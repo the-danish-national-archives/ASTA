@@ -1,0 +1,32 @@
+body{
+    background-color: burlywood;    
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif
+}
+
+.side-nav{
+    height: 100%;
+    width: 150px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #111;
+    opacity: 0.9;
+    overflow-x: hidden;
+    padding-top: 60px;
+}
+
+.side-nav a{
+    padding: 10px 10px 10px 30px;
+    text-decoration: none;
+    font-size: 22px;
+    color: #ccc;
+    display: block;
+}
+
+.side-nav a:hover{
+    color:#fff;
+}
+
+#content{
+    padding-left: 150px;
+}

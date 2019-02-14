@@ -1,0 +1,17 @@
+{
+  "name": "file-converter",
+  "version": "1.0.0",
+  "description": "Electron app for converting files",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "keywords": [
+    "electron"
+  ],
+  "author": "Brian Lynnerup Pedersen",
+  "license": "ISC",
+  "dependencies": {
+    "electron": "^4.0.4"
+  }
+}
