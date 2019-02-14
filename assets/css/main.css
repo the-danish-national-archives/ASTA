@@ -16,17 +16,17 @@ body{
     position: fixed;
     top: 0;
     left: 0;
-    background-color: #111;
+    background-color: #dddddd;
     opacity: 0.9;
     overflow-x: hidden;
-    padding-top: 60px;
+    padding-top: 20px;
 }
 
 .side-nav a{
     padding: 10px 10px 10px 30px;
     text-decoration: none;
     font-size: 22px;
-    color: #ccc;
+    color: #002a39;
     display: block;
 }
 
@@ -36,4 +36,17 @@ body{
 
 #content{
     padding-left: 150px;
+}
+
+#logo{
+    width: 130px;
+    height: 70px;
+    margin: 0px 0px 0px 10px;
+}
+
+.divider{
+    color: #1a232a;
+    width: 130px;
+    height: 2px;
+    align-self: center;
 }

@@ -13,6 +13,7 @@ function createWindow () {
     webPreferences: {
       nodeIntegration: true
     }
+    //,icon: path.join(__dirname, 'assets/icons/png/<img>') <-- set this
   })
 
   // and load the index.html of the app.
@@ -20,7 +21,7 @@ function createWindow () {
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
-
+  
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
     // Dereference the window object, usually you would store windows
