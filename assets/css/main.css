@@ -1,6 +1,13 @@
+@font-face {
+    font-family: SourceSansPro;
+    src: url("../fonts/SourceSansPro-Regular.otf");
+    font-style: normal;
+    font-weight: 100px;
+}
+
 body{
-    background-color: burlywood;    
-    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif
+    background-color: burlywood;  
+    font-family: SourceSansPro; 
 }
 
 .side-nav{
