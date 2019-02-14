@@ -16,3 +16,13 @@ This is created using _only_ open source and free licens
 * Create a local path for the project and either clone the repository or download the zip (and unzip) file to that path.
 * Navigate to the root folder of the project and run the command 'npm install' from your terminal (this will install all dependencies from the package.json file).
 * Once the packages have been installed run the command 'npm start' from your terminal and the project will start up.
+
+## Basic architecture 
+
+This project is a minimalistic app created using Electron. It follows the conventions mentioned at https://electronjs.org/ for the basic setup.
+
+* The main window and main process is handled from main.js.
+* The container window for all the various elements is created in index.html
+* All additional resources are located in the assets folder.
+* * The sidebar (menu) logic is handled in the menus.js file.
+* * All menu items have their own HTML file.
