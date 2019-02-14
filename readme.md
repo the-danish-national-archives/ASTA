@@ -21,8 +21,8 @@ This is created using _only_ open source and free licens
 
 This project is a minimalistic app created using Electron. It follows the conventions mentioned at https://electronjs.org/ for the basic setup.
 
-* The main window and main process is handled from main.js.
+* The main window creation and main process is handled from main.js.
 * The container window for all the various elements is created in index.html
 * All additional resources are located in the assets folder.
-* * The sidebar (menu) logic is handled in the menus.js file.
+* * The sidebar (menu) logic is handled in the menu.js file.
 * * All menu items have their own HTML file.
