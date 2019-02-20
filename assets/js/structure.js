@@ -1,8 +1,5 @@
-'use strict';
-var Rigsarkiv;
-(function (Rigsarkiv) {
-  (function (Structure) {
-    
+window.Rigsarkiv = window.Rigsarkiv || {},
+function (n) {
     const {ipcRenderer} = require('electron')
     const fs = require('fs');
     const pattern = /^[0-9]*$/;
@@ -74,16 +71,14 @@ var Rigsarkiv;
          })
     }
 
-    Structure.initialize = function (selectDirectoryId,pathDirectoryId,deliveryPackageId,okId,outputId) {
-        
-        settings.selectDirBtn =  document.getElementById(selectDirectoryId);
-        settings.pathDirTxt =  document.getElementById(pathDirectoryId);
-        settings.deliveryPackageTxt =  document.getElementById(deliveryPackageId);
-        settings.okBtn =  document.getElementById(okId);
-        settings.outputSpn =  document.getElementById(outputId);
-        AddEvents();       
+    Rigsarkiv.Structure = {        
+        initialize: function (selectDirectoryId,pathDirectoryId,deliveryPackageId,okId,outputId) {
+            settings.selectDirBtn =  document.getElementById(selectDirectoryId);
+            settings.pathDirTxt =  document.getElementById(pathDirectoryId);
+            settings.deliveryPackageTxt =  document.getElementById(deliveryPackageId);
+            settings.okBtn =  document.getElementById(okId);
+            settings.outputSpn =  document.getElementById(outputId);
+            AddEvents();
+        }
     };
-  })(Rigsarkiv.Structure || (Rigsarkiv.Structure = {}));  
-})(Rigsarkiv || (Rigsarkiv = {}));
-
-Rigsarkiv.Structure.initialize("hybris-select-directory","hybris-path","hybris-delivery-package","hybris-okBtn","hybris-output");
+}(jQuery);
