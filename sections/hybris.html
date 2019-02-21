@@ -15,10 +15,20 @@
                     <hr class="button-divider">
                     <div class="formularContainer">
                         <h3>Skab en afleveringspakke</h3>
-                        <p>Indtast løbenummer for afleveringspakken <i class="far fa-question-circle"></i></p>
+                        <p>
+                            Indtast løbenummer for afleveringspakken 
+                            <i id="hybris-message-delivery-package" class="far fa-question-circle" ></i>
+                            <span id="hybris-message-delivery-package-Title" hidden="true">Løbenummer</span>
+                            <span id="hybris-message-delivery-package-Text" hidden="true">Indtast det løbenummer for afleveringspakken, du har fået udleveret af Rigsarkivet. Det udleverede løbenummer fremgår af aflevringsbestemmelsen og arkivskabeskrivelsesfilen (archiveIndex.xml). Det består udelukkende af minimum 5 cifre uden foranstillede nuller. Indtastes løbenummer ikke, får afleveringspakken midlertidigt nummeret 99999. Løbenummer kan ændres senere.</span>
+                        </p>
                         <input type="text" id="hybris-delivery-package">
                         <br>
-                        <p>Vælg destination for afleveringspakken <i class="far fa-question-circle"></i></p>
+                        <p>
+                            Vælg destination for afleveringspakken 
+                            <i id="hybris-message-path" class="far fa-question-circle"></i>
+                            <span id="hybris-message-path-Title" hidden="true">Destination</span>
+                            <span id="hybris-message-path-Text" hidden="true">Vælg det drev eller den mappe på computeren eller mediet (fx USB, harddisk, SSD), som afleveringspakken skal placeres på.</span>
+                        </p>
                         <div>
                             <input type="text" id="hybris-path">
                             <button id="hybris-select-directory">Browse...</button>
@@ -41,6 +51,8 @@
         <script type="text/javascript">
             require('./assets/js/utilities');
             require('./assets/js/structure');
+            require('./assets/js/messages');
+            Rigsarkiv.Messages.initialize(["hybris-message-delivery-package","hybris-message-path"]);
             Rigsarkiv.Structure.initialize("hybris-select-directory","hybris-path","hybris-delivery-package","hybris-okBtn","hybris-output-Error","hybris-output-Exists","hybris-output-RequiredPath","hybris-output-UnvalidDeliveryPackage","hybris-output-Ok","hybris-output-Supplement","hybris-select-delivery-package");           
           </script>
     </section>

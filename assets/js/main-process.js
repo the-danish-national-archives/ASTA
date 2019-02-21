@@ -9,3 +9,15 @@ ipcMain.on('open-file-dialog', (event) => {
     }
   })
 })
+
+ipcMain.on('open-information-dialog', (event,title,text) => {
+  const options = {
+    type: 'info',
+    title: title,
+    message: text,
+    buttons: ['Cancel']
+  }
+  dialog.showMessageBox(options, (index) => {
+    event.sender.send('information-dialog-selection', index)
+  })
+})
