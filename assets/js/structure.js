@@ -19,6 +19,7 @@ function (n) {
         outputUnvalidDeliveryPackageSpn: null,
         outputOkSpn: null,
         outputOkText: null,
+        outputSupplementSpn: null,
         selectDeliveryPackage: null,
         folderPrefix: "FD.",
         defaultFolderPostfix: "99999",
@@ -32,6 +33,7 @@ function (n) {
         settings.outputUnvalidDeliveryPackageSpn.hidden = true;
         settings.outputOkSpn.hidden = true;
         settings.selectDeliveryPackage.hidden = true;
+        settings.outputSupplementSpn.hidden = true;
     }
 
     var EnsureStructure = function () {
@@ -55,9 +57,10 @@ function (n) {
                         }
                     });
                 });
-                settings.selectDeliveryPackage.innerHTML = folderPath;
+                settings.selectDeliveryPackage.innerHTML = settings.selectedPath;
                 settings.selectDeliveryPackage.hidden = false;
                 settings.outputOkSpn.hidden = false;
+                settings.outputSupplementSpn.hidden = false;
                 settings.outputOkSpn.innerHTML = settings.outputOkText.format(folderName);
             }
             else  {
@@ -90,15 +93,13 @@ function (n) {
             settings.pathDirTxt.value = settings.selectedPath;
          })
         settings.selectDeliveryPackage.addEventListener('click', (event) => {
-            var folderName = settings.folderPrefix;
-            folderName += (settings.deliveryPackageTxt.value === "") ? settings.defaultFolderPostfix: settings.deliveryPackageTxt.value;
-            var folderPath = settings.selectedPath + "\\" + folderName
+           var folderPath = settings.selectedPath + "\\";
             shell.openItem(folderPath);
         }) 
     }
 
     Rigsarkiv.Structure = {        
-        initialize: function (selectDirectoryId,pathDirectoryId,deliveryPackageId,okId,outputErrorId,outputExistsId,outputRequiredPathId,outputUnvalidDeliveryPackageId,outputOkId,selectDeliveryPackageId) {            
+        initialize: function (selectDirectoryId,pathDirectoryId,deliveryPackageId,okId,outputErrorId,outputExistsId,outputRequiredPathId,outputUnvalidDeliveryPackageId,outputOkId,outputSupplementId,selectDeliveryPackageId) {            
             settings.selectDirBtn =  document.getElementById(selectDirectoryId);
             settings.pathDirTxt =  document.getElementById(pathDirectoryId);
             settings.deliveryPackageTxt =  document.getElementById(deliveryPackageId);
@@ -111,6 +112,7 @@ function (n) {
             settings.outputUnvalidDeliveryPackageSpn =  document.getElementById(outputUnvalidDeliveryPackageId);
             settings.outputOkSpn =  document.getElementById(outputOkId);
             settings.outputOkText = settings.outputOkSpn.innerHTML;
+            settings.outputSupplementSpn = document.getElementById(outputSupplementId);
             settings.selectDeliveryPackage = document.getElementById(selectDeliveryPackageId);
             AddEvents();
         }
