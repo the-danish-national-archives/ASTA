@@ -16,17 +16,22 @@
                     <div class="formularContainer">
                         <h3>Skab en afleveringspakke</h3>
                         <p>Indtast løbenummer for afleveringspakken <i class="far fa-question-circle"></i></p>
-                        <input type="text">
+                        <input type="text" id="hybris-delivery-package">
                         <br>
                         <p>Vælg destination for afleveringspakken <i class="far fa-question-circle"></i></p>
                         <div>
-                            <input type="text" id="path">
-                            <button>Browse...</button>
+                            <input type="text" id="hybris-path">
+                            <button id="hybris-select-directory">Browse...</button>
                         </div>
-                        <button id="okBtn">Ok</button>
+                        <button id="hybris-okBtn">Ok</button>
+                        <span id="hybris-output"></span>
                     </div>
                 </section>
             </div>
         </header>
+        <script type="text/javascript">
+            require('./assets/js/structure');
+            Rigsarkiv.Structure.initialize("hybris-select-directory","hybris-path","hybris-delivery-package","hybris-okBtn","hybris-output");           
+          </script>
     </section>
 </template>

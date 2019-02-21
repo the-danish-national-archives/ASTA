@@ -68,3 +68,6 @@ function makeSingleInstance() {
     }
   })
 }
+
+// Require each JS file in the main-process dir
+require('./assets/js/main-process')
