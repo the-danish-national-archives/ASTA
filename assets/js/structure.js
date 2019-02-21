@@ -2,7 +2,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
 function (n) {
     const {ipcRenderer} = require('electron')
     const fs = require('fs');
-    const pattern = /^[0-9]*$/;
+    const pattern = /^([1-9]{1}[0-9]{4,})$/;
 
     var settings = {
         selectDirBtn: null,
@@ -10,36 +10,54 @@ function (n) {
         selectedPath: null,
         deliveryPackageTxt: null,
         okBtn: null,
-        outputSpn: null,
+        outputErrorSpn: null,
+        outputErrorText: null,
+        outputExistsSpn: null,
+        outputExistsText: null,
+        outputRequiredPathSpn: null,
+        outputUnvalidDeliveryPackageSpn: null,
+        outputOkSpn: null,
+        outputOkText: null,
         folderPrefix: "FD.",
+        defaultFolderPostfix: "99999",
         subFolders: ["ContextDocumentation","Data","Indices"]
     }
 
     var Reset = function () {
-        settings.outputSpn.innerHTML = "";
+        settings.outputErrorSpn.hidden = true;
+        settings.outputExistsSpn.hidden = true;
+        settings.outputRequiredPathSpn.hidden = true;
+        settings.outputUnvalidDeliveryPackageSpn.hidden = true;
+        settings.outputOkSpn.hidden = true;
     }
 
     var EnsureStructure = function () {
-        var folderPath = settings.selectedPath + "\\" + settings.folderPrefix + settings.deliveryPackageTxt.value        
+        var folderName = settings.folderPrefix;
+        folderName += (settings.deliveryPackageTxt.value === "") ? settings.defaultFolderPostfix: settings.deliveryPackageTxt.value;
+        var folderPath = settings.selectedPath + "\\" + folderName        
         fs.exists(folderPath, (exists) => {
             if(!exists) {
                 console.log("Create structure: " + folderPath);
                 fs.mkdir(folderPath, { recursive: true }, (err) => {
                     if (err) {
-                        settings.outputSpn.innerHTML = settings.outputSpn.innerHTML + "<br/>Error: " + err.message;
+                        settings.outputErrorSpn.hidden = false;
+                        settings.outputErrorSpn.innerHTML = settings.outputErrorText.format(err.message);
                     }
                 });
                 settings.subFolders.forEach(element => {
                     fs.mkdir(folderPath + "\\" + element, { recursive: true }, (err) => {
                         if (err) {
-                            settings.outputSpn.innerHTML = settings.outputSpn.innerHTML + "<br/>Error: " + err.message;
+                            settings.outputErrorSpn.hidden = false;
+                            settings.outputErrorSpn.innerHTML = settings.outputErrorText.format(err.message);
                         }
                     });
                 });
-                settings.outputSpn.innerHTML = settings.outputSpn.innerHTML + "<br/>Afleveringspakken er oprettet" ;
+                settings.outputOkSpn.hidden = false;
+                settings.outputOkSpn.innerHTML = settings.outputOkText.format(folderName);
             }
             else  {
-                settings.outputSpn.innerHTML = settings.outputSpn.innerHTML + "<br/>Afleveringspakken eksisterer";
+                settings.outputExistsSpn.hidden = false;
+                settings.outputExistsSpn.innerHTML = settings.outputExistsText.format(folderName);
             }
         });
     }
@@ -48,15 +66,12 @@ function (n) {
         settings.okBtn.addEventListener('click', (event) => {
             Reset();
             if(settings.pathDirTxt.value === "") {
-                settings.outputSpn.innerHTML = settings.outputSpn.innerHTML + "<br/>Destination for afleveringspakken mangler";
-            }
-            if(settings.deliveryPackageTxt.value === "") {
-                settings.outputSpn.innerHTML = settings.outputSpn.innerHTML + "<br/>Løbenummer for afleveringspakken mangler";
+                settings.outputRequiredPathSpn.hidden = false;
             }
             if(settings.deliveryPackageTxt.value !== "" && !pattern.test(settings.deliveryPackageTxt.value)) {
-                settings.outputSpn.innerHTML = settings.outputSpn.innerHTML + "<br/>Løbenummer for afleveringspakken ikke valid nummer";
+                settings.outputUnvalidDeliveryPackageSpn.hidden = false;
             }
-            if(settings.selectedPath != null && settings.pathDirTxt.value !== "" && settings.deliveryPackageTxt.value !== "" && pattern.test(settings.deliveryPackageTxt.value)) {
+            if(settings.selectedPath != null && settings.pathDirTxt.value !== "" && (settings.deliveryPackageTxt.value === "" || (settings.deliveryPackageTxt.value !== "" && pattern.test(settings.deliveryPackageTxt.value)))) {
                EnsureStructure();
             }
         })
@@ -72,12 +87,19 @@ function (n) {
     }
 
     Rigsarkiv.Structure = {        
-        initialize: function (selectDirectoryId,pathDirectoryId,deliveryPackageId,okId,outputId) {            
+        initialize: function (selectDirectoryId,pathDirectoryId,deliveryPackageId,okId,outputErrorId,outputExistsId,outputRequiredPathId,outputUnvalidDeliveryPackageId,outputOkId) {            
             settings.selectDirBtn =  document.getElementById(selectDirectoryId);
             settings.pathDirTxt =  document.getElementById(pathDirectoryId);
             settings.deliveryPackageTxt =  document.getElementById(deliveryPackageId);
             settings.okBtn =  document.getElementById(okId);
-            settings.outputSpn =  document.getElementById(outputId);
+            settings.outputErrorSpn =  document.getElementById(outputErrorId);
+            settings.outputErrorText = settings.outputErrorSpn.innerHTML;
+            settings.outputExistsSpn =  document.getElementById(outputExistsId);
+            settings.outputExistsText = settings.outputExistsSpn.innerHTML;
+            settings.outputRequiredPathSpn =  document.getElementById(outputRequiredPathId);
+            settings.outputUnvalidDeliveryPackageSpn =  document.getElementById(outputUnvalidDeliveryPackageId);
+            settings.outputOkSpn =  document.getElementById(outputOkId);
+            settings.outputOkText = settings.outputOkSpn.innerHTML;
             AddEvents();
         }
     };

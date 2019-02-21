@@ -24,14 +24,19 @@
                             <button id="hybris-select-directory">Browse...</button>
                         </div>
                         <button id="hybris-okBtn">Ok</button>
-                        <span id="hybris-output"></span>
+                        <span id="hybris-output-RequiredPath" hidden="true"><br/>Destination for afleveringspakken mangler</span>
+                        <span id="hybris-output-UnvalidDeliveryPackage" hidden="true"><br/>Det angivne løbenummer er ugyldigt. Løbenummer kan kun bestå af tal sammensat af minimum 5 cifre uden foranstillede nuller</span>
+                        <span id="hybris-output-Error" hidden="true"><br/>Error: {0}</span>
+                        <span id="hybris-output-Exists" hidden="true"><br/>Afleveringspakken [{0}] eksisterer</span>
+                        <span id="hybris-output-Ok" hidden="true"><br/>En tom mappestruktur for afleveringspakken [{0}] er dannet og placeret her:</span>
                     </div>
                 </section>
             </div>
         </header>
         <script type="text/javascript">
+            require('./assets/js/utilities');
             require('./assets/js/structure');
-            Rigsarkiv.Structure.initialize("hybris-select-directory","hybris-path","hybris-delivery-package","hybris-okBtn","hybris-output");           
+            Rigsarkiv.Structure.initialize("hybris-select-directory","hybris-path","hybris-delivery-package","hybris-okBtn","hybris-output-Error","hybris-output-Exists","hybris-output-RequiredPath","hybris-output-UnvalidDeliveryPackage","hybris-output-Ok");           
           </script>
     </section>
 </template>
