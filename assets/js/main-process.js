@@ -15,7 +15,7 @@ ipcMain.on('open-information-dialog', (event,title,text) => {
     type: 'info',
     title: title,
     message: text,
-    buttons: ['Cancel']
+    buttons: []
   }
   dialog.showMessageBox(options, (index) => {
     event.sender.send('information-dialog-selection', index)
