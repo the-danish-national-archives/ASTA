@@ -1,6 +1,7 @@
 window.Rigsarkiv = window.Rigsarkiv || {},
 function (n) {
     const {ipcRenderer} = require('electron')
+    const {shell} = require('electron')
     const fs = require('fs');
     const pattern = /^([1-9]{1}[0-9]{4,})$/;
 
@@ -18,6 +19,7 @@ function (n) {
         outputUnvalidDeliveryPackageSpn: null,
         outputOkSpn: null,
         outputOkText: null,
+        selectDeliveryPackage: null,
         folderPrefix: "FD.",
         defaultFolderPostfix: "99999",
         subFolders: ["ContextDocumentation","Data","Indices"]
@@ -29,6 +31,7 @@ function (n) {
         settings.outputRequiredPathSpn.hidden = true;
         settings.outputUnvalidDeliveryPackageSpn.hidden = true;
         settings.outputOkSpn.hidden = true;
+        settings.selectDeliveryPackage.hidden = true;
     }
 
     var EnsureStructure = function () {
@@ -52,6 +55,8 @@ function (n) {
                         }
                     });
                 });
+                settings.selectDeliveryPackage.innerHTML = folderPath;
+                settings.selectDeliveryPackage.hidden = false;
                 settings.outputOkSpn.hidden = false;
                 settings.outputOkSpn.innerHTML = settings.outputOkText.format(folderName);
             }
@@ -79,15 +84,21 @@ function (n) {
             Reset();
             ipcRenderer.send('open-file-dialog');
         })
-         ipcRenderer.on('selected-directory', (event, path) => {
+        ipcRenderer.on('selected-directory', (event, path) => {
             settings.selectedPath = path; 
             console.log(`selected path: ${path}`); 
             settings.pathDirTxt.value = settings.selectedPath;
          })
+        settings.selectDeliveryPackage.addEventListener('click', (event) => {
+            var folderName = settings.folderPrefix;
+            folderName += (settings.deliveryPackageTxt.value === "") ? settings.defaultFolderPostfix: settings.deliveryPackageTxt.value;
+            var folderPath = settings.selectedPath + "\\" + folderName
+            shell.openItem(folderPath);
+        }) 
     }
 
     Rigsarkiv.Structure = {        
-        initialize: function (selectDirectoryId,pathDirectoryId,deliveryPackageId,okId,outputErrorId,outputExistsId,outputRequiredPathId,outputUnvalidDeliveryPackageId,outputOkId) {            
+        initialize: function (selectDirectoryId,pathDirectoryId,deliveryPackageId,okId,outputErrorId,outputExistsId,outputRequiredPathId,outputUnvalidDeliveryPackageId,outputOkId,selectDeliveryPackageId) {            
             settings.selectDirBtn =  document.getElementById(selectDirectoryId);
             settings.pathDirTxt =  document.getElementById(pathDirectoryId);
             settings.deliveryPackageTxt =  document.getElementById(deliveryPackageId);
@@ -100,6 +111,7 @@ function (n) {
             settings.outputUnvalidDeliveryPackageSpn =  document.getElementById(outputUnvalidDeliveryPackageId);
             settings.outputOkSpn =  document.getElementById(outputOkId);
             settings.outputOkText = settings.outputOkSpn.innerHTML;
+            settings.selectDeliveryPackage = document.getElementById(selectDeliveryPackageId);
             AddEvents();
         }
     };
