@@ -6,7 +6,7 @@
 }
 
 body{
-    background-color: burlywood;  
+    background-color: rgb(222, 184, 135);  
     font-family: SourceSansPro; 
 }
 
@@ -87,4 +87,46 @@ h1{
 
 .formularContainer{
     padding-left: 5%
+}
+
+.verticalDivider{
+    border-left: 2px solid #000;
+    height: 90%;
+    min-height: 400px;
+}
+
+.nemesisControls{
+    width: 40%;
+    margin-left: 5%;
+}
+
+.nemesisOutput{
+    height: 400px;
+    width: 40%;
+    margin-right: 5%;
+    border: 1px solid #000;
+    background-color: rgb(207, 190, 143)
+}
+
+.box {
+    display: flex;
+    justify-content: space-between;
+}
+
+.error{
+    color: red;
+    margin-left: 10px;
+    margin-right: 5px;
+}
+
+.warning{
+    color: yellow;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.ok{
+    color: green;
+    margin-left: 6px;
+    margin-right: 5px;
 }
