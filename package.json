@@ -8,7 +8,8 @@
     "package-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=assets/icons/mac/bookshelf-icon.icns --prune=true --out=release-builds",
     "package-win": "electron-packager . file-converter-app --overwrite --asar=true --platform=win32 --arch=ia32 --icon=assets/icons/win/SA_Krone_App.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"file-converter\"",
     "package-linux": "electron-packager . electron-tutorial-app --overwrite --asar=true --platform=linux --arch=x64 --icon=assets/icons/png/bookshelf-icon.png --prune=true --out=release-builds",
-    "create-installer-win": "node installers/windows/createinstaller.js"
+    "create-installer-win": "node installers/windows/createinstaller.js",
+    "create-installer-mac": "electron-installer-dmg ./release-builds/file-converter-darwin-x64/file-converter.app file-converter --out=release-builds --overwrite --icon=assets/icons/mac/bookshelf-icon.icns"
   },
   "keywords": [
     "electron"
@@ -16,10 +17,10 @@
   "author": "Brian Lynnerup Pedersen",
   "license": "ISC",
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.7.2",
     "electron": "^4.0.4"
   },
   "devDependencies": {
-    "@fortawesome/fontawesome-free": "^5.7.2",
     "electron-installer-dmg": "^2.0.0",
     "electron-packager": "^13.1.0",
     "electron-winstaller": "^2.7.0"
