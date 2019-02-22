@@ -1,11 +1,21 @@
 const {ipcMain, dialog} = require('electron')
 
-ipcMain.on('open-file-dialog', (event) => {
+ipcMain.on('structure-open-file-dialog', (event) => {
   dialog.showOpenDialog({
     properties: ['openFile', 'openDirectory']
   }, (files) => {
     if (files) {
-      event.sender.send('selected-directory', files)
+      event.sender.send('structure-selected-directory', files)
+    }
+  })
+})
+
+ipcMain.on('validation-open-file-dialog', (event) => {
+  dialog.showOpenDialog({
+    properties: ['openFile', 'openDirectory']
+  }, (files) => {
+    if (files) {
+      event.sender.send('validation-selected-directory', files)
     }
   })
 })

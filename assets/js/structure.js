@@ -85,9 +85,9 @@ function (n) {
         })
         settings.selectDirBtn.addEventListener('click', (event) => {
             Reset();
-            ipcRenderer.send('open-file-dialog');
+            ipcRenderer.send('structure-open-file-dialog');
         })
-        ipcRenderer.on('selected-directory', (event, path) => {
+        ipcRenderer.on('structure-selected-directory', (event, path) => {
             settings.selectedPath = path; 
             console.log(`selected path: ${path}`); 
             settings.pathDirTxt.value = settings.selectedPath;

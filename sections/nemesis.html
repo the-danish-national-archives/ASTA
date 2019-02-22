@@ -12,26 +12,32 @@
                         <h3>Test en afleveringspakke</h3>
                         <div class="box">
                             <div class="nemesisControls">
-                                <span>Select files for testing:</span>
+                                <span>Select afleveringspakken for testing:</span>
                                 <br>
-                                <input type="text">
-                                <button>Browse...</button>
+                                <input type="text" id="nemesis-path">
+                                <button id="nemesis-select-directory">Browse...</button>
                                 <br/>
                                 <br/>
                                 <span>Midlertidig test kontroller, indtil vi har lavet fil parser.</span>
-                                <button>Test mappe struktur</button>
+                                <button id="nemesis-validateBtn">Test mappe struktur</button>
                             </div>
                             <div class="verticalDivider"> </div>
                             <div class="nemesisOutput">
-                                <span><i class="fas fa-times error"></i>Test 'id' fejler</span><br/>
-                                <span><i class="fas fa-exclamation-triangle warning"></i>Test 'id' advarsel</span><br>
-                                <span><i class="fas fa-check-circle ok"></i>Test 'id' gennemført</span>
-                                
+                                <span id="nemesis-output-CheckId-Error" hidden="true"><i class="fas fa-times error"></i>Test id '{0}' fejler</span>
+                                <span id="nemesis-output-CheckId-Warning" hidden="true"><i class="fas fa-exclamation-triangle warning"></i>Test id '{0}' advarsel</span>
+                                <span id="nemesis-output-CheckId-Ok" hidden="true"><i class="fas fa-check-circle ok"></i>Test id '{0}' gennemført</span>
+                                <br/>
                             </div>
                         </div>
                     </div>
                 </section>
             </div>
         </header>
+        <script>window.$ = window.jQuery = require('./assets/js/jquery.min.js');</script>
+        <script type="text/javascript">
+            require('./assets/js/utilities');
+            require('./assets/js/validation');
+            Rigsarkiv.Validation.initialize("nemesis-select-directory","nemesis-path","nemesis-validateBtn","nemesis-output");           
+          </script>
     </section>
 </template>
