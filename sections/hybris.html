@@ -8,12 +8,13 @@
                 </div>
                 <section>
                     <div class="btnContaier">
-                            <button name="button" class="menuBtn">Skab Mappestruktur</button>
-                            <button name="button" class="menuBtn">Åben afleveringspakke</button>
+                            <button name="button" class="menuBtn" id="hybris-tab-structure">Skab Mappestruktur</button>
+                            <button name="button" class="menuBtn" id="hybris-tab-metdata">Åben afleveringspakke</button>
                     </div>
                     
                     <hr class="button-divider">
-                    <div class="formularContainer">
+                    <div id="hybris-panel-metdata" class="formularContainer" hidden="true"></div>
+                    <div id="hybris-panel-structure" class="formularContainer">
                         <h3>Skab en afleveringspakke</h3>
                         <p>
                             Indtast løbenummer for afleveringspakken 
@@ -50,8 +51,11 @@
         </header>
         <script type="text/javascript">
             require('./assets/js/utilities');
+            require('./assets/js/panels');
             require('./assets/js/structure');
             require('./assets/js/messages');
+
+            Rigsarkiv.Panels.initialize(["hybris-tab-metdata","hybris-tab-structure"]);
             Rigsarkiv.Messages.initialize(["hybris-message-delivery-package","hybris-message-path"]);
             Rigsarkiv.Structure.initialize("hybris-select-directory","hybris-path","hybris-delivery-package","hybris-okBtn","hybris-output-Error","hybris-output-Exists","hybris-output-RequiredPath","hybris-output-UnvalidDeliveryPackage","hybris-output-Ok","hybris-output-Supplement","hybris-select-delivery-package");           
           </script>
