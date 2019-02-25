@@ -81,6 +81,10 @@ h1{
     color: green;
 }
 
+h4{
+    color: rgb(153, 142, 142)
+}
+
 .menuBtn{
     color: black;
     background-color: rgb(0, 128, 11);
