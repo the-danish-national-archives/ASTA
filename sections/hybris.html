@@ -25,6 +25,11 @@
                         <span><label for="referenceVariable">Referencevariabel</label><input type="text" name="referenceVariable" id="refVar"><i class="far fa-question-circle"></i></span><br>
                         <br>
                         <button type="submit">OK</button>
+                        <h3>Udtrække data- og metadata</h3> 
+                        <div>
+                            <input type="text" id="hybris-statistics-filepath">
+                            <button id="hybris-select-statistics-file">Browse...</button>
+                        </div>
                     </div>
                     <div id="hybris-panel-structure" class="formularContainer">
                         <h3>Skab en afleveringspakke</h3>
@@ -63,13 +68,15 @@
         </header>
         <script type="text/javascript">
             require('./assets/js/utilities');
+            require('./assets/js/messages');
             require('./assets/js/panels');
             require('./assets/js/structure');
-            require('./assets/js/messages');
+            require('./assets/js/dataextraction');
 
             Rigsarkiv.Panels.initialize(["hybris-tab-metdata","hybris-tab-structure"]);
             Rigsarkiv.Messages.initialize(["hybris-message-delivery-package","hybris-message-path"]);
-            Rigsarkiv.Structure.initialize("hybris-select-directory","hybris-path","hybris-delivery-package","hybris-okBtn","hybris-output-Error","hybris-output-Exists","hybris-output-RequiredPath","hybris-output-UnvalidDeliveryPackage","hybris-output-Ok","hybris-output-Supplement","hybris-select-delivery-package");           
+            Rigsarkiv.Structure.initialize("hybris-select-directory","hybris-path","hybris-delivery-package","hybris-okBtn","hybris-output-Error","hybris-output-Exists","hybris-output-RequiredPath","hybris-output-UnvalidDeliveryPackage","hybris-output-Ok","hybris-output-Supplement","hybris-select-delivery-package");          
+            Rigsarkiv.DataExtraction.initialize("hybris-select-statistics-file","hybris-statistics-filepath");
           </script>
     </section>
 </template>
