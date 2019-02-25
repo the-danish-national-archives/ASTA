@@ -3,9 +3,26 @@ const {ipcMain, dialog} = require('electron')
 ipcMain.on('structure-open-file-dialog', (event) => {
   dialog.showOpenDialog({
     properties: ['openFile', 'openDirectory']
-  }, (files) => {
+    }, (files) => {
     if (files) {
       event.sender.send('structure-selected-directory', files)
+    }
+  })
+})
+
+ipcMain.on('dataextraction-open-file-dialog', (event) => {
+  dialog.showOpenDialog({
+    properties: ['openFile'],
+    filters: [
+      {
+        "name": "statistics file",
+        "extensions": ["sas", "spss", "stata"]
+      }
+    ]
+  
+  }, (files) => {
+    if (files) {
+      event.sender.send('dataextraction-selected-statistics-file', files)
     }
   })
 })
