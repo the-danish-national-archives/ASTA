@@ -20,7 +20,7 @@ window.navigation = window.navigation || {},
             setMenuOnClickEvent: function () {
                 document.body.addEventListener('click', function (event) {
                     if (event.target.dataset.section) {
-                        var selectedItem =  $('#side-menu').find('.selected').removeClass('selected');
+                        $('#side-menu').find('.selected').removeClass('selected');
                         navigation.menu.hideAllSections()
                         navigation.menu.showSection(event)
                     }
@@ -38,6 +38,7 @@ window.navigation = window.navigation || {},
                 $(this.constants.startSectionMenuItem).click()
                 $(this.constants.startSection).show()
                 $(this.constants.startSection + ' section').show()
+                $(this.constants.startSectionMenuItem).addClass('selected');
             },
 
             hideAllSections: function () {
