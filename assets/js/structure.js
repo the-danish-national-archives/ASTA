@@ -50,21 +50,25 @@ function (n) {
                         settings.outputErrorSpn.hidden = false;
                         settings.outputErrorSpn.innerHTML = settings.outputErrorText.format(err.message);
                     }
+                    else {
+                        settings.subFolders.forEach(element => {
+                            fs.mkdir(folderPath + "\\" + element, { recursive: true }, (err) => {
+                                if (err) {
+                                    settings.outputErrorSpn.hidden = false;
+                                    settings.outputErrorSpn.innerHTML = settings.outputErrorText.format(err.message);   
+                                    settings.deliveryPackagePath = null;                         
+                                }
+                                else {
+                                    settings.selectDeliveryPackage.innerHTML = settings.selectedPath;
+                                    settings.selectDeliveryPackage.hidden = false;
+                                    settings.outputOkSpn.hidden = false;
+                                    settings.outputSupplementSpn.hidden = false;
+                                    settings.outputOkSpn.innerHTML = settings.outputOkText.format(folderName);
+                                }
+                            });
+                        });
+                    }
                 });
-                settings.subFolders.forEach(element => {
-                    fs.mkdir(folderPath + "\\" + element, { recursive: true }, (err) => {
-                        if (err) {
-                            settings.outputErrorSpn.hidden = false;
-                            settings.outputErrorSpn.innerHTML = settings.outputErrorText.format(err.message);   
-                            settings.deliveryPackagePath = null;                         
-                        }
-                    });
-                });
-                settings.selectDeliveryPackage.innerHTML = settings.selectedPath;
-                settings.selectDeliveryPackage.hidden = false;
-                settings.outputOkSpn.hidden = false;
-                settings.outputSupplementSpn.hidden = false;
-                settings.outputOkSpn.innerHTML = settings.outputOkText.format(folderName);
             }
             else  {
                 settings.outputExistsSpn.hidden = false;
