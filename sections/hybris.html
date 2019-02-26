@@ -13,8 +13,15 @@
                             <button name="button" class="menuBtn" id="hybris-tab-metdata">Skab Metadata</button>
                     </div>
                     <hr class="button-divider">
-                    <div id="hybris-panel-script" hidden="true">
+                    <div id="hybris-panel-script" class="formularContainer" hidden="true">
                         <h3>Opret script fil til statistik program.</h3>
+                        <div>
+                            <input type="text" id="hybris-statistics-filepath">
+                            <button id="hybris-select-statistics-file">Browse...</button>
+                        </div>
+                        <button id="hybris-statistics-okBtn">Ok</button>
+                        <span id="hybris-output-metdata-Error" hidden="true"><br/>Error: {0}</span>
+                        <span id="hybris-output-metdata-OKCopyScript" hidden="true"><br/>Fil {0} er koperet til: {1}</span>
                     </div>
                     <div id="hybris-panel-metdata" class="formularContainer" hidden="true">
                         <h3>Indtast information om statistikfilen</h3>
@@ -28,15 +35,7 @@
                         <span><label class="descriptionLabel" for="foreignVariableName">Fremmevaiabelnavn</label><input type="text" name="foreignVariableName" id="foreignKeyVarName"><i class="far fa-question-circle"></i></span><br>
                         <span><label class="descriptionLabel" for="referenceVariable">Referencevariabel</label><input type="text" name="referenceVariable" id="refVar"><i class="far fa-question-circle"></i></span><br>
                         <br>
-                        <button type="submit" id="metadata-okBtn">OK</button>
-                        <h3>Udtræk data- og metadata</h3> 
-                        <div>
-                            <input type="text" id="hybris-statistics-filepath">
-                            <button id="hybris-select-statistics-file">Browse...</button>
-                        </div>
-                        <button id="hybris-statistics-okBtn">Ok</button>
-                        <span id="hybris-output-metdata-Error" hidden="true"><br/>Error: {0}</span>
-                        <span id="hybris-output-metdata-OKCopyScript" hidden="true"><br/>Fil {0} er koperet til: {1}</span>
+                        <button type="submit" id="metadata-okBtn">OK</button>                        
                     </div>
                     <div id="hybris-panel-structure" class="formularContainer">
                         <h3>Skab en afleveringspakke</h3>
@@ -81,7 +80,7 @@
             require('./assets/js/dataextraction');
             require('./assets/js/addMetaData');
 
-            Rigsarkiv.Panels.initialize(["hybris-tab-metdata","hybris-tab-structure", "hybris-panel-script"]);
+            Rigsarkiv.Panels.initialize(["hybris-tab-structure","hybris-tab-script","hybris-tab-metdata"]);
             Rigsarkiv.Messages.initialize(["hybris-message-delivery-package","hybris-message-path"]);
             Rigsarkiv.Structure.initialize("hybris-select-directory","hybris-path","hybris-delivery-package","hybris-okBtn","hybris-output-Error","hybris-output-Exists","hybris-output-RequiredPath","hybris-output-UnvalidDeliveryPackage","hybris-output-Ok","hybris-output-Supplement","hybris-select-delivery-package");          
             Rigsarkiv.DataExtraction.initialize(Rigsarkiv.Structure.callback,"hybris-select-statistics-file","hybris-statistics-filepath","hybris-statistics-okBtn","hybris-output-metdata-Error","hybris-output-metdata-OKCopyScript");
