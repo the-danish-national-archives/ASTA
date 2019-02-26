@@ -1,10 +1,12 @@
 window.Rigsarkiv = window.Rigsarkiv || {},
 function (n) {
     const {ipcRenderer} = require('electron')
+    const {shell} = require('electron')
     const fs = require('fs');
 
     var settings = {
         structureCallback: null,
+        scriptType: null,
         scriptFileName: null,
         dataFolderPath: null,
         selectStatisticsFileBtn: null,
@@ -14,11 +16,14 @@ function (n) {
         outputStatisticsErrorText: null,
         outputStatisticsOkCopyScriptSpn: null,
         outputStatisticsOkCopyScriptText: null,
+        outputStatisticsOkCopyScriptInfoSpn: null,
+        outputStatisticsOkCopyScriptInfoText: null,        
         outputStatisticsSASWarningTitle: null,
         outputStatisticsSASWarningText: null,
         selectedStatisticsFilePath: null,
         scriptPanel: null,  
-        okScriptBtn: null,      
+        okScriptBtn: null,   
+        okScriptDataPath: null,   
         scriptPath: "./assets/scripts/{0}",
         scripts: ["spss_script.sps","sas_uden_katalog_script.sas","sas_med_katalog_script.sas","stata_script.do"],
         sasCatalogFileExt: "{0}.sas7bcat",
@@ -26,28 +31,67 @@ function (n) {
         dataTablePathPostfix: "\\table{0}"
     }
 
+    var HandleError = function(err) {
+        console.log(`Error: ${err}`);
+        settings.outputStatisticsErrorSpn.hidden = false;
+        settings.outputStatisticsErrorSpn.innerHTML = settings.outputStatisticsErrorText.format(err.message);
+    }
+
     var Reset = function () {
         settings.outputStatisticsErrorSpn.hidden = true;
-        settings.outputStatisticsOkCopyScriptSpn.hidden = true;
         settings.scriptPanel.hidden = true;
     }
 
-    var CopyScript = function() {
-        var scriptFilePath = settings.scriptPath.format(settings.scriptFileName);
-        console.log(`script file path: ${scriptFilePath}`);
+    var GetFileName = function() {
+        var folders = settings.selectedStatisticsFilePath[0].split("\\");
+        return folders[folders.length - 1];
+    }
 
+    var CopyData = function(fileName) {
+        var filePath = settings.selectedStatisticsFilePath[0];
+        console.log(`copy data file to: ${filePath}`);        
+        fs.copyFile(filePath, settings.dataFolderPath + "\\" + fileName, (err) => {
+            if (err) {
+                HandleError(err);
+            }
+        });
+    }
+
+    var CopyScript = function() {        
+        var scriptFilePath = settings.scriptPath.format(settings.scriptFileName);
+        console.log(`copy script file to: ${scriptFilePath}`);
         fs.copyFile(scriptFilePath, settings.dataFolderPath + "\\" + settings.scriptFileName, (err) => {
             if (err) {
-                settings.outputStatisticsErrorSpn.hidden = false;
-                settings.outputStatisticsErrorSpn.innerHTML = settings.outputStatisticsErrorText.format(err.message);
+                HandleError(err);
             }
             else {
                 console.log(settings.scriptFileName + ' was copied to '+ settings.dataFolderPath);
-                settings.outputStatisticsOkCopyScriptSpn.hidden = false;
-                settings.outputStatisticsOkCopyScriptSpn.innerHTML = settings.outputStatisticsOkCopyScriptText.format(settings.scriptFileName,settings.dataFolderPath);
-                settings.scriptPanel.hidden = false;
+                var filePath = settings.dataFolderPath + "\\" + settings.scriptFileName;
+                fs.readFile(filePath, (err, data) => {
+                    if (err) {
+                        HandleError(err);
+                    }
+                    else {
+                        var filePath = settings.dataFolderPath + "\\" + settings.scriptFileName;
+                        var fileName = GetFileName();
+                        fileName = fileName.substring(0,fileName.indexOf("."));
+                        var updatedData = data.toString().format(settings.dataFolderPath,fileName);
+                        fs.writeFile(filePath, updatedData, (err) => {
+                            if (err) {
+                                HandleError(err);
+                            }
+                            else {
+                                settings.outputStatisticsOkCopyScriptSpn.innerHTML = settings.outputStatisticsOkCopyScriptText.format(settings.scriptType,settings.scriptFileName,GetFileName());
+                                settings.outputStatisticsOkCopyScriptInfoSpn.innerHTML = settings.outputStatisticsOkCopyScriptInfoText.format(settings.scriptFileName);
+                                settings.okScriptDataPath.innerHTML = settings.dataFolderPath;
+                                settings.scriptPanel.hidden = false;
+                            }
+                        });
+                    }
+                  });
+                
             }            
-        });
+        });       
     }   
     
     var EnsureScript = function() {
@@ -55,31 +99,35 @@ function (n) {
         var folderPath = filePath.substring(0,filePath.lastIndexOf("\\"));
         fs.readdir(folderPath, (err, files) => {
             if (err) {
-                settings.outputStatisticsErrorSpn.hidden = false;
-                settings.outputStatisticsErrorSpn.innerHTML = settings.outputStatisticsErrorText.format(err.message);
+                HandleError(err);
             }
             else {
-                var folders = settings.selectedStatisticsFilePath[0].split("\\");
-                var fileName = folders[folders.length - 1];
+                var fileName = GetFileName();
                 var fileExt = fileName.substring(fileName.indexOf(".") + 1);
                 var sasCatalogFileName = settings.sasCatalogFileExt.format(fileName.substring(0,fileName.indexOf(".")));
                 var sasCatalogExists = false;
                 files.forEach(file => {
-                    if(file === sasCatalogFileName) {
-                        sasCatalogExists = true;
-                    }
+                    if(file === sasCatalogFileName) { sasCatalogExists = true; }
                 });
-
                 switch(fileExt) {
-                    case "sav": settings.scriptFileName = settings.scripts[0]; break;
+                    case "sav": {
+                        settings.scriptType = "SPSS";
+                        settings.scriptFileName = settings.scripts[0]; 
+                    };break;
                     case "sas7bdat": {
+                        settings.scriptType = "SAS";
                         settings.scriptFileName = sasCatalogExists ? settings.scripts[2] : settings.scripts[1];
                     };break;
-                    case "dta": settings.scriptFileName = settings.scripts[3]; break;
+                    case "dta": { 
+                        settings.scriptType = "Stata";
+                        settings.scriptFileName = settings.scripts[3];
+                     }; break;
                 }
                 if(!sasCatalogExists && fileExt === "sas7bdat") {
                     ipcRenderer.send('open-warning-dialog',settings.outputStatisticsSASWarningTitle.innerHTML,settings.outputStatisticsSASWarningText.innerHTML);
                 }
+                if(sasCatalogExists && fileExt === "sas7bdat") {  CopyData(sasCatalogFileName); }
+                CopyData(fileName);
                 CopyScript();     
             }
         });
@@ -93,8 +141,7 @@ function (n) {
         fs.readdir(settings.dataFolderPath, (err, files) => {
             if (err) {
                 settings.dataFolderPath = null;
-                settings.outputStatisticsErrorSpn.hidden = false;
-                settings.outputStatisticsErrorSpn.innerHTML = settings.outputStatisticsErrorText.format(err.message);
+                HandleError(err);
             }
             else {
                 var tablecounter = 0;
@@ -109,8 +156,7 @@ function (n) {
                 fs.mkdir(settings.dataFolderPath, { recursive: true }, (err) => {
                     if (err) {
                         settings.dataFolderPath = null;
-                        settings.outputStatisticsErrorSpn.hidden = false;
-                        settings.outputStatisticsErrorSpn.innerHTML = settings.outputStatisticsErrorText.format(err.message);
+                        HandleError(err);
                     }
                     else {
                         console.log(`ensure package data path: ${settings.dataFolderPath}`);
@@ -121,9 +167,17 @@ function (n) {
         });
     }
 
+    var EnsureExport = function() {
+
+    }
+
     var AddEvents = function () {
+        settings.okScriptDataPath.addEventListener('click', (event) => {
+            var folderPath = settings.dataFolderPath + "\\";
+            shell.openItem(folderPath);
+        })
         settings.okScriptBtn.addEventListener('click', (event) => {
-            
+            EnsureExport();
         })
         settings.okStatisticsBtn.addEventListener('click', (event) => {
             Reset();
@@ -140,7 +194,7 @@ function (n) {
     }
 
     Rigsarkiv.DataExtraction = {        
-        initialize: function (structureCallback,selectStatisticsFileId,pathStatisticsFileId,okStatisticsId,outputStatisticsErrorId,outputStatisticsOkCopyScriptId,outputStatisticsSASWarningPrefixId,scriptPanelId,okScriptBtnId) {
+        initialize: function (structureCallback,selectStatisticsFileId,pathStatisticsFileId,okStatisticsId,outputStatisticsErrorId,outputStatisticsOkCopyScriptId,outputStatisticsSASWarningPrefixId,scriptPanelId,okScriptBtnId,okScriptDataPathId,outputStatisticsOkCopyScriptInfoId) {
             settings.structureCallback = structureCallback;
             settings.selectStatisticsFileBtn = document.getElementById(selectStatisticsFileId);
             settings.pathStatisticsFileTxt = document.getElementById(pathStatisticsFileId);
@@ -153,6 +207,9 @@ function (n) {
             settings.outputStatisticsSASWarningText = document.getElementById(outputStatisticsSASWarningPrefixId + "-Text");
             settings.scriptPanel = document.getElementById(scriptPanelId);
             settings.okScriptBtn = document.getElementById(okScriptBtnId);
+            settings.okScriptDataPath = document.getElementById(okScriptDataPathId);
+            settings.outputStatisticsOkCopyScriptInfoSpn = document.getElementById(outputStatisticsOkCopyScriptInfoId);
+            settings.outputStatisticsOkCopyScriptInfoText = settings.outputStatisticsOkCopyScriptInfoSpn.innerHTML;
             AddEvents();
         }
     };

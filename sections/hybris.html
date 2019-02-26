@@ -28,15 +28,21 @@
                         </div>
                         <button id="hybris-statistics-okBtn">Ok</button>
                         <span id="hybris-output-statistics-Error" hidden="true"><br/>Error: {0}</span>
-                        <span id="hybris-output-statistics-OKCopyScript" hidden="true"><br/>Fil {0} er koperet til: {1}</span>
                         <span id="hybris-message-statistics-SASCatalogWarning-Title" hidden="true">SAS fil uden katalog</span>
                         <span id="hybris-message-statistics-SASCatalogWarning-Text" hidden="true">Du er ved at udtrække data fra en SAS-fil uden katalog. Når der udtrækkes data for en SAS-fil med katalog, skal katalogfilen (.sas7bcat) placeres i samme mappe som den valgte SAS-datafil (.sas7bdat), der skal laves udtræk fra og navngives på samme måde som datafilen.</span>
                     </div>
                     <div id="hybris-panel-script" class="formularContainer" hidden="true">
                         <h3>TRIN 2: Kør eksport script i statistikprogram</h3>
+                        <span id="hybris-output-script-OKCopyScript">
+                            <br/>{0} scriptet {1} til eksport af data og metadata fra statistikfil {2} er dannet og placeret i mappen: </span><a id="hybris-output-script-dataPath"></a>
+                        <span id="hybris-output-script-OKCopyScriptInfo">
+                            <br/><br/>Du skal nu køre scriptet {0} i dit statistikprogram før du klikker på OK knappen
+                            <br/><br/>Sådan gøre du:
+                            <br/>
+                        </span>
                         <button id="hybris-script-okBtn">Ok</button>
                         <span id="hybris-output-script-Error" hidden="true"><br/>Error: {0}</span>
-                        <span id="hybris-output-script-OKCopyScript" hidden="true"><br/>Fil {0} er koperet til: {1}</span>
+                        
                     </div>
                     <div id="hybris-panel-metdata" class="formularContainer" hidden="true">
                         <h3>Indtast information om statistikfilen</h3>
@@ -98,7 +104,7 @@
             Rigsarkiv.Panels.initialize(["hybris-tab-structure","hybris-tab-statistics","hybris-tab-metdata"]);
             Rigsarkiv.Messages.initialize(["hybris-message-delivery-package","hybris-message-path","hybris-message-statistics-filepath"]);
             Rigsarkiv.Structure.initialize("hybris-select-directory","hybris-path","hybris-delivery-package","hybris-okBtn","hybris-output-Error","hybris-output-Exists","hybris-output-RequiredPath","hybris-output-UnvalidDeliveryPackage","hybris-output-Ok","hybris-output-Supplement","hybris-select-delivery-package");          
-            Rigsarkiv.DataExtraction.initialize(Rigsarkiv.Structure.callback,"hybris-select-statistics-file","hybris-statistics-filepath","hybris-statistics-okBtn","hybris-output-statistics-Error","hybris-output-statistics-OKCopyScript","hybris-message-statistics-SASCatalogWarning","hybris-panel-script","hybris-script-okBtn");
+            Rigsarkiv.DataExtraction.initialize(Rigsarkiv.Structure.callback,"hybris-select-statistics-file","hybris-statistics-filepath","hybris-statistics-okBtn","hybris-output-statistics-Error","hybris-output-script-OKCopyScript","hybris-message-statistics-SASCatalogWarning","hybris-panel-script","hybris-script-okBtn","hybris-output-script-dataPath","hybris-output-script-OKCopyScriptInfo");
             Rigsarkiv.MetaData.initialize("fileName", "dataFileDescription", "keyVar", "foreignFileName", "foreignKeyVarName", "refVar", "metadata-okBtn");
           </script>
     </section>
