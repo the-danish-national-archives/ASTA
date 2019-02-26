@@ -58,15 +58,13 @@ function (n) {
                                     settings.outputErrorSpn.innerHTML = settings.outputErrorText.format(err.message);   
                                     settings.deliveryPackagePath = null;                         
                                 }
-                                else {
-                                    settings.selectDeliveryPackage.innerHTML = settings.selectedPath;
-                                    settings.selectDeliveryPackage.hidden = false;
-                                    settings.outputOkSpn.hidden = false;
-                                    settings.outputSupplementSpn.hidden = false;
-                                    settings.outputOkSpn.innerHTML = settings.outputOkText.format(folderName);
-                                }
                             });
                         });
+                        settings.selectDeliveryPackage.innerHTML = settings.selectedPath;
+                        settings.selectDeliveryPackage.hidden = false;
+                        settings.outputOkSpn.hidden = false;
+                        settings.outputSupplementSpn.hidden = false;
+                        settings.outputOkSpn.innerHTML = settings.outputOkText.format(folderName);
                     }
                 });
             }
