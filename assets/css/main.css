@@ -69,6 +69,20 @@ body{
 
 /* HR elements END */
 
+/* Label elements */
+
+.descriptionLabel{
+    margin-right: 20px;
+    width: 200px;
+    display: inline-block;
+}
+
+/* Label elements END */
+
+i{
+    margin-left: 5px;
+}
+
 .title {
     text-align: right;
     padding: 10px;
@@ -82,7 +96,7 @@ h1{
 }
 
 h4{
-    color: rgb(153, 142, 142)
+    color: rgb(192, 143, 37)
 }
 
 .menuBtn{

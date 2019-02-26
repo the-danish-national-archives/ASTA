@@ -12,9 +12,12 @@
     "create-installer-mac": "electron-installer-dmg ./release-builds/file-converter-darwin-x64/file-converter.app file-converter --out=release-builds --overwrite --icon=assets/icons/mac/bookshelf-icon.icns"
   },
   "keywords": [
-    "electron"
+    "electron",
+    "Rigsarkivet",
+    "Arkivering",
+    "Afleveringspakke"
   ],
-  "author": "Brian Lynnerup Pedersen",
+  "author": "ProActive A/S - Brian Lynnerup Pedersen, Nawar Hajwal",
   "license": "ISC",
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.7.2",
