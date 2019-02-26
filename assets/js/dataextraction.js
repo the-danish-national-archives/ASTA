@@ -15,7 +15,9 @@ function (n) {
         outputStatisticsOkCopyScriptText: null,
         outputStatisticsSASWarningTitle: null,
         outputStatisticsSASWarningText: null,
-        selectedStatisticsFilePath: null,        
+        selectedStatisticsFilePath: null,
+        scriptPanel: null,  
+        okScriptBtn: null,      
         scriptPath: "./assets/scripts/{0}",
         scripts: ["spss_script.sps","sas_uden_katalog_script.sas","sas_med_katalog_script.sas","stata_script.do"],
         sasCatalogFileExt: "{0}.sas7bcat"
@@ -24,6 +26,7 @@ function (n) {
     var Reset = function () {
         settings.outputStatisticsErrorSpn.hidden = true;
         settings.outputStatisticsOkCopyScriptSpn.hidden = true;
+        settings.scriptPanel.hidden = true;
     }
 
     var GetFolderPath = function() {
@@ -45,6 +48,7 @@ function (n) {
                 console.log(settings.scriptFileName + ' was copied to '+ folderPath);
                 settings.outputStatisticsOkCopyScriptSpn.hidden = false;
                 settings.outputStatisticsOkCopyScriptSpn.innerHTML = settings.outputStatisticsOkCopyScriptText.format(settings.scriptFileName,folderPath);
+                settings.scriptPanel.hidden = false;
             }            
         });
           
@@ -86,7 +90,14 @@ function (n) {
         });
     }
 
+    var EnsureData = function() {
+
+    }
+
     var AddEvents = function () {
+        settings.okScriptBtn.addEventListener('click', (event) => {
+            EnsureData();
+        })
         settings.okStatisticsBtn.addEventListener('click', (event) => {
             Reset();
             EnsureScript();
@@ -102,7 +113,7 @@ function (n) {
     }
 
     Rigsarkiv.DataExtraction = {        
-        initialize: function (structureCallback,selectStatisticsFileId,pathStatisticsFileId,okStatisticsId,outputStatisticsErrorId,outputStatisticsOkCopyScriptId,outputStatisticsSASWarningPrefixId) {
+        initialize: function (structureCallback,selectStatisticsFileId,pathStatisticsFileId,okStatisticsId,outputStatisticsErrorId,outputStatisticsOkCopyScriptId,outputStatisticsSASWarningPrefixId,scriptPanelId,okScriptBtnId) {
             settings.structureCallback = structureCallback;
             settings.selectStatisticsFileBtn = document.getElementById(selectStatisticsFileId);
             settings.pathStatisticsFileTxt = document.getElementById(pathStatisticsFileId);
@@ -113,6 +124,8 @@ function (n) {
             settings.outputStatisticsOkCopyScriptText = settings.outputStatisticsOkCopyScriptSpn.innerHTML;
             settings.outputStatisticsSASWarningTitle = document.getElementById(outputStatisticsSASWarningPrefixId + "-Title");
             settings.outputStatisticsSASWarningText = document.getElementById(outputStatisticsSASWarningPrefixId + "-Text");
+            settings.scriptPanel = document.getElementById(scriptPanelId);
+            settings.okScriptBtn = document.getElementById(okScriptBtnId);
             AddEvents();
         }
     };
