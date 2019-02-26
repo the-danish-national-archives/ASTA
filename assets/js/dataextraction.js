@@ -44,10 +44,13 @@ function (n) {
                 settings.outputStatisticsErrorSpn.hidden = false;
                 settings.outputStatisticsErrorSpn.innerHTML = settings.outputStatisticsErrorText.format(err.message);
             }
-            console.log(scriptFileName + ' was copied to '+ folderPath);
+            else {
+                console.log(scriptFileName + ' was copied to '+ folderPath);
+                settings.outputStatisticsOkCopyScriptSpn.hidden = false;
+                settings.outputStatisticsOkCopyScriptSpn.innerHTML = settings.outputStatisticsOkCopyScriptText.format(scriptFileName,folderPath);
+            }            
           });
-          settings.outputStatisticsOkCopyScriptSpn.hidden = false;
-          settings.outputStatisticsOkCopyScriptSpn.innerHTML = settings.outputStatisticsOkCopyScriptText.format(scriptFileName,folderPath);
+          
           //var structureFolderPath = settings.structureCallback();
         //console.log(`package path: ${structureFolderPath}`);
         
