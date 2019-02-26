@@ -9,11 +9,22 @@
                 <section>
                     <div class="btnContaier">
                             <button name="button" class="menuBtn" id="hybris-tab-structure">Skab Mappestruktur</button>
-                            <button name="button" class="menuBtn" id="hybris-tab-metdata">Åben afleveringspakke</button>
+                            <button name="button" class="menuBtn" id="hybris-tab-metdata">Skab Metadata</button>
                     </div>
-                    
                     <hr class="button-divider">
                     <div id="hybris-panel-metdata" class="formularContainer" hidden="true">
+                        <h3>Indtast information om statistikfilen</h3>
+                        <br>
+                        <span><label>Datafilnavn*</label><input type="text" name="dataFileName" id="fileName"></span><i class="far fa-question-circle"></i><br>
+                        <span><label for="dataFileDescription">Datafilbeskrivelse*</label><input type="text" name="dataFileDescription" id="fileDescription"></span><i class="far fa-question-circle"></i><br>
+                        <span><label for="keyVariable">Nøglevariabel</label><input type="text" name="keyVariable" id="keyVar"></span><i class="far fa-question-circle"></i><br>
+                        <br>
+                        <h4>Angiv reference til anden datafil i afleveringspakken</h4>
+                        <span><label for="foreignDataFileName">Fremmeddatafilnavn</label><input type="text" name="foreignDataFileName" id="foreignFileName"><i class="far fa-question-circle"></i></span><br>
+                        <span><label for="foreignVariableName">Fremmevaiabelnavn</label><input type="text" name="foreignVariableName" id="foreignKeyVarName"><i class="far fa-question-circle"></i></span><br>
+                        <span><label for="referenceVariable">Referencevariabel</label><input type="text" name="referenceVariable" id="refVar"><i class="far fa-question-circle"></i></span><br>
+                        <br>
+                        <button type="submit">OK</button>
                         <h3>Udtrække data- og metadata</h3> 
                         <div>
                             <input type="text" id="hybris-statistics-filepath">
