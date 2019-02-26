@@ -9,23 +9,27 @@
                 <section>
                     <div class="btnContaier">
                             <button name="button" class="menuBtn" id="hybris-tab-structure">Skab Mappestruktur</button>
+                            <button name="button" class="menuBtn" id="hybris-tab-script">Skab Script Fil</button>
                             <button name="button" class="menuBtn" id="hybris-tab-metdata">Skab Metadata</button>
                     </div>
                     <hr class="button-divider">
+                    <div id="hybris-panel-script" hidden="true">
+                        <h3>Opret script fil til statistik program.</h3>
+                    </div>
                     <div id="hybris-panel-metdata" class="formularContainer" hidden="true">
                         <h3>Indtast information om statistikfilen</h3>
                         <br>
-                        <span><label>Datafilnavn*</label><input type="text" name="dataFileName" id="fileName"></span><i class="far fa-question-circle"></i><br>
-                        <span><label for="dataFileDescription">Datafilbeskrivelse*</label><input type="text" name="dataFileDescription" id="fileDescription"></span><i class="far fa-question-circle"></i><br>
-                        <span><label for="keyVariable">Nøglevariabel</label><input type="text" name="keyVariable" id="keyVar"></span><i class="far fa-question-circle"></i><br>
+                        <span><label class="descriptionLabel" for="dataFileName">Datafilnavn*</label><input type="text" name="dataFileName" id="fileName"></span><i class="far fa-question-circle"></i><br>
+                        <span><label class="descriptionLabel" for="dataFileDescription">Datafilbeskrivelse*</label><input type="text" name="dataFileDescription" id="fileDescription"></span><i class="far fa-question-circle"></i><br>
+                        <span><label class="descriptionLabel" for="keyVariable">Nøglevariabel</label><input type="text" name="keyVariable" id="keyVar"></span><i class="far fa-question-circle"></i><br>
                         <br>
                         <h4>Angiv reference til anden datafil i afleveringspakken</h4>
-                        <span><label for="foreignDataFileName">Fremmeddatafilnavn</label><input type="text" name="foreignDataFileName" id="foreignFileName"><i class="far fa-question-circle"></i></span><br>
-                        <span><label for="foreignVariableName">Fremmevaiabelnavn</label><input type="text" name="foreignVariableName" id="foreignKeyVarName"><i class="far fa-question-circle"></i></span><br>
-                        <span><label for="referenceVariable">Referencevariabel</label><input type="text" name="referenceVariable" id="refVar"><i class="far fa-question-circle"></i></span><br>
+                        <span><label class="descriptionLabel" for="foreignDataFileName">Fremmeddatafilnavn</label><input type="text" name="foreignDataFileName" id="foreignFileName"><i class="far fa-question-circle"></i></span><br>
+                        <span><label class="descriptionLabel" for="foreignVariableName">Fremmevaiabelnavn</label><input type="text" name="foreignVariableName" id="foreignKeyVarName"><i class="far fa-question-circle"></i></span><br>
+                        <span><label class="descriptionLabel" for="referenceVariable">Referencevariabel</label><input type="text" name="referenceVariable" id="refVar"><i class="far fa-question-circle"></i></span><br>
                         <br>
-                        <button type="submit">OK</button>
-                        <h3>Udtrække data- og metadata</h3> 
+                        <button type="submit" id="metadata-okBtn">OK</button>
+                        <h3>Udtræk data- og metadata</h3> 
                         <div>
                             <input type="text" id="hybris-statistics-filepath">
                             <button id="hybris-select-statistics-file">Browse...</button>
@@ -75,11 +79,13 @@
             require('./assets/js/panels');
             require('./assets/js/structure');
             require('./assets/js/dataextraction');
+            require('./assets/js/addMetaData');
 
-            Rigsarkiv.Panels.initialize(["hybris-tab-metdata","hybris-tab-structure"]);
+            Rigsarkiv.Panels.initialize(["hybris-tab-metdata","hybris-tab-structure", "hybris-panel-script"]);
             Rigsarkiv.Messages.initialize(["hybris-message-delivery-package","hybris-message-path"]);
             Rigsarkiv.Structure.initialize("hybris-select-directory","hybris-path","hybris-delivery-package","hybris-okBtn","hybris-output-Error","hybris-output-Exists","hybris-output-RequiredPath","hybris-output-UnvalidDeliveryPackage","hybris-output-Ok","hybris-output-Supplement","hybris-select-delivery-package");          
             Rigsarkiv.DataExtraction.initialize(Rigsarkiv.Structure.callback,"hybris-select-statistics-file","hybris-statistics-filepath","hybris-statistics-okBtn","hybris-output-metdata-Error","hybris-output-metdata-OKCopyScript");
+            Rigsarkiv.MetaData.initialize("fileName", "dataFileDescription", "keyVar", "foreignFileName", "foreignKeyVarName", "refVar", "metadata-okBtn");
           </script>
     </section>
 </template>
