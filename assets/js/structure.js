@@ -23,7 +23,8 @@ function (n) {
         selectDeliveryPackage: null,
         folderPrefix: "FD.",
         defaultFolderPostfix: "99999",
-        subFolders: ["ContextDocumentation","Data","Indices"]
+        subFolders: ["ContextDocumentation","Data","Indices"],
+        deliveryPackagePath: null
     }
 
     var Reset = function () {
@@ -39,7 +40,8 @@ function (n) {
     var EnsureStructure = function () {
         var folderName = settings.folderPrefix;
         folderName += (settings.deliveryPackageTxt.value === "") ? settings.defaultFolderPostfix: settings.deliveryPackageTxt.value;
-        var folderPath = settings.selectedPath + "\\" + folderName        
+        var folderPath = settings.selectedPath + "\\" + folderName;
+        settings.deliveryPackagePath = folderPath;                        
         fs.exists(folderPath, (exists) => {
             if(!exists) {
                 console.log("Create structure: " + folderPath);
@@ -53,7 +55,8 @@ function (n) {
                     fs.mkdir(folderPath + "\\" + element, { recursive: true }, (err) => {
                         if (err) {
                             settings.outputErrorSpn.hidden = false;
-                            settings.outputErrorSpn.innerHTML = settings.outputErrorText.format(err.message);
+                            settings.outputErrorSpn.innerHTML = settings.outputErrorText.format(err.message);   
+                            settings.deliveryPackagePath = null;                         
                         }
                     });
                 });
@@ -115,6 +118,9 @@ function (n) {
             settings.outputSupplementSpn = document.getElementById(outputSupplementId);
             settings.selectDeliveryPackage = document.getElementById(selectDeliveryPackageId);
             AddEvents();
+        },
+        callback: function () {
+            return settings.deliveryPackagePath;
         }
     };
 }(jQuery);
