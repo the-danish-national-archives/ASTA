@@ -30,6 +30,9 @@
                             <input type="text" id="hybris-statistics-filepath">
                             <button id="hybris-select-statistics-file">Browse...</button>
                         </div>
+                        <button id="hybris-statistics-okBtn">Ok</button>
+                        <span id="hybris-output-metdata-Error" hidden="true"><br/>Error: {0}</span>
+                        <span id="hybris-output-metdata-OKCopyScript" hidden="true"><br/>Fil {0} er koperet til: {1}</span>
                     </div>
                     <div id="hybris-panel-structure" class="formularContainer">
                         <h3>Skab en afleveringspakke</h3>
@@ -77,7 +80,7 @@
             Rigsarkiv.Panels.initialize(["hybris-tab-metdata","hybris-tab-structure"]);
             Rigsarkiv.Messages.initialize(["hybris-message-delivery-package","hybris-message-path"]);
             Rigsarkiv.Structure.initialize("hybris-select-directory","hybris-path","hybris-delivery-package","hybris-okBtn","hybris-output-Error","hybris-output-Exists","hybris-output-RequiredPath","hybris-output-UnvalidDeliveryPackage","hybris-output-Ok","hybris-output-Supplement","hybris-select-delivery-package");          
-            Rigsarkiv.DataExtraction.initialize("hybris-select-statistics-file","hybris-statistics-filepath");
+            Rigsarkiv.DataExtraction.initialize(Rigsarkiv.Structure.callback,"hybris-select-statistics-file","hybris-statistics-filepath","hybris-statistics-okBtn","hybris-output-metdata-Error","hybris-output-metdata-OKCopyScript");
             Rigsarkiv.MetaData.initialize("fileName", "dataFileDescription", "keyVar", "foreignFileName", "foreignKeyVarName", "refVar", "metadata-okBtn");
           </script>
     </section>
