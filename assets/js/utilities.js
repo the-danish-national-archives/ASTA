@@ -9,3 +9,16 @@ if (!String.prototype.format) {
       });
     };
   }
+  
+  if (!String.prototype.normlizePath) {
+    String.prototype.normlizePath = function() {
+      if(this.indexOf("\\") > -1) {
+        var folders = this.split("\\");
+        folders = folders.slice(1,folders.length);        
+        return "/{0}".format(folders.join("/"));
+      }
+      else {
+        return this.toString();
+      }
+    }
+  }
