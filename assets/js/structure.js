@@ -121,7 +121,8 @@ function (n) {
             AddEvents();
         },
         callback: function () {
-            return { deliveryPackagePath: settings.deliveryPackagePath, selectedPath: settings.selectedPath[0] };
+            var folderPath = (settings.selectedPath != null ? settings.selectedPath[0] : null);
+            return { deliveryPackagePath: settings.deliveryPackagePath, selectedPath: folderPath };
         }
     };
 }(jQuery);

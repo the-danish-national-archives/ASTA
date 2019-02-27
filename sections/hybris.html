@@ -27,6 +27,7 @@
                             <button id="hybris-select-statistics-file">Browse...</button>
                         </div>
                         <button id="hybris-statistics-okBtn">Ok</button>
+                        <span id="hybris-output-statistics-RequiredPath" hidden="true"><br/>Destination for statistikfilen mangler</span>
                         <span id="hybris-output-statistics-Error" hidden="true"><br/>Error: {0}</span>
                         <span id="hybris-message-statistics-SASCatalogWarning-Title" hidden="true">SAS fil uden katalog</span>
                         <span id="hybris-message-statistics-SASCatalogWarning-Text" hidden="true">Du er ved at udtrække data fra en SAS-fil uden katalog. Når der udtrækkes data for en SAS-fil med katalog, skal katalogfilen (.sas7bcat) placeres i samme mappe som den valgte SAS-datafil (.sas7bdat), der skal laves udtræk fra og navngives på samme måde som datafilen.</span>
@@ -37,6 +38,12 @@
                             <span id="hybris-output-script-OKCopyScriptInfo">
                                 <br/><br/>Du skal nu køre scriptet {0} i dit statistikprogram før du klikker på OK knappen
                                 <br/><br/>Sådan gøre du:
+                                <br/>
+                                <ol>
+                                    <li>Lad dette værktøj kør (luk det ikke ned)</li>
+                                    <li>Åben scriptet i {1} og eksekver det.</li>
+                                    <li>Vend tilbag til dette program og klik OK på knappen nedenfor, når scriptet er køret færdig.</li>
+                                </ol>
                                 <br/>
                             </span>
                             <button id="hybris-script-okBtn">Ok</button>
@@ -104,7 +111,7 @@
             Rigsarkiv.Panels.initialize(["hybris-tab-structure","hybris-tab-statistics","hybris-tab-metdata"]);
             Rigsarkiv.Messages.initialize(["hybris-message-delivery-package","hybris-message-path","hybris-message-statistics-filepath"]);
             Rigsarkiv.Structure.initialize("hybris-select-directory","hybris-path","hybris-delivery-package","hybris-okBtn","hybris-output-Error","hybris-output-Exists","hybris-output-RequiredPath","hybris-output-UnvalidDeliveryPackage","hybris-output-Ok","hybris-output-Supplement","hybris-select-delivery-package");          
-            Rigsarkiv.DataExtraction.initialize(Rigsarkiv.Structure.callback,"hybris-select-statistics-file","hybris-statistics-filepath","hybris-statistics-okBtn","hybris-output-statistics-Error","hybris-output-script-OKCopyScript","hybris-message-statistics-SASCatalogWarning","hybris-panel-script","hybris-script-okBtn","hybris-output-script-dataPath","hybris-output-script-OKCopyScriptInfo");
+            Rigsarkiv.DataExtraction.initialize(Rigsarkiv.Structure.callback,"hybris-select-statistics-file","hybris-statistics-filepath","hybris-statistics-okBtn","hybris-output-statistics-Error","hybris-output-script-OKCopyScript","hybris-message-statistics-SASCatalogWarning","hybris-panel-script","hybris-script-okBtn","hybris-output-script-dataPath","hybris-output-script-OKCopyScriptInfo","hybris-output-statistics-RequiredPath");
             Rigsarkiv.MetaData.initialize("hybris-fileName", "hybris-fileDescription", "hybris-keyVar", "hybris-foreignFileName", "hybris-foreignKeyVarName", "hybris-refVar", "metadata-okBtn");
           </script>
     </section>

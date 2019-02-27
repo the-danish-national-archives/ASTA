@@ -7,6 +7,7 @@ function (n) {
     var settings = {
         structureCallback: null,
         scriptType: null,
+        scriptApplication: null,
         scriptFileName: null,
         dataFolderPath: null,
         selectStatisticsFileBtn: null,
@@ -20,6 +21,7 @@ function (n) {
         outputStatisticsOkCopyScriptInfoText: null,        
         outputStatisticsSASWarningTitle: null,
         outputStatisticsSASWarningText: null,
+        outputStatisticsRequiredPathSpn: null,
         selectedStatisticsFilePath: null,
         scriptPanel: null,  
         okScriptBtn: null,   
@@ -38,6 +40,7 @@ function (n) {
     }
 
     var Reset = function () {
+        settings.outputStatisticsRequiredPathSpn.hidden = true;
         settings.outputStatisticsErrorSpn.hidden = true;
         settings.scriptPanel.hidden = true;
     }
@@ -94,7 +97,7 @@ function (n) {
                             }
                             else {
                                 settings.outputStatisticsOkCopyScriptSpn.innerHTML = settings.outputStatisticsOkCopyScriptText.format(settings.scriptType,settings.scriptFileName,GetFileName());
-                                settings.outputStatisticsOkCopyScriptInfoSpn.innerHTML = settings.outputStatisticsOkCopyScriptInfoText.format(settings.scriptFileName);
+                                settings.outputStatisticsOkCopyScriptInfoSpn.innerHTML = settings.outputStatisticsOkCopyScriptInfoText.format(settings.scriptFileName, settings.scriptApplication);
                                 settings.okScriptDataPath.innerHTML = GetLocalFolderPath();
                                 settings.scriptPanel.hidden = false;
                             }
@@ -122,14 +125,17 @@ function (n) {
                 });
                 switch(fileExt) {
                     case "sav": {
+                        settings.scriptApplication = "Statistikprogrammet SPSS Statistics";
                         settings.scriptType = "SPSS";
                         settings.scriptFileName = settings.scripts[0]; 
                     };break;
                     case "sas7bdat": {
+                        settings.scriptApplication = "Statistikprogrammet SAS";
                         settings.scriptType = "SAS";
                         settings.scriptFileName = sasCatalogExists ? settings.scripts[2] : settings.scripts[1];
                     };break;
                     case "dta": { 
+                        settings.scriptApplication = "Statistikprogrammet Stata";
                         settings.scriptType = "Stata";
                         settings.scriptFileName = settings.scripts[3];
                      }; break;
@@ -191,7 +197,16 @@ function (n) {
         })
         settings.okStatisticsBtn.addEventListener('click', (event) => {
             Reset();
-            EnsureData();            
+            if(settings.pathStatisticsFileTxt.value === "") {
+                settings.outputStatisticsRequiredPathSpn.hidden = false;
+            }
+            if(settings.pathStatisticsFileTxt.value !== "" && settings.structureCallback != null && settings.structureCallback().deliveryPackagePath != null) {
+                EnsureData();
+            }
+            else {
+                settings.outputStatisticsErrorSpn.hidden = false;
+                settings.outputStatisticsErrorSpn.innerHTML = settings.outputStatisticsErrorText.format("No delivery Package Path");
+            }                        
         })
         settings.selectStatisticsFileBtn.addEventListener('click', (event) => {
            ipcRenderer.send('dataextraction-open-file-dialog');
@@ -204,7 +219,7 @@ function (n) {
     }
 
     Rigsarkiv.DataExtraction = {        
-        initialize: function (structureCallback,selectStatisticsFileId,pathStatisticsFileId,okStatisticsId,outputStatisticsErrorId,outputStatisticsOkCopyScriptId,outputStatisticsSASWarningPrefixId,scriptPanelId,okScriptBtnId,okScriptDataPathId,outputStatisticsOkCopyScriptInfoId) {
+        initialize: function (structureCallback,selectStatisticsFileId,pathStatisticsFileId,okStatisticsId,outputStatisticsErrorId,outputStatisticsOkCopyScriptId,outputStatisticsSASWarningPrefixId,scriptPanelId,okScriptBtnId,okScriptDataPathId,outputStatisticsOkCopyScriptInfoId,outputStatisticsRequiredPathId) {
             settings.structureCallback = structureCallback;
             settings.selectStatisticsFileBtn = document.getElementById(selectStatisticsFileId);
             settings.pathStatisticsFileTxt = document.getElementById(pathStatisticsFileId);
@@ -220,7 +235,9 @@ function (n) {
             settings.okScriptDataPath = document.getElementById(okScriptDataPathId);
             settings.outputStatisticsOkCopyScriptInfoSpn = document.getElementById(outputStatisticsOkCopyScriptInfoId);
             settings.outputStatisticsOkCopyScriptInfoText = settings.outputStatisticsOkCopyScriptInfoSpn.innerHTML;
-            AddEvents();
+            settings.outputStatisticsRequiredPathSpn = document.getElementById(outputStatisticsRequiredPathId);
+
+            AddEvents();            
         },
         callback: function () {
             return { dataFolderPath: settings.dataFolderPath, selectedStatisticsFilePath: settings.selectedStatisticsFilePath[0] };
