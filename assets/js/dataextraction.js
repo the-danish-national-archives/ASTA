@@ -46,6 +46,7 @@ function (n) {
         settings.outputStatisticsRequiredPathSpn.hidden = true;
         settings.outputStatisticsErrorSpn.hidden = true;
         settings.scriptPanel.hidden = true;
+        settings.outputScriptOkSpn.hidden = true;
     }
 
     var GetLocalFolderPath = function() {
@@ -188,6 +189,7 @@ function (n) {
     }
 
     var EnsureExport = function() {
+        settings.outputScriptOkSpn.hidden = true;
         fs.readdir(settings.dataFolderPath, (err, files) => {
             if (err) {
                 HandleError(err);
@@ -203,6 +205,9 @@ function (n) {
                 });
                 if(counter < 3) {
                     ipcRenderer.send('open-warning-dialog',settings.outputScriptRequiredFilesWarningTitle.innerHTML,settings.outputScriptRequiredFilesWarningText.innerHTML);
+                }
+                else {
+                    settings.outputScriptOkSpn.hidden = false;
                 }
             }
         });
@@ -239,7 +244,7 @@ function (n) {
     }
 
     Rigsarkiv.DataExtraction = {        
-        initialize: function (structureCallback,selectStatisticsFileId,pathStatisticsFileId,okStatisticsId,outputStatisticsErrorId,outputStatisticsOkCopyScriptId,outputStatisticsSASWarningPrefixId,scriptPanelId,okScriptBtnId,okScriptDataPathId,outputStatisticsOkCopyScriptInfoId,outputStatisticsRequiredPathId,outputScriptRequiredFilesWarningPrefixId) {
+        initialize: function (structureCallback,selectStatisticsFileId,pathStatisticsFileId,okStatisticsId,outputStatisticsErrorId,outputStatisticsOkCopyScriptId,outputStatisticsSASWarningPrefixId,scriptPanelId,okScriptBtnId,okScriptDataPathId,outputStatisticsOkCopyScriptInfoId,outputStatisticsRequiredPathId,outputScriptRequiredFilesWarningPrefixId,outputScriptOkId) {
             settings.structureCallback = structureCallback;
             settings.selectStatisticsFileBtn = document.getElementById(selectStatisticsFileId);
             settings.pathStatisticsFileTxt = document.getElementById(pathStatisticsFileId);
@@ -258,6 +263,7 @@ function (n) {
             settings.outputStatisticsRequiredPathSpn = document.getElementById(outputStatisticsRequiredPathId);
             settings.outputScriptRequiredFilesWarningTitle = document.getElementById(outputScriptRequiredFilesWarningPrefixId + "-Title");
             settings.outputScriptRequiredFilesWarningText = document.getElementById(outputScriptRequiredFilesWarningPrefixId + "-Text");
+            settings.outputScriptOkSpn =  document.getElementById(outputScriptOkId);
             AddEvents();
         },
         callback: function () {
