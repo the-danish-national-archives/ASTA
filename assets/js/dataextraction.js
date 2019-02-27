@@ -27,8 +27,8 @@ function (n) {
         scriptPath: "./assets/scripts/{0}",
         scripts: ["spss_script.sps","sas_uden_katalog_script.sas","sas_med_katalog_script.sas","stata_script.do"],
         sasCatalogFileExt: "{0}.sas7bcat",
-        dataPathPostfix: "\\Data",
-        dataTablePathPostfix: "\\table{0}"
+        dataPathPostfix: "/Data",
+        dataTablePathPostfix: "/table{0}"
     }
 
     var HandleError = function(err) {
@@ -42,15 +42,27 @@ function (n) {
         settings.scriptPanel.hidden = true;
     }
 
+    var GetLocalFolderPath = function() {
+        var folderPath = settings.structureCallback().selectedPath;
+        if(folderPath.indexOf("\\") > -1) {
+            var folders = settings.dataFolderPath.split("/");
+            return "{0}\\{1}\\{2}\\{3}".format(folderPath,folders[folders.length - 3],folders[folders.length - 2],folders[folders.length - 1]);
+        }
+        else {
+            return settings.dataFolderPath;
+        }
+    } 
+
     var GetFileName = function() {
-        var folders = settings.selectedStatisticsFilePath[0].split("\\");
+        var filePath = settings.selectedStatisticsFilePath[0].normlizePath();
+        var folders = filePath.split("/");
         return folders[folders.length - 1];
     }
 
     var CopyData = function(fileName) {
-        var filePath = settings.selectedStatisticsFilePath[0];
+        var filePath = settings.selectedStatisticsFilePath[0].normlizePath();
         console.log(`copy data file to: ${filePath}`);        
-        fs.copyFile(filePath, settings.dataFolderPath + "\\" + fileName, (err) => {
+        fs.copyFile(filePath, settings.dataFolderPath + "/" + fileName, (err) => {
             if (err) {
                 HandleError(err);
             }
@@ -60,19 +72,19 @@ function (n) {
     var CopyScript = function() {        
         var scriptFilePath = settings.scriptPath.format(settings.scriptFileName);
         console.log(`copy script file to: ${scriptFilePath}`);
-        fs.copyFile(scriptFilePath, settings.dataFolderPath + "\\" + settings.scriptFileName, (err) => {
+        fs.copyFile(scriptFilePath, settings.dataFolderPath + "/" + settings.scriptFileName, (err) => {
             if (err) {
                 HandleError(err);
             }
             else {
                 console.log(settings.scriptFileName + ' was copied to '+ settings.dataFolderPath);
-                var filePath = settings.dataFolderPath + "\\" + settings.scriptFileName;
+                var filePath = settings.dataFolderPath + "/" + settings.scriptFileName;
                 fs.readFile(filePath, (err, data) => {
                     if (err) {
                         HandleError(err);
                     }
                     else {
-                        var filePath = settings.dataFolderPath + "\\" + settings.scriptFileName;
+                        var filePath = settings.dataFolderPath + "/" + settings.scriptFileName;
                         var fileName = GetFileName();
                         fileName = fileName.substring(0,fileName.indexOf("."));
                         var updatedData = data.toString().format(settings.dataFolderPath,fileName);
@@ -83,20 +95,19 @@ function (n) {
                             else {
                                 settings.outputStatisticsOkCopyScriptSpn.innerHTML = settings.outputStatisticsOkCopyScriptText.format(settings.scriptType,settings.scriptFileName,GetFileName());
                                 settings.outputStatisticsOkCopyScriptInfoSpn.innerHTML = settings.outputStatisticsOkCopyScriptInfoText.format(settings.scriptFileName);
-                                settings.okScriptDataPath.innerHTML = settings.dataFolderPath;
+                                settings.okScriptDataPath.innerHTML = GetLocalFolderPath();
                                 settings.scriptPanel.hidden = false;
                             }
                         });
                     }
-                  });
-                
+                  });                
             }            
         });       
     }   
     
     var EnsureScript = function() {
-        var filePath = settings.selectedStatisticsFilePath[0];
-        var folderPath = filePath.substring(0,filePath.lastIndexOf("\\"));
+        var filePath = settings.selectedStatisticsFilePath[0].normlizePath();
+        var folderPath = filePath.substring(0,filePath.lastIndexOf("/"));
         fs.readdir(folderPath, (err, files) => {
             if (err) {
                 HandleError(err);
@@ -134,7 +145,7 @@ function (n) {
     }
 
     var EnsureData = function() {
-        var structureFolderPath = settings.structureCallback();
+        var structureFolderPath = settings.structureCallback().deliveryPackagePath;
         if(structureFolderPath == null) { return; }
         settings.dataFolderPath =  structureFolderPath + settings.dataPathPostfix;
                 
@@ -173,8 +184,7 @@ function (n) {
 
     var AddEvents = function () {
         settings.okScriptDataPath.addEventListener('click', (event) => {
-            var folderPath = settings.dataFolderPath + "\\";
-            shell.openItem(folderPath);
+            shell.openItem(GetLocalFolderPath());
         })
         settings.okScriptBtn.addEventListener('click', (event) => {
             EnsureExport();

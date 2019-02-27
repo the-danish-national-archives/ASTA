@@ -97,7 +97,7 @@ function (n) {
             settings.pathDirTxt.value = settings.selectedPath;
          })
         settings.selectDeliveryPackage.addEventListener('click', (event) => {
-           var folderPath = settings.selectedPath[0] + "\\";
+           var folderPath = settings.selectedPath[0];
             shell.openItem(folderPath);
         }) 
     }
@@ -121,7 +121,7 @@ function (n) {
             AddEvents();
         },
         callback: function () {
-            return settings.deliveryPackagePath;
+            return { deliveryPackagePath: settings.deliveryPackagePath, selectedPath: settings.selectedPath[0] };
         }
     };
 }(jQuery);
