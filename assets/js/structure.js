@@ -39,20 +39,19 @@ function (n) {
 
     var EnsureStructure = function () {
         var folderName = settings.folderPrefix;
-        folderName += (settings.deliveryPackageTxt.value === "") ? settings.defaultFolderPostfix: settings.deliveryPackageTxt.value;
-        var folderPath = settings.selectedPath + "\\" + folderName;
-        settings.deliveryPackagePath = folderPath;                        
-        fs.exists(folderPath, (exists) => {
+        folderName += (settings.deliveryPackageTxt.value === "") ? settings.defaultFolderPostfix: settings.deliveryPackageTxt.value;        
+        settings.deliveryPackagePath = settings.selectedPath[0].normlizePath() + "/" + folderName;
+        fs.exists(settings.deliveryPackagePath, (exists) => {
             if(!exists) {
-                console.log("Create structure: " + folderPath);
-                fs.mkdir(folderPath, { recursive: true }, (err) => {
+                console.log("Create structure: " + settings.deliveryPackagePath);
+                fs.mkdir(settings.deliveryPackagePath, { recursive: true }, (err) => {
                     if (err) {
                         settings.outputErrorSpn.hidden = false;
                         settings.outputErrorSpn.innerHTML = settings.outputErrorText.format(err.message);
                     }
                     else {
                         settings.subFolders.forEach(element => {
-                            fs.mkdir(folderPath + "\\" + element, { recursive: true }, (err) => {
+                            fs.mkdir(settings.deliveryPackagePath + "/" + element, { recursive: true }, (err) => {
                                 if (err) {
                                     settings.outputErrorSpn.hidden = false;
                                     settings.outputErrorSpn.innerHTML = settings.outputErrorText.format(err.message);   
@@ -98,7 +97,7 @@ function (n) {
             settings.pathDirTxt.value = settings.selectedPath;
          })
         settings.selectDeliveryPackage.addEventListener('click', (event) => {
-           var folderPath = settings.selectedPath + "\\";
+           var folderPath = settings.selectedPath[0] + "\\";
             shell.openItem(folderPath);
         }) 
     }

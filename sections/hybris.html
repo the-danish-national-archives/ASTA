@@ -10,6 +10,7 @@
                     <div class="btnContaier">
                             <button name="button" class="menuBtn" id="hybris-tab-structure">Skab Mappestruktur</button>
                             <button name="button" class="menuBtn" id="hybris-tab-statistics">Skab Script Fil</button>
+                            <button name="button" class="menuBtn" id="hybris-tab-script" hidden="true"></button>
                             <button name="button" class="menuBtn" id="hybris-tab-metdata">Skab Metadata</button>
                     </div>
                     <hr class="button-divider">
@@ -101,7 +102,7 @@
             require('./assets/js/dataextraction');
             require('./assets/js/addMetaData');
 
-            Rigsarkiv.Panels.initialize(["hybris-tab-structure","hybris-tab-statistics","hybris-tab-metdata"]);
+            Rigsarkiv.Panels.initialize(["hybris-tab-structure","hybris-tab-statistics","hybris-tab-script","hybris-tab-metdata"]);
             Rigsarkiv.Messages.initialize(["hybris-message-delivery-package","hybris-message-path","hybris-message-statistics-filepath"]);
             Rigsarkiv.Structure.initialize("hybris-select-directory","hybris-path","hybris-delivery-package","hybris-okBtn","hybris-output-Error","hybris-output-Exists","hybris-output-RequiredPath","hybris-output-UnvalidDeliveryPackage","hybris-output-Ok","hybris-output-Supplement","hybris-select-delivery-package");          
             Rigsarkiv.DataExtraction.initialize(Rigsarkiv.Structure.callback,"hybris-select-statistics-file","hybris-statistics-filepath","hybris-statistics-okBtn","hybris-output-statistics-Error","hybris-output-script-OKCopyScript","hybris-message-statistics-SASCatalogWarning","hybris-panel-script","hybris-script-okBtn","hybris-output-script-dataPath","hybris-output-script-OKCopyScriptInfo");
