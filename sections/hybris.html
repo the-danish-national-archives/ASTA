@@ -48,7 +48,8 @@
                             </span>
                             <button id="hybris-script-okBtn">Ok</button>
                             <span id="hybris-output-script-Error" hidden="true"><br/>Error: {0}</span>
-                            
+                            <span id="hybris-output-script-RequiredFilesWarning-Title" hidden="true">Data og metadata fra statistikfilen</span>
+                            <span id="hybris-output-script-RequiredFilesWarning-Text" hidden="true">Der er ikke udtrukket data og metadata fra statistikfilen. Kør export scriptet i dit statistikprogram før du klikker på OK. Hvis du fortsætter uden at køre scriptet vil data- og metadatafil være tomme.</span>
                         </div>
                     </div>                    
                     <div id="hybris-panel-metdata" class="formularContainer" hidden="true">
@@ -111,7 +112,7 @@
             Rigsarkiv.Panels.initialize(["hybris-tab-structure","hybris-tab-statistics","hybris-tab-metdata"]);
             Rigsarkiv.Messages.initialize(["hybris-message-delivery-package","hybris-message-path","hybris-message-statistics-filepath"]);
             Rigsarkiv.Structure.initialize("hybris-select-directory","hybris-path","hybris-delivery-package","hybris-okBtn","hybris-output-Error","hybris-output-Exists","hybris-output-RequiredPath","hybris-output-UnvalidDeliveryPackage","hybris-output-Ok","hybris-output-Supplement","hybris-select-delivery-package");          
-            Rigsarkiv.DataExtraction.initialize(Rigsarkiv.Structure.callback,"hybris-select-statistics-file","hybris-statistics-filepath","hybris-statistics-okBtn","hybris-output-statistics-Error","hybris-output-script-OKCopyScript","hybris-message-statistics-SASCatalogWarning","hybris-panel-script","hybris-script-okBtn","hybris-output-script-dataPath","hybris-output-script-OKCopyScriptInfo","hybris-output-statistics-RequiredPath");
+            Rigsarkiv.DataExtraction.initialize(Rigsarkiv.Structure.callback,"hybris-select-statistics-file","hybris-statistics-filepath","hybris-statistics-okBtn","hybris-output-statistics-Error","hybris-output-script-OKCopyScript","hybris-message-statistics-SASCatalogWarning","hybris-panel-script","hybris-script-okBtn","hybris-output-script-dataPath","hybris-output-script-OKCopyScriptInfo","hybris-output-statistics-RequiredPath","hybris-output-script-RequiredFilesWarning");
             Rigsarkiv.MetaData.initialize("hybris-fileName", "hybris-fileDescription", "hybris-keyVar", "hybris-foreignFileName", "hybris-foreignKeyVarName", "hybris-refVar", "metadata-okBtn");
           </script>
     </section>

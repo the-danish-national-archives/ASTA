@@ -21,6 +21,8 @@ function (n) {
         outputStatisticsOkCopyScriptInfoText: null,        
         outputStatisticsSASWarningTitle: null,
         outputStatisticsSASWarningText: null,
+        outputScriptRequiredFilesWarningTitle: null,
+        outputScriptRequiredFilesWarningText: null,
         outputStatisticsRequiredPathSpn: null,
         selectedStatisticsFilePath: null,
         scriptPanel: null,  
@@ -28,6 +30,7 @@ function (n) {
         okScriptDataPath: null,   
         scriptPath: "./assets/scripts/{0}",
         scripts: ["spss_script.sps","sas_uden_katalog_script.sas","sas_med_katalog_script.sas","stata_script.do"],
+        outputPostfixFiles: ["{0}.csv","{0}_VARIABEL.txt","{0}_VARIABELBESKRIVELSE.txt"],
         sasCatalogFileExt: "{0}.sas7bcat",
         dataPathPostfix: "/Data",
         dataTablePathPostfix: "/table{0}"
@@ -185,7 +188,24 @@ function (n) {
     }
 
     var EnsureExport = function() {
-
+        fs.readdir(settings.dataFolderPath, (err, files) => {
+            if (err) {
+                HandleError(err);
+            }
+            else {
+                var counter = 0;
+                var fileName = GetFileName();
+                var filePrefix = fileName.substring(0,fileName.indexOf("."))
+                files.forEach(file => {
+                    settings.outputPostfixFiles.forEach(element => {
+                        if(element.format(filePrefix) == file) { counter = counter + 1; }
+                    });
+                });
+                if(counter < 3) {
+                    ipcRenderer.send('open-warning-dialog',settings.outputScriptRequiredFilesWarningTitle.innerHTML,settings.outputScriptRequiredFilesWarningText.innerHTML);
+                }
+            }
+        });
     }
 
     var AddEvents = function () {
@@ -219,7 +239,7 @@ function (n) {
     }
 
     Rigsarkiv.DataExtraction = {        
-        initialize: function (structureCallback,selectStatisticsFileId,pathStatisticsFileId,okStatisticsId,outputStatisticsErrorId,outputStatisticsOkCopyScriptId,outputStatisticsSASWarningPrefixId,scriptPanelId,okScriptBtnId,okScriptDataPathId,outputStatisticsOkCopyScriptInfoId,outputStatisticsRequiredPathId) {
+        initialize: function (structureCallback,selectStatisticsFileId,pathStatisticsFileId,okStatisticsId,outputStatisticsErrorId,outputStatisticsOkCopyScriptId,outputStatisticsSASWarningPrefixId,scriptPanelId,okScriptBtnId,okScriptDataPathId,outputStatisticsOkCopyScriptInfoId,outputStatisticsRequiredPathId,outputScriptRequiredFilesWarningPrefixId) {
             settings.structureCallback = structureCallback;
             settings.selectStatisticsFileBtn = document.getElementById(selectStatisticsFileId);
             settings.pathStatisticsFileTxt = document.getElementById(pathStatisticsFileId);
@@ -236,8 +256,9 @@ function (n) {
             settings.outputStatisticsOkCopyScriptInfoSpn = document.getElementById(outputStatisticsOkCopyScriptInfoId);
             settings.outputStatisticsOkCopyScriptInfoText = settings.outputStatisticsOkCopyScriptInfoSpn.innerHTML;
             settings.outputStatisticsRequiredPathSpn = document.getElementById(outputStatisticsRequiredPathId);
-
-            AddEvents();            
+            settings.outputScriptRequiredFilesWarningTitle = document.getElementById(outputScriptRequiredFilesWarningPrefixId + "-Title");
+            settings.outputScriptRequiredFilesWarningText = document.getElementById(outputScriptRequiredFilesWarningPrefixId + "-Text");
+            AddEvents();
         },
         callback: function () {
             return { dataFolderPath: settings.dataFolderPath, selectedStatisticsFilePath: settings.selectedStatisticsFilePath[0] };
