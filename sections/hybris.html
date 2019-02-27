@@ -26,14 +26,14 @@
                     <div id="hybris-panel-metdata" class="formularContainer" hidden="true">
                         <h3>Indtast information om statistikfilen</h3>
                         <br>
-                        <span><label class="descriptionLabel" for="dataFileName">Datafilnavn*</label><input type="text" name="dataFileName" id="fileName"></span><i class="far fa-question-circle"></i><br>
-                        <span><label class="descriptionLabel" for="dataFileDescription">Datafilbeskrivelse*</label><input type="text" name="dataFileDescription" id="fileDescription"></span><i class="far fa-question-circle"></i><br>
-                        <span><label class="descriptionLabel" for="keyVariable">Nøglevariabel</label><input type="text" name="keyVariable" id="keyVar"></span><i class="far fa-question-circle"></i><br>
+                        <span><label class="descriptionLabel" for="dataFileName">Datafilnavn*</label><input type="text" name="dataFileName" id="hybris-fileName"></span><i class="far fa-question-circle"></i><br>
+                        <span><label class="descriptionLabel" for="dataFileDescription">Datafilbeskrivelse*</label><input type="text" name="dataFileDescription" id="hybris-FileDescription"></span><i class="far fa-question-circle"></i><br>
+                        <span><label class="descriptionLabel" for="keyVariable">Nøglevariabel</label><input type="text" name="keyVariable" id="hybris-keyVar"></span><i class="far fa-question-circle"></i><br>
                         <br>
                         <h4>Angiv reference til anden datafil i afleveringspakken</h4>
-                        <span><label class="descriptionLabel" for="foreignDataFileName">Fremmeddatafilnavn</label><input type="text" name="foreignDataFileName" id="foreignFileName"><i class="far fa-question-circle"></i></span><br>
-                        <span><label class="descriptionLabel" for="foreignVariableName">Fremmevaiabelnavn</label><input type="text" name="foreignVariableName" id="foreignKeyVarName"><i class="far fa-question-circle"></i></span><br>
-                        <span><label class="descriptionLabel" for="referenceVariable">Referencevariabel</label><input type="text" name="referenceVariable" id="refVar"><i class="far fa-question-circle"></i></span><br>
+                        <span><label class="descriptionLabel" for="foreignDataFileName">Fremmeddatafilnavn</label><input type="text" name="foreignDataFileName" id="hybris-foreignFileName"><i class="far fa-question-circle"></i></span><br>
+                        <span><label class="descriptionLabel" for="foreignVariableName">Fremmevaiabelnavn</label><input type="text" name="foreignVariableName" id="hybris-foreignKeyVarName"><i class="far fa-question-circle"></i></span><br>
+                        <span><label class="descriptionLabel" for="referenceVariable">Referencevariabel</label><input type="text" name="referenceVariable" id="hybris-refVar"><i class="far fa-question-circle"></i></span><br>
                         <br>
                         <button type="submit" id="metadata-okBtn">OK</button>                        
                     </div>
@@ -84,7 +84,7 @@
             Rigsarkiv.Messages.initialize(["hybris-message-delivery-package","hybris-message-path"]);
             Rigsarkiv.Structure.initialize("hybris-select-directory","hybris-path","hybris-delivery-package","hybris-okBtn","hybris-output-Error","hybris-output-Exists","hybris-output-RequiredPath","hybris-output-UnvalidDeliveryPackage","hybris-output-Ok","hybris-output-Supplement","hybris-select-delivery-package");          
             Rigsarkiv.DataExtraction.initialize(Rigsarkiv.Structure.callback,"hybris-select-statistics-file","hybris-statistics-filepath","hybris-statistics-okBtn","hybris-output-metdata-Error","hybris-output-metdata-OKCopyScript");
-            Rigsarkiv.MetaData.initialize("fileName", "dataFileDescription", "keyVar", "foreignFileName", "foreignKeyVarName", "refVar", "metadata-okBtn");
+            Rigsarkiv.MetaData.initialize("hybris-fileName", "hybris-fileDescription", "hybris-keyVar", "hybris-foreignFileName", "hybris-foreignKeyVarName", "hybris-refVar", "metadata-okBtn");
           </script>
     </section>
 </template>
