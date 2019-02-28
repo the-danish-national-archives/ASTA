@@ -5,9 +5,9 @@ Note: The working directory must contain the data file (dta)
 */
 
 * Set the working directory and data file name
-global fileDir "G:\Stata"
-global inputStata $fileDir\stata_23765_short
-global inputStata_ "stata_23765_short"
+global fileDir "{0}"
+global inputStata $fileDir\{1}
+global inputStata_ "{1}"
 
 * Set options
 set scrollbufsize 2048000
@@ -87,7 +87,7 @@ gen var=var1+" "+var2
 drop var1 var2 var3
 * Write output to file
 export delimited using $fileDir\tempB.txt, delimiter(",") novarnames nolabel replace
-filefilter $fileDir\tempB.txt $fileDir\stata_23765_short_VARIABEL.txt, from(",$osEOL") to ("") replace
+filefilter $fileDir\tempB.txt $fileDir\{1}_VARIABEL.txt, from(",$osEOL") to ("") replace
 
 * CREATE VARIABELBESKRIVELSE
 use $inputStata, replace
@@ -118,7 +118,7 @@ replace varLabel="n.a." if varLabel==""
 gen v0=var1+" '"+varLabel+"'"
 keep v0
 * Write output to file
-export delimited using $fileDir\stata_23765_short_VARIABELBESKRIVELSE.txt, delimiter(tab) novarnames nolabel replace
+export delimited using $fileDir\{1}_VARIABELBESKRIVELSE.txt, delimiter(tab) novarnames nolabel replace
 
 * CREATE KODELISTE
 use $inputStata, replace
@@ -148,7 +148,7 @@ replace onlyLabel="'"+onlyLabel+"'" if onlyLabel!=""
 replace valLabel=var1+" "+onlyLabel if valLabel==""
 keep valLabel
 * Write output to file
-export delimited using $fileDir\stata_23765_short_KODELISTE.txt, delimiter(tab) novarnames nolabel replace
+export delimited using $fileDir\{1}_KODELISTE.txt, delimiter(tab) novarnames nolabel replace
 }
 else {
 cls

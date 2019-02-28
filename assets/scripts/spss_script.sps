@@ -6,9 +6,9 @@ Note: The working directory must contain the data file (sav)
 
 * Set the working directory and data file name.
 file handle dataDir
-/name 'G:\spss'.
+/name '{0}'.
 file handle inputSpss
-/name 'dataDir\spss23765_short.sav'.
+/name 'dataDir\{1}.sav'.
 
 * Set options.
 set unicode on decimal dot olang=english.
@@ -145,7 +145,7 @@ select if varName ne 'absoluteDum'.
 alter type variable(amin).
 delete variables casenum varName varName_ type varFormat master codeVar codeListName.
 * Note: Trailing spaces included in output lines.
-write outfile 'dataDir\spss23765_short_VARIABEL.txt' /variable.
+write outfile 'dataDir\{1}_VARIABEL.txt' /variable.
 execute.
 
 * CREATE VARIABELBESKRIVELSE.
@@ -163,7 +163,7 @@ compute varDescription=concat(ltrim(rtrim(varName)), concat(" '", ltrim(rtrim(va
 select if varName ne 'absoluteDum'.
 alter type varDescription(amin).
 * Note: Trailing spaces included in output lines.
-write outfile 'dataDir\spss23765_short_VARIABELBESKRIVELSE.txt' /varDescription.
+write outfile 'dataDir\{1}_VARIABELBESKRIVELSE.txt' /varDescription.
 execute.
 
 * CREATE KODELISTE.
@@ -184,7 +184,7 @@ get data
 select if codeList ne ''.
 alter type codeList(amin).
 * Note: Trailing spaces included in output lines.
-write outfile 'dataDir\spss23765_short_KODELISTE.txt' /codeList.
+write outfile 'dataDir\{1}_KODELISTE.txt' /codeList.
 execute.
 
 * CREATE BRUGERKODE.
@@ -213,7 +213,7 @@ compute varMissing=concat(ltrim(rtrim(varName)), " '", replace(ltrim(rtrim(missi
 select if varName ne 'absoluteDum'.
 alter type varMissing(amin).
 * Note: Trailing spaces included in output lines.
-write outfile 'dataDir\spss23765_short_BRUGERKODE.txt' /varMissing.
+write outfile 'dataDir\{1}_BRUGERKODE.txt' /varMissing.
 execute.
 
 * Delete temporary content (in file and on disk).
@@ -250,4 +250,4 @@ save translate outfile=!QUOTE(!CONCAT(dataDir, '\', !outfile, '.csv'))
 /fieldnames
 /cells=values.
 !enddefine.
-!export outfile=spss23765_short.
+!export outfile={1}.

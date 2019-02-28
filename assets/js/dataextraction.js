@@ -92,9 +92,15 @@ function (n) {
                     }
                     else {
                         var filePath = settings.dataFolderPath + "/" + settings.scriptFileName;
-                        var fileName = GetFileName();
+                        var fileName = GetFileName();  
+                        var fileExt = fileName.substring(fileName.indexOf(".") + 1);                      
                         fileName = fileName.substring(0,fileName.indexOf("."));
-                        var updatedData = data.toString().format(settings.dataFolderPath,fileName);
+                        var folderPath = GetLocalFolderPath();
+                        if(fileExt === "sas7bdat") 
+                        { 
+                            folderPath = (folderPath.indexOf("\\") > -1) ? "{0}\\".format(folderPath) : "{0}/".format(folderPath);
+                        }
+                        var updatedData = data.toString().format(folderPath,fileName);
                         fs.writeFile(filePath, updatedData, (err) => {
                             if (err) {
                                 HandleError(err);

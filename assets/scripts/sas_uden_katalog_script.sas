@@ -5,8 +5,8 @@ Note: The working directory must contain the data file (sas7bdat)
 */
 
 * Set the working directory and data file name;
-%let outDir=%str(G:\SAS-uden katalog\);
-%let inputSas=%str(sas_23765_short);
+%let outDir=%str({0});
+%let inputSas=%str({1});
 libname mylib "&outDir";
 
 * Set options;
@@ -58,7 +58,7 @@ if prxmatch('/best\d*\./',lowcase(strip(Format)))>0 then Format=cats(type,len,'.
 varNameFormat=cat(strip(Variable),' ',strip(lowcase(Format)));
 run;
 * Write output to file;
-%let name=%str(sas_23765_short_VARIABEL.txt);
+%let name=%str({1}_VARIABEL.txt);
 %let outfile=&outDir&name;
 data _null_;
 set mylib.varNames;
@@ -76,7 +76,7 @@ length varLabels $7200;
 varLabels=cat(strip(Variable)," '",strip(Label),"'");
 run;
 * Write output to file;
-%let name=%str(sas_23765_short_VARIABELBESKRIVELSE.txt);
+%let name=%str({1}_VARIABELBESKRIVELSE.txt);
 %let outfile=&outDir&name;
 data _null_;
 set mylib.varLabels;
