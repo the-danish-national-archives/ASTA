@@ -217,7 +217,7 @@ function (n) {
             else {
                 var counter = 0;
                 var fileName = GetFileName();
-                var filePrefix = fileName.substring(0,fileName.indexOf("."))
+                var filePrefix = fileName.substring(0,fileName.indexOf("."));
                 files.forEach(file => {
                     settings.outputPostfixFiles.forEach(element => {
                         if(element.format(filePrefix) == file) { counter = counter + 1; }
