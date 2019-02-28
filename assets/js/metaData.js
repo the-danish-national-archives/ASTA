@@ -1,8 +1,10 @@
 window.Rigsarkiv = window.Rigsarkiv || {},
     function (n) {
         const { ipcRenderer } = require('electron');
-        const startNumberPattern = (/^([a-zA-ZæøåÆØÅ])([a-zA-ZæøåÆØÅ0-9]*)/)
+        const startNumberPattern = /^([a-zA-ZæøåÆØÅ])([a-zA-ZæøåÆØÅ0-9]*)$/;
         const quotesPattern = /^"([a-zA-ZæøåÆØÅ0-9]*)"$/;
+        const spacePattern = /\s/;
+        const strLength = 128;
 
         var settings = {
             fileName: null,
@@ -25,22 +27,23 @@ window.Rigsarkiv = window.Rigsarkiv || {},
 
         function ValidateFields() {
             var validationOk = true;
-            if (startNumberPattern.test(settings.fileName.value) || quotesPattern.test(settings.fileName.value)){
-                console.log("valid");
-            } else {
+            if (settings.fileName.value === "") {
+                console.log('empty input');
+            }
+            if (spacePattern.test(settings.fileName.value)) {
                 console.log('error');
             }
-
-
-            // if (settings.fileName.value === "") {
-            //     settings.fileNameReq.hidden = false;
-            // }
-            // if (startNumberPattern.test(settings.fileName.value)) {
-            //     settings.numberFirst.hidden =  false;
-            // }
-            // else if (!quotesPattern.test(settings.fileName.value)) {
-            //     settings.illegalChar.hidden = false;
-            // }
+            if (startNumberPattern.test(settings.fileName.value)) {
+                console.log("valid");
+            } else {
+                console.log('failed')
+            }
+            if (quotesPattern.test(settings.fileName.value)){
+                console.log('valid quotes');
+            }
+            if (settings.fileName.value.length > strLength) {
+                console.log('input too long');
+            }
 
         }
 
