@@ -287,7 +287,7 @@ function (n) {
             AddEvents();
         },
         callback: function () {
-            return { dataFolderPath: settings.dataFolderPath, selectedStatisticsFilePath: settings.selectedStatisticsFilePath[0], scriptType: settings.scriptType };
+            return { dataFolderPath: settings.dataFolderPath, selectedStatisticsFilePath: settings.selectedStatisticsFilePath[0], scriptType: settings.scriptType, localFolderPath: GetLocalFolderPath() };
         }
     };
 }(jQuery);

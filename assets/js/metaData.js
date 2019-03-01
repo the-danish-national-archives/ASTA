@@ -2,10 +2,11 @@ window.Rigsarkiv = window.Rigsarkiv || {},
     function (n) {
 
         const { ipcRenderer } = require('electron');
+        const {shell} = require('electron');
         const fs = require('fs');
 
-        const startNumberPattern = /^([a-zA-ZæøåÆØÅ])([a-zA-ZæøåÆØÅ0-9]*)$/;
-        const quotesPattern = /^"([a-zA-ZæøåÆØÅ0-9]*)"$/;
+        const startNumberPattern = /^([a-zA-ZæøåÆØÅ])([a-zA-ZæøåÆØÅ0-9_]*)$/;
+        const quotesPattern = /^"([a-zA-ZæøåÆØÅ0-9_]*)"$/;
         const spacePattern = /\s/;
         const strLength = 128;
 
@@ -17,6 +18,10 @@ window.Rigsarkiv = window.Rigsarkiv || {},
             foreignKeyVarName: null,
             foreignFileRefVar: null,
             okBtn: null,
+            outputOkSpn: null,
+            okDataPath: null,
+            outputErrorSpn: null,
+            outputErrorText: null,
             // Messages
             fileNameReq: null,
             numberFirst: null,
@@ -31,40 +36,20 @@ window.Rigsarkiv = window.Rigsarkiv || {},
 
         var HandleError = function(err) {
             console.log(`Error: ${err}`);
-            //settings.outputStatisticsErrorSpn.hidden = false;
-            //settings.outputStatisticsErrorSpn.innerHTML = settings.outputStatisticsErrorText.format(err.message);
+            settings.outputErrorSpn.hidden = false;
+            settings.outputErrorSpn.innerHTML = settings.outputErrorText.format(err.message);
         }
 
         var Reset = function () {
             settings.isValidMetadata = true;
             settings.fileNameReq.hidden = true;
             settings.numberFirst.hidden = true;
+            settings.illegalChar.hidden = true;
+            settings.outputOkSpn.hidden = true;
+            settings.okDataPath.hidden = true;
+            settings.outputErrorSpn.hidden = true;
             settings.contents = ["","","",""];
-        }
-
-        var ValidateFields = function() {
-            if (settings.fileName.value === "") {
-                console.log('empty input');
-                settings.isValidMetadata = false;
-            }
-            if (spacePattern.test(settings.fileName.value)) {
-                console.log('error');
-                settings.isValidMetadata = false;
-            }
-            if (startNumberPattern.test(settings.fileName.value)) {
-                console.log("valid");
-            } else {                
-                console.log('failed')
-                settings.isValidMetadata = false;
-            }
-            if (quotesPattern.test(settings.fileName.value)){
-                console.log('valid quotes');
-            }
-            if (settings.fileName.value.length > strLength) {
-                console.log('input too long');
-                settings.isValidMetadata = false;
-            }
-        }
+        }        
 
         var GetMetaDataFileName = function() {
             return settings.metadataFileName.format(GetDataFolderName());
@@ -91,8 +76,9 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                             fs.unlinkSync("{0}/{1}".format(dataFolderPath,file));
                         }
                     });
-                    //settings.outputStatisticsOkCopyScriptSpn.innerHTML = settings.outputStatisticsOkCopyScriptText.format(settings.scriptType,scriptFileName,GetFileName());
-                    //settings.okScriptDataPath.innerHTML = GetLocalFolderPath();                        
+                    settings.outputOkSpn.hidden = false;
+                    settings.okDataPath.hidden = false;
+                    settings.okDataPath.innerHTML = settings.extractionCallback().localFolderPath;                        
                 }
             });
         }
@@ -127,7 +113,10 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                     var dataFolderPath = callback.dataFolderPath;
                     var metadataFileName = GetMetaDataFileName();
                     var scriptType = callback.scriptType;
-                    var updatedData = data.toString().format(scriptType,settings.fileName.value,settings.fileDescr.value,settings.keyVar.value,settings.foreignFileName.value,settings.foreignKeyVarName.value,settings.foreignFileRefVar.value,settings.contents[0],settings.contents[1],settings.contents[2],settings.contents[3]);
+                    var foreignKeyVarName = (settings.foreignKeyVarName.value != null && settings.foreignKeyVarName.value !== "") ? "'{0}'".format(settings.foreignKeyVarName.value) : "";
+                    var foreignFileRefVar = (settings.foreignFileRefVar.value != null && settings.foreignFileRefVar.value !== "") ? "'{0}'".format(settings.foreignFileRefVar.value) : "";
+                    var updatedData = data.toString().format(scriptType,settings.fileName.value,settings.fileDescr.value,settings.keyVar.value,settings.foreignFileName.value,foreignKeyVarName,foreignFileRefVar,
+                        settings.contents[0],settings.contents[1],settings.contents[2],settings.contents[3]);
                     fs.writeFile("{0}/{1}".format(dataFolderPath,metadataFileName), updatedData, (err) => {
                         if (err) {
                             HandleError(err);
@@ -186,7 +175,32 @@ window.Rigsarkiv = window.Rigsarkiv || {},
             });
         }
 
+        var ValidateFields = function() {
+            if (settings.fileName.value === "") {
+                settings.fileNameReq.hidden = false;
+                settings.isValidMetadata = false;
+            }
+            if (spacePattern.test(settings.fileName.value)) {
+                settings.illegalChar.hidden = false;
+                settings.isValidMetadata = false;
+            }
+            if (!startNumberPattern.test(settings.fileName.value)) {
+                settings.numberFirst.hidden = false;
+                settings.isValidMetadata = false;
+            }
+            if (quotesPattern.test(settings.fileName.value)){
+                console.log('valid quotes');
+            }
+            if (settings.fileName.value.length > strLength) {
+                console.log('input too long');
+                settings.isValidMetadata = false;
+            }
+        }
+
         var AddEvents = function () {
+            settings.okDataPath.addEventListener('click', (event) => {
+                shell.openItem(settings.extractionCallback().localFolderPath);
+            })
             settings.okBtn.addEventListener('click', function (event) {
                 Reset();
                 ValidateFields();
@@ -195,7 +209,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
         }
 
         Rigsarkiv.MetaData = {
-            initialize: function (extractionCallback,metadataFileName, metadataFileNameDescription, metadataKeyVariable, metadataForeignFileName, metadataForeignKeyVariableName, metadataReferenceVariable, metdataOkBtn, inputFileNameRequired, inputNumberFirst, inputIllegalChar) {
+            initialize: function (extractionCallback,metadataFileName,metadataFileNameDescription,metadataKeyVariable,metadataForeignFileName,metadataForeignKeyVariableName,metadataReferenceVariable,metdataOkBtn,inputFileNameRequired,inputNumberFirst,inputIllegalChar,outputOkId,okDataPathId,outputErrorId) {
                 settings.extractionCallback = extractionCallback;
                 settings.fileName = document.getElementById(metadataFileName);
                 settings.fileDescr = document.getElementById(metadataFileNameDescription);
@@ -207,6 +221,10 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 settings.fileNameReq = document.getElementById(inputFileNameRequired);
                 settings.numberFirst = document.getElementById(inputNumberFirst);
                 settings.illegalChar = document.getElementById(inputIllegalChar);
+                settings.outputOkSpn = document.getElementById(outputOkId);
+                settings.okDataPath = document.getElementById(okDataPathId);
+                settings.outputErrorSpn = document.getElementById(outputErrorId);
+                settings.outputErrorText = settings.outputErrorSpn.innerHTML; 
                 AddEvents();
             }
         }
