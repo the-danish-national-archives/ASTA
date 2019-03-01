@@ -19,14 +19,20 @@ window.Rigsarkiv = window.Rigsarkiv || {},
             foreignFileRefVar: null,
             okBtn: null,
             outputOkSpn: null,
+            outputOkText: null,
             okDataPath: null,
             outputErrorSpn: null,
             outputErrorText: null,
-            // Messages
+            outputNewExtractionSpn: null,
+            outputNewExtractionText: null,
+            newExtractionBtn: null,
+            exitBtn: null,
+            outputExitSpn: null,
+            extractionTab: null,
+            structureTab: null,
             fileNameReq: null,
             numberFirst: null,
             illegalChar: null,
-            //var
             contents: ["","","",""],
             isValidMetadata: true,
             metadataFileName: "{0}.txt",
@@ -48,6 +54,10 @@ window.Rigsarkiv = window.Rigsarkiv || {},
             settings.outputOkSpn.hidden = true;
             settings.okDataPath.hidden = true;
             settings.outputErrorSpn.hidden = true;
+            settings.outputNewExtractionSpn.hidden = true;
+            settings.newExtractionBtn.hidden = true;
+            settings.exitBtn.hidden = true;
+            settings.outputExitSpn.hidden = true;
             settings.contents = ["","","",""];
         }        
 
@@ -69,16 +79,25 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 }
                 else {
                     var fileName = GetDataFolderName();
-                    var dataFolderPath = settings.extractionCallback().dataFolderPath;
+                    var callback = settings.extractionCallback();
+                    var dataFolderPath = callback.dataFolderPath;
                     files.forEach(file => {
                         if(file != settings.dataFileName.format(fileName) && file != settings.metadataFileName.format(fileName)) {
                             console.log("delete file : " + file);
                             fs.unlinkSync("{0}/{1}".format(dataFolderPath,file));
                         }
                     });
+                    var folders = callback.selectedStatisticsFilePath.normlizePath().split("/");
                     settings.outputOkSpn.hidden = false;
                     settings.okDataPath.hidden = false;
-                    settings.okDataPath.innerHTML = settings.extractionCallback().localFolderPath;                        
+                    settings.outputNewExtractionSpn.hidden = false;
+                    settings.newExtractionBtn.hidden = false; 
+                    settings.outputExitSpn.hidden = false;  
+                    settings.exitBtn.hidden = false;
+                    settings.outputOkSpn.innerHTML = settings.outputOkText.format(folders[folders.length - 1]);
+                    settings.okDataPath.innerHTML = callback.localFolderPath;
+                    folders = dataFolderPath.split("/");
+                    settings.outputNewExtractionSpn.innerHTML = settings.outputNewExtractionText.format(folders[folders.length - 3]);                                       
                 }
             });
         }
@@ -197,7 +216,27 @@ window.Rigsarkiv = window.Rigsarkiv || {},
             }
         }
 
+        var ResetExtraction = function() {
+            settings.extractionCallback().reset();
+            Reset();
+            settings.fileName.value = "";
+            settings.fileDescr.value = "";
+            settings.keyVar.value = "";
+            settings.foreignFileName.value = "";
+            settings.foreignKeyVarName.value = "";
+            settings.foreignFileRefVar.value = "";
+        }
+
         var AddEvents = function () {
+            settings.exitBtn.addEventListener('click', (event) => {
+                settings.extractionCallback().structureCallback.reset();
+                ResetExtraction();
+                settings.structureTab.click();
+            });
+            settings.newExtractionBtn.addEventListener('click', (event) => {
+                ResetExtraction();
+                settings.extractionTab.click();
+            });
             settings.okDataPath.addEventListener('click', (event) => {
                 shell.openItem(settings.extractionCallback().localFolderPath);
             })
@@ -209,7 +248,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
         }
 
         Rigsarkiv.MetaData = {
-            initialize: function (extractionCallback,metadataFileName,metadataFileNameDescription,metadataKeyVariable,metadataForeignFileName,metadataForeignKeyVariableName,metadataReferenceVariable,metdataOkBtn,inputFileNameRequired,inputNumberFirst,inputIllegalChar,outputOkId,okDataPathId,outputErrorId) {
+            initialize: function (extractionCallback,metadataFileName,metadataFileNameDescription,metadataKeyVariable,metadataForeignFileName,metadataForeignKeyVariableName,metadataReferenceVariable,metdataOkBtn,inputFileNameRequired,inputNumberFirst,inputIllegalChar,outputOkId,okDataPathId,outputErrorId,outputNewExtractionId,newExtractionBtn,extractionTabId,outputExitId,exitBtn,structureTabId) {
                 settings.extractionCallback = extractionCallback;
                 settings.fileName = document.getElementById(metadataFileName);
                 settings.fileDescr = document.getElementById(metadataFileNameDescription);
@@ -222,9 +261,17 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 settings.numberFirst = document.getElementById(inputNumberFirst);
                 settings.illegalChar = document.getElementById(inputIllegalChar);
                 settings.outputOkSpn = document.getElementById(outputOkId);
+                settings.outputOkText = settings.outputOkSpn.innerHTML;
                 settings.okDataPath = document.getElementById(okDataPathId);
                 settings.outputErrorSpn = document.getElementById(outputErrorId);
                 settings.outputErrorText = settings.outputErrorSpn.innerHTML; 
+                settings.outputNewExtractionSpn = document.getElementById(outputNewExtractionId);
+                settings.outputNewExtractionText = settings.outputNewExtractionSpn.innerHTML;
+                settings.newExtractionBtn = document.getElementById(newExtractionBtn);
+                settings.extractionTab = document.getElementById(extractionTabId);
+                settings.outputExitSpn = document.getElementById(outputExitId); 
+                settings.exitBtn = document.getElementById(exitBtn);
+                settings.structureTab = document.getElementById(structureTabId);
                 AddEvents();
             }
         }

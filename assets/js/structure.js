@@ -122,7 +122,16 @@ function (n) {
         },
         callback: function () {
             var folderPath = (settings.selectedPath != null ? settings.selectedPath[0] : null);
-            return { deliveryPackagePath: settings.deliveryPackagePath, selectedPath: folderPath };
+            return { 
+                deliveryPackagePath: settings.deliveryPackagePath, 
+                selectedPath: folderPath,
+                reset: function() 
+                { 
+                    settings.pathDirTxt.value = "";
+                    settings.deliveryPackageTxt.value = "";
+                    Reset();
+                }  
+            };
         }
     };
 }(jQuery);

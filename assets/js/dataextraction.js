@@ -42,7 +42,7 @@ function (n) {
         settings.outputStatisticsErrorSpn.innerHTML = settings.outputStatisticsErrorText.format(err.message);
     }
 
-    var Reset = function () {
+    var Reset = function () {        
         settings.outputStatisticsRequiredPathSpn.hidden = true;
         settings.outputStatisticsErrorSpn.hidden = true;
         settings.scriptPanel.hidden = true;
@@ -287,7 +287,18 @@ function (n) {
             AddEvents();
         },
         callback: function () {
-            return { dataFolderPath: settings.dataFolderPath, selectedStatisticsFilePath: settings.selectedStatisticsFilePath[0], scriptType: settings.scriptType, localFolderPath: GetLocalFolderPath() };
+            return { 
+                structureCallback: settings.structureCallback(),
+                dataFolderPath: settings.dataFolderPath, 
+                selectedStatisticsFilePath: settings.selectedStatisticsFilePath[0], 
+                scriptType: settings.scriptType, 
+                localFolderPath: GetLocalFolderPath(), 
+                reset: function() 
+                { 
+                    settings.pathStatisticsFileTxt.value = "";
+                    Reset();
+                } 
+            };
         }
     };
 }(jQuery);

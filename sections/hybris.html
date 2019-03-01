@@ -108,9 +108,13 @@
                         <span id="hybris-message-metdata-referenceVariable-Text" hidden="true">Variabelnavn(e) for den/de variable i datafilen der laves udtræk fra (referencevariabel), som refererer til fremmedvariablen i fremmeddatafilen.</span>
                         <br>
                         <br>
-                        <button type="submit" id="metadata-metdata-okBtn">OK</button>
+                        <button type="submit" id="hybris-metdata-okBtn">OK</button>
                         <span id="hybris-output-metdata-Error" hidden="true"><br/>Error: {0}</span>
-                        <span id="hybris-output-metdata-Ok" hidden="true"><br />Metadata opdateret i mappen: </span><a id="hybris-output-metdata-path" hidden="true"></a>
+                        <span id="hybris-output-metdata-Ok" hidden="true"><br />Data- og metadatafil er nu udtrukket fra statistikfilen {0} og placeret her:</span><a id="hybris-output-metdata-path" hidden="true"></a>
+                        <span id="hybris-output-metdata-NewExtraction" hidden="true"><br /><br />Hvis du skal udtrække data fra flere statistikfiler, som ingår i afleveringspakke [{0}] så klik knappen "Nyt udtræk"<br /></span>
+                        <button id="hybris-metdata-NewExtractionBtn" hidden="true">NYT UDTRÆK</button>
+                        <span id="hybris-output-metdata-Exit" hidden="true"><br /><br />Hvis der ikke skal tilføjes flere dataudtræk til afleveringspakken, så klik på "Afslut"<br /></span>
+                        <button id="hybris-metdata-ExitBtn" hidden="true">AFSLUT</button>
                         <span id="hybris-output-metdata-fileNameRequired" hidden="true"><br>Datafilnavn skal udfyldes</span>
                         <span id="hybris-output-metdata-numberFirst" hidden="true"><br>Det angivne datafilnavn begynder med et tal. Dette er ikke lovligt.</span>
                         <span id="hybris-output-metdata-illegalChar" hidden="true"><br>Det angivne datafilnavn indeholder ulovlige tegn. Kun tal, bogstaver og underscore er lovlige tegn for et datafilnavn</span>
@@ -164,7 +168,7 @@
             Rigsarkiv.Messages.initialize(["hybris-message-delivery-package","hybris-message-path","hybris-message-statistics-filepath","hybris-message-metdata-fileName","hybris-message-metdata-fileDescription","hybris-message-metdata-keyVariable","hybris-message-metdata-foreignFile","hybris-message-metdata-foreignVariable","hybris-message-metdata-referenceVariable"]);
             Rigsarkiv.Structure.initialize("hybris-select-directory","hybris-path","hybris-delivery-package","hybris-okBtn","hybris-output-Error","hybris-output-Exists","hybris-output-RequiredPath","hybris-output-UnvalidDeliveryPackage","hybris-output-Ok","hybris-output-Supplement","hybris-select-delivery-package");          
             Rigsarkiv.DataExtraction.initialize(Rigsarkiv.Structure.callback,"hybris-select-statistics-file","hybris-statistics-filepath","hybris-statistics-okBtn","hybris-output-statistics-Error","hybris-output-script-OKCopyScript","hybris-message-statistics-SASCatalogWarning","hybris-panel-script","hybris-script-okBtn","hybris-output-script-dataPath","hybris-output-script-OKCopyScriptInfo","hybris-output-statistics-RequiredPath","hybris-output-script-RequiredFilesWarning","hybris-output-script-Ok");
-            Rigsarkiv.MetaData.initialize(Rigsarkiv.DataExtraction.callback,"hybris-metdata-fileName", "hybris-metdata-fileDescription", "hybris-metdata-keyVar", "hybris-metdata-foreignFileName", "hybris-metdata-foreignKeyVarName", "hybris-metdata-refVar", "metadata-metdata-okBtn", "hybris-output-metdata-fileNameRequired", "hybris-output-metdata-numberFirst", "hybris-output-metdata-illegalChar","hybris-output-metdata-Ok","hybris-output-metdata-path","hybris-output-metdata-Error");
+            Rigsarkiv.MetaData.initialize(Rigsarkiv.DataExtraction.callback,"hybris-metdata-fileName", "hybris-metdata-fileDescription", "hybris-metdata-keyVar", "hybris-metdata-foreignFileName", "hybris-metdata-foreignKeyVarName", "hybris-metdata-refVar", "hybris-metdata-okBtn", "hybris-output-metdata-fileNameRequired", "hybris-output-metdata-numberFirst", "hybris-output-metdata-illegalChar","hybris-output-metdata-Ok","hybris-output-metdata-path","hybris-output-metdata-Error","hybris-output-metdata-NewExtraction","hybris-metdata-NewExtractionBtn","hybris-tab-statistics","hybris-output-metdata-Exit","hybris-metdata-ExitBtn","hybris-tab-structure");
           </script>
     </section>
 </template>
