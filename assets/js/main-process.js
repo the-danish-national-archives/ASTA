@@ -57,6 +57,18 @@ ipcMain.on('open-warning-dialog', (event,title,text) => {
     buttons: []
   }
   dialog.showMessageBox(options, (index) => {
-    event.sender.send('information-dialog-selection', index)
+    event.sender.send('warning-dialog-selection', index)
+  })
+})
+
+ipcMain.on('open-error-dialog', (event,title,text) => {
+  const options = {
+    type: 'error',
+    title: title,
+    message: text,
+    buttons: []
+  }
+  dialog.showMessageBox(options, (index) => {
+    event.sender.send('error-dialog-selection', index)
   })
 })

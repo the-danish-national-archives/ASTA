@@ -1,8 +1,9 @@
 window.Rigsarkiv = window.Rigsarkiv || {},
 function (n) {
-    const {ipcRenderer} = require('electron')
-    const {shell} = require('electron')
+    const {ipcRenderer} = require('electron');
+    const {shell} = require('electron');
     const fs = require('fs');
+    const chardet = require('chardet');
 
     var settings = {
         structureCallback: null,
@@ -24,6 +25,8 @@ function (n) {
         outputScriptRequiredFilesWarningTitle: null,
         outputScriptRequiredFilesWarningText: null,
         outputStatisticsRequiredPathSpn: null,
+        outputScriptEncodingFileErrorTitle: null,
+        outputScriptEncodingFileErrorText: null,
         selectedStatisticsFilePath: null,
         scriptPanel: null,  
         okScriptBtn: null,   
@@ -31,6 +34,7 @@ function (n) {
         scriptPath: "./assets/scripts/{0}",
         scripts: ["spss_script.sps","sas_uden_katalog_script.sas","sas_med_katalog_script.sas","stata_script.do"],
         outputPostfixFiles: ["{0}.csv","{0}_VARIABEL.txt","{0}_VARIABELBESKRIVELSE.txt"],
+        outputOptionalPostfixFiles: ["{0}_KODELISTE.txt","{0}_BRUGERKODE.txt"],
         sasCatalogFileExt: "{0}.sas7bcat",
         dataPathPostfix: "/Data",
         dataTablePathPostfix: "/table{0}"
@@ -208,6 +212,18 @@ function (n) {
         });
     }
 
+    var ValidateFile = function(fileName) {
+        var charsetMatch = chardet.detectFileSync("{0}/{1}".format(settings.dataFolderPath,fileName));
+        console.log("File {0} encode: {1}".format(fileName,charsetMatch));
+        if(charsetMatch !== "UTF-8") {
+            var localPath = GetLocalFolderPath();
+            localPath += (localPath.indexOf("\\") > -1) ? "\\{0}".format(fileName) : "/{0}".format(fileName);
+            ipcRenderer.send('open-error-dialog',settings.outputScriptEncodingFileErrorTitle.innerHTML,settings.outputScriptEncodingFileErrorText.innerHTML.format(localPath));
+            return false;
+        }
+        return true;
+    }
+
     var EnsureExport = function() {
         settings.outputScriptOkSpn.hidden = true;
         fs.readdir(settings.dataFolderPath, (err, files) => {
@@ -215,19 +231,27 @@ function (n) {
                 HandleError(err);
             }
             else {
+                var fileValidate = true;
                 var counter = 0;
                 var fileName = GetFileName();
                 var filePrefix = fileName.substring(0,fileName.indexOf("."));
                 files.forEach(file => {
                     settings.outputPostfixFiles.forEach(element => {
-                        if(element.format(filePrefix) == file) { counter = counter + 1; }
+                        if(element.format(filePrefix) == file) 
+                        { 
+                            counter = counter + 1;
+                            if(!ValidateFile(file)) { fileValidate = false; } 
+                        }
+                    });
+                    settings.outputOptionalPostfixFiles.forEach(element => {
+                        if(element.format(filePrefix) == file && !ValidateFile(file)) { fileValidate = false; }
                     });
                 });
                 if(counter < 3) {
                     ipcRenderer.send('open-warning-dialog',settings.outputScriptRequiredFilesWarningTitle.innerHTML,settings.outputScriptRequiredFilesWarningText.innerHTML);
                 }
                 else {
-                    settings.outputScriptOkSpn.hidden = false;
+                    if(fileValidate) { settings.outputScriptOkSpn.hidden = false; }
                 }
             }
         });
@@ -264,7 +288,7 @@ function (n) {
     }
 
     Rigsarkiv.DataExtraction = {        
-        initialize: function (structureCallback,selectStatisticsFileId,pathStatisticsFileId,okStatisticsId,outputStatisticsErrorId,outputStatisticsOkCopyScriptId,outputStatisticsSASWarningPrefixId,scriptPanelId,okScriptBtnId,okScriptDataPathId,outputStatisticsOkCopyScriptInfoId,outputStatisticsRequiredPathId,outputScriptRequiredFilesWarningPrefixId,outputScriptOkId) {
+        initialize: function (structureCallback,selectStatisticsFileId,pathStatisticsFileId,okStatisticsId,outputStatisticsErrorId,outputStatisticsOkCopyScriptId,outputStatisticsSASWarningPrefixId,scriptPanelId,okScriptBtnId,okScriptDataPathId,outputStatisticsOkCopyScriptInfoId,outputStatisticsRequiredPathId,outputScriptRequiredFilesWarningPrefixId,outputScriptOkId,outputScriptEncodingFileErrorPrefixId) {
             settings.structureCallback = structureCallback;
             settings.selectStatisticsFileBtn = document.getElementById(selectStatisticsFileId);
             settings.pathStatisticsFileTxt = document.getElementById(pathStatisticsFileId);
@@ -284,6 +308,8 @@ function (n) {
             settings.outputScriptRequiredFilesWarningTitle = document.getElementById(outputScriptRequiredFilesWarningPrefixId + "-Title");
             settings.outputScriptRequiredFilesWarningText = document.getElementById(outputScriptRequiredFilesWarningPrefixId + "-Text");
             settings.outputScriptOkSpn =  document.getElementById(outputScriptOkId);
+            settings.outputScriptEncodingFileErrorTitle = document.getElementById(outputScriptEncodingFileErrorPrefixId + "-Title");
+            settings.outputScriptEncodingFileErrorText = document.getElementById(outputScriptEncodingFileErrorPrefixId + "-Text");
             AddEvents();
         },
         callback: function () {
