@@ -13,6 +13,39 @@
                         <button name="button" class="menuBtn" id="hybris-tab-metdata">Skab Metadata</button>
                     </div>
                     <hr class="button-divider">
+                    <div id="hybris-panel-structure" class="formularContainer">
+                        <h3>Skab en afleveringspakke</h3>
+                        <p>
+                            Indtast løbenummer for afleveringspakken
+                            <i id="hybris-message-delivery-package" class="far fa-question-circle"></i>
+                            <span id="hybris-message-delivery-package-Title" hidden="true">Løbenummer</span>
+                            <span id="hybris-message-delivery-package-Text" hidden="true">Indtast det løbenummer for afleveringspakken, du har fået udleveret af Rigsarkivet. Det udleverede løbenummer fremgår af aflevringsbestemmelsen og arkivskabeskrivelsesfilen (archiveIndex.xml). Det består udelukkende af minimum 5 cifre uden foranstillede nuller. Indtastes løbenummer ikke, får afleveringspakken midlertidigt nummeret 99999. Løbenummer kan ændres senere.</span>
+                        </p>
+                        <input type="text" id="hybris-delivery-package">
+                        <br>
+                        <p>
+                            Vælg destination for afleveringspakken
+                            <i id="hybris-message-path" class="far fa-question-circle"></i>
+                            <span id="hybris-message-path-Title" hidden="true">Destination</span>
+                            <span id="hybris-message-path-Text" hidden="true">Vælg det drev eller den mappe på computeren eller mediet (fx USB, harddisk, SSD), som afleveringspakken skal placeres på.</span>
+                        </p>
+                        <div>
+                            <input type="text" id="hybris-path">
+                            <button id="hybris-select-directory">Browse...</button>
+                        </div>
+                        <button id="hybris-okBtn">Ok</button>
+                        <span id="hybris-output-RequiredPath" hidden="true"><br />Destination for afleveringspakken mangler</span>
+                        <span id="hybris-output-UnvalidDeliveryPackage" hidden="true"><br />Det angivne løbenummer er ugyldigt. Løbenummer kan kun bestå af tal sammensat af minimum 5 cifre uden foranstillede nuller</span>
+                        <span id="hybris-output-Error" hidden="true"><br />Error: {0}</span>
+                        <span id="hybris-output-Exists" hidden="true"><br />Afleveringspakken [{0}] eksisterer</span>
+                        <span id="hybris-output-Ok" hidden="true"><br />En tom mappestruktur for afleveringspakken [{0}]
+                            er dannet og placeret her: </span><a id="hybris-select-delivery-package" hidden="true"></a>
+                        <span id="hybris-output-Supplement" hidden="true">
+                            <br /><br />Du kan nu udtrække data- og metadata fra din statstikfil (SPSS, SAS eller Stata) til de data- og metadatafiler der skal placeres i afleveringspakken.
+                            <br /><br />Eller du kan placere indexfiler og kontekstdokumenter i afleveringspakken.
+                            <br /><br />Anvend fanebladene ovenfor.
+                        </span>
+                    </div>
                     <div id="hybris-panel-statistics" class="formularContainer" hidden="true">
                         <h3>TRIN 1: Vælg datafil</h3>
                         <p>
@@ -55,7 +88,6 @@
                             <span id="hybris-output-script-EncodingFileError-Text" hidden="true">Filen {0} indeholder karakterer som ikke er UTF-8 tegn. Statistikfilen, der laves udtræk fra, skal være indkodet som UTF-8 før dataudtræk laves med Hybris.  Du skal ændre encoding for statistikfilen i dit statistikprogram og lave nyt dataudtæk med Hybris.</span>
                         </div>
                     </div>
-                    <!-- Meta data section -->                    
                     <div id="hybris-panel-metdata" class="formularContainer" hidden="true">
                         <h3>Indtast information om statistikfilen</h3>
                         <br>
@@ -117,44 +149,13 @@
                         <button id="hybris-metdata-NewExtractionBtn" hidden="true">NYT UDTRÆK</button>
                         <span id="hybris-output-metdata-Exit" hidden="true"><br /><br />Hvis der ikke skal tilføjes flere dataudtræk til afleveringspakken, så klik på "Afslut"<br /></span>
                         <button id="hybris-metdata-ExitBtn" hidden="true">AFSLUT</button>
-                        <span id="hybris-output-metdata-fileNameRequired" hidden="true"><br>Datafilnavn skal udfyldes</span>
-                        <span id="hybris-output-metdata-numberFirst" hidden="true"><br>Det angivne datafilnavn begynder med et tal. Dette er ikke lovligt.</span>
-                        <span id="hybris-output-metdata-illegalChar" hidden="true"><br>Det angivne datafilnavn indeholder ulovlige tegn. Kun tal, bogstaver og underscore er lovlige tegn for et datafilnavn</span>
-                    </div>
-                    <!-- Meta data section END -->
-                    <div id="hybris-panel-structure" class="formularContainer">
-                        <h3>Skab en afleveringspakke</h3>
-                        <p>
-                            Indtast løbenummer for afleveringspakken
-                            <i id="hybris-message-delivery-package" class="far fa-question-circle"></i>
-                            <span id="hybris-message-delivery-package-Title" hidden="true">Løbenummer</span>
-                            <span id="hybris-message-delivery-package-Text" hidden="true">Indtast det løbenummer for afleveringspakken, du har fået udleveret af Rigsarkivet. Det udleverede løbenummer fremgår af aflevringsbestemmelsen og arkivskabeskrivelsesfilen (archiveIndex.xml). Det består udelukkende af minimum 5 cifre uden foranstillede nuller. Indtastes løbenummer ikke, får afleveringspakken midlertidigt nummeret 99999. Løbenummer kan ændres senere.</span>
-                        </p>
-                        <input type="text" id="hybris-delivery-package">
-                        <br>
-                        <p>
-                            Vælg destination for afleveringspakken
-                            <i id="hybris-message-path" class="far fa-question-circle"></i>
-                            <span id="hybris-message-path-Title" hidden="true">Destination</span>
-                            <span id="hybris-message-path-Text" hidden="true">Vælg det drev eller den mappe på computeren eller mediet (fx USB, harddisk, SSD), som afleveringspakken skal placeres på.</span>
-                        </p>
-                        <div>
-                            <input type="text" id="hybris-path">
-                            <button id="hybris-select-directory">Browse...</button>
-                        </div>
-                        <button id="hybris-okBtn">Ok</button>
-                        <span id="hybris-output-RequiredPath" hidden="true"><br />Destination for afleveringspakken mangler</span>
-                        <span id="hybris-output-UnvalidDeliveryPackage" hidden="true"><br />Det angivne løbenummer er ugyldigt. Løbenummer kan kun bestå af tal sammensat af minimum 5 cifre uden foranstillede nuller</span>
-                        <span id="hybris-output-Error" hidden="true"><br />Error: {0}</span>
-                        <span id="hybris-output-Exists" hidden="true"><br />Afleveringspakken [{0}] eksisterer</span>
-                        <span id="hybris-output-Ok" hidden="true"><br />En tom mappestruktur for afleveringspakken [{0}]
-                            er dannet og placeret her: </span><a id="hybris-select-delivery-package" hidden="true"></a>
-                        <span id="hybris-output-Supplement" hidden="true">
-                            <br /><br />Du kan nu udtrække data- og metadata fra din statstikfil (SPSS, SAS eller Stata) til de data- og metadatafiler der skal placeres i afleveringspakken.
-                            <br /><br />Eller du kan placere indexfiler og kontekstdokumenter i afleveringspakken.
-                            <br /><br />Anvend fanebladene ovenfor.
-                        </span>
-                    </div>
+                        <span id="hybris-output-metdata-fileNameRequired" hidden="true"><br/>Datafilnavn skal udfyldes</span>
+                        <span id="hybris-output-metdata-fileDescrRequired" hidden="true"><br/>Datafilbeskrivelse skal udfyldes</span>
+                        <span id="hybris-output-metdata-fileNameNumberFirst" hidden="true"><br/>Det angivne datafilnavn begynder med et tal. Dette er ikke lovligt.</span>
+                        <span id="hybris-output-metdata-fileNameIllegalChar" hidden="true"><br/>Det angivne datafilnavn indeholder ulovlige tegn. Kun tal, bogstaver og underscore er lovlige tegn for et datafilnavn</span>
+                        <span id="hybris-output-metdata-fileNameLength" hidden="true"><br/>Det angivne datafilnavn er længere end den tilladte længde på 128 tegn. Forkort datafilnavnet.</span>
+                        <span id="hybris-output-metdata-fileNamereservedWord" hidden="true"><br/>Det angivne datafilnavn er et reserveret ord i SQL 99 standarden. Omkrans datafilnavnet med dobbeltapostrof eller omdøb datafilnavnet.</span>
+                    </div>                    
                 </section>
             </div>
         </header>
@@ -170,7 +171,7 @@
             Rigsarkiv.Messages.initialize(["hybris-message-delivery-package","hybris-message-path","hybris-message-statistics-filepath","hybris-message-metdata-fileName","hybris-message-metdata-fileDescription","hybris-message-metdata-keyVariable","hybris-message-metdata-foreignFile","hybris-message-metdata-foreignVariable","hybris-message-metdata-referenceVariable"]);
             Rigsarkiv.Structure.initialize("hybris-select-directory","hybris-path","hybris-delivery-package","hybris-okBtn","hybris-output-Error","hybris-output-Exists","hybris-output-RequiredPath","hybris-output-UnvalidDeliveryPackage","hybris-output-Ok","hybris-output-Supplement","hybris-select-delivery-package");          
             Rigsarkiv.DataExtraction.initialize(Rigsarkiv.Structure.callback,"hybris-select-statistics-file","hybris-statistics-filepath","hybris-statistics-okBtn","hybris-output-statistics-Error","hybris-output-script-OKCopyScript","hybris-message-statistics-SASCatalogWarning","hybris-panel-script","hybris-script-okBtn","hybris-output-script-dataPath","hybris-output-script-OKCopyScriptInfo","hybris-output-statistics-RequiredPath","hybris-output-script-RequiredFilesWarning","hybris-output-script-Ok","hybris-output-script-EncodingFileError");
-            Rigsarkiv.MetaData.initialize(Rigsarkiv.DataExtraction.callback,"hybris-metdata-fileName", "hybris-metdata-fileDescription", "hybris-metdata-keyVar", "hybris-metdata-foreignFileName", "hybris-metdata-foreignKeyVarName", "hybris-metdata-refVar", "hybris-metdata-okBtn", "hybris-output-metdata-fileNameRequired", "hybris-output-metdata-numberFirst", "hybris-output-metdata-illegalChar","hybris-output-metdata-Ok","hybris-output-metdata-path","hybris-output-metdata-Error","hybris-output-metdata-NewExtraction","hybris-metdata-NewExtractionBtn","hybris-tab-statistics","hybris-output-metdata-Exit","hybris-metdata-ExitBtn","hybris-tab-structure");
+            Rigsarkiv.MetaData.initialize(Rigsarkiv.DataExtraction.callback,"hybris-metdata-fileName", "hybris-metdata-fileDescription", "hybris-metdata-keyVar", "hybris-metdata-foreignFileName", "hybris-metdata-foreignKeyVarName", "hybris-metdata-refVar", "hybris-metdata-okBtn", "hybris-output-metdata-fileNameRequired", "hybris-output-metdata-fileNameNumberFirst", "hybris-output-metdata-fileNameIllegalChar","hybris-output-metdata-Ok","hybris-output-metdata-path","hybris-output-metdata-Error","hybris-output-metdata-NewExtraction","hybris-metdata-NewExtractionBtn","hybris-tab-statistics","hybris-output-metdata-Exit","hybris-metdata-ExitBtn","hybris-tab-structure","hybris-output-metdata-fileNameLength","hybris-output-metdata-fileNamereservedWord","hybris-output-metdata-fileDescrRequired");
           </script>
     </section>
 </template>

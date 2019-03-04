@@ -5,9 +5,9 @@ window.Rigsarkiv = window.Rigsarkiv || {},
         const {shell} = require('electron');
         const fs = require('fs');
 
-        const startNumberPattern = /^([a-zA-ZæøåÆØÅ])([a-zA-ZæøåÆØÅ0-9_]*)$/;
-        const quotesPattern = /^"([a-zA-ZæøåÆØÅ0-9_]*)"$/;
-        const spacePattern = /\s/;
+        const startNumberPattern = /^([0-9])([a-zA-ZæøåÆØÅ0-9_]*)$/;
+        const validFileNamePattern = /^([a-zA-ZæøåÆØÅ])([a-zA-ZæøåÆØÅ0-9_]*)$/;
+        const reservedWordPattern = /^(END|INSERT|INTO)$/i;
         const strLength = 128;
 
         var settings = {
@@ -31,8 +31,11 @@ window.Rigsarkiv = window.Rigsarkiv || {},
             extractionTab: null,
             structureTab: null,
             fileNameReq: null,
+            fileDescrReq: null,
             numberFirst: null,
             illegalChar: null,
+            fileNameLength: null,
+            fileNameReservedWord: null,
             contents: ["","","",""],
             isValidMetadata: true,
             metadataFileName: "{0}.txt",
@@ -49,8 +52,11 @@ window.Rigsarkiv = window.Rigsarkiv || {},
         var Reset = function () {
             settings.isValidMetadata = true;
             settings.fileNameReq.hidden = true;
+            settings.fileDescrReq.hidden = true;
             settings.numberFirst.hidden = true;
             settings.illegalChar.hidden = true;
+            settings.fileNameLength.hidden = true;
+            settings.fileNameReservedWord.hidden = true;
             settings.outputOkSpn.hidden = true;
             settings.okDataPath.hidden = true;
             settings.outputErrorSpn.hidden = true;
@@ -199,19 +205,24 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 settings.fileNameReq.hidden = false;
                 settings.isValidMetadata = false;
             }
-            if (spacePattern.test(settings.fileName.value)) {
-                settings.illegalChar.hidden = false;
+            if(settings.isValidMetadata && settings.fileDescr.value === "") {
+                settings.fileDescrReq.hidden = false;
                 settings.isValidMetadata = false;
             }
-            if (!startNumberPattern.test(settings.fileName.value)) {
+            if (settings.isValidMetadata && startNumberPattern.test(settings.fileName.value)) {
                 settings.numberFirst.hidden = false;
                 settings.isValidMetadata = false;
             }
-            if (quotesPattern.test(settings.fileName.value)){
-                console.log('valid quotes');
+            if (settings.isValidMetadata && !validFileNamePattern.test(settings.fileName.value)) {
+                settings.illegalChar.hidden = false;
+                settings.isValidMetadata = false;
             }
-            if (settings.fileName.value.length > strLength) {
-                console.log('input too long');
+            if (settings.isValidMetadata && settings.fileName.value.length > strLength) {
+                settings.fileNameLength.hidden = false;
+                settings.isValidMetadata = false;
+            }
+            if (settings.isValidMetadata && reservedWordPattern.test(settings.fileName.value)) {
+                settings.fileNameReservedWord.hidden = false;
                 settings.isValidMetadata = false;
             }
         }
@@ -248,7 +259,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
         }
 
         Rigsarkiv.MetaData = {
-            initialize: function (extractionCallback,metadataFileName,metadataFileNameDescription,metadataKeyVariable,metadataForeignFileName,metadataForeignKeyVariableName,metadataReferenceVariable,metdataOkBtn,inputFileNameRequired,inputNumberFirst,inputIllegalChar,outputOkId,okDataPathId,outputErrorId,outputNewExtractionId,newExtractionBtn,extractionTabId,outputExitId,exitBtn,structureTabId) {
+            initialize: function (extractionCallback,metadataFileName,metadataFileNameDescription,metadataKeyVariable,metadataForeignFileName,metadataForeignKeyVariableName,metadataReferenceVariable,metdataOkBtn,inputFileNameRequired,inputNumberFirst,inputIllegalChar,outputOkId,okDataPathId,outputErrorId,outputNewExtractionId,newExtractionBtn,extractionTabId,outputExitId,exitBtn,structureTabId,fileNameLengthId,fileNameReservedWordId,fileDescrReqId) {
                 settings.extractionCallback = extractionCallback;
                 settings.fileName = document.getElementById(metadataFileName);
                 settings.fileDescr = document.getElementById(metadataFileNameDescription);
@@ -272,6 +283,9 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 settings.outputExitSpn = document.getElementById(outputExitId); 
                 settings.exitBtn = document.getElementById(exitBtn);
                 settings.structureTab = document.getElementById(structureTabId);
+                settings.fileNameLength = document.getElementById(fileNameLengthId);
+                settings.fileNameReservedWord = document.getElementById(fileNameReservedWordId);
+                settings.fileDescrReq = document.getElementById(fileDescrReqId);
                 AddEvents();
             }
         }
