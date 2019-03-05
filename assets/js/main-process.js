@@ -18,11 +18,42 @@ ipcMain.on('dataextraction-open-file-dialog', (event) => {
         "name": "statistics file",
         "extensions": ["sas7bdat", "sav", "dta"]
       }
-    ]
-  
+    ]  
   }, (files) => {
     if (files) {
       event.sender.send('dataextraction-selected-statistics-file', files)
+    }
+  })
+})
+
+ipcMain.on('indexfiles-open-archiveindex-file-dialog', (event) => {
+  dialog.showOpenDialog({
+    properties: ['openFile'],
+    filters: [
+      {
+        "name": "archiveindex file",
+        "extensions": ["xml"]
+      }
+    ]  
+  }, (files) => {
+    if (files) {
+      event.sender.send('indexfiles-selected-archiveindex-file', files)
+    }
+  })
+})
+
+ipcMain.on('indexfiles-open-contextdocumentationindex-file-dialog', (event) => {
+  dialog.showOpenDialog({
+    properties: ['openFile'],
+    filters: [
+      {
+        "name": "contextdocumentationindex file",
+        "extensions": ["xml"]
+      }
+    ]  
+  }, (files) => {
+    if (files) {
+      event.sender.send('indexfiles-selected-contextdocumentationindex-file', files)
     }
   })
 })
