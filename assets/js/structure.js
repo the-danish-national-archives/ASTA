@@ -11,15 +11,19 @@ function (n) {
         selectedPath: null,
         deliveryPackageTxt: null,
         okBtn: null,
+        nextBtn: null,
         outputErrorSpn: null,
         outputErrorText: null,
         outputExistsSpn: null,
+        outputExistsTitle:null,
         outputExistsText: null,
-        outputRequiredPathSpn: null,
-        outputUnvalidDeliveryPackageSpn: null,
+        outputRequiredPathTitle: null,
+        outputRequiredPathText: null,
+        outputUnvalidDeliveryPackageTitle: null,
+        outputUnvalidDeliveryPackageText: null,
         outputOkSpn: null,
         outputOkText: null,
-        outputSupplementSpn: null,
+        statisticsTab: null,
         selectDeliveryPackage: null,
         folderPrefix: "FD.",
         defaultFolderPostfix: "99999",
@@ -29,12 +33,19 @@ function (n) {
 
     var Reset = function () {
         settings.outputErrorSpn.hidden = true;
-        settings.outputExistsSpn.hidden = true;
-        settings.outputRequiredPathSpn.hidden = true;
-        settings.outputUnvalidDeliveryPackageSpn.hidden = true;
         settings.outputOkSpn.hidden = true;
         settings.selectDeliveryPackage.hidden = true;
-        settings.outputSupplementSpn.hidden = true;
+        settings.nextBtn.hidden = true;
+    }
+
+    var ShowOutput = function() {
+        var folders = settings.deliveryPackagePath.split("/");
+        var folderName = folders[folders.length - 1];
+        settings.selectDeliveryPackage.innerHTML = settings.selectedPath;
+        settings.selectDeliveryPackage.hidden = false;
+        settings.outputOkSpn.hidden = false;
+        settings.outputOkSpn.innerHTML = settings.outputOkText.format(folderName);
+        settings.nextBtn.hidden = false;
     }
 
     var EnsureStructure = function () {
@@ -57,19 +68,17 @@ function (n) {
                                     settings.outputErrorSpn.innerHTML = settings.outputErrorText.format(err.message);   
                                     settings.deliveryPackagePath = null;                         
                                 }
+                                else {
+                                    ShowOutput();
+                                }
                             });
-                        });
-                        settings.selectDeliveryPackage.innerHTML = settings.selectedPath;
-                        settings.selectDeliveryPackage.hidden = false;
-                        settings.outputOkSpn.hidden = false;
-                        settings.outputSupplementSpn.hidden = false;
-                        settings.outputOkSpn.innerHTML = settings.outputOkText.format(folderName);
+                        });                        
                     }
                 });
             }
             else  {
-                settings.outputExistsSpn.hidden = false;
-                settings.outputExistsSpn.innerHTML = settings.outputExistsText.format(folderName);
+                ipcRenderer.send('open-warning-dialog',settings.outputExistsTitle.innerHTML,settings.outputExistsText.format(folderName));
+                ShowOutput();
             }
         });
     }
@@ -78,15 +87,18 @@ function (n) {
         settings.okBtn.addEventListener('click', (event) => {
             Reset();
             if(settings.pathDirTxt.value === "") {
-                settings.outputRequiredPathSpn.hidden = false;
+                ipcRenderer.send('open-error-dialog',settings.outputRequiredPathTitle.innerHTML,settings.outputRequiredPathText.innerHTML);
             }
             if(settings.deliveryPackageTxt.value !== "" && !pattern.test(settings.deliveryPackageTxt.value)) {
-                settings.outputUnvalidDeliveryPackageSpn.hidden = false;
+                ipcRenderer.send('open-error-dialog',settings.outputUnvalidDeliveryPackageTitle.innerHTML,settings.outputUnvalidDeliveryPackageText.innerHTML);
             }
             if(settings.selectedPath != null && settings.pathDirTxt.value !== "" && (settings.deliveryPackageTxt.value === "" || (settings.deliveryPackageTxt.value !== "" && pattern.test(settings.deliveryPackageTxt.value)))) {
                EnsureStructure();
             }
         })
+        settings.nextBtn.addEventListener('click', (event) => {
+            settings.statisticsTab.click();
+        });
         settings.selectDirBtn.addEventListener('click', (event) => {
             Reset();
             ipcRenderer.send('structure-open-file-dialog');
@@ -103,21 +115,24 @@ function (n) {
     }
 
     Rigsarkiv.Structure = {        
-        initialize: function (selectDirectoryId,pathDirectoryId,deliveryPackageId,okId,outputErrorId,outputExistsId,outputRequiredPathId,outputUnvalidDeliveryPackageId,outputOkId,outputSupplementId,selectDeliveryPackageId) {            
+        initialize: function (selectDirectoryId,pathDirectoryId,deliveryPackageId,okId,outputErrorId,outputExistsId,outputRequiredPathId,outputUnvalidDeliveryPackageId,outputOkId,selectDeliveryPackageId,nextId,statisticsTabId) {            
             settings.selectDirBtn =  document.getElementById(selectDirectoryId);
             settings.pathDirTxt =  document.getElementById(pathDirectoryId);
             settings.deliveryPackageTxt =  document.getElementById(deliveryPackageId);
             settings.okBtn =  document.getElementById(okId);
             settings.outputErrorSpn =  document.getElementById(outputErrorId);
             settings.outputErrorText = settings.outputErrorSpn.innerHTML;
-            settings.outputExistsSpn =  document.getElementById(outputExistsId);
-            settings.outputExistsText = settings.outputExistsSpn.innerHTML;
-            settings.outputRequiredPathSpn =  document.getElementById(outputRequiredPathId);
-            settings.outputUnvalidDeliveryPackageSpn =  document.getElementById(outputUnvalidDeliveryPackageId);
+            settings.outputExistsTitle =  document.getElementById(outputExistsId + "-Title");
+            settings.outputExistsText = document.getElementById(outputExistsId + "-Text").innerHTML;
+            settings.outputRequiredPathTitle =  document.getElementById(outputRequiredPathId + "-Title");
+            settings.outputRequiredPathText =  document.getElementById(outputRequiredPathId + "-Text");
+            settings.outputUnvalidDeliveryPackageTitle =  document.getElementById(outputUnvalidDeliveryPackageId + "-Title");
+            settings.outputUnvalidDeliveryPackageText =  document.getElementById(outputUnvalidDeliveryPackageId + "-Text");
             settings.outputOkSpn =  document.getElementById(outputOkId);
             settings.outputOkText = settings.outputOkSpn.innerHTML;
-            settings.outputSupplementSpn = document.getElementById(outputSupplementId);
             settings.selectDeliveryPackage = document.getElementById(selectDeliveryPackageId);
+            settings.nextBtn =  document.getElementById(nextId);
+            settings.statisticsTab = document.getElementById(statisticsTabId);
             AddEvents();
         },
         callback: function () {
