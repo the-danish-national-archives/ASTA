@@ -20,7 +20,7 @@
                         <p>
                             Du kan her skabe en tom mappestruktur til afleveringspakken.  
                         </p>
-                        <div class="light-turkish"><h4>Skab en tom mappestruktur:</h4></div>
+                        <div><h4>Skab en tom mappestruktur:</h4></div>
                         <p>
                             Indtast løbenummer for afleveringspakken
                             <i id="hybris-message-structure-delivery-package" class="far fa-question-circle"></i>
@@ -37,7 +37,7 @@
                         </p>
                         <div>
                             <input type="text" id="hybris-structure-path">
-                            <button id="hybris-select-structure-directory">Browse...</button>
+                            <button id="hybris-select-structure-directory">Browse</button>
                         </div>
                         <button id="hybris-structure-okBtn">Ok</button>
                         <span id="hybris-output-structure-RequiredPath-Title" hidden="true">Afleveringspakken mangler</span>
@@ -54,56 +54,71 @@
                         <button id="hybris-structure-nextBtn" hidden="true">Næste</button>
                     </div>
                     <div id="hybris-panel-statistics" class="formularContainer" hidden="true">
-                        <p>
-                            <h2>Udtræk data - TRIN 1</h2>
-                        </p>
-                        <p>
-                            Du kan her udtrække data- og metadata fra dine statistikfiler til den tomme afleveringspakke du lige har skabt.  
-                            <br/>
-                            <br/> Udtrækket består af 3 trin for hver statistikfil: 
-                            <br/> TRIN 1: Vælg statistikfil
-                            <br/> TRIN 2: Kør export script i dit statistikprogram
-                            <br/> TRIN 3: Indtast informationer om statistikfilen
-                        </p>
-                        <h3>TRIN 1: Vælg datafil</h3>
-                        <p>
-                            Vælg statistikfilen som udtræk skal laves fra
-                            <i id="hybris-message-statistics-filepath" class="far fa-question-circle"></i>
-                            <span id="hybris-message-statistics-filepath-Title" hidden="true">Vælg statistikfil</span>
-                            <span id="hybris-message-statistics-filepath-Text" hidden="true">Vælg den statistikfil, du ønsker at lave udtræk fra.<br />Filen skal være en af følgende formater: .sas (SAS-fil), .dta (Stata-fil) eller .sav (SPSS-fil).<br />Når der udtrækkes data fra en SAS-fil med katalog, skal katalogfilen (sas7bcat eller sa7bdat) placeres i samme mappe som den valgte SAS-fil (.sas), der skal laves udtræk fra. Katalogfilen skal være navngivet med samme navn som statistikfilen.
-                            </span>
-                        </p>
-                        <div>
-                            <input type="text" id="hybris-statistics-filepath">
-                            <button id="hybris-select-statistics-file">Browse...</button>
-                        </div>
-                        <button id="hybris-statistics-okBtn">Ok</button>
-                        <span id="hybris-output-statistics-RequiredPath" hidden="true"><br/>Destination for statistikfilen mangler</span>
-                        <span id="hybris-output-statistics-Error" hidden="true"><br/>Error: {0}</span>
-                        <span id="hybris-message-statistics-SASCatalogWarning-Title" hidden="true">SAS fil uden katalog</span>
-                        <span id="hybris-message-statistics-SASCatalogWarning-Text" hidden="true">Du er ved at udtrække data fra en SAS-fil uden katalog. Når der udtrækkes data for en SAS-fil med katalog, skal katalogfilen (.sas7bcat) placeres i samme mappe som den valgte SAS-datafil (.sas7bdat), der skal laves udtræk fra og navngives på samme måde som datafilen.</span>
-                        <div id="hybris-panel-script" hidden="true">
-                            <h3>TRIN 2: Kør eksport script i statistikprogram</h3>
-                            <span id="hybris-output-script-OKCopyScript">
-                                <br/>{0} scriptet {1} til eksport af data og metadata fra statistikfil {2} er dannet og placeret i mappen: </span><a id="hybris-output-script-dataPath"></a>
-                            <span id="hybris-output-script-OKCopyScriptInfo">
-                                <br/><br/>Du skal nu køre scriptet {0} i dit statistikprogram før du klikker på OK knappen
-                                <br/><br/>Sådan gøre du:
+                        <div id="hybris-panel-script1">
+                            <p>
+                                <h2>Udtræk data - TRIN 1</h2>
+                            </p>
+                            <p>
+                                Du kan her udtrække data- og metadata fra dine statistikfiler til den tomme afleveringspakke du lige har skabt.  
                                 <br/>
-                                <ol>
-                                    <li>Lad dette værktøj kør (luk det ikke ned)</li>
-                                    <li>Åben scriptet i {1} og eksekver det.</li>
-                                    <li>Vend tilbag til dette program og klik OK på knappen nedenfor, når scriptet er køret færdig.</li>
-                                </ol>
+                                <br/> Udtrækket består af 3 trin for hver statistikfil: 
+                                <br/> TRIN 1: Vælg statistikfil
+                                <br/> TRIN 2: Kør export script i dit statistikprogram
+                                <br/> TRIN 3: Indtast informationer om statistikfilen
+                            </p>
+                            <span><strong>Information!</strong>  Du kan kun lave udtræk fra statistikfiler i formaterne SPSS, SAS og Stata.</span>
+                            <br/>
+                            <div><h4>TRIN 1: Vælg statistikfil</h4></div>
+                            <p>
+                                Vælg statistikfilen som udtræk skal laves fra:
+                                <i id="hybris-message-statistics-filepath" class="far fa-question-circle"></i>
+                                <span id="hybris-message-statistics-filepath-Title" hidden="true">Vælg statistikfil</span>
+                                <span id="hybris-message-statistics-filepath-Text" hidden="true">Vælg den statistikfil, du ønsker at lave udtræk fra.<br />Filen skal være en af følgende formater: .sas (SAS-fil), .dta (Stata-fil) eller .sav (SPSS-fil).<br />Når der udtrækkes data fra en SAS-fil med katalog, skal katalogfilen (sas7bcat eller sa7bdat) placeres i samme mappe som den valgte SAS-fil (.sas), der skal laves udtræk fra. Katalogfilen skal være navngivet med samme navn som statistikfilen.
+                                </span>
+                            </p>
+                            <div>
+                                <input type="text" id="hybris-statistics-filepath">
+                                <button id="hybris-select-statistics-file">Browse</button>
+                            </div>
+                            <button id="hybris-statistics-okBtn">Ok</button>
+                            <span id="hybris-output-statistics-RequiredPath-Title" hidden="true">Statistikfilen mangler</span>
+                            <span id="hybris-output-statistics-RequiredPath-Text" hidden="true">Destination for statistikfilen mangler</span>
+                            <span id="hybris-output-statistics-Error" hidden="true"><br/>Error: {0}</span>
+                            <span id="hybris-message-statistics-SASCatalogWarning-Title" hidden="true">SAS fil uden katalog</span>
+                            <span id="hybris-message-statistics-SASCatalogWarning-Text" hidden="true">Du er ved at udtrække data fra en SAS-fil uden katalog. Når der udtrækkes data for en SAS-fil med katalog, skal katalogfilen (.sas7bcat) placeres i samme mappe som den valgte SAS-datafil (.sas7bdat), der skal laves udtræk fra og navngives på samme måde som datafilen.</span>
+                        </div>                        
+                        <div id="hybris-panel-script2" hidden="true">
+                            <p>
+                                <h2>Udtræk data - TRIN 2</h2>
+                            </p>
+                            <br/>
+                            <span id="hybris-output-script-OKCopyScript">
+                                <strong>Information!</strong> [{0}] scriptet [{1}] til udtræk af data- og metadata fra statistikfilen <br/>{2} er nu dannet og placeret i mappen  
+                            </span>
+                            [<a id="hybris-output-script-dataPath"></a>]
+                            <br/>
+                            <div><h4>TRIN 2: Kør export scriptet i dit statistikprogram</h4></div>
+                            <br/>
+                            <span id="hybris-output-script-OKCopyScriptInfo">
+                                <h4>Du skal nu køre scriptet {0} i dit statistikprogram før du klikker på OK knappen</h4>
+                                <br/>
+                                <h4> Sådan gør du: </h4>
+                                <p>  
+                                    1) Lad dette værktøj køre i baggrunden (luk det ikke)
+                                    <br/> 2) Åben scriptet i statistikprogrammet [{1}] og eksekver det. Når scriptet kører udtrækkes data og metadata fra statistikfilen til Rigsarkivets format for data- og metadatafiler i afleveringspakken.
+                                    <br/> 3) Når scriptet er kørt færdigt, vender du tilbage til dette værktøj og klikker på knappen "OK" nedenfor for at bekræfte at scriptet er kørt. 
+                                </p>
                                 <br/>
                             </span>
                             <button id="hybris-script-okBtn">Ok</button>
-                            <span id="hybris-output-script-Ok" hidden="true"><br/>Der er udtrukket data og metadata fra statistikfilen</span>
+                            <span id="hybris-output-script-Ok" hidden="true"><br/>Der er udtrukket data og metadata fra statistikfilen [{0}].<br/>Luk statistikfilen, før du klikker på knappen "Næste", for at gå til trin 3.</span>
                             <span id="hybris-output-script-Error" hidden="true"><br/>Error: {0}</span>
                             <span id="hybris-output-script-RequiredFilesWarning-Title" hidden="true">Data og metadata fra statistikfilen</span>
                             <span id="hybris-output-script-RequiredFilesWarning-Text" hidden="true">Der er ikke udtrukket data og metadata fra statistikfilen. Kør export scriptet i dit statistikprogram før du klikker på OK. Hvis du fortsætter uden at køre scriptet vil data- og metadatafil være tomme.</span>
                             <span id="hybris-output-script-EncodingFileError-Title" hidden="true">Fil encoding</span>
                             <span id="hybris-output-script-EncodingFileError-Text" hidden="true">Filen {0} indeholder karakterer som ikke er UTF-8 tegn. Statistikfilen, der laves udtræk fra, skal være indkodet som UTF-8 før dataudtræk laves med Hybris.  Du skal ændre encoding for statistikfilen i dit statistikprogram og lave nyt dataudtæk med Hybris.</span>
+                            <br /><br />
+                            <button id="hybris-script-nextBtn" hidden="true">Næste</button>
                         </div>
                     </div>
                     <div id="hybris-panel-metdata" class="formularContainer" hidden="true">
@@ -219,7 +234,7 @@
             Rigsarkiv.Panels.initialize(["hybris-tab-structure","hybris-tab-statistics","hybris-tab-metdata","hybris-tab-indexfiles"]);
             Rigsarkiv.Messages.initialize(["hybris-message-structure-delivery-package","hybris-message-structure-path","hybris-message-statistics-filepath","hybris-message-metdata-fileName","hybris-message-metdata-fileDescription","hybris-message-metdata-keyVariable","hybris-message-metdata-foreignFile","hybris-message-metdata-foreignVariable","hybris-message-metdata-referenceVariable","hybris-message-indexfiles-archiveIndex","hybris-message-indexfiles-contextDocumentationIndex"]);
             Rigsarkiv.Structure.initialize("hybris-select-structure-directory","hybris-structure-path","hybris-structure-delivery-package","hybris-structure-okBtn","hybris-output-structure-Error","hybris-output-structure-Exists","hybris-output-structure-RequiredPath","hybris-output-structure-UnvalidDeliveryPackage","hybris-output-structure-Ok","hybris-structure-select-delivery-package","hybris-structure-nextBtn","hybris-tab-statistics","hybris-output-structure-Supplement");          
-            Rigsarkiv.DataExtraction.initialize(Rigsarkiv.Structure.callback,"hybris-select-statistics-file","hybris-statistics-filepath","hybris-statistics-okBtn","hybris-output-statistics-Error","hybris-output-script-OKCopyScript","hybris-message-statistics-SASCatalogWarning","hybris-panel-script","hybris-script-okBtn","hybris-output-script-dataPath","hybris-output-script-OKCopyScriptInfo","hybris-output-statistics-RequiredPath","hybris-output-script-RequiredFilesWarning","hybris-output-script-Ok","hybris-output-script-EncodingFileError");
+            Rigsarkiv.DataExtraction.initialize(Rigsarkiv.Structure.callback,"hybris-select-statistics-file","hybris-statistics-filepath","hybris-statistics-okBtn","hybris-output-statistics-Error","hybris-output-script-OKCopyScript","hybris-message-statistics-SASCatalogWarning","hybris-panel-script1","hybris-panel-script2","hybris-script-okBtn","hybris-output-script-dataPath","hybris-output-script-OKCopyScriptInfo","hybris-output-statistics-RequiredPath","hybris-output-script-RequiredFilesWarning","hybris-output-script-Ok","hybris-output-script-EncodingFileError","hybris-script-nextBtn","hybris-tab-metdata");
             Rigsarkiv.MetaData.initialize(Rigsarkiv.DataExtraction.callback,"hybris-metdata-fileName", "hybris-metdata-fileDescription", "hybris-metdata-keyVar", "hybris-metdata-foreignFileName", "hybris-metdata-foreignKeyVarName", "hybris-metdata-refVar", "hybris-metdata-okBtn", "hybris-output-metdata-fileNameRequired", "hybris-output-metdata-fileNameNumberFirst", "hybris-output-metdata-fileNameIllegalChar","hybris-output-metdata-Ok","hybris-output-metdata-path","hybris-output-metdata-Error","hybris-output-metdata-NewExtraction","hybris-metdata-NewExtractionBtn","hybris-tab-statistics","hybris-output-metdata-Exit","hybris-metdata-ExitBtn","hybris-tab-structure","hybris-output-metdata-fileNameLength","hybris-output-metdata-fileNamereservedWord","hybris-output-metdata-fileDescrRequired");
             Rigsarkiv.IndexFiles.initialize(Rigsarkiv.Structure.callback,"hybris-indexfiles-archiveIndex-selectFile","hybris-indexfiles-archiveIndex","hybris-indexfiles-contextDocumentationIndex-selectFile","hybris-indexfiles-contextDocumentationIndex","hybris-indexfiles-okBtn","hybris-output-indexfiles-Error","hybris-output-indexfiles-RequiredPath","hybris-output-indexfiles-Ok","hybris-indexfiles-delivery-package");
           </script>
