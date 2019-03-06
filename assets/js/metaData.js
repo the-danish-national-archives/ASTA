@@ -26,16 +26,26 @@ window.Rigsarkiv = window.Rigsarkiv || {},
             outputNewExtractionSpn: null,
             outputNewExtractionText: null,
             newExtractionBtn: null,
-            exitBtn: null,
-            outputExitSpn: null,
+            nextBtn: null,
+            outputNextSpn: null,
             extractionTab: null,
-            structureTab: null,
-            fileNameReq: null,
-            fileDescrReq: null,
-            numberFirst: null,
-            illegalChar: null,
-            fileNameLength: null,
-            fileNameReservedWord: null,
+            indexFilesTab: null,
+            fileNameReqTitle: null,
+            fileNameReqText: null,
+            fileDescrReqTitle: null,
+            fileDescrReqText: null,
+            numberFirstTitle: null,
+            numberFirstText: null,
+            illegalCharTitle: null,
+            illegalCharText: null,
+            fileNameLengthTitle: null,
+            fileNameLengthText: null,
+            fileNameReservedWordTitle: null,
+            fileNameReservedWordText: null,
+            informationPanel1: null,
+            informationPanel2: null,
+            indexFilesDescriptionSpn: null,
+            indexFilesDescriptionText: null,
             contents: ["","","",""],
             isValidMetadata: true,
             metadataFileName: "{0}.txt",
@@ -50,20 +60,11 @@ window.Rigsarkiv = window.Rigsarkiv || {},
         }
 
         var Reset = function () {
+            settings.informationPanel1.hidden = false;
+            settings.informationPanel2.hidden = true;
             settings.isValidMetadata = true;
-            settings.fileNameReq.hidden = true;
-            settings.fileDescrReq.hidden = true;
-            settings.numberFirst.hidden = true;
-            settings.illegalChar.hidden = true;
-            settings.fileNameLength.hidden = true;
-            settings.fileNameReservedWord.hidden = true;
-            settings.outputOkSpn.hidden = true;
-            settings.okDataPath.hidden = true;
             settings.outputErrorSpn.hidden = true;
-            settings.outputNewExtractionSpn.hidden = true;
-            settings.newExtractionBtn.hidden = true;
-            settings.exitBtn.hidden = true;
-            settings.outputExitSpn.hidden = true;
+            settings.nextBtn.hidden = true;
             settings.contents = ["","","",""];
         }        
 
@@ -93,17 +94,15 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                             fs.unlinkSync("{0}/{1}".format(dataFolderPath,file));
                         }
                     });
+                    settings.informationPanel1.hidden = true;
+                    settings.informationPanel2.hidden = false;
                     var folders = callback.selectedStatisticsFilePath.normlizePath().split("/");
-                    settings.outputOkSpn.hidden = false;
-                    settings.okDataPath.hidden = false;
-                    settings.outputNewExtractionSpn.hidden = false;
-                    settings.newExtractionBtn.hidden = false; 
-                    settings.outputExitSpn.hidden = false;  
-                    settings.exitBtn.hidden = false;
-                    settings.outputOkSpn.innerHTML = settings.outputOkText.format(folders[folders.length - 1]);
+                    settings.nextBtn.hidden = false;
+                    settings.outputOkSpn.innerHTML = settings.outputOkText.format(settings.dataFileName.format(fileName),settings.metadataFileName.format(fileName),folders[folders.length - 1]);
                     settings.okDataPath.innerHTML = callback.localFolderPath;
                     folders = dataFolderPath.split("/");
-                    settings.outputNewExtractionSpn.innerHTML = settings.outputNewExtractionText.format(folders[folders.length - 3]);                                       
+                    settings.outputNewExtractionSpn.innerHTML = settings.outputNewExtractionText.format(folders[folders.length - 3]);
+                    settings.indexFilesDescriptionSpn.innerHTML = settings.indexFilesDescriptionText.format(folders[folders.length - 3]);                                      
                 }
             });
         }
@@ -202,27 +201,27 @@ window.Rigsarkiv = window.Rigsarkiv || {},
 
         var ValidateFields = function() {
             if (settings.fileName.value === "") {
-                settings.fileNameReq.hidden = false;
+                ipcRenderer.send('open-error-dialog',settings.fileNameReqTitle.innerHTML,settings.fileNameReqText.innerHTML);
                 settings.isValidMetadata = false;
             }
             if(settings.isValidMetadata && settings.fileDescr.value === "") {
-                settings.fileDescrReq.hidden = false;
+                ipcRenderer.send('open-error-dialog',settings.fileDescrReqTitle.innerHTML,settings.fileDescrReqText.innerHTML);
                 settings.isValidMetadata = false;
             }
             if (settings.isValidMetadata && startNumberPattern.test(settings.fileName.value)) {
-                settings.numberFirst.hidden = false;
+                ipcRenderer.send('open-error-dialog',settings.numberFirstTitle.innerHTML,settings.numberFirstText.innerHTML);
                 settings.isValidMetadata = false;
             }
             if (settings.isValidMetadata && !validFileNamePattern.test(settings.fileName.value)) {
-                settings.illegalChar.hidden = false;
+                ipcRenderer.send('open-error-dialog',settings.illegalCharTitle.innerHTML,settings.illegalCharText.innerHTML);
                 settings.isValidMetadata = false;
             }
             if (settings.isValidMetadata && settings.fileName.value.length > strLength) {
-                settings.fileNameLength.hidden = false;
+                ipcRenderer.send('open-error-dialog',settings.fileNameLengthTitle.innerHTML,settings.fileNameLengthText.innerHTML);
                 settings.isValidMetadata = false;
             }
             if (settings.isValidMetadata && reservedWordPattern.test(settings.fileName.value)) {
-                settings.fileNameReservedWord.hidden = false;
+                ipcRenderer.send('open-error-dialog',settings.fileNameReservedWordTitle.innerHTML,settings.fileNameReservedWordText.innerHTML);
                 settings.isValidMetadata = false;
             }
         }
@@ -239,10 +238,8 @@ window.Rigsarkiv = window.Rigsarkiv || {},
         }
 
         var AddEvents = function () {
-            settings.exitBtn.addEventListener('click', (event) => {
-                settings.extractionCallback().structureCallback.reset();
-                ResetExtraction();
-                settings.structureTab.click();
+            settings.nextBtn.addEventListener('click', (event) => {
+                settings.indexFilesTab.click();
             });
             settings.newExtractionBtn.addEventListener('click', (event) => {
                 ResetExtraction();
@@ -259,7 +256,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
         }
 
         Rigsarkiv.MetaData = {
-            initialize: function (extractionCallback,metadataFileName,metadataFileNameDescription,metadataKeyVariable,metadataForeignFileName,metadataForeignKeyVariableName,metadataReferenceVariable,metdataOkBtn,inputFileNameRequired,inputNumberFirst,inputIllegalChar,outputOkId,okDataPathId,outputErrorId,outputNewExtractionId,newExtractionBtn,extractionTabId,outputExitId,exitBtn,structureTabId,fileNameLengthId,fileNameReservedWordId,fileDescrReqId) {
+            initialize: function (extractionCallback,metadataFileName,metadataFileNameDescription,metadataKeyVariable,metadataForeignFileName,metadataForeignKeyVariableName,metadataReferenceVariable,metdataOkBtn,inputFileNameRequired,inputNumberFirst,inputIllegalChar,outputOkId,okDataPathId,outputErrorId,outputNewExtractionId,newExtractionBtn,extractionTabId,outputNextId,nextBtn,indexFilesTabId,fileNameLengthId,fileNameReservedWordId,fileDescrReqId,informationPanel1Id,informationPanel2Id,indexFilesDescriptionId) {
                 settings.extractionCallback = extractionCallback;
                 settings.fileName = document.getElementById(metadataFileName);
                 settings.fileDescr = document.getElementById(metadataFileNameDescription);
@@ -268,9 +265,12 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 settings.foreignKeyVarName = document.getElementById(metadataForeignKeyVariableName);
                 settings.foreignFileRefVar = document.getElementById(metadataReferenceVariable);
                 settings.okBtn = document.getElementById(metdataOkBtn);
-                settings.fileNameReq = document.getElementById(inputFileNameRequired);
-                settings.numberFirst = document.getElementById(inputNumberFirst);
-                settings.illegalChar = document.getElementById(inputIllegalChar);
+                settings.fileNameReqTitle = document.getElementById(inputFileNameRequired + "-Title");
+                settings.fileNameReqText = document.getElementById(inputFileNameRequired + "-Text");
+                settings.numberFirstTitle = document.getElementById(inputNumberFirst + "-Title");
+                settings.numberFirstText = document.getElementById(inputNumberFirst + "-Text");
+                settings.illegalCharTitle = document.getElementById(inputIllegalChar + "-Title");
+                settings.illegalCharText = document.getElementById(inputIllegalChar + "-Text");
                 settings.outputOkSpn = document.getElementById(outputOkId);
                 settings.outputOkText = settings.outputOkSpn.innerHTML;
                 settings.okDataPath = document.getElementById(okDataPathId);
@@ -280,12 +280,19 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 settings.outputNewExtractionText = settings.outputNewExtractionSpn.innerHTML;
                 settings.newExtractionBtn = document.getElementById(newExtractionBtn);
                 settings.extractionTab = document.getElementById(extractionTabId);
-                settings.outputExitSpn = document.getElementById(outputExitId); 
-                settings.exitBtn = document.getElementById(exitBtn);
-                settings.structureTab = document.getElementById(structureTabId);
-                settings.fileNameLength = document.getElementById(fileNameLengthId);
-                settings.fileNameReservedWord = document.getElementById(fileNameReservedWordId);
-                settings.fileDescrReq = document.getElementById(fileDescrReqId);
+                settings.outputNextSpn = document.getElementById(outputNextId); 
+                settings.nextBtn = document.getElementById(nextBtn);
+                settings.indexFilesTab = document.getElementById(indexFilesTabId);
+                settings.fileNameLengthTitle = document.getElementById(fileNameLengthId + "-Title");
+                settings.fileNameLengthText = document.getElementById(fileNameLengthId + "-Text");
+                settings.fileNameReservedWordTitle = document.getElementById(fileNameReservedWordId + "-Title");
+                settings.fileNameReservedWordText = document.getElementById(fileNameReservedWordId + "-Text");
+                settings.fileDescrReqTitle = document.getElementById(fileDescrReqId + "-Title");
+                settings.fileDescrReqText = document.getElementById(fileDescrReqId + "-Text");
+                settings.informationPanel1 = document.getElementById(informationPanel1Id);
+                settings.informationPanel2 = document.getElementById(informationPanel2Id);
+                settings.indexFilesDescriptionSpn = document.getElementById(indexFilesDescriptionId);
+                settings.indexFilesDescriptionText = settings.indexFilesDescriptionSpn.innerHTML;
                 AddEvents();
             }
         }

@@ -16,7 +16,8 @@ window.Rigsarkiv = window.Rigsarkiv || {},
             okBtn: null,
             outputErrorSpn: null,
             outputErrorText: null,
-            outputRequiredPathSpn: null,
+            outputRequiredPathTitle: null,
+            outputRequiredPathText: null,
             IndecesPostfixPath: "{0}/Indices",
             IndecesPath: null,
             outputOkSpn: null,
@@ -32,7 +33,6 @@ window.Rigsarkiv = window.Rigsarkiv || {},
 
         var Reset = function () {
             settings.outputErrorSpn.hidden = true;
-            settings.outputRequiredPathSpn.hidden = true;
             settings.outputOkSpn.hidden = true;
             settings.selectDeliveryPackage.hidden = true;
         }
@@ -76,7 +76,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                             var selectedArchiveIndexFileName = GetFileName(settings.selectedArchiveIndexFilePath);
                             var selectedContextDocumentationIndexFileName = GetFileName(settings.selectedContextDocumentationIndexFilePath);
                             settings.outputOkSpn.innerHTML =  settings.outputOkText.format(selectedArchiveIndexFileName,selectedContextDocumentationIndexFileName);
-                            settings.selectDeliveryPackage.innerHTML = GetLocalFolderPath();
+                            settings.selectDeliveryPackage.innerHTML = "[{0}]".format(GetLocalFolderPath());
                         }
                     });
                 }
@@ -103,7 +103,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
              settings.okBtn.addEventListener('click', function (event) {
                 Reset();
                 if(settings.pathArchiveIndexFileTxt.value === "" || settings.pathContextDocumentationIndexFileTxt.value === "") {
-                    settings.outputRequiredPathSpn.hidden = false;
+                    ipcRenderer.send('open-error-dialog',settings.outputRequiredPathTitle.innerHTML,settings.outputRequiredPathText.innerHTML);
                 }
                if(settings.selectedArchiveIndexFilePath != null && settings.selectedContextDocumentationIndexFilePath != null && settings.pathArchiveIndexFileTxt.value !== "" && settings.pathContextDocumentationIndexFileTxt.value !== "") { 
                     EnsureFiles(); 
@@ -124,7 +124,8 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 settings.okBtn = document.getElementById(indexFilesOkBtn);
                 settings.outputErrorSpn =  document.getElementById(outputErrorId);
                 settings.outputErrorText = settings.outputErrorSpn.innerHTML;
-                settings.outputRequiredPathSpn =  document.getElementById(outputRequiredPathId);
+                settings.outputRequiredPathTitle =  document.getElementById(outputRequiredPathId + "-Title");
+                settings.outputRequiredPathText =  document.getElementById(outputRequiredPathId + "-Text");
                 settings.outputOkSpn =  document.getElementById(outputOkId);
                 settings.outputOkText = settings.outputOkSpn.innerHTML;
                 settings.selectDeliveryPackage = document.getElementById(selectDeliveryPackageId);
