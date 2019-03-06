@@ -3,8 +3,7 @@
         <header class="section-header">
             <div class="section-wrapper">
                 <div class="header">
-                    <h1 class="title">Hybris</h1>
-                    <h3 class="title">LAV EN AFLEVERINGSPAKKE</h3>
+                    <h1 class="title">HYBRIS - Skab en afleveringspakke</h1>
                 </div>
                 <section>
                     <div class="btnContaier">
@@ -15,7 +14,13 @@
                     </div>
                     <hr class="button-divider">
                     <div id="hybris-panel-structure" class="formularContainer">
-                        <h3>Skab en afleveringspakke</h3>
+                        <p>
+                            <h2>Mappestruktur</h2>
+                        </p>
+                        <p>
+                            Du kan her skabe en tom mappestruktur til afleveringspakken.  
+                        </p>
+                        <div class="light-turkish"><h4>Skab en tom mappestruktur:</h4></div>
                         <p>
                             Indtast løbenummer for afleveringspakken
                             <i id="hybris-message-structure-delivery-package" class="far fa-question-circle"></i>
@@ -42,12 +47,24 @@
                         <span id="hybris-output-structure-Error" hidden="true"><br />Error: {0}</span>
                         <span id="hybris-output-structure-Exists-Title" hidden="true">Afleveringspakken Eksisterer</span>
                         <span id="hybris-output-structure-Exists-Text" hidden="true">Afleveringspakken [{0}] eksisterer</span>
-                        <span id="hybris-output-structure-Ok" hidden="true"><br />En tom mappestruktur for afleveringspakken [{0}] er dannet og placeret her: </span>
-                        <a id="hybris-structure-select-delivery-package" hidden="true"></a>
-                        <br />
+                        <span id="hybris-output-structure-Ok" hidden="true"><br /><br /><strong>Bekræftelse!</strong> En tom mappestruktur for afleveringspakke [{0}] er nu skabt og placeret i mappen [</span>
+                        <a id="hybris-structure-select-delivery-package" hidden="true"></a> 
+                        <span id="hybris-output-structure-Supplement" hidden="true">]<br/> Klik på knappen "Næste", hvis du vil lave udtræk af data- og metadata fra dine statistikfiler til denne afleveringspakke.</span>
+                        <br /><br />
                         <button id="hybris-structure-nextBtn" hidden="true">Næste</button>
                     </div>
                     <div id="hybris-panel-statistics" class="formularContainer" hidden="true">
+                        <p>
+                            <h2>Udtræk data - TRIN 1</h2>
+                        </p>
+                        <p>
+                            Du kan her udtrække data- og metadata fra dine statistikfiler til den tomme afleveringspakke du lige har skabt.  
+                            <br/>
+                            <br/> Udtrækket består af 3 trin for hver statistikfil: 
+                            <br/> TRIN 1: Vælg statistikfil
+                            <br/> TRIN 2: Kør export script i dit statistikprogram
+                            <br/> TRIN 3: Indtast informationer om statistikfilen
+                        </p>
                         <h3>TRIN 1: Vælg datafil</h3>
                         <p>
                             Vælg statistikfilen som udtræk skal laves fra
@@ -201,7 +218,7 @@
 
             Rigsarkiv.Panels.initialize(["hybris-tab-structure","hybris-tab-statistics","hybris-tab-metdata","hybris-tab-indexfiles"]);
             Rigsarkiv.Messages.initialize(["hybris-message-structure-delivery-package","hybris-message-structure-path","hybris-message-statistics-filepath","hybris-message-metdata-fileName","hybris-message-metdata-fileDescription","hybris-message-metdata-keyVariable","hybris-message-metdata-foreignFile","hybris-message-metdata-foreignVariable","hybris-message-metdata-referenceVariable","hybris-message-indexfiles-archiveIndex","hybris-message-indexfiles-contextDocumentationIndex"]);
-            Rigsarkiv.Structure.initialize("hybris-select-structure-directory","hybris-structure-path","hybris-structure-delivery-package","hybris-structure-okBtn","hybris-output-structure-Error","hybris-output-structure-Exists","hybris-output-structure-RequiredPath","hybris-output-structure-UnvalidDeliveryPackage","hybris-output-structure-Ok","hybris-structure-select-delivery-package","hybris-structure-nextBtn","hybris-tab-statistics");          
+            Rigsarkiv.Structure.initialize("hybris-select-structure-directory","hybris-structure-path","hybris-structure-delivery-package","hybris-structure-okBtn","hybris-output-structure-Error","hybris-output-structure-Exists","hybris-output-structure-RequiredPath","hybris-output-structure-UnvalidDeliveryPackage","hybris-output-structure-Ok","hybris-structure-select-delivery-package","hybris-structure-nextBtn","hybris-tab-statistics","hybris-output-structure-Supplement");          
             Rigsarkiv.DataExtraction.initialize(Rigsarkiv.Structure.callback,"hybris-select-statistics-file","hybris-statistics-filepath","hybris-statistics-okBtn","hybris-output-statistics-Error","hybris-output-script-OKCopyScript","hybris-message-statistics-SASCatalogWarning","hybris-panel-script","hybris-script-okBtn","hybris-output-script-dataPath","hybris-output-script-OKCopyScriptInfo","hybris-output-statistics-RequiredPath","hybris-output-script-RequiredFilesWarning","hybris-output-script-Ok","hybris-output-script-EncodingFileError");
             Rigsarkiv.MetaData.initialize(Rigsarkiv.DataExtraction.callback,"hybris-metdata-fileName", "hybris-metdata-fileDescription", "hybris-metdata-keyVar", "hybris-metdata-foreignFileName", "hybris-metdata-foreignKeyVarName", "hybris-metdata-refVar", "hybris-metdata-okBtn", "hybris-output-metdata-fileNameRequired", "hybris-output-metdata-fileNameNumberFirst", "hybris-output-metdata-fileNameIllegalChar","hybris-output-metdata-Ok","hybris-output-metdata-path","hybris-output-metdata-Error","hybris-output-metdata-NewExtraction","hybris-metdata-NewExtractionBtn","hybris-tab-statistics","hybris-output-metdata-Exit","hybris-metdata-ExitBtn","hybris-tab-structure","hybris-output-metdata-fileNameLength","hybris-output-metdata-fileNamereservedWord","hybris-output-metdata-fileDescrRequired");
             Rigsarkiv.IndexFiles.initialize(Rigsarkiv.Structure.callback,"hybris-indexfiles-archiveIndex-selectFile","hybris-indexfiles-archiveIndex","hybris-indexfiles-contextDocumentationIndex-selectFile","hybris-indexfiles-contextDocumentationIndex","hybris-indexfiles-okBtn","hybris-output-indexfiles-Error","hybris-output-indexfiles-RequiredPath","hybris-output-indexfiles-Ok","hybris-indexfiles-delivery-package");

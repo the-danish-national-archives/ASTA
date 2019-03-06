@@ -24,6 +24,7 @@ function (n) {
         outputOkSpn: null,
         outputOkText: null,
         statisticsTab: null,
+        outputSupplementSpn: null,
         selectDeliveryPackage: null,
         folderPrefix: "FD.",
         defaultFolderPostfix: "99999",
@@ -34,6 +35,7 @@ function (n) {
     var Reset = function () {
         settings.outputErrorSpn.hidden = true;
         settings.outputOkSpn.hidden = true;
+        settings.outputSupplementSpn.hidden = true;
         settings.selectDeliveryPackage.hidden = true;
         settings.nextBtn.hidden = true;
     }
@@ -45,6 +47,7 @@ function (n) {
         settings.selectDeliveryPackage.hidden = false;
         settings.outputOkSpn.hidden = false;
         settings.outputOkSpn.innerHTML = settings.outputOkText.format(folderName);
+        settings.outputSupplementSpn.hidden = false;
         settings.nextBtn.hidden = false;
     }
 
@@ -115,7 +118,7 @@ function (n) {
     }
 
     Rigsarkiv.Structure = {        
-        initialize: function (selectDirectoryId,pathDirectoryId,deliveryPackageId,okId,outputErrorId,outputExistsId,outputRequiredPathId,outputUnvalidDeliveryPackageId,outputOkId,selectDeliveryPackageId,nextId,statisticsTabId) {            
+        initialize: function (selectDirectoryId,pathDirectoryId,deliveryPackageId,okId,outputErrorId,outputExistsId,outputRequiredPathId,outputUnvalidDeliveryPackageId,outputOkId,selectDeliveryPackageId,nextId,statisticsTabId,outputSupplementId) {            
             settings.selectDirBtn =  document.getElementById(selectDirectoryId);
             settings.pathDirTxt =  document.getElementById(pathDirectoryId);
             settings.deliveryPackageTxt =  document.getElementById(deliveryPackageId);
@@ -133,6 +136,7 @@ function (n) {
             settings.selectDeliveryPackage = document.getElementById(selectDeliveryPackageId);
             settings.nextBtn =  document.getElementById(nextId);
             settings.statisticsTab = document.getElementById(statisticsTabId);
+            settings.outputSupplementSpn =  document.getElementById(outputSupplementId);
             AddEvents();
         },
         callback: function () {
