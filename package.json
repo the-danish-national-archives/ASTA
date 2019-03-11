@@ -5,11 +5,11 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "package-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=assets/icons/mac/SA_Krone_App.icns --prune=true --out=release-builds",
-    "package-win": "electron-packager . file-converter-app --overwrite --asar=true --platform=win32 --arch=ia32 --icon=assets/icons/win/SA_Krone_App.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"file-converter\"",
-    "package-linux": "electron-packager . electron-tutorial-app --overwrite --asar=true --platform=linux --arch=x64 --icon=assets/icons/png/SA_Krone_App_32x32.png --prune=true --out=release-builds",
+    "package-mac": "electron-packager . --overwrite --extra-resource=assets/scripts/metadata.txt --extra-resource=assets/scripts/sas_med_katalog_script.sas --extra-resource=assets/scripts/sas_uden_katalog_script.sas --extra-resource=assets/scripts/spss_script.sps --extra-resource=assets/scripts/stata_script.do --platform=darwin --arch=x64 --icon=assets/icons/mac/SA_Krone_App.icns --prune=true --out=release-builds",
+    "package-win": "electron-packager . file-converter-app --overwrite --asar=true --extra-resource=assets/scripts/metadata.txt --extra-resource=assets/scripts/sas_med_katalog_script.sas --extra-resource=assets/scripts/sas_uden_katalog_script.sas --extra-resource=assets/scripts/spss_script.sps --extra-resource=assets/scripts/stata_script.do --platform=win32 --arch=ia32 --icon=assets/icons/win/SA_Krone_App.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"file-converter\"",
+    "package-linux": "electron-packager . electron-tutorial-app --overwrite --extra-resource=assets/scripts/metadata.txt --extra-resource=assets/scripts/sas_med_katalog_script.sas --extra-resource=assets/scripts/sas_uden_katalog_script.sas --extra-resource=assets/scripts/spss_script.sps --extra-resource=assets/scripts/stata_script.do --asar=true --platform=linux --arch=x64 --icon=assets/icons/png/SA_Krone_App_32x32.png --prune=true --out=release-builds",
     "create-installer-win": "node installers/windows/createinstaller.js",
-    "create-installer-mac": "electron-installer-dmg ./release-builds/file-converter-darwin-x64/file-converter.app file-converter --out=release-builds --overwrite --icon=assets/icons/mac/bookshelf-icon.icns"
+    "create-installer-mac": "electron-installer-dmg ./release-builds/file-converter-darwin-x64/file-converter.app file-converter --out=release-builds --overwrite --icon=assets/icons/mac/bookshelf-icon.icns",
   },
   "keywords": [
     "electron",

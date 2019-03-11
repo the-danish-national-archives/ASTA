@@ -4,6 +4,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
         const { ipcRenderer } = require('electron');
         const {shell} = require('electron');
         const fs = require('fs');
+        const path = require('path');
 
         const startNumberPattern = /^([0-9])([a-zA-ZæøåÆØÅ0-9_]*)$/;
         const validFileNamePattern = /^([a-zA-ZæøåÆØÅ])([a-zA-ZæøåÆØÅ0-9_]*)$/;
@@ -50,7 +51,9 @@ window.Rigsarkiv = window.Rigsarkiv || {},
             isValidMetadata: true,
             metadataFileName: "{0}.txt",
             dataFileName: "{0}.csv",
-            metadataFilePath: "./assets/scripts/metadata.txt"
+            metadataTemplateFileName: "metadata.txt",
+            scriptPath: "./assets/scripts/{0}",
+            resourcePath: "resources/{0}"
         }
 
         var HandleError = function(err) {
@@ -156,8 +159,13 @@ window.Rigsarkiv = window.Rigsarkiv || {},
         var EnsureFile = function() {
             var dataFolderPath = settings.extractionCallback().dataFolderPath;
             var metadataFileName = GetMetaDataFileName();
-            console.log(`copy ${metadataFileName} file to: ${dataFolderPath}`);
-            fs.copyFile(settings.metadataFilePath, "{0}/{1}".format(dataFolderPath,metadataFileName), (err) => {
+            var metadataFilePath = settings.scriptPath.format(settings.metadataTemplateFileName);
+            if(!fs.existsSync(metadataFilePath)) {
+                var rootPath = path.join('./');
+                metadataFilePath = path.join(rootPath,settings.resourcePath.format(settings.metadataTemplateFileName));
+            }
+            console.log(`copy ${settings.metadataTemplateFileName} file to: ${dataFolderPath}`);
+            fs.copyFile(metadataFilePath, "{0}/{1}".format(dataFolderPath,metadataFileName), (err) => {
                 if (err) {
                     HandleError(err);
                 }

@@ -3,6 +3,7 @@ function (n) {
     const {ipcRenderer} = require('electron');
     const {shell} = require('electron');
     const fs = require('fs');
+    const path = require('path');
     const chardet = require('chardet');
 
     var settings = {
@@ -38,6 +39,7 @@ function (n) {
         metdataTab: null, 
         okScriptDataPath: null,   
         scriptPath: "./assets/scripts/{0}",
+        resourcePath: "resources/{0}",
         scripts: ["spss_script.sps","sas_uden_katalog_script.sas","sas_med_katalog_script.sas","stata_script.do"],
         outputPostfixFiles: ["{0}.csv","{0}_VARIABEL.txt","{0}_VARIABELBESKRIVELSE.txt"],
         outputOptionalPostfixFiles: ["{0}_KODELISTE.txt","{0}_BRUGERKODE.txt"],
@@ -131,6 +133,10 @@ function (n) {
     var CopyScript = function() { 
         var scriptFileName = GetScriptFileName();
         var scriptFilePath = settings.scriptPath.format(settings.scriptFileName);
+        if(!fs.existsSync(scriptFilePath)) {
+            var rootPath = path.join('./');
+            scriptFilePath = path.join(rootPath,settings.resourcePath.format(settings.scriptFileName));
+        }
         console.log(`copy script file ${settings.scriptFileName} to ${settings.dataFolderPath}`);
         fs.copyFile(scriptFilePath, settings.dataFolderPath + "/" + scriptFileName, (err) => {
             if (err) {
