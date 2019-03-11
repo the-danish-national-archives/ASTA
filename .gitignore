@@ -4,5 +4,4 @@ node_modules
 *.exe
 
 /release-builds/file-converter-app-win32-ia32
-/release-builds/file-converter-darwin-x64
-!/release-builds/file-converter-darwin-x64/resources
+/release-builds/file-converter-app-darwin-x64
