@@ -5,6 +5,7 @@ function (n) {
     const fs = require('fs');
     const path = require('path');
     const chardet = require('chardet');
+    const os = require('os');
 
     var settings = {
         structureCallback: null,
@@ -136,13 +137,13 @@ function (n) {
         if(!fs.existsSync(scriptFilePath)) {
             var rootPath = path.join('./');
             settings.outputStatisticsErrorSpn.hidden = false;
-            settings.outputStatisticsErrorSpn.innerHTML = rootPath;
+            settings.outputStatisticsErrorSpn.innerHTML = rootPath + " -  " + os.platform();
             scriptFilePath = path.join(rootPath,settings.resourcePath.format(settings.scriptFileName));
         }
         console.log(`copy script file ${settings.scriptFileName} to ${settings.dataFolderPath}`);
         fs.copyFile(scriptFilePath, settings.dataFolderPath + "/" + scriptFileName, (err) => {
             if (err) {
-                HandleError(err);
+                //HandleError(err);
             }
             else {
                 var scriptFileName = GetScriptFileName();
