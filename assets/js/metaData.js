@@ -5,6 +5,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
         const {shell} = require('electron');
         const fs = require('fs');
         const path = require('path');
+        const os = require('os');
 
         const startNumberPattern = /^([0-9])([a-zA-ZæøåÆØÅ0-9_]*)$/;
         const validFileNamePattern = /^([a-zA-ZæøåÆØÅ])([a-zA-ZæøåÆØÅ0-9_]*)$/;
@@ -53,7 +54,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
             dataFileName: "{0}.csv",
             metadataTemplateFileName: "metadata.txt",
             scriptPath: "./assets/scripts/{0}",
-            resourcePath: "resources/{0}"
+            resourceWinPath: "resources/{0}"
         }
 
         var HandleError = function(err) {
@@ -160,10 +161,20 @@ window.Rigsarkiv = window.Rigsarkiv || {},
             var dataFolderPath = settings.extractionCallback().dataFolderPath;
             var metadataFileName = GetMetaDataFileName();
             var metadataFilePath = settings.scriptPath.format(settings.metadataTemplateFileName);
+            
             if(!fs.existsSync(metadataFilePath)) {
-                var rootPath = path.join('./');
-                metadataFilePath = path.join(rootPath,settings.resourcePath.format(settings.metadataTemplateFileName));
+                var rootPath = null;
+                if(os.platform() == "win32") {
+                    rootPath = path.join('./');
+                    metadataFilePath = path.join(rootPath,settings.resourceWinPath.format(settings.metadataTemplateFileName));
+                }
+                if(os.platform() == "darwin") {
+                    var folders =  __dirname.split("/");
+                    rootPath = folders.slice(0,folders.length - 3).join("/");
+                    metadataFilePath = "{0}/{1}".format(rootPath,settings.metadataTemplateFileName);
+                }
             }
+
             console.log(`copy ${settings.metadataTemplateFileName} file to: ${dataFolderPath}`);
             fs.copyFile(metadataFilePath, "{0}/{1}".format(dataFolderPath,metadataFileName), (err) => {
                 if (err) {
