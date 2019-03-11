@@ -21,10 +21,10 @@
   "license": "ISC",
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.7.2",
-    "chardet": "^0.7.0",
-    "electron": "^4.0.4"
+    "chardet": "^0.7.0"
   },
   "devDependencies": {
+    "electron": "^4.0.8",
     "electron-installer-dmg": "^2.0.0",
     "electron-packager": "^13.1.0",
     "electron-winstaller": "^2.7.0"
