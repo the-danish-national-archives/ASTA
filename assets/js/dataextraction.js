@@ -135,6 +135,8 @@ function (n) {
         var scriptFilePath = settings.scriptPath.format(settings.scriptFileName);
         if(!fs.existsSync(scriptFilePath)) {
             var rootPath = path.join('./');
+            settings.outputStatisticsErrorSpn.hidden = false;
+            settings.outputStatisticsErrorSpn.innerHTML = rootPath;
             scriptFilePath = path.join(rootPath,settings.resourcePath.format(settings.scriptFileName));
         }
         console.log(`copy script file ${settings.scriptFileName} to ${settings.dataFolderPath}`);
