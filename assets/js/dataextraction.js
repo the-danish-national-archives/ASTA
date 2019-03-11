@@ -41,7 +41,7 @@ function (n) {
         okScriptDataPath: null,   
         scriptPath: "./assets/scripts/{0}",
         resourceWinPath: "resources/{0}",
-        resourceMacPath: "contents/resources/{0}",
+        resourceMacPath: "Contents/Resources/{0}",
         scripts: ["spss_script.sps","sas_uden_katalog_script.sas","sas_med_katalog_script.sas","stata_script.do"],
         outputPostfixFiles: ["{0}.csv","{0}_VARIABEL.txt","{0}_VARIABELBESKRIVELSE.txt"],
         outputOptionalPostfixFiles: ["{0}_KODELISTE.txt","{0}_BRUGERKODE.txt"],
@@ -141,13 +141,15 @@ function (n) {
                 scriptFilePath = path.join(rootPath,settings.resourceWinPath.format(settings.scriptFileName));
             }
             if(os.platform() == "darwin") {
-                scriptFilePath = path.join(rootPath,settings.resourceMacPath.format(settings.scriptFileName));
+                scriptFilePath = "{0}/{1}".format(__dirname,settings.resourceMacPath.format(settings.scriptFileName));
+                settings.outputStatisticsErrorSpn.hidden = false;
+        settings.outputStatisticsErrorSpn.innerHTML = scriptFilePath;
             }
         }        
         console.log(`copy script file ${settings.scriptFileName} to ${settings.dataFolderPath}`);
         fs.copyFile(scriptFilePath, settings.dataFolderPath + "/" + scriptFileName, (err) => {
             if (err) {
-                HandleError(err);
+               // HandleError(err);
             }
             else {
                 var scriptFileName = GetScriptFileName();
