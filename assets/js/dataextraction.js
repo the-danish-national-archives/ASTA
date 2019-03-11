@@ -136,14 +136,17 @@ function (n) {
         var scriptFileName = GetScriptFileName();
         var scriptFilePath = settings.scriptPath.format(settings.scriptFileName);
         if(!fs.existsSync(scriptFilePath)) {
-            var rootPath = path.join('./');
+            var rootPath = null;
             if(os.platform() == "win32") {
+                rootPath = path.join('./');
                 scriptFilePath = path.join(rootPath,settings.resourceWinPath.format(settings.scriptFileName));
             }
             if(os.platform() == "darwin") {
-                scriptFilePath = "{0}/{1}".format(__dirname,settings.resourceMacPath.format(settings.scriptFileName));
+                var folders =  __dirname.split("/");
+                rootPath = folders.slice(0,folders.length -2).join("/");
+                scriptFilePath = "{0}/{1}".format(rootPath,settings.resourceMacPath.format(settings.scriptFileName));
                 settings.outputStatisticsErrorSpn.hidden = false;
-        settings.outputStatisticsErrorSpn.innerHTML = scriptFilePath;
+                settings.outputStatisticsErrorSpn.innerHTML = scriptFilePath;
             }
         }        
         console.log(`copy script file ${settings.scriptFileName} to ${settings.dataFolderPath}`);
