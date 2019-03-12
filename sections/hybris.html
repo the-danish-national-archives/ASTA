@@ -25,7 +25,7 @@
                             Indtast løbenummer for afleveringspakken
                             <i id="hybris-message-structure-delivery-package" class="far fa-question-circle"></i>
                             <span id="hybris-message-structure-delivery-package-Title" hidden="true">Løbenummer</span>
-                            <span id="hybris-message-structure-delivery-package-Text" hidden="true">Indtast det løbenummer for afleveringspakken, du har fået udleveret af Rigsarkivet. Det udleverede løbenummer fremgår af aflevringsbestemmelsen og arkivskabeskrivelsesfilen (archiveIndex.xml). Det består udelukkende af minimum 5 cifre uden foranstillede nuller. Indtastes løbenummer ikke, får afleveringspakken midlertidigt nummeret 99999. Løbenummer kan ændres senere.</span>
+                            <span id="hybris-message-structure-delivery-package-Text" hidden="true">Indtast det løbenummer for afleveringspakken, du har fået udleveret af Rigsarkivet. Det udleverede løbenummer fremgår af afleveringsbestemmelsen og arkivbeskrivelsesfilen (archiveIndex.xml). Løbenummeret består udelukkende af minimum 5 cifre uden foranstillede nuller. Indtastes løbenummer ikke, får afleveringspakken midlertidigt løbenummeret 99999. Løbenummer kan ændres senere.</span>
                         </p>
                         <input type="text" id="hybris-structure-delivery-package">
                         <br>
@@ -43,10 +43,10 @@
                         <span id="hybris-output-structure-RequiredPath-Title" hidden="true">Afleveringspakken mangler</span>
                         <span id="hybris-output-structure-RequiredPath-Text" hidden="true">Destination for afleveringspakken mangler</span>
                         <span id="hybris-output-structure-UnvalidDeliveryPackage-Title" hidden="true">Det angivne løbenummer er ugyldigt</span>
-                        <span id="hybris-output-structure-UnvalidDeliveryPackage-Text" hidden="true">Løbenummer kan kun bestå af tal sammensat af minimum 5 cifre uden foranstillede nuller</span>
+                        <span id="hybris-output-structure-UnvalidDeliveryPackage-Text" hidden="true">Det angivne løbenummer er ugyldigt. Løbenummer kan kun bestå af tal sammensat af minimum 5 cifre uden foranstillede nuller. Foranstillede og efterstillede blanktegn er ikke tilladt.</span>
                         <span id="hybris-output-structure-Error" hidden="true"><br />Error: {0}</span>
                         <span id="hybris-output-structure-Exists-Title" hidden="true">Afleveringspakken Eksisterer</span>
-                        <span id="hybris-output-structure-Exists-Text" hidden="true">Afleveringspakken [{0}] eksisterer</span>
+                        <span id="hybris-output-structure-Exists-Text" hidden="true">Afleveringspakken [{0}] eksisterer allerede på destinationen. Vælg en anden destination eller fjern/slet den eksisterende afleveringspakke fra den valgte destination.</span>
                         <span id="hybris-output-structure-Ok" hidden="true"><br /><br /><strong>Bekræftelse!</strong> En tom mappestruktur for afleveringspakke [{0}] er nu skabt og placeret i mappen [</span>
                         <a id="hybris-structure-select-delivery-package" hidden="true"></a> 
                         <span id="hybris-output-structure-Supplement" hidden="true">]<br/> Klik på knappen "Næste", hvis du vil lave udtræk af data- og metadata fra dine statistikfiler til denne afleveringspakke.</span>
@@ -73,7 +73,7 @@
                                 Vælg statistikfilen som udtræk skal laves fra:
                                 <i id="hybris-message-statistics-filepath" class="far fa-question-circle"></i>
                                 <span id="hybris-message-statistics-filepath-Title" hidden="true">Vælg statistikfil</span>
-                                <span id="hybris-message-statistics-filepath-Text" hidden="true">Vælg den statistikfil, du ønsker at lave udtræk fra.<br />Filen skal være en af følgende formater: .sas (SAS-fil), .dta (Stata-fil) eller .sav (SPSS-fil).<br />Når der udtrækkes data fra en SAS-fil med katalog, skal katalogfilen (sas7bcat eller sa7bdat) placeres i samme mappe som den valgte SAS-fil (.sas), der skal laves udtræk fra. Katalogfilen skal være navngivet med samme navn som statistikfilen.
+                                <span id="hybris-message-statistics-filepath-Text" hidden="true">Vælg den statistikfil, du ønsker at lave udtræk fra.<br />Filen skal have et af følgende formater: .sas7bdat (SAS-fil), .dta (Stata-fil) eller .sav (SPSS-fil). Når der udtrækkes data for en SAS-fil med katalog, skal katalogfilen (.sas7bcat) placeres i samme mappe som den valgte SAS-datafil (.sas7bdat), der skal laves udtræk fra og navngives på samme måde som datafilen.  Du skal lave en kopi af katalogfilen og omdøbe denne.
                                 </span>
                             </p>
                             <div>
@@ -105,7 +105,7 @@
                                 <h4> Sådan gør du: </h4>
                                 <p>  
                                     1) Lad dette værktøj køre i baggrunden (luk det ikke)
-                                    <br/> 2) Åben scriptet i statistikprogrammet [{1}] og eksekver det. Når scriptet kører udtrækkes data og metadata fra statistikfilen til Rigsarkivets format for data- og metadatafiler i afleveringspakken.
+                                    <br/> 2) Åben scriptet i [{1}] og eksekver det. Når scriptet kører udtrækkes data og metadata fra statistikfilen til Rigsarkivets format for data- og metadatafiler i afleveringspakken.
                                     <br/> 3) Når scriptet er kørt færdigt, vender du tilbage til dette værktøj og klikker på knappen "OK" nedenfor for at bekræfte at scriptet er kørt. 
                                 </p>
                                 <br/>
@@ -116,7 +116,7 @@
                             <span id="hybris-output-script-CloseApplicationWarning-Title" hidden="true">Statistikprogrammet</span>
                             <span id="hybris-output-script-CloseApplicationWarning-Text" hidden="true">Luk statistikfilen og export scriptet, før du klikker på knappen "Næste", for at gå til trin 3.</span>
                             <span id="hybris-output-script-RequiredFilesWarning-Title" hidden="true">Data og metadata fra statistikfilen</span>
-                            <span id="hybris-output-script-RequiredFilesWarning-Text" hidden="true">Der er ikke udtrukket data og metadata fra statistikfilen. Kør export scriptet i dit statistikprogram før du klikker på OK. Hvis du fortsætter uden at køre scriptet vil data- og metadatafil være tomme.</span>
+                            <span id="hybris-output-script-RequiredFilesWarning-Text" hidden="true">Der er ikke udtrukket data og metadata fra statistikfilen. Kør export scriptet i dit statistikprogram før du klikker på OK.</span>
                             <span id="hybris-output-script-EncodingFileError-Title" hidden="true">Fil encoding</span>
                             <span id="hybris-output-script-EncodingFileError-Text" hidden="true">Filen {0} indeholder karakterer som ikke er UTF-8 tegn. Statistikfilen, der laves udtræk fra, skal være indkodet som UTF-8 før dataudtræk laves med Hybris.  Du skal ændre encoding for statistikfilen i dit statistikprogram og lave nyt dataudtæk med Hybris.</span>
                             <br /><br />
@@ -139,7 +139,7 @@
                             </span>
                             <i id="hybris-message-metdata-fileName" class="far fa-question-circle"></i>
                             <span id="hybris-message-metdata-fileName-Title" hidden="true">DATAFILNAVN</span>
-                            <span id="hybris-message-metdata-fileName-Text" hidden="true">Navn på datafilen, som den benævnes i brugssammenhæng.</span>
+                            <span id="hybris-message-metdata-fileName-Text" hidden="true">Navn på statistikfilen, der laves udtræk fra, som den benævnes i brugssammenhæng.</span>
                             <br>
                             <span>
                                 <label class="descriptionLabel" for="hybrismetdatafileDescription">Datafilbeskrivelse*</label>
@@ -147,7 +147,7 @@
                             </span>
                             <i id="hybris-message-metdata-fileDescription" class="far fa-question-circle"></i>
                             <span id="hybris-message-metdata-fileDescription-Title" hidden="true">DATAFILBESKRIVELSE</span>
-                            <span id="hybris-message-metdata-fileDescription-Text" hidden="true">Beskrivelse af datafilens indhold.</span>
+                            <span id="hybris-message-metdata-fileDescription-Text" hidden="true">Beskrivelse af statistikfilens indhold.</span>
                             <br>
                             <span>
                                 <label class="descriptionLabel" for="hybrismetdatakeyVar">Nøglevariabel</label>
@@ -155,7 +155,7 @@
                             </span>
                             <i id="hybris-message-metdata-keyVariable" class="far fa-question-circle"></i>
                             <span id="hybris-message-metdata-keyVariable-Title" hidden="true">NØGLEVARIABEL</span>
-                            <span id="hybris-message-metdata-keyVariable-Text" hidden="true">Datafilens unikke nøglevariabel angivet med navne på den/de variable, nøglevariablen består af. Flere variabelnavne adskilles med mellemrum.</span>
+                            <span id="hybris-message-metdata-keyVariable-Text" hidden="true">Statistikfilens unikke nøglevariabel angivet med navne på den/de variable, som nøglevariablen består af. Flere variabelnavne adskilles med mellemrum.</span>
                             <br/>
                             <p>Angiv reference til anden datafil i afleveringspakken</p>
                             <span>
@@ -164,15 +164,15 @@
                             </span>
                             <i id="hybris-message-metdata-foreignFile" class="far fa-question-circle"></i>
                             <span id="hybris-message-metdata-foreignFile-Title" hidden="true">REFERENCE (fremmeddatafil)</span>
-                            <span id="hybris-message-metdata-foreignFile-Text" hidden="true">Navn på den anden datafil der refereres til (fremmeddatafil)</span>
+                            <span id="hybris-message-metdata-foreignFile-Text" hidden="true">Navn på den anden statistikfil i afleveringspakken, der refereres til (fremmeddatafil)</span>
                             <br>
                             <span>
-                                <label class="descriptionLabel" for="hybrismetdataforeignKeyVarName">Fremmevaiabelnavn</label>
+                                <label class="descriptionLabel" for="hybrismetdataforeignKeyVarName">Fremmedvariabelnavn</label>
                                 <input type="text" name="hybrismetdataforeignKeyVarName" id="hybris-metdata-foreignKeyVarName">
                             </span>
                             <i id="hybris-message-metdata-foreignVariable" class="far fa-question-circle"></i>
                             <span id="hybris-message-metdata-foreignVariable-Title" hidden="true">REFERENCE (fremmedvariabel)</span>
-                            <span id="hybris-message-metdata-foreignVariable-Text" hidden="true">Variabelnavn(e) for fremmeddatafilens nøglevariabel (fremmedvariable)</span>
+                            <span id="hybris-message-metdata-foreignVariable-Text" hidden="true">Variabelnavn(e) for den anden statistikfils (fremmeddatafilens) nøglevariabel.</span>
                             <br>
                             <span>
                                 <label class="descriptionLabel" for="hybrismetdatarefVar">Referencevariabel</label>
@@ -180,7 +180,7 @@
                             </span>
                             <i id="hybris-message-metdata-referenceVariable" class="far fa-question-circle"></i>
                             <span id="hybris-message-metdata-referenceVariable-Title" hidden="true">REFERENCE (referencevariabel)</span>
-                            <span id="hybris-message-metdata-referenceVariable-Text" hidden="true">Variabelnavn(e) for den/de variable i datafilen der laves udtræk fra (referencevariabel), som refererer til fremmedvariablen i fremmeddatafilen.</span>
+                            <span id="hybris-message-metdata-referenceVariable-Text" hidden="true">Variabelnavn(e) for den/de variable i statistikfilen der laves udtræk fra (referencevariabel), som refererer til nøglevariablen (fremmedvariablen) i den anden statistilfil (fremmeddatafilen) i afleveringspakken.</span>
                             <br>
                             <br>
                             <button type="submit" id="hybris-metdata-okBtn">OK</button>
@@ -219,7 +219,7 @@
                             Vælg archiveIndex.xml filen:
                             <i id="hybris-message-indexfiles-archiveIndex" class="far fa-question-circle"></i>
                             <span id="hybris-message-indexfiles-archiveIndex-Title" hidden="true">archiveIndex.xml</span>
-                            <span id="hybris-message-indexfiles-archiveIndex-Text" hidden="true">Indexfilen archiveIndex.xml er en arkivbeskrivelsesfil, der indeholder metadata om afleveringspakken, fx navn på den forsker der har skabt data, perioden data dækker, beskrivelse af indhold osv. Det er den godkendte archiveIndex.xml som du har modtaget fra Rigsarkivet, som du skal uploade til </span>
+                            <span id="hybris-message-indexfiles-archiveIndex-Text" hidden="true">Indexfilen archiveIndex.xml er en arkivbeskrivelsesfil, der indeholder metadata om afleveringspakken, fx navn på den forsker der har skabt data, perioden data dækker, beskrivelse af indhold osv. Det er den godkendte archiveIndex.xml som du har modtaget fra Rigsarkivet, som du skal uploade til afleveringspakken.</span>
                         </p>
                         <div>
                             <input type="text" id="hybris-indexfiles-archiveIndex">
