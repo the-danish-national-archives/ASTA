@@ -30,6 +30,8 @@ function (n) {
         outputStatisticsRequiredPathText: null,
         outputScriptEncodingFileErrorTitle: null,
         outputScriptEncodingFileErrorText: null,
+        outputScriptCloseApplicationWarningTitle: null,
+        outputScriptCloseApplicationWarningText: null,
         selectedStatisticsFilePath: null,
         outputScriptOkSpn: null,
         outputScriptOkText: null,
@@ -276,6 +278,7 @@ function (n) {
                 else {
                     if(fileValidate) 
                     { 
+                        ipcRenderer.send('open-warning-dialog',settings.outputScriptCloseApplicationWarningTitle.innerHTML,settings.outputScriptCloseApplicationWarningText.innerHTML);
                         settings.outputScriptOkSpn.innerHTML = settings.outputScriptOkText.format(GetFileName());
                         settings.outputScriptOkSpn.hidden = false;
                         settings.nextBtn.hidden = false;
@@ -315,7 +318,7 @@ function (n) {
     }
 
     Rigsarkiv.DataExtraction = {        
-        initialize: function (structureCallback,selectStatisticsFileId,pathStatisticsFileId,okStatisticsId,outputStatisticsErrorId,outputStatisticsOkCopyScriptId,outputStatisticsSASWarningPrefixId,scriptPanel1Id,scriptPanel2Id,okScriptBtnId,okScriptDataPathId,outputStatisticsOkCopyScriptInfoId,outputStatisticsRequiredPathId,outputScriptRequiredFilesWarningPrefixId,outputScriptOkId,outputScriptEncodingFileErrorPrefixId,nextId,metdataTabId) {
+        initialize: function (structureCallback,selectStatisticsFileId,pathStatisticsFileId,okStatisticsId,outputStatisticsErrorId,outputStatisticsOkCopyScriptId,outputStatisticsSASWarningPrefixId,scriptPanel1Id,scriptPanel2Id,okScriptBtnId,okScriptDataPathId,outputStatisticsOkCopyScriptInfoId,outputStatisticsRequiredPathId,outputScriptRequiredFilesWarningPrefixId,outputScriptOkId,outputScriptEncodingFileErrorPrefixId,nextId,metdataTabId,outputScriptCloseApplicationWarningPrefixId) {
             settings.structureCallback = structureCallback;
             settings.selectStatisticsFileBtn = document.getElementById(selectStatisticsFileId);
             settings.pathStatisticsFileTxt = document.getElementById(pathStatisticsFileId);
@@ -342,6 +345,8 @@ function (n) {
             settings.outputScriptEncodingFileErrorText = document.getElementById(outputScriptEncodingFileErrorPrefixId + "-Text");
             settings.nextBtn = document.getElementById(nextId);
             settings.metdataTab = document.getElementById(metdataTabId);
+            settings.outputScriptCloseApplicationWarningTitle = document.getElementById(outputScriptCloseApplicationWarningPrefixId + "-Title");
+            settings.outputScriptCloseApplicationWarningText = document.getElementById(outputScriptCloseApplicationWarningPrefixId + "-Text");
             AddEvents();
         },
         callback: function () {

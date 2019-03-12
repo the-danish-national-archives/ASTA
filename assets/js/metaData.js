@@ -9,7 +9,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
 
         const startNumberPattern = /^([0-9])([a-zA-ZæøåÆØÅ0-9_]*)$/;
         const validFileNamePattern = /^([a-zA-ZæøåÆØÅ])([a-zA-ZæøåÆØÅ0-9_]*)$/;
-        const reservedWordPattern = /^(END|INSERT|INTO)$/i;
+        const reservedWordPattern = /^(ABSOLUTE|ACTION|ADD|ADMIN|AFTER|AGGREGATE|ALIAS|ALL|ALLOCATE|ALTER|AND|ANY|ARE|ARRAY|AS|ASC|ASSERTION|AT|AUTHORIZATION|BEFORE|BEGIN|BINARY|BIT|BLOB|BOOLEAN|BOTH|BREADTH|BY|CALL|CASCADE|CASCADED|CASE|CAST|CATALOG|CHAR|CHARACTER|CHECK|CLASS|CLOB|CLOSE|COLLATE|COLLATION|COLUMN|COMMIT|COMPLETION|CONNECT|CONNECTION|CONSTRAINT|CONSTRAINTS ||CONSTRUCTOR|CONTINUE|CORRESPONDING|CREATE|CROSS|CUBE|CURRENT|CURRENT_DATE|CURRENT_PATH|CURRENT_ROLE|CURRENT_TIME|CURRENT_TIMESTAMP|CURRENT_USER|CURSOR|CYCLE|DATA|DATE|DAY|DEALLOCATE|DEC|DECIMAL|DECLARE|DEFAULT|DEFERRABLE|DEFERRED|DELETE|DEPTH|DEREF|DESC|DESCRIBE|DESCRIPTOR|DESTROY|DESTRUCTOR|DETERMINISTIC|DICTIONARY|DIAGNOSTICS|DISCONNECT|DISTINCT|DOMAIN|DOUBLE|DROP|DYNAMIC|EACH|ELSE|END|END-EXEC|EQUALS|ESCAPE|EVERY|EXCEPT|EXCEPTION|EXEC|EXECUTE|EXTERNAL|FALSE|FETCH|FIRST|FLOAT|FOR|FOREIGN|FOUND|FROM|FREE|FULL|FUNCTION|GENERAL|GET|GLOBAL|GO|GOTO|GRANT|GROUP|GROUPING|HAVING|HOST|HOUR|IDENTITY|IGNORE|IMMEDIATE|IN|INDICATOR|INITIALIZE|INITIALLY|INNER|INOUT|INPUT|INSERT|INT|INTEGER|INTERSECT|INTERVAL|INTO|IS|ISOLATION|ITERATE|JOIN|KEY|LANGUAGE|LARGE|LAST|LATERAL|LEADING|LEFT|LESS|LEVEL|LIKE|LIMIT|LOCAL|LOCALTIME|LOCALTIMESTAMP|LOCATOR|MAP|MATCH|MINUTE|MODIFIES|MODIFY|MODULE|MONTH|NAMES|NATIONAL|NATURAL|NCHAR|NCLOB|NEW|NEXT|NO|NONE|NOT|NULL|NUMERIC|OBJECT|OF|OFF|OLD|ON|ONLY|OPEN|OPERATION|OPTION|OR|ORDER|ORDINALITY|OUT|OUTER|OUTPUT|PAD|PARAMETER|PARAMETERS|PARTIAL|PATH|POSTFIX|PRECISION|PREFIX|PREORDER|PREPARE|PRESERVE|PRIMARY|PRIOR|PRIVILEGES|PROCEDURE|PUBLIC|READ|READS|REAL|RECURSIVE|REF|REFERENCES|REFERENCING|RELATIVE|RESTRICT|RESULT|RETURN|RETURNS|REVOKE|RIGHT|ROLE|ROLLBACK|ROLLUP|ROUTINE|ROW|ROWS|SAVEPOINT|SCHEMA|SCROLL|SCOPE|SEARCH|SECOND|SECTION|SELECT|SEQUENCE|SESSION|SESSION_USER|SET|SETS|SIZE|SMALLINT|SOME|SPACE|SPECIFIC|SPECIFICTYPE|SQL|SQLEXCEPTION|SQLSTATE|SQLWARNING|START|STATE|STATEMENT|STATIC|STRUCTURE|SYSTEM_USER|TABLE|TEMPORARY|TERMINATE|THAN|THEN|TIME|TIMESTAMP|TIMEZONE_HOUR|TIMEZONE_MINUTE|TO|TRAILING|TRANSACTION|TRANSLATION|TREAT|TRIGGER|TRUE|UNDER|UNION|UNIQUE|UNKNOWN|UNNEST|UPDATE|USAGE|USER|USING|VALUE|VALUES|VARCHAR|VARIABLE|VARYING|VIEW|WHEN|WHENEVER|WHERE|WITH|WITHOUT|WORK|WRITE|YEAR|ZONE)$/i;
         const strLength = 128;
 
         var settings = {
@@ -26,7 +26,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
             outputErrorSpn: null,
             outputErrorText: null,
             outputNewExtractionSpn: null,
-            outputNewExtractionText: null,
+            outputNewExtractionText: null,            
             newExtractionBtn: null,
             nextBtn: null,
             outputNextSpn: null,
@@ -44,6 +44,8 @@ window.Rigsarkiv = window.Rigsarkiv || {},
             fileNameLengthText: null,
             fileNameReservedWordTitle: null,
             fileNameReservedWordText: null,
+            outputCloseApplicationErrorTitle: null,
+            outputCloseApplicationErrorText: null,
             informationPanel1: null,
             informationPanel2: null,
             indexFilesDescriptionSpn: null,
@@ -89,24 +91,36 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                     HandleError(err);
                 }
                 else {
+                    var hasError = false;
                     var fileName = GetDataFolderName();
                     var callback = settings.extractionCallback();
                     var dataFolderPath = callback.dataFolderPath;
                     files.forEach(file => {
                         if(file != settings.dataFileName.format(fileName) && file != settings.metadataFileName.format(fileName)) {
                             console.log("delete file : " + file);
-                            fs.unlinkSync("{0}/{1}".format(dataFolderPath,file));
+                            try {
+                                fs.unlinkSync("{0}/{1}".format(dataFolderPath,file));                                
+                            }
+                            catch(err) {
+                                hasError = true;
+                                HandleError(err);
+                            }                            
                         }
                     });
-                    settings.informationPanel1.hidden = true;
-                    settings.informationPanel2.hidden = false;
-                    var folders = callback.selectedStatisticsFilePath.normlizePath().split("/");
-                    settings.nextBtn.hidden = false;
-                    settings.outputOkSpn.innerHTML = settings.outputOkText.format(settings.dataFileName.format(fileName),settings.metadataFileName.format(fileName),folders[folders.length - 1]);
-                    settings.okDataPath.innerHTML = callback.localFolderPath;
-                    folders = dataFolderPath.split("/");
-                    settings.outputNewExtractionSpn.innerHTML = settings.outputNewExtractionText.format(folders[folders.length - 3]);
-                    settings.indexFilesDescriptionSpn.innerHTML = settings.indexFilesDescriptionText.format(folders[folders.length - 3]);                                      
+                    if(hasError) {
+                        ipcRenderer.send('open-error-dialog',settings.outputCloseApplicationErrorTitle.innerHTML,settings.outputCloseApplicationErrorText.innerHTML);
+                    }
+                    else {
+                        settings.informationPanel1.hidden = true;
+                        settings.informationPanel2.hidden = false;
+                        var folders = callback.selectedStatisticsFilePath.normlizePath().split("/");
+                        settings.nextBtn.hidden = false;
+                        settings.outputOkSpn.innerHTML = settings.outputOkText.format(settings.dataFileName.format(fileName),settings.metadataFileName.format(fileName),folders[folders.length - 1]);
+                        settings.okDataPath.innerHTML = callback.localFolderPath;
+                        folders = dataFolderPath.split("/");
+                        settings.outputNewExtractionSpn.innerHTML = settings.outputNewExtractionText.format(folders[folders.length - 3]);
+                        settings.indexFilesDescriptionSpn.innerHTML = settings.indexFilesDescriptionText.format(folders[folders.length - 3]);
+                    }                                                          
                 }
             });
         }
@@ -275,7 +289,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
         }
 
         Rigsarkiv.MetaData = {
-            initialize: function (extractionCallback,metadataFileName,metadataFileNameDescription,metadataKeyVariable,metadataForeignFileName,metadataForeignKeyVariableName,metadataReferenceVariable,metdataOkBtn,inputFileNameRequired,inputNumberFirst,inputIllegalChar,outputOkId,okDataPathId,outputErrorId,outputNewExtractionId,newExtractionBtn,extractionTabId,outputNextId,nextBtn,indexFilesTabId,fileNameLengthId,fileNameReservedWordId,fileDescrReqId,informationPanel1Id,informationPanel2Id,indexFilesDescriptionId) {
+            initialize: function (extractionCallback,metadataFileName,metadataFileNameDescription,metadataKeyVariable,metadataForeignFileName,metadataForeignKeyVariableName,metadataReferenceVariable,metdataOkBtn,inputFileNameRequired,inputNumberFirst,inputIllegalChar,outputOkId,okDataPathId,outputErrorId,outputNewExtractionId,newExtractionBtn,extractionTabId,outputNextId,nextBtn,indexFilesTabId,fileNameLengthId,fileNameReservedWordId,fileDescrReqId,informationPanel1Id,informationPanel2Id,indexFilesDescriptionId,outputCloseApplicationErrorPrefixId) {
                 settings.extractionCallback = extractionCallback;
                 settings.fileName = document.getElementById(metadataFileName);
                 settings.fileDescr = document.getElementById(metadataFileNameDescription);
@@ -312,6 +326,8 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 settings.informationPanel2 = document.getElementById(informationPanel2Id);
                 settings.indexFilesDescriptionSpn = document.getElementById(indexFilesDescriptionId);
                 settings.indexFilesDescriptionText = settings.indexFilesDescriptionSpn.innerHTML;
+                settings.outputCloseApplicationErrorTitle = document.getElementById(outputCloseApplicationErrorPrefixId + "-Title");
+                settings.outputCloseApplicationErrorText = document.getElementById(outputCloseApplicationErrorPrefixId + "-Text");
                 AddEvents();
             }
         }
