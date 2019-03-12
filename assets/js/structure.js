@@ -81,7 +81,6 @@ function (n) {
             }
             else  {
                 ipcRenderer.send('open-warning-dialog',settings.outputExistsTitle.innerHTML,settings.outputExistsText.format(folderName));
-                ShowOutput();
             }
         });
     }
