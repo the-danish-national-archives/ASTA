@@ -92,6 +92,20 @@ ipcMain.on('open-warning-dialog', (event,title,text) => {
   })
 })
 
+ipcMain.on('open-confirm-dialog', (event,title,text) => {
+  const options = {
+    type: 'warning',
+    title: title,
+    message: text,
+    cancelId: 1,
+    buttons: ['FORSÆT', 'FORTRYD']
+    //buttons: ['OK', 'Cancel']
+  }
+  dialog.showMessageBox(options, (index) => {
+    event.sender.send('confirm-dialog-selection', index)
+  })
+})
+
 ipcMain.on('open-error-dialog', (event,title,text) => {
   const options = {
     type: 'error',
