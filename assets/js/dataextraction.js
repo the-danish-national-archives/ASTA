@@ -194,13 +194,31 @@ function (n) {
                      }; break;
                 }
                 if(!sasCatalogExists && fileExt === "sas7bdat") {
-                    ipcRenderer.send('open-warning-dialog',settings.outputStatisticsSASWarningTitle.innerHTML,settings.outputStatisticsSASWarningText.innerHTML);
+                    ipcRenderer.send('open-confirm-dialog',settings.outputStatisticsSASWarningTitle.innerHTML,settings.outputStatisticsSASWarningText.innerHTML);
+                    return;
                 }
                 if(sasCatalogExists && fileExt === "sas7bdat") {  CopyData(sasCatalogFileName); }
                 CopyData(fileName);
                 CopyScript();     
             }
         });
+    }
+
+    var ResetData = function() {
+        settings.pathStatisticsFileTxt.value = "";
+        fs.rmdir(settings.dataFolderPath, (err) => {
+            if (err) {
+                HandleError(err);
+            }
+            else {
+                settings.dataFolderPath = null;
+                settings.scriptApplication = null;
+                settings.scriptType = null;
+                settings.scriptFileName = null; 
+                settings.selectedStatisticsFilePath = null;                
+                Reset();
+            }
+        });            
     }
 
     var EnsureData = function() {
@@ -314,6 +332,13 @@ function (n) {
             settings.selectedStatisticsFilePath = path; 
             console.log(`selected path: ${path}`); 
             settings.pathStatisticsFileTxt.value = settings.selectedStatisticsFilePath;            
+         })
+         ipcRenderer.on('confirm-dialog-selection', (event, index) => {
+            if(index === 0) {
+                CopyData(GetFileName());
+                CopyScript();
+            } 
+            if(index === 1) { ResetData(); }            
          })
     }
 
