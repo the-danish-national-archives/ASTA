@@ -26,7 +26,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
             outputErrorSpn: null,
             outputErrorText: null,
             outputNewExtractionSpn: null,
-            outputNewExtractionText: null,
+            outputNewExtractionText: null,            
             newExtractionBtn: null,
             nextBtn: null,
             outputNextSpn: null,
@@ -44,6 +44,8 @@ window.Rigsarkiv = window.Rigsarkiv || {},
             fileNameLengthText: null,
             fileNameReservedWordTitle: null,
             fileNameReservedWordText: null,
+            outputCloseApplicationErrorTitle: null,
+            outputCloseApplicationErrorText: null,
             informationPanel1: null,
             informationPanel2: null,
             indexFilesDescriptionSpn: null,
@@ -89,24 +91,36 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                     HandleError(err);
                 }
                 else {
+                    var hasError = false;
                     var fileName = GetDataFolderName();
                     var callback = settings.extractionCallback();
                     var dataFolderPath = callback.dataFolderPath;
                     files.forEach(file => {
                         if(file != settings.dataFileName.format(fileName) && file != settings.metadataFileName.format(fileName)) {
                             console.log("delete file : " + file);
-                            fs.unlinkSync("{0}/{1}".format(dataFolderPath,file));
+                            try {
+                                fs.unlinkSync("{0}/{1}".format(dataFolderPath,file));                                
+                            }
+                            catch(err) {
+                                hasError = true;
+                                HandleError(err);
+                            }                            
                         }
                     });
-                    settings.informationPanel1.hidden = true;
-                    settings.informationPanel2.hidden = false;
-                    var folders = callback.selectedStatisticsFilePath.normlizePath().split("/");
-                    settings.nextBtn.hidden = false;
-                    settings.outputOkSpn.innerHTML = settings.outputOkText.format(settings.dataFileName.format(fileName),settings.metadataFileName.format(fileName),folders[folders.length - 1]);
-                    settings.okDataPath.innerHTML = callback.localFolderPath;
-                    folders = dataFolderPath.split("/");
-                    settings.outputNewExtractionSpn.innerHTML = settings.outputNewExtractionText.format(folders[folders.length - 3]);
-                    settings.indexFilesDescriptionSpn.innerHTML = settings.indexFilesDescriptionText.format(folders[folders.length - 3]);                                      
+                    if(hasError) {
+                        ipcRenderer.send('open-error-dialog',settings.outputCloseApplicationErrorTitle.innerHTML,settings.outputCloseApplicationErrorText.innerHTML);
+                    }
+                    else {
+                        settings.informationPanel1.hidden = true;
+                        settings.informationPanel2.hidden = false;
+                        var folders = callback.selectedStatisticsFilePath.normlizePath().split("/");
+                        settings.nextBtn.hidden = false;
+                        settings.outputOkSpn.innerHTML = settings.outputOkText.format(settings.dataFileName.format(fileName),settings.metadataFileName.format(fileName),folders[folders.length - 1]);
+                        settings.okDataPath.innerHTML = callback.localFolderPath;
+                        folders = dataFolderPath.split("/");
+                        settings.outputNewExtractionSpn.innerHTML = settings.outputNewExtractionText.format(folders[folders.length - 3]);
+                        settings.indexFilesDescriptionSpn.innerHTML = settings.indexFilesDescriptionText.format(folders[folders.length - 3]);
+                    }                                                          
                 }
             });
         }
@@ -275,7 +289,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
         }
 
         Rigsarkiv.MetaData = {
-            initialize: function (extractionCallback,metadataFileName,metadataFileNameDescription,metadataKeyVariable,metadataForeignFileName,metadataForeignKeyVariableName,metadataReferenceVariable,metdataOkBtn,inputFileNameRequired,inputNumberFirst,inputIllegalChar,outputOkId,okDataPathId,outputErrorId,outputNewExtractionId,newExtractionBtn,extractionTabId,outputNextId,nextBtn,indexFilesTabId,fileNameLengthId,fileNameReservedWordId,fileDescrReqId,informationPanel1Id,informationPanel2Id,indexFilesDescriptionId) {
+            initialize: function (extractionCallback,metadataFileName,metadataFileNameDescription,metadataKeyVariable,metadataForeignFileName,metadataForeignKeyVariableName,metadataReferenceVariable,metdataOkBtn,inputFileNameRequired,inputNumberFirst,inputIllegalChar,outputOkId,okDataPathId,outputErrorId,outputNewExtractionId,newExtractionBtn,extractionTabId,outputNextId,nextBtn,indexFilesTabId,fileNameLengthId,fileNameReservedWordId,fileDescrReqId,informationPanel1Id,informationPanel2Id,indexFilesDescriptionId,outputCloseApplicationErrorPrefixId) {
                 settings.extractionCallback = extractionCallback;
                 settings.fileName = document.getElementById(metadataFileName);
                 settings.fileDescr = document.getElementById(metadataFileNameDescription);
@@ -312,6 +326,8 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 settings.informationPanel2 = document.getElementById(informationPanel2Id);
                 settings.indexFilesDescriptionSpn = document.getElementById(indexFilesDescriptionId);
                 settings.indexFilesDescriptionText = settings.indexFilesDescriptionSpn.innerHTML;
+                settings.outputCloseApplicationErrorTitle = document.getElementById(outputCloseApplicationErrorPrefixId + "-Title");
+                settings.outputCloseApplicationErrorText = document.getElementById(outputCloseApplicationErrorPrefixId + "-Text");
                 AddEvents();
             }
         }
