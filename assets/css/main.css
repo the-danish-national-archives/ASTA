@@ -5,6 +5,13 @@
     font-weight: 100px;
 }
 
+@font-face {
+    font-family: SourceSansProBold;
+    src: url("../fonts/SourceSansPro-Bold.otf");
+    font-style: normal;
+    font-weight: 100px;
+}
+
 body {
     background-color: rgb(222, 184, 135);
     font-family: SourceSansPro;
@@ -13,6 +20,10 @@ body {
 a {
     text-decoration: underline black;
     cursor: pointer;
+}
+
+.boldfaced {
+    font-family: SourceSansProBold;
 }
 
 /* Side navigation menu */

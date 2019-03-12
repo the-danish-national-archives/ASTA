@@ -15,14 +15,14 @@
                     <hr class="button-divider">
                     <div id="hybris-panel-structure" class="formularContainer">
                         <p>
-                            <h2>Mappestruktur</h2>
+                            <h2 class="boldfaced">Mappestruktur</h2>
                         </p>
                         <p>
                             Du kan her skabe en tom mappestruktur til afleveringspakken.  
                         </p>
                         <div><h4>Skab en tom mappestruktur:</h4></div>
                         <p>
-                            Indtast løbenummer for afleveringspakken
+                            <span class="boldfaced">Indtast løbenummer for afleveringspakken</span>
                             <i id="hybris-message-structure-delivery-package" class="far fa-question-circle"></i>
                             <span id="hybris-message-structure-delivery-package-Title" hidden="true">Løbenummer</span>
                             <span id="hybris-message-structure-delivery-package-Text" hidden="true">Indtast det løbenummer for afleveringspakken, du har fået udleveret af Rigsarkivet. Det udleverede løbenummer fremgår af afleveringsbestemmelsen og arkivbeskrivelsesfilen (archiveIndex.xml). Løbenummeret består udelukkende af minimum 5 cifre uden foranstillede nuller. Indtastes løbenummer ikke, får afleveringspakken midlertidigt løbenummeret 99999. Løbenummer kan ændres senere.</span>
@@ -30,7 +30,7 @@
                         <input type="text" id="hybris-structure-delivery-package">
                         <br>
                         <p>
-                            Vælg destination for afleveringspakken
+                            <span class="boldfaced">Vælg destination for afleveringspakken</span>
                             <i id="hybris-message-structure-path" class="far fa-question-circle"></i>
                             <span id="hybris-message-structure-path-Title" hidden="true">Destination</span>
                             <span id="hybris-message-structure-path-Text" hidden="true">Vælg det drev eller den mappe på computeren eller mediet (fx USB, harddisk, SSD), som afleveringspakken skal placeres på.</span>
@@ -56,7 +56,7 @@
                     <div id="hybris-panel-statistics" class="formularContainer" hidden="true">
                         <div id="hybris-panel-script1">
                             <p>
-                                <h2>Udtræk data - TRIN 1</h2>
+                                <h2 class="boldfaced">Udtræk data - TRIN 1</h2>
                             </p>
                             <p>
                                 Du kan her udtrække data- og metadata fra dine statistikfiler til den tomme afleveringspakke du lige har skabt.  
@@ -70,7 +70,7 @@
                             <br/>
                             <div><h4>TRIN 1: Vælg statistikfil</h4></div>
                             <p>
-                                Vælg statistikfilen som udtræk skal laves fra:
+                                <span class="boldfaced">Vælg statistikfilen som udtræk skal laves fra:</span>
                                 <i id="hybris-message-statistics-filepath" class="far fa-question-circle"></i>
                                 <span id="hybris-message-statistics-filepath-Title" hidden="true">Vælg statistikfil</span>
                                 <span id="hybris-message-statistics-filepath-Text" hidden="true">Vælg den statistikfil, du ønsker at lave udtræk fra.<br />Filen skal have et af følgende formater: .sas7bdat (SAS-fil), .dta (Stata-fil) eller .sav (SPSS-fil). Når der udtrækkes data for en SAS-fil med katalog, skal katalogfilen (.sas7bcat) placeres i samme mappe som den valgte SAS-datafil (.sas7bdat), der skal laves udtræk fra og navngives på samme måde som datafilen.  Du skal lave en kopi af katalogfilen og omdøbe denne.
@@ -89,7 +89,7 @@
                         </div>                        
                         <div id="hybris-panel-script2" hidden="true">
                             <p>
-                                <h2>Udtræk data - TRIN 2</h2>
+                                <h2 class="boldfaced">Udtræk data - TRIN 2</h2>
                             </p>
                             <br/>
                             <span id="hybris-output-script-OKCopyScript">
@@ -102,7 +102,7 @@
                             <span id="hybris-output-script-OKCopyScriptInfo">
                                 <h4>Du skal nu køre scriptet {0} i dit statistikprogram før du klikker på OK knappen</h4>
                                 <br/>
-                                <h4> Sådan gør du: </h4>
+                                <h4>Sådan gør du: </h4>
                                 <p>  
                                     1) Lad dette værktøj køre i baggrunden (luk det ikke)
                                     <br/> 2) Åben scriptet i [{1}] og eksekver det. Når scriptet kører udtrækkes data og metadata fra statistikfilen til Rigsarkivets format for data- og metadatafiler i afleveringspakken.
@@ -126,7 +126,7 @@
                     <div id="hybris-panel-metdata" class="formularContainer" hidden="true">
                         <div id="hybris-panel-information1">
                             <p>
-                                <h2>Udtræk data - TRIN 3</h2>
+                                <h2 class="boldfaced">Udtræk data - TRIN 3</h2>
                             </p>
                             <p>
                                 Du skal nu indtaste informationer om statistikfilen  
@@ -210,13 +210,13 @@
                     </div> 
                     <div id="hybris-panel-indexfiles" class="formularContainer" hidden="true">
                         <p>
-                            <h2>Upload indexfiler til afleveringspakken</h2>
+                            <h2 class="boldfaced">Upload indexfiler til afleveringspakken</h2>
                         </p>
                         <span id="hybris-output-indexfiles-Description">Her kan du uploade indexfilerne archiveIndex.xml og contextDocumentationIndex.xml til afleveringspakke [{0}].</span>
                         <br/>
                         <span id="hybris-output-indexfiles-Summary"><strong>Bekræftelse!</strong> Indexfilerne skal være godkendt af Rigsarkivet og navngivet archiveIndex.xml og contextDocumentationIndex.xml. </span>
                         <p>
-                            Vælg archiveIndex.xml filen:
+                            <span class="boldfaced">Vælg archiveIndex.xml filen:</span>
                             <i id="hybris-message-indexfiles-archiveIndex" class="far fa-question-circle"></i>
                             <span id="hybris-message-indexfiles-archiveIndex-Title" hidden="true">archiveIndex.xml</span>
                             <span id="hybris-message-indexfiles-archiveIndex-Text" hidden="true">Indexfilen archiveIndex.xml er en arkivbeskrivelsesfil, der indeholder metadata om afleveringspakken, fx navn på den forsker der har skabt data, perioden data dækker, beskrivelse af indhold osv. Det er den godkendte archiveIndex.xml som du har modtaget fra Rigsarkivet, som du skal uploade til afleveringspakken.</span>
@@ -226,7 +226,7 @@
                             <button id="hybris-indexfiles-archiveIndex-selectFile">Browse</button>
                         </div>
                         <p>
-                            Vælg contextDocumentationIndex.xml filen:
+                            <span class="boldfaced">Vælg contextDocumentationIndex.xml filen:</span>
                             <i id="hybris-message-indexfiles-contextDocumentationIndex" class="far fa-question-circle"></i>
                             <span id="hybris-message-indexfiles-contextDocumentationIndex-Title" hidden="true">contextDocumentationIndex.xml</span>
                             <span id="hybris-message-indexfiles-contextDocumentationIndex-Text" hidden="true"><strong>Bekræftelse!</strong> Indexfilen contextDocumentationIndex.xml indeholder oplysninger om kontekstdokumenterne i afleveringspakken, fx dokumenttitel, dokumentdato og opmærkning af dokumentkategori. Det er den godkendte contextDocumentationIndex.xml, som du har modtaget fra Rigsarkivet, du skal uploade til afleveringspakken.</span>
