@@ -13,7 +13,7 @@
 }
 
 body {
-    background-color: rgb(222, 184, 135);
+    background-color: #fff;
     font-family: SourceSansPro;
 }
 
@@ -22,11 +22,22 @@ a {
     cursor: pointer;
 }
 
+button {
+    font-family: SourceSansPro;
+    background-color: #6db1a7;
+    border: solid #49897f 0.5px;
+    color: #fff;
+    padding-top: 1px;
+    padding-right: 10px;
+    padding-bottom: 1px;
+    padding-left: 10px;
+}
+
 .boldfaced {
     font-family: SourceSansProBold;
 }
 
-/* Side navigation menu */
+/* Side navigation menu */ 
 
 .side-nav {
     height: 100%;
@@ -34,7 +45,7 @@ a {
     position: fixed;
     top: 0;
     left: 0;
-    background-color: #dddddd;
+    background-color: #000;
     opacity: 0.9;
     overflow-x: hidden;
     padding-top: 20px;
@@ -44,16 +55,21 @@ a {
     padding: 10px 10px 10px 30px;
     text-decoration: none;
     font-size: 22px;
-    color: #002a39;
+    color: #49897f;
     display: block;
 }
+
 
 .side-nav a:hover {
     color: #fff;
 }
 
 .selected {
-    background-color: rgb(222, 184, 135);
+    background-color: #fff;
+}
+
+a.selected:hover {
+    color: #6db1a7;
 }
 
 #logo {
@@ -64,8 +80,18 @@ a {
 
 /* Side navigation menu END */
 
+/* Header */
+
+.header {
+    background-color: #000;
+    height: 116px;
+}
+
+/* Header END */
+
 #content {
     padding-left: 150px;
+    margin: -10px;
 }
 
 /* HR elements */
@@ -102,23 +128,26 @@ i {
 }
 
 .fa-question-circle {
-    cursor: help;
+    cursor: pointer;
 }
 
 .title {
-    text-align: right;
-    padding: 10px;
+    padding: 50px 10px 10px 10px;
     margin-top: 0px;
     margin-bottom: 0px;
 }
 
 h1 {
     font-size: 40px;
-    color: green;
+    color: #49897f;
+}
+
+h3 {
+    color: #49897f;
 }
 
 h4 {
-    color: rgb(192, 143, 37)
+    color: #6db1a7;
 }
 
 .menuBtn {
