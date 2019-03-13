@@ -172,7 +172,8 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                     var dataFolderPath = callback.dataFolderPath;
                     var metadataFileName = GetMetaDataFileName();
                     var scriptType = callback.scriptType;
-                    var updatedData = data.toString().format(scriptType,settings.fileName.value,settings.fileDescr.value,settings.keyVar.value,
+                    var keyVar = (settings.keyVar.value != null && settings.keyVar.value !== "") ? "{0}\r\n".format(settings.keyVar.value) : "";
+                    var updatedData = data.toString().format(scriptType,settings.fileName.value,settings.fileDescr.value,keyVar,
                         GetReferences(),
                         settings.contents[0],settings.contents[1],settings.contents[2],settings.contents[3]);
                     fs.writeFile("{0}/{1}".format(dataFolderPath,metadataFileName), updatedData, (err) => {
