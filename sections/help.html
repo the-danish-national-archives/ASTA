@@ -6,50 +6,104 @@
                     <h1 class="title">Vejledning</h1>
                 </div>
                 <section>
-                        <div>
-                            <p>
-                                Zombie ipsum reversus ab viral inferno, nam rick grimes malum cerebro. De carne lumbering
-                                animata corpora quaeritis. Summus brains sit​​, morbo vel maleficia? De apocalypsi gorger omero
-                                undead survivor dictum mauris. Hi mindless mortuis soulless creaturas, imo evil stalking monstra
-                                adventus resi dentevil vultus comedat cerebella viventium. Qui animated corpse, cricket bat max
-                                brucks terribilem incessu zomby. The voodoo sacerdos flesh eater, suscitat mortuos comedere
-                                carnem virus. Zonbi tattered for solum oculi eorum defunctis go lum cerebro. Nescio brains an
-                                Undead zombies. Sicut malus putrid voodoo horror. Nigh tofth eliv ingdead.
-            
-                                Cum horribilem walking dead resurgere de crazed sepulcris creaturis, zombie sicut de grave
-                                feeding iride et serpens. Pestilentia, shaun ofthe dead scythe animated corpses ipsa screams.
-                                Pestilentia est plague haec decaying ambulabat mortuos. Sicut zeder apathetic malus voodoo.
-                                Aenean a dolor plan et terror soulless vulnerum contagium accedunt, mortui iam vivam unlife. Qui
-                                tardius moveri, brid eof reanimator sed in magna copia sint terribiles undeath legionis. Alii
-                                missing oculis aliorum sicut serpere crabs nostram. Putridi braindead odores kill and infect,
-                                aere implent left four dead.
-            
-                                Lucio fulci tremor est dark vivos magna. Expansis creepy arm yof darkness ulnis witchcraft
-                                missing carnem armis Kirkman Moore and Adlard caeruleum in locis. Romero morbo Congress amarus
-                                in auras. Nihil horum sagittis tincidunt, zombie slack-jawed gelida survival portenta. The
-                                unleashed virus est, et iam zombie mortui ambulabunt super terram. Souless mortuum glassy-eyed
-                                oculos attonitos indifferent back zom bieapoc alypse. An hoc dead snow braaaiiiins sociopathic
-                                incipere Clairvius Narcisse, an ante? Is bello mundi z?
-            
-                                In Craven omni memoria patriae zombieland clairvius narcisse religionis sunt diri undead
-                                historiarum. Golums, zombies unrelenting et Raimi fascinati beheading. Maleficia! Vel cemetery
-                                man a modern bursting eyeballs perhsaps morbi. A terrenti flesh contagium. Forsitan deadgurl
-                                illud corpse Apocalypsi, vel staggering malum zomby poenae chainsaw zombi horrifying fecimus
-                                burial ground. Indeflexus shotgun coup de poudre monstra per plateas currere. Fit de decay
-                                nostra carne undead. Poenitentiam violent zom biehig hway agite RE:dead pœnitentiam! Vivens
-                                mortua sunt apud nos night of the living dead.
-            
-                                Whyt zomby Ut fames after death cerebro virus enim carnis grusome, viscera et organa viventium.
-                                Sicut spargit virus ad impetum, qui supersumus flesh eating. Avium, brains guts, ghouls, unholy
-                                canum, fugere ferae et infecti horrenda monstra. Videmus twenty-eight deformis pale, horrenda
-                                daemonum. Panduntur brains portae rotting inferi. Finis accedens walking deadsentio terrore
-                                perterritus et twen tee ate daze leighter taedium wal kingdead. The horror, monstra epidemic
-                                significant finem. Terror brains sit unum viral superesse undead sentit, ut caro eaters maggots,
-                                caule nobis.
-                            </p>
-                        </div>
+                    <h2>Quick-guide til produktion og test af en afleveringspakke</h2>
+                    <br/>
+                    <table class="table">
+                        <tr>
+                            <td>
+                                <h4  class="light-turkish">Sådan kvalitetssikrer du statistikfilen før du anvender Hybris</h4>
+                                <p class="list-group-item-text p"> <b>Hybris udtrækker blot de data- og metadata der findes i statistikfilen. 
+                                </br>Det er derfor vigtigt at du sikrer dig at kvaliteten af data- og metadata i statistikfilen lever op til Rigsarkivets krav, før du laver udtræk med Hybris.
+                                </br>
+                                </br>Krav til data- og metadatakvalitet er listet herunder. Du kan også finde quickguiden her: <a id="hybris-help-link1" href="#Quickguide.pdf">Quickguide.pdf</a>:</b>
+                                </br>1) Tegnsættet for statistikfilerne skal være indkodet som UTF-8
+                                </br>2) Der må ikke være linjeskift i indhold i sidste variabel
+                                </br>3) Variabelnavne [Variable name] skal være angivet for alle variable.
+                                </br>4) Variabelnavne skal være unikke inden for statistikfilen.
+                                </br>5) Variabelnavne må aldrig begynde med et tal, men må godt være en blanding af bogstaver og tal
+                                </br>6) Variabelnavne må max være 128 tegn lange
+                                </br>7) Hvis variabelnavne er reserverede ord i SQL 99 (fx SELECT, END, DATE eller AGGREGATE) skal variabelnavnet omkranses af dobbeltapostrof
+                                </br>8) Variabelbeskrivelser [Variable labels] skal være angivet for alle variable.
+                                </br>9) Hvis der kun er angivet kodeforklaringer [value labels] for nogle af koderne [values] der fremgår af en skala, skal dette beskrives i variabelbeskrivelsen for variablen.
+                                </br>10) Der må konsekvent kun anvendes enten specialkoder (Special numeric) eller brugerdefinerede koder for manglende værdier.
+                                </br>11) Specialkoder og brugerdefinerede koder for manglende værdier må kun anvendes for numeriske og kategoriske variable med datatyperne numerisk heltal og decimal.
+                                </br>12) Hvis brugerdefinerede koder for manglende værdier er anvendt for variable med tekst, dato eller tidstempel skal dette beskrives i et kontekstdokument i afleveringspakken.
+                                </br>13) Brugerdefinerede koder for manglende værdier skal altid fremgå af kodelisten [Value labels]
+                                </br>14) Specialkoder for manglende værdier må kun antage værdier A-Z eller .a-.z.
+                                </br>15) Datatyper for variable i statistikfilen skal overholde de tilladte datatyper i en afleveringspakke. Hvis dette ikke er tilfældet, skal du selv konvertere datatyperne til tilladte formater før udtræk laves med Hybris.
+                                </br>16) Der skal være fuld overensstemmelse mellem datatype og længde for de variable, der indgår i en reference mellem flere statistikfiler i afleveringspakken.
+                                </br>17) Alle koderværdier i data [Value] skal være beskrevet med en kodeforklaring [Value labels]
+                                </br>18) Kodelister [Value labels] må kun være tilknyttet numeriske og kategoriske variable med datatyperne numerisk heltal, decimal og tekst.
+                                </br>19) Koder [Values] skal være unikke inden for samme kodeliste [Value labels knyttet til en variabel]
+                                </br><b>Læs <a id="hybris-help-link2" href="#Bilag9Kravtilafleveringspakke.pdf">Bilag 9_Krav til afleveringspakke.pdf</a> igennem, hvis du vil have en bedre ide om hvad en afleveringspakke er og hvilke krav der stilles til data- og metadatafilen.</b>
+                                </br>Her findes hele <a id="hybris-help-link3" href="#Bekendtgoerelse1007plusinklbilag9.pdf">Bekendtgørelse 1007+ inkl bilag 9.pdf</a>.
+                                </p>
+                            </td>
+                        </tr>
+                         <tr>
+                            <td>
+                                <h4  class="light-turkish">Dette skal du have klar før du anvender Hybris</h4>
+                                <p class="list-group-item-text p"> 
+                                <b>Du bør have nedenstående filer og informationer klar, før du anvender Hybris: </b>
+                                </br> 1) Fremfinde de statistikfiler der skal afleveres til Rigsarkivet. OBS: Hvis personfølsomme oplysninger er adskilt fra statistikfilen i en nøglefil, skal både statistikfilen og nøglefilen indgå i afleveringspakken.
+                                </br> 2) Fremfinde løbenummer for afleveringspakken. Løbenummere er udleveret af Rigsarkivet og fremgår af afleveringsbestemmelsen.
+                                </br> 3) Udfylde indexfilerne archiveIndex.xml og contextDocumentationIndex.xml. Rigsarkivet har udviklet indtastningsværktøjer til udfyldning af indexfilerne. Se vejledningerne "Skab archiveIndex" og "Skab contextDocumentationIndex".
+                                </br> 4) Rigsarkivet skal godkende de udfyldte indexfiler, før du placerer dem i afleveringspakken.
+                                </br> 5) Fremfinde de kontekstdokumenter, der skal indgå i afleveringspakken. Disse fremgår af Rigsarkivets afleveringsbestemmelse.
+                                </br> 6) Konvertere kontekstdokumenterne til TIFF. Se hvordan i vejledningen om "TIFF-konvertering".				
+                                </br> 7) Afklar om der findes unikke variable i statistikfilene som skal angives som nøglevariable under udtræk med Hybris
+                                </br> 8) Afklar om der skal dannes referencer mellem flere statistikfiler i afleveringspakken samt over hvilke variable disse referencer skal dannes.
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h4  class="light-turkish">Disse dele af afleveringspakken kan du skabe med Hybris</h4>
+                                <p class="list-group-item-text p">1) Navngive afleveringspakken med korrekt løbenummer. 
+                                </br> 2) Danne en tom mappestruktur til afleveringspakken med struktur og navngivning af mapper, der overholder krav i bilag 9. 
+                                </br> 3) Lave udtræk af data og metadata fra dine originale statistikfiler til data- og metadatafiler, der overholder de strukturelle krav til disse filer i bilag 9.
+                                </br> 4) Uploade archiveIndex.xml og contextDocumentationIndex.xml til afleveringspakken. Læs <a id="hybris-help-link4" href="#SkabarchiveIndexvejledning.pdf">Skab archiveIndex_vejledning.pdf</a> og <a id="hybris-help-link5" href="#SkabcontextDocumentationIndexvejledning.pdf">Skab contextDocumentationIndex_vejledning.pdf</a> for vejledning i udfyldning af disse indexfiler.
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h4  class="light-turkish">Disse dele af afleveringspakken skal du selv lave</h4>
+                                <p class="list-group-item-text p"> 1) Placere kontekstdokumenter i afleveringspakken i en rækkefølge der stemmer overens med rækkefølgen af dokumenter i contextDocumentationIndex.xml filen.
+                                </p>
+                            </td>
+                        </tr>
+                                <tr>
+                            <td>
+                                <h4  class="light-turkish">Sådan tester du med testværktøjet Nemesis</h4>
+                                <p class="list-group-item-text p"> 
+                                1) Klik på menupunktet NEMESIS og vælg den afleveringspakke, du vil teste. Klik på "Start".
+                                </br> 2) Læse fejlbeskeder fra testen i fejlloggen
+                                </br> 3) Nærstudere de krav i bilag 9 som fejlene omhandler, for at forstå hvordan fejlene rettes.
+                             </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h4  class="light-turkish">Sådan retter du fejl i en eksisterende afleveringspakke</h4>
+                                <p class="list-group-item-text p">1) Små fejl i metadatafilen kan rettes manuelt i en teksteditor
+                                </br> 2) Komplekse eller mange repeterende fejl i metadatafilen bør rettes direkte i statistikfilen, hvorefter der laves et nyt udtræk med Hybris.
+                                </br> 3) Fejl i datafilen rettes direkte i statistikfilen, hvorefter der laves et nyt udtræk med Hybris. 
+                                </br> 4) Fejl i indexfilerne kan rettes i Rigsarkivets indtastningsværktøjer til disse. Værktøjerne validerer om filerne overholder krav til indexfiler. Ændringer i indexfilerne skal godkendes af Rigsarkivet.
+                                </br> 5) Fejl i kontekstdokumenter rettes ved at erstatte det eksisterende TIFF-dokument med et tilrettet.
+                                </br> 6) Tilføjes nye kontekstdokumenter til afleveringspakken som ikke fremgår af afleveringsbestemmelsen, skal afleveringsbestemmelsen opdateres med disse dokumenter og godkendes af Rigsarkivet.
+                                </p>
+                            </td>
+                        </tr>
+                    </table>
+                    <span id="hybris-output-help-Error" hidden="true"><br/>Error: {0}</span>
                     </section>
             </div>
         </header>
+        <script type="text/javascript">
+            require('./assets/js/utilities');            
+            require('./assets/js/links');
+
+            Rigsarkiv.Links.initialize("hybris-output-help-Error",["hybris-help-link1","hybris-help-link2","hybris-help-link3","hybris-help-link4","hybris-help-link5"]);
+            </script>
     </section>
 </template>
