@@ -64,6 +64,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
             scriptPath: "./assets/scripts/{0}",
             resourceWinPath: "resources/{0}"
         }
+        
 
         var HandleError = function(err) {
             console.log(`Error: ${err}`);
