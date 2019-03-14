@@ -1,4 +1,4 @@
 node_modules
 
 #Ignore exe files
-*.exe
+#*.exe
