@@ -40,7 +40,7 @@
                             <button id="hybris-select-structure-directory">Browse</button>
                         </div>
                         <br>
-                        <button id="hybris-structure-okBtn">Ok</button><br>
+                        <button id="hybris-structure-okBtn">Ok</button><br><br>
                         <span id="hybris-output-structure-RequiredPath-Title" hidden="true">Afleveringspakken mangler</span>
                         <span id="hybris-output-structure-RequiredPath-Text" hidden="true">Destination for afleveringspakken mangler</span>
                         <span id="hybris-output-structure-UnvalidDeliveryPackage-Title" hidden="true">Det angivne løbenummer er ugyldigt</span>
@@ -48,9 +48,9 @@
                         <span id="hybris-output-structure-Error" hidden="true"><br />Error: {0}</span>
                         <span id="hybris-output-structure-Exists-Title" hidden="true">Afleveringspakken Eksisterer</span>
                         <span id="hybris-output-structure-Exists-Text" hidden="true">Afleveringspakken [{0}] eksisterer allerede på destinationen. Vælg en anden destination eller fjern/slet den eksisterende afleveringspakke fra den valgte destination.</span>
-                        <span id="hybris-output-structure-Ok" hidden="true"><strong>Bekræftelse!</strong> En tom mappestruktur for afleveringspakke [{0}] er nu skabt og placeret i mappen [</span>
-                        <a id="hybris-structure-select-delivery-package" hidden="true" ></a>
-                        <span id="hybris-output-structure-Supplement" hidden="true">]<br/> Klik på knappen "Næste", hvis du vil lave udtræk af data- og metadata fra dine statistikfiler til denne afleveringspakke.</span>
+                        <span id="hybris-output-structure-Ok" hidden="true" class="alert-warning"><strong>Bekræftelse!</strong> En tom mappestruktur for afleveringspakke [{0}] er nu skabt og placeret i mappen [</span>
+                        <a id="hybris-structure-select-delivery-package" hidden="true" class="alert-warning"></a>
+                        <span id="hybris-output-structure-Supplement" hidden="true">]<br/><br> Klik på knappen "Næste", hvis du vil lave udtræk af data- og metadata fra dine statistikfiler til denne afleveringspakke.</span>
                         <br /><br />
                         <button id="hybris-structure-nextBtn" hidden="true">Næste</button>
                     </div>
@@ -81,6 +81,7 @@
                                 <input type="text" class="path" id="hybris-statistics-filepath">
                                 <button id="hybris-select-statistics-file">Browse</button>
                             </div>
+                            <br>
                             <button id="hybris-statistics-okBtn">Ok</button>
                             <span id="hybris-output-statistics-RequiredPath-Title" hidden="true">Statistikfilen mangler</span>
                             <span id="hybris-output-statistics-RequiredPath-Text" hidden="true">Destination for statistikfilen mangler</span>
@@ -135,8 +136,7 @@
                             <p>
                                 Du skal nu indtaste informationer om statistikfilen  
                             </p>
-                            <div><h4>TRIN 3: Indtast informationer om statistikfilen</h4></div>
-                            <br/>
+                            <h4>TRIN 3: Indtast informationer om statistikfilen</h4>
                             <span>
                                 <label class="descriptionLabel" for="hybrismetdatafileName">Datafilnavn*</label>
                                 <input type="text" name="hybrismetdatafileName" id="hybris-metdata-fileName">
@@ -189,8 +189,8 @@
                             <span id="hybris-message-metdata-referenceVariable-Title" hidden="true">REFERENCE (referencevariabel)</span>
                             <span id="hybris-message-metdata-referenceVariable-Text" hidden="true">Variabelnavn(e) for den/de variable i statistikfilen der laves udtræk fra (referencevariabel), som refererer til nøglevariablen (fremmedvariablen) i den anden statistilfil (fremmeddatafilen) i afleveringspakken.</span>
                             <br/>
-                            <button id="hybris-metdata-addReferenceBtn">Tilføj ny reference</button>
-                            <br/>
+                            <button id="hybris-metdata-addReferenceBtn" style="margin-left: 276px;">Tilføj ny reference</button>
+                            <br/><br>
                             <button id="hybris-metdata-okBtn">OK</button>
                             <span id="hybris-output-metdata-Error" hidden="true"><br/>Error: {0}</span>
                             <span id="hybris-output-metdata-fileNameRequired-Title" hidden="true">Datafilnavn</span>
@@ -222,9 +222,9 @@
                         <p>
                             <h2 class="boldfaced">Upload indexfiler til afleveringspakken</h2>
                         </p>
-                        <span id="hybris-output-indexfiles-Description">Her kan du uploade indexfilerne archiveIndex.xml og contextDocumentationIndex.xml til afleveringspakke [{0}].</span>
-                        <br/>
-                        <span id="hybris-output-indexfiles-Summary"><strong>Bekræftelse!</strong> Indexfilerne skal være godkendt af Rigsarkivet og navngivet archiveIndex.xml og contextDocumentationIndex.xml. </span>
+                        <span id="hybris-output-indexfiles-Description">Her kan du uploade indexfilerne archiveIndex.xml og contextDocumentationIndex.xml til afleveringspakken [{0}].</span>
+                        <br/><br>
+                        <span id="hybris-output-indexfiles-Summary" class="alert-warning"><strong>Bekræftelse!</strong> Indexfilerne skal være godkendt af Rigsarkivet og navngivet archiveIndex.xml og contextDocumentationIndex.xml. </span>
                         <p>
                             <span class="boldfaced">Vælg archiveIndex.xml filen:</span>
                             <i id="hybris-message-indexfiles-archiveIndex" class="far fa-question-circle"></i>
@@ -232,7 +232,7 @@
                             <span id="hybris-message-indexfiles-archiveIndex-Text" hidden="true">Indexfilen archiveIndex.xml er en arkivbeskrivelsesfil, der indeholder metadata om afleveringspakken, fx navn på den forsker der har skabt data, perioden data dækker, beskrivelse af indhold osv. Det er den godkendte archiveIndex.xml som du har modtaget fra Rigsarkivet, som du skal uploade til afleveringspakken.</span>
                         </p>
                         <div>
-                            <input type="text" id="hybris-indexfiles-archiveIndex">
+                            <input type="text" id="hybris-indexfiles-archiveIndex" class="path">
                             <button id="hybris-indexfiles-archiveIndex-selectFile">Browse</button>
                         </div>
                         <p>
@@ -242,9 +242,10 @@
                             <span id="hybris-message-indexfiles-contextDocumentationIndex-Text" hidden="true"><strong>Bekræftelse!</strong> Indexfilen contextDocumentationIndex.xml indeholder oplysninger om kontekstdokumenterne i afleveringspakken, fx dokumenttitel, dokumentdato og opmærkning af dokumentkategori. Det er den godkendte contextDocumentationIndex.xml, som du har modtaget fra Rigsarkivet, du skal uploade til afleveringspakken.</span>
                         </p>
                         <div>
-                            <input type="text" id="hybris-indexfiles-contextDocumentationIndex">
+                            <input type="text" id="hybris-indexfiles-contextDocumentationIndex" class="path">
                             <button id="hybris-indexfiles-contextDocumentationIndex-selectFile">Browse</button>
                         </div>
+                        <br>
                         <button id="hybris-indexfiles-okBtn">Ok</button>
                         <span id="hybris-output-indexfiles-Error" hidden="true"><br />Error: {0}</span>
                         <span id="hybris-output-indexfiles-RequiredPath-Title" hidden="true">Mangler fil</span>
