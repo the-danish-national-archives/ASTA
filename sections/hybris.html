@@ -94,16 +94,14 @@
                                 <h2 class="boldfaced">Udtræk data - TRIN 2</h2>
                             </p>
                             <br/>
-                            <span id="hybris-output-script-OKCopyScript">
+                            <span id="hybris-output-script-OKCopyScript" class="alert-warning">
                                 <strong>Information!</strong> [{0}] scriptet [{1}] til udtræk af data- og metadata fra statistikfilen <br/>{2} er nu dannet og placeret i mappen  
                             </span>
-                            [<a id="hybris-output-script-dataPath"></a>]
+                            [<a id="hybris-output-script-dataPath" class="alert-warning"></a>]
                             <br/>
-                            <div><h4>TRIN 2: Kør export scriptet i dit statistikprogram</h4></div>
-                            <br/>
+                            <h4>TRIN 2: Kør export scriptet i dit statistikprogram</h4>
                             <span id="hybris-output-script-OKCopyScriptInfo">
                                 <h4 class="header-warning">Du skal nu køre eksport scriptet {0} i dit statistikprogram før du klikker på OK knappen nedenfor.</h4>
-                                <br/>
                                 <h4>Sådan gør du: </h4>
                                 <p>
                                     <ol>
@@ -111,11 +109,10 @@
                                         <li>Åben scriptet i [{1}] og eksekver det. Når scriptet kører udtrækkes data og metadata fra statistikfilen til Rigsarkivets format for data- og metadatafiler i afleveringspakken.</li>
                                         <li>Når scriptet er kørt færdigt, vender du tilbage til dette værktøj og klikker på knappen "OK" nedenfor for at bekræfte at scriptet er kørt. </li>
                                     </ol>  
-                                    <br/> 
                                 </p>
-                                <br/>
                             </span>
                             <button id="hybris-script-okBtn">Ok</button>
+                            <br>
                             <span id="hybris-output-script-Ok" hidden="true"><br/>Der er udtrukket data og metadata fra statistikfilen [{0}].</span>
                             <span id="hybris-output-script-Error" hidden="true"><br/>Error: {0}</span>
                             <span id="hybris-output-script-CloseApplicationWarning-Title" hidden="true">Statistikprogrammet</span>
@@ -211,7 +208,7 @@
                             <span id="hybris-output-metdata-referenceRequired-Text" hidden="true">Referencen er ufuldstændig. Alle tre felter for angivelse af en reference skal være udfyldt.</span>
                         </div>
                         <div id="hybris-panel-information2" hidden="true">                                
-                            <span id="hybris-output-metdata-Ok"><br /><strong>Bekræftelse!</strong>Udtræk fra den valgte statistikfil er nu færdigt. En datafil ({0}) og en metadatafil ({1}) med data fra statistikfilen [{2}] er nu udtrukket og placeret i mappen [</span><a id="hybris-output-metdata-path"></a>
+                            <span id="hybris-output-metdata-Ok" class="alert-warning"><br /><strong>Bekræftelse!</strong>Udtræk fra den valgte statistikfil er nu færdigt. En datafil ({0}) og en metadatafil ({1}) med data fra statistikfilen [{2}] er nu udtrukket og placeret i mappen [</span><a id="hybris-output-metdata-path" class="alert-warning"></a>
                             <span id="hybris-output-metdata-NewExtraction">]<br /><br />Hvis du skal lave udtræk fra flere statistikfiler til afleveringspakke [{0}], så klik på knappen "Nyt udtræk".<br /></span>
                             <button id="hybris-metdata-NewExtractionBtn">Nyt udtræk</button>
                             <span id="hybris-output-metdata-Next"><br /><br />Hvis du ikke skal lave flere udtræk til afleveringspakken, så klik på knappen "Næste".<br /></span>
