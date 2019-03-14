@@ -61,7 +61,8 @@ i {
 }
 
 .title {
-    padding: 50px 10px 10px 10px;
+    padding: 50px 10px 10px 0px;
+    padding-left: 5%;
     margin-top: 0px;
     margin-bottom: 0px;
     
@@ -85,7 +86,7 @@ i {
 
 .alert-warning {
     background-color: #fcffe3;
-    border: solid 0.5px #faebcc;
+    /* border: solid 0.5px #faebcc; */
     color: #8a6d3b;
 }
 
