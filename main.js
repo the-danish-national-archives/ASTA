@@ -1,5 +1,5 @@
 // Modules to control application life and create native browser window
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow, dialog } = require('electron')
 const setupEvents = require('./installers/setupEvents')
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -29,10 +29,24 @@ function createWindow() {
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
-    // Dereference the window object, usually you would store windows
+   // Dereference the window object, usually you would store windows
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
     mainWindow = null
+  })
+
+  mainWindow.on('close', function (e) {
+    var choice = dialog.showMessageBox(this,
+      {
+        type: 'warning',
+        cancelId: 1,
+        buttons: ['FORSÆT', 'FORTRYD'],
+        title: 'Programmet lukkes',
+        message: 'Du er ved at lukke programmet ned. Er du sikker på at du vil afbryde programmet? OBS: Hvis programmet lukkes, mens du er i gang med at lave et dataudtræk med Hybris, vil dataudtrækket ikke blive færdiggjort og du skal skabe afleveringspakken igen helt forfra. Det du har udført i Hybris allerede vil blive gemt. OBS: Husk at Hybris skal forblive åben, samtidig med at du kører export scriptet i dit statistikprogram i TRIN 2 under et dataudtræk.'
+     });
+     if(choice == 1){
+       e.preventDefault();
+     }
   })
 }
 
@@ -42,7 +56,7 @@ function createWindow() {
 app.on('ready', createWindow)
 
 // Quit when all windows are closed.
-app.on('window-all-closed', function () {
+app.on('window-all-closed', function () {  
   // On macOS it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
   if (process.platform !== 'darwin') {
