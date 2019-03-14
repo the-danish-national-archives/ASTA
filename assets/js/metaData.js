@@ -1,3 +1,8 @@
+/*
+    Model is responsible for metadata inputs
+    initialize interface inputs: elements from <div id="hybris-panel-metdata">
+    create metadata.txt
+*/
 window.Rigsarkiv = window.Rigsarkiv || {},
     function (n) {
 

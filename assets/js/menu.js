@@ -1,3 +1,8 @@
+/*
+ Model is responsible for left menu
+ menu is based on sections HTML pages 
+ each page start with <template> tag with class "section-template" and others subs classes where menu events is based on
+*/
 window.navigation = window.navigation || {},
     function (n) {
         navigation.menu = {

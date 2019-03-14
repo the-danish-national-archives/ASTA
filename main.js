@@ -1,3 +1,7 @@
+/*
+The script that runs in the main process can display a GUI by creating web pages. An Electron app always has one main process, but never more.
+https://electronjs.org/docs/tutorial/application-architecture
+*/
 // Modules to control application life and create native browser window
 const { app, BrowserWindow, dialog } = require('electron')
 const setupEvents = require('./installers/setupEvents')

@@ -1,3 +1,9 @@
+/*
+    Model is responsible for documents links
+    inputs array of tag <a> ids
+    <a> href attribute will be used as target document name
+    alle documents are saved at ./assets/documents/
+*/
 window.Rigsarkiv = window.Rigsarkiv || {},
     function (n) {
         const {shell} = require('electron');

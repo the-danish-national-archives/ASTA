@@ -1,3 +1,9 @@
+/*
+ Model is responsible for popup information messages
+ inputs array of postprefixed <i> elemets 
+ message title get related <span> element with postfixed -Title
+ message text get related <span> element with postfixed -Text
+*/
 window.Rigsarkiv = window.Rigsarkiv || {},
 function (n) {
     const {ipcRenderer} = require('electron')

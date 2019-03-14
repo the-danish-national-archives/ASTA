@@ -1,3 +1,7 @@
+/*
+  implments all interaction events between main process and renderer process
+  File dialogs & Popups
+*/
 const {ipcMain, dialog} = require('electron')
 
 ipcMain.on('structure-open-file-dialog', (event) => {
@@ -99,7 +103,6 @@ ipcMain.on('open-confirm-dialog', (event,title,text) => {
     message: text,
     cancelId: 1,
     buttons: ['FORSÆT', 'FORTRYD']
-    //buttons: ['OK', 'Cancel']
   }
   dialog.showMessageBox(options, (index) => {
     event.sender.send('confirm-dialog-selection', index)
