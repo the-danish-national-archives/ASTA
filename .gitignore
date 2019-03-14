@@ -2,6 +2,3 @@ node_modules
 
 #Ignore exe files
 *.exe
-
-release-builds/file-converter-app-win32-ia32
-release-builds/file-converter-app-darwin-x64
