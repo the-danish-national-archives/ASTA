@@ -50,6 +50,66 @@ input[type=text] {
     font-family: SourceSansProBold;
 }
 
+
+i {
+    margin-left: 5px;
+    color: #49897f;
+}
+
+.fa-question-circle {
+    cursor: pointer;
+}
+
+.title {
+    padding: 50px 10px 10px 10px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    
+}
+
+.menuBtn {
+    color: black;
+    background-color: rgb(0, 128, 11);
+    text-align: center;
+    display: inline-block;
+}
+
+.btnContaier {
+    padding-left: 5%;
+}
+
+.formularContainer {
+    padding-left: 5%;
+    padding-right: 5%;
+}
+
+.alert-warning {
+    background-color: #fcffe3;
+    border: solid 0.5px #faebcc;
+    color: #8a6d3b;
+}
+
+/* Headers */
+
+h1 {
+    font-size: 40px;
+    color: #49897f;
+}
+
+h3 {
+    color: #49897f;
+}
+
+h4 {
+    color: #6db1a7;
+}
+
+.header-warning {
+    color: red;
+}
+
+/* Headers END */
+
 /* Side navigation menu */ 
 
 .side-nav {
@@ -136,50 +196,6 @@ a.selected:hover {
 
 /* Label elements END */
 
-i {
-    margin-left: 5px;
-    color: #49897f;
-}
-
-.fa-question-circle {
-    cursor: pointer;
-}
-
-.title {
-    padding: 50px 10px 10px 10px;
-    margin-top: 0px;
-    margin-bottom: 0px;
-    
-}
-
-h1 {
-    font-size: 40px;
-    color: #49897f;
-}
-
-h3 {
-    color: #49897f;
-}
-
-h4 {
-    color: #6db1a7;
-}
-
-.menuBtn {
-    color: black;
-    background-color: rgb(0, 128, 11);
-    text-align: center;
-    display: inline-block;
-}
-
-.btnContaier {
-    padding-left: 5%;
-}
-
-.formularContainer {
-    padding-left: 5%
-}
-
 /* Nemesis layout */
 
 .verticalDivider {
@@ -195,7 +211,6 @@ h4 {
 .nemesisOutput {
     height: 400px;
     width: 40%;
-    margin-right: 5%;
     border: 1px solid #000;
     background-color: rgb(207, 190, 143)
 }
