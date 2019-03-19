@@ -4,8 +4,9 @@
     output 2 xml files at /Indices
  */
 window.Rigsarkiv = window.Rigsarkiv || {},
+function (n) {
+    Rigsarkiv.Hypris = Rigsarkiv.Hypris || {},
     function (n) {
-
         const { ipcRenderer } = require('electron');
         const {shell} = require('electron');
         const fs = require('fs');
@@ -28,7 +29,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
             outputOkSpn: null,
             outputOkText: null,
             selectDeliveryPackage: null
-         }
+        }
 
         var HandleError = function(err) {
             console.log(`Error: ${err}`);
@@ -91,35 +92,35 @@ window.Rigsarkiv = window.Rigsarkiv || {},
         var AddEvents = function () {
             settings.selectArchiveIndexFileBtn.addEventListener('click', (event) => {
                 ipcRenderer.send('indexfiles-open-archiveindex-file-dialog');
-             })
-             ipcRenderer.on('indexfiles-selected-archiveindex-file', (event, path) => {
-                 settings.selectedArchiveIndexFilePath = path; 
-                 console.log(`selected ArchiveIndex path: ${path}`); 
-                 settings.pathArchiveIndexFileTxt.value = settings.selectedArchiveIndexFilePath;            
-              })
-              settings.selectContextDocumentationIndexFileBtn.addEventListener('click', (event) => {
+            })
+            ipcRenderer.on('indexfiles-selected-archiveindex-file', (event, path) => {
+                settings.selectedArchiveIndexFilePath = path; 
+                console.log(`selected ArchiveIndex path: ${path}`); 
+                settings.pathArchiveIndexFileTxt.value = settings.selectedArchiveIndexFilePath;            
+            })
+            settings.selectContextDocumentationIndexFileBtn.addEventListener('click', (event) => {
                 ipcRenderer.send('indexfiles-open-contextdocumentationindex-file-dialog');
-             })
-             ipcRenderer.on('indexfiles-selected-contextdocumentationindex-file', (event, path) => {
+            })
+            ipcRenderer.on('indexfiles-selected-contextdocumentationindex-file', (event, path) => {
                 settings.selectedContextDocumentationIndexFilePath = path; 
                 console.log(`selected ContextDocumentationIndex path: ${path}`); 
                 settings.pathContextDocumentationIndexFileTxt.value = settings.selectedContextDocumentationIndexFilePath;            
-             })
-             settings.okBtn.addEventListener('click', function (event) {
+            })
+            settings.okBtn.addEventListener('click', function (event) {
                 Reset();
                 if(settings.pathArchiveIndexFileTxt.value === "" || settings.pathContextDocumentationIndexFileTxt.value === "") {
                     ipcRenderer.send('open-error-dialog',settings.outputRequiredPathTitle.innerHTML,settings.outputRequiredPathText.innerHTML);
                 }
-               if(settings.selectedArchiveIndexFilePath != null && settings.selectedContextDocumentationIndexFilePath != null && settings.pathArchiveIndexFileTxt.value !== "" && settings.pathContextDocumentationIndexFileTxt.value !== "") { 
+            if(settings.selectedArchiveIndexFilePath != null && settings.selectedContextDocumentationIndexFilePath != null && settings.pathArchiveIndexFileTxt.value !== "" && settings.pathContextDocumentationIndexFileTxt.value !== "") { 
                     EnsureFiles(); 
                 }
             })
             settings.selectDeliveryPackage.addEventListener('click', (event) => {
                 shell.openItem(GetLocalFolderPath());
-             }) 
+            }) 
         }
 
-        Rigsarkiv.IndexFiles = {
+        Rigsarkiv.Hypris.IndexFiles = {
             initialize: function (structureCallback,selectArchiveIndexFileId,pathSArchiveIndexFileId,selectContextDocumentationIndexFileId,pathContextDocumentationIndexFileId,indexFilesOkBtn,outputErrorId,outputRequiredPathId,outputOkId,selectDeliveryPackageId) {
                 settings.structureCallback = structureCallback;
                 settings.selectArchiveIndexFileBtn = document.getElementById(selectArchiveIndexFileId);
@@ -137,4 +138,5 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 AddEvents();
             }
         }
+    }(jQuery);
 }(jQuery);
