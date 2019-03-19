@@ -13,12 +13,15 @@
                             <div class="nemesisControls">
                                 <span>Vælg afleveringspakke til test:</span>
                                 <br>
-                                <input type="text" id="nemesis-path">
-                                <button id="nemesis-select-directory">Browse...</button>
+                                <input type="text" id="nemesis-structure-path">
+                                <button id="nemesis-select-structure-directory">Browse</button>
                                 <br/>
                                 <br/>
                                 <span>Midlertidig test kontroller, indtil vi har lavet fil parser.</span>
-                                <button id="nemesis-validateBtn">Test mappe struktur</button>
+                                <button id="nemesis-structure-validateBtn">Test mappe struktur</button>
+                                <span id="nemesis-output-structure-Error" hidden="true"><br />Error: {0}</span>
+                                <span id="nemesis-output-structure-Ok" hidden="true" class="alert-warning"><strong>Bekræftelse!</strong> Log fil [{0}] er nu skabt og placeret i mappen [</span>
+                                <a id="nemesis-structure-select-logFile" hidden="true" class="alert-warning"></a>
                             </div>
                             <div class="verticalDivider"> </div>
                             <div class="nemesisOutput">
@@ -34,8 +37,13 @@
         </header>
         <script>window.$ = window.jQuery = require('./assets/js/jquery.min.js');</script>
         <script type="text/javascript">
+             require('./assets/js/utilities');
+            require('./assets/js/messages');
+            require('./assets/js/log');
             require('./assets/js/nemesis/structure');
-            Rigsarkiv.Validation.initialize("nemesis-select-directory","nemesis-path","nemesis-validateBtn","nemesis-output");           
+
+            Rigsarkiv.Log.initialize("nemesis-output-structure-Error");
+            Rigsarkiv.Nemesis.Structure.initialize(Rigsarkiv.Log.callback,"nemesis-select-structure-directory","nemesis-structure-path","nemesis-structure-validateBtn","nemesis-output-structure-Error","nemesis-output-structure-Ok","nemesis-structure-select-logFile","nemesis-output");           
           </script>
     </section>
 </template>
