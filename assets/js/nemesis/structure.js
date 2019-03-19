@@ -3,41 +3,20 @@ function (n) {
     Rigsarkiv.Nemesis = Rigsarkiv.Nemesis || {},
         function (n){
         const {ipcRenderer} = require('electron')
-        const {shell} = require('electron')
-        const fs = require('fs');
         const pattern = /^(FD.[1-9]{1}[0-9]{4,})$/;
 
         var settings = { 
             selectDirBtn: null,
             pathDirTxt: null,
             selectedPath: null,
-            selectedLogFilePath: null,
             validateBtn: null,
-            outputErrorSpn: null,
-            outputErrorText: null,
-            outputOkSpn: null,
-            outputOkText: null,
-            selectLogfile: null,
             outputPrefix: null,
             logCallback: null,
             defaultFolder: "FD.99999"
         }
 
         var Reset = function () {
-            settings.outputErrorSpn.hidden = true;
-            settings.outputOkSpn.hidden = true;
-            settings.selectLogfile.hidden = true;
             $("span[id^='" + settings.outputPrefix + "']").hide();
-        }
-
-        var ShowOutput = function() {
-            settings.selectedLogFilePath = settings.logCallback().commit(settings.selectedPath[0]);
-            var folders = settings.selectedLogFilePath.normlizePath().split("/");
-            var folderName = folders[folders.length - 1];
-            settings.selectLogfile.innerHTML = settings.selectedLogFilePath + "]";
-            settings.selectLogfile.hidden = false;
-            settings.outputOkSpn.hidden = false;
-            settings.outputOkSpn.innerHTML = settings.outputOkText.format(folderName);
         }
 
         var ValidateStructure = function (folderName) {
@@ -62,7 +41,7 @@ function (n) {
                 }            
             }
             element.html(element.html().format(folderName));
-            ShowOutput();            
+            settings.logCallback().commit(settings.selectedPath[0]);            
             return result;
         }
 
@@ -82,23 +61,15 @@ function (n) {
                 console.log(`selected path: ${path}`); 
                 settings.pathDirTxt.value = settings.selectedPath;
                 settings.logCallback().info("selected path: {0}".format(settings.selectedPath[0]));
-            })
-            settings.selectLogfile.addEventListener('click', (event) => {
-                shell.openItem(settings.selectedLogFilePath);
-            });
+            })            
         }
 
         Rigsarkiv.Nemesis.Structure = {        
-            initialize: function (logCallback,selectDirectoryId,pathDirectoryId,validateId,outputErrorId,outputOkId,selectLogfileId,outputPrefix) {            
+            initialize: function (logCallback,selectDirectoryId,pathDirectoryId,validateId,outputPrefix) {            
                 settings.logCallback = logCallback;
                 settings.selectDirBtn =  document.getElementById(selectDirectoryId);
                 settings.pathDirTxt =  document.getElementById(pathDirectoryId);
                 settings.validateBtn =  document.getElementById(validateId);
-                settings.outputErrorSpn =  document.getElementById(outputErrorId);
-                settings.outputErrorText = settings.outputErrorSpn.innerHTML;
-                settings.outputOkSpn =  document.getElementById(outputOkId);
-                settings.outputOkText = settings.outputOkSpn.innerHTML;
-                settings.selectLogfile = document.getElementById(selectLogfileId);
                 settings.outputPrefix = outputPrefix;
                 AddEvents();
             }

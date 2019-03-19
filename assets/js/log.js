@@ -6,6 +6,10 @@ function (n) {
     var settings = {
         outputErrorSpn: null,
         outputErrorText: null,
+        outputOkSpn: null,
+        outputOkText: null,
+        selectLogfile: null,
+        outputSupplementSpn: null,
         filePath: null,
         selectedFilePath: null,
         logs: [],
@@ -16,6 +20,13 @@ function (n) {
         errorElement: "<span id=\"{0}\"><i class=\"fas fa-times error\"></i>{1}</span><br/>",
         warnElement: "<span id=\"{0}\"><i class=\"fas fa-exclamation-triangle warning\"></i>{1}</span><br/>",
         infoElement: "<span id=\"{0}\"><i class=\"fas fa-check-circle ok\"></i>{1}</span><br/>" 
+    }
+
+    var Reset = function () {
+        settings.outputErrorSpn.hidden = true;
+        settings.outputOkSpn.hidden = true;
+        settings.selectLogfile.hidden = true;
+        settings.outputSupplementSpn.hidden = true;
     }
 
     var HandleError = function(err) {
@@ -78,19 +89,37 @@ function (n) {
                     if (err) {
                         HandleError(err);
                     }
-                    else {
+                    else {                        
                         settings.logs = [];
                         console.log("Log is updated at: {0}".format(settings.filePath));
+                        var folders = settings.filePath.split("/");
+                        var folderName = folders[folders.length - 1];
+                        settings.selectLogfile.innerHTML = settings.selectedFilePath + "]";
+                        settings.outputOkSpn.innerHTML = settings.outputOkText.format(folderName);
+                        settings.selectLogfile.hidden = false;
+                        settings.outputOkSpn.hidden = false;
+                        settings.outputSupplementSpn.hidden = false;                        
                     }
                 });
             }
         });
     }
 
+    var AddEvents = function () {
+        settings.selectLogfile.addEventListener('click', (event) => {
+            shell.openItem(settings.selectedFilePath);
+        }); 
+    }
+
     Rigsarkiv.Log = {
-        initialize: function (outputErrorId) {
+        initialize: function (outputErrorId,outputOkId,selectLogfileId,outputSupplementId) {
             settings.outputErrorSpn = document.getElementById(outputErrorId);
             settings.outputErrorText = settings.outputErrorSpn.innerHTML;
+            settings.outputOkSpn =  document.getElementById(outputOkId);
+            settings.outputOkText = settings.outputOkSpn.innerHTML;
+            settings.selectLogfile = document.getElementById(selectLogfileId);
+            settings.outputSupplementSpn =  document.getElementById(outputSupplementId);
+            AddEvents();               
         },
         callback: function () {
             return { 
@@ -111,6 +140,7 @@ function (n) {
                 },
                 commit: function(selectedFolderPath)
                 {
+                    Reset();
                     settings.selectedFilePath = settings.filePostfix.format(selectedFolderPath);
                     settings.filePath = settings.filePostfix.format(selectedFolderPath.normlizePath());
                     if(!fs.existsSync(settings.filePath)) {
@@ -119,7 +149,6 @@ function (n) {
                     else {
                         EnsureData();
                     }
-                    return settings.selectedFilePath;
                 } 
             };
         }

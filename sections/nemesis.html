@@ -20,14 +20,15 @@
                                 <span>Midlertidig test kontroller, indtil vi har lavet fil parser.</span>
                                 <button id="nemesis-structure-validateBtn">Test mappe struktur</button>
                                 <span id="nemesis-output-structure-Error" hidden="true"><br />Error: {0}</span>
-                                <span id="nemesis-output-structure-Ok" hidden="true" class="alert-warning"><strong>Bekræftelse!</strong> Log fil [{0}] er nu skabt og placeret i mappen [</span>
-                                <a id="nemesis-structure-select-logFile" hidden="true" class="alert-warning"></a>
+                                <span id="nemesis-output-structure-Ok" hidden="true"><br /><strong>Bekræftelse!</strong> Log fil [{0}] er nu skabt og placeret i mappen [</span>
+                                <a id="nemesis-structure-select-logFile" hidden="true"></a>
+                                <span id="nemesis-output-structure-Supplement" hidden="true">]</span>
                             </div>
                             <div class="verticalDivider"> </div>
                             <div class="nemesisOutput">
-                                <span id="nemesis-output-CheckId-Error" hidden="true"><i class="fas fa-times error"></i>Test id '{0}' fejler</span>
-                                <span id="nemesis-output-CheckId-Warning" hidden="true"><i class="fas fa-exclamation-triangle warning"></i>Test id '{0}' advarsel</span>
-                                <span id="nemesis-output-CheckId-Ok" hidden="true"><i class="fas fa-check-circle ok"></i>Test id '{0}' gennemført</span>
+                                <span id="nemesis-processing-CheckId-Error" hidden="true"><i class="fas fa-times error"></i>Test id '{0}' fejler</span>
+                                <span id="nemesis-processing-CheckId-Warning" hidden="true"><i class="fas fa-exclamation-triangle warning"></i>Test id '{0}' advarsel</span>
+                                <span id="nemesis-processing-CheckId-Ok" hidden="true"><i class="fas fa-check-circle ok"></i>Test id '{0}' gennemført</span>
                                 <br/>
                             </div>
                         </div>
@@ -42,8 +43,8 @@
             require('./assets/js/log');
             require('./assets/js/nemesis/structure');
 
-            Rigsarkiv.Log.initialize("nemesis-output-structure-Error");
-            Rigsarkiv.Nemesis.Structure.initialize(Rigsarkiv.Log.callback,"nemesis-select-structure-directory","nemesis-structure-path","nemesis-structure-validateBtn","nemesis-output-structure-Error","nemesis-output-structure-Ok","nemesis-structure-select-logFile","nemesis-output");           
+            Rigsarkiv.Log.initialize("nemesis-output-structure-Error","nemesis-output-structure-Ok","nemesis-structure-select-logFile","nemesis-output-structure-Supplement");
+            Rigsarkiv.Nemesis.Structure.initialize(Rigsarkiv.Log.callback,"nemesis-select-structure-directory","nemesis-structure-path","nemesis-structure-validateBtn","nemesis-processing");           
           </script>
     </section>
 </template>
