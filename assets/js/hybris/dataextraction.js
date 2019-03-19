@@ -11,7 +11,7 @@
 */
 window.Rigsarkiv = window.Rigsarkiv || {},
 function (n) {
-    Rigsarkiv.Hypris = Rigsarkiv.Hypris || {},
+    Rigsarkiv.Hybris = Rigsarkiv.Hybris || {},
     function (n) {
         const {ipcRenderer} = require('electron');
         const {shell} = require('electron');
@@ -354,7 +354,7 @@ function (n) {
                 if(index === 1) { ResetData(); }            
             })
         }
-        Rigsarkiv.Hypris.DataExtraction = {        
+        Rigsarkiv.Hybris.DataExtraction = {        
             initialize: function (structureCallback,selectStatisticsFileId,pathStatisticsFileId,okStatisticsId,outputStatisticsErrorId,outputStatisticsOkCopyScriptId,outputStatisticsSASWarningPrefixId,scriptPanel1Id,scriptPanel2Id,okScriptBtnId,okScriptDataPathId,outputStatisticsOkCopyScriptInfoId,outputStatisticsRequiredPathId,outputScriptRequiredFilesWarningPrefixId,outputScriptOkId,outputScriptEncodingFileErrorPrefixId,nextId,metdataTabId,outputScriptCloseApplicationWarningPrefixId) {
                 settings.structureCallback = structureCallback;
                 settings.selectStatisticsFileBtn = document.getElementById(selectStatisticsFileId);

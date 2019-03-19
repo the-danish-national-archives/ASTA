@@ -5,7 +5,7 @@
 */
 window.Rigsarkiv = window.Rigsarkiv || {},
     function (n) {
-        Rigsarkiv.Hypris = Rigsarkiv.Hypris || {},
+        Rigsarkiv.Hybris = Rigsarkiv.Hybris || {},
         function (n) {
             const { ipcRenderer } = require('electron');
             const {shell} = require('electron');
@@ -332,7 +332,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 });
             }
 
-            Rigsarkiv.Hypris.MetaData = {
+            Rigsarkiv.Hybris.MetaData = {
                 initialize: function (extractionCallback,metadataFileName,metadataFileNameDescription,metadataKeyVariable,metadataForeignFileName,metadataForeignKeyVariableName,metadataReferenceVariable,metdataOkBtn,inputFileNameRequired,inputNumberFirst,inputIllegalChar,outputOkId,okDataPathId,outputErrorId,outputNewExtractionId,newExtractionBtn,extractionTabId,outputNextId,nextBtn,indexFilesTabId,fileNameLengthId,fileNameReservedWordId,fileDescrReqId,informationPanel1Id,informationPanel2Id,indexFilesDescriptionId,outputCloseApplicationErrorPrefixId,referencesId,addReferenceBtn,referenceReqId) {
                     settings.extractionCallback = extractionCallback;
                     settings.fileName = document.getElementById(metadataFileName);

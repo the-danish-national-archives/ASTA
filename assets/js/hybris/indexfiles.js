@@ -5,7 +5,7 @@
  */
 window.Rigsarkiv = window.Rigsarkiv || {},
 function (n) {
-    Rigsarkiv.Hypris = Rigsarkiv.Hypris || {},
+    Rigsarkiv.Hybris = Rigsarkiv.Hybris || {},
     function (n) {
         const { ipcRenderer } = require('electron');
         const {shell} = require('electron');
@@ -120,7 +120,7 @@ function (n) {
             }) 
         }
 
-        Rigsarkiv.Hypris.IndexFiles = {
+        Rigsarkiv.Hybris.IndexFiles = {
             initialize: function (structureCallback,selectArchiveIndexFileId,pathSArchiveIndexFileId,selectContextDocumentationIndexFileId,pathContextDocumentationIndexFileId,indexFilesOkBtn,outputErrorId,outputRequiredPathId,outputOkId,selectDeliveryPackageId) {
                 settings.structureCallback = structureCallback;
                 settings.selectArchiveIndexFileBtn = document.getElementById(selectArchiveIndexFileId);

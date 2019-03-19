@@ -5,8 +5,8 @@
 */
 window.Rigsarkiv = window.Rigsarkiv || {},
 function (n) {
-    Rigsarkiv.Hypris = Rigsarkiv.Hypris || {},
-    function (n) {
+    Rigsarkiv.Hybris = Rigsarkiv.Hybris || {},
+    function (n){
         const {ipcRenderer} = require('electron')
         const {shell} = require('electron')
         const fs = require('fs');
@@ -123,7 +123,7 @@ function (n) {
             }) 
         }
 
-        Rigsarkiv.Hypris.Structure = {        
+        Rigsarkiv.Hybris.Structure = {        
             initialize: function (selectDirectoryId,pathDirectoryId,deliveryPackageId,okId,outputErrorId,outputExistsId,outputRequiredPathId,outputUnvalidDeliveryPackageId,outputOkId,selectDeliveryPackageId,nextId,statisticsTabId,outputSupplementId) {            
                 settings.selectDirBtn =  document.getElementById(selectDirectoryId);
                 settings.pathDirTxt =  document.getElementById(pathDirectoryId);
