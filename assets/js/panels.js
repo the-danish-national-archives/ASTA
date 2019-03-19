@@ -1,3 +1,8 @@
+/*
+    Model is responsible for Tabs og realted panels
+    inputs array of tag <button> ids contains "-tab-"
+    related panels with <div> tag and ids contains "-panel-"
+*/
 window.Rigsarkiv = window.Rigsarkiv || {},
 function (n) {
     const {ipcRenderer} = require('electron')

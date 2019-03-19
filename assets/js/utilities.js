@@ -1,3 +1,6 @@
+/*
+Implments custum javascript helper functions where it used by other modules
+*/
 if (!String.prototype.format) {
     String.prototype.format = function() {
       var args = arguments;

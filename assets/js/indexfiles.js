@@ -1,3 +1,8 @@
+/*
+    Model is responsible for upload index files
+    initialize interface inputs: elements from <div id="hybris-panel-indexfiles">
+    output 2 xml files at /Indices
+ */
 window.Rigsarkiv = window.Rigsarkiv || {},
     function (n) {
 

@@ -1,3 +1,14 @@
+/*
+    Model is responsible for data extraction from statistics program
+    initialize interface inputs: elements from <div id="hybris-panel-statistics">
+    callback interface outputs: 
+        structure Callback 
+        data relative Folder Path: /Data/tableX
+        selected Statistics File absolut Path
+        script Type: SPSS, SAS, Stata
+        local Folder absolut Path
+    scripts templates at ./assets/scripts/
+*/
 window.Rigsarkiv = window.Rigsarkiv || {},
 function (n) {
     const {ipcRenderer} = require('electron');

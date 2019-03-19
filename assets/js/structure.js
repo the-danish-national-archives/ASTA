@@ -1,3 +1,8 @@
+/*
+    Model is responsible for Ensure Delivery Package folder Structure
+    initialize interface inputs: elements from <div id="hybris-panel-structure">
+    callback interface outputs:  delivery Package relative Path & selected absolut Path
+*/
 window.Rigsarkiv = window.Rigsarkiv || {},
 function (n) {
     const {ipcRenderer} = require('electron')
