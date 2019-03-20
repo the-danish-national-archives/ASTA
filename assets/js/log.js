@@ -2,6 +2,8 @@ window.Rigsarkiv = window.Rigsarkiv || {},
 function (n) {
     const {shell} = require('electron');
     const fs = require('fs');
+    const path = require('path');
+    const os = require('os');
 
     var settings = {
         outputErrorSpn: null,
@@ -17,9 +19,9 @@ function (n) {
         scriptPath: "./assets/scripts/{0}",
         resourceWinPath: "resources/{0}",
         filePostfix: "{0}_log.html",
-        errorElement: "<span id=\"{0}\"><i class=\"fas fa-times error\"></i>{1}</span><br/>",
-        warnElement: "<span id=\"{0}\"><i class=\"fas fa-exclamation-triangle warning\"></i>{1}</span><br/>",
-        infoElement: "<span id=\"{0}\"><i class=\"fas fa-check-circle ok\"></i>{1}</span><br/>" 
+        errorElement: "<span id=\"{0}\" class=\"error\"><i class=\"fas fa-times error\"></i>{1}</span><br/>",
+        warnElement: "<span id=\"{0}\" class=\"warning\"><i class=\"fas fa-exclamation-triangle warning\"></i>{1}</span><br/>",
+        infoElement: "<span id=\"{0}\" class=\"ok\"><i class=\"fas fa-check-circle ok\"></i>{1}</span><br/>" 
     }
 
     var Reset = function () {
@@ -53,30 +55,8 @@ function (n) {
     
         return result;
     }
-    var CopyFile = function() {
-        var logFilePath = settings.scriptPath.format(settings.templateFileName);
-        if(!fs.existsSync(logFilePath)) {
-            var rootPath = null;
-            if(os.platform() == "win32") {
-                rootPath = path.join('./');
-                logFilePath = path.join(rootPath,settings.resourceWinPath.format(settings.templateFileName));
-            }
-            if(os.platform() == "darwin") {
-                var folders =  __dirname.split("/");
-                rootPath = folders.slice(0,folders.length - 3).join("/");
-                logFilePath = "{0}/{1}".format(rootPath,settings.templateFileName);
-            }
-        }
-        console.log(`copy ${settings.templateFileName} file to: ${settings.filePath}`);
-        fs.copyFile(logFilePath, settings.filePath, (err) => {
-            if (err) {
-                HandleError(err);
-            }
-            else {
-                EnsureData();
-            }
-        });
-    }
+
+    
 
     var EnsureData = function() {
         fs.readFile(settings.filePath, (err, data) => {
@@ -101,6 +81,31 @@ function (n) {
                         settings.outputSupplementSpn.hidden = false;                        
                     }
                 });
+            }
+        });
+    }
+
+    var CopyFile = function() {
+        var logFilePath = settings.scriptPath.format(settings.templateFileName);        
+        if(!fs.existsSync(logFilePath)) {
+            var rootPath = null;
+            if(os.platform() == "win32") {
+                rootPath = path.join('./');
+                logFilePath = path.join(rootPath,settings.resourceWinPath.format(settings.templateFileName));
+            }
+            if(os.platform() == "darwin") {
+                var folders =  __dirname.split("/");
+                rootPath = folders.slice(0,folders.length - 3).join("/");
+                logFilePath = "{0}/{1}".format(rootPath,settings.templateFileName);
+            }
+        }        
+        console.log(`copy ${settings.templateFileName} file to: ${settings.filePath}`);
+        fs.copyFile(logFilePath, settings.filePath, (err) => {
+            if (err) {
+                HandleError(err);
+            }
+            else {
+                EnsureData();
             }
         });
     }
@@ -140,15 +145,14 @@ function (n) {
                 },
                 commit: function(selectedFolderPath)
                 {
-                    Reset();
+                    Reset();                    
                     settings.selectedFilePath = settings.filePostfix.format(selectedFolderPath);
                     settings.filePath = settings.filePostfix.format(selectedFolderPath.normlizePath());
-                    if(!fs.existsSync(settings.filePath)) {
-                        CopyFile();
+                    if(fs.existsSync(settings.filePath)) {                        
+                        console.log(`Delete exists log: ${settings.filePath}`);
+                        fs.unlinkSync(settings.filePath);
                     }
-                    else {
-                        EnsureData();
-                    }
+                    CopyFile();
                 } 
             };
         }

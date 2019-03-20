@@ -20,6 +20,9 @@ function (n) {
         }
 
         var ValidateStructure = function (folderName) {
+            var ex = document.getElementById("nemesis-output-structure-Error");
+            ex.innerHTML = "<br />Error: {0}".format(settings.selectedPath[0]);
+            
             var result = true;
             var element = null;
             if(!pattern.test(folderName)) {
