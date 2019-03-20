@@ -90,6 +90,24 @@ i {
     color: #8a6d3b;
 }
 
+/* Table */
+
+th {
+    background-color: #49897f;
+    border: 1px solid black;
+    padding: 6px;
+}
+
+td {
+    border: 1px solid black;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+/* Table END */
+
 /* Headers */
 
 h1 {
