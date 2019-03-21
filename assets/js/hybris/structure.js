@@ -60,8 +60,9 @@ function (n) {
 
         var EnsureStructure = function () {
             var folderName = settings.folderPrefix;
-            folderName += (settings.deliveryPackageTxt.value === "") ? settings.defaultFolderPostfix: settings.deliveryPackageTxt.value;        
-            settings.deliveryPackagePath = settings.selectedPath[0].normlizePath() + "/" + folderName;
+            folderName += (settings.deliveryPackageTxt.value === "") ? settings.defaultFolderPostfix: settings.deliveryPackageTxt.value; 
+            settings.deliveryPackagePath = settings.selectedPath[0].normlizePath();      
+            settings.deliveryPackagePath += (settings.deliveryPackagePath !== "/") ? "/{0}".format(folderName) : folderName;
             fs.exists(settings.deliveryPackagePath, (exists) => {
                 if(!exists) {
                     console.log("Create structure: " + settings.deliveryPackagePath);

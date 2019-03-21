@@ -177,6 +177,7 @@ function (n) {
         var EnsureScript = function() {
             var filePath = settings.selectedStatisticsFilePath[0].normlizePath();
             var folderPath = filePath.substring(0,filePath.lastIndexOf("/"));
+            if(folderPath === "") { folderPath = "/"; }
             fs.readdir(folderPath, (err, files) => {
                 if (err) {
                     HandleError(err);
