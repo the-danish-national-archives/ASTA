@@ -1,3 +1,7 @@
+/*
+    Model is responsible for Logging to HTML file
+    initialize interface inputs: 
+ */
 window.Rigsarkiv = window.Rigsarkiv || {},
 function (n) {
     const {shell} = require('electron');
@@ -5,6 +9,7 @@ function (n) {
     const path = require('path');
     const os = require('os');
 
+    //private data memebers
     var settings = {
         outputErrorSpn: null,
         outputErrorText: null,
@@ -13,17 +18,19 @@ function (n) {
         selectLogfile: null,
         outputSupplementSpn: null,
         filePath: null,
-        selectedFilePath: null,
         logs: [],
+        logsDate: null,
+        errorsCounter: 0,
         templateFileName: "log.html",
         scriptPath: "./assets/scripts/{0}",
-        resourceWinPath: "resources/{0}",
+        resourceWinPath: "resources\\{0}",
         filePostfix: "{0}_log.html",
-        errorElement: "<span id=\"{0}\" class=\"error\"><i class=\"fas fa-times error\"></i>{1}</span><br/>",
-        warnElement: "<span id=\"{0}\" class=\"warning\"><i class=\"fas fa-exclamation-triangle warning\"></i>{1}</span><br/>",
-        infoElement: "<span id=\"{0}\" class=\"ok\"><i class=\"fas fa-check-circle ok\"></i>{1}</span><br/>" 
+        errorElement: "<span id=\"{0}\" name=\"{1}\" class=\"error\">{1}: {2}</span><br/>",
+        warnElement: "<span id=\"{0}\" name=\"{1}\" class=\"warning\">{1}: {2}</span><br/>",
+        infoElement: "<span id=\"{0}\" name=\"{1}\" class=\"ok\">{1}: {2}</span><br/>" 
     }
 
+    //reset status & input fields
     var Reset = function () {
         settings.outputErrorSpn.hidden = true;
         settings.outputOkSpn.hidden = true;
@@ -31,12 +38,14 @@ function (n) {
         settings.outputSupplementSpn.hidden = true;
     }
 
+    //output system error messages
     var HandleError = function(err) {
         console.log(`Error: ${err}`);
         settings.outputErrorSpn.hidden = false;
         settings.outputErrorSpn.innerHTML = settings.outputErrorText.format(err.message);
     }
 
+    //format current datetime
     var GetDateTime = function() {        
         var result = "";
 
@@ -54,27 +63,31 @@ function (n) {
         result += (temp < 10) ? "0{0}".format(temp) : temp;
     
         return result;
-    }
+    }    
 
-    
-
+    //commit log data
     var EnsureData = function() {
         fs.readFile(settings.filePath, (err, data) => {
             if (err) {
                 HandleError(err);
             }
             else {
-                var updatedData = data.toString().format(settings.logs.join("\r\n"));
+                var folders = settings.filePath.getFolders();
+                var folderName = folders[folders.length - 1];
+                folderName = folderName.substring(0,folderName.indexOf("_log.html"));
+                var updatedData = data.toString().format(settings.logsDate.getFromFormat("dd-MM-yyyy"),folderName,settings.logs.join("\r\n"),settings.errorsCounter);
                 fs.writeFile(settings.filePath, updatedData, (err) => {
                     if (err) {
                         HandleError(err);
                     }
                     else {                        
                         settings.logs = [];
+                        settings.errorsCounter = 0;
+                        settings.logsDate = null;                        
                         console.log("Log is updated at: {0}".format(settings.filePath));
-                        var folders = settings.filePath.split("/");
+                        var folders = settings.filePath.getFolders();
                         var folderName = folders[folders.length - 1];
-                        settings.selectLogfile.innerHTML = settings.selectedFilePath + "]";
+                        settings.selectLogfile.innerHTML = settings.filePath + "]";
                         settings.outputOkSpn.innerHTML = settings.outputOkText.format(folderName);
                         settings.selectLogfile.hidden = false;
                         settings.outputOkSpn.hidden = false;
@@ -85,6 +98,7 @@ function (n) {
         });
     }
 
+    //copy log HTML template file to parent folder of selected Delivery Package folder
     var CopyFile = function() {
         var logFilePath = settings.scriptPath.format(settings.templateFileName);        
         if(!fs.existsSync(logFilePath)) {
@@ -110,12 +124,14 @@ function (n) {
         });
     }
 
+    //add Event Listener to HTML elmenets
     var AddEvents = function () {
         settings.selectLogfile.addEventListener('click', (event) => {
-            shell.openItem(settings.selectedFilePath);
+            shell.openItem(settings.filePath);
         }); 
     }
 
+    //Model interfaces functions
     Rigsarkiv.Log = {
         initialize: function (outputErrorId,outputOkId,selectLogfileId,outputSupplementId) {
             settings.outputErrorSpn = document.getElementById(outputErrorId);
@@ -128,26 +144,29 @@ function (n) {
         },
         callback: function () {
             return { 
-                error: function(text) 
+                error: function(folderName,text) 
                 { 
+                    if(settings.logsDate == null) { settings.logsDate = new Date(); }
                     console.log(`error ${text}`);
-                    settings.logs.push(settings.errorElement.format(GetDateTime(),text));
+                    settings.logs.push(settings.errorElement.format((new Date()).getFromFormat("yyyyMMddhhmmss"),folderName,text));
+                    settings.errorsCounter += 1;
                 },
-                warn: function(text) 
+                warn: function(folderName,text) 
                 { 
+                    if(settings.logsDate == null) { settings.logsDate = new Date(); }
                     console.log(`warn ${text}`);
-                    settings.logs.push(settings.warnElement.format(GetDateTime(),text));
+                    settings.logs.push(settings.warnElement.format((new Date()).getFromFormat("yyyyMMddhhmmss"),folderName,text));
                 },
-                info: function(text) 
+                info: function(folderName,text) 
                 { 
+                    if(settings.logsDate == null) { settings.logsDate = new Date(); }
                     console.log(`info ${text}`);
-                    settings.logs.push(settings.infoElement.format(GetDateTime(),text));
+                    settings.logs.push(settings.infoElement.format((new Date()).getFromFormat("yyyyMMddhhmmss"),folderName,text));
                 },
                 commit: function(selectedFolderPath)
                 {
                     Reset();                    
-                    settings.selectedFilePath = settings.filePostfix.format(selectedFolderPath);
-                    settings.filePath = settings.filePostfix.format(selectedFolderPath.normlizePath());
+                    settings.filePath = settings.filePostfix.format(selectedFolderPath);
                     if(fs.existsSync(settings.filePath)) {                        
                         console.log(`Delete exists log: ${settings.filePath}`);
                         fs.unlinkSync(settings.filePath);
