@@ -12,6 +12,7 @@ function (n) {
         const fs = require('fs');
         const pattern = /^([1-9]{1}[0-9]{4,})$/;
 
+        //private data memebers
         var settings = {
             selectDirBtn: null,
             pathDirTxt: null,
@@ -39,6 +40,7 @@ function (n) {
             deliveryPackagePath: null
         }
 
+        //reset status & input fields
         var Reset = function () {
             settings.outputErrorSpn.hidden = true;
             settings.outputOkSpn.hidden = true;
@@ -47,8 +49,9 @@ function (n) {
             settings.nextBtn.hidden = true;
         }
 
+        //Output structure creation status
         var ShowOutput = function() {
-            var folders = settings.deliveryPackagePath.split("/");
+            var folders = settings.deliveryPackagePath.getFolders();
             var folderName = folders[folders.length - 1];
             settings.selectDeliveryPackage.innerHTML = settings.selectedPath;
             settings.selectDeliveryPackage.hidden = false;
@@ -58,11 +61,12 @@ function (n) {
             settings.nextBtn.hidden = false;
         }
 
+        //create delivery Package folder Structure
         var EnsureStructure = function () {
             var folderName = settings.folderPrefix;
             folderName += (settings.deliveryPackageTxt.value === "") ? settings.defaultFolderPostfix: settings.deliveryPackageTxt.value; 
-            settings.deliveryPackagePath = settings.selectedPath[0].normlizePath();      
-            settings.deliveryPackagePath += (settings.deliveryPackagePath !== "/") ? "/{0}".format(folderName) : folderName;
+            settings.deliveryPackagePath = settings.selectedPath[0];      
+            settings.deliveryPackagePath += (settings.deliveryPackagePath.indexOf("\\") > -1) ? "\\{0}".format(folderName) : "/{0}".format(folderName);
             fs.exists(settings.deliveryPackagePath, (exists) => {
                 if(!exists) {
                     console.log("Create structure: " + settings.deliveryPackagePath);
@@ -73,7 +77,8 @@ function (n) {
                         }
                         else {
                             settings.subFolders.forEach(element => {
-                                fs.mkdir(settings.deliveryPackagePath + "/" + element, { recursive: true }, (err) => {
+                                var subFolderName = (settings.deliveryPackagePath.indexOf("\\") > -1) ? "\\{0}".format(element) : "/{0}".format(element);
+                                fs.mkdir(settings.deliveryPackagePath + subFolderName, { recursive: true }, (err) => {
                                     if (err) {
                                         settings.outputErrorSpn.hidden = false;
                                         settings.outputErrorSpn.innerHTML = settings.outputErrorText.format(err.message);   
@@ -93,6 +98,7 @@ function (n) {
             });
         }
 
+        //add Event Listener to HTML elmenets
         var AddEvents = function () {
             settings.okBtn.addEventListener('click', (event) => {
                 Reset();
@@ -124,6 +130,7 @@ function (n) {
             }) 
         }
 
+        //Model interfaces functions
         Rigsarkiv.Hybris.Structure = {        
             initialize: function (selectDirectoryId,pathDirectoryId,deliveryPackageId,okId,outputErrorId,outputExistsId,outputRequiredPathId,outputUnvalidDeliveryPackageId,outputOkId,selectDeliveryPackageId,nextId,statisticsTabId,outputSupplementId) {            
                 settings.selectDirBtn =  document.getElementById(selectDirectoryId);

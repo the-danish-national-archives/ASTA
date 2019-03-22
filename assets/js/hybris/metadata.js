@@ -19,6 +19,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
             const enclosedReservedWordPattern = /^(")(ABSOLUTE|ACTION|ADD|ADMIN|AFTER|AGGREGATE|ALIAS|ALL|ALLOCATE|ALTER|AND|ANY|ARE|ARRAY|AS|ASC|ASSERTION|AT|AUTHORIZATION|BEFORE|BEGIN|BINARY|BIT|BLOB|BOOLEAN|BOTH|BREADTH|BY|CALL|CASCADE|CASCADED|CASE|CAST|CATALOG|CHAR|CHARACTER|CHECK|CLASS|CLOB|CLOSE|COLLATE|COLLATION|COLUMN|COMMIT|COMPLETION|CONNECT|CONNECTION|CONSTRAINT|CONSTRAINTS ||CONSTRUCTOR|CONTINUE|CORRESPONDING|CREATE|CROSS|CUBE|CURRENT|CURRENT_DATE|CURRENT_PATH|CURRENT_ROLE|CURRENT_TIME|CURRENT_TIMESTAMP|CURRENT_USER|CURSOR|CYCLE|DATA|DATE|DAY|DEALLOCATE|DEC|DECIMAL|DECLARE|DEFAULT|DEFERRABLE|DEFERRED|DELETE|DEPTH|DEREF|DESC|DESCRIBE|DESCRIPTOR|DESTROY|DESTRUCTOR|DETERMINISTIC|DICTIONARY|DIAGNOSTICS|DISCONNECT|DISTINCT|DOMAIN|DOUBLE|DROP|DYNAMIC|EACH|ELSE|END|END-EXEC|EQUALS|ESCAPE|EVERY|EXCEPT|EXCEPTION|EXEC|EXECUTE|EXTERNAL|FALSE|FETCH|FIRST|FLOAT|FOR|FOREIGN|FOUND|FROM|FREE|FULL|FUNCTION|GENERAL|GET|GLOBAL|GO|GOTO|GRANT|GROUP|GROUPING|HAVING|HOST|HOUR|IDENTITY|IGNORE|IMMEDIATE|IN|INDICATOR|INITIALIZE|INITIALLY|INNER|INOUT|INPUT|INSERT|INT|INTEGER|INTERSECT|INTERVAL|INTO|IS|ISOLATION|ITERATE|JOIN|KEY|LANGUAGE|LARGE|LAST|LATERAL|LEADING|LEFT|LESS|LEVEL|LIKE|LIMIT|LOCAL|LOCALTIME|LOCALTIMESTAMP|LOCATOR|MAP|MATCH|MINUTE|MODIFIES|MODIFY|MODULE|MONTH|NAMES|NATIONAL|NATURAL|NCHAR|NCLOB|NEW|NEXT|NO|NONE|NOT|NULL|NUMERIC|OBJECT|OF|OFF|OLD|ON|ONLY|OPEN|OPERATION|OPTION|OR|ORDER|ORDINALITY|OUT|OUTER|OUTPUT|PAD|PARAMETER|PARAMETERS|PARTIAL|PATH|POSTFIX|PRECISION|PREFIX|PREORDER|PREPARE|PRESERVE|PRIMARY|PRIOR|PRIVILEGES|PROCEDURE|PUBLIC|READ|READS|REAL|RECURSIVE|REF|REFERENCES|REFERENCING|RELATIVE|RESTRICT|RESULT|RETURN|RETURNS|REVOKE|RIGHT|ROLE|ROLLBACK|ROLLUP|ROUTINE|ROW|ROWS|SAVEPOINT|SCHEMA|SCROLL|SCOPE|SEARCH|SECOND|SECTION|SELECT|SEQUENCE|SESSION|SESSION_USER|SET|SETS|SIZE|SMALLINT|SOME|SPACE|SPECIFIC|SPECIFICTYPE|SQL|SQLEXCEPTION|SQLSTATE|SQLWARNING|START|STATE|STATEMENT|STATIC|STRUCTURE|SYSTEM_USER|TABLE|TEMPORARY|TERMINATE|THAN|THEN|TIME|TIMESTAMP|TIMEZONE_HOUR|TIMEZONE_MINUTE|TO|TRAILING|TRANSACTION|TRANSLATION|TREAT|TRIGGER|TRUE|UNDER|UNION|UNIQUE|UNKNOWN|UNNEST|UPDATE|USAGE|USER|USING|VALUE|VALUES|VARCHAR|VARIABLE|VARYING|VIEW|WHEN|WHENEVER|WHERE|WITH|WITHOUT|WORK|WRITE|YEAR|ZONE)(")$/i;
             const strLength = 128;
 
+            //private data memebers
             var settings = {
                 fileName: null,
                 fileDescr: null,
@@ -68,16 +69,17 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 dataFileName: "{0}.csv",
                 metadataTemplateFileName: "metadata.txt",
                 scriptPath: "./assets/scripts/{0}",
-                resourceWinPath: "resources/{0}"
+                resourceWinPath: "resources\\{0}"
             }
             
-
+            //output system error messages
             var HandleError = function(err) {
                 console.log(`Error: ${err}`);
                 settings.outputErrorSpn.hidden = false;
                 settings.outputErrorSpn.innerHTML = settings.outputErrorText.format(err.message);
             }
 
+            //reset status & input fields
             var Reset = function () {
                 settings.informationPanel1.hidden = false;
                 settings.informationPanel2.hidden = true;
@@ -87,16 +89,19 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 settings.contents = ["","","",""];
             }        
 
+            //get metadata file name
             var GetMetaDataFileName = function() {
                 return settings.metadataFileName.format(GetDataFolderName());
             }
 
+            // get selected data table folder name 
             var GetDataFolderName = function() {
                 var dataFolderPath = settings.extractionCallback().dataFolderPath;
-                var folders = dataFolderPath.split("/");
+                var folders = dataFolderPath.getFolders();
                 return folders[folders.length - 1];
             }
 
+            //delete other txt files from statistic program
             var Cleanup = function() {
                 var dataFolderPath = settings.extractionCallback().dataFolderPath;
                 fs.readdir(dataFolderPath, (err, files) => {
@@ -112,7 +117,9 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                             if(file != settings.dataFileName.format(fileName) && file != settings.metadataFileName.format(fileName)) {
                                 console.log("delete file : " + file);
                                 try {
-                                    fs.unlinkSync("{0}/{1}".format(dataFolderPath,file));                                
+                                    var srcFilePath = dataFolderPath;
+                                    srcFilePath += (srcFilePath.indexOf("\\") > -1) ? "\\{0}".format(file) : "/{0}".format(file);
+                                    fs.unlinkSync(srcFilePath);                                
                                 }
                                 catch(err) {
                                     hasError = true;
@@ -124,13 +131,13 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                             ipcRenderer.send('open-error-dialog',settings.outputCloseApplicationErrorTitle.innerHTML,settings.outputCloseApplicationErrorText.innerHTML);
                         }
                         else {
+                            var folders = callback.selectedStatisticsFilePath.getFolders();                            
                             settings.informationPanel1.hidden = true;
                             settings.informationPanel2.hidden = false;
-                            var folders = callback.selectedStatisticsFilePath.normlizePath().split("/");
                             settings.nextBtn.hidden = false;
                             settings.outputOkSpn.innerHTML = settings.outputOkText.format(settings.dataFileName.format(fileName),settings.metadataFileName.format(fileName),folders[folders.length - 1]);
                             settings.okDataPath.innerHTML = callback.localFolderPath;
-                            folders = dataFolderPath.split("/");
+                            folders = dataFolderPath.getFolders();
                             settings.outputNewExtractionSpn.innerHTML = settings.outputNewExtractionText.format(folders[folders.length - 3]);
                             settings.indexFilesDescriptionSpn.innerHTML = settings.indexFilesDescriptionText.format(folders[folders.length - 3]);
                         }                                                          
@@ -138,14 +145,22 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 });
             }
 
+            //rename Statistics file name 
             var RenameFile = function() {
-                var folders = settings.extractionCallback().selectedStatisticsFilePath.normlizePath().split("/");
+                var folders = settings.extractionCallback().selectedStatisticsFilePath.getFolders();
                 var srcFileName = folders[folders.length - 1];
                 srcFileName = srcFileName.substring(0,srcFileName.indexOf("."));
+                srcFileName = settings.dataFileName.format(srcFileName);
                 var destFileName = GetDataFolderName();
+                destFileName = settings.dataFileName.format(destFileName);
                 var dataFolderPath = settings.extractionCallback().dataFolderPath;
-                console.log("rename " + srcFileName + " file to: {0}.csv".format(destFileName));
-                fs.rename("{0}/{1}".format(dataFolderPath,settings.dataFileName.format(srcFileName)) ,"{0}/{1}".format(dataFolderPath,settings.dataFileName.format(destFileName)) , (err) => {
+
+                console.log("rename {0} file to: {1}".format(srcFileName,destFileName));                
+                var srcFilePath = dataFolderPath;
+                srcFilePath += (srcFilePath.indexOf("\\") > -1) ? "\\{0}".format(srcFileName) : "/{0}".format(srcFileName);
+                var destFilePath = dataFolderPath;
+                destFilePath += (destFilePath.indexOf("\\") > -1) ? "\\{0}".format(destFileName) : "/{0}".format(destFileName);
+                fs.rename(srcFilePath,destFilePath, (err) => {
                     if (err) {
                         HandleError(err);
                     }
@@ -156,6 +171,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 }); 
             }
 
+            //Build data references sets
             var GetReferences = function() {
                 var result = "";
                 var foreignKeyVarName = null;
@@ -168,23 +184,26 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 return result;
             }
 
+            //update metadata txt file
             var UpdateFile = function() {
-                var dataFolderPath = settings.extractionCallback().dataFolderPath;
                 var metadataFileName = GetMetaDataFileName();
-                fs.readFile("{0}/{1}".format(dataFolderPath,metadataFileName), (err, data) => {
+                var srcFilePath = settings.extractionCallback().dataFolderPath;
+                srcFilePath += (srcFilePath.indexOf("\\") > -1) ? "\\{0}".format(metadataFileName) : "/{0}".format(metadataFileName);
+                fs.readFile(srcFilePath, (err, data) => {
                     if (err) {
                         HandleError(err);
                     }
                     else {
                         var callback = settings.extractionCallback();
-                        var dataFolderPath = callback.dataFolderPath;
                         var metadataFileName = GetMetaDataFileName();
                         var scriptType = callback.scriptType;
                         var keyVar = (settings.keyVar.value != null && settings.keyVar.value !== "") ? "{0}\r\n".format(settings.keyVar.value) : "";
                         var updatedData = data.toString().format(scriptType,settings.fileName.value,settings.fileDescr.value,keyVar,
                             GetReferences(),
                             settings.contents[0],settings.contents[1],settings.contents[2],settings.contents[3]);
-                        fs.writeFile("{0}/{1}".format(dataFolderPath,metadataFileName), updatedData, (err) => {
+                        var srcFilePath = callback.dataFolderPath;
+                        srcFilePath += (srcFilePath.indexOf("\\") > -1) ? "\\{0}".format(metadataFileName) : "/{0}".format(metadataFileName);
+                        fs.writeFile(srcFilePath, updatedData, (err) => {
                             if (err) {
                                 HandleError(err);
                             }
@@ -196,11 +215,11 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 });
             }
 
+            //copy metadata txt file to data table
             var EnsureFile = function() {
                 var dataFolderPath = settings.extractionCallback().dataFolderPath;
                 var metadataFileName = GetMetaDataFileName();
                 var metadataFilePath = settings.scriptPath.format(settings.metadataTemplateFileName);
-                
                 if(!fs.existsSync(metadataFilePath)) {
                     var rootPath = null;
                     if(os.platform() == "win32") {
@@ -215,19 +234,20 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 }
 
                 console.log(`copy ${settings.metadataTemplateFileName} file to: ${dataFolderPath}`);
-                fs.copyFile(metadataFilePath, "{0}/{1}".format(dataFolderPath,metadataFileName), (err) => {
+                var destFilePath = dataFolderPath;
+                destFilePath += (destFilePath.indexOf("\\") > -1) ? "\\{0}".format(metadataFileName) : "/{0}".format(metadataFileName);
+                fs.copyFile(metadataFilePath,destFilePath, (err) => {
                     if (err) {
                         HandleError(err);
                     }
                     else {
-                        var dataFolderPath = settings.extractionCallback().dataFolderPath;
-                        var metadataFileName = GetMetaDataFileName();
-                        console.log(metadataFileName + ' was copied to '+ dataFolderPath);
+                        console.log("{0} was copied to {1}".format(GetMetaDataFileName(),settings.extractionCallback().dataFolderPath));
                         UpdateFile();
                     }
                 });
             }
 
+            //build metadata file content
             var EnsureData = function() {
                 var dataFolderPath = settings.extractionCallback().dataFolderPath;
                 fs.readdir(dataFolderPath, (err, files) => {
@@ -238,7 +258,8 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                         var dataFolderPath = settings.extractionCallback().dataFolderPath;
                         console.log(`get texts contents: ${dataFolderPath}`);
                         files.forEach(file => {
-                            var filePath = "{0}/{1}".format(dataFolderPath,file);
+                            var filePath = dataFolderPath;
+                            filePath += (filePath.indexOf("\\") > -1) ? "\\{0}".format(file) : "/{0}".format(file);
                             if(file.lastIndexOf("_VARIABEL.txt") > -1) {
                                 settings.contents[0] = fs.readFileSync(filePath).toString();
                             }
@@ -257,6 +278,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 });
             }
 
+            //validation of input fileds with dialog popups
             var ValidateFields = function() {
                 if (settings.fileName.value === "") {
                     ipcRenderer.send('open-error-dialog',settings.fileNameReqTitle.innerHTML,settings.fileNameReqText.innerHTML);
@@ -286,6 +308,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 }
             }
 
+            //implments new data table extraction
             var ResetExtraction = function() {
                 settings.extractionCallback().reset();
                 Reset();
@@ -300,6 +323,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 settings.foreignFileRefVar.value = "";
             }
 
+            //add Event Listener to HTML elmenets
             var AddEvents = function () {
                 settings.nextBtn.addEventListener('click', (event) => {
                     settings.indexFilesTab.click();
@@ -332,6 +356,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 });
             }
 
+            //Model interfaces functions
             Rigsarkiv.Hybris.MetaData = {
                 initialize: function (extractionCallback,metadataFileName,metadataFileNameDescription,metadataKeyVariable,metadataForeignFileName,metadataForeignKeyVariableName,metadataReferenceVariable,metdataOkBtn,inputFileNameRequired,inputNumberFirst,inputIllegalChar,outputOkId,okDataPathId,outputErrorId,outputNewExtractionId,newExtractionBtn,extractionTabId,outputNextId,nextBtn,indexFilesTabId,fileNameLengthId,fileNameReservedWordId,fileDescrReqId,informationPanel1Id,informationPanel2Id,indexFilesDescriptionId,outputCloseApplicationErrorPrefixId,referencesId,addReferenceBtn,referenceReqId) {
                     settings.extractionCallback = extractionCallback;

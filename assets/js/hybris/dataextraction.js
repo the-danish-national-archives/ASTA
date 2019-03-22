@@ -20,6 +20,7 @@ function (n) {
         const chardet = require('chardet');
         const os = require('os');
 
+        //private data memebers
         var settings = {
             structureCallback: null,
             scriptType: null,
@@ -55,21 +56,23 @@ function (n) {
             metdataTab: null, 
             okScriptDataPath: null,   
             scriptPath: "./assets/scripts/{0}",
-            resourceWinPath: "resources/{0}",
+            resourceWinPath: "resources\\{0}",
             scripts: ["spss_script.sps","sas_uden_katalog_script.sas","sas_med_katalog_script.sas","stata_script.do"],
             outputPostfixFiles: ["{0}.csv","{0}_VARIABEL.txt","{0}_VARIABELBESKRIVELSE.txt"],
             outputOptionalPostfixFiles: ["{0}_KODELISTE.txt","{0}_BRUGERKODE.txt"],
             sasCatalogFileExt: "{0}.sas7bcat",
-            dataPathPostfix: "/Data",
-            dataTablePathPostfix: "/table{0}"
+            dataPathPostfix: "Data",
+            dataTablePathPostfix: "table{0}"
         }
 
+        //output system error messages
         var HandleError = function(err) {
             console.log(`Error: ${err}`);
             settings.outputStatisticsErrorSpn.hidden = false;
             settings.outputStatisticsErrorSpn.innerHTML = settings.outputStatisticsErrorText.format(err.message);
         }
 
+        //reset status & input fields
         var Reset = function () {        
             settings.outputStatisticsErrorSpn.hidden = true;
             settings.scriptPanel1.hidden = false;
@@ -78,23 +81,14 @@ function (n) {
             settings.nextBtn.hidden = true;
         }
 
-        var GetLocalFolderPath = function() {
-            var folderPath = settings.structureCallback().selectedPath;
-            if(folderPath.indexOf("\\") > -1) {
-                var folders = settings.dataFolderPath.split("/");
-                return "{0}\\{1}\\{2}\\{3}".format(folderPath,folders[folders.length - 3],folders[folders.length - 2],folders[folders.length - 1]);
-            }
-            else {
-                return settings.dataFolderPath;
-            }
-        } 
-
+        //get selected Statistics File name
         var GetFileName = function() {
-            var filePath = settings.selectedStatisticsFilePath[0].normlizePath();
-            var folders = filePath.split("/");
+            var filePath = settings.selectedStatisticsFilePath[0];
+            var folders = filePath.getFolders();
             return folders[folders.length - 1];
         }
 
+        //get renamed script file
         var GetScriptFileName = function() {
             var fileName = GetFileName();
             var fileNameNoExt = fileName.substring(0,fileName.indexOf("."));
@@ -102,28 +96,34 @@ function (n) {
             return "{0}.{1}".format(fileNameNoExt,scriptExt);        
         }
 
+        //Copy Statistics file to data table folder
         var CopyData = function(fileName) {
-            var filePath = settings.selectedStatisticsFilePath[0].normlizePath();
-            var folderPath = filePath.substring(0,filePath.lastIndexOf("/"));
-            console.log("copy file " + fileName + " to  " + folderPath);        
-            fs.copyFile( "{0}/{1}".format(folderPath,fileName), "{0}/{1}".format(settings.dataFolderPath,fileName), (err) => {
+            var filePath = settings.selectedStatisticsFilePath[0];
+            var folderPath = filePath.substring(0,filePath.lastIndexOf((filePath.indexOf("\\") > -1) ? "\\" : "/"));
+            
+            console.log("copy file " + fileName + " to  " + folderPath);  
+            var srcFilePath = (folderPath.indexOf("\\") > -1) ? "{0}\\{1}".format(folderPath,fileName) : "{0}/{1}".format(folderPath,fileName);   
+            var destFilePath = (settings.dataFolderPath.indexOf("\\") > -1) ? "{0}\\{1}".format(settings.dataFolderPath,fileName) : "{0}/{1}".format(settings.dataFolderPath,fileName);
+            fs.copyFile(srcFilePath , destFilePath, (err) => {
                 if (err) {
                     HandleError(err);
                 }
             });
         }
 
+        //Update script file with new dtat table path & file name
         var UpdateScript = function() {
-            var scriptFileName = GetScriptFileName();
-            fs.readFile(settings.dataFolderPath + "/" + scriptFileName, (err, data) => {
+            var srcFilePath = settings.dataFolderPath;
+            srcFilePath += (srcFilePath.indexOf("\\") > -1) ? "\\{0}".format(GetScriptFileName()) : "/{0}".format(GetScriptFileName());
+            fs.readFile(srcFilePath, (err, data) => {
                 if (err) {
                     HandleError(err);
                 }
                 else {
-                    var scriptFileName = GetScriptFileName();
-                    var filePath = settings.dataFolderPath + "/" + scriptFileName;
+                     var filePath = settings.dataFolderPath;
+                    filePath += (filePath.indexOf("\\") > -1) ? "\\{0}".format(GetScriptFileName()) : "/{0}".format(GetScriptFileName());
                     var fileName = GetFileName();  
-                    var folderPath = GetLocalFolderPath();
+                    var folderPath = settings.dataFolderPath;
                     if(fileName.substring(fileName.indexOf(".") + 1) === "sas7bdat") 
                     { 
                         folderPath = (folderPath.indexOf("\\") > -1) ? "{0}\\".format(folderPath) : "{0}/".format(folderPath);
@@ -137,7 +137,7 @@ function (n) {
                             var scriptFileName = GetScriptFileName();
                             settings.outputStatisticsOkCopyScriptSpn.innerHTML = settings.outputStatisticsOkCopyScriptText.format(settings.scriptType,scriptFileName,GetFileName());
                             settings.outputStatisticsOkCopyScriptInfoSpn.innerHTML = settings.outputStatisticsOkCopyScriptInfoText.format(scriptFileName, settings.scriptApplication);
-                            settings.okScriptDataPath.innerHTML = GetLocalFolderPath();
+                            settings.okScriptDataPath.innerHTML = settings.dataFolderPath;
                             settings.scriptPanel1.hidden = true;
                             settings.scriptPanel2.hidden = false;
                         }
@@ -146,6 +146,7 @@ function (n) {
             });
         }
 
+        //copy related script file to data table folder 
         var CopyScript = function() { 
             var scriptFileName = GetScriptFileName();
             var scriptFilePath = settings.scriptPath.format(settings.scriptFileName);
@@ -159,10 +160,12 @@ function (n) {
                     var folders =  __dirname.split("/");
                     rootPath = folders.slice(0,folders.length - 3).join("/");
                     scriptFilePath = "{0}/{1}".format(rootPath,settings.scriptFileName);
-            }
+                }
             }        
             console.log(`copy script file ${settings.scriptFileName} to ${settings.dataFolderPath}`);
-            fs.copyFile(scriptFilePath, settings.dataFolderPath + "/" + scriptFileName, (err) => {
+            var destFilePath = settings.dataFolderPath;
+            destFilePath += (destFilePath.indexOf("\\") > -1) ? "\\{0}".format(scriptFileName) : "/{0}".format(scriptFileName);
+            fs.copyFile(scriptFilePath, destFilePath, (err) => {
                 if (err) {
                 HandleError(err);
                 }
@@ -174,10 +177,10 @@ function (n) {
             });       
         }   
         
+        //copy script file related to selected Statistics file
         var EnsureScript = function() {
-            var filePath = settings.selectedStatisticsFilePath[0].normlizePath();
-            var folderPath = filePath.substring(0,filePath.lastIndexOf("/"));
-            if(folderPath === "") { folderPath = "/"; }
+            var filePath = settings.selectedStatisticsFilePath[0];
+            var folderPath = filePath.substring(0,filePath.lastIndexOf((filePath.indexOf("\\") > -1) ? "\\" : "/"));
             fs.readdir(folderPath, (err, files) => {
                 if (err) {
                     HandleError(err);
@@ -218,6 +221,7 @@ function (n) {
             });
         }
 
+        //delte current data table folder & reset inputs
         var ResetData = function() {
             settings.pathStatisticsFileTxt.value = "";
             fs.rmdir(settings.dataFolderPath, (err) => {
@@ -235,11 +239,10 @@ function (n) {
             });            
         }
 
+        //create data tables folder structures
         var EnsureData = function() {
-            var structureFolderPath = settings.structureCallback().deliveryPackagePath;
-            if(structureFolderPath == null) { return; }
-            settings.dataFolderPath =  structureFolderPath + settings.dataPathPostfix;
-                    
+            settings.dataFolderPath = settings.structureCallback().deliveryPackagePath;
+            settings.dataFolderPath += (settings.dataFolderPath.indexOf("\\") > -1) ? "\\{0}".format(settings.dataPathPostfix) : "/{0}".format(settings.dataPathPostfix);
             fs.readdir(settings.dataFolderPath, (err, files) => {
                 if (err) {
                     settings.dataFolderPath = null;
@@ -254,7 +257,8 @@ function (n) {
                         }
                     });
                     tablecounter = tablecounter + 1;
-                    settings.dataFolderPath += settings.dataTablePathPostfix.format(tablecounter);
+                    var dataTableName = settings.dataTablePathPostfix.format(tablecounter);
+                    settings.dataFolderPath += (settings.dataFolderPath.indexOf("\\") > -1) ? "\\{0}".format(dataTableName) : "/{0}".format(dataTableName);
                     fs.mkdir(settings.dataFolderPath, { recursive: true }, (err) => {
                         if (err) {
                             settings.dataFolderPath = null;
@@ -269,11 +273,14 @@ function (n) {
             });
         }
 
+        //validate file encoding
         var ValidateFile = function(fileName) {
-            var charsetMatch = chardet.detectFileSync("{0}/{1}".format(settings.dataFolderPath,fileName));
+            var filePath = settings.dataFolderPath;
+            filePath += (settings.dataFolderPath.indexOf("\\") > -1) ? "\\{0}".format(fileName) : "/{0}".format(fileName);
+            var charsetMatch = chardet.detectFileSync(filePath);
             console.log("File {0} encode: {1}".format(fileName,charsetMatch));
             if(charsetMatch !== "UTF-8") {
-                var localPath = GetLocalFolderPath();
+                var localPath = settings.dataFolderPath;
                 localPath += (localPath.indexOf("\\") > -1) ? "\\{0}".format(fileName) : "/{0}".format(fileName);
                 ipcRenderer.send('open-error-dialog',settings.outputScriptEncodingFileErrorTitle.innerHTML,settings.outputScriptEncodingFileErrorText.innerHTML.format(localPath));
                 return false;
@@ -281,6 +288,7 @@ function (n) {
             return true;
         }
 
+        //Ensure output files of statistic program
         var EnsureExport = function() {
             settings.outputScriptOkSpn.hidden = true;
             fs.readdir(settings.dataFolderPath, (err, files) => {
@@ -320,9 +328,10 @@ function (n) {
             });
         }
 
+        //add Event Listener to HTML elmenets
         var AddEvents = function () {
             settings.okScriptDataPath.addEventListener('click', (event) => {
-                shell.openItem(GetLocalFolderPath());
+                shell.openItem(settings.dataFolderPath);
             })
             settings.okScriptBtn.addEventListener('click', (event) => {
                 EnsureExport();
@@ -355,6 +364,8 @@ function (n) {
                 if(index === 1) { ResetData(); }            
             })
         }
+
+        //Model interfaces functions
         Rigsarkiv.Hybris.DataExtraction = {        
             initialize: function (structureCallback,selectStatisticsFileId,pathStatisticsFileId,okStatisticsId,outputStatisticsErrorId,outputStatisticsOkCopyScriptId,outputStatisticsSASWarningPrefixId,scriptPanel1Id,scriptPanel2Id,okScriptBtnId,okScriptDataPathId,outputStatisticsOkCopyScriptInfoId,outputStatisticsRequiredPathId,outputScriptRequiredFilesWarningPrefixId,outputScriptOkId,outputScriptEncodingFileErrorPrefixId,nextId,metdataTabId,outputScriptCloseApplicationWarningPrefixId) {
                 settings.structureCallback = structureCallback;
@@ -393,7 +404,7 @@ function (n) {
                     dataFolderPath: settings.dataFolderPath, 
                     selectedStatisticsFilePath: settings.selectedStatisticsFilePath[0], 
                     scriptType: settings.scriptType, 
-                    localFolderPath: GetLocalFolderPath(), 
+                    localFolderPath: settings.dataFolderPath, 
                     reset: function() 
                     { 
                         settings.pathStatisticsFileTxt.value = "";

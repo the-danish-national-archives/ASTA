@@ -11,6 +11,7 @@ function (n) {
         const {shell} = require('electron');
         const fs = require('fs');
 
+        //private data memebers
         var settings = { 
             metadataCallback: null,
             selectArchiveIndexFileBtn: null,
@@ -24,54 +25,51 @@ function (n) {
             outputErrorText: null,
             outputRequiredPathTitle: null,
             outputRequiredPathText: null,
-            IndecesPostfixPath: "{0}/Indices",
+            IndecesPostfix: "Indices",
             IndecesPath: null,
             outputOkSpn: null,
             outputOkText: null,
             selectDeliveryPackage: null
         }
 
+        //output system error messages
         var HandleError = function(err) {
             console.log(`Error: ${err}`);
             settings.outputErrorSpn.hidden = false;
             settings.outputErrorSpn.innerHTML = settings.outputErrorText.format(err.message);            
         }
 
+        //reset status & input fields
         var Reset = function () {
             settings.outputErrorSpn.hidden = true;
             settings.outputOkSpn.hidden = true;
             settings.selectDeliveryPackage.hidden = true;
         }
 
+        //get selcted file name
         var GetFileName = function(selectedPath) {
-            var filePath = selectedPath[0].normlizePath();
-            var folders = filePath.split("/");
+            var filePath = selectedPath[0];
+            var folders = filePath.getFolders();
             return folders[folders.length - 1];
         }
 
-        var GetLocalFolderPath = function() {
-            var folderPath = settings.structureCallback().selectedPath;
-            if(folderPath.indexOf("\\") > -1) {
-                var folders = settings.IndecesPath.split("/");
-                return "{0}\\{1}\\{2}".format(folderPath,folders[folders.length - 2],folders[folders.length - 1]);
-            }
-            else {
-                return settings.IndecesPath;
-            }
-        }
-
+        //upload Indeces files 
         var EnsureFiles= function () {
-            var structureFolderPath = settings.structureCallback().deliveryPackagePath;
-            settings.IndecesPath = settings.IndecesPostfixPath.format(structureFolderPath);
+            settings.IndecesPath = settings.structureCallback().deliveryPackagePath;
+            settings.IndecesPath += (settings.IndecesPath.indexOf("\\") > -1) ? "\\{0}".format(settings.IndecesPostfix) : "/{0}".format(settings.IndecesPostfix);
             var fileName = GetFileName(settings.selectedArchiveIndexFilePath);
             console.log("copy file " + fileName + " to  " + settings.IndecesPath);
-            fs.copyFile(settings.selectedArchiveIndexFilePath[0], "{0}/{1}".format(settings.IndecesPath,fileName), (err) => {
+            var destFilePath = settings.IndecesPath;
+            destFilePath += (destFilePath.indexOf("\\") > -1) ? "\\{0}".format(fileName) : "/{0}".format(fileName);
+            fs.copyFile(settings.selectedArchiveIndexFilePath[0],destFilePath, (err) => {
                 if (err) {
                     HandleError(err);
                 }
                 else {                   
                     var fileName = GetFileName(settings.selectedContextDocumentationIndexFilePath);
                     console.log("copy file " + fileName + " to  " + settings.IndecesPath);
+                    var destFilePath = settings.IndecesPath;
+                    destFilePath += (destFilePath.indexOf("\\") > -1) ? "\\{0}".format(fileName) : "/{0}".format(fileName);
                     fs.copyFile(settings.selectedContextDocumentationIndexFilePath[0], "{0}/{1}".format(settings.IndecesPath,fileName), (err) => {
                         if (err) {
                             HandleError(err);
@@ -82,13 +80,14 @@ function (n) {
                             var selectedArchiveIndexFileName = GetFileName(settings.selectedArchiveIndexFilePath);
                             var selectedContextDocumentationIndexFileName = GetFileName(settings.selectedContextDocumentationIndexFilePath);
                             settings.outputOkSpn.innerHTML =  settings.outputOkText.format(selectedArchiveIndexFileName,selectedContextDocumentationIndexFileName);
-                            settings.selectDeliveryPackage.innerHTML = "[{0}]".format(GetLocalFolderPath());
+                            settings.selectDeliveryPackage.innerHTML = "[{0}]".format(settings.IndecesPath);
                         }
                     });
                 }
             });
         }
 
+        //add Event Listener to HTML elmenets
         var AddEvents = function () {
             settings.selectArchiveIndexFileBtn.addEventListener('click', (event) => {
                 ipcRenderer.send('indexfiles-open-archiveindex-file-dialog');
@@ -116,10 +115,11 @@ function (n) {
                 }
             })
             settings.selectDeliveryPackage.addEventListener('click', (event) => {
-                shell.openItem(GetLocalFolderPath());
+                shell.openItem(settings.IndecesPath);
             }) 
         }
 
+        //Model interfaces functions
         Rigsarkiv.Hybris.IndexFiles = {
             initialize: function (structureCallback,selectArchiveIndexFileId,pathSArchiveIndexFileId,selectContextDocumentationIndexFileId,pathContextDocumentationIndexFileId,indexFilesOkBtn,outputErrorId,outputRequiredPathId,outputOkId,selectDeliveryPackageId) {
                 settings.structureCallback = structureCallback;

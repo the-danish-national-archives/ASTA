@@ -12,16 +12,14 @@ if (!String.prototype.format) {
       });
     };
   }
-  
-  if (!String.prototype.normlizePath) {
-    String.prototype.normlizePath = function() {
+
+  if (!String.prototype.getFolders) {
+    String.prototype.getFolders = function() {
       if(this.indexOf("\\") > -1) {
-        var folders = this.split("\\");
-        folders = folders.slice(1,folders.length);        
-        return "/{0}".format(folders.join("/"));
+        return this.split("\\");
       }
       else {
-        return this.toString();
+        return this.toString().split("/");;
       }
     }
   }
