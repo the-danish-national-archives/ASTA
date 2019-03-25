@@ -29,9 +29,12 @@
                             </div>
                             <div class="verticalDivider"> </div>
                             <div class="nemesisOutput">
-                                <span id="nemesis-processing-CheckId-Error" hidden="true"><i class="fas fa-times error"></i>Den valgte afleveringspakke er ikke navngivet korrekt.</span>
-                                <span id="nemesis-processing-CheckId-Warning" hidden="true"><i class="fas fa-exclamation-triangle warning"></i>Test id advarsel</span>
-                                <span id="nemesis-processing-CheckId-Ok" hidden="true"><i class="fas fa-check-circle ok"></i>Mappestruktur ID test gennemført</span>
+                                <span id="nemesis-processing-CheckId-Error" hidden="true"><i class="fas fa-times error"></i>Den valgte afleveringspakke er ikke navngivet korrekt.<br/></span>
+                                <span id="nemesis-processing-CheckId-Warning" hidden="true"><i class="fas fa-exclamation-triangle warning"></i>Test id advarsel<br/></span>
+                                <span id="nemesis-processing-CheckId-Ok" hidden="true"><i class="fas fa-check-circle ok"></i>Mappestruktur ID test gennemført<br/></span>
+                                <span id="nemesis-processing-CheckFolders-Error" hidden="true"><i class="fas fa-times error"></i>Der findes ikke en {0} mappe i afleveringspakken.<br/></span>
+                                <span id="nemesis-processing-CheckFoldersCount-Error" hidden="true"><i class="fas fa-times error"></i>Afleveringspakken indeholder en mappe som er navngivet forkert. [{0}]<br/></span>
+                                <span id="nemesis-processing-CheckFolders-Ok" hidden="true"><i class="fas fa-check-circle ok"></i>Mappestruktur mapper findes gennemført<br/></span>
                                 <br/>
                             </div>
                         </div>
@@ -47,7 +50,7 @@
             require('./assets/js/nemesis/structure');
 
             Rigsarkiv.Log.initialize("nemesis-output-structure-Error","nemesis-output-structure-Ok","nemesis-structure-select-logFile","nemesis-output-structure-Supplement");
-            Rigsarkiv.Nemesis.Structure.initialize(Rigsarkiv.Log.callback,"nemesis-select-structure-directory","nemesis-structure-path","nemesis-structure-validateBtn","nemesis-output-structure-logStart","nemesis-output-structure-logEndNoError","nemesis-output-structure-logEndWithError","nemesis-processing");           
+            Rigsarkiv.Nemesis.Structure.initialize(Rigsarkiv.Log.callback,"nemesis-output-structure-Error","nemesis-select-structure-directory","nemesis-structure-path","nemesis-structure-validateBtn","nemesis-output-structure-logStart","nemesis-output-structure-logEndNoError","nemesis-output-structure-logEndWithError","nemesis-processing");           
           </script>
     </section>
 </template>
