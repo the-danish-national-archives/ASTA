@@ -23,6 +23,7 @@ function (n) {
             logEndWithErrorSpn:null,
             outputText: {},
             defaultSubFolders: ["ContextDocumentation","Data","Indices"],
+            defaultIndicesFiles: ["archiveIndex.xml","contextDocumentationIndex.xml"],
             defaultFolder: "FD.99999",
             logType: "structure"
         }
@@ -46,6 +47,53 @@ function (n) {
         var GetFolderName = function() {
             var folders = settings.selectedPath[0].getFolders();
             return folders[folders.length - 1];
+        }
+
+        var ValidateIndices = function () {
+            var destPath = settings.selectedPath[0];
+            destPath += (destPath.indexOf("\\") > -1) ? "\\{0}".format(settings.defaultSubFolders[2]) : "/{0}".format(settings.defaultSubFolders[2]); 
+            fs.readdir(destPath, (err, files) => {
+                if (err) {
+                    HandleError(err);
+                }
+                else {
+                    var subFiles = [];
+                    files.forEach(file => {
+                        console.log(`Find Indices file: ${file}`); 
+                        subFiles.push(file);
+                    });
+                    var result = true;
+                    var folderName = GetFolderName();
+                    var element = $("span#" + settings.outputPrefix + "-CheckFolderIndices-Error");
+                    settings.defaultIndicesFiles.forEach(file => {
+                        if(!subFiles.includes(file) && result) {                            
+                            element.show();
+                            settings.logCallback().error(settings.logType,folderName,element.text().format(file));
+                            element.html(element.html().format(file));
+                            result = false;
+                        }
+                    });
+                    if(result && subFiles.length > 2) {
+                        element = $("span#" + settings.outputPrefix + "-CheckFolderIndicesCount-Error");
+                        subFiles.forEach(file => {
+                            if(result && file !== settings.defaultIndicesFiles[0] && file !== settings.defaultIndicesFiles[1]) {
+                                element.show();
+                                settings.logCallback().error(settings.logType,folderName,element.text().format(file));
+                                element.html(element.html().format(file));
+                                result = false;
+                            }
+                        });
+                    }
+                    if(!result) {
+                        CommitLog(true);
+                    }
+                    else {
+                        element = $("span#" + settings.outputPrefix + "-CheckFolderIndices-Ok");
+                        element.show(); 
+                        settings.logCallback().info(settings.logType,folderName,element.text());
+                    }
+                }
+            });
         }
 
         var ValidateStructure = function () {
@@ -88,6 +136,7 @@ function (n) {
                         element = $("span#" + settings.outputPrefix + "-CheckFolders-Ok");
                         element.show(); 
                         settings.logCallback().info(settings.logType,folderName,element.text());
+                        ValidateIndices();
                     }
                 }
             });
