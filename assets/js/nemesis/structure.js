@@ -40,19 +40,19 @@ function (n) {
             if(!pattern.test(folderName)) {
                 element = $("span#" + settings.outputPrefix + "-CheckId-Error");            
                 element.show();
-                settings.logCallback().error(settings.logType,folderName,element.text().format(folderName));
+                settings.logCallback().error(settings.logType,folderName,element.text());
                 result = false;
             }
             else {
                 if(folderName === settings.defaultFolder) {
                     element = $("span#" + settings.outputPrefix + "-CheckId-Warning");
                     element.show();
-                    settings.logCallback().warn(settings.logType,folderName,element.text().format(folderName));
+                    settings.logCallback().warn(settings.logType,folderName,element.text());
                 }
                 else {
                     element = $("span#" + settings.outputPrefix + "-CheckId-Ok");
                     element.show();
-                    settings.logCallback().info(settings.logType,folderName,element.text().format(folderName));
+                    settings.logCallback().info(settings.logType,folderName,element.text());
                 }            
             }
             element.html(element.html().format(folderName));
