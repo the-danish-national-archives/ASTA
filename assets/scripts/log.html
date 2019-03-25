@@ -13,20 +13,25 @@
             color: #49897f;
         }
 
+        h3 {
+            color: #49897f;
+        }
+
         .header {
             background-color: rgb(26, 24, 24);
-            height: 186px;
+            height: 200px;
         }
 
         .title {
-            padding: 35px 0px 0px 20px;
+            padding-top: 35px;
+            padding-left: 2.5%;
             margin-top: 0px;
             margin-bottom: 0px;
         }
 
         .runDate {
             color: white;
-            padding: 0px 0px 10px 20px;
+            padding-left: 2.5%;
         }
 
         label {
@@ -50,6 +55,17 @@
             margin-left: 6px;
             margin-right: 5px;
         }
+
+        .divider {
+            background-color: #202a1a;
+            width: 95%;
+            height: 2px;
+            align-self: center;
+        }
+
+        .filters {
+            padding-left: 2.5%;
+        }
     </style>
 </head>
 
@@ -57,9 +73,13 @@
     <div class="header">
         <h1 class="title">Nemesis Test Log</h1>
         <p class="runDate">Dato for testkørsel: {0}</p>
-        <label for="checkErr">Errors:</label><input type="checkbox" name="error" id="checkErr" checked="true">
-        <label for="checkWarn">Warning</label><input type="checkbox" name="warning" id="checkWarn">
-        <label for="checkInfo">Info</label><input type="checkbox" name="info" id="checkInfo">
+        <hr class="divider">
+        <div class="filters">
+            <span style="color:white;">Filter:</span><br>
+            <label for="checkErr">Errors:</label><input type="checkbox" name="error" id="checkErr" checked="true">
+            <label for="checkWarn">Warning</label><input type="checkbox" name="warning" id="checkWarn">
+            <label for="checkInfo">Info</label><input type="checkbox" name="info" id="checkInfo">
+        </div>
     </div>
     <p>Test af afleveringspakke ID: {1}</p>
     <p>Test startet</p>
