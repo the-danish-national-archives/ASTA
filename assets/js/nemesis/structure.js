@@ -36,7 +36,7 @@ function (n) {
             
             var result = true;
             var element = null;
-            settings.logCallback().info(settings.logType,folderName,settings.logStartSpn.innerHTML);
+            settings.logCallback().section(settings.logType,folderName,settings.logStartSpn.innerHTML);
             if(!pattern.test(folderName)) {
                 element = $("span#" + settings.outputPrefix + "-CheckId-Error");            
                 element.show();
@@ -57,9 +57,9 @@ function (n) {
             }
             element.html(element.html().format(folderName));
             if(result) {
-                settings.logCallback().info(settings.logType,folderName,settings.logEndNoErrorSpn.innerHTML);
+                settings.logCallback().section(settings.logType,folderName,settings.logEndNoErrorSpn.innerHTML);
             } else {
-                settings.logCallback().info(settings.logType,folderName,settings.logEndWithErrorSpn.innerHTML);
+                settings.logCallback().section(settings.logType,folderName,settings.logEndWithErrorSpn.innerHTML);
             }
             settings.logCallback().commit(settings.selectedPath[0]);            
             return result;

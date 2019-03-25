@@ -27,7 +27,8 @@ function (n) {
         filePostfix: "{0}_log.html",
         errorElement: "<span id=\"{0}_{1}\" name=\"{2}\" class=\"error\">{3}<br/></span>",
         warnElement: "<span id=\"{0}_{1}\" name=\"{2}\" class=\"warning\" hidden=\"true\">{3}<br/></span>",
-        infoElement: "<span id=\"{0}_{1}\" name=\"{2}\" class=\"ok\" hidden=\"true\">{3}<br/></span>"
+        infoElement: "<span id=\"{0}_{1}\" name=\"{2}\" class=\"ok\" hidden=\"true\">{3}<br/></span>",
+        sectionElement: "<span id=\"{0}_{1}\" name=\"{2}\" class=\"section\">{3}<br/></span>"
     }
 
     //reset status & input fields
@@ -162,6 +163,12 @@ function (n) {
                     if(settings.logsDate == null) { settings.logsDate = new Date(); }
                     console.log(`info ${text}`);
                     settings.logs.push(settings.infoElement.format(logType,(new Date()).getFromFormat("yyyyMMddhhmmss"),folderName,text));
+                },
+                section: function(logType,folderName,text) 
+                { 
+                    if(settings.logsDate == null) { settings.logsDate = new Date(); }
+                    console.log(`info ${text}`);
+                    settings.logs.push(settings.sectionElement.format(logType,(new Date()).getFromFormat("yyyyMMddhhmmss"),folderName,text));
                 },
                 commit: function(selectedFolderPath)
                 {
