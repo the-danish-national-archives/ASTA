@@ -20,6 +20,7 @@
         .header {
             background-color: rgb(26, 24, 24);
             height: 200px;
+            border-radius: 10px;
         }
 
         .title {
@@ -66,6 +67,15 @@
         .filters {
             padding-left: 2.5%;
         }
+
+        .content {
+            padding: 0% 2.5%;
+        }
+
+        .results {
+            padding: 0% 2.5%;
+            border: 1px solid black;
+        }
     </style>
 </head>
 
@@ -76,18 +86,35 @@
         <hr class="divider">
         <div class="filters">
             <span style="color:white;">Filter:</span><br>
-            <label for="checkErr">Errors:</label><input type="checkbox" name="error" id="checkErr" checked="true">
+            <label for="checkErr">Errors:</label><input type="checkbox" name="error" id="checkErr" checked="true" onchange="stateChanged(this)">
             <label for="checkWarn">Warning</label><input type="checkbox" name="warning" id="checkWarn">
             <label for="checkInfo">Info</label><input type="checkbox" name="info" id="checkInfo">
         </div>
     </div>
-    <p>Test af afleveringspakke ID: {1}</p>
-    <p>Test startet</p>
-    <div style="background-color: red">
-        Test content
-        {2}
+    <div class="content">
+        <h3>Test af afleveringspakke ID: {1}</h3>
+        <p>Test startet</p>
+        <div class="results" style="background-color: goldenrod">
+            Test content
+            <span id="h2" name="hehe" class="error">{3}<br/>some text</span>
+            {2}
+        </div>
+        <p>Test afsluttet med {3} antal fejl</p>
     </div>
-    <p>Test afsluttet med {3} antal fejl</p>
 </body>
+<script>
+    var elements = document.getElementsByClassName("error");
+    console.log(elements.length);
 
+    function stateChanged(checkBoxEl){
+        if(checkBoxEl.checked) {
+            console.log('element visible');
+            elements[0].style.visibility = 'visible';
+
+        } else {
+            console.log('element hidden');
+            elements[0].style.visibility = 'hidden';
+        }
+    }
+</script>
 </html>
