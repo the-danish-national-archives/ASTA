@@ -1,9 +1,9 @@
 node_modules
 
-#Ignore exe files
+#Ignore specific files
 #*.exe
+#*.zip
 
+#Ignore specific folders
 /release-builds/file-converter-app-win32-ia32
 /release-builds/file-converter-app-darwin-x64
-
-*.zip

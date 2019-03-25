@@ -26,8 +26,8 @@ function (n) {
         resourceWinPath: "resources\\{0}",
         filePostfix: "{0}_log.html",
         errorElement: "<span id=\"{0}_{1}\" name=\"{2}\" class=\"error\">{3}<br/></span>",
-        warnElement: "<span id=\"{0}_{1}\" name=\"{2}\" class=\"warning\">{3}<br/></span>",
-        infoElement: "<span id=\"{0}_{1}\" name=\"{2}\" class=\"ok\">{3}<br/></span>" 
+        warnElement: "<span id=\"{0}_{1}\" name=\"{2}\" class=\"warning\" hidden=\"true\">{3}<br/></span>",
+        infoElement: "<span id=\"{0}_{1}\" name=\"{2}\" class=\"ok\" hidden=\"true\">{3}<br/></span>"
     }
 
     //reset status & input fields
