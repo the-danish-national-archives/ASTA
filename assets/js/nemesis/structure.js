@@ -36,30 +36,30 @@ function (n) {
             
             var result = true;
             var element = null;
-            settings.logCallback().info(settings.logType,folderName,settings.logStartSpn.innerHTML);
+            settings.logCallback().section(settings.logType,folderName,settings.logStartSpn.innerHTML);
             if(!pattern.test(folderName)) {
                 element = $("span#" + settings.outputPrefix + "-CheckId-Error");            
                 element.show();
-                settings.logCallback().error(settings.logType,folderName,element.text().format(folderName));
+                settings.logCallback().error(settings.logType,folderName,element.text());
                 result = false;
             }
             else {
                 if(folderName === settings.defaultFolder) {
                     element = $("span#" + settings.outputPrefix + "-CheckId-Warning");
                     element.show();
-                    settings.logCallback().warn(settings.logType,folderName,element.text().format(folderName));
+                    settings.logCallback().warn(settings.logType,folderName,element.text());
                 }
                 else {
                     element = $("span#" + settings.outputPrefix + "-CheckId-Ok");
                     element.show();
-                    settings.logCallback().info(settings.logType,folderName,element.text().format(folderName));
+                    settings.logCallback().info(settings.logType,folderName,element.text());
                 }            
             }
             element.html(element.html().format(folderName));
             if(result) {
-                settings.logCallback().info(settings.logType,folderName,settings.logEndNoErrorSpn.innerHTML);
+                settings.logCallback().section(settings.logType,folderName,settings.logEndNoErrorSpn.innerHTML);
             } else {
-                settings.logCallback().info(settings.logType,folderName,settings.logEndWithErrorSpn.innerHTML);
+                settings.logCallback().section(settings.logType,folderName,settings.logEndWithErrorSpn.innerHTML);
             }
             settings.logCallback().commit(settings.selectedPath[0]);            
             return result;
