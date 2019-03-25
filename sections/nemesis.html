@@ -23,6 +23,9 @@
                                 <span id="nemesis-output-structure-Ok" hidden="true"><br /><strong>Bekræftelse!</strong> Log fil [{0}] er nu skabt og placeret i mappen [</span>
                                 <a id="nemesis-structure-select-logFile" hidden="true"></a>
                                 <span id="nemesis-output-structure-Supplement" hidden="true">]</span>
+                                <span id="nemesis-output-structure-logStart" hidden="true">Mappestruktur test startet<br/></span>
+                                <span id="nemesis-output-structure-logEndNoError" hidden="true"><br/>Metadatafilstruktur test afsluttet uden fejl</span>
+                                <span id="nemesis-output-structure-logEndWithError" hidden="true"><br/>Metadatafilstruktur test afsluttet</span>
                             </div>
                             <div class="verticalDivider"> </div>
                             <div class="nemesisOutput">
@@ -44,7 +47,7 @@
             require('./assets/js/nemesis/structure');
 
             Rigsarkiv.Log.initialize("nemesis-output-structure-Error","nemesis-output-structure-Ok","nemesis-structure-select-logFile","nemesis-output-structure-Supplement");
-            Rigsarkiv.Nemesis.Structure.initialize(Rigsarkiv.Log.callback,"nemesis-select-structure-directory","nemesis-structure-path","nemesis-structure-validateBtn","nemesis-processing");           
+            Rigsarkiv.Nemesis.Structure.initialize(Rigsarkiv.Log.callback,"nemesis-select-structure-directory","nemesis-structure-path","nemesis-structure-validateBtn","nemesis-output-structure-logStart","nemesis-output-structure-logEndNoError","nemesis-output-structure-logEndWithError","nemesis-processing");           
           </script>
     </section>
 </template>

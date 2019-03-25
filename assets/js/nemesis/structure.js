@@ -17,7 +17,11 @@ function (n) {
             validateBtn: null,
             outputPrefix: null,
             logCallback: null,
-            defaultFolder: "FD.99999"
+            logStartSpn: null,
+            logEndNoErrorSpn: null,
+            logEndWithErrorSpn:null,
+            defaultFolder: "FD.99999",
+            logType: "structure"
         }
 
         //reset status & input fields
@@ -25,31 +29,38 @@ function (n) {
             $("span[id^='" + settings.outputPrefix + "']").hide();
         }
 
+        //validate folder structure
         var ValidateStructure = function (folderName) {
             var ex = document.getElementById("nemesis-output-structure-Error");
             ex.innerHTML = "<br />Error: {0}".format(settings.selectedPath[0]);
             
             var result = true;
             var element = null;
+            settings.logCallback().info(settings.logType,folderName,settings.logStartSpn.innerHTML);
             if(!pattern.test(folderName)) {
                 element = $("span#" + settings.outputPrefix + "-CheckId-Error");            
                 element.show();
-                settings.logCallback().error(folderName,element.text().format(folderName));
+                settings.logCallback().error(settings.logType,folderName,element.text().format(folderName));
                 result = false;
             }
             else {
                 if(folderName === settings.defaultFolder) {
                     element = $("span#" + settings.outputPrefix + "-CheckId-Warning");
                     element.show();
-                    settings.logCallback().warn(folderName,element.text().format(folderName));
+                    settings.logCallback().warn(settings.logType,folderName,element.text().format(folderName));
                 }
                 else {
                     element = $("span#" + settings.outputPrefix + "-CheckId-Ok");
                     element.show();
-                    settings.logCallback().info(folderName,element.text().format(folderName));
+                    settings.logCallback().info(settings.logType,folderName,element.text().format(folderName));
                 }            
             }
             element.html(element.html().format(folderName));
+            if(result) {
+                settings.logCallback().info(settings.logType,folderName,settings.logEndNoErrorSpn.innerHTML);
+            } else {
+                settings.logCallback().info(settings.logType,folderName,settings.logEndWithErrorSpn.innerHTML);
+            }
             settings.logCallback().commit(settings.selectedPath[0]);            
             return result;
         }
@@ -70,19 +81,19 @@ function (n) {
                 settings.selectedPath = path; 
                 console.log(`selected path: ${path}`); 
                 settings.pathDirTxt.value = settings.selectedPath;
-                var folders = settings.selectedPath[0].getFolders();
-                var folderName = folders[folders.length - 1];
-                settings.logCallback().info(folderName,"selected path: {0}".format(settings.selectedPath[0]));
             })            
         }
 
         //Model interfaces functions
         Rigsarkiv.Nemesis.Structure = {        
-            initialize: function (logCallback,selectDirectoryId,pathDirectoryId,validateId,outputPrefix) {            
+            initialize: function (logCallback,selectDirectoryId,pathDirectoryId,validateId,logStartId,logEndNoErrorId,logEndWithErrorId,outputPrefix) {            
                 settings.logCallback = logCallback;
-                settings.selectDirBtn =  document.getElementById(selectDirectoryId);
-                settings.pathDirTxt =  document.getElementById(pathDirectoryId);
-                settings.validateBtn =  document.getElementById(validateId);
+                settings.selectDirBtn = document.getElementById(selectDirectoryId);
+                settings.pathDirTxt = document.getElementById(pathDirectoryId);
+                settings.validateBtn = document.getElementById(validateId);
+                settings.logStartSpn = document.getElementById(logStartId);
+                settings.logEndNoErrorSpn = document.getElementById(logEndNoErrorId);  
+                settings.logEndWithErrorSpn = document.getElementById(logEndWithErrorId);
                 settings.outputPrefix = outputPrefix;
                 AddEvents();
             }

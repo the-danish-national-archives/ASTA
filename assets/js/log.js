@@ -25,9 +25,9 @@ function (n) {
         scriptPath: "./assets/scripts/{0}",
         resourceWinPath: "resources\\{0}",
         filePostfix: "{0}_log.html",
-        errorElement: "<span id=\"{0}\" name=\"{1}\" class=\"error\">{1}: {2}</span><br/>",
-        warnElement: "<span id=\"{0}\" name=\"{1}\" class=\"warning\">{1}: {2}</span><br/>",
-        infoElement: "<span id=\"{0}\" name=\"{1}\" class=\"ok\">{1}: {2}</span><br/>" 
+        errorElement: "<span id=\"{0}_{1}\" name=\"{2}\" class=\"error\">{3}<br/></span>",
+        warnElement: "<span id=\"{0}_{1}\" name=\"{2}\" class=\"warning\">{3}<br/></span>",
+        infoElement: "<span id=\"{0}_{1}\" name=\"{2}\" class=\"ok\">{3}<br/></span>" 
     }
 
     //reset status & input fields
@@ -144,24 +144,24 @@ function (n) {
         },
         callback: function () {
             return { 
-                error: function(folderName,text) 
+                error: function(logType,folderName,text) 
                 { 
                     if(settings.logsDate == null) { settings.logsDate = new Date(); }
                     console.log(`error ${text}`);
-                    settings.logs.push(settings.errorElement.format((new Date()).getFromFormat("yyyyMMddhhmmss"),folderName,text));
+                    settings.logs.push(settings.errorElement.format(logType,(new Date()).getFromFormat("yyyyMMddhhmmss"),folderName,text));
                     settings.errorsCounter += 1;
                 },
-                warn: function(folderName,text) 
+                warn: function(logType,folderName,text) 
                 { 
                     if(settings.logsDate == null) { settings.logsDate = new Date(); }
                     console.log(`warn ${text}`);
-                    settings.logs.push(settings.warnElement.format((new Date()).getFromFormat("yyyyMMddhhmmss"),folderName,text));
+                    settings.logs.push(settings.warnElement.format(logType,(new Date()).getFromFormat("yyyyMMddhhmmss"),folderName,text));
                 },
-                info: function(folderName,text) 
+                info: function(logType,folderName,text) 
                 { 
                     if(settings.logsDate == null) { settings.logsDate = new Date(); }
                     console.log(`info ${text}`);
-                    settings.logs.push(settings.infoElement.format((new Date()).getFromFormat("yyyyMMddhhmmss"),folderName,text));
+                    settings.logs.push(settings.infoElement.format(logType,(new Date()).getFromFormat("yyyyMMddhhmmss"),folderName,text));
                 },
                 commit: function(selectedFolderPath)
                 {
