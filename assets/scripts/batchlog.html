@@ -1,0 +1,144 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Test Log</title>
+    <style>
+        body {
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        }
+
+        h1 {
+            font-size: 40px;
+            color: #49897f;
+        }
+
+        h3 {
+            color: #49897f;
+        }
+
+        .header {
+            background-color: rgb(26, 24, 24);
+            height: 200px;
+            border-radius: 10px;
+        }
+
+        .title {
+            padding-top: 35px;
+            padding-left: 2.5%;
+            margin-top: 0px;
+            margin-bottom: 0px;
+        }
+
+        .runDate {
+            color: white;
+            padding-left: 2.5%;
+        }
+
+        label {
+            color: white;
+        }
+
+        .error {
+            color: red;
+        }
+
+        .warning {
+            color: gray;
+        }
+
+        .ok {
+            color: black;
+        }
+
+        .section {
+            color: black;
+        }
+
+        .divider {
+            background-color: #202a1a;
+            width: 95%;
+            height: 2px;
+            align-self: center;
+        }
+
+        .filters {
+            padding-left: 2.5%;
+        }
+
+        .content {
+            padding: 0% 2.5%;
+        }
+
+        .results {
+            padding: 0% 2.5%;
+            border: 1px solid black;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <h1 class="title">Nemesis Batch Test Log</h1>
+        <p class="runDate">Dato for testkørsel: {0}</p>
+        <hr class="divider">
+        <div class="filters">
+            <span style="color:white;">Filter:</span><br>
+            <label for="checkErr">Fejl:</label><input type="checkbox" name="error" id="checkErr" checked="true" onchange="errVisiChanged(this)">
+            <label for="checkWarn">OBS:</label><input type="checkbox" name="warning" id="checkWarn" onchange="warnVisiChanged(this)">
+            <label for="checkInfo">Info:</label><input type="checkbox" name="info" id="checkInfo" onchange="infoVisiChanged(this)">
+        </div>
+    </div>
+    <div class="content">
+        <h3>Test af afleveringspakke ID: {1}</h3>
+        <p>Test startet</p>
+        <div class="results" id="testContent">
+            {2}
+        </div>
+        <p>Test afsluttet med {3} antal fejl</p>
+    </div>
+</body>
+<script>
+    // Turn error messages on / off
+    var errElements = document.getElementsByClassName("error");
+    function errVisiChanged(checkBoxErrEl){
+        if(checkBoxErrEl.checked) {
+            for(var i = 0; i < errElements.length; i++) {
+                errElements[i].hidden = false;
+            };
+        } else {
+            for(var i = 0; i < errElements.length; i++) {
+                errElements[i].hidden = true;
+            };
+        }
+    }
+
+    // Turn warning messages on / off
+    var warnElements = document.getElementsByClassName('warning');
+    function warnVisiChanged(checkboxWarnEl){
+        if(checkboxWarnEl.checked) {
+            for(var i = 0; i < warnElements.length; i++) {
+                warnElements[i].hidden = false;
+            }
+        } else {
+            for (var i = 0; i < warnElements.length; i++) {
+                warnElements[i].hidden = true;
+            }
+        }
+    }
+
+    // Turn info messages on / off
+    var infoElements = document.getElementsByClassName('ok');
+    function infoVisiChanged(checkbnoxInfoEl){
+        if(checkbnoxInfoEl.checked) {
+            for(var i = 0; i < infoElements.length; i++){
+                infoElements[i].hidden = false;
+            }
+        } else {
+            for (var i = 0; i < infoElements.length; i++) {
+                infoElements[i].hidden = true;
+            }
+        }
+    }
+</script>
+</html>
