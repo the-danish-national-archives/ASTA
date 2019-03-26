@@ -25,9 +25,9 @@ function (n) {
         scriptPath: "./assets/scripts/{0}",
         resourceWinPath: "resources\\{0}",
         filePostfix: "{0}_log.html",
-        errorElement: "<span id=\"{0}_{1}\" name=\"{2}\" class=\"error\">{3}<br/></span>",
-        warnElement: "<span id=\"{0}_{1}\" name=\"{2}\" class=\"warning\" hidden=\"true\">{3}<br/></span>",
-        infoElement: "<span id=\"{0}_{1}\" name=\"{2}\" class=\"ok\" hidden=\"true\">{3}<br/></span>",
+        errorElement: "<span id=\"{0}_{1}\" name=\"{2}\" class=\"error\">{3}</span>",
+        warnElement: "<span id=\"{0}_{1}\" name=\"{2}\" class=\"warning\" hidden=\"true\">{3}</span>",
+        infoElement: "<span id=\"{0}_{1}\" name=\"{2}\" class=\"ok\" hidden=\"true\">{3}</span>",
         sectionElement: "<span id=\"{0}_{1}\" name=\"{2}\" class=\"section\">{3}<br/></span>"
     }
 
