@@ -86,9 +86,9 @@
         <hr class="divider">
         <div class="filters">
             <span style="color:white;">Filter:</span><br>
-            <label for="checkErr">Errors:</label><input type="checkbox" name="error" id="checkErr" checked="true" onchange="stateChanged(this)">
-            <label for="checkWarn">Warning</label><input type="checkbox" name="warning" id="checkWarn">
-            <label for="checkInfo">Info</label><input type="checkbox" name="info" id="checkInfo">
+            <label for="checkErr">Fejl:</label><input type="checkbox" name="error" id="checkErr" checked="true" onchange="errVisiChanged(this)">
+            <label for="checkWarn">OBS:</label><input type="checkbox" name="warning" id="checkWarn" onchange="warnVisiChanged(this)">
+            <label for="checkInfo">Info:</label><input type="checkbox" name="info" id="checkInfo" onchange="infoVisiChanged(this)">
         </div>
     </div>
     <div class="content">
@@ -96,24 +96,58 @@
         <p>Test startet</p>
         <div class="results" id="testContent" style="background-color: goldenrod">
             Test content
-            <span id="h2" name="hehe" class="error">{3}<br/>some text</span>
+            <span id="e1" name="hehe" class="error"><br/>some text</span>
+            <span id="e2" name="hehe" class="error"><br/>some more text</span>
+            <span id="e3" name="hehe" class="error"><br/>some other text</span>
+            <span id="w1" name="warn" class="warning" hidden="true"><br/>warning text 1</span>
+            <span id="w2" name="warn" class="warning" hidden="true"><br/>warning text 2</span>
+            <span id="i2" name="info" class="ok" hidden="true"><br/>info text 1</span>
+            <span id="i1" name="info" class="ok" hidden="true"><br/>info text 2</span>
             {2}
         </div>
         <p>Test afsluttet med {3} antal fejl</p>
     </div>
 </body>
 <script>
-    var elements = document.getElementsByClassName("error");
-    console.log(elements.length);
-
-    function stateChanged(checkBoxEl){
-        if(checkBoxEl.checked) {
-            console.log('element visible');
-            elements[0].style.visibility = 'visible';
-
+    // Turn error messages on / off
+    var errElements = document.getElementsByClassName("error");
+    function errVisiChanged(checkBoxErrEl){
+        if(checkBoxErrEl.checked) {
+            for(var i = 0; i < errElements.length; i++) {
+                errElements[i].hidden = false;
+            };
         } else {
-            console.log('element hidden');
-            elements[0].style.visibility = 'hidden';
+            for(var i = 0; i < errElements.length; i++) {
+                errElements[i].hidden = true;
+            };
+        }
+    }
+
+    // Turn warning messages on / off
+    var warnElements = document.getElementsByClassName('warning');
+    function warnVisiChanged(checkboxWarnEl){
+        if(checkboxWarnEl.checked) {
+            for(var i = 0; i < warnElements.length; i++) {
+                warnElements[i].hidden = false;
+            }
+        } else {
+            for (var i = 0; i < warnElements.length; i++) {
+                warnElements[i].hidden = true;
+            }
+        }
+    }
+
+    // Turn info messages on / off
+    var infoElements = document.getElementsByClassName('ok');
+    function infoVisiChanged(checkbnoxInfoEl){
+        if(checkbnoxInfoEl.checked) {
+            for(var i = 0; i < infoElements.length; i++){
+                infoElements[i].hidden = false;
+            }
+        } else {
+            for (var i = 0; i < infoElements.length; i++) {
+                infoElements[i].hidden = true;
+            }
         }
     }
 </script>
