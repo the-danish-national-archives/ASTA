@@ -26,11 +26,13 @@ function (n) {
             defaultSubFolders: ["ContextDocumentation","Data","Indices"],
             defaultIndicesFiles: ["archiveIndex.xml","contextDocumentationIndex.xml"],
             defaultFolder: "FD.99999",
-            logType: "structure"
+            logType: "structure",
+            errorsCounter: 0
         }
 
         //reset status & input fields
         var Reset = function () {
+            settings.errorsCounter = 0;
             $("span[id^='" + settings.outputPrefix + "']").hide();
              $("span[id^='" + settings.outputPrefix + "']").each(function() {
                 $(this).html(settings.outputText[this.id]);
@@ -51,108 +53,100 @@ function (n) {
         }
 
         var ValidateIndices = function () {
+            var result = true;
             var destPath = settings.selectedPath[0];
             destPath += (destPath.indexOf("\\") > -1) ? "\\{0}".format(settings.defaultSubFolders[2]) : "/{0}".format(settings.defaultSubFolders[2]); 
-            fs.readdir(destPath, (err, files) => {
-                if (err) {
-                    HandleError(err);
-                }
-                else {
-                    var subFiles = [];
-                    files.forEach(file => {
-                        console.log(`Find Indices file: ${file}`); 
-                        subFiles.push(file);
-                    });
-                    var result = true;
-                    var folderName = GetFolderName();
-                    var element = $("span#" + settings.outputPrefix + "-CheckFolderIndices-Error");
-                    settings.defaultIndicesFiles.forEach(file => {
-                        if(!subFiles.includes(file) && result) {                            
-                            element.show();
-                            settings.logCallback().error(settings.logType,folderName,element.text().format(file));
-                            element.html(element.html().format(file));
-                            result = false;
-                        }
-                    });
-                    if(result && subFiles.length > 2) {
-                        element = $("span#" + settings.outputPrefix + "-CheckFolderIndicesCount-Error");
-                        subFiles.forEach(file => {
-                            if(result && file !== settings.defaultIndicesFiles[0] && file !== settings.defaultIndicesFiles[1]) {
-                                element.show();
-                                settings.logCallback().error(settings.logType,folderName,element.text().format(file));
-                                element.html(element.html().format(file));
-                                result = false;
-                            }
-                        });
-                    }
-                    if(!result) {
-                        CommitLog(true);
-                    }
-                    else {
-                        element = $("span#" + settings.outputPrefix + "-CheckFolderIndices-Ok");
-                        element.show(); 
-                        settings.logCallback().info(settings.logType,folderName,element.text());
-                        settings.metadataCallback().validate(settings.selectedPath);
-                    }
+            var subFiles = fs.readdirSync(destPath);
+            var folderName = GetFolderName();
+            var element = $("span#" + settings.outputPrefix + "-CheckFolderIndices-Error");
+            settings.defaultIndicesFiles.forEach(file => {
+                if(!subFiles.includes(file)) {                            
+                    element.show();
+                    settings.logCallback().error(settings.logType,folderName,element.text().format(file));
+                    element.html(element.html().format(file));
+                    settings.errorsCounter += 1;
+                    result = false;
                 }
             });
+            if(result && subFiles.length > 2) {
+                element = $("span#" + settings.outputPrefix + "-CheckFolderIndicesCount-Error");
+                subFiles.forEach(file => {
+                    if(result && file !== settings.defaultIndicesFiles[0] && file !== settings.defaultIndicesFiles[1]) {
+                        element.show();
+                        settings.logCallback().error(settings.logType,folderName,element.text().format(file));
+                        element.html(element.html().format(file));
+                        settings.errorsCounter += 1;
+                        result = false;
+                    }
+                });
+            }
+            if(result) {
+                element = $("span#" + settings.outputPrefix + "-CheckFolderIndices-Ok");
+                element.show(); 
+                settings.logCallback().info(settings.logType,folderName,element.text());                
+            }
         }
 
+        var ValidateData = function() {
+
+        }
+
+        var ValidateContextDocumentation = function() {
+
+        }
+
+        // loop sub folders Structure
         var ValidateStructure = function () {
-            fs.readdir(settings.selectedPath[0], (err, files) => {
-                if (err) {
-                    HandleError(err);
+            var result = true;
+            var subFolders = fs.readdirSync(settings.selectedPath[0]);
+            var folderName = GetFolderName();
+            var element = $("span#" + settings.outputPrefix + "-CheckFolders-Error");
+            settings.defaultSubFolders.forEach(folder => {
+                if(!subFolders.includes(folder)) {                            
+                    element.show();
+                    settings.logCallback().error(settings.logType,folderName,element.text().format(folder));
+                    element.html(element.html().format(folder));
+                    settings.errorsCounter += 1;
+                    result = false;
                 }
                 else {
-                    var subFolders = [];
-                    files.forEach(file => {
-                        console.log(`Find sub folder: ${file}`); 
-                        subFolders.push(file);
-                    });
-                    var result = true;
-                    var folderName = GetFolderName();
-                    var element = $("span#" + settings.outputPrefix + "-CheckFolders-Error");
-                    settings.defaultSubFolders.forEach(folder => {
-                        if(!subFolders.includes(folder) && result) {                            
-                            element.show();
-                            settings.logCallback().error(settings.logType,folderName,element.text().format(folder));
-                            element.html(element.html().format(folder));
-                            result = false;
-                        }
-                    });
-                    if(result && subFolders.length > 3) {
-                        element = $("span#" + settings.outputPrefix + "-CheckFoldersCount-Error");
-                        subFolders.forEach(folder => {
-                            if(result && folder !== settings.defaultSubFolders[0] && folder !== settings.defaultSubFolders[1] && folder !== settings.defaultSubFolders[2]) {
-                                element.show();
-                                settings.logCallback().error(settings.logType,folderName,element.text().format(folder));
-                                element.html(element.html().format(folder));
-                                result = false;
-                            }
-                        });
-                    }
-                    if(!result) {
-                        CommitLog(true);
-                    }
-                    else {
-                        element = $("span#" + settings.outputPrefix + "-CheckFolders-Ok");
-                        element.show(); 
-                        settings.logCallback().info(settings.logType,folderName,element.text());
-                        ValidateIndices();
+                    switch(folder) {
+                        case "ContextDocumentation": ValidateContextDocumentation(); break;
+                        case "Data": ValidateData(); break;
+                        case "Indices": ValidateIndices(); break;
                     }
                 }
             });
+            if(result && subFolders.length > 3) {
+                element = $("span#" + settings.outputPrefix + "-CheckFoldersCount-Error");
+                subFolders.forEach(folder => {
+                    if(result && folder !== settings.defaultSubFolders[0] && folder !== settings.defaultSubFolders[1] && folder !== settings.defaultSubFolders[2]) {
+                        element.show();
+                        settings.logCallback().error(settings.logType,folderName,element.text().format(folder));
+                        element.html(element.html().format(folder));
+                        settings.errorsCounter += 1;
+                        result = false;
+                    }
+                });
+            }
+            if(result) {                    
+                element = $("span#" + settings.outputPrefix + "-CheckFolders-Ok");
+                element.show(); 
+                settings.logCallback().info(settings.logType,folderName,element.text());
+            }
+            return result;
         }
 
         //validate folder Name
         var ValidateName = function () {
-           var result = true;
-           var element = null;
-           var folderName = GetFolderName();            
+            var result = true;
+            var element = null;
+            var folderName = GetFolderName();            
             if(!pattern.test(folderName)) {
                 element = $("span#" + settings.outputPrefix + "-CheckId-Error");            
                 element.show();
                 settings.logCallback().error(settings.logType,folderName,element.text());
+                settings.errorsCounter += 1;
                 result = false;
             }
             else {
@@ -167,32 +161,37 @@ function (n) {
                     settings.logCallback().info(settings.logType,folderName,element.text());
                 }            
             }
-            if(!result) {
-                CommitLog(true);
-            }
-            else {
-                ValidateStructure(); 
-            }
+            return result;    
         }
 
-        //write log file
-        var CommitLog = function (hasError) {
-            var folderName = GetFolderName();
-            if(!hasError) {
-                settings.logCallback().section(settings.logType,folderName,settings.logEndNoErrorSpn.innerHTML);
-            } else {
-                settings.logCallback().section(settings.logType,folderName,settings.logEndWithErrorSpn.innerHTML);
+        //start flow validation
+        var Validate = function() {
+            try 
+            {
+                var folderName = GetFolderName();
+                settings.logCallback().section(settings.logType,folderName,settings.logStartSpn.innerHTML);            
+                ValidateName();
+                ValidateStructure();
+                if(settings.errorsCounter === 0) {
+                    settings.logCallback().section(settings.logType,folderName,settings.logEndNoErrorSpn.innerHTML);
+                    settings.metadataCallback().validate(settings.selectedPath);                    
+                } else {
+                    settings.logCallback().section(settings.logType,folderName,settings.logEndWithErrorSpn.innerHTML);
+                    settings.logCallback().commit(settings.selectedPath[0]);
+                }                
             }
-            settings.logCallback().commit(settings.selectedPath[0]); 
+            catch(err) 
+            {
+                HandleError(err);
+            }
         }
 
         //add Event Listener to HTML elmenets
         var AddEvents = function () {
             settings.validateBtn.addEventListener('click', (event) => {
                 Reset();
-                if(settings.selectedPath == null || settings.pathDirTxt.value === "") { return; }
-                settings.logCallback().section(settings.logType,GetFolderName(),settings.logStartSpn.innerHTML);
-                ValidateName();                           
+                if(settings.selectedPath == null || settings.pathDirTxt.value === "") { return; }                
+                Validate();                           
             })
             settings.selectDirBtn.addEventListener('click', (event) => {
                 ipcRenderer.send('validation-open-file-dialog');

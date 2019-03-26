@@ -21,7 +21,8 @@ function (n) {
             logEndNoErrorSpn: null,
             logEndWithErrorSpn:null,
             outputText: {},
-            logType: "metadata"
+            logType: "metadata",
+            errorsCounter: 0
         }
 
         //reset status & input fields
