@@ -39,6 +39,10 @@
             color: white;
         }
 
+        select {
+            margin-right: 10px; 
+        }
+
         .error {
             color: red;
         }
@@ -84,6 +88,10 @@
         <hr class="divider">
         <div class="filters">
             <span style="color:white;">Filter:</span><br>
+            <label for="fdSelector">FD Pakke:</label>
+            <select name="fdNumber" id="fdSelector" onchange="fdSelectChanged(this)">
+                <option value="">--Vælg FD Pakke--</option>
+            </select>
             <label for="checkErr">Fejl:</label><input type="checkbox" name="error" id="checkErr" checked="true" onchange="errVisiChanged(this)">
             <label for="checkWarn">OBS:</label><input type="checkbox" name="warning" id="checkWarn" onchange="warnVisiChanged(this)">
             <label for="checkInfo">Info:</label><input type="checkbox" name="info" id="checkInfo" onchange="infoVisiChanged(this)">
@@ -94,11 +102,48 @@
         <p>Test startet</p>
         <div class="results" id="testContent">
             {2}
+            <div class="testContent" id="FD1">
+                <span>Results of FD00001</span>
+            </div>
+            <div class="testContent" id="FD2">
+                <span>Results of FD00002</span>
+            </div>
+            <div class="testContent" id="FD3">
+                    <span>Results of FD00003</span>
+                </div>
         </div>
         <p>Test afsluttet med {3} antal fejl</p>
     </div>
 </body>
 <script>
+    // Populate the dropdown when the page have loaded.
+    (function(){
+        var fdResults = document.getElementsByClassName('testContent');
+        var fdSelect = document.getElementById('fdSelector');
+        for(var i = fdResults.length - 1; i >= 0; i--) { 
+            var opt = document.createElement('option');
+            opt.value = fdResults[i].id;
+            opt.text = fdResults[i].id;
+            fdSelect.add(opt, fdSelect[1]);
+        }
+    })();
+
+    // Show only the selected FD test result.
+    function fdSelectChanged(selectObj) {
+        console.log(selectObj.value);
+        console.log(selectObj.length);
+        var testLogs = document.getElementsByClassName('testContent');
+        for(var i = 0; i < testLogs.length; i++){
+            if (testLogs[i].id === selectObj.value) {
+                console.log('value is: ' + selectObj.value);
+                testLogs[i].hidden = false;
+            } else {
+                console.log(selectObj.value);
+                testLogs[i].hidden = true;
+            }
+        }
+    }
+
     // Turn error messages on / off
     var errElements = document.getElementsByClassName("error");
     function errVisiChanged(checkBoxErrEl){
