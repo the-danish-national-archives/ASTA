@@ -22,6 +22,7 @@ function (n) {
             logStartSpn: null,
             logEndNoErrorSpn: null,
             logEndWithErrorSpn:null,
+            deliveryPackagePath: null,
             outputText: {},
             defaultSubFolders: ["ContextDocumentation","Data","Indices"],
             defaultIndicesFiles: ["archiveIndex.xml","contextDocumentationIndex.xml"],
@@ -48,7 +49,7 @@ function (n) {
 
         // get selected folder name 
         var GetFolderName = function() {
-            var folders = settings.selectedPath[0].getFolders();
+            var folders = settings.deliveryPackagePath.getFolders();
             return folders[folders.length - 1];
         }
 
@@ -62,7 +63,7 @@ function (n) {
 
         var ValidateIndices = function () {
             var result = true;
-            var destPath = settings.selectedPath[0];
+            var destPath = settings.deliveryPackagePath;
             destPath += (destPath.indexOf("\\") > -1) ? "\\{0}".format(settings.defaultSubFolders[2]) : "/{0}".format(settings.defaultSubFolders[2]); 
             var subFiles = fs.readdirSync(destPath);
             var folderName = GetFolderName();
@@ -104,7 +105,7 @@ function (n) {
         // loop sub folders Structure
         var ValidateStructure = function () {
             var result = true;
-            var subFolders = fs.readdirSync(settings.selectedPath[0]);
+            var subFolders = fs.readdirSync(settings.deliveryPackagePath);
             var folderName = GetFolderName();
             var id = "{0}-CheckFolders-Error".format(settings.outputPrefix);
             settings.defaultSubFolders.forEach(folder => {
@@ -178,10 +179,10 @@ function (n) {
                 ValidateStructure();
                 if(settings.errorsCounter === 0) {
                     settings.logCallback().section(settings.logType,folderName,settings.logEndNoErrorSpn.innerHTML);
-                    settings.metadataCallback().validate(settings.selectedPath);                    
+                    settings.metadataCallback().validate(settings.deliveryPackagePath,settings.outputText);                    
                 } else {
                     settings.logCallback().section(settings.logType,folderName,settings.logEndWithErrorSpn.innerHTML);
-                    settings.logCallback().commit(settings.selectedPath[0]);
+                    settings.logCallback().commit(settings.deliveryPackagePath);
                 }                
             }
             catch(err) 
@@ -195,6 +196,7 @@ function (n) {
             settings.validateBtn.addEventListener('click', (event) => {
                 Reset();
                 if(settings.selectedPath == null || settings.pathDirTxt.value === "") { return; }                
+                settings.deliveryPackagePath = settings.selectedPath[0];
                 Validate();                           
             })
             settings.selectDirBtn.addEventListener('click', (event) => {
