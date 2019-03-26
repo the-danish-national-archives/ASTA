@@ -35,7 +35,7 @@ function (n) {
             settings.errorsCounter = 0;
             $("span[id^='" + settings.outputPrefix + "']").hide();
              $("span[id^='" + settings.outputPrefix + "']").each(function() {
-                $(this).html(settings.outputText[this.id]);
+                $(this).html("");
             });
         }
 
@@ -52,38 +52,44 @@ function (n) {
             return folders[folders.length - 1];
         }
 
+        var ShowElement = function(id,text) {
+            var element = $("span#{0}".format(id));            
+            if(text != null) {
+                element.html(element.html() + text);
+            }
+            element.show();
+        }
+
         var ValidateIndices = function () {
             var result = true;
             var destPath = settings.selectedPath[0];
             destPath += (destPath.indexOf("\\") > -1) ? "\\{0}".format(settings.defaultSubFolders[2]) : "/{0}".format(settings.defaultSubFolders[2]); 
             var subFiles = fs.readdirSync(destPath);
             var folderName = GetFolderName();
-            var element = $("span#" + settings.outputPrefix + "-CheckFolderIndices-Error");
+            var id = "{0}-CheckFolderIndices-Error".format(settings.outputPrefix);
             settings.defaultIndicesFiles.forEach(file => {
-                if(!subFiles.includes(file)) {                            
-                    element.show();
-                    settings.logCallback().error(settings.logType,folderName,element.text().format(file));
-                    element.html(element.html().format(file));
+                if(!subFiles.includes(file)) { 
+                    ShowElement(id,settings.outputText[id].format(file));                           
+                    settings.logCallback().error(settings.logType,folderName,settings.outputText[id].format(file));
                     settings.errorsCounter += 1;
                     result = false;
                 }
             });
             if(result && subFiles.length > 2) {
-                element = $("span#" + settings.outputPrefix + "-CheckFolderIndicesCount-Error");
+                id = "{0}-CheckFolderIndicesCount-Error".format(settings.outputPrefix);
                 subFiles.forEach(file => {
                     if(result && file !== settings.defaultIndicesFiles[0] && file !== settings.defaultIndicesFiles[1]) {
-                        element.show();
-                        settings.logCallback().error(settings.logType,folderName,element.text().format(file));
-                        element.html(element.html().format(file));
+                        ShowElement(id,settings.outputText[id].format(file));
+                        settings.logCallback().error(settings.logType,folderName,settings.outputText[id].format(file));
                         settings.errorsCounter += 1;
                         result = false;
                     }
                 });
             }
             if(result) {
-                element = $("span#" + settings.outputPrefix + "-CheckFolderIndices-Ok");
-                element.show(); 
-                settings.logCallback().info(settings.logType,folderName,element.text());                
+                id = "{0}-CheckFolderIndices-Ok".format(settings.outputPrefix);
+                ShowElement(id,settings.outputText[id]);
+                settings.logCallback().info(settings.logType,folderName,settings.outputText[id]);                
             }
         }
 
@@ -100,12 +106,11 @@ function (n) {
             var result = true;
             var subFolders = fs.readdirSync(settings.selectedPath[0]);
             var folderName = GetFolderName();
-            var element = $("span#" + settings.outputPrefix + "-CheckFolders-Error");
+            var id = "{0}-CheckFolders-Error".format(settings.outputPrefix);
             settings.defaultSubFolders.forEach(folder => {
-                if(!subFolders.includes(folder)) {                            
-                    element.show();
-                    settings.logCallback().error(settings.logType,folderName,element.text().format(folder));
-                    element.html(element.html().format(folder));
+                if(!subFolders.includes(folder)) {
+                    ShowElement(id,settings.outputText[id].format(folder));
+                    settings.logCallback().error(settings.logType,folderName,settings.outputText[id].format(folder));
                     settings.errorsCounter += 1;
                     result = false;
                 }
@@ -118,21 +123,20 @@ function (n) {
                 }
             });
             if(result && subFolders.length > 3) {
-                element = $("span#" + settings.outputPrefix + "-CheckFoldersCount-Error");
+                id = "{0}-CheckFoldersCount-Error".format(settings.outputPrefix); 
                 subFolders.forEach(folder => {
                     if(result && folder !== settings.defaultSubFolders[0] && folder !== settings.defaultSubFolders[1] && folder !== settings.defaultSubFolders[2]) {
-                        element.show();
-                        settings.logCallback().error(settings.logType,folderName,element.text().format(folder));
-                        element.html(element.html().format(folder));
+                        ShowElement(id,settings.outputText[id].format(folder));
+                        settings.logCallback().error(settings.logType,folderName,settings.outputText[id].format(folder));
                         settings.errorsCounter += 1;
                         result = false;
                     }
                 });
             }
-            if(result) {                    
-                element = $("span#" + settings.outputPrefix + "-CheckFolders-Ok");
-                element.show(); 
-                settings.logCallback().info(settings.logType,folderName,element.text());
+            if(result) {  
+                id = "{0}-CheckFolders-Ok".format(settings.outputPrefix);                   
+                ShowElement(id,settings.outputText[id]);
+                settings.logCallback().info(settings.logType,folderName,settings.outputText[id]);
             }
             return result;
         }
@@ -140,25 +144,25 @@ function (n) {
         //validate folder Name
         var ValidateName = function () {
             var result = true;
-            var element = null;
+            var id = null;
             var folderName = GetFolderName();            
             if(!pattern.test(folderName)) {
-                element = $("span#" + settings.outputPrefix + "-CheckId-Error");            
-                element.show();
-                settings.logCallback().error(settings.logType,folderName,element.text());
+                id = "{0}-CheckId-Error".format(settings.outputPrefix);
+                ShowElement(id,settings.outputText[id]);
+                settings.logCallback().error(settings.logType,folderName,settings.outputText[id]);
                 settings.errorsCounter += 1;
                 result = false;
             }
             else {
                 if(folderName === settings.defaultFolder) {
-                    element = $("span#" + settings.outputPrefix + "-CheckId-Warning");
-                    element.show();
-                    settings.logCallback().warn(settings.logType,folderName,element.text());
+                    id = "{0}-CheckId-Warning".format(settings.outputPrefix);
+                    ShowElement(id,settings.outputText[id]);
+                    settings.logCallback().warn(settings.logType,folderName,settings.outputText[id]);
                 }
                 else {
-                    element = $("span#" + settings.outputPrefix + "-CheckId-Ok");
-                    element.show();
-                    settings.logCallback().info(settings.logType,folderName,element.text());
+                    id = "{0}-CheckId-Ok".format(settings.outputPrefix);
+                    ShowElement(id,settings.outputText[id]);
+                    settings.logCallback().info(settings.logType,folderName,settings.outputText[id]);
                 }            
             }
             return result;    
@@ -219,6 +223,7 @@ function (n) {
                 settings.outputPrefix = outputPrefix;
                 $("span[id^='" + settings.outputPrefix + "']").each(function() {
                     settings.outputText[this.id] = $(this).html();
+                    $(this).html("");
                 });
                 AddEvents();
             }
