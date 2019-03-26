@@ -13,19 +13,22 @@
                             <div class="nemesisControls">
                                 <span>Vælg afleveringspakke til test:</span>
                                 <br>
-                                <input type="text" id="nemesis-structure-path">
-                                <button id="nemesis-select-structure-directory">Browse</button>
+                                <input type="text" id="nemesis-path">
+                                <button id="nemesis-select-directory">Browse</button>
                                 <br/>
                                 <br/>
                                 <span>Midlertidig test kontroller, indtil vi har lavet fil parser.</span>
-                                <button id="nemesis-structure-validateBtn">Test mappe struktur</button>
-                                <span id="nemesis-output-structure-Error" hidden="true"><br />Error: {0}</span>
-                                <span id="nemesis-output-structure-Ok" hidden="true"><br /><strong>Bekræftelse!</strong> Log fil [{0}] er nu skabt og placeret i mappen [</span>
-                                <a id="nemesis-structure-select-logFile" hidden="true"></a>
-                                <span id="nemesis-output-structure-Supplement" hidden="true">]</span>
+                                <button id="nemesis-validateBtn">Test mappe</button>
+                                <span id="nemesis-output-Error" hidden="true"><br />Error: {0}</span>
+                                <span id="nemesis-output-Ok" hidden="true"><br /><strong>Bekræftelse!</strong> Log fil [{0}] er nu skabt og placeret i mappen [</span>
+                                <a id="nemesis-select-logFile" hidden="true"></a>
+                                <span id="nemesis-output-Supplement" hidden="true">]</span>
                                 <span id="nemesis-output-structure-logStart" hidden="true">Mappestruktur test startet<br/></span>
                                 <span id="nemesis-output-structure-logEndNoError" hidden="true"><br/>Metadatafilstruktur test afsluttet uden fejl</span>
                                 <span id="nemesis-output-structure-logEndWithError" hidden="true"><br/>Metadatafilstruktur test afsluttet</span>
+                                <span id="nemesis-output-metadata-logStart" hidden="true">Metadatafil test startet<br/></span>
+                                <span id="nemesis-output-metadata-logEndNoError" hidden="true"><br/>Metadatafil test afsluttet uden fejl</span>
+                                <span id="nemesis-output-metadata-logEndWithError" hidden="true"><br/>Metadatafil test afsluttet</span>
                             </div>
                             <div class="verticalDivider"> </div>
                             <div class="nemesisOutput">
@@ -37,7 +40,7 @@
                                 <span id="nemesis-processing-CheckFolders-Ok" hidden="true"><i class="fas fa-check-circle ok"></i>Mappestruktur mapper test gennemført<br/></span>
                                 <span id="nemesis-processing-CheckFolderIndices-Error" hidden="true"><i class="fas fa-times error"></i>Indexfilen {0} mangler i afleveringspakken<br/></span>
                                 <span id="nemesis-processing-CheckFolderIndicesCount-Error" hidden="true"><i class="fas fa-times error"></i>Indices mappen indeholder en ulovlig fil "{0}"<br/></span>
-                                <span id="nemesis-processing-CheckFolderIndices-Ok" hidden="true"><i class="fas fa-times error"></i>Indices, filer gennemført<br/></span>
+                                <span id="nemesis-processing-CheckFolderIndices-Ok" hidden="true"><i class="fas fa-check-circle ok"></i>Indices, filer gennemført<br/></span>
                                 <br/>
                             </div>
                         </div>
@@ -47,13 +50,15 @@
         </header>
         <script>window.$ = window.jQuery = require('./assets/js/jquery.min.js');</script>
         <script type="text/javascript">
-             require('./assets/js/utilities');
+            require('./assets/js/utilities');
             require('./assets/js/messages');
             require('./assets/js/log');
             require('./assets/js/nemesis/structure');
+            require('./assets/js/nemesis/metadata');
 
-            Rigsarkiv.Log.initialize("nemesis-output-structure-Error","nemesis-output-structure-Ok","nemesis-structure-select-logFile","nemesis-output-structure-Supplement");
-            Rigsarkiv.Nemesis.Structure.initialize(Rigsarkiv.Log.callback,"nemesis-output-structure-Error","nemesis-select-structure-directory","nemesis-structure-path","nemesis-structure-validateBtn","nemesis-output-structure-logStart","nemesis-output-structure-logEndNoError","nemesis-output-structure-logEndWithError","nemesis-processing");           
+            Rigsarkiv.Log.initialize("nemesis-output-Error","nemesis-output-Ok","nemesis-select-logFile","nemesis-output-Supplement");
+            Rigsarkiv.Nemesis.Structure.initialize(Rigsarkiv.Log.callback,Rigsarkiv.Nemesis.MetaData.callback,"nemesis-output-Error","nemesis-select-directory","nemesis-path","nemesis-validateBtn","nemesis-output-structure-logStart","nemesis-output-structure-logEndNoError","nemesis-output-structure-logEndWithError","nemesis-processing");
+            Rigsarkiv.Nemesis.MetaData.initialize(Rigsarkiv.Log.callback,"nemesis-output-Error","nemesis-select-directory","nemesis-path","nemesis-validateBtn","nemesis-output-metadata-logStart","nemesis-output-metadata-logEndNoError","nemesis-output-metadata-logEndWithError","nemesis-processing");             
           </script>
     </section>
 </template>

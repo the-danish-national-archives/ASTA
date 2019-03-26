@@ -1,5 +1,5 @@
 /*
-    Model is responsible for Validate Delivery Package folder Structure
+    Model is responsible for Validate Delivery Package folder Structure (Flow 1.0)
     initialize interface inputs: elements from <div class="formularContainer">
  */
 window.Rigsarkiv = window.Rigsarkiv || {},
@@ -18,6 +18,7 @@ function (n) {
             validateBtn: null,
             outputPrefix: null,
             logCallback: null,
+            metadataCallback: null,
             logStartSpn: null,
             logEndNoErrorSpn: null,
             logEndWithErrorSpn:null,
@@ -91,6 +92,7 @@ function (n) {
                         element = $("span#" + settings.outputPrefix + "-CheckFolderIndices-Ok");
                         element.show(); 
                         settings.logCallback().info(settings.logType,folderName,element.text());
+                        settings.metadataCallback().validate(settings.selectedPath);
                     }
                 }
             });
@@ -204,8 +206,9 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Nemesis.Structure = {        
-            initialize: function (logCallback,outputErrorId,selectDirectoryId,pathDirectoryId,validateId,logStartId,logEndNoErrorId,logEndWithErrorId,outputPrefix) {            
+            initialize: function (logCallback,metadataCallback,outputErrorId,selectDirectoryId,pathDirectoryId,validateId,logStartId,logEndNoErrorId,logEndWithErrorId,outputPrefix) {            
                 settings.logCallback = logCallback;
+                settings.metadataCallback = metadataCallback;
                 settings.outputErrorSpn = document.getElementById(outputErrorId);
                 settings.outputErrorText = settings.outputErrorSpn.innerHTML;
                 settings.selectDirBtn = document.getElementById(selectDirectoryId);
