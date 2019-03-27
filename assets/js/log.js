@@ -68,36 +68,24 @@ function (n) {
 
     //commit log data
     var EnsureData = function() {
-        fs.readFile(settings.filePath, (err, data) => {
-            if (err) {
-                HandleError(err);
-            }
-            else {
-                var folders = settings.filePath.getFolders();
-                var folderName = folders[folders.length - 1];
-                folderName = folderName.substring(0,folderName.indexOf("_log.html"));
-                var updatedData = data.toString().format(settings.logsDate.getFromFormat("dd-MM-yyyy"),folderName,settings.logs.join("\r\n"),settings.errorsCounter);
-                fs.writeFile(settings.filePath, updatedData, (err) => {
-                    if (err) {
-                        HandleError(err);
-                    }
-                    else {                        
-                        settings.logs = [];
-                        settings.errorsCounter = 0;
-                        settings.logsDate = null;                        
-                        console.log("Log is updated at: {0}".format(settings.filePath));
-                        var folders = settings.filePath.getFolders();
-                        var folderName = folders[folders.length - 1];
-                        settings.selectLogfile.innerHTML = settings.filePath + "]";
-                        settings.outputOkSpn.innerHTML = settings.outputOkText.format(folderName);
-                        settings.selectLogfile.hidden = false;
-                        settings.outputOkSpn.hidden = false;
-                        settings.outputSupplementSpn.hidden = false;                        
-                    }
-                });
-            }
-        });
-    }
+        var data = fs.readFileSync(settings.filePath);        
+        var folders = settings.filePath.getFolders();
+        var folderName = folders[folders.length - 1];
+        folderName = folderName.substring(0,folderName.indexOf("_log.html"));
+        var updatedData = data.toString().format(settings.logsDate.getFromFormat("dd-MM-yyyy"),folderName,settings.logs.join("\r\n"),settings.errorsCounter);
+        fs.writeFileSync(settings.filePath, updatedData);                         
+        settings.logs = [];
+        settings.errorsCounter = 0;
+        settings.logsDate = null;                        
+        console.log("Log is updated at: {0}".format(settings.filePath));
+        var folders = settings.filePath.getFolders();
+        var folderName = folders[folders.length - 1];
+        settings.selectLogfile.innerHTML = settings.filePath;
+        settings.outputOkSpn.innerHTML = settings.outputOkText.format(folderName);
+        settings.selectLogfile.hidden = false;
+        settings.outputOkSpn.hidden = false;
+        settings.outputSupplementSpn.hidden = false;                        
+   }
 
     //copy log HTML template file to parent folder of selected Delivery Package folder
     var CopyFile = function() {
@@ -115,14 +103,8 @@ function (n) {
             }
         }        
         console.log(`copy ${settings.templateFileName} file to: ${settings.filePath}`);
-        fs.copyFile(logFilePath, settings.filePath, (err) => {
-            if (err) {
-                HandleError(err);
-            }
-            else {
-                EnsureData();
-            }
-        });
+        fs.copyFileSync(logFilePath, settings.filePath);
+        EnsureData();        
     }
 
     //add Event Listener to HTML elmenets
@@ -172,13 +154,20 @@ function (n) {
                 },
                 commit: function(selectedFolderPath)
                 {
-                    Reset();                    
-                    settings.filePath = settings.filePostfix.format(selectedFolderPath);
-                    if(fs.existsSync(settings.filePath)) {                        
-                        console.log(`Delete exists log: ${settings.filePath}`);
-                        fs.unlinkSync(settings.filePath);
+                    Reset(); 
+                    try
+                    {
+                        settings.filePath = settings.filePostfix.format(selectedFolderPath);
+                        if(fs.existsSync(settings.filePath)) {                        
+                            console.log(`Delete exists log: ${settings.filePath}`);
+                            fs.unlinkSync(settings.filePath);
+                        }
+                        CopyFile();
                     }
-                    CopyFile();
+                    catch(err) 
+                    {
+                        HandleError(err);
+                    }
                 } 
             };
         }

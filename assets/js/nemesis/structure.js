@@ -8,7 +8,8 @@ function (n) {
         function (n){
         const {ipcRenderer} = require('electron');
         const fs = require('fs');
-        const pattern = /^(FD.[1-9]{1}[0-9]{4,})$/;
+        const deliveryPackagePattern = /^(FD.[1-9]{1}[0-9]{4,})$/;
+        const dataTablePattern = /^(table[0-9]{1,})$/;
 
         //private data memebers
         var settings = { 
@@ -24,16 +25,20 @@ function (n) {
             logEndWithErrorSpn:null,
             deliveryPackagePath: null,
             outputText: {},
+            metadataFileName: "{0}.txt",
+            dataFileName: "{0}.csv",
             defaultSubFolders: ["ContextDocumentation","Data","Indices"],
             defaultIndicesFiles: ["archiveIndex.xml","contextDocumentationIndex.xml"],
             defaultFolder: "FD.99999",
             logType: "structure",
-            errorsCounter: 0
+            errorsCounter: 0,
+            errorStop: false
         }
 
         //reset status & input fields
         var Reset = function () {
             settings.errorsCounter = 0;
+            settings.errorStop = false;
             $("span[id^='" + settings.outputPrefix + "']").hide();
              $("span[id^='" + settings.outputPrefix + "']").each(function() {
                 $(this).html("");
@@ -53,117 +58,194 @@ function (n) {
             return folders[folders.length - 1];
         }
 
-        var ShowElement = function(id,text) {
+        // View Element by id & return texts
+        var ViewElement = function(id,formatText) {
+            var result = settings.outputText[id];
+            if(formatText != null) {
+                result = result.format(formatText)
+            }
+
             var element = $("span#{0}".format(id));            
-            if(text != null) {
-                element.html(element.html() + text);
+            if(result != null) {
+                element.html(element.html() + result);
             }
             element.show();
+
+            return result;
         }
 
+        //handle error logging + HTML output
+        var LogError = function(postfixId,formatText) {
+            var id = "{0}{1}".format(settings.outputPrefix,postfixId);
+            var text = ViewElement(id,formatText);
+
+            settings.logCallback().error(settings.logType,GetFolderName(),text);
+            settings.errorsCounter += 1;
+            return false;
+        }
+
+        //Handle warn logging
+        var LogWarn = function(postfixId,formatText) {
+            var id = "{0}{1}".format(settings.outputPrefix,postfixId);
+            var text = ViewElement(id,formatText);
+
+            settings.logCallback().warn(settings.logType,GetFolderName(),text);
+        }
+        
+        //Handle info logging
+        var LogInfo = function(postfixId,formatText) {
+            var id = "{0}{1}".format(settings.outputPrefix,postfixId);
+            var text = ViewElement(id,formatText);
+
+            settings.logCallback().info(settings.logType,GetFolderName(),text);
+        }
+
+        //Validate Indices folder's files
         var ValidateIndices = function () {
             var result = true;
             var destPath = settings.deliveryPackagePath;
             destPath += (destPath.indexOf("\\") > -1) ? "\\{0}".format(settings.defaultSubFolders[2]) : "/{0}".format(settings.defaultSubFolders[2]); 
             var subFiles = fs.readdirSync(destPath);
-            var folderName = GetFolderName();
-            var id = "{0}-CheckFolderIndices-Error".format(settings.outputPrefix);
             settings.defaultIndicesFiles.forEach(file => {
                 if(!subFiles.includes(file)) { 
-                    ShowElement(id,settings.outputText[id].format(file));                           
-                    settings.logCallback().error(settings.logType,folderName,settings.outputText[id].format(file));
-                    settings.errorsCounter += 1;
-                    result = false;
+                    result = LogError("-CheckFolderIndices-Error",file);
                 }
             });
             if(result && subFiles.length > 2) {
-                id = "{0}-CheckFolderIndicesCount-Error".format(settings.outputPrefix);
                 subFiles.forEach(file => {
                     if(result && file !== settings.defaultIndicesFiles[0] && file !== settings.defaultIndicesFiles[1]) {
-                        ShowElement(id,settings.outputText[id].format(file));
-                        settings.logCallback().error(settings.logType,folderName,settings.outputText[id].format(file));
-                        settings.errorsCounter += 1;
-                        result = false;
+                        result = LogError("-CheckFolderIndicesCount-Error",file);
                     }
                 });
             }
             if(result) {
-                id = "{0}-CheckFolderIndices-Ok".format(settings.outputPrefix);
-                ShowElement(id,settings.outputText[id]);
-                settings.logCallback().info(settings.logType,folderName,settings.outputText[id]);                
+                LogInfo("-CheckFolderIndices-Ok",null);
             }
+            return result;
         }
 
-        var ValidateData = function() {
+        var ValidateTable = function(tableFolderName) {
+            var result = true;
+            var destPath = settings.deliveryPackagePath;
+            destPath += (destPath.indexOf("\\") > -1) ? "\\{0}\\{1}".format(settings.defaultSubFolders[1],tableFolderName) : "/{0}/{1}".format(settings.defaultSubFolders[1],tableFolderName); 
+            var subFiles = fs.readdirSync(destPath);
+            if(subFiles != null && subFiles.length > 0) {
+                var fileName = settings.dataFileName.format(tableFolderName);
+                if(!subFiles.includes(fileName)) {
+                    result = LogError("-CheckFolderData-TableFolderDataFile-Error",tableFolderName);
+                }
+                fileName = settings.metadataFileName.format(tableFolderName);
+                if(!subFiles.includes(fileName)) {
+                    result = LogError("-CheckFolderData-TableFolderMetadataFile-Error",tableFolderName);
+                }
+            }
+            else {
+                result = LogError("-CheckFolderData-TableFolderEmpty-Error",tableFolderName);
+            }
+            return result;
+        }
 
+        //Validate tables orders names
+        var ValidateTablesOrder = function(subFolders) {
+            var result = true;
+            var tables = [];
+            subFolders.forEach(folder => {
+                tables.push(parseInt(folder.substring(5)));
+            });
+            tables.sort(function(a, b){return a-b});
+            if(tables[0] !== 1) {
+                result = LogError("-CheckFolderData-TableFolders1-Error",null);
+            }
+            var i;
+            var orderResult = true;
+            for (i = 0; i < tables.length; i++) { 
+                if((i + 1) !== tables[i]) {
+                    orderResult = false;
+                    break;
+                }
+            }
+            if(!orderResult) {
+                result = LogError("-CheckFolderData-TableFoldersOrder-Error",null);
+            }
+            return result;
+        }
+
+        //Validate Data folder & sub table datasets
+        var ValidateData = function() {
+            var result = true;
+            var destPath = settings.deliveryPackagePath;
+            destPath += (destPath.indexOf("\\") > -1) ? "\\{0}".format(settings.defaultSubFolders[1]) : "/{0}".format(settings.defaultSubFolders[1]); 
+            var subFolders = fs.readdirSync(destPath);
+            if(subFolders != null && subFolders.length > 0) {
+                id = "{0}-CheckFolderData-TableFolders-Error".format(settings.outputPrefix);
+                settings.errorStop = true;
+                subFolders.forEach(folder => {
+                    if(!dataTablePattern.test(folder)) {
+                        result = LogError("-CheckFolderData-TableFolders-Error",folder);
+                    }//minimum one tableX
+                    else 
+                    { 
+                        if(!ValidateTable(folder)) { result = false; }
+                        settings.errorStop = false; 
+                    }
+                });
+                if(!ValidateTablesOrder(subFolders)) { result = false; }
+            }
+            else {
+                settings.errorStop = true;
+                result = LogError("-CheckFolderDataEmpty-Error",null);
+            }
+
+            if(result) { LogInfo("-CheckFolderData-Ok",null); }
+            return result;
         }
 
         var ValidateContextDocumentation = function() {
+            var result = true;
 
+            return result;
         }
 
         // loop sub folders Structure
         var ValidateStructure = function () {
             var result = true;
             var subFolders = fs.readdirSync(settings.deliveryPackagePath);
-            var folderName = GetFolderName();
-            var id = "{0}-CheckFolders-Error".format(settings.outputPrefix);
             settings.defaultSubFolders.forEach(folder => {
                 if(!subFolders.includes(folder)) {
-                    ShowElement(id,settings.outputText[id].format(folder));
-                    settings.logCallback().error(settings.logType,folderName,settings.outputText[id].format(folder));
-                    settings.errorsCounter += 1;
-                    result = false;
+                   result = LogError("-CheckFolders-Error",folder);
+                   if(folder === settings.defaultSubFolders[1]) { settings.errorStop = true; }
                 }
                 else {
-                    switch(folder) {
-                        case "ContextDocumentation": ValidateContextDocumentation(); break;
-                        case "Data": ValidateData(); break;
-                        case "Indices": ValidateIndices(); break;
-                    }
+                    if(folder === settings.defaultSubFolders[0]) { ValidateContextDocumentation(); }
+                    if(folder === settings.defaultSubFolders[1]) { ValidateData(); }
+                    if(folder === settings.defaultSubFolders[2]) { ValidateIndices(); }
                 }
             });
             if(result && subFolders.length > 3) {
-                id = "{0}-CheckFoldersCount-Error".format(settings.outputPrefix); 
                 subFolders.forEach(folder => {
                     if(result && folder !== settings.defaultSubFolders[0] && folder !== settings.defaultSubFolders[1] && folder !== settings.defaultSubFolders[2]) {
-                        ShowElement(id,settings.outputText[id].format(folder));
-                        settings.logCallback().error(settings.logType,folderName,settings.outputText[id].format(folder));
-                        settings.errorsCounter += 1;
-                        result = false;
+                        result = LogError("-CheckFoldersCount-Error",folder);
                     }
                 });
             }
-            if(result) {  
-                id = "{0}-CheckFolders-Ok".format(settings.outputPrefix);                   
-                ShowElement(id,settings.outputText[id]);
-                settings.logCallback().info(settings.logType,folderName,settings.outputText[id]);
-            }
+            
+            if(result) { LogInfo("-CheckFolders-Ok",null); }
             return result;
         }
 
         //validate folder Name
         var ValidateName = function () {
             var result = true;
-            var id = null;
-            var folderName = GetFolderName();            
-            if(!pattern.test(folderName)) {
-                id = "{0}-CheckId-Error".format(settings.outputPrefix);
-                ShowElement(id,settings.outputText[id]);
-                settings.logCallback().error(settings.logType,folderName,settings.outputText[id]);
-                settings.errorsCounter += 1;
-                result = false;
+            var folderName = GetFolderName();
+            if(!deliveryPackagePattern.test(folderName)) {
+                result = LogError("-CheckId-Error",null);
             }
             else {
                 if(folderName === settings.defaultFolder) {
-                    id = "{0}-CheckId-Warning".format(settings.outputPrefix);
-                    ShowElement(id,settings.outputText[id]);
-                    settings.logCallback().warn(settings.logType,folderName,settings.outputText[id]);
+                    LogWarn("-CheckId-Warning",null)
                 }
                 else {
-                    id = "{0}-CheckId-Ok".format(settings.outputPrefix);
-                    ShowElement(id,settings.outputText[id]);
-                    settings.logCallback().info(settings.logType,folderName,settings.outputText[id]);
+                    LogInfo("-CheckId-Ok",null)
                 }            
             }
             return result;    
@@ -179,11 +261,16 @@ function (n) {
                 ValidateStructure();
                 if(settings.errorsCounter === 0) {
                     settings.logCallback().section(settings.logType,folderName,settings.logEndNoErrorSpn.innerHTML);
-                    settings.metadataCallback().validate(settings.deliveryPackagePath,settings.outputText);                    
                 } else {
-                    settings.logCallback().section(settings.logType,folderName,settings.logEndWithErrorSpn.innerHTML);
+                    settings.logCallback().section(settings.logType,folderName,settings.logEndWithErrorSpn.innerHTML);                    
+                }
+                if(!settings.errorStop) { 
+                    settings.metadataCallback().validate(settings.deliveryPackagePath,settings.outputText); 
+                } 
+                else {
                     settings.logCallback().commit(settings.deliveryPackagePath);
-                }                
+                }                  
+                                
             }
             catch(err) 
             {

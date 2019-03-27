@@ -47,7 +47,6 @@ function (n) {
                     settings.logCallback().section(settings.logType,folderName,settings.logEndNoErrorSpn.innerHTML);
                 } else {
                     settings.logCallback().section(settings.logType,folderName,settings.logEndWithErrorSpn.innerHTML);
-                    settings.logCallback().commit(settings.deliveryPackagePath);
                 } 
                 settings.logCallback().commit(settings.deliveryPackagePath);               
             }
