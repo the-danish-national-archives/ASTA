@@ -9,7 +9,9 @@ function (n) {
         const {ipcRenderer} = require('electron');
         const fs = require('fs');
         const deliveryPackagePattern = /^(FD.[1-9]{1}[0-9]{4,})$/;
-        const dataTablePattern = /^(table[0-9]{1,})$/;
+        const dataTablePattern = /^(table[1-9]{1}([0-9]{0,}))$/;
+        const dataFilePattern = /^(table[1-9]{1}([0-9]{0,}).csv)$/;
+        const metadataFilePattern = /^(table[1-9]{1}([0-9]{0,}).txt)$/;
 
         //private data memebers
         var settings = { 
@@ -59,10 +61,20 @@ function (n) {
         }
 
         // View Element by id & return texts
-        var ViewElement = function(id,formatText) {
+        var ViewElement = function(id,formatText1,formatText2,formatText3) {
             var result = settings.outputText[id];
-            if(formatText != null) {
-                result = result.format(formatText)
+            if(formatText1 != null) { 
+                if(formatText2 != null) {
+                    if(formatText3 != null) {
+                        result = result.format(formatText1,formatText2,formatText3);
+                    }
+                    else {
+                        result = result.format(formatText1,formatText2);
+                    }
+                }
+                else {
+                    result = result.format(formatText1);
+                } 
             }
 
             var element = $("span#{0}".format(id));            
@@ -75,9 +87,14 @@ function (n) {
         }
 
         //handle error logging + HTML output
-        var LogError = function(postfixId,formatText) {
+        var LogError = function(postfixId) {
             var id = "{0}{1}".format(settings.outputPrefix,postfixId);
-            var text = ViewElement(id,formatText);
+            var text = null;
+            if (arguments.length > 1) {                
+                if(arguments.length === 2) { text = ViewElement(id,arguments[1],null,null); }
+                if(arguments.length === 3) { text = ViewElement(id,arguments[1],arguments[2],null); }
+                if(arguments.length === 4) { text = ViewElement(id,arguments[1],arguments[2],arguments[3]); }
+            }
 
             settings.logCallback().error(settings.logType,GetFolderName(),text);
             settings.errorsCounter += 1;
@@ -85,17 +102,27 @@ function (n) {
         }
 
         //Handle warn logging
-        var LogWarn = function(postfixId,formatText) {
+        var LogWarn = function(postfixId) {
             var id = "{0}{1}".format(settings.outputPrefix,postfixId);
-            var text = ViewElement(id,formatText);
+            var text = null;
+            if (arguments.length > 1) {                
+                if(arguments.length === 2) { text = ViewElement(id,arguments[1],null,null); }
+                if(arguments.length === 3) { text = ViewElement(id,arguments[1],arguments[2],null); }
+                if(arguments.length === 4) { text = ViewElement(id,arguments[1],arguments[2],arguments[3]); }
+            }
 
             settings.logCallback().warn(settings.logType,GetFolderName(),text);
         }
         
         //Handle info logging
-        var LogInfo = function(postfixId,formatText) {
+        var LogInfo = function(postfixId) {
             var id = "{0}{1}".format(settings.outputPrefix,postfixId);
-            var text = ViewElement(id,formatText);
+            var text = null;
+            if (arguments.length > 1) {                
+                if(arguments.length === 2) { text = ViewElement(id,arguments[1],null,null); }
+                if(arguments.length === 3) { text = ViewElement(id,arguments[1],arguments[2],null); }
+                if(arguments.length === 4) { text = ViewElement(id,arguments[1],arguments[2],arguments[3]); }
+            }
 
             settings.logCallback().info(settings.logType,GetFolderName(),text);
         }
@@ -124,11 +151,31 @@ function (n) {
             return result;
         }
 
-        var ValidateTable = function(tableFolderName) {
+        //validate wrong files
+        var ValidateTableFiles = function(tableFolderName,subFiles) {
             var result = true;
-            var destPath = settings.deliveryPackagePath;
-            destPath += (destPath.indexOf("\\") > -1) ? "\\{0}\\{1}".format(settings.defaultSubFolders[1],tableFolderName) : "/{0}/{1}".format(settings.defaultSubFolders[1],tableFolderName); 
-            var subFiles = fs.readdirSync(destPath);
+            subFiles.forEach(file => {
+                if(file !== settings.dataFileName.format(tableFolderName) && file !== settings.metadataFileName.format(tableFolderName)) {
+                    var fileExt = file.substring(file.indexOf("."));
+                    if(fileExt !== settings.dataFileName.format("") && fileExt !== settings.metadataFileName.format("")) {
+                        result = LogError("-CheckFolderData-TableFolderFileExt-Error",tableFolderName,file);
+                    }
+                    else {
+                        if(dataFilePattern.test(file) || metadataFilePattern.test(file)) {
+                            result = LogError("-CheckFolderData-TableFolderFileOrder-Error",tableFolderName,file);
+                        }
+                        else {
+                            result = LogError("-CheckFolderData-TableFolderFile-Error",tableFolderName,file);
+                        }
+                    }
+                }
+            });
+            return result;
+        }
+
+        //Validate table folder must exits files
+        var ValidateTable = function(tableFolderName,subFiles) {
+            var result = true;
             if(subFiles != null && subFiles.length > 0) {
                 var fileName = settings.dataFileName.format(tableFolderName);
                 if(!subFiles.includes(fileName)) {
@@ -142,6 +189,8 @@ function (n) {
             else {
                 result = LogError("-CheckFolderData-TableFolderEmpty-Error",tableFolderName);
             }
+            //minimum one tableX valid files
+            if(result) { settings.errorStop = false; }
             return result;
         }
 
@@ -173,20 +222,25 @@ function (n) {
         //Validate Data folder & sub table datasets
         var ValidateData = function() {
             var result = true;
-            var destPath = settings.deliveryPackagePath;
-            destPath += (destPath.indexOf("\\") > -1) ? "\\{0}".format(settings.defaultSubFolders[1]) : "/{0}".format(settings.defaultSubFolders[1]); 
+            var destPath = (settings.deliveryPackagePath.indexOf("\\") > -1) ? "{0}\\{1}".format(settings.deliveryPackagePath,settings.defaultSubFolders[1]) : "{0}/{1}".format(settings.deliveryPackagePath,settings.defaultSubFolders[1]); 
             var subFolders = fs.readdirSync(destPath);
             if(subFolders != null && subFolders.length > 0) {
-                id = "{0}-CheckFolderData-TableFolders-Error".format(settings.outputPrefix);
                 settings.errorStop = true;
                 subFolders.forEach(folder => {
                     if(!dataTablePattern.test(folder)) {
                         result = LogError("-CheckFolderData-TableFolders-Error",folder);
-                    }//minimum one tableX
+                    }
                     else 
-                    { 
-                        if(!ValidateTable(folder)) { result = false; }
-                        settings.errorStop = false; 
+                    {
+                        var destTablePath = (destPath.indexOf("\\") > -1) ? "{0}\\{1}".format(destPath,folder) : "{0}/{1}".format(destPath,folder); 
+                        var subFiles = fs.readdirSync(destTablePath);
+                        if(!ValidateTable(folder,subFiles)) { 
+                            result = false; 
+                        }
+                        else {
+                            if(subFiles.length > 2) { result = LogError("-CheckFolderData-TableFolderFilesCount-Error",folder); }
+                        }
+                        if(!ValidateTableFiles(folder,subFiles)) { result = false; }                            
                     }
                 });
                 if(!ValidateTablesOrder(subFolders)) { result = false; }
@@ -195,7 +249,6 @@ function (n) {
                 settings.errorStop = true;
                 result = LogError("-CheckFolderDataEmpty-Error",null);
             }
-
             if(result) { LogInfo("-CheckFolderData-Ok",null); }
             return result;
         }
