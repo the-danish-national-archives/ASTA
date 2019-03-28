@@ -102,15 +102,10 @@
         <p>Test startet</p>
         <div class="results" id="testContent">
             {2}
-            <div class="testContent" id="FD1">
-                <span>Results of FD00001</span>
-            </div>
-            <div class="testContent" id="FD2">
-                <span>Results of FD00002</span>
-            </div>
-            <div class="testContent" id="FD3">
-                    <span>Results of FD00003</span>
-                </div>
+            <span name="FD00001">Results of FD00001</span><br>
+            <span name="FD00001">Results of FD00001</span><br>
+            <span name="FD00002">Results of FD00002</span><br>
+            <span name="FD00003">Results of FD00003</span><br>
         </div>
         <p>Test afsluttet med {3} antal fejl</p>
     </div>
@@ -121,9 +116,24 @@
         var fdResults = document.getElementsByClassName('testContent');
         var fdSelect = document.getElementById('fdSelector');
         for(var i = fdResults.length - 1; i >= 0; i--) { 
+            // var opt = document.createElement('option');
+            // opt.value = fdResults[i].id;
+            // opt.text = fdResults[i].id;
+            // fdSelect.add(opt, fdSelect[1]);
+        }
+    },
+    
+    function(){
+        var testContent = document.getElementById('testContent');
+        var spans = testContent.getElementsByTagName('span');
+        var ids = new Set();
+        for (var i = 0; i < spans.length; i++){
+            ids.add(spans[i].getAttribute('name'));
+        }
+        for (var x = 0; x < ids.length; x++){
             var opt = document.createElement('option');
-            opt.value = fdResults[i].id;
-            opt.text = fdResults[i].id;
+            opt.value = ids[i];
+            opt.text = ids[i];
             fdSelect.add(opt, fdSelect[1]);
         }
     })();
@@ -135,10 +145,8 @@
         var testLogs = document.getElementsByClassName('testContent');
         for(var i = 0; i < testLogs.length; i++){
             if (testLogs[i].id === selectObj.value) {
-                console.log('value is: ' + selectObj.value);
                 testLogs[i].hidden = false;
             } else {
-                console.log(selectObj.value);
                 testLogs[i].hidden = true;
             }
         }
