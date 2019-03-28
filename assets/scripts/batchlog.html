@@ -149,11 +149,11 @@
     function errVisiChanged(checkBoxErrEl) {
         if (checkBoxErrEl.checked) {
             for (var i = 0; i < errElements.length; i++) {
-                errElements[i].hidden = false;
+                errElements[i].style.display = "block";
             };
         } else {
             for (var i = 0; i < errElements.length; i++) {
-                errElements[i].hidden = true;
+                errElements[i].style.display = "none";
             };
         }
     }
@@ -162,11 +162,11 @@
     function warnVisiChanged(checkboxWarnEl) {
         if (checkboxWarnEl.checked) {
             for (var i = 0; i < warnElements.length; i++) {
-                warnElements[i].hidden = false;
+                warnElements[i].style.display = "block";
             }
         } else {
             for (var i = 0; i < warnElements.length; i++) {
-                warnElements[i].hidden = true;
+                warnElements[i].style.display = "none";
             }
         }
     }
@@ -175,11 +175,11 @@
     function infoVisiChanged(checkbnoxInfoEl) {
         if (checkbnoxInfoEl.checked) {
             for (var i = 0; i < infoElements.length; i++) {
-                infoElements[i].hidden = false;
+                infoElements[i].style.display = "block";
             }
         } else {
             for (var i = 0; i < infoElements.length; i++) {
-                infoElements[i].hidden = true;
+                infoElements[i].style.display = "none";
             }
         }
     }
