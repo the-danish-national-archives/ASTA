@@ -90,7 +90,7 @@
             <span style="color:white;">Filter:</span><br>
             <label for="fdSelector">FD Pakke:</label>
             <select name="fdNumber" id="fdSelector" onchange="fdSelectChanged(this)">
-                <option value="">--Vælg FD Pakke--</option>
+                <option value="">--Alle FD Pakker--</option>
             </select>
             <label for="checkErr">Fejl:</label><input type="checkbox" name="error" id="checkErr" checked="true" onchange="errVisiChanged(this)">
             <label for="checkWarn">OBS:</label><input type="checkbox" name="warning" id="checkWarn" onchange="warnVisiChanged(this)">
@@ -102,94 +102,84 @@
         <p>Test startet</p>
         <div class="results" id="testContent">
             {2}
-            <span name="FD00001">Results of FD00001</span><br>
-            <span name="FD00001">Results of FD00001</span><br>
-            <span name="FD00002">Results of FD00002</span><br>
-            <span name="FD00003">Results of FD00003</span><br>
         </div>
         <p>Test afsluttet med {3} antal fejl</p>
     </div>
 </body>
 <script>
     // Populate the dropdown when the page have loaded.
-    (function(){
-        var fdResults = document.getElementsByClassName('testContent');
+    (function () {
         var fdSelect = document.getElementById('fdSelector');
-        for(var i = fdResults.length - 1; i >= 0; i--) { 
-            // var opt = document.createElement('option');
-            // opt.value = fdResults[i].id;
-            // opt.text = fdResults[i].id;
-            // fdSelect.add(opt, fdSelect[1]);
-        }
-    },
-    
-    function(){
         var testContent = document.getElementById('testContent');
         var spans = testContent.getElementsByTagName('span');
         var ids = new Set();
-        for (var i = 0; i < spans.length; i++){
+        var i = [];
+        for (var i = spans.length - 1; i >= 0; i--){
             ids.add(spans[i].getAttribute('name'));
         }
-        for (var x = 0; x < ids.length; x++){
+        for (let item of ids){
             var opt = document.createElement('option');
-            opt.value = ids[i];
-            opt.text = ids[i];
+            opt.value = item;
+            opt.text = item;
             fdSelect.add(opt, fdSelect[1]);
         }
     })();
 
     // Show only the selected FD test result.
     function fdSelectChanged(selectObj) {
-        console.log(selectObj.value);
-        console.log(selectObj.length);
-        var testLogs = document.getElementsByClassName('testContent');
-        for(var i = 0; i < testLogs.length; i++){
-            if (testLogs[i].id === selectObj.value) {
-                testLogs[i].hidden = false;
-            } else {
-                testLogs[i].hidden = true;
+        var testContent = document.getElementById('testContent');
+        var spans = testContent.getElementsByTagName('span');
+        //var testLogs = document.getElementsByClassName('testContent');
+        if(selectObj.value === ""){
+            for(var i = 0; i < spans.length; i++){
+                spans[i].style.display = "block";    
+            }
+        } else {
+            for (var i = 0; i < spans.length; i++) {
+                if (spans[i].getAttribute('name') === selectObj.value) {
+                    spans[i].style.display = "block";
+                } else {
+                    spans[i].style.display = "none";
+                }
             }
         }
     }
-
     // Turn error messages on / off
     var errElements = document.getElementsByClassName("error");
-    function errVisiChanged(checkBoxErrEl){
-        if(checkBoxErrEl.checked) {
-            for(var i = 0; i < errElements.length; i++) {
-                errElements[i].hidden = false;
+    function errVisiChanged(checkBoxErrEl) {
+        if (checkBoxErrEl.checked) {
+            for (var i = 0; i < errElements.length; i++) {
+                errElements[i].style.display = "block";
             };
         } else {
-            for(var i = 0; i < errElements.length; i++) {
-                errElements[i].hidden = true;
+            for (var i = 0; i < errElements.length; i++) {
+                errElements[i].style.display = "none";
             };
         }
     }
-
     // Turn warning messages on / off
     var warnElements = document.getElementsByClassName('warning');
-    function warnVisiChanged(checkboxWarnEl){
-        if(checkboxWarnEl.checked) {
-            for(var i = 0; i < warnElements.length; i++) {
-                warnElements[i].hidden = false;
+    function warnVisiChanged(checkboxWarnEl) {
+        if (checkboxWarnEl.checked) {
+            for (var i = 0; i < warnElements.length; i++) {
+                warnElements[i].style.display = "block";
             }
         } else {
             for (var i = 0; i < warnElements.length; i++) {
-                warnElements[i].hidden = true;
+                warnElements[i].style.display = "none";
             }
         }
     }
-
     // Turn info messages on / off
     var infoElements = document.getElementsByClassName('ok');
-    function infoVisiChanged(checkbnoxInfoEl){
-        if(checkbnoxInfoEl.checked) {
-            for(var i = 0; i < infoElements.length; i++){
-                infoElements[i].hidden = false;
+    function infoVisiChanged(checkbnoxInfoEl) {
+        if (checkbnoxInfoEl.checked) {
+            for (var i = 0; i < infoElements.length; i++) {
+                infoElements[i].style.display = "block";
             }
         } else {
             for (var i = 0; i < infoElements.length; i++) {
-                infoElements[i].hidden = true;
+                infoElements[i].style.display = "none";
             }
         }
     }

@@ -36,7 +36,8 @@ function (n) {
             defaultFolder: "FD.99999",
             logType: "structure",
             errorsCounter: 0,
-            errorStop: false
+            errorStop: false,
+            testId: ""
         }
 
         //reset status & input fields
@@ -439,9 +440,14 @@ function (n) {
             })            
         }
 
+        var SetTestId = function (){
+            settings.testId = settings.selectedPath;
+            console.log('test id : ' + settings.testId);
+        }
+
         //Model interfaces functions
         Rigsarkiv.Nemesis.Structure = {        
-            initialize: function (logCallback,metadataCallback,outputErrorId,selectDirectoryId,pathDirectoryId,validateId,logStartId,logEndNoErrorId,logEndWithErrorId,outputPrefix) {            
+            initialize: function (logCallback,metadataCallback,outputErrorId,selectDirectoryId,pathDirectoryId,validateId,logStartId,logEndNoErrorId,logEndWithErrorId,outputPrefix,testId) {            
                 settings.logCallback = logCallback;
                 settings.metadataCallback = metadataCallback;
                 settings.outputErrorSpn = document.getElementById(outputErrorId);
@@ -453,11 +459,13 @@ function (n) {
                 settings.logEndNoErrorSpn = document.getElementById(logEndNoErrorId);  
                 settings.logEndWithErrorSpn = document.getElementById(logEndWithErrorId);
                 settings.outputPrefix = outputPrefix;
+                settings.testId = testId;
                 $("span[id^='" + settings.outputPrefix + "']").each(function() {
                     settings.outputText[this.id] = $(this).html();
                     $(this).html("");
                 });
                 AddEvents();
+                SetTestId();
             }
         };    
     }(jQuery);
