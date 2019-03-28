@@ -12,6 +12,7 @@ function (n) {
         const dataTablePattern = /^(table[1-9]{1}([0-9]{0,}))$/;
         const dataFilePattern = /^(table[1-9]{1}([0-9]{0,}).csv)$/;
         const metadataFilePattern = /^(table[1-9]{1}([0-9]{0,}).txt)$/;
+        const docFolderPattern = /^([1-9]{1}([0-9]{0,11}))$/;
 
         //private data memebers
         var settings = { 
@@ -29,6 +30,7 @@ function (n) {
             outputText: {},
             metadataFileName: "{0}.txt",
             dataFileName: "{0}.csv",
+            docCollectionFolderName: "docCollection1",
             defaultSubFolders: ["ContextDocumentation","Data","Indices"],
             defaultIndicesFiles: ["archiveIndex.xml","contextDocumentationIndex.xml"],
             defaultFolder: "FD.99999",
@@ -226,9 +228,11 @@ function (n) {
             var subFolders = fs.readdirSync(destPath);
             if(subFolders != null && subFolders.length > 0) {
                 settings.errorStop = true;
+                var validTablesName = true;
                 subFolders.forEach(folder => {
                     if(!dataTablePattern.test(folder)) {
                         result = LogError("-CheckFolderData-TableFolders-Error",folder);
+                        validTablesName = false;
                     }
                     else 
                     {
@@ -243,7 +247,7 @@ function (n) {
                         if(!ValidateTableFiles(folder,subFiles)) { result = false; }                            
                     }
                 });
-                if(!ValidateTablesOrder(subFolders)) { result = false; }
+                if(validTablesName && !ValidateTablesOrder(subFolders)) { result = false; }
             }
             else {
                 settings.errorStop = true;
@@ -253,9 +257,52 @@ function (n) {
             return result;
         }
 
+        //Validate docCollection1 folder
+        var ValidateDocCollection = function(contextDocumentationPath) {
+            var result = true;
+            var destPath = (contextDocumentationPath.indexOf("\\") > -1) ? "{0}\\{1}".format(contextDocumentationPath,settings.docCollectionFolderName) : "{0}/{1}".format(contextDocumentationPath,settings.docCollectionFolderName); 
+            var subFolders = fs.readdirSync(destPath);
+            if(subFolders != null && subFolders.length > 0) {
+                var validFoldersName = true;
+                subFolders.forEach(folder => {
+                    if(!docFolderPattern.test(folder)) {
+                        result = LogError("-CheckFolderContextDocumentation-DocCollectionDocumentFolder-Error",folder);
+                        validFoldersName = false;
+                    }
+                });
+
+            }
+            else {
+                result = LogError("-CheckFolderContextDocumentation-DocCollectionEmpty-Error",null);
+            }
+            return result;
+        }
+
+        //Validate ContextDocumentation folder
         var ValidateContextDocumentation = function() {
             var result = true;
-
+            var destPath = (settings.deliveryPackagePath.indexOf("\\") > -1) ? "{0}\\{1}".format(settings.deliveryPackagePath,settings.defaultSubFolders[0]) : "{0}/{1}".format(settings.deliveryPackagePath,settings.defaultSubFolders[0]); 
+            var subFolders = fs.readdirSync(destPath);
+            if(subFolders != null && subFolders.length > 0) {
+                if(!subFolders.includes(settings.docCollectionFolderName)) {
+                    result = LogError("-CheckFolderContextDocumentation-DocCollections-Error",null);
+                }
+                else 
+                {
+                    if(!ValidateDocCollection(destPath)) {
+                        result = false;
+                    }
+                    subFolders.forEach(folder => {
+                        if(folder != settings.docCollectionFolderName) {
+                            result = LogError("-CheckFolderContextDocumentation-DocCollectionsCount-Error",folder);
+                        }
+                    });
+                }
+            }
+            else {
+                result = LogError("-CheckFolderContextDocumentationEmpty-Error",null);
+            }
+            if(result) { LogInfo("-CheckFolderContextDocumentation-Ok",null); }
             return result;
         }
 
