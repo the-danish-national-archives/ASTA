@@ -32,6 +32,7 @@
                             </div>
                             <div class="verticalDivider"> </div>
                             <div class="nemesisOutput">
+                                <h3 id="nemesis-test-id"></h3>
                                 <span id="nemesis-processing-CheckId-Error" hidden="true"><i class="fas fa-times error"></i>Den valgte afleveringspakke er ikke navngivet korrekt.<br/></span>
                                 <span id="nemesis-processing-CheckId-Warning" hidden="true"><i class="fas fa-exclamation-triangle warning"></i>Test id advarsel<br/></span>
                                 <span id="nemesis-processing-CheckId-Ok" hidden="true"><i class="fas fa-check-circle ok"></i>Mappestruktur ID test gennemført<br/></span>
@@ -75,7 +76,7 @@
             require('./assets/js/nemesis/metadata');
 
             Rigsarkiv.Log.initialize("nemesis-output-Error","nemesis-output-Ok","nemesis-select-logFile","nemesis-output-Supplement");
-            Rigsarkiv.Nemesis.Structure.initialize(Rigsarkiv.Log.callback,Rigsarkiv.Nemesis.MetaData.callback,"nemesis-output-Error","nemesis-select-directory","nemesis-path","nemesis-validateBtn","nemesis-output-structure-logStart","nemesis-output-structure-logEndNoError","nemesis-output-structure-logEndWithError","nemesis-processing");
+            Rigsarkiv.Nemesis.Structure.initialize(Rigsarkiv.Log.callback,Rigsarkiv.Nemesis.MetaData.callback,"nemesis-output-Error","nemesis-select-directory","nemesis-path","nemesis-validateBtn","nemesis-output-structure-logStart","nemesis-output-structure-logEndNoError","nemesis-output-structure-logEndWithError","nemesis-processing", "nemesis-test-id");
             Rigsarkiv.Nemesis.MetaData.initialize(Rigsarkiv.Log.callback,"nemesis-output-Error","nemesis-output-metadata-logStart","nemesis-output-metadata-logEndNoError","nemesis-output-metadata-logEndWithError","nemesis-processing");             
           </script>
     </section>
