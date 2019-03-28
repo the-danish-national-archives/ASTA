@@ -257,6 +257,42 @@ function (n) {
             return result;
         }
 
+        //Validate Document Folder
+        var ValidateDocumentFolder = function(documentFolderName,subFiles) {
+            var result = true;
+            if(subFiles != null && subFiles.length > 0) {
+            }
+            else {
+                result = LogError("-CheckFolderContextDocumentation-DocCollectionDocumentFolderEmpty-Error",documentFolderName);
+            }
+            return result;   
+        }
+
+        //Validate docCollection1 folder orders
+        var ValidateDocumentFoldersOrder = function(subFolders) {
+            var result = true;
+            var folders = [];
+            subFolders.forEach(folder => {
+                folders.push(parseInt(folder));
+            });
+            folders.sort(function(a, b){return a-b});
+            if(folders[0] !== 1) {
+                result = LogError("-CheckFolderContextDocumentation-DocCollectionDocumentFolder1-Error",null);
+            }
+            var i;
+            var orderResult = true;
+            for (i = 0; i < folders.length; i++) { 
+                if((i + 1) !== folders[i]) {
+                    orderResult = false;
+                    break;
+                }
+            }
+            if(!orderResult) {
+                result = LogError("-CheckFolderContextDocumentation-DocCollectionDocumentFolderOrder-Error",null);
+            }
+            return result;
+        }
+
         //Validate docCollection1 folder
         var ValidateDocCollection = function(contextDocumentationPath) {
             var result = true;
@@ -269,8 +305,15 @@ function (n) {
                         result = LogError("-CheckFolderContextDocumentation-DocCollectionDocumentFolder-Error",folder);
                         validFoldersName = false;
                     }
+                    else {
+                        var destFolderPath = (destPath.indexOf("\\") > -1) ? "{0}\\{1}".format(destPath,folder) : "{0}/{1}".format(destPath,folder); 
+                        var subFiles = fs.readdirSync(destFolderPath);
+                        if(!ValidateDocumentFolder(folder,subFiles)) {
+                            result = false;
+                        }
+                    }
                 });
-
+                if(validFoldersName && !ValidateDocumentFoldersOrder(subFolders)) { result = false; }
             }
             else {
                 result = LogError("-CheckFolderContextDocumentation-DocCollectionEmpty-Error",null);
