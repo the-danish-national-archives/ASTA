@@ -103,10 +103,6 @@
         <p>Test startet</p>
         <div class="results" id="testContent">
             {2}
-            <span name="FD00001">Results of FD00001</span><br>
-            <span name="FD00001">Results of FD00001</span><br>
-            <span name="FD00002">Results of FD00002</span><br>
-            <span name="FD00003">Results of FD00003</span><br>
         </div>
         <p>Test afsluttet med {3} antal fejl</p>
     </div>
@@ -137,18 +133,18 @@
         console.log(selectObj.value);
         console.log(selectObj.length);
         //var testLogs = document.getElementsByClassName('testContent');
-        if(selectObj.value === "all"){
-            for(var i = 0; spans.length; i++){
-                spans[i].hidden = false;    
+        if(selectObj.value === "all" || selectObj.value === ""){
+            for(var i = 0; i < spans.length; i++){
+                spans[i].style.display = "block";    
             }
         } else {
             for (var i = 0; i < spans.length; i++) {
                 if (spans[i].getAttribute('name') === selectObj.value) {
                     console.log('value is: ' + selectObj.value);
-                    spans[i].hidden = false;
+                    spans[i].style.display = "block";
                 } else {
                     console.log(selectObj.value);
-                    spans[i].hidden = true;
+                    spans[i].style.display = "none";
                 }
             }
         }
