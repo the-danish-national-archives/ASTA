@@ -259,15 +259,27 @@ function (n) {
             return result;
         }
 
-         //Validate Document files orders
-        var ValidateDocumentFilesOrder = function(subFiles) {
+        //Validate Document files orders
+        var ValidateDocumentFilesOrder = function(documentFolderName,subFiles) {
             var result = true;
             var files = [];
-            subFolders.forEach(file => {
+            subFiles.forEach(file => {
                 files.push(parseInt(file.substring(0,file.indexOf("."))));
             });
+            files.sort(function(a, b){return a-b});
             if(files[0] !== 1) {
-                //result = LogError("-CheckFolderContextDocumentation-DocCollectionDocumentFileName1-Error",null);
+                result = LogError("-CheckFolderContextDocumentation-DocCollectionDocumentFileName1-Error",documentFolderName);
+            }
+            var i;
+            var orderResult = true;
+            for (i = 0; i < files.length; i++) { 
+                if((i + 1) !== files[i]) {
+                    orderResult = false;
+                    break;
+                }
+            }
+            if(!orderResult) {
+                result = LogError("-CheckFolderContextDocumentation-DocCollectionDocumentFilesOrder-Error",null);
             }
             return result;
         }
@@ -281,7 +293,7 @@ function (n) {
                 subFiles.forEach(file => {
                     var fileName = file.substring(0,file.indexOf("."))
                     if(!docFolderPattern.test(fileName)) {
-                        result = LogError("-CheckFolderContextDocumentation-DocCollectionDocumentFileName-Error",documentFolderName,fileExt);
+                        result = LogError("-CheckFolderContextDocumentation-DocCollectionDocumentFileName-Error",documentFolderName,file);
                         validFilesName = false;
                     }
                     else {
@@ -297,7 +309,7 @@ function (n) {
                 if(filesExt.length > 1) {
                     result = LogError("-CheckFolderContextDocumentation-DocCollectionDocumentFilesExt-Error",documentFolderName);
                 }
-                if(validFilesName && !ValidateDocumentFilesOrder(subFiles)) { result = false; }
+                if(validFilesName && !ValidateDocumentFilesOrder(documentFolderName,subFiles)) { result = false; }
             }
             else {
                 result = LogError("-CheckFolderContextDocumentation-DocCollectionDocumentFolderEmpty-Error",documentFolderName);
