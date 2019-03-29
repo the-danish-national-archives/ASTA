@@ -400,6 +400,7 @@ function (n) {
             try 
             {
                 var folderName = GetFolderName();
+                settings.testId.innerText = folderName;
                 settings.logCallback().section(settings.logType,folderName,settings.logStartSpn.innerHTML);            
                 ValidateName();
                 ValidateStructure();
@@ -440,11 +441,6 @@ function (n) {
             })            
         }
 
-        var SetTestId = function (){
-            settings.testId = settings.selectedPath;
-            console.log('test id : ' + settings.testId);
-        }
-
         //Model interfaces functions
         Rigsarkiv.Nemesis.Structure = {        
             initialize: function (logCallback,metadataCallback,outputErrorId,selectDirectoryId,pathDirectoryId,validateId,logStartId,logEndNoErrorId,logEndWithErrorId,outputPrefix,testId) {            
@@ -459,13 +455,12 @@ function (n) {
                 settings.logEndNoErrorSpn = document.getElementById(logEndNoErrorId);  
                 settings.logEndWithErrorSpn = document.getElementById(logEndWithErrorId);
                 settings.outputPrefix = outputPrefix;
-                settings.testId = testId;
+                settings.testId = document.getElementById('nemesis-test-id');
                 $("span[id^='" + settings.outputPrefix + "']").each(function() {
                     settings.outputText[this.id] = $(this).html();
                     $(this).html("");
                 });
                 AddEvents();
-                SetTestId();
             }
         };    
     }(jQuery);

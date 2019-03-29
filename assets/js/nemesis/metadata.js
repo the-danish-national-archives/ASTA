@@ -43,6 +43,7 @@ function (n) {
                 var folderName = GetFolderName();
                 settings.logCallback().section(settings.logType,folderName,settings.logStartSpn.innerHTML);            
                 //do flow validation
+                console.log('folder:' + folderName);
                 if(settings.errorsCounter === 0) {
                     settings.logCallback().section(settings.logType,folderName,settings.logEndNoErrorSpn.innerHTML);
                 } else {
@@ -56,6 +57,10 @@ function (n) {
             }
         }
 
+        var AddEvents = function (){
+            console.log('events ');
+        }
+
         //Model interfaces functions
         Rigsarkiv.Nemesis.MetaData = {        
             initialize: function (logCallback,outputErrorId,logStartId,logEndNoErrorId,logEndWithErrorId,outputPrefix) {            
@@ -66,6 +71,7 @@ function (n) {
                 settings.logEndNoErrorSpn = document.getElementById(logEndNoErrorId);  
                 settings.logEndWithErrorSpn = document.getElementById(logEndWithErrorId);
                 settings.outputPrefix = outputPrefix;
+                AddEvents();
             },
             callback: function () {
                 return { 
