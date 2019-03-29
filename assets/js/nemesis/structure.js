@@ -31,6 +31,7 @@ function (n) {
             metadataFileName: "{0}.txt",
             dataFileName: "{0}.csv",
             docCollectionFolderName: "docCollection1",
+            docFilesExt: [".tif",".mpg",".mp3",".jpg","jp2"],
             defaultSubFolders: ["ContextDocumentation","Data","Indices"],
             defaultIndicesFiles: ["archiveIndex.xml","contextDocumentationIndex.xml"],
             defaultFolder: "FD.99999",
@@ -258,10 +259,45 @@ function (n) {
             return result;
         }
 
+         //Validate Document files orders
+        var ValidateDocumentFilesOrder = function(subFiles) {
+            var result = true;
+            var files = [];
+            subFolders.forEach(file => {
+                files.push(parseInt(file.substring(0,file.indexOf("."))));
+            });
+            if(files[0] !== 1) {
+                //result = LogError("-CheckFolderContextDocumentation-DocCollectionDocumentFileName1-Error",null);
+            }
+            return result;
+        }
+
         //Validate Document Folder
         var ValidateDocumentFolder = function(documentFolderName,subFiles) {
             var result = true;
             if(subFiles != null && subFiles.length > 0) {
+               var filesExt = [];
+               var validFilesName = true;
+                subFiles.forEach(file => {
+                    var fileName = file.substring(0,file.indexOf("."))
+                    if(!docFolderPattern.test(fileName)) {
+                        result = LogError("-CheckFolderContextDocumentation-DocCollectionDocumentFileName-Error",documentFolderName,fileExt);
+                        validFilesName = false;
+                    }
+                    else {
+                        var fileExt = file.substring(file.indexOf("."));
+                        if(!settings.docFilesExt.includes(fileExt)) {
+                            result = LogError("-CheckFolderContextDocumentation-DocCollectionDocumentFileExt-Error",documentFolderName,fileExt);
+                        } 
+                        else {
+                            if(!filesExt.includes(fileExt)) { filesExt.push(fileExt); }
+                        }
+                    }                    
+                });
+                if(filesExt.length > 1) {
+                    result = LogError("-CheckFolderContextDocumentation-DocCollectionDocumentFilesExt-Error",documentFolderName);
+                }
+                if(validFilesName && !ValidateDocumentFilesOrder(subFiles)) { result = false; }
             }
             else {
                 result = LogError("-CheckFolderContextDocumentation-DocCollectionDocumentFolderEmpty-Error",documentFolderName);
