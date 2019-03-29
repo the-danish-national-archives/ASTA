@@ -19,7 +19,8 @@ function (n) {
             deliveryPackagePath: null,
             outputText: {},
             logType: "metadata",
-            errorsCounter: 0
+            errorsCounter: 0,
+            errorStop: false,
         }
 
         //output system error messages
@@ -34,6 +35,89 @@ function (n) {
             var folders = settings.deliveryPackagePath.getFolders();
             return folders[folders.length - 1];
         }
+        // View Element by id & return texts
+        var ViewElement = function(id,formatText1,formatText2,formatText3) {
+            var result = settings.outputText[id];
+            if(formatText1 != null) { 
+                if(formatText2 != null) {
+                    if(formatText3 != null) {
+                        result = result.format(formatText1,formatText2,formatText3);
+                    }
+                    else {
+                        result = result.format(formatText1,formatText2);
+                    }
+                }
+                else {
+                    result = result.format(formatText1);
+                } 
+            }
+
+            var element = $("span#{0}".format(id));            
+            if(result != null) {
+                element.html(element.html() + result);
+            }
+            element.show();
+
+            return result;
+        }
+
+        //handle error logging + HTML output
+        var LogError = function(postfixId) {
+            var id = "{0}{1}".format(settings.outputPrefix,postfixId);
+            var text = null;
+            if (arguments.length > 1) {                
+                if(arguments.length === 2) { text = ViewElement(id,arguments[1],null,null); }
+                if(arguments.length === 3) { text = ViewElement(id,arguments[1],arguments[2],null); }
+                if(arguments.length === 4) { text = ViewElement(id,arguments[1],arguments[2],arguments[3]); }
+            }
+
+            settings.logCallback().error(settings.logType,GetFolderName(),text);
+            settings.errorsCounter += 1;
+            return false;
+        }
+
+        //Handle warn logging
+        var LogWarn = function(postfixId) {
+            var id = "{0}{1}".format(settings.outputPrefix,postfixId);
+            var text = null;
+            if (arguments.length > 1) {                
+                if(arguments.length === 2) { text = ViewElement(id,arguments[1],null,null); }
+                if(arguments.length === 3) { text = ViewElement(id,arguments[1],arguments[2],null); }
+                if(arguments.length === 4) { text = ViewElement(id,arguments[1],arguments[2],arguments[3]); }
+            }
+
+            settings.logCallback().warn(settings.logType,GetFolderName(),text);
+        }
+        
+        //Handle info logging
+        var LogInfo = function(postfixId) {
+            var id = "{0}{1}".format(settings.outputPrefix,postfixId);
+            var text = null;
+            if (arguments.length > 1) {                
+                if(arguments.length === 2) { text = ViewElement(id,arguments[1],null,null); }
+                if(arguments.length === 3) { text = ViewElement(id,arguments[1],arguments[2],null); }
+                if(arguments.length === 4) { text = ViewElement(id,arguments[1],arguments[2],arguments[3]); }
+            }
+
+            settings.logCallback().info(settings.logType,GetFolderName(),text);
+        }
+
+        /*var ValidateData = function () {
+            var result = true;
+            var destPath = (settings.deliveryPackagePath.indexOf("\\") > -1) ? "{0}\\{1}".format(settings.deliveryPackagePath,settings.defaultSubFolders[1]) : "{0}/{1}".format(settings.deliveryPackagePath,settings.defaultSubFolders[1]); 
+            fs.readdirSync(destPath).forEach(folder => {
+                var destTablePath = (destPath.indexOf("\\") > -1) ? "{0}\\{1}".format(destPath,folder) : "{0}/{1}".format(destPath,folder); 
+                var subFiles = fs.readdirSync(destTablePath);
+                subFiles.forEach(file => {
+                    if(file === "") {
+                        if(!ValidateMetadataFile(file)) {
+                            result = LogError("-CheckFolderData-TableFolderFileExt-Error",folder,file);
+                        }
+                    }
+                });
+            });
+            return result; 
+        }*/
 
         //start flow validation
         var Validate = function () {

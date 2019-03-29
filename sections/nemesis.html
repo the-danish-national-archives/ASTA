@@ -11,17 +11,18 @@
                         <h4>Test en afleveringspakke</h4>
                         <div class="box">
                             <div class="nemesisControls">
-                                <span>Vælg afleveringspakke til test:</span>
-                                <br>
-                                <input type="text" id="nemesis-path">
-                                <button id="nemesis-select-directory">Browse</button>
-                                <br/>
-                                <br/>
-                                <button id="nemesis-validateBtn">Test mappe</button>
-                                <span id="nemesis-output-Error" hidden="true"><br />Error: {0}</span>
-                                <span id="nemesis-output-Ok" hidden="true"><br /><strong>Bekræftelse!</strong> Log fil [{0}] er nu skabt og placeret i mappen [</span>
-                                <a id="nemesis-select-logFile" hidden="true"></a>
-                                <span id="nemesis-output-Supplement" hidden="true">]</span>
+                               <div id="nemesis-validate-test-panel">
+                                    <span>Vælg afleveringspakke til test:</span>
+                                    <br>
+                                    <input type="text" id="nemesis-path">
+                                    <button id="nemesis-select-directory">Browse</button>
+                                    <br/><br/>                                
+                                    <button id="nemesis-validateBtn">Test mappe</button>
+                                    <span id="nemesis-output-Error" hidden="true"><br />Error: {0}</span>
+                                    <span id="nemesis-output-Ok" hidden="true"><br /><strong>Bekræftelse!</strong> Log fil [{0}] er nu skabt og placeret i mappen [</span>
+                                    <a id="nemesis-select-logFile" hidden="true"></a>
+                                    <span id="nemesis-output-Supplement" hidden="true">]</span>                                
+                                </div>
                                 <span id="nemesis-output-structure-logStart" hidden="true">Mappestruktur test startet<br/></span>
                                 <span id="nemesis-output-structure-logEndNoError" hidden="true"><br/>Metadatafilstruktur test afsluttet uden fejl</span>
                                 <span id="nemesis-output-structure-logEndWithError" hidden="true"><br/>Metadatafilstruktur test afsluttet</span>
@@ -29,11 +30,15 @@
                                 <span id="nemesis-output-metadata-logEndNoError" hidden="true"><br/>Metadatafil test afsluttet uden fejl</span>
                                 <span id="nemesis-output-metadata-logEndWithError" hidden="true"><br/>Metadatafil test afsluttet</span>
                                 <br>
-                            <div id="batch-test-controls">
-                                <h4>Batch test</h4>
-                                <span>Vælg mappe indeholdende flere afleveringspakker:</span>
-                                <button id="nemesis-batch-validateBtn">Batch test</button>
-                            </div>
+                                <div id="nemesis-batch-test-panel">
+                                    <h4>Batch test</h4>
+                                    <span>Vælg mappe indeholdende flere afleveringspakker:</span>
+                                    <br>
+                                    <input type="text" id="nemesis-batch-path">
+                                    <button id="nemesis-select-batch-directory">Browse</button>
+                                    <br/><br/> 
+                                    <button id="nemesis-batch-validateBtn">Batch test</button>
+                                </div>
                             </div>
                             <div class="verticalDivider"> </div>
                             <div class="nemesisOutput">
