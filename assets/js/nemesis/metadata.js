@@ -11,6 +11,8 @@ function (n) {
 
         //private data memebers
         var settings = { 
+            outputErrorSpn: null,
+            outputErrorText: null,
             outputPrefix: null,
             logCallback: null,
             logStartSpn: null,

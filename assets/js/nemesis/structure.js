@@ -17,6 +17,8 @@ function (n) {
 
         //private data memebers
         var settings = { 
+            outputErrorSpn: null,
+            outputErrorText: null,
             selectDirBtn: null,
             pathDirTxt: null,
             selectedPath: null,
@@ -510,6 +512,16 @@ function (n) {
                     $(this).html("");
                 });
                 AddEvents();
+            },
+            callback: function () {
+                return { 
+                    validate: function(path) 
+                    { 
+                        settings.deliveryPackagePath = path;
+                        Reset();
+                        Validate();
+                    }  
+                };
             }
         };    
     }(jQuery);

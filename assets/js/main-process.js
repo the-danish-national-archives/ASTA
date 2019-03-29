@@ -72,6 +72,16 @@ ipcMain.on('validation-open-file-dialog', (event) => {
   })
 })
 
+ipcMain.on('batch-open-file-dialog', (event) => {
+  dialog.showOpenDialog({
+    properties: ['openFile', 'openDirectory']
+  }, (files) => {
+    if (files) {
+      event.sender.send('batch-selected-directory', files)
+    }
+  })
+})
+
 ipcMain.on('open-information-dialog', (event,title,text) => {
   const options = {
     type: 'info',

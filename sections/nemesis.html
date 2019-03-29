@@ -90,10 +90,12 @@
             require('./assets/js/utilities');
             require('./assets/js/messages');
             require('./assets/js/log');
+            require('./assets/js/nemesis/batch');
             require('./assets/js/nemesis/structure');
             require('./assets/js/nemesis/metadata');
 
             Rigsarkiv.Log.initialize("nemesis-output-Error","nemesis-output-Ok","nemesis-select-logFile","nemesis-output-Supplement");
+            Rigsarkiv.Nemesis.Batch.initialize(Rigsarkiv.Nemesis.Structure.callback,"nemesis-output-Error","nemesis-select-batch-directory","nemesis-batch-path","nemesis-batch-validateBtn");
             Rigsarkiv.Nemesis.Structure.initialize(Rigsarkiv.Log.callback,Rigsarkiv.Nemesis.MetaData.callback,"nemesis-output-Error","nemesis-select-directory","nemesis-path","nemesis-validateBtn","nemesis-output-structure-logStart","nemesis-output-structure-logEndNoError","nemesis-output-structure-logEndWithError","nemesis-processing", "nemesis-test-id");
             Rigsarkiv.Nemesis.MetaData.initialize(Rigsarkiv.Log.callback,"nemesis-output-Error","nemesis-output-metadata-logStart","nemesis-output-metadata-logEndNoError","nemesis-output-metadata-logEndWithError","nemesis-processing");             
           </script>
