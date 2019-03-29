@@ -241,7 +241,7 @@ function (n) {
                     {
                         var destTablePath = (destPath.indexOf("\\") > -1) ? "{0}\\{1}".format(destPath,folder) : "{0}/{1}".format(destPath,folder); 
                         var subFiles = fs.readdirSync(destTablePath);
-                        if(!ValidateTable(folder,subFiles)) { 
+                        if(!ValidateTable(folder,subFiles.filter(junk.not))) { 
                             result = false; 
                         }
                         else {
