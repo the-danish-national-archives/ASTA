@@ -8,6 +8,7 @@ function (n) {
         function (n){
         const {ipcRenderer} = require('electron');
         const fs = require('fs');
+        const junk = require('junk');
         const deliveryPackagePattern = /^(FD.[1-9]{1}[0-9]{4,})$/;
         const dataTablePattern = /^(table[1-9]{1}([0-9]{0,}))$/;
         const dataFilePattern = /^(table[1-9]{1}([0-9]{0,}).csv)$/;
@@ -279,7 +280,7 @@ function (n) {
                 }
             }
             if(!orderResult) {
-                result = LogError("-CheckFolderContextDocumentation-DocCollectionDocumentFilesOrder-Error",null);
+                result = LogError("-CheckFolderContextDocumentation-DocCollectionDocumentFilesOrder-Error",documentFolderName);
             }
             return result;
         }
@@ -290,7 +291,7 @@ function (n) {
             if(subFiles != null && subFiles.length > 0) {
                var filesExt = [];
                var validFilesName = true;
-                subFiles.forEach(file => {
+                subFiles.forEach(file => {                    
                     var fileName = file.substring(0,file.indexOf("."))
                     if(!docFolderPattern.test(fileName)) {
                         result = LogError("-CheckFolderContextDocumentation-DocCollectionDocumentFileName-Error",documentFolderName,file);
@@ -356,8 +357,8 @@ function (n) {
                     }
                     else {
                         var destFolderPath = (destPath.indexOf("\\") > -1) ? "{0}\\{1}".format(destPath,folder) : "{0}/{1}".format(destPath,folder); 
-                        var subFiles = fs.readdirSync(destFolderPath);
-                        if(!ValidateDocumentFolder(folder,subFiles)) {
+                        var subFiles = fs.readdirSync(destFolderPath);                        
+                        if(!ValidateDocumentFolder(folder,subFiles.filter(junk.not))) {
                             result = false;
                         }
                     }

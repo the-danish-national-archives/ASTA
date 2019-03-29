@@ -21,7 +21,8 @@
   "license": "ISC",
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.7.2",
-    "chardet": "^0.7.0"
+    "chardet": "^0.7.0",
+    "junk": "^3.0.0"
   },
   "devDependencies": {
     "electron": "^4.0.8",
