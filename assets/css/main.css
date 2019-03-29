@@ -90,6 +90,12 @@ i {
     color: #8a6d3b;
 }
 
+#content {
+    padding-left: 150px;
+    margin: -8px;
+    margin-top: -10px;
+}
+
 /* Table */
 
 th {
@@ -180,12 +186,6 @@ a.selected:hover {
 }
 
 /* Header END */
-
-#content {
-    padding-left: 150px;
-    margin: -8px;
-    margin-top: -10px;
-}
 
 /* HR elements */
 
