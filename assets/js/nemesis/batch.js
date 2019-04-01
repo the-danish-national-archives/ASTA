@@ -23,6 +23,7 @@ function (n) {
             validatePanel: null,
             spinner: null,
             spinnerClass: null,
+            rightsCallback: null,
             structureCallback: null,
             okSpn: null,
             okText: null,
@@ -163,7 +164,8 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Nemesis.Batch = { 
-            initialize: function (structureCallback,outputErrorId,selectDirectoryId,pathDirectoryId,validateId,spinnerId,okId,selectLogfileId,supplementId) {            
+            initialize: function (rightsCallback,structureCallback,outputErrorId,selectDirectoryId,pathDirectoryId,validateId,spinnerId,okId,selectLogfileId,supplementId,panelId) {            
+                settings.rightsCallback = rightsCallback;
                 settings.structureCallback = structureCallback;
                 settings.outputErrorSpn = document.getElementById(outputErrorId);
                 settings.outputErrorText = settings.outputErrorSpn.innerHTML;
@@ -176,7 +178,9 @@ function (n) {
                 settings.okSpn =  document.getElementById(okId);
                 settings.okText = settings.okSpn.innerHTML;
                 settings.selectLogfile = document.getElementById(selectLogfileId);
-                settings.supplementSpn =  document.getElementById(supplementId);               
+                settings.supplementSpn =  document.getElementById(supplementId);
+                settings.panel =  document.getElementById(panelId);
+                settings.panel.hidden = !settings.rightsCallback().isAdmin;              
                 AddEvents();
             }
         };
