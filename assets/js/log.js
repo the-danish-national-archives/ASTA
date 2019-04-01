@@ -46,26 +46,6 @@ function (n) {
         settings.outputErrorSpn.innerHTML = settings.outputErrorText.format(err.message);
     }
 
-    //format current datetime
-    var GetDateTime = function() {        
-        var result = "";
-
-        var today = new Date();
-        result += today.getFullYear();        
-        var temp = today.getMonth() + 1;
-        result += (temp < 10) ? "0{0}".format(temp) : temp;
-        var temp = today.getDate();
-        result += (temp < 10) ? "0{0}".format(temp) : temp;
-        var temp = today.getHours();
-        result += (temp < 10) ? "0{0}".format(temp) : temp;
-        var temp = today.getMinutes();
-        result += (temp < 10) ? "0{0}".format(temp) : temp;
-        var temp = today.getSeconds();
-        result += (temp < 10) ? "0{0}".format(temp) : temp;
-    
-        return result;
-    }    
-
     //commit log data
     var EnsureData = function() {
         var data = fs.readFileSync(settings.filePath);        
@@ -163,6 +143,7 @@ function (n) {
                             fs.unlinkSync(settings.filePath);
                         }
                         CopyFile();
+                        return settings.filePath;
                     }
                     catch(err) 
                     {

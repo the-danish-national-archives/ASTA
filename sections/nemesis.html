@@ -10,19 +10,17 @@
                     <div class="formularContainer">
                         <h4>Test en afleveringspakke</h4>
                         <div class="box">
-                            <div class="nemesisControls">
-                               <div id="nemesis-validate-test-panel">
-                                    <span>Vælg afleveringspakke til test:</span>
-                                    <br>
-                                    <input type="text" id="nemesis-path">
-                                    <button id="nemesis-select-directory">Browse</button>
-                                    <br/><br/>                                
-                                    <button id="nemesis-validateBtn">Test mappe</button>
-                                    <span id="nemesis-output-Error" hidden="true"><br />Error: {0}</span>
-                                    <span id="nemesis-output-Ok" hidden="true"><br /><strong>Bekræftelse!</strong> Log fil [{0}] er nu skabt og placeret i mappen [</span>
-                                    <a id="nemesis-select-logFile" hidden="true"></a>
-                                    <span id="nemesis-output-Supplement" hidden="true">]</span>                                
-                                </div>
+                            <div class="nemesisControls">                               
+                                <span>Vælg afleveringspakke til test:</span>
+                                <br>
+                                <input type="text" id="nemesis-path">
+                                <button id="nemesis-select-directory">Browse</button>
+                                <br/><br/>                                
+                                <button id="nemesis-validateBtn">Test mappe</button>
+                                <span id="nemesis-output-Error" hidden="true"><br />Error: {0}</span>
+                                <span id="nemesis-output-Ok" hidden="true"><br/><strong>Bekræftelse!</strong> Log fil [{0}] er nu skabt og placeret i mappen [</span>
+                                <a id="nemesis-select-logFile" hidden="true"></a>
+                                <span id="nemesis-output-Supplement" hidden="true">]</span>                                
                                 <span id="nemesis-output-structure-logStart" hidden="true">Mappestruktur test startet<br/></span>
                                 <span id="nemesis-output-structure-logEndNoError" hidden="true"><br/>Metadatafilstruktur test afsluttet uden fejl</span>
                                 <span id="nemesis-output-structure-logEndWithError" hidden="true"><br/>Metadatafilstruktur test afsluttet</span>
@@ -38,11 +36,12 @@
                                     <button id="nemesis-select-batch-directory">Browse</button>
                                     <br/><br/> 
                                     <button id="nemesis-batch-validateBtn">Batch test</button>
+                                    <span id="nemesis-batch-Ok" hidden="true"><br /><strong>Bekræftelse!</strong> Log fil [{0}] er nu skabt og placeret i mappen [</span>
+                                    <a id="nemesis-batch-select-logFile" hidden="true"></a>
+                                    <span id="nemesis-batch-Supplement" hidden="true">]</span>
                                 </div>
                             </div><br>
-                            <!-- Spinner -->
-                            <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
-                            
+                            <div id="nemesis-validate-Spinner" hidden="true" class="lds-ring"><div></div><div></div><div></div><div></div></div>
                             <div class="verticalDivider"> </div>
                             <div class="nemesisOutput">
                                 <h3 id="nemesis-test-id"></h3>
@@ -98,7 +97,7 @@
             require('./assets/js/nemesis/metadata');
 
             Rigsarkiv.Log.initialize("nemesis-output-Error","nemesis-output-Ok","nemesis-select-logFile","nemesis-output-Supplement");
-            Rigsarkiv.Nemesis.Batch.initialize(Rigsarkiv.Nemesis.Structure.callback,"nemesis-output-Error","nemesis-select-batch-directory","nemesis-batch-path","nemesis-batch-validateBtn");
+            Rigsarkiv.Nemesis.Batch.initialize(Rigsarkiv.Nemesis.Structure.callback,"nemesis-output-Error","nemesis-select-batch-directory","nemesis-batch-path","nemesis-batch-validateBtn","nemesis-validate-Spinner","nemesis-batch-Ok","nemesis-batch-select-logFile","nemesis-batch-Supplement");
             Rigsarkiv.Nemesis.Structure.initialize(Rigsarkiv.Log.callback,Rigsarkiv.Nemesis.MetaData.callback,"nemesis-output-Error","nemesis-select-directory","nemesis-path","nemesis-validateBtn","nemesis-output-structure-logStart","nemesis-output-structure-logEndNoError","nemesis-output-structure-logEndWithError","nemesis-processing", "nemesis-test-id");
             Rigsarkiv.Nemesis.MetaData.initialize(Rigsarkiv.Log.callback,"nemesis-output-Error","nemesis-output-metadata-logStart","nemesis-output-metadata-logEndNoError","nemesis-output-metadata-logEndWithError","nemesis-processing");             
           </script>

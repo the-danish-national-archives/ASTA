@@ -135,12 +135,13 @@ function (n) {
                 } else {
                     settings.logCallback().section(settings.logType,folderName,settings.logEndWithErrorSpn.innerHTML);
                 } 
-                settings.logCallback().commit(settings.deliveryPackagePath);               
+                return settings.logCallback().commit(settings.deliveryPackagePath);               
             }
             catch(err) 
             {
                 HandleError(err);
             }
+            return null;
         }
 
         var AddEvents = function (){
@@ -165,7 +166,7 @@ function (n) {
                     { 
                         settings.deliveryPackagePath = path;
                         settings.outputText = outputText;
-                        Validate();
+                        return Validate();
                     }  
                 };
             }

@@ -30,7 +30,8 @@ function (n) {
             logEndNoErrorSpn: null,
             logEndWithErrorSpn:null,
             deliveryPackagePath: null,
-            outputText: {},
+            testId: null,
+           outputText: {},
             metadataFileName: "{0}.txt",
             dataFileName: "{0}.csv",
             docCollectionFolderName: "docCollection1",
@@ -40,13 +41,12 @@ function (n) {
             defaultFolder: "FD.99999",
             logType: "structure",
             errorsCounter: 0,
-            errorStop: false,
-            testId: ""
+            errorStop: false            
         }
 
         //reset status & input fields
         var Reset = function () {
-            settings.errorsCounter = 0;
+             settings.errorsCounter = 0;
             settings.errorStop = false;
             $("span[id^='" + settings.outputPrefix + "']").hide();
              $("span[id^='" + settings.outputPrefix + "']").each(function() {
@@ -461,10 +461,10 @@ function (n) {
                     settings.logCallback().section(settings.logType,folderName,settings.logEndWithErrorSpn.innerHTML);                    
                 }
                 if(!settings.errorStop) { 
-                    settings.metadataCallback().validate(settings.deliveryPackagePath,settings.outputText); 
+                    return settings.metadataCallback().validate(settings.deliveryPackagePath,settings.outputText); 
                 } 
                 else {
-                    settings.logCallback().commit(settings.deliveryPackagePath);
+                    return settings.logCallback().commit(settings.deliveryPackagePath);
                 }                  
                                 
             }
@@ -472,6 +472,7 @@ function (n) {
             {
                 HandleError(err);
             }
+            return null;
         }
 
         //add Event Listener to HTML elmenets
@@ -506,7 +507,7 @@ function (n) {
                 settings.logEndNoErrorSpn = document.getElementById(logEndNoErrorId);  
                 settings.logEndWithErrorSpn = document.getElementById(logEndWithErrorId);
                 settings.outputPrefix = outputPrefix;
-                settings.testId = document.getElementById('nemesis-test-id');
+                settings.testId = document.getElementById(testId);
                 $("span[id^='" + settings.outputPrefix + "']").each(function() {
                     settings.outputText[this.id] = $(this).html();
                     $(this).html("");
@@ -519,7 +520,7 @@ function (n) {
                     { 
                         settings.deliveryPackagePath = path;
                         Reset();
-                        Validate();
+                        return Validate();
                     }  
                 };
             }
