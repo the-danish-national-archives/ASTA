@@ -10,7 +10,7 @@ function (n) {
         const {shell} = require('electron');
         const fs = require('fs'); 
         const path = require('path');
-        const os = require('os');       
+        const os = require('os');   
 
         //private data memebers
         var settings = { 
@@ -50,7 +50,7 @@ function (n) {
         }
 
         // collect logs data
-        var EnsureLogsData = function(filePath) {
+        var EnsureLogsData = function(filePath,folderName) {
             console.log(`log path: ${filePath}`);
             var data = fs.readFileSync(filePath).toString();
             var startIndex = data.indexOf(settings.startLogData);
@@ -104,9 +104,11 @@ function (n) {
         //Validate each delivery Package
         var Validate = function() {
             var deliveryPackagePath = settings.deliveryPackages[settings.runIndex];
-            console.log(`validate path: ${deliveryPackagePath}`);                    
-            var filePath = settings.structureCallback().validate(deliveryPackagePath);
-            EnsureLogsData(filePath);
+            console.log(`validate path: ${deliveryPackagePath}`); 
+            var folders = deliveryPackagePath.getFolders();
+            var logResult = settings.structureCallback().validate(deliveryPackagePath);
+            settings.errorsCounter += logResult.errors;
+            EnsureLogsData(logResult.filePath,folders[folders.length - 1]);
             settings.runIndex = settings.runIndex + 1;
             if(settings.runIndex < settings.deliveryPackages.length) {                
                 setTimeout(Validate, 1000);

@@ -28,7 +28,7 @@ function (n) {
         errorElement: "<span id=\"{0}_{1}\" name=\"{2}\" class=\"error\">{3}</span>",
         warnElement: "<span id=\"{0}_{1}\" name=\"{2}\" class=\"warning\" hidden=\"true\">{3}</span>",
         infoElement: "<span id=\"{0}_{1}\" name=\"{2}\" class=\"ok\" hidden=\"true\">{3}</span>",
-        sectionElement: "<span id=\"{0}_{1}\" name=\"{2}\" class=\"section\">{3}<br/></span>"
+        sectionElement: "<span id=\"{0}_{1}\" name=\"{2}\" class=\"section\">{3}</span>"
     }
 
     //reset status & input fields
@@ -142,8 +142,12 @@ function (n) {
                             console.log(`Delete exists log: ${settings.filePath}`);
                             fs.unlinkSync(settings.filePath);
                         }
+                        var errorsCounter = settings.errorsCounter;
                         CopyFile();
-                        return settings.filePath;
+                        return { 
+                            filePath: settings.filePath,
+                            errors: errorsCounter
+                        };
                     }
                     catch(err) 
                     {

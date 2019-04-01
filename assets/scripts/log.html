@@ -101,43 +101,25 @@
 <script>
     // Turn error messages on / off
     var errElements = document.getElementsByClassName("error");
-    function errVisiChanged(checkBoxErrEl){
-        if(checkBoxErrEl.checked) {
-            for(var i = 0; i < errElements.length; i++) {
-                errElements[i].style.display = "block";
-            };
-        } else {
-            for(var i = 0; i < errElements.length; i++) {
-                errElements[i].style.display = "none";
-            };
+    function errVisiChanged(checkBoxErrEl){        
+        for(var i = 0; i < errElements.length; i++) {
+            errElements[i].style.display = (checkBoxErrEl.checked) ? "block" : "none";
         }
     }
 
     // Turn warning messages on / off
     var warnElements = document.getElementsByClassName('warning');
     function warnVisiChanged(checkboxWarnEl){
-        if(checkboxWarnEl.checked) {
-            for(var i = 0; i < warnElements.length; i++) {
-                warnElements[i].style.display = "block";
-            }
-        } else {
-            for (var i = 0; i < warnElements.length; i++) {
-                warnElements[i].style.display = "none";
-            }
+        for(var i = 0; i < warnElements.length; i++) {
+            warnElements[i].style.display = (checkboxWarnEl.checked) ? "block" : "none";
         }
     }
 
     // Turn info messages on / off
     var infoElements = document.getElementsByClassName('ok');
     function infoVisiChanged(checkbnoxInfoEl){
-        if(checkbnoxInfoEl.checked) {
-            for(var i = 0; i < infoElements.length; i++){
-                infoElements[i].style.display = "block";
-            }
-        } else {
-            for (var i = 0; i < infoElements.length; i++) {
-                infoElements[i].style.display = "none";
-            }
+        for(var i = 0; i < infoElements.length; i++){
+            infoElements[i].style.display = (checkbnoxInfoEl.checked) ? "block" : "none";
         }
     }
 </script>
