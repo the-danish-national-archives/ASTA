@@ -8,6 +8,7 @@ function (n) {
     function (n) {
         const {ipcRenderer} = require('electron');
         const fs = require('fs');
+        const chardet = require('chardet');
 
         //private data memebers
         var settings = { 
@@ -23,6 +24,8 @@ function (n) {
             logType: "metadata",
             errorsCounter: 0,
             errorStop: false,
+            dataPathPostfix: "Data",
+            metadataLabels: ["SYSTEMNAVN","DATAFILNAVN","DATAFILBESKRIVELSE","NØGLEVARIABEL","REFERENCE","VARIABEL","VARIABELBESKRIVELSE","KODELISTE","BRUGERKODE"]
         }
 
         //output system error messages
@@ -104,22 +107,103 @@ function (n) {
             settings.logCallback().info(settings.logType,GetFolderName(),text);
         }
 
-        /*var ValidateData = function () {
+        // validate required labels values
+        var ValidateLabelValues = function (fileName,lines) {
             var result = true;
-            var destPath = (settings.deliveryPackagePath.indexOf("\\") > -1) ? "{0}\\{1}".format(settings.deliveryPackagePath,settings.defaultSubFolders[1]) : "{0}/{1}".format(settings.deliveryPackagePath,settings.defaultSubFolders[1]); 
-            fs.readdirSync(destPath).forEach(folder => {
-                var destTablePath = (destPath.indexOf("\\") > -1) ? "{0}\\{1}".format(destPath,folder) : "{0}/{1}".format(destPath,folder); 
-                var subFiles = fs.readdirSync(destTablePath);
-                subFiles.forEach(file => {
-                    if(file === "") {
-                        if(!ValidateMetadataFile(file)) {
-                            result = LogError("-CheckFolderData-TableFolderFileExt-Error",folder,file);
-                        }
+            settings.metadataLabels.forEach(label => {
+                var index = lines.indexOf(label);
+                index += 1;
+                if(label === settings.metadataLabels[0] || label === settings.metadataLabels[1] || label === settings.metadataLabels[2]) {
+                    if(lines[index].trim() === "") {
+                        result = LogError("-CheckMetadata-FileLabel-ValueRequired-Error",fileName,label);
                     }
-                });
+                    else {
+                        if(lines[index + 1].trim() !== "") {
+                            result = LogError("-CheckMetadata-FileLabel-ValueMax-Error",fileName,label);
+                        }
+                    }                    
+                }
+                if(label === settings.metadataLabels[5] && lines[index].trim() === "") {
+                    result = LogError("-CheckMetadata-FileLabel-ValueRequired-Error",fileName,label);
+                    settings.errorStop = true;
+                }
             });
+            return result;
+        }
+
+        //Validate Metadata Labels required & orders
+        var ValidateLabels = function (fileName,lines) {
+            var result = true;
+            var orderError = false;
+            var prevIndex = -1;
+            settings.metadataLabels.forEach(label => {
+                var index = lines.indexOf(label);
+                if(index < 0) {
+                    result = LogError("-CheckMetadata-FileLabelRequired-Error",fileName,label);
+                }
+                else {
+                    if(prevIndex > index) { orderError = true; }
+                    prevIndex = index;
+                    index += 1;
+                    if(lines.indexOf(label,index) > -1) {
+                        result = LogError("-CheckMetadata-FileLabelMax-Error",fileName,label);
+                    }
+                }
+            });
+            if(orderError) {
+                result = LogError("-CheckMetadata-FileLabelsOrder-Error",fileName);
+            }
+            return result;
+        }
+
+        //validate Metadata file
+        var ValidateMetadata = function (metadataFilePath,fileName) {
+            var result = true;
+            var data = fs.readFileSync(metadataFilePath);
+            if(data != null) {
+                data = data.toString();
+                if(data != null && data !== "") {
+                    var lines = data.split("\r\n");
+                    lines[0] = lines[0].trim();
+                    if(!ValidateLabels(fileName,lines)) 
+                    { 
+                        result = false; 
+                        settings.errorStop = true;
+                    }
+                    else {
+                        if(!ValidateLabelValues(fileName,lines)) { result = false; }
+                    }
+                }
+                else {
+                    result = LogError("-CheckMetadata-FileEmpty-Error",fileName);
+                }
+            }
+            else {
+                result = LogError("-CheckMetadata-FileEmpty-Error",fileName);
+            }
+            return result;
+        }
+
+        //loop Data folder's table & Metadata files
+        var ValidateData = function () {
+            var result = true;
+            var destPath = (settings.deliveryPackagePath.indexOf("\\") > -1) ? "{0}\\{1}".format(settings.deliveryPackagePath,settings.dataPathPostfix) : "{0}/{1}".format(settings.deliveryPackagePath,settings.dataPathPostfix); 
+            fs.readdirSync(destPath).forEach(folder => {
+                var metadataFilePath = (destPath.indexOf("\\") > -1) ? "{0}\\{1}\\{1}.txt".format(destPath,folder) : "{0}/{1}/{1}.txt".format(destPath,folder);                 
+                console.log("validate metadata file: {0}".format(metadataFilePath));
+                var charsetMatch = chardet.detectFileSync(metadataFilePath);
+                var folders = metadataFilePath.getFolders();
+                var fileName = folders[folders.length - 1];
+                if(charsetMatch !== "UTF-8") {
+                    result = LogError("-CheckMetadata-FileEncoding-Error",fileName);
+                } 
+                else {
+                    if(!ValidateMetadata(metadataFilePath,fileName)) { result = false; }
+                }                               
+            });
+            if(result) { LogInfo("-CheckMetadata-Ok",null); }
             return result; 
-        }*/
+        }
 
         //start flow validation
         var Validate = function () {
@@ -128,8 +212,7 @@ function (n) {
             {
                 var folderName = GetFolderName();
                 settings.logCallback().section(settings.logType,folderName,settings.logStartSpn.innerHTML);            
-                //do flow validation
-                console.log('folder:' + folderName);
+                ValidateData();
                 if(settings.errorsCounter === 0) {
                     settings.logCallback().section(settings.logType,folderName,settings.logEndNoErrorSpn.innerHTML);
                 } else {
