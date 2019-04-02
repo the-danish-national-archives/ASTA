@@ -31,7 +31,7 @@ function (n) {
             logEndWithErrorSpn:null,
             deliveryPackagePath: null,
             testId: null,
-           outputText: {},
+            outputText: {},
             metadataFileName: "{0}.txt",
             dataFileName: "{0}.csv",
             docCollectionFolderName: "docCollection1",
