@@ -52,7 +52,7 @@ function (n) {
         var folders = settings.filePath.getFolders();
         var folderName = folders[folders.length - 1];
         folderName = folderName.substring(0,folderName.indexOf("_log.html"));
-        var updatedData = data.toString().format(settings.logsDate.getFromFormat("dd-MM-yyyy"),folderName,settings.logs.join("\r\n"),settings.errorsCounter);
+        var updatedData = data.toString().format(settings.logsDate.getFromFormat("dd-MM-yyyy hh:mm:ss"),folderName,settings.logs.join("\r\n"),settings.errorsCounter);
         fs.writeFileSync(settings.filePath, updatedData);                         
         settings.logs = [];
         settings.errorsCounter = 0;
