@@ -102,7 +102,7 @@
         <div class="results" id="testContent">
             {1}
         </div>
-        <p>Batch test afsluttet med {2} antal fejl</p>
+        <p id="count">Batch test afsluttet med {2} fejl</p>
     </div>
 </body>
 <script>
@@ -154,7 +154,26 @@
         errVisiChanged(document.getElementById('checkErr'));
         warnVisiChanged(document.getElementById('checkWarn'));
         infoVisiChanged(document.getElementById('checkInfo'));
+        updateErrCounter(selectObj.value);
     }
+
+    function updateErrCounter(val){
+        var el = document.getElementById('count');
+        var spans = document.getElementsByClassName('error');
+        var errCounter = 0;
+        for (var i = 0; i < spans.length; i++){
+            if (spans[i].style.display == "block") {
+                errCounter++
+            }
+        }
+        if (val === "") {
+            el.innerText = 'Hele batch testen inderholder ' + errCounter + ' fejl';
+        } else {
+            el.innerText = val + ' indeholder ' + errCounter + ' fejl';
+        }
+        
+    }
+
     // Turn error messages on / off
     var errElements = document.getElementsByClassName("error");
     function errVisiChanged(checkBoxErrEl) {        
