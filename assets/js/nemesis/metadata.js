@@ -31,7 +31,8 @@ function (n) {
             errorsCounter: 0,
             errorStop: false,
             dataPathPostfix: "Data",
-            metadataLabels: ["SYSTEMNAVN","DATAFILNAVN","DATAFILBESKRIVELSE","NØGLEVARIABEL","REFERENCE","VARIABEL","VARIABELBESKRIVELSE","KODELISTE","BRUGERKODE"]
+            metadataLabels: ["SYSTEMNAVN","DATAFILNAVN","DATAFILBESKRIVELSE","NØGLEVARIABEL","REFERENCE","VARIABEL","VARIABELBESKRIVELSE","KODELISTE","BRUGERKODE"],
+            data: []
         }
 
         //output system error messages
@@ -113,6 +114,47 @@ function (n) {
             settings.logCallback().info(settings.logType,GetFolderName(),text);
         }
 
+        //get data JSON table object pointer by table file name
+        var GetTableData = function (fileName) {
+            var result = null;
+            settings.data.forEach(table => {
+                if(table.fileName === fileName) {
+                    result = table;
+                }
+            });
+            return result;
+        }
+
+        //validate variables Description, update output data json
+        var ValidateVariablesDescription = function (fileName,lines,startIndex) {
+            var result = true;
+            var table = GetTableData(fileName);
+            var i = startIndex;
+
+            return result;
+        }
+
+        //validate variables, update output data json
+        var ValidateVariables = function (fileName,lines,startIndex) {
+            var result = true;
+            var table = GetTableData(fileName);
+            var i = startIndex;
+            do {
+                var expressions = lines[i].trim().split(" ");
+                if(expressions.length >= 2 && expressions[0] !== "" && expressions[1] !== "") {
+                    var variable = { "name":expressions[0], "format":expressions[1], "description":"" }
+                    table.variables.push(variable)
+                }
+                else {
+                    result = LogError("-CheckMetadata-FileVariables-RowRequiredInfo-Error",fileName,(i + 1));
+                    settings.errorStop = true;
+                }
+                i++;
+              }
+              while (lines[i].trim() !== "");
+            return result;
+        }
+
         //validate DATAFILNAVN
         var ValidateTitle = function (fileName,title) {
             var result = true;
@@ -134,6 +176,7 @@ function (n) {
         // validate required labels values
         var ValidateLabelValues = function (fileName,lines) {
             var result = true;
+            var validateVariables = true;
             settings.metadataLabels.forEach(label => {
                 var index = lines.indexOf(label);
                 index += 1;
@@ -150,9 +193,18 @@ function (n) {
                         }
                     }                    
                 }
-                if(label === settings.metadataLabels[5] && lines[index].trim() === "") {
-                    result = LogError("-CheckMetadata-FileLabel-ValueRequired-Error",fileName,label);
-                    settings.errorStop = true;
+                if(label === settings.metadataLabels[5]) {
+                    if(lines[index].trim() === "") {
+                        result = LogError("-CheckMetadata-FileLabel-ValueRequired-Error",fileName,label);
+                        settings.errorStop = true;
+                    }
+                    else {
+                        validateVariables = ValidateVariables(fileName,lines,index);
+                        if(!validateVariables) { result = false; }
+                    }
+                }
+                if(label === settings.metadataLabels[6] && validateVariables) {
+
                 }
             });
             return result;
@@ -199,6 +251,7 @@ function (n) {
                     }
                     else {
                         if(!ValidateLabelValues(fileName,lines)) { result = false; }
+                        
                     }
                 }
                 else {
@@ -226,6 +279,7 @@ function (n) {
                         result = LogError("-CheckMetadata-FileEncoding-Error",fileName);
                     } 
                     else {
+                        settings.data.push({ "fileName":fileName, "variables":[] })
                         if(!ValidateMetadata(metadataFilePath,fileName)) { result = false; }
                     } 
                 }
@@ -245,6 +299,8 @@ function (n) {
                 var folderName = GetFolderName();
                 settings.logCallback().section(settings.logType,folderName,settings.logStartSpn.innerHTML);            
                 ValidateData();
+                console.log("output data: ");
+                console.log(settings.data);
                 if(settings.errorsCounter === 0) {
                     settings.logCallback().section(settings.logType,folderName,settings.logEndNoErrorSpn.innerHTML);
                 } else {
