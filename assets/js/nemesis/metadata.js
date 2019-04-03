@@ -183,15 +183,24 @@ function (n) {
         }
 
         //validate variables, update output data json
-        var ValidateVariables = function (fileName,lines,startIndex) {
+        var ValidateVariables = function (fileName,lines,startIndex,keys) {
             var result = true;
             var table = GetTableData(fileName);
+            var variables = [];
             var i = startIndex;
             do {
                 var expressions = lines[i].trim().split(" ");
                 if(expressions.length >= 2 && expressions[0] !== "" && expressions[1] !== "") {
-                    var variable = { "name":expressions[0], "format":expressions[1], "description":"" }
-                    table.variables.push(variable)
+                    if(!variables.includes(expressions[0])) {
+                        variables.push(expressions[0]);
+                        var isKey = (keys != null && keys.includes(expressions[0])) ? true : false;
+                        var variable = { "name":expressions[0], "format":expressions[1], "isKey":isKey, "description":"" }
+                        table.variables.push(variable);
+                    }
+                    else {
+                        result = LogError("-CheckMetadata-FileVariables-RowDouble-Error",fileName,(i + 1));
+                        settings.errorStop = true;
+                    }
                 }
                 else {
                     result = LogError("-CheckMetadata-FileVariables-RowRequiredInfo-Error",fileName,(i + 1));
@@ -200,8 +209,39 @@ function (n) {
                 i++;
             }
             while (lines[i].trim() !== "");
+            if(keys != null) {
+                keys.forEach(key => {
+                    if(!variables.includes(key)) {
+                        result = LogError("-CheckMetadata-FileVariables-KeyRequired-Error",fileName,key);
+                    }
+                });
+            }
             return result;
         }
+
+        //get valid keys variables array
+        var GetValidKeys  = function (fileName,lines,startIndex) {
+            var result = [];
+            var isValid = true;
+            lines[startIndex].trim().split(" ").forEach(key => {
+                if(startNumberPattern.test(key)) {
+                    isValid = LogError("-CheckMetadata-FileLabel-KeyNumber-Error",fileName,key);
+                }
+                if(isValid && !validFileNamePattern.test(key) && !enclosedReservedWordPattern.test(key)) {                   
+                    isValid = LogError("-CheckMetadata-FileLabel-KeyValidation-Error",fileName,key); 
+                }
+                if(isValid && key.length > titleMaxLength) {
+                    isValid = LogError("-CheckMetadata-FileLabel-KeyLength-Error",fileName,key);
+                }
+                if(isValid && reservedWordPattern.test(key)) {
+                    isValid = LogError("-CheckMetadata-FileLabel-KeyReservedWord-Error",fileName,key);
+                }
+                if(isValid) {
+                    result.push(key);
+                }
+            });
+            return result;
+        } 
 
         //validate DATAFILNAVN
         var ValidateTitle = function (fileName,title) {
@@ -221,25 +261,40 @@ function (n) {
             return result;
         }
 
+        //validate basics labels ("SYSTEMNAVN","DATAFILNAVN","DATAFILBESKRIVELSE") values
+        var ValidateBasicValues = function (fileName,label,lines,index) {
+            var result = true;
+            if(lines[index].trim() === "") {
+                result = LogError("-CheckMetadata-FileLabel-ValueRequired-Error",fileName,label);
+            }
+            else {
+                if(label === settings.metadataLabels[0]) 
+                { 
+                    GetTableData(fileName).system = lines[index].trim(); 
+                }
+                if(label === settings.metadataLabels[1] && !ValidateTitle(fileName,lines[index].trim())) { 
+                    result = false; 
+                }
+                if(lines[index + 1].trim() !== "") {
+                    result = LogError("-CheckMetadata-FileLabel-ValueMax-Error",fileName,label);
+                }
+            }   
+            return result;
+        }
+
         // validate required labels values
         var ValidateLabelValues = function (fileName,lines) {
             var result = true;
             var validateVariables = true;
+            var keys = null;
             settings.metadataLabels.forEach(label => {
                 var index = lines.indexOf(label);
                 index += 1;
                 if(label === settings.metadataLabels[0] || label === settings.metadataLabels[1] || label === settings.metadataLabels[2]) {
-                    if(lines[index].trim() === "") {
-                        result = LogError("-CheckMetadata-FileLabel-ValueRequired-Error",fileName,label);
-                    }
-                    else {
-                        if(label === settings.metadataLabels[1]) {
-                            if(!ValidateTitle(fileName,lines[index].trim())) { result = false; }
-                        }
-                        if(lines[index + 1].trim() !== "") {
-                            result = LogError("-CheckMetadata-FileLabel-ValueMax-Error",fileName,label);
-                        }
-                    }                    
+                    if(!ValidateBasicValues(fileName,label,lines,index)) { result = false; }
+                }
+                if(label === settings.metadataLabels[3] && lines[index].trim() !== "") {
+                    keys = GetValidKeys(fileName,lines,index);
                 }
                 if(label === settings.metadataLabels[5]) {
                     if(lines[index].trim() === "") {
@@ -247,13 +302,11 @@ function (n) {
                         settings.errorStop = true;
                     }
                     else {
-                        validateVariables = ValidateVariables(fileName,lines,index);
+                        validateVariables = ValidateVariables(fileName,lines,index,keys);
                         if(!validateVariables) { result = false; }
                     }
                 }
-                if(label === settings.metadataLabels[6] && validateVariables) {
-                    if(!ValidateVariablesDescription(fileName,lines,index)) { result = false; }
-                }
+                if(label === settings.metadataLabels[6] && validateVariables && !ValidateVariablesDescription(fileName,lines,index)) { result = false; }
             });
             return result;
         }
@@ -327,7 +380,7 @@ function (n) {
                         result = LogError("-CheckMetadata-FileEncoding-Error",fileName);
                     } 
                     else {
-                        settings.data.push({ "fileName":fileName, "variables":[] })
+                        settings.data.push({ "fileName":fileName, "system":"", "variables":[] })
                         if(!ValidateMetadata(metadataFilePath,fileName)) { result = false; }
                     } 
                 }
