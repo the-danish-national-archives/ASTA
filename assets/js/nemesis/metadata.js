@@ -217,16 +217,21 @@ function (n) {
             var destPath = (settings.deliveryPackagePath.indexOf("\\") > -1) ? "{0}\\{1}".format(settings.deliveryPackagePath,settings.dataPathPostfix) : "{0}/{1}".format(settings.deliveryPackagePath,settings.dataPathPostfix); 
             fs.readdirSync(destPath).forEach(folder => {
                 var metadataFilePath = (destPath.indexOf("\\") > -1) ? "{0}\\{1}\\{1}.txt".format(destPath,folder) : "{0}/{1}/{1}.txt".format(destPath,folder);                 
-                console.log("validate metadata file: {0}".format(metadataFilePath));
-                var charsetMatch = chardet.detectFileSync(metadataFilePath);
-                var folders = metadataFilePath.getFolders();
-                var fileName = folders[folders.length - 1];
-                if(charsetMatch !== "UTF-8") {
-                    result = LogError("-CheckMetadata-FileEncoding-Error",fileName);
-                } 
+                if(fs.existsSync(metadataFilePath)) {
+                    console.log("validate metadata file: {0}".format(metadataFilePath));
+                    var charsetMatch = chardet.detectFileSync(metadataFilePath);
+                    var folders = metadataFilePath.getFolders();
+                    var fileName = folders[folders.length - 1];
+                    if(charsetMatch !== "UTF-8") {
+                        result = LogError("-CheckMetadata-FileEncoding-Error",fileName);
+                    } 
+                    else {
+                        if(!ValidateMetadata(metadataFilePath,fileName)) { result = false; }
+                    } 
+                }
                 else {
-                    if(!ValidateMetadata(metadataFilePath,fileName)) { result = false; }
-                }                               
+                    console.log("None exist Metadata file path: {0}".format(metadataFilePath));
+                }                              
             });
             if(result) { LogInfo("-CheckMetadata-Ok",null); }
             return result; 
