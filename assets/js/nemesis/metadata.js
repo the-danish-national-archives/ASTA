@@ -137,7 +137,7 @@ function (n) {
                 name = line.substring(0,index);
                 var descriptionTemp = line.substring(index + 1);
                 if(descriptionTemp.length > 2 && descriptionTemp[0] === "'" && descriptionTemp[descriptionTemp.length - 1] === "'") {
-                    description = descriptionTemp.substring(1,descriptionTemp.length - 2);
+                    description = descriptionTemp.substring(1,descriptionTemp.length - 1);
                 }
                 else {
                     description = "";
@@ -438,6 +438,7 @@ function (n) {
                     { 
                         settings.deliveryPackagePath = path;
                         settings.outputText = outputText;
+                        settings.data = [];
                         return Validate();
                     }  
                 };
