@@ -125,12 +125,60 @@ function (n) {
             return result;
         }
 
+        //get Variable Description line as JSON
+        var GetVariableDescription = function (line) {
+            var name = null;
+            var description = null;
+            var index = line.indexOf(" "); 
+            if(index < 0) {
+                name = line;
+            } 
+            else {
+                name = line.substring(0,index);
+                var descriptionTemp = line.substring(index + 1);
+                if(descriptionTemp.length > 2 && descriptionTemp[0] === "'" && descriptionTemp[descriptionTemp.length - 1] === "'") {
+                    description = descriptionTemp.substring(1,descriptionTemp.length - 2);
+                }
+                else {
+                    description = "";
+                }
+            }
+            return { "name":name, "description":description}
+        }
+
         //validate variables Description, update output data json
         var ValidateVariablesDescription = function (fileName,lines,startIndex) {
             var result = true;
             var table = GetTableData(fileName);
+            var variableDescriptions = [];
+            table.variables.forEach(variable => variableDescriptions.push(variable.name));
             var i = startIndex;
-
+            do {          
+                var info = GetVariableDescription(lines[i]);                
+                var exitsCounter = 0;
+                if(variableDescriptions.includes(info.name)) {
+                    variableDescriptions.splice(variableDescriptions.indexOf(info.name),1);
+                    table.variables.forEach(variable => {
+                        if(variable.name === info.name && info.description != null) {
+                            exitsCounter++ 
+                            variable.description = info.description;
+                            if(info.description === "") {
+                                result = LogError("-CheckMetadata-FileVariable-DescriptionFormat-Error",fileName,info.name);
+                            }
+                        }
+                    });                    
+                    if(exitsCounter === 0) {
+                        result = LogError("-CheckMetadata-FileVariable-DescriptionRequired-Error",fileName,info.name);
+                    }
+                }                              
+                i++;
+            }
+            while (lines[i].trim() !== "");
+            if(variableDescriptions.length > 0) {
+                variableDescriptions.forEach(variable => {
+                    result = LogError("-CheckMetadata-FileVariable-DescriptionExists-Error",fileName,variable);
+                });                
+            }  
             return result;
         }
 
@@ -150,8 +198,8 @@ function (n) {
                     settings.errorStop = true;
                 }
                 i++;
-              }
-              while (lines[i].trim() !== "");
+            }
+            while (lines[i].trim() !== "");
             return result;
         }
 
@@ -204,7 +252,7 @@ function (n) {
                     }
                 }
                 if(label === settings.metadataLabels[6] && validateVariables) {
-
+                    if(!ValidateVariablesDescription(fileName,lines,index)) { result = false; }
                 }
             });
             return result;
