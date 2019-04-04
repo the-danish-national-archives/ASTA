@@ -270,16 +270,16 @@ function (n) {
         var ValidateReferenceName = function (referenceName) {
             var result = true;
             if(result && startNumberPattern.test(referenceName)) {
-                result = LogError("-CheckMetadata-FileVariable-NameNumber-Error",settings.fileName,referenceName);
+                result = LogError("-CheckMetadata-FileReference-NameNumber-Error",settings.fileName,referenceName);
             }
             if(result && !validFileNamePattern.test(referenceName) && !enclosedReservedWordPattern.test(referenceName)) {
-                result = LogError("-CheckMetadata-FileVariable-NameValidation-Error",settings.fileName,variableName);
+                result = LogError("-CheckMetadata-FileReference-NameValidation-Error",settings.fileName,referenceName);
             }
             if(result && referenceName.length > titleMaxLength) {
-                result = LogError("-CheckMetadata-FileVariable-NameLength-Error",settings.fileName,referenceName);
+                result = LogError("-CheckMetadata-FileReference-NameLength-Error",settings.fileName,referenceName);
             }
             if(result && reservedWordPattern.test(referenceName)) {
-                result = LogError("-CheckMetadata-FileVariable-NameReservedWord-Error",settings.fileName,referenceName);
+                result = LogError("-CheckMetadata-FileReference-NameReservedWord-Error",settings.fileName,referenceName);
             }
             return result;
         }
@@ -290,6 +290,10 @@ function (n) {
             var i = startIndex;
             do {
                 var expressions = lines[i].trim().split(" ");
+                if(expressions.length >= 3 && expressions[0] !== "" && expressions[1].length > 2 && expressions[2].length > 2 && expressions[1][0] === "'" && expressions[1][expressions[1].length - 1] === "'"  && expressions[2][0] === "'" && expressions[2][expressions[2].length - 1] === "'") {
+                    if(!ValidateReferenceName(expressions[0])) { result = false; }
+                    if(!ValidateReferenceName(expressions[1].substring(1,expressions[1].length - 1))) { result = false; }
+                }
                 i++;
             }
             while (lines[i].trim() !== "");
