@@ -29,6 +29,7 @@ function (n) {
             outputText: {},
             logType: "metadata",
             fileName: null,
+            references: [],
             errorsCounter: 0,
             errorStop: false,
             dataPathPostfix: "Data",
@@ -285,14 +286,32 @@ function (n) {
         }
 
         //Validate References
-        var ValidateReferences = function (lines,startIndex) {
+        var ValidateReferences = function (lines,startIndex,keys) {
             var result = true;
             var i = startIndex;
+            var tableName = null;
+            var tableKey = null;
+            var refKey = null;
             do {
                 var expressions = lines[i].trim().split(" ");
                 if(expressions.length >= 3 && expressions[0] !== "" && expressions[1].length > 2 && expressions[2].length > 2 && expressions[1][0] === "'" && expressions[1][expressions[1].length - 1] === "'"  && expressions[2][0] === "'" && expressions[2][expressions[2].length - 1] === "'") {
-                    if(!ValidateReferenceName(expressions[0])) { result = false; }
-                    if(!ValidateReferenceName(expressions[1].substring(1,expressions[1].length - 1))) { result = false; }
+                    tableName = expressions[0];
+                    tableKey = expressions[1].substring(1,expressions[1].length - 1);
+                    refKey = expressions[2].substring(1,expressions[2].length - 1);
+                    if(ValidateReferenceName(tableName) && ValidateReferenceName(tableKey)) {
+                        if(keys != null && keys.includes(refKey)) {
+                            settings.references.push({"table":tableName, "key":tableKey, "fileName":settings.fileName, "refKey":refKey});
+                        }
+                        else {
+                            result = LogError("-CheckMetadata-FileReferences-KeyRequired-Error",settings.fileName,refKey);
+                        }
+                    }
+                    else {
+                        result = false; 
+                    }
+                }
+                else {
+                    result = LogError("-CheckMetadata-FileReferences-RowRequiredInfo-Error",settings.fileName,i + 1);
                 }
                 i++;
             }
@@ -321,16 +340,22 @@ function (n) {
         //validate basics labels ("SYSTEMNAVN","DATAFILNAVN","DATAFILBESKRIVELSE") values
         var ValidateBasicValues = function (label,lines,index) {
             var result = true;
+            var table = GetTableData(settings.fileName);
             if(lines[index].trim() === "") {
                 result = LogError("-CheckMetadata-FileLabel-ValueRequired-Error",settings.fileName,label);
             }
             else {
                 if(label === settings.metadataLabels[0]) 
                 { 
-                    GetTableData(settings.fileName).system = lines[index].trim(); 
+                    table.system = lines[index].trim(); 
                 }
-                if(label === settings.metadataLabels[1] && !ValidateTitle(lines[index].trim())) { 
-                    result = false; 
+                if(label === settings.metadataLabels[1]) { 
+                    if(!ValidateTitle(lines[index].trim()))  { 
+                        result = false; 
+                    }
+                    else {
+                        table.name = lines[index].trim(); 
+                    } 
                 }
                 if(lines[index + 1].trim() !== "") {
                     result = LogError("-CheckMetadata-FileLabel-ValueMax-Error",settings.fileName,label);
@@ -353,7 +378,7 @@ function (n) {
                     keys = GetValidKeys(lines,index);
                 }
                 if(label === settings.metadataLabels[4] && lines[index].trim() !== "") {
-                    if(!ValidateReferences(lines,index)) { result = false; }
+                    if(!ValidateReferences(lines,index,keys)) { result = false; }
                 }
                 if(label === settings.metadataLabels[5]) {
                     if(lines[index].trim() === "") {
@@ -438,7 +463,7 @@ function (n) {
                         result = LogError("-CheckMetadata-FileEncoding-Error",settings.fileName);
                     } 
                     else {
-                        settings.data.push({ "fileName":settings.fileName, "system":"", "variables":[] })
+                        settings.data.push({ "fileName":settings.fileName, "system":"", "name":"", "variables":[] })
                         if(!ValidateMetadata(metadataFilePath)) { result = false; }
                     } 
                 }
@@ -496,6 +521,7 @@ function (n) {
                     { 
                         settings.deliveryPackagePath = path;
                         settings.outputText = outputText;
+                        settings.references = [];
                         settings.data = [];
                         settings.errorStop = false;
                         return Validate();
