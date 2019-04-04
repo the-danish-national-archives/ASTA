@@ -29,7 +29,8 @@ function (n) {
             outputText: {},
             logType: "metadata",
             fileName: null,
-            references: [],
+            fileKeys: [],
+            fileReferences: [],
             errorsCounter: 0,
             errorStop: false,
             dataPathPostfix: "Data",
@@ -202,8 +203,33 @@ function (n) {
             return result;
         }
 
+        //Validate related Variables Keys & refernces
+        var ValidateVariablesRelated = function(variables) {
+            var result = true;
+            var table = GetTableData(settings.fileName);
+            settings.fileKeys.forEach(key => {
+                if(!variables.includes(key)) {
+                    result = LogError("-CheckMetadata-FileVariables-KeyRequired-Error",settings.fileName,key);
+                }
+            });
+            settings.fileReferences.forEach(ref => {
+                if(!variables.includes(ref.refKey)) {
+                    result = LogError("-CheckMetadata-FileReferences-KeyRequired-Error",settings.fileName,refKey);
+                }
+                else {
+                    table.variables.forEach(variable => {
+                        if(variable.name === ref.refKey) {
+                            variable.refData = ref.table;
+                            variable.refVariable = ref.key;
+                        }
+                    }); 
+                }
+            });
+            return result;
+        }
+
         //validate variables, update output data json
-        var ValidateVariables = function (lines,startIndex,keys) {
+        var ValidateVariables = function (lines,startIndex) {
             var result = true;
             var table = GetTableData(settings.fileName);
             var variables = [];
@@ -215,8 +241,8 @@ function (n) {
                     if(!variables.includes(variableName)) {
                         variables.push(variableName);
                         if(ValidateVariableName(variableName)) {
-                            var isKey = (keys != null && keys.includes(variableName)) ? true : false;
-                            var variable = { "name":variableName, "format":expressions[1], "isKey":isKey, "description":"" }
+                            var isKey = (settings.fileKeys.includes(variableName)) ? true : false;
+                            var variable = { "name":variableName, "format":expressions[1], "isKey":isKey, "description":"", "refData":"", "refVariable":"" }
                             table.variables.push(variable);
                         } 
                         else { result = false; }                       
@@ -232,36 +258,29 @@ function (n) {
                 }
                 i++;
             }
-            while (lines[i].trim() !== "");
-            if(keys != null) {
-                keys.forEach(key => {
-                    if(!variables.includes(key)) {
-                        result = LogError("-CheckMetadata-FileVariables-KeyRequired-Error",settings.fileName,key);
-                    }
-                });
-            }
+            while (lines[i].trim() !== "");           
+            if(!ValidateVariablesRelated(variables)) { result = false; }  
             return result;
         }
 
-        //get valid keys variables array
-        var GetValidKeys  = function (lines,startIndex) {
-            var result = [];
-            var isValid = true;
+        //validate keys variables array
+        var ValidateKeys  = function (lines,startIndex) {
+            var result = true;
             lines[startIndex].trim().split(" ").forEach(key => {
                 if(startNumberPattern.test(key)) {
-                    isValid = LogError("-CheckMetadata-FileLabel-KeyNumber-Error",settings.fileName,key);
+                    result = LogError("-CheckMetadata-FileLabel-KeyNumber-Error",settings.fileName,key);
                 }
-                if(isValid && !validFileNamePattern.test(key) && !enclosedReservedWordPattern.test(key)) {                   
-                    isValid = LogError("-CheckMetadata-FileLabel-KeyValidation-Error",settings.fileName,key); 
+                if(result && !validFileNamePattern.test(key) && !enclosedReservedWordPattern.test(key)) {                   
+                    result = LogError("-CheckMetadata-FileLabel-KeyValidation-Error",settings.fileName,key); 
                 }
-                if(isValid && key.length > titleMaxLength) {
-                    isValid = LogError("-CheckMetadata-FileLabel-KeyLength-Error",settings.fileName,key);
+                if(result && key.length > titleMaxLength) {
+                    result = LogError("-CheckMetadata-FileLabel-KeyLength-Error",settings.fileName,key);
                 }
-                if(isValid && reservedWordPattern.test(key)) {
-                    isValid = LogError("-CheckMetadata-FileLabel-KeyReservedWord-Error",settings.fileName,key);
+                if(result && reservedWordPattern.test(key)) {
+                    result = LogError("-CheckMetadata-FileLabel-KeyReservedWord-Error",settings.fileName,key);
                 }
-                if(isValid) {
-                    result.push(key);
+                if(result) {
+                    settings.fileKeys.push(key);
                 }
             });
             return result;
@@ -286,7 +305,7 @@ function (n) {
         }
 
         //Validate References
-        var ValidateReferences = function (lines,startIndex,keys) {
+        var ValidateReferences = function (lines,startIndex) {
             var result = true;
             var i = startIndex;
             var tableName = null;
@@ -299,12 +318,7 @@ function (n) {
                     tableKey = expressions[1].substring(1,expressions[1].length - 1);
                     refKey = expressions[2].substring(1,expressions[2].length - 1);
                     if(ValidateReferenceName(tableName) && ValidateReferenceName(tableKey)) {
-                        if(keys != null && keys.includes(refKey)) {
-                            settings.references.push({"table":tableName, "key":tableKey, "fileName":settings.fileName, "refKey":refKey});
-                        }
-                        else {
-                            result = LogError("-CheckMetadata-FileReferences-KeyRequired-Error",settings.fileName,refKey);
-                        }
+                        settings.fileReferences.push({"table":tableName, "key":tableKey, "refKey":refKey});                        
                     }
                     else {
                         result = false; 
@@ -367,7 +381,8 @@ function (n) {
         // validate required labels values
         var ValidateLabelValues = function (lines) {
             var result = true;
-            var keys = null;
+            settings.fileKeys = [];
+            settings.fileReferences = [];
             settings.metadataLabels.forEach(label => {
                 var index = lines.indexOf(label);
                 index += 1;
@@ -375,10 +390,10 @@ function (n) {
                     if(!ValidateBasicValues(label,lines,index)) { result = false; }
                 }
                 if(label === settings.metadataLabels[3] && lines[index].trim() !== "") {
-                    keys = GetValidKeys(lines,index);
+                    if(!ValidateKeys(lines,index)) { result = false; }
                 }
                 if(label === settings.metadataLabels[4] && lines[index].trim() !== "") {
-                    if(!ValidateReferences(lines,index,keys)) { result = false; }
+                    if(!ValidateReferences(lines,index)) { result = false; }
                 }
                 if(label === settings.metadataLabels[5]) {
                     if(lines[index].trim() === "") {
@@ -386,7 +401,7 @@ function (n) {
                         settings.errorStop = true;
                     }
                     else {
-                        if(!ValidateVariables(lines,index,keys)) { result = false; }
+                        if(!ValidateVariables(lines,index)) { result = false; }
                     }
                 }
                 if(label === settings.metadataLabels[6] && !settings.errorStop && !ValidateVariablesDescription(lines,index)) { result = false; }
@@ -521,7 +536,6 @@ function (n) {
                     { 
                         settings.deliveryPackagePath = path;
                         settings.outputText = outputText;
-                        settings.references = [];
                         settings.data = [];
                         settings.errorStop = false;
                         return Validate();
