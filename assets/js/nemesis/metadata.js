@@ -155,8 +155,8 @@ function (n) {
             table.variables.forEach(variable => variables.push(variable.name));
             var i = startIndex;                        
             do {
-                var expressions = lines[i].trim().split(" ");
-                if(expressions.length === 1) {
+                var expressions = lines[i].trim().reduceWhiteSpace().split(" ");
+                if(expressions.length === 1 && expressions[0].indexOf("'") < 0) {
                     codeName = expressions[0];
                     if(!ValidateCodeName(codeName)) 
                     { 
@@ -173,7 +173,7 @@ function (n) {
                 }
                 else {
                     if(codeName != null) {
-                        if(!codePattern.test(lines[i].trim())) { 
+                        if(!codePattern.test(lines[i].trim().reduceWhiteSpace())) { 
                             result = LogError("-CheckMetadata-FileCodeList-CodeValidation-Error",settings.fileName,codeName,(i + 1));
                         }
                         else {
@@ -196,7 +196,7 @@ function (n) {
         var GetVariableDescription = function (line) {
             var name = null;
             var description = null;
-            var index = line.indexOf(" "); 
+            var index = line.reduceWhiteSpace().indexOf(" "); 
             if(index < 0) {
                 name = line;
             } 
@@ -299,7 +299,7 @@ function (n) {
             var variables = [];
             var i = startIndex;
             do {
-                var expressions = lines[i].trim().split(" ");
+                var expressions = lines[i].trim().reduceWhiteSpace().split(" ");
                 if(expressions.length >= 2 && expressions[0] !== "" && expressions[1] !== "") {
                     var variableName = expressions[0];
                     if(!variables.includes(variableName)) {

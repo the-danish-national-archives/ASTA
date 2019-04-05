@@ -24,6 +24,10 @@ if (!String.prototype.format) {
     }
   }
 
+  String.prototype.reduceWhiteSpace = function() {
+      return this.replace(/\s+/g, ' ');
+  }
+
   if (!Date.prototype.getFromFormat) {
     Date.prototype.getFromFormat = function(format) {
       var yyyy = this.getFullYear().toString();
