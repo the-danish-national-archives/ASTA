@@ -78,6 +78,10 @@
             padding: 0% 2.5%;
             border: 1px solid black;
         }
+
+        .extraInfo {
+            border: 1px solid black;
+        }
     </style>
 </head>
 
@@ -105,7 +109,7 @@
         <p id="count">Batch test afsluttet med {2} fejl</p>
     </div>
 </body>
-<script>
+<script>    
     var selectedValue = "";
     // Populate the dropdown when the page have loaded.
     (function () {
@@ -113,15 +117,26 @@
         var testContent = document.getElementById('testContent');
         var spans = testContent.getElementsByTagName('span');
         var ids = new Set();
-        var i = [];
         for (var i = spans.length - 1; i >= 0; i--){
             var name = spans[i].getAttribute('name');
             ids.add(name);
             var iTag = spans[i].getElementsByTagName('i');
+            var extraInfoId = null;
+            var extraInfoHtml = "";
             if(iTag != null && iTag.length > 0) {
+                if(iTag[0].firstChild != null) {
+                    extraInfoId = iTag[0].firstChild.id;
+                    extraInfoHtml = iTag[0].firstChild.innerHTML;
+                }
                 spans[i].removeChild(iTag[0]);
             }
-            spans[i].innerHTML = name + ": " + spans[i].innerHTML;
+            if(extraInfoId != null) {
+                spans[i].innerHTML = name + ": <a href=\"#\" onclick=\"javascript:ShowHideExtraInfo(this,'" + extraInfoId + "');return false;\">+(" + extraInfoId + ")</a> " + spans[i].innerHTML + "<div id=\"" + extraInfoId + "\" class=\"extraInfo\" style=\"display:none\">" + extraInfoHtml + "</div>";
+            }
+            else {
+                spans[i].innerHTML = name + ": " + spans[i].innerHTML;
+            }
+            
         }
         for (let item of ids){
             var opt = document.createElement('option');
@@ -130,6 +145,18 @@
             fdSelect.add(opt, fdSelect[1]);
         }
     })();
+
+    function ShowHideExtraInfo(link,divId) {
+        var divElement = document.getElementById(divId);
+        if(divElement.style.display === "none") {
+            link.innerText = "-" + link.innerText.substring(1);
+            divElement.style.display = "block";
+        }
+        else {
+            link.innerText = "+" + link.innerText.substring(1);
+            divElement.style.display = "none";
+        }
+    }
 
     // Show only the selected FD test result.
     function fdSelectChanged(selectObj) {

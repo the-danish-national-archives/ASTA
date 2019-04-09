@@ -38,8 +38,8 @@ function (n) {
             scriptPath: "./assets/scripts/{0}",
             resourceWinPath: "resources\\{0}",
             filePostfix: "{0}_log.html",
-            startLogData: "<div class=\"results\" id=\"testContent\">",
-            endLogData: "</div>",
+            startLogData: "<!--Start Log Data-->",
+            endLogData: "<!--End Log Data-->",
             errorsCounter: 0
         } 
         
