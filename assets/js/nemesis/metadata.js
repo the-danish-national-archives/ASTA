@@ -189,6 +189,7 @@ function (n) {
                         else {
                             info.codes.forEach(code => {
                                 if(!userCodePattern.test(code)) {
+                                    settings.errorStop = true;
                                     result = LogError("-CheckMetadata-FileUserCodes-CodeValidation-Error",settings.fileName,info.name,code);
                                 }
                                 else {
