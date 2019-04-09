@@ -128,6 +128,65 @@ function (n) {
             });
             return result;
         }
+        
+        //Validate single user code name
+        var ValidateUserCodeName = function (codeName) {
+            var result = true;
+            if(result && startNumberPattern.test(codeName)) {
+                result = LogError("-CheckMetadata-FileUserCodes-NameNumber-Error",settings.fileName,codeName);
+            }
+            if(result && !validFileNamePattern.test(codeName) && !enclosedReservedWordPattern.test(codeName)) {
+                result = LogError("-CheckMetadata-FileUserCodes-NameValidation-Error",settings.fileName,codeName);
+            }
+            if(result && codeName.length > titleMaxLength) {
+                result = LogError("-CheckMetadata-FileUserCodes-NameLength-Error",settings.fileName,codeName);
+            }
+            if(result && reservedWordPattern.test(codeName)) {
+                result = LogError("-CheckMetadata-FileUserCodes-NameReservedWord-Error",settings.fileName,codeName);
+            }
+            return result;
+        }
+
+        // get user code one line info as JSON
+        var GetUserCode = function (line) {
+            var name = null;
+            var codes = null;
+            var index = line.reduceWhiteSpace().indexOf(" "); 
+            if(index < 0) {
+                name = line;
+            } 
+            else {
+                name = line.substring(0,index);
+                var codesTemp = line.substring(index + 1);
+                codes = [];
+                codesTemp.reduceWhiteSpace().split(" ").forEach(code => {                    
+                    codes.push(code.substring(1,code.length - 1));
+                });
+            }
+            return { "name":name, "codes":codes}
+        }
+
+        //Validate BRUGERKODE
+        var ValidateUserCodes = function (lines,startIndex) {
+            var result = true;
+            var table = GetTableData(settings.fileName);
+            var i = startIndex;                        
+            do {
+                var info = GetUserCode(lines[i]);
+                if(info.codes == null) {
+                    result = LogError("-CheckMetadata-FileUserCodes-CodeRequired-Error",settings.fileName,(i + 1));                    
+                }
+                else {
+                    if(!ValidateUserCodeName(info.name)) {
+                        settings.errorStop = true;
+                        result = false; 
+                    }
+                }
+                i++;
+            }
+            while (lines[i].trim() !== ""); 
+            return result;
+        }
 
         //Validate single code name
         var ValidateCodeName = function (codeName) {
@@ -180,7 +239,7 @@ function (n) {
                             var options = lines[i].trim().split("' '");
                             table.variables.forEach(variable => {
                                 if(variable.name === codeName) {
-                                    variable.options.push({ "name":options[0].substring(1), "description":options[1].substring(0,options[1].length - 1) });
+                                    variable.options.push({ "name":options[0].substring(1), "description":options[1].substring(0,options[1].length - 1), "missing":"0" });
                                 }
                             });
                        }
@@ -471,6 +530,9 @@ function (n) {
                 if(label === settings.metadataLabels[6] && !settings.errorStop && !ValidateVariablesDescription(lines,index)) { result = false; }
                 if(label === settings.metadataLabels[7] && lines[index].trim() !== "" && !settings.errorStop) {
                     if(!ValidateCodeList(lines,index)) { result = false; }
+                }
+                if(label === settings.metadataLabels[8] && lines[index].trim() !== "" && !settings.errorStop) {
+                    if(!ValidateUserCodes(lines,index)) { result = false; }
                 }
             });
             return result;
