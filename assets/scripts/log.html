@@ -74,6 +74,10 @@
             padding: 0% 2.5%;
             border: 1px solid black;
         }
+
+        .extraInfo {
+            border: 1px solid black;
+        }
     </style>
 </head>
 
@@ -101,6 +105,42 @@
     </div>
 </body>
 <script>
+    (function () {
+        var spans = testContent.getElementsByTagName('span');
+        for (var i = spans.length - 1; i >= 0; i--){
+            var name = spans[i].getAttribute('name');
+            var iTag = spans[i].getElementsByTagName('i');
+            var extraInfoId = null;
+            var extraInfoHtml = "";
+            if(iTag != null && iTag.length > 0) {
+                if(iTag[0].firstChild != null) {
+                    extraInfoId = iTag[0].firstChild.id;
+                    extraInfoHtml = iTag[0].firstChild.innerHTML;
+                }
+                spans[i].removeChild(iTag[0]);
+            }
+            if(extraInfoId != null) {
+                spans[i].innerHTML = "<a href=\"#\" onclick=\"javascript:ShowHideExtraInfo(this,'" + extraInfoId + "');return false;\">+(" + extraInfoId + ")</a> " + spans[i].innerHTML + "<div id=\"" + extraInfoId + "\" class=\"extraInfo\" style=\"display:none\">" + extraInfoHtml + "</div>";
+            }
+            else {
+                spans[i].innerHTML = spans[i].innerHTML;
+            }
+            
+        }
+    })();
+
+    function ShowHideExtraInfo(link,divId) {
+        var divElement = document.getElementById(divId);
+        if(divElement.style.display === "none") {
+            link.innerText = "-" + link.innerText.substring(1);
+            divElement.style.display = "block";
+        }
+        else {
+            link.innerText = "+" + link.innerText.substring(1);
+            divElement.style.display = "none";
+        }
+    }
+
     // Turn error messages on / off
     var errElements = document.getElementsByClassName("error");
     function errVisiChanged(checkBoxErrEl){        
