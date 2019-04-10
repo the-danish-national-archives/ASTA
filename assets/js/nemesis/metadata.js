@@ -16,7 +16,12 @@ function (n) {
         const enclosedReservedWordPattern = /^(")(ABSOLUTE|ACTION|ADD|ADMIN|AFTER|AGGREGATE|ALIAS|ALL|ALLOCATE|ALTER|AND|ANY|ARE|ARRAY|AS|ASC|ASSERTION|AT|AUTHORIZATION|BEFORE|BEGIN|BINARY|BIT|BLOB|BOOLEAN|BOTH|BREADTH|BY|CALL|CASCADE|CASCADED|CASE|CAST|CATALOG|CHAR|CHARACTER|CHECK|CLASS|CLOB|CLOSE|COLLATE|COLLATION|COLUMN|COMMIT|COMPLETION|CONNECT|CONNECTION|CONSTRAINT|CONSTRAINTS ||CONSTRUCTOR|CONTINUE|CORRESPONDING|CREATE|CROSS|CUBE|CURRENT|CURRENT_DATE|CURRENT_PATH|CURRENT_ROLE|CURRENT_TIME|CURRENT_TIMESTAMP|CURRENT_USER|CURSOR|CYCLE|DATA|DATE|DAY|DEALLOCATE|DEC|DECIMAL|DECLARE|DEFAULT|DEFERRABLE|DEFERRED|DELETE|DEPTH|DEREF|DESC|DESCRIBE|DESCRIPTOR|DESTROY|DESTRUCTOR|DETERMINISTIC|DICTIONARY|DIAGNOSTICS|DISCONNECT|DISTINCT|DOMAIN|DOUBLE|DROP|DYNAMIC|EACH|ELSE|END|END-EXEC|EQUALS|ESCAPE|EVERY|EXCEPT|EXCEPTION|EXEC|EXECUTE|EXTERNAL|FALSE|FETCH|FIRST|FLOAT|FOR|FOREIGN|FOUND|FROM|FREE|FULL|FUNCTION|GENERAL|GET|GLOBAL|GO|GOTO|GRANT|GROUP|GROUPING|HAVING|HOST|HOUR|IDENTITY|IGNORE|IMMEDIATE|IN|INDICATOR|INITIALIZE|INITIALLY|INNER|INOUT|INPUT|INSERT|INT|INTEGER|INTERSECT|INTERVAL|INTO|IS|ISOLATION|ITERATE|JOIN|KEY|LANGUAGE|LARGE|LAST|LATERAL|LEADING|LEFT|LESS|LEVEL|LIKE|LIMIT|LOCAL|LOCALTIME|LOCALTIMESTAMP|LOCATOR|MAP|MATCH|MINUTE|MODIFIES|MODIFY|MODULE|MONTH|NAMES|NATIONAL|NATURAL|NCHAR|NCLOB|NEW|NEXT|NO|NONE|NOT|NULL|NUMERIC|OBJECT|OF|OFF|OLD|ON|ONLY|OPEN|OPERATION|OPTION|OR|ORDER|ORDINALITY|OUT|OUTER|OUTPUT|PAD|PARAMETER|PARAMETERS|PARTIAL|PATH|POSTFIX|PRECISION|PREFIX|PREORDER|PREPARE|PRESERVE|PRIMARY|PRIOR|PRIVILEGES|PROCEDURE|PUBLIC|READ|READS|REAL|RECURSIVE|REF|REFERENCES|REFERENCING|RELATIVE|RESTRICT|RESULT|RETURN|RETURNS|REVOKE|RIGHT|ROLE|ROLLBACK|ROLLUP|ROUTINE|ROW|ROWS|SAVEPOINT|SCHEMA|SCROLL|SCOPE|SEARCH|SECOND|SECTION|SELECT|SEQUENCE|SESSION|SESSION_USER|SET|SETS|SIZE|SMALLINT|SOME|SPACE|SPECIFIC|SPECIFICTYPE|SQL|SQLEXCEPTION|SQLSTATE|SQLWARNING|START|STATE|STATEMENT|STATIC|STRUCTURE|SYSTEM_USER|TABLE|TEMPORARY|TERMINATE|THAN|THEN|TIME|TIMESTAMP|TIMEZONE_HOUR|TIMEZONE_MINUTE|TO|TRAILING|TRANSACTION|TRANSLATION|TREAT|TRIGGER|TRUE|UNDER|UNION|UNIQUE|UNKNOWN|UNNEST|UPDATE|USAGE|USER|USING|VALUE|VALUES|VARCHAR|VARIABLE|VARYING|VIEW|WHEN|WHENEVER|WHERE|WITH|WITHOUT|WORK|WRITE|YEAR|ZONE)(")$/i;
         const codePattern = /^('(((\+|\-){0,1}[0-9]+)|([a-zA-ZæøåÆØÅ0-9]+)|(\.[a-zA-ZæøåÆØÅ])|((\+|\-){0,1}[0-9]+(\.|\,){0,1}[0-9]*))' '[\w\W\s]*')$/;
         const userCodePattern = /^('(((\+|\-){0,1}[0-9]+)|([a-zA-ZæøåÆØÅ0-9]+)|((\+|\-){0,1}[0-9]+(\.|\,){0,1}[0-9]*))')$/;
-       
+        const datatypeString = [/^(string)$/,/^(\%[0-9]+s)$/,/^(\$[0-9]+\.)$/,/^(a[0-9]+)$/];
+        const datatypeInt = [/^(int)$/,/^((\%[0-9]+\.0f)|(\%[0-9]+\.0g))$/,/^(f[0-9]+\.)$/,/^(f[0-9]+)$/];
+        const datatypeDecimal = [/^(decimal)$/,/^((\%[0-9]+\.[0-9]+f)|(\%[0-9]+\.[0-9]+g))$/,/^(f[0-9]+\.[0-9]+)$/,/^(f[0-9]+\.[0-9]+)$/];
+        const datatypeDate = [/^(date)$/,/^(\%tdCCYY-NN-DD)$/,/^((yymmdd\.)|(yymmdd10\.))$/,/^(sdate10)$/];
+        const datatypeTime = [/^(time)$/,/^(\%tcHH:MM:SS)$/,/^((time\.)|(time8\.))$/,/^(time8)$/];
+        const datatypeDateTime = [/^(datetime)$/,/^(\%tcCCYY-NN-DD\!THH:MM:SS)$/,/^((e8601dt\.)|(e8601dt19\.))$/,/^(datetime20)$/];
         const titleMaxLength = 128;
             
         //private data memebers
@@ -391,7 +396,7 @@ function (n) {
                         variables.push(variableName);
                         if(ValidateVariableName(variableName)) {
                             var isKey = (settings.fileKeys.includes(variableName)) ? true : false;
-                            var variable = { "name":variableName, "format":expressions[1], "isKey":isKey, "description":"", "refData":"", "refVariable":"", "options":[] }
+                            var variable = { "name":variableName, "format":expressions[1], "isKey":isKey, "type":"", "description":"", "refData":"", "refVariable":"", "options":[] }
                             table.variables.push(variable);
                         } 
                         else { result = false; }                       
@@ -589,6 +594,39 @@ function (n) {
             return result;
         }
 
+        //Validate variable Format by regExp set
+        var ValidateFormat = function (variableType,regExps,variable) {
+            var result = false;
+            for(var i = 0;i < regExps.length;i++) {
+                if(regExps[i].test(variable.format)) {
+                    variable.type = variableType;
+                    result = true;
+                    break;
+                }
+            }
+            return result;
+        }
+
+        //Validate variables Data Formats
+        var ValidateDataFormats = function () {
+            var result = false;
+            var table = GetTableData(settings.fileName);
+            table.variables.forEach(variable => {
+                var isValid = false;                
+                if(!isValid) { isValid = ValidateFormat("String",datatypeString,variable); } 
+                if(!isValid) { isValid = ValidateFormat("Int",datatypeInt,variable); }   
+                if(!isValid) { isValid = ValidateFormat("Decimal",datatypeDecimal,variable); }
+                if(!isValid) { isValid = ValidateFormat("Date",datatypeDate,variable); } 
+                if(!isValid) { isValid = ValidateFormat("Time",datatypeTime,variable); }
+                if(!isValid) { isValid = ValidateFormat("DateTime",datatypeDateTime,variable); }
+                if(!isValid) {
+                    result = LogError("-CheckMetadata-FileVariable-DataFormat-Error",settings.fileName,variable.name,variable.format);
+                    settings.errorStop = true;
+                }
+            });
+            return result;
+        }
+
         //validate Metadata file
         var ValidateMetadata = function (metadataFilePath) {
             var result = true;
@@ -605,7 +643,7 @@ function (n) {
                     }
                     else {
                         if(!ValidateLabelValues(lines)) { result = false; }
-                        
+                        if(!settings.errorStop && ValidateDataFormats()) { result = false; }
                     }
                 }
                 else {
