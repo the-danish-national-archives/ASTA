@@ -17,8 +17,8 @@ function (n) {
         const codePattern = /^('(((\+|\-){0,1}[0-9]+)|([a-zA-ZæøåÆØÅ0-9]+)|(\.[a-zA-ZæøåÆØÅ])|((\+|\-){0,1}[0-9]+(\.|\,){0,1}[0-9]*))' '[\w\W\s]*')$/;
         const userCodePattern = /^('(((\+|\-){0,1}[0-9]+)|([a-zA-ZæøåÆØÅ0-9]+)|((\+|\-){0,1}[0-9]+(\.|\,){0,1}[0-9]*))')$/;
         const datatypeString = [/^(string)$/,/^(\%([0-9]+)s)$/,/^(\$([0-9]+)\.)$/,/^(a([0-9]+))$/];
-        const datatypeInt = [/^(int)$/,/^((\%[0-9]+\.0f)|(\%[0-9]+\.0g))$/,/^(f[0-9]+\.)$/,/^(f[0-9]+)$/];
-        const datatypeDecimal = [/^(decimal)$/,/^((\%[0-9]+\.[0-9]+f)|(\%[0-9]+\.[0-9]+g))$/,/^(f[0-9]+\.[0-9]+)$/,/^(f[0-9]+\.[0-9]+)$/];
+        const datatypeInt = [/^(int)$/,/^((\%([0-9]+)\.0f)|(\%([0-9]+)\.0g))$/,/^(f([0-9]+)\.)$/,/^(f([0-9]+))$/];
+        const datatypeDecimal = [/^(decimal)$/,/^((\%([0-9]+)\.([0-9]+f))|(\%([0-9]+)\.([0-9]+)g))$/,/^(f([0-9]+)\.([0-9]+))$/,/^(f([0-9]+)\.([0-9]+))$/];
         const datatypeDate = [/^(date)$/,/^(\%tdCCYY-NN-DD)$/,/^((yymmdd\.)|(yymmdd10\.))$/,/^(sdate10)$/];
         const datatypeTime = [/^(time)$/,/^(\%tcHH:MM:SS)$/,/^((time\.)|(time8\.))$/,/^(time8)$/];
         const datatypeDateTime = [/^(datetime)$/,/^(\%tcCCYY-NN-DD\!THH:MM:SS)$/,/^((e8601dt\.)|(e8601dt19\.))$/,/^(datetime20)$/];
@@ -595,6 +595,55 @@ function (n) {
             return result;
         }
 
+        // Validate string format type
+        var ValidateStringFormat = function (variable,regExp) {
+            var result = true;
+            var maxLength = stringMaxLength.toString();
+            var matches = variable.format.match(regExp);
+            if(matches != null && matches.length > 2) {
+                if(parseInt(matches[2]) <= stringMaxLength) { 
+                    maxLength = matches[2];
+                }
+                else {
+                    result = LogError("-CheckMetadata-FileVariable-DataFormat-StringLength-Error",settings.fileName,variable.name,variable.format);
+                }
+            }
+            variable.regExp = "^[\\w\\W\\s]{0," + maxLength + "}$";
+            return result;
+        }
+
+        // Validate Int format type
+        var ValidateIntFormat = function (variable,regExp) {
+            var result = true;
+            var length = "";
+            var matches = variable.format.match(regExp);
+            matches.forEach(match => {
+                if(!isNaN(match)) { length = match; }
+            });
+            variable.regExp = "^(\+|\-){0,1}[0-9]{1," + length + "}$";
+            return result;
+        }
+
+        // Validate Decimal Format type
+        var ValidateDecimalFormat = function (variable,regExp) {
+            var result = true;
+            var intLength = "";
+            var decimalLength = "";
+            var matches = variable.format.match(regExp);
+            matches.forEach(match => {
+                if(!isNaN(match)) {
+                    if(intLength === "") {
+                        intLength = match;
+                    }
+                    else {
+                        decimalLength = match;
+                    }
+                }
+            });
+            variable.regExp = "^(\+|\-){0,1}[0-9]{1," + intLength + "}(\.|\,)[0-9]{1," + decimalLength + "}$";
+            return result;
+        }
+
         //Validate variable Format by regExp set
         /*
             var patt = new RegExp("^[\\w\\W\\s]{0,9}$");
@@ -607,19 +656,17 @@ function (n) {
                 if(regExps[i].test(variable.format)) {
                     variable.type = variableType;
                     if(variableType === "String") {
-                        var maxLength = stringMaxLength.toString();
-                        var matches = variable.format.match(regExps[i]);
-                        if(matches != null && matches.length > 2) {
-                            if(parseInt(matches[2]) <= stringMaxLength) {
-                                maxLength = matches[2];
-                            }
-                            else {
-                                result = LogError("-CheckMetadata-FileVariable-DataFormat-StringLength-Error",settings.fileName,variable.name,variable.format);
-                            }
-                        }
-                        variable.regExp = "^[\\w\\W\\s]{0," + maxLength + "}$";
+                        result = ValidateStringFormat(variable,regExps[i]);                        
                     }
-                    result = true;
+                    if(variableType === "Int") {
+                        result = ValidateIntFormat(variable,regExps[i]);
+                    }
+                    if(variableType === "Decimal") {
+                        result = ValidateDecimalFormat(variable,regExps[i]);
+                    }
+                    if(variableType === "Date") { result = true; }
+                    if(variableType === "Time") { result = true; }
+                    if(variableType === "DateTime") { result = true; }
                     break;
                 }
             }
