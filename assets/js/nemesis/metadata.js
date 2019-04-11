@@ -23,6 +23,7 @@ function (n) {
         const datatypeTime = [/^(time)$/,/^(\%tcHH:MM:SS)$/,/^((time\.)|(time8\.))$/,/^(time8)$/];
         const datatypeDateTime = [/^(datetime)$/,/^(\%tcCCYY-NN-DD\!THH:MM:SS)$/,/^((e8601dt\.)|(e8601dt19\.))$/,/^(datetime20)$/];
         const titleMaxLength = 128;
+        const stringMaxLength = 32767;
             
         //private data memebers
         var settings = { 
@@ -606,10 +607,17 @@ function (n) {
                 if(regExps[i].test(variable.format)) {
                     variable.type = variableType;
                     if(variableType === "String") {
+                        var maxLength = stringMaxLength.toString();
                         var matches = variable.format.match(regExps[i]);
                         if(matches != null && matches.length > 2) {
-                            variable.regExp = "^[\\w\\W\\s]{0," + matches[2]+ "}$";
+                            if(parseInt(matches[2]) <= stringMaxLength) {
+                                maxLength = matches[2];
+                            }
+                            else {
+                                result = LogError("-CheckMetadata-FileVariable-DataFormat-StringLength-Error",settings.fileName,variable.name,variable.format);
+                            }
                         }
+                        variable.regExp = "^[\\w\\W\\s]{0," + maxLength + "}$";
                     }
                     result = true;
                     break;
