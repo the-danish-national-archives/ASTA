@@ -131,7 +131,7 @@
                 spans[i].removeChild(iTag[0]);
             }
             if(extraInfoId != null) {
-                spans[i].innerHTML = name + ": <a href=\"#\" onclick=\"javascript:ShowHideExtraInfo(this,'" + extraInfoId + "');return false;\">+(" + extraInfoId + ")</a> " + spans[i].innerHTML + "<div id=\"" + extraInfoId + "\" class=\"extraInfo\" style=\"display:none\">" + extraInfoHtml + "</div>";
+                spans[i].innerHTML = name + ": <a href=\"#\" onclick=\"javascript:ShowHideExtraInfo(this,'" + extraInfoId + i + "');return false;\">+(" + extraInfoId + ")</a> " + spans[i].innerHTML + "<div id=\"" + extraInfoId + i + "\" class=\"extraInfo\" style=\"display:none\">" + extraInfoHtml + "</div>";
             }
             else {
                 spans[i].innerHTML = name + ": " + spans[i].innerHTML;
