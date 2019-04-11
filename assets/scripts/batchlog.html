@@ -144,7 +144,31 @@
             opt.text = item;
             fdSelect.add(opt, fdSelect[1]);
         }
+        addRulers();
     })();
+
+    // Adds horizontal rulers to the test log, to improve ease of reading.
+    function addRulers() {
+        var testContent = document.getElementById('testContent');
+        var spans = testContent.getElementsByTagName('span');
+        for (var i = 0; i < spans.length; i++) {
+            if (i > 0) {
+                if (spans[i].getAttribute('name') != spans[i - 1].getAttribute('name')){
+                    var newHr = document.createElement('hr');
+                    spans[i].parentNode.insertBefore(newHr, spans[i]);
+                }
+            }
+        }
+    }        
+
+    // Removes the horizontal rulers from the test log, when only showing a single test result instead of the full batch.
+    function removeRulers() {
+        var testContent = document.getElementById('testContent');
+        var rulers = testContent.getElementsByTagName('hr');
+        for (var i = rulers.length - 1; i >= 0; i--) {
+            rulers[i].remove();
+        }
+    }
 
     function ShowHideExtraInfo(link,divId) {
         var divElement = document.getElementById(divId);
@@ -168,9 +192,15 @@
         for(var i = 0; i < spans.length; i++){
             if(selectObj.value === ""){
                 spans[i].style.display = "block"; 
+                if(i === 0){
+                    addRulers();
+                }
             }   
             else 
             {
+                if(i === 0) {
+                    removeRulers();
+                }
                 if (spans[i].getAttribute('name') === selectObj.value) {
                     spans[i].style.display = "block";
                 } else {
