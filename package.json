@@ -14,7 +14,7 @@
     "create-installer-win": "node installers/windows/createinstaller.js",
     "create-installer-win-admin": "node installers/windows/createadmininstaller.js",
     "create-installer-mac": "electron-installer-dmg ./release-builds/file-converter-darwin-x64/file-converter.app file-converter --out=release-builds --overwrite --icon=assets/icons/mac/bookshelf-icon.icns",
-    "create-installer-mac-admin": "electron-installer-dmg ./release-builds/file-converter-admin-app-darwin-x64/file-converter.app file-converter --out=release-builds --overwrite --icon=assets/icons/mac/bookshelf-icon.icns"
+    "create-installer-mac-admin": "electron-installer-dmg ./release-builds/file-converter-admin-app-darwin-x64/file-converter-admin.app file-converter --out=release-builds --overwrite --icon=assets/icons/mac/bookshelf-icon.icns"
   },
   "keywords": [
     "electron",

@@ -10,7 +10,9 @@ RELEASES
 /release-builds/file-converter-app-win32-ia32
 /release-builds/file-converter-app-darwin-x64
 /release-builds/file-converter-admin-app-win32-ia32
+/release-builds/file-converter-admin-app-darwin-x64
 #/release-builds/windows-installer
+
 
 #Include specific files
 !*/release-builds/windows-installer/FileConverterAdmin.exe
