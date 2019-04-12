@@ -397,7 +397,7 @@ function (n) {
                         variables.push(variableName);
                         if(ValidateVariableName(variableName)) {
                             var isKey = (settings.fileKeys.includes(variableName)) ? true : false;
-                            var variable = { "name":variableName, "format":expressions[1], "isKey":isKey, "type":"", "regExp":"", "description":"", "refData":"", "refVariable":"", "options":[] }
+                            var variable = { "name":variableName, "format":expressions[1], "isKey":isKey, "type":"", "description":"", "refData":"", "refVariable":"", "options":[], "regExps":[], "appliedRegExp":-1 }
                             table.variables.push(variable);
                         } 
                         else { result = false; }                       
@@ -608,7 +608,7 @@ function (n) {
                     result = LogError("-CheckMetadata-FileVariable-DataFormat-StringLength-Error",settings.fileName,variable.name,variable.format);
                 }
             }
-            variable.regExp = "^[\\w\\W\\s]{0," + maxLength + "}$";
+            variable.regExps.push("^[\\w\\W\\s]{0," + maxLength + "}$");
             return result;
         }
 
@@ -620,7 +620,7 @@ function (n) {
             matches.forEach(match => {
                 if(!isNaN(match)) { length = match; }
             });
-            variable.regExp = "^(\+|\-){0,1}[0-9]{1," + length + "}$";
+            variable.regExps.push("^(\\+|\\-){0,1}[0-9]{1," + length + "}$");
             return result;
         }
 
@@ -640,7 +640,32 @@ function (n) {
                     }
                 }
             });
-            variable.regExp = "^(\+|\-){0,1}[0-9]{1," + intLength + "}(\.|\,)[0-9]{1," + decimalLength + "}$";
+            variable.regExps.push("^(\\+|\\-){0,1}[0-9]{1," + intLength + "}\\.[0-9]{1," + decimalLength + "}$");
+            variable.regExps.push("^(\\+|\\-){0,1}[0-9]{1," + intLength + "}\\,[0-9]{1," + decimalLength + "}$");
+            return result;
+        }
+
+        //Validate Date Format type
+        var ValidateDateFormat = function (variable,regExp) {
+            var result = true;
+            variable.regExps.push("^([0-9]{4,4})-([0-9]{2,2})-([0-9]{2,2})$");
+            variable.regExps.push("^([0-9]{4,4})\\/([0-9]{2,2})\\/([0-9]{2,2})$");
+            return result;
+        }
+
+        //Validate Time Format type
+        var ValidateTimeFormat = function (variable,regExp) {
+            var result = true;
+            variable.regExps.push("^([0-9]{2,2}):([0-9]{2,2}):([0-9]{2,2})$");
+            return result;
+        }
+
+        //Validate DateTime Format type
+        var ValidateDateTimeFormat = function (variable,regExp) {
+            var result = true;
+            variable.regExps.push("^([0-9]{4,4})-([0-9]{2,2})-([0-9]{2,2})T([0-9]{2,2}):([0-9]{2,2}):([0-9]{2,2})$");
+            variable.regExps.push("^([0-9]{4,4})\\/([0-9]{2,2})\\/([0-9]{2,2})T\\s([0-9]{2,2}):([0-9]{2,2}):([0-9]{2,2})$");
+            variable.regExps.push("^([0-9]{2,2})-([a-zA-Z]{3,3})-([0-9]{4,4})\\s([0-9]{2,2}):([0-9]{2,2}):([0-9]{2,2})$");
             return result;
         }
 
@@ -664,9 +689,16 @@ function (n) {
                     if(variableType === "Decimal") {
                         result = ValidateDecimalFormat(variable,regExps[i]);
                     }
-                    if(variableType === "Date") { result = true; }
-                    if(variableType === "Time") { result = true; }
-                    if(variableType === "DateTime") { result = true; }
+                    if(variableType === "Date") { 
+                        result = ValidateDateFormat(variable,regExps[i]); 
+                    }
+                    if(variableType === "Time") { 
+                        result = ValidateTimeFormat(variable,regExps[i]);  
+                    }
+                    if(variableType === "DateTime") 
+                    { 
+                        result = ValidateDateTimeFormat(variable,regExps[i]); 
+                    }
                     break;
                 }
             }
