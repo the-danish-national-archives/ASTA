@@ -268,7 +268,7 @@ function (n) {
                             result = LogError("-CheckMetadata-FileCodeList-CodeValidation-Error",settings.fileName,codeName,(i + 1));
                         }
                         else {
-                            var options = lines[i].trim().split("' '");
+                            var options = lines[i].trim().reduceWhiteSpace().split("' '");
                             table.variables.forEach(variable => {
                                 if(variable.name === codeName) {
                                     variable.options.push({ "name":options[0].substring(1), "description":options[1].substring(0,options[1].length - 1), "missing":false });
