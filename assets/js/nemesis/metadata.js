@@ -372,7 +372,7 @@ function (n) {
             });
             settings.fileReferences.forEach(ref => {
                 if(!variables.includes(ref.refKey)) {
-                    result = LogError("-CheckMetadata-FileReferences-KeyRequired-Error",settings.fileName,refKey);
+                    result = LogError("-CheckMetadata-FileReferences-KeyRequired-Error",settings.fileName,ref.refKey);
                 }
                 else {
                     table.variables.forEach(variable => {
@@ -474,7 +474,7 @@ function (n) {
             var refKey = null;
             do {
                 var expressions = lines[i].trim().split(" ");
-                if(expressions.length >= 3 && expressions[0] !== "" && expressions[1].length > 2 && expressions[2].length > 2 && expressions[1][0] === "'" && expressions[1][expressions[1].length - 1] === "'"  && expressions[2][0] === "'" && expressions[2][expressions[2].length - 1] === "'") {
+                if(expressions.length === 3 && expressions[0] !== "" && expressions[1].length > 2 && expressions[2].length > 2 && expressions[1][0] === "'" && expressions[1][expressions[1].length - 1] === "'"  && expressions[2][0] === "'" && expressions[2][expressions[2].length - 1] === "'") {
                     tableName = expressions[0];
                     tableKey = expressions[1].substring(1,expressions[1].length - 1);
                     refKey = expressions[2].substring(1,expressions[2].length - 1);
@@ -486,7 +486,12 @@ function (n) {
                     }
                 }
                 else {
-                    result = LogError("-CheckMetadata-FileReferences-RowRequiredInfo-Error",settings.fileName,i + 1);
+                    if(expressions.length > 3) {
+                        result = LogError("-CheckMetadata-FileReferences-RowValidation-Error",settings.fileName,i + 1);
+                    } 
+                    else {
+                        result = LogError("-CheckMetadata-FileReferences-RowRequiredInfo-Error",settings.fileName,i + 1);
+                    }
                 }
                 i++;
             }
