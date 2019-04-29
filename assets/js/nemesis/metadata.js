@@ -355,6 +355,9 @@ function (n) {
             if(result && reservedWordPattern.test(variableName)) {
                 result = LogError("-CheckMetadata-FileVariable-NameReservedWord-Error",settings.fileName,variableName);
             }
+            if(result && settings.metadataLabels.includes(variableName.toUpperCase())) {
+                result = LogError("-CheckMetadata-FileVariable-LabelReservedWord-Error",settings.fileName,variableName.toUpperCase());
+            }
             return result;
         }
 
@@ -419,7 +422,7 @@ function (n) {
         }
 
         //validate keys variables array
-        var ValidateKeys  = function (lines,startIndex) {
+        var ValidateKeys  = function (label,lines,startIndex) {
             var result = true;
             lines[startIndex].trim().split(" ").forEach(key => {
                 if(startNumberPattern.test(key)) {
@@ -438,6 +441,9 @@ function (n) {
                     settings.fileKeys.push(key);
                 }
             });
+            if(lines[startIndex + 1].trim() !== "") {
+                result = LogError("-CheckMetadata-FileLabel-ValueMax-Error",settings.fileName,label);
+            }
             return result;
         }
         
@@ -545,7 +551,7 @@ function (n) {
                     if(!ValidateBasicValues(label,lines,index)) { result = false; }
                 }
                 if(label === settings.metadataLabels[3] && lines[index].trim() !== "") {
-                    if(!ValidateKeys(lines,index)) { result = false; }
+                    if(!ValidateKeys(label,lines,index)) { result = false; }
                 }
                 if(label === settings.metadataLabels[4] && lines[index].trim() !== "") {
                     if(!ValidateReferences(lines,index)) { result = false; }
@@ -563,7 +569,7 @@ function (n) {
                 if(label === settings.metadataLabels[7] && lines[index].trim() !== "" && !settings.errorStop) {
                     if(!ValidateCodeList(lines,index)) { result = false; }
                 }
-                if(label === settings.metadataLabels[8] && lines[index].trim() !== "" && !settings.errorStop) {
+                if(label === settings.metadataLabels[8] && lines[index] !== undefined && lines[index].trim() !== "" && !settings.errorStop) {
                     if(!ValidateUserCodes(lines,index)) { result = false; }
                 }
             });
@@ -589,6 +595,11 @@ function (n) {
                     }
                 }
             });
+            for(var i = 0;i < lines.length;i++) {
+               if(lines[i].trim() === ""  && i < (lines.length -1) && lines[i + 1].trim() != "" && !settings.metadataLabels.includes(lines[i + 1].trim())) {
+                    result = LogError("-CheckMetadata-FileLabel-NameValidation-Error",settings.fileName,lines[i + 1].trim());
+               } 
+            }
             if(orderError) {
                 result = LogError("-CheckMetadata-FileLabelsOrder-Error",settings.fileName);
             }
