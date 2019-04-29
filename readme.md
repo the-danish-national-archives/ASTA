@@ -29,4 +29,4 @@ This project is a minimalistic app created using Electron. It follows the conven
 
 ## Windows .exe issue
 There can be an issue (the app will open twice) with creating a new .exe file for Windows, when one already exists. 
-It is recommended to delete the contents of the release folder, even though the script is set to overwrite the contents..
+It is recommended to delete the contents of the release folder, even though the script is set to overwrite the contents.
