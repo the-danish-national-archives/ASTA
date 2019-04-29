@@ -16,7 +16,7 @@
                                 <input type="text" id="nemesis-path">
                                 <button id="nemesis-select-directory">Browse</button>
                                 <br/><br/>                                
-                                <button id="nemesis-validateBtn">Test mappe</button>
+                                <button id="nemesis-validateBtn">Start test</button>
                                 <span id="nemesis-output-Error" hidden="true"><br />Error: {0}</span>
                                 <span id="nemesis-output-Ok" hidden="true"><br/><strong>Bekræftelse!</strong> Log fil [{0}] er nu skabt og placeret i mappen [</span>
                                 <a id="nemesis-select-logFile" hidden="true"></a>
@@ -95,6 +95,7 @@
                                 <span id="nemesis-processing-CheckMetadata-FileEmpty-Error" hidden="true"><i class="fas fa-times error"></i>Metadatafilen {0} er tom<br/></span>
                                 <span id="nemesis-processing-CheckMetadata-FileEncoding-Error" hidden="true"><i class="fas fa-times error"></i>Metadatafilen {0} overholder ikke kravet om UTF8 indkodning<br/></span>
                                 <span id="nemesis-processing-CheckMetadata-Ok" hidden="true"><i class="fas fa-check-circle ok"></i>Metadatafiler test gennemført<br/></span>
+                                <span id="nemesis-processing-CheckFolderContextDocumentation-ContextDocumentation-FileRequired-Error" hidden="true"><i class="fas fa-times error"><div id="15136" hidden="true">Dette er en placeholder tekst, skal erstattes inden release.</div></i>Der er ikke overensstemmelse mellem dokument ID’er angivet i indexfilen {0} og de dokumentID’er der er anvendt til navngivning af dokumentmapperne i afleveringspakken for følgende dokumentmappe: {1}<br/></span>
                                 <span id="nemesis-processing-CheckFolderContextDocumentation-DocCollectionDocumentFilesOrder-Error" hidden="true"><i class="fas fa-times error"></i>Der findes et spring i siderækkefølge af et single pages dokument i dokumentmappen [{0}]<br/></span>
                                 <span id="nemesis-processing-CheckFolderContextDocumentation-DocCollectionDocumentFileName1-Error" hidden="true"><i class="fas fa-times error"></i>Et dokuments filer skal navngives fortløbende med et nummer begyndende med 1 i dokumentmappe [{0}]<br/></span>
                                 <span id="nemesis-processing-CheckFolderContextDocumentation-DocCollectionDocumentFileName-Error" hidden="true"><i class="fas fa-times error"></i>Dokumenter i dokumentmappe {0} er navngivet forkert med "{1}"<br/></span>
@@ -121,6 +122,8 @@
                                 <span id="nemesis-processing-CheckFolderData-TableFolders-Error" hidden="true"><i class="fas fa-times error"></i>Data mappen i afleveringspakken indeholder en undermappe navngivet [{0}]<br/></span>
                                 <span id="nemesis-processing-CheckFolderDataEmpty-Error" hidden="true"><i class="fas fa-times error"></i>Mappen Data er tom<br/></span>
                                 <span id="nemesis-processing-CheckFolderData-Ok" hidden="true"><i class="fas fa-check-circle ok"></i>Data, mappen gennemført<br/></span>
+                                <span id="nemesis-processing-CheckFolderIndices-ContextDocumentation-FileRequired-Error" hidden="true"><i class="fas fa-times error"><div id="15136" hidden="true">Dette er en placeholder tekst, skal erstattes inden release.</div></i>Der er ikke overensstemmelse mellem dokument ID’er angivet i indexfilen {0} og de dokumentID’er der er anvendt til navngivning af dokumentmapperne i afleveringspakken for følgende documentID: {1}<br/></span>
+                                <span id="nemesis-processing-CheckFolderIndices-FileEmpty-Error" hidden="true"><i class="fas fa-times error"></i>Indexfilen {0} er tom<br/></span>
                                 <span id="nemesis-processing-CheckFolderIndices-Error" hidden="true"><i class="fas fa-times error"></i>Indexfilen {0} mangler i afleveringspakken<br/></span>
                                 <span id="nemesis-processing-CheckFolderIndicesCount-Error" hidden="true"><i class="fas fa-times error"></i>Indices mappen indeholder en ulovlig fil "{0}"<br/></span>
                                 <span id="nemesis-processing-CheckFolderIndices-Ok" hidden="true"><i class="fas fa-check-circle ok"></i>Indices, filer gennemført<br/></span>

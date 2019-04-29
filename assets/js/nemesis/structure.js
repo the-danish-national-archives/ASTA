@@ -9,6 +9,7 @@ function (n) {
         const {ipcRenderer} = require('electron');
         const fs = require('fs');
         const junk = require('junk');
+        const domParser = require('xmldom');
         const deliveryPackagePattern = /^(FD.[1-9]{1}[0-9]{4,})$/;
         const dataTablePattern = /^(table[1-9]{1}([0-9]{0,}))$/;
         const dataFilePattern = /^(table[1-9]{1}([0-9]{0,}).csv)$/;
@@ -41,13 +42,15 @@ function (n) {
             defaultFolder: "FD.99999",
             logType: "structure",
             errorsCounter: 0,
-            errorStop: false            
+            errorStop: false,
+            documents: []            
         }
 
         //reset status & input fields
         var Reset = function () {
-             settings.errorsCounter = 0;
+            settings.errorsCounter = 0;
             settings.errorStop = false;
+            settings.documents = [];
             $("span[id^='" + settings.outputPrefix + "']").hide();
              $("span[id^='" + settings.outputPrefix + "']").each(function() {
                 $(this).html("");
@@ -134,6 +137,44 @@ function (n) {
             settings.logCallback().info(settings.logType,GetFolderName(),text);
         }
 
+        //Validate Indices contextDocumentationIndex.xml file
+        var ValidateContextDocumentationIndex = function (destPath) {
+            var result = true;
+            var documentIds = [];
+            var fileName =settings.defaultIndicesFiles[1];
+            var filePath = (destPath.indexOf("\\") > -1) ? "{0}\\{1}".format(destPath,fileName) : "{0}/{1}".format(destPath,fileName);
+            var data = fs.readFileSync(filePath);
+            if(data != null) {
+                data = data.toString();
+                if(data != null && data !== "") {
+                    var doc = new domParser.DOMParser().parseFromString(data);
+                    for(var i = 0; i < doc.documentElement.childNodes.length;i++) {
+                        var node = doc.documentElement.childNodes[i];
+                        if(node.nodeName === "document" && node.childNodes != null && node.childNodes[1].nodeName === "documentID") {
+                            documentIds.push(node.childNodes[1].firstChild.data);
+                        }
+                    }
+                    documentIds.forEach(id => {
+                        if(!settings.documents.includes(id)) {
+                            result = LogError("-CheckFolderIndices-ContextDocumentation-FileRequired-Error",fileName,id); 
+                        }
+                    });
+                    settings.documents.forEach(id => {
+                        if(!documentIds.includes(id)) {
+                            result = LogError("-CheckFolderContextDocumentation-ContextDocumentation-FileRequired-Error",fileName,id); 
+                        }
+                    });
+                }
+                else {
+                    result = LogError("-CheckFolderIndices-FileEmpty-Error",fileName);
+                }
+            }
+            else {
+                result = LogError("-CheckFolderIndices-FileEmpty-Error",fileName);
+            }
+            return result;
+        }
+
         //Validate Indices folder's files
         var ValidateIndices = function () {
             var result = true;
@@ -152,7 +193,8 @@ function (n) {
                     }
                 });
             }
-            if(result) {
+            if(result && !ValidateContextDocumentationIndex(destPath)) { result = false; }
+            if(result) {                
                 LogInfo("-CheckFolderIndices-Ok",null);
             }
             return result;
@@ -357,7 +399,8 @@ function (n) {
                         result = LogError("-CheckFolderContextDocumentation-DocCollectionDocumentFolder-Error",folder);
                         validFoldersName = false;
                     }
-                    else {
+                    else { 
+                        settings.documents.push(folder);                       
                         var destFolderPath = (destPath.indexOf("\\") > -1) ? "{0}\\{1}".format(destPath,folder) : "{0}/{1}".format(destPath,folder); 
                         var subFiles = fs.readdirSync(destFolderPath);                        
                         if(!ValidateDocumentFolder(folder,subFiles.filter(junk.not))) {
@@ -455,7 +498,7 @@ function (n) {
                 settings.logCallback().section(settings.logType,folderName,settings.logStartSpn.innerHTML);            
                 ValidateName();
                 ValidateStructure();
-                if(settings.errorsCounter === 0) {
+                 if(settings.errorsCounter === 0) {
                     settings.logCallback().section(settings.logType,folderName,settings.logEndNoErrorSpn.innerHTML);
                 } else {
                     settings.logCallback().section(settings.logType,folderName,settings.logEndWithErrorSpn.innerHTML);                    
