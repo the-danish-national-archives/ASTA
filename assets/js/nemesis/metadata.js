@@ -17,6 +17,7 @@ function (n) {
         const codePattern = /^('(((\+|\-){0,1}[0-9]+)|([a-zA-ZæøåÆØÅ0-9]+)|(\.[a-zA-ZæøåÆØÅ])|((\+|\-){0,1}[0-9]+(\.|\,){0,1}[0-9]*))' '[\w\W\s]*')$/;
         const userCodePattern = /^('(((\+|\-){0,1}[0-9]+)|([a-zA-ZæøåÆØÅ0-9]+)|((\+|\-){0,1}[0-9]+(\.|\,){0,1}[0-9]*))')$/;
         const codeListPattern = /^\${0,1}([\w\W\s^\.]*)\.$/;
+        const descriptionMultiPattern = /'([^']+)'/g;
         const datatypeString = [/^(string)$/,/^(\%([0-9]+)s)$/,/^(\$([0-9]+)\.)$/,/^(a([0-9]+))$/];
         const datatypeInt = [/^(int)$/,/^((\%([0-9]+)\.0f)|(\%([0-9]+)\.0g))$/,/^(f([0-9]+)\.)$/,/^(f([0-9]+))$/];
         const datatypeDecimal = [/^(decimal)$/,/^((\%([0-9]+)\.([0-9]+f))|(\%([0-9]+)\.([0-9]+)g))$/,/^(f([0-9]+)\.([0-9]+))$/,/^(f([0-9]+)\.([0-9]+))$/];
@@ -299,7 +300,7 @@ function (n) {
         }
 
         //get Variable Description line as JSON
-        var GetVariableDescription = function (line) {
+        var GetVariableDescription = function (line,startIndex) {
             var name = null;
             var description = null;
             var index = line.reduceWhiteSpace().indexOf(" "); 
@@ -309,10 +310,16 @@ function (n) {
             else {
                 name = line.substring(0,index);
                 var descriptionTemp = line.substring(index + 1);
-                if(descriptionTemp.length > 2 && descriptionTemp[0] === "'" && descriptionTemp[descriptionTemp.length - 1] === "'") {
-                    description = descriptionTemp.substring(1,descriptionTemp.length - 1);
+                var matches = descriptionTemp.match(descriptionMultiPattern)
+                if(matches != null && matches.length > 0) {
+                    description = matches[0].substring(1,matches[0].length - 1);
+                    if(matches.length > 1) {
+                        LogError("-CheckMetadata-FileVariable-DescriptionMax-Error",settings.fileName,startIndex); 
+                        description = "";
+                    }
                 }
                 else {
+                    LogError("-CheckMetadata-FileVariable-DescriptionFormat-Error",settings.fileName,info.name);
                     description = "";
                 }
             }
@@ -330,23 +337,20 @@ function (n) {
                 if(lines[i].reduceWhiteSpace().indexOf("' '") > -1) {
                 
                 }          
-                var info = GetVariableDescription(lines[i]);                
+                var info = GetVariableDescription(lines[i],startIndex);                
                 var exitsCounter = 0;
                 if(variableDescriptions.includes(info.name)) {
                     variableDescriptions.splice(variableDescriptions.indexOf(info.name),1);
                     table.variables.forEach(variable => {
                         if(variable.name === info.name && info.description != null) {
                             exitsCounter++ 
-                            variable.description = info.description;
-                            if(info.description === "") {
-                                result = LogError("-CheckMetadata-FileVariable-DescriptionFormat-Error",settings.fileName,info.name);
-                            }
+                            variable.description = info.description;                            
                         }
-                    });                    
-                    if(exitsCounter === 0) {
-                        result = LogError("-CheckMetadata-FileVariable-DescriptionRequired-Error",settings.fileName,info.name);
-                    }
-                }                              
+                    });
+                } 
+                if(exitsCounter === 0) {
+                    result = LogError("-CheckMetadata-FileVariable-DescriptionRequired-Error",settings.fileName,info.name);
+                }                             
                 i++;
             }
             while (lines[i].trim() !== "");
