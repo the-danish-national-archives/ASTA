@@ -409,6 +409,9 @@ function (n) {
                         result = LogError("-CheckMetadata-FileVariables-RowDouble-Error",settings.fileName,(i + 1));
                         settings.errorStop = true;
                     }
+                    if(expressions.length > 3) {
+                        result = LogError("-CheckMetadata-FileVariables-RowMax-Error",settings.fileName,(i + 1));
+                    }
                 }
                 else {
                     result = LogError("-CheckMetadata-FileVariables-RowRequiredInfo-Error",settings.fileName,(i + 1));
@@ -474,25 +477,28 @@ function (n) {
             var refKey = null;
             do {
                 var expressions = lines[i].trim().split(" ");
-                if(expressions.length === 3 && expressions[0] !== "" && expressions[1].length > 2 && expressions[2].length > 2 && expressions[1][0] === "'" && expressions[1][expressions[1].length - 1] === "'"  && expressions[2][0] === "'" && expressions[2][expressions[2].length - 1] === "'") {
-                    tableName = expressions[0];
-                    tableKey = expressions[1].substring(1,expressions[1].length - 1);
-                    refKey = expressions[2].substring(1,expressions[2].length - 1);
-                    if(ValidateReferenceName(tableName) && ValidateReferenceName(tableKey)) {
-                        settings.fileReferences.push({"table":tableName, "key":tableKey, "refKey":refKey});                        
+                if(expressions.length === 3) {
+                    if(expressions[1].length > 2 && expressions[2].length > 2 && expressions[1][0] === "'" && expressions[1][expressions[1].length - 1] === "'"  && expressions[2][0] === "'" && expressions[2][expressions[2].length - 1] === "'") {
+                        tableName = expressions[0];
+                        tableKey = expressions[1].substring(1,expressions[1].length - 1);
+                        refKey = expressions[2].substring(1,expressions[2].length - 1);
+                        if(ValidateReferenceName(tableName) && ValidateReferenceName(tableKey)) {
+                            settings.fileReferences.push({"table":tableName, "key":tableKey, "refKey":refKey});                        
+                        }
+                        else {
+                            result = false; 
+                        }
                     }
                     else {
-                        result = false; 
-                    }
-                }
-                else {
-                    if(expressions.length > 3) {
                         result = LogError("-CheckMetadata-FileReferences-RowValidation-Error",settings.fileName,i + 1);
-                    } 
-                    else {
-                        result = LogError("-CheckMetadata-FileReferences-RowRequiredInfo-Error",settings.fileName,i + 1);
                     }
-                }
+                }                
+                if(expressions.length > 3) {
+                    result = LogError("-CheckMetadata-FileReferences-RowMax-Error",settings.fileName,i + 1);
+                } 
+                if(expressions.length < 3) {
+                    result = LogError("-CheckMetadata-FileReferences-RowRequiredInfo-Error",settings.fileName,i + 1);
+                } 
                 i++;
             }
             while (lines[i].trim() !== "");
