@@ -266,23 +266,29 @@ function (n) {
             table.variables.forEach(variable => {
                 if(variable.codeListKey !== "") { codeListKeys.push(variable.codeListKey); }
             });
+            var codeName = null;
             var i = startIndex;                        
-            do {
-                var expressions = lines[i].trim().reduceWhiteSpace().split(" ");
-                if(expressions.length === 1 && expressions[0].indexOf("'") < 0) {
-                    codeName = expressions[0];
-                    if(!ValidateCodeName(codeName)) 
-                    { 
-                        settings.errorStop = true;
-                        result = false; 
-                        codeName = null;
+            do {                
+                if(!codePattern.test(lines[i].trim().reduceWhiteSpace())) {
+                    var expressions = lines[i].trim().reduceWhiteSpace().split(" ");
+                    if(expressions.length === 1) {
+                        codeName = expressions[0];
+                        if(!ValidateCodeName(codeName)) 
+                        { 
+                            settings.errorStop = true;
+                            result = false; 
+                            codeName = null;
+                        }
+                        else {
+                            validKeys.push(codeName);
+                            if(!codeListKeys.includes(codeName)) {
+                                    result = LogError("-CheckMetadata-FileCodeList-KeyRequired-Error",settings.fileName,codeName);
+                                    codeName = null;
+                            }
+                        }
                     }
                     else {
-                        validKeys.push(codeName);
-                       if(!codeListKeys.includes(codeName)) {
-                            result = LogError("-CheckMetadata-FileCodeList-KeyRequired-Error",settings.fileName,codeName);
-                            codeName = null;
-                       }
+                        result = LogError("-CheckMetadata-FileCodeList-Name-Error",settings.fileName,expressions[0],(i + 1));
                     }
                 }
                 else {
