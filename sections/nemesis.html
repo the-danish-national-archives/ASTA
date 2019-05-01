@@ -27,6 +27,9 @@
                                 <span id="nemesis-output-metadata-logStart" hidden="true">Metadatafil test startet<br/></span>
                                 <span id="nemesis-output-metadata-logEndNoError" hidden="true">Metadatafil test afsluttet uden fejl<br/></span>
                                 <span id="nemesis-output-metadata-logEndWithError" hidden="true">Metadatafil test afsluttet<br/></span>
+                                <span id="nemesis-output-data-logStart" hidden="true">Datafil test startet<br/></span>
+                                <span id="nemesis-output-data-logEndNoError" hidden="true">Datafil test afsluttet uden fejl<br/></span>
+                                <span id="nemesis-output-data-logEndWithError" hidden="true">Datafil test afsluttet<br/></span>
                                 <br>
                                 <div id="nemesis-batch-test-panel">
                                     <h4>Batch test</h4>
@@ -155,12 +158,14 @@
             require('./assets/js/nemesis/batch');
             require('./assets/js/nemesis/structure');
             require('./assets/js/nemesis/metadata');
+            require('./assets/js/nemesis/data');
 
             Rigsarkiv.Rights.initialize("nemesis-output-Error");
             Rigsarkiv.Log.initialize("nemesis-output-Error","nemesis-output-Ok","nemesis-select-logFile","nemesis-output-Supplement");
             Rigsarkiv.Nemesis.Batch.initialize(Rigsarkiv.Rights.callback,Rigsarkiv.Nemesis.Structure.callback,"nemesis-output-Error","nemesis-select-batch-directory","nemesis-batch-path","nemesis-batch-validateBtn","nemesis-validate-Spinner","nemesis-batch-Ok","nemesis-batch-select-logFile","nemesis-batch-Supplement","nemesis-batch-test-panel");
             Rigsarkiv.Nemesis.Structure.initialize(Rigsarkiv.Log.callback,Rigsarkiv.Nemesis.MetaData.callback,"nemesis-output-Error","nemesis-select-directory","nemesis-path","nemesis-validateBtn","nemesis-output-structure-logStart","nemesis-output-structure-logEndNoError","nemesis-output-structure-logEndWithError","nemesis-processing", "nemesis-test-id");
-            Rigsarkiv.Nemesis.MetaData.initialize(Rigsarkiv.Log.callback,"nemesis-output-Error","nemesis-output-metadata-logStart","nemesis-output-metadata-logEndNoError","nemesis-output-metadata-logEndWithError","nemesis-processing");             
+            Rigsarkiv.Nemesis.MetaData.initialize(Rigsarkiv.Log.callback,Rigsarkiv.Nemesis.Data.callback,"nemesis-output-Error","nemesis-output-metadata-logStart","nemesis-output-metadata-logEndNoError","nemesis-output-metadata-logEndWithError","nemesis-processing");
+            Rigsarkiv.Nemesis.Data.initialize(Rigsarkiv.Log.callback,"nemesis-output-Error","nemesis-output-data-logStart","nemesis-output-data-logEndNoError","nemesis-output-data-logEndWithError","nemesis-processing");             
           </script>
     </section>
 </template>
