@@ -33,6 +33,7 @@ function (n) {
             outputErrorText: null,
             outputPrefix: null,
             logCallback: null,
+            dataCallback: null,
             logStartSpn: null,
             logEndNoErrorSpn: null,
             logEndWithErrorSpn:null,
@@ -61,6 +62,7 @@ function (n) {
             var folders = settings.deliveryPackagePath.getFolders();
             return folders[folders.length - 1];
         }
+
         // View Element by id & return texts
         var ViewElement = function(id,formatText1,formatText2,formatText3) {
             var result = settings.outputText[id];
@@ -858,14 +860,14 @@ function (n) {
                 var folderName = GetFolderName();
                 settings.logCallback().section(settings.logType,folderName,settings.logStartSpn.innerHTML);            
                 ValidateData();
-                console.log("output data: ");
+                console.log("metadata output: ");
                 console.log(settings.data);
                 if(settings.errorsCounter === 0) {
                     settings.logCallback().section(settings.logType,folderName,settings.logEndNoErrorSpn.innerHTML);
                 } else {
                     settings.logCallback().section(settings.logType,folderName,settings.logEndWithErrorSpn.innerHTML);
                 } 
-                return settings.logCallback().commit(settings.deliveryPackagePath);               
+                return settings.dataCallback().validate(settings.deliveryPackagePath,settings.outputText,settings.data);               
             }
             catch(err) 
             {
@@ -880,8 +882,9 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Nemesis.MetaData = {        
-            initialize: function (logCallback,outputErrorId,logStartId,logEndNoErrorId,logEndWithErrorId,outputPrefix) {            
+            initialize: function (logCallback,dataCallback,outputErrorId,logStartId,logEndNoErrorId,logEndWithErrorId,outputPrefix) {            
                 settings.logCallback = logCallback;
+                settings.dataCallback = dataCallback;
                 settings.outputErrorSpn = document.getElementById(outputErrorId);
                 settings.outputErrorText = settings.outputErrorSpn.innerHTML;
                 settings.logStartSpn = document.getElementById(logStartId);

@@ -112,7 +112,7 @@ ipcMain.on('open-confirm-dialog', (event,title,text) => {
     title: title,
     message: text,
     cancelId: 1,
-    buttons: ['FORSÆT', 'FORTRYD']
+    buttons: ['FORTSÆT', 'FORTRYD']
   }
   dialog.showMessageBox(options, (index) => {
     event.sender.send('confirm-dialog-selection', index)
