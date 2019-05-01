@@ -860,7 +860,7 @@ function (n) {
                 var folderName = GetFolderName();
                 settings.logCallback().section(settings.logType,folderName,settings.logStartSpn.innerHTML);            
                 ValidateData();
-                console.log("output data: ");
+                console.log("metadata output: ");
                 console.log(settings.data);
                 if(settings.errorsCounter === 0) {
                     settings.logCallback().section(settings.logType,folderName,settings.logEndNoErrorSpn.innerHTML);

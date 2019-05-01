@@ -8,6 +8,7 @@ function (n) {
     function (n) {
         const {ipcRenderer} = require('electron');
         const fs = require('fs');
+        const chardet = require('chardet');
         
         //private data memebers
         var settings = { 
@@ -21,6 +22,8 @@ function (n) {
             deliveryPackagePath: null,
             outputText: {},
             logType: "data",
+            fileName: null,
+            dataPathPostfix: "Data",
             data: []
         }
 
@@ -104,6 +107,31 @@ function (n) {
             settings.logCallback().info(settings.logType,GetFolderName(),text);
         }
 
+        //loop Data folder's table & data files
+        var ValidateData = function () {
+            var result = true;
+            var destPath = (settings.deliveryPackagePath.indexOf("\\") > -1) ? "{0}\\{1}".format(settings.deliveryPackagePath,settings.dataPathPostfix) : "{0}/{1}".format(settings.deliveryPackagePath,settings.dataPathPostfix); 
+            fs.readdirSync(destPath).forEach(folder => {
+                var dataFilePath = (destPath.indexOf("\\") > -1) ? "{0}\\{1}\\{1}.csv".format(destPath,folder) : "{0}/{1}/{1}.csv".format(destPath,folder);                 
+                if(fs.existsSync(dataFilePath)) {
+                    console.log("validate data file: {0}".format(dataFilePath));
+                    var charsetMatch = chardet.detectFileSync(dataFilePath);
+                    var folders = dataFilePath.getFolders();
+                    settings.fileName = folders[folders.length - 1];
+                    if(charsetMatch !== "UTF-8") {
+                        result = LogError("-CheckData-FileEncoding-Error",settings.fileName);
+                    } 
+                    else {
+                        
+                    } 
+                }
+                else {
+                    console.log("None exist Data file path: {0}".format(dataFilePath));
+                }                              
+            });
+            if(result) { LogInfo("-CheckData-Ok",null); }
+            return result; 
+        }
 
         //start flow validation
         var Validate = function () {
@@ -112,8 +140,8 @@ function (n) {
             {
                 var folderName = GetFolderName();
                 settings.logCallback().section(settings.logType,folderName,settings.logStartSpn.innerHTML);            
-                //ValidateData();
-                console.log("output data: ");
+                ValidateData();
+                console.log("data output: ");
                 console.log(settings.data);
                 if(settings.errorsCounter === 0) {
                     settings.logCallback().section(settings.logType,folderName,settings.logEndNoErrorSpn.innerHTML);
