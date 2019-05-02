@@ -26,8 +26,12 @@ function (n) {
             fileName: null,
             table: null,
             rowIndex: 0,
+            dataFiles: [],
+            runIndex: -1,
+            endValidation: false,
             metadataFileName: "{0}.txt",
             dataPathPostfix: "Data",
+            logResult: null,
             metadata: [],
             data: []
         }
@@ -39,12 +43,6 @@ function (n) {
             settings.outputErrorSpn.innerHTML = settings.outputErrorText.format(err.message);
         }
 
-        // get selected folder name 
-        var GetFolderName = function() {
-            var folders = settings.deliveryPackagePath.getFolders();
-            return folders[folders.length - 1];
-        }
-                
         // View Element by id & return texts
         var ViewElement = function(id,formatText1,formatText2,formatText3) {
             var result = settings.outputText[id];
@@ -112,45 +110,77 @@ function (n) {
             settings.logCallback().info(settings.logType,GetFolderName(),text);
         }
 
+        // get selected folder name 
+        var GetFolderName = function() {
+            var folders = settings.deliveryPackagePath.getFolders();
+            return folders[folders.length - 1];
+        }
+
         //get data JSON table object pointer by table file name
         var GetTableData = function (fileName) {
             var result = null;
+            metadataFileName = settings.metadataFileName.format(fileName.substring(0,fileName.indexOf(".")));
             settings.metadata.forEach(table => {
-                if(table.fileName === fileName) {
+                if(table.fileName === metadataFileName) {
                     result = table;
                 }
             });
             return result;
         }
 
+        // get file name by path
+        var GetFileName = function(filePath) {
+            var folders = filePath.getFolders();
+            return folders[folders.length - 1];
+        }
+
+        var ProcessDataSet = function() {
+            settings.runIndex = settings.runIndex + 1;
+            if(settings.runIndex < settings.dataFiles.length) {
+                var dataFilePath = settings.dataFiles[settings.runIndex];
+                settings.endValidation = false;
+                settings.fileName = GetFileName(dataFilePath);
+                settings.table = GetTableData(settings.fileName);
+                settings.rowIndex = 0;
+                settings.data = [];
+                console.log(`validate: ${dataFilePath}`);
+                ValidateDataSet(dataFilePath);
+            }
+            else {
+                settings.endValidation = true;
+            }
+        }
+
         //Validate single CSV file
         var ValidateDataSet = function (dataFilePath) {
-            var result = true;
-            settings.rowIndex = 0;
+            var result = true;  
             fs.createReadStream(dataFilePath)
-                .pipe(csv({ separator: ';', strict:true }))
-                .on('headers', (headers) => {
-                    console.log(`CSV headers: ${headers.length}`);
-                    if(headers.length === 1) {
-                        result = LogError("-CheckData-FileSeprator-Error",settings.fileName);
-                    }
-                    //settings.table.variables.length
-                })
-                .on('data', (data) => {
-                    if(result) {
-                        //console.log(Object.values(data));
-                        settings.data.push(data);
-                        settings.rowIndex++;
-                    }
-                })
-                .on('error', (e) => { 
-                    if(e.message === "Row length does not match headers") {
-                        result = LogError("-CheckData-FileRows-MatchLength-Error",settings.fileName,(settings.rowIndex + 2));
-                    }
-                })
-                .on('end', () => {  
+            .pipe(csv({ separator: ';', strict:true }))
+            .on('headers', (headers) => {
+                console.log(`CSV headers: ${headers.length}`);
+                if(headers.length === 1) {
+                    result = LogError("-CheckData-FileSeprator-Error",settings.fileName);
+                }
+                //settings.table.variables.length
+            })
+            .on('data', (data) => {
+                if(result) {
+                    //console.log(Object.values(data));
+                    settings.data.push(data);
+                    settings.rowIndex++;
+                }
+            })
+            .on('error', (e) => { 
+                if(e.message === "Row length does not match headers") {
+                    result = LogError("-CheckData-FileRows-MatchLength-Error",settings.fileName,(settings.rowIndex + 2));
+                }
+                ProcessDataSet();
+            })
+            .on('end', () => { 
+                console.log("data output: ");
                 console.log(settings.data);
-            });            
+                ProcessDataSet();
+            }); 
             return result;
         }
 
@@ -163,49 +193,53 @@ function (n) {
                 if(fs.existsSync(dataFilePath)) {
                     console.log("validate data file: {0}".format(dataFilePath));
                     var charsetMatch = chardet.detectFileSync(dataFilePath);
-                    var folders = dataFilePath.getFolders();
-                    settings.fileName = folders[folders.length - 1];
-                    metadataFileName = settings.metadataFileName.format(settings.fileName.substring(0,settings.fileName.indexOf(".")));
-                    settings.table = GetTableData(metadataFileName);
+                    settings.fileName = GetFileName(dataFilePath);
+                    settings.table = GetTableData(settings.fileName);
                     if(charsetMatch !== "UTF-8") {
                         result = LogError("-CheckData-FileEncoding-Error",settings.fileName);
                     } 
                     else {
-                        if(!settings.table.errorStop && !ValidateDataSet(dataFilePath)) {
-                            result = false;
-                        }                                       
+                        if(!settings.table.errorStop) { settings.dataFiles.push(dataFilePath); }                                                              
                     } 
                 }
                 else {
                     console.log("None exist Data file path: {0}".format(dataFilePath));
                 }                              
             });
+            if(settings.dataFiles.length > 0) { ProcessDataSet(); }
             if(result) { LogInfo("-CheckData-Ok",null); }
             return result; 
         }
 
+        var CommitLog = function () {
+            console.log("endValidation: {0}".format(settings.endValidation));
+            if(!settings.endValidation) {
+                setTimeout(CommitLog, 100);
+            }
+            else {
+                var folderName = GetFolderName();
+                if(settings.errorsCounter === 0) {
+                    settings.logCallback().section(settings.logType,folderName,settings.logEndNoErrorSpn.innerHTML);
+                } else {
+                    settings.logCallback().section(settings.logType,folderName,settings.logEndWithErrorSpn.innerHTML);
+                }
+                settings.logResult = settings.logCallback().commit(settings.deliveryPackagePath);
+            }
+        }
         //start flow validation
         var Validate = function () {
             console.log(`data selected path: ${settings.deliveryPackagePath}`); 
             try 
             {
-                var folderName = GetFolderName();
-                settings.logCallback().section(settings.logType,folderName,settings.logStartSpn.innerHTML);            
-                ValidateData();
-                console.log("data output: ");
-                console.log(settings.data);
-                if(settings.errorsCounter === 0) {
-                    settings.logCallback().section(settings.logType,folderName,settings.logEndNoErrorSpn.innerHTML);
-                } else {
-                    settings.logCallback().section(settings.logType,folderName,settings.logEndWithErrorSpn.innerHTML);
-                } 
-                return settings.logCallback().commit(settings.deliveryPackagePath);               
+                settings.logCallback().section(settings.logType,GetFolderName(),settings.logStartSpn.innerHTML);            
+                ValidateData(); 
+                CommitLog();                                              
             }
             catch(err) 
             {
                 HandleError(err);
             }
-            return null;
+            return settings.logResult;
         }
 
         var AddEvents = function (){
@@ -231,6 +265,9 @@ function (n) {
                         settings.deliveryPackagePath = path;
                         settings.outputText = outputText;
                         settings.metadata = metadata;
+                        settings.endValidation = true;                        
+                        settings.runIndex = -1;
+                        settings.dataFiles = [];
                         return Validate();
                     }  
                 };
