@@ -9,6 +9,7 @@ function (n) {
         const {ipcRenderer} = require('electron');
         const fs = require('fs');
         const chardet = require('chardet');
+        const csv = require('csv-parser');
         
         //private data memebers
         var settings = { 
@@ -23,7 +24,11 @@ function (n) {
             outputText: {},
             logType: "data",
             fileName: null,
+            table: null,
+            rowIndex: 0,
+            metadataFileName: "{0}.txt",
             dataPathPostfix: "Data",
+            metadata: [],
             data: []
         }
 
@@ -39,7 +44,7 @@ function (n) {
             var folders = settings.deliveryPackagePath.getFolders();
             return folders[folders.length - 1];
         }
-        
+                
         // View Element by id & return texts
         var ViewElement = function(id,formatText1,formatText2,formatText3) {
             var result = settings.outputText[id];
@@ -107,6 +112,48 @@ function (n) {
             settings.logCallback().info(settings.logType,GetFolderName(),text);
         }
 
+        //get data JSON table object pointer by table file name
+        var GetTableData = function (fileName) {
+            var result = null;
+            settings.metadata.forEach(table => {
+                if(table.fileName === fileName) {
+                    result = table;
+                }
+            });
+            return result;
+        }
+
+        //Validate single CSV file
+        var ValidateDataSet = function (dataFilePath) {
+            var result = true;
+            settings.rowIndex = 0;
+            fs.createReadStream(dataFilePath)
+                .pipe(csv({ separator: ';', strict:true }))
+                .on('headers', (headers) => {
+                    console.log(`CSV headers: ${headers.length}`);
+                    if(headers.length === 1) {
+                        result = LogError("-CheckData-FileSeprator-Error",settings.fileName);
+                    }
+                    //settings.table.variables.length
+                })
+                .on('data', (data) => {
+                    if(result) {
+                        //console.log(Object.values(data));
+                        settings.data.push(data);
+                        settings.rowIndex++;
+                    }
+                })
+                .on('error', (e) => { 
+                    if(e.message === "Row length does not match headers") {
+                        result = LogError("-CheckData-FileRows-MatchLength-Error",settings.fileName,(settings.rowIndex + 2));
+                    }
+                })
+                .on('end', () => {  
+                console.log(settings.data);
+            });            
+            return result;
+        }
+
         //loop Data folder's table & data files
         var ValidateData = function () {
             var result = true;
@@ -118,11 +165,15 @@ function (n) {
                     var charsetMatch = chardet.detectFileSync(dataFilePath);
                     var folders = dataFilePath.getFolders();
                     settings.fileName = folders[folders.length - 1];
+                    metadataFileName = settings.metadataFileName.format(settings.fileName.substring(0,settings.fileName.indexOf(".")));
+                    settings.table = GetTableData(metadataFileName);
                     if(charsetMatch !== "UTF-8") {
                         result = LogError("-CheckData-FileEncoding-Error",settings.fileName);
                     } 
                     else {
-                        
+                        if(!settings.table.errorStop && !ValidateDataSet(dataFilePath)) {
+                            result = false;
+                        }                                       
                     } 
                 }
                 else {
@@ -175,11 +226,11 @@ function (n) {
             },
             callback: function () {
                 return { 
-                    validate: function(path,outputText,data) 
+                    validate: function(path,outputText,metadata) 
                     { 
                         settings.deliveryPackagePath = path;
                         settings.outputText = outputText;
-                        settings.data = data;
+                        settings.metadata = metadata;
                         return Validate();
                     }  
                 };
