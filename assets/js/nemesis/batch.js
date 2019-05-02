@@ -68,6 +68,7 @@ function (n) {
             var folderName = folders[folders.length - 1];
             folderName = folderName.substring(0,folderName.indexOf("_log.html"));
             var updatedData = data.toString().format(settings.logsDate.getFromFormat("dd-MM-yyyy hh:mm:ss"),settings.logs.join("\r\n"),settings.errorsCounter);
+            console.log('filepath: ' + settings.filePath + ' selected path:' + settings.selectedPath[0]);
             fs.writeFileSync(settings.filePath, updatedData);
             console.log("Log is updated at: {0}".format(settings.filePath));
             settings.logs = [];
@@ -133,7 +134,8 @@ function (n) {
                     settings.deliveryPackages.push(deliveryPackagePath);
                 }
             });
-            settings.filePath = settings.filePostfix.format(destPath);
+            var folders = settings.selectedPath[0].getFolders();
+            settings.filePath = (destPath.indexOf("\\") > -1) ? "{0}\\{1}.html".format(destPath, folders[folders.length - 1]) : "{0}/{1}".format(destPath, folders[folders.length - 1]);//settings.filePostfix.format(destPath);
             if(fs.existsSync(settings.filePath)) {                        
                 console.log(`Delete exists log: ${settings.filePath}`);
                 fs.unlinkSync(settings.filePath);
