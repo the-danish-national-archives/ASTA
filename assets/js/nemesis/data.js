@@ -24,12 +24,12 @@ function (n) {
             outputText: {},
             logType: "data",
             fileName: null,
+            metadataFileName: null,
             table: null,
             rowIndex: 0,
             dataFiles: [],
             runIndex: -1,
             endValidation: false,
-            metadataFileName: "{0}.txt",
             dataPathPostfix: "Data",
             logResult: null,
             metadata: [],
@@ -117,11 +117,10 @@ function (n) {
         }
 
         //get data JSON table object pointer by table file name
-        var GetTableData = function (fileName) {
-            var result = null;
-            metadataFileName = settings.metadataFileName.format(fileName.substring(0,fileName.indexOf(".")));
+        var GetTableData = function () {
+            var result = null;            
             settings.metadata.forEach(table => {
-                if(table.fileName === metadataFileName) {
+                if(table.fileName === settings.metadataFileName) {
                     result = table;
                 }
             });
@@ -140,7 +139,8 @@ function (n) {
                 var dataFilePath = settings.dataFiles[settings.runIndex];
                 settings.endValidation = false;
                 settings.fileName = GetFileName(dataFilePath);
-                settings.table = GetTableData(settings.fileName);
+                settings.metadataFileName =  "{0}.txt".format(settings.fileName.substring(0,settings.fileName.indexOf(".")));
+                settings.table = GetTableData();
                 settings.rowIndex = 0;
                 settings.data = [];
                 console.log(`validate: ${dataFilePath}`);
@@ -149,6 +149,20 @@ function (n) {
             else {
                 settings.endValidation = true;
             }
+        }
+
+        var ValidateHeaders = function(headers) {
+            var result = true;
+            var variables = [];
+            settings.table.variables.forEach(variable => variables.push(variable.name));
+            if(variables.length !== headers.length) {
+                result = LogError("-CheckData-FileHeaders-MatchColumns-Error",settings.fileName,settings.metadataFileName);
+            }
+            else {
+
+            }
+
+            return result;
         }
 
         //Validate single CSV file
@@ -161,7 +175,9 @@ function (n) {
                 if(headers.length === 1) {
                     result = LogError("-CheckData-FileSeprator-Error",settings.fileName);
                 }
-                //settings.table.variables.length
+                else {
+                    if(!ValidateHeaders(headers)) { result = false; }
+                }
             })
             .on('data', (data) => {
                 if(result) {
@@ -194,7 +210,8 @@ function (n) {
                     console.log("validate data file: {0}".format(dataFilePath));
                     var charsetMatch = chardet.detectFileSync(dataFilePath);
                     settings.fileName = GetFileName(dataFilePath);
-                    settings.table = GetTableData(settings.fileName);
+                    settings.metadataFileName =  "{0}.txt".format(settings.fileName.substring(0,settings.fileName.indexOf(".")));
+                    settings.table = GetTableData();
                     if(charsetMatch !== "UTF-8") {
                         result = LogError("-CheckData-FileEncoding-Error",settings.fileName);
                     } 
