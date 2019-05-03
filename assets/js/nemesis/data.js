@@ -151,6 +151,7 @@ function (n) {
             }
         }
 
+        //Validate CSV headers
         var ValidateHeaders = function(headers) {
             var result = true;
             var variables = [];
@@ -159,15 +160,40 @@ function (n) {
                 result = LogError("-CheckData-FileHeaders-MatchColumns-Error",settings.fileName,settings.metadataFileName);
             }
             else {
-
+                var notExists = 0;
+                headers.forEach(header => {
+                    if(!variables.includes(header.trim())) { notExists++; }
+                });
+                if(notExists === headers.length) {
+                    result = LogError("-CheckData-FileHeaders-MatchAll-Error",settings.fileName,settings.metadataFileName);
+                }
+                else {
+                    headers.forEach(header => {
+                        if(!variables.includes(header.trim())) {
+                           result = LogError("-CheckData-FileHeaders-MatchColumn-Error",settings.fileName,settings.metadataFileName,header);
+                        }
+                    });  
+                }
+                if(result) {
+                    for(var i = 0;i < headers.length;i++) {
+                        if(headers[i].trim() !== variables[i]) {
+                            result = LogError("-CheckData-FileHeaders-ColumnsOrder-Error",settings.fileName,settings.metadataFileName,headers[i]);  
+                        }
+                    }
+                }
             }
+            return result;
+        }
 
+        var ValidateRow = function(data) {
+            var result = true;
             return result;
         }
 
         //Validate single CSV file
         var ValidateDataSet = function (dataFilePath) {
-            var result = true;  
+            var result = true;
+            var rowErrors = 0;  
             fs.createReadStream(dataFilePath)
             .pipe(csv({ separator: ';', strict:true }))
             .on('headers', (headers) => {
@@ -182,7 +208,12 @@ function (n) {
             .on('data', (data) => {
                 if(result) {
                     //console.log(Object.values(data));
-                    settings.data.push(data);
+                    if(!ValidateRow(data)) {
+                        rowErrors++;
+                    }
+                    else {
+                        settings.data.push(data);
+                    }                    
                     settings.rowIndex++;
                 }
             })
@@ -195,6 +226,7 @@ function (n) {
             .on('end', () => { 
                 console.log("data output: ");
                 console.log(settings.data);
+                if(rowErrors > 0) { result = false; }
                 ProcessDataSet();
             }); 
             return result;
