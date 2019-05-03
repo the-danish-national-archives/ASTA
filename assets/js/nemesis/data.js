@@ -185,8 +185,10 @@ function (n) {
             return result;
         }
 
+        //Validate row at CSV file
         var ValidateRow = function(data) {
             var result = true;
+            console.log(Object.values(data));
             return result;
         }
 
@@ -207,7 +209,6 @@ function (n) {
             })
             .on('data', (data) => {
                 if(result) {
-                    //console.log(Object.values(data));
                     if(!ValidateRow(data)) {
                         rowErrors++;
                     }
