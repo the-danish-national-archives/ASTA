@@ -10,6 +10,7 @@ function (n) {
         const fs = require('fs');
         const chardet = require('chardet');
         const csv = require('csv-parser');
+        const rowErrorsMax = 40;
         
         //private data memebers
         var settings = { 
@@ -33,7 +34,8 @@ function (n) {
             dataPathPostfix: "Data",
             logResult: null,
             metadata: [],
-            data: []
+            data: [],
+            rowErrors: null
         }
 
         //output system error messages
@@ -44,12 +46,17 @@ function (n) {
         }
 
         // View Element by id & return texts
-        var ViewElement = function(id,formatText1,formatText2,formatText3) {
+        var ViewElement = function(id,formatText1,formatText2,formatText3,formatText4) {
             var result = settings.outputText[id];
             if(formatText1 != null) { 
                 if(formatText2 != null) {
                     if(formatText3 != null) {
-                        result = result.format(formatText1,formatText2,formatText3);
+                        if(formatText4 != null){
+                            result = result.format(formatText1,formatText2,formatText3,formatText4);
+                        }
+                        else {
+                            result = result.format(formatText1,formatText2,formatText3);
+                        }
                     }
                     else {
                         result = result.format(formatText1,formatText2);
@@ -77,6 +84,7 @@ function (n) {
                 if(arguments.length === 2) { text = ViewElement(id,arguments[1],null,null); }
                 if(arguments.length === 3) { text = ViewElement(id,arguments[1],arguments[2],null); }
                 if(arguments.length === 4) { text = ViewElement(id,arguments[1],arguments[2],arguments[3]); }
+                if(arguments.length === 5) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4]); }
             }
 
             settings.logCallback().error(settings.logType,GetFolderName(),text);
@@ -185,17 +193,83 @@ function (n) {
             return result;
         }
 
+        // Validate single data cell value format
+        var ValidateFormat = function (dataValue, regExp, dataType) {
+            var result = true;
+            switch (dataType) {
+                case 'Time':
+                    var matches = dataValue.match(regExp);
+                    console.log(matches);
+                    // Check hours valid value
+                    if (parseInt(matches[1])) {
+                        // Check if the value is within the allowed values for hour.
+                        // var varTime = new Date(2019, 05, 03, parseInt(matches[1]), parseInt(matches[2]), parseInt(matches[3]));
+                        // if not true -> result = false;
+                    }
+                    if (parseInt(matches[2])) {
+                        // Check if the value is within the allowed values for minute.
+                    }
+                    if (parseInt(matches[3])) {
+                        // Check if the value is within the allowed values for seconds.
+                    }
+                    break;
+                case 'String':
+                    var matches = dataValue.match(regExp);
+                    // Check valid format for String variables.
+                    break;
+                case 'Int':
+                    // Check valid format for Int variables.
+                    break;
+                case 'Decimal':
+                    // Check valid format for Decimal variables.
+                    break;
+                case 'Date':
+                    // Check valid format for Date variables.
+                    break;
+                case 'DateTime':
+                    // Check valid format for DateTime variables.
+                    break;
+                // Handling user defined values?
+                default:
+                    console.log('Variable did not have a recongnized type: ' + dataValue);
+                    break;
+            }
+            return result;
+        }
+
         //Validate row at CSV file
         var ValidateRow = function(data) {
             var result = true;
             console.log(Object.values(data));
+            var dataRow = Object.values(data);
+            for(var i = 0;i < dataRow.length;i++) {
+                if(dataRow[i].trim() !== ""){
+                        var patternMatch = false;
+                        var variable = settings.table.variables[i];
+                    variable.regExps.forEach(regex => {
+                        var patt = new RegExp(regex);
+                        if(patt.test(dataRow[i])){
+                            patternMatch = ValidateFormat(dataRow[i], patt, variable.type);
+                        }
+                    });
+                    if(!patternMatch) {
+                        console.log('regex match fail: ' + variable.name + ' cell value: ' + dataRow[i]);
+                        // LogError -CheckData-FileRow-ColumnsFormat-Error
+                        // result = LogError;
+                    }
+                } else {
+                    // Check codelist if value can be missing / empty
+                    
+                }
+            }
             return result;
         }
+
 
         //Validate single CSV file
         var ValidateDataSet = function (dataFilePath) {
             var result = true;
-            var rowErrors = 0;  
+            settings.rowErrors = 0;  
             fs.createReadStream(dataFilePath)
             .pipe(csv({ separator: ';', strict:true }))
             .on('headers', (headers) => {
@@ -208,9 +282,9 @@ function (n) {
                 }
             })
             .on('data', (data) => {
-                if(result) {
+                if(result && settings.rowErrors <= rowErrorsMax) {
                     if(!ValidateRow(data)) {
-                        rowErrors++;
+                        settings.rowErrors++;
                     }
                     else {
                         settings.data.push(data);
