@@ -150,6 +150,7 @@
             fdSelect.add(opt, fdSelect[1]);
         }
         addRulers();
+        updateErrCounter("");
     })();
 
     // Adds horizontal rulers to the test log, to improve ease of reading.
@@ -224,7 +225,7 @@
         var spans = document.getElementsByClassName('error');
         var errCounter = 0;
         for (var i = 0; i < spans.length; i++){
-            if (spans[i].style.display == "block") {
+            if (spans[i].style.display === "block" || spans[i].style.display === "") {
                 errCounter++
             }
         }

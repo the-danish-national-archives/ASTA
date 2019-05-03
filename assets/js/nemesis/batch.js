@@ -102,24 +102,36 @@ function (n) {
             console.log(`copy ${settings.templateFileName} file to: ${settings.filePath}`);
             fs.copyFileSync(logFilePath, settings.filePath);
         }
-          
+        
+        //Ensure existing of Log File
+        var EnsureLogFile = function() {
+            var deliveryPackagePath = settings.deliveryPackages[settings.runIndex]; 
+            var logFilePath = settings.filePostfix.format(deliveryPackagePath);
+            console.log(`Ensure log path: ${logFilePath}`);
+            if(fs.existsSync(logFilePath)) { 
+                var folders = deliveryPackagePath.getFolders();
+                EnsureLogsData(logFilePath,folders[folders.length - 1]);
+                settings.runIndex = settings.runIndex + 1;
+                if(settings.runIndex < settings.deliveryPackages.length) {                
+                    setTimeout(Validate, 500);
+                } 
+                else {
+                    settings.spinner.className = "";                
+                    CopyFile();
+                    EnsureData();                
+                }           
+            }
+            else {
+                setTimeout(EnsureLogFile, 500);
+            }
+        }
+
         //Validate each delivery Package
         var Validate = function() {
             var deliveryPackagePath = settings.deliveryPackages[settings.runIndex];
             console.log(`validate path: ${deliveryPackagePath}`); 
-            var folders = deliveryPackagePath.getFolders();
-            var logResult = settings.structureCallback().validate(deliveryPackagePath);
-            settings.errorsCounter += logResult.errors;
-            EnsureLogsData(logResult.filePath,folders[folders.length - 1]);
-            settings.runIndex = settings.runIndex + 1;
-            if(settings.runIndex < settings.deliveryPackages.length) {                
-                setTimeout(Validate, 1000);
-            } 
-            else {
-                settings.spinner.className = "";                
-                CopyFile();
-                EnsureData();                
-            }           
+            settings.structureCallback().validate(deliveryPackagePath);
+            EnsureLogFile();            
         }
 
         //start run batching delete existing log
@@ -134,8 +146,8 @@ function (n) {
                     settings.deliveryPackages.push(deliveryPackagePath);
                 }
             });
-            var folders = settings.selectedPath[0].getFolders();
-            settings.filePath = (destPath.indexOf("\\") > -1) ? "{0}\\{1}.html".format(destPath, folders[folders.length - 1]) : "{0}/{1}".format(destPath, folders[folders.length - 1]);//settings.filePostfix.format(destPath);
+            var folders = destPath.getFolders();
+            settings.filePath = (destPath.indexOf("\\") > -1) ? "{0}\\{1}.html".format(destPath, folders[folders.length - 1]) : "{0}/{1}.html".format(destPath, folders[folders.length - 1]);//settings.filePostfix.format(destPath);
             if(fs.existsSync(settings.filePath)) {                        
                 console.log(`Delete exists log: ${settings.filePath}`);
                 fs.unlinkSync(settings.filePath);
