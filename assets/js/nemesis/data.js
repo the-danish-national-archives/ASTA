@@ -328,7 +328,7 @@ function (n) {
                         result = LogError("-CheckData-FileEncoding-Error",settings.fileName);
                     } 
                     else {
-                        if(!settings.table.errorStop) { settings.dataFiles.push(dataFilePath); }                                                              
+                        if(settings.table != null && !settings.table.errorStop) { settings.dataFiles.push(dataFilePath); }                                                              
                     } 
                 }
                 else {
