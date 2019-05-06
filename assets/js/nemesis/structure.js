@@ -395,12 +395,12 @@ function (n) {
             if(subFolders != null && subFolders.length > 0) {
                 var validFoldersName = true;
                 subFolders.forEach(folder => {
+                    settings.documents.push(folder);
                     if(!docFolderPattern.test(folder)) {
                         result = LogError("-CheckFolderContextDocumentation-DocCollectionDocumentFolder-Error",folder);
                         validFoldersName = false;
                     }
                     else { 
-                        settings.documents.push(folder);                       
                         var destFolderPath = (destPath.indexOf("\\") > -1) ? "{0}\\{1}".format(destPath,folder) : "{0}/{1}".format(destPath,folder); 
                         var subFiles = fs.readdirSync(destFolderPath);                        
                         if(!ValidateDocumentFolder(folder,subFiles.filter(junk.not))) {

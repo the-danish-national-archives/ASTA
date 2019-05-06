@@ -301,7 +301,7 @@ function (n) {
             .on('end', () => { 
                 console.log("data output: ");
                 console.log(settings.data);
-                if(rowErrors > 0) { result = false; }
+                if(settings.rowErrors > 0) { result = false; }
                 ProcessDataSet();
             }); 
             return result;
