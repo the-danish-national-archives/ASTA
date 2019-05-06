@@ -348,21 +348,17 @@ function (n) {
                 }
             })
             .on('data', (data) => {
-                if(result && settings.rowErrors <= rowErrorsMax) {
-                    if(!ValidateRow(data)) {
-                        settings.rowErrors++;
-                    }
-                    else {
-                        settings.data.push(data);
-                    }                    
-                    settings.rowIndex++;
+                if(result && settings.rowErrors <= rowErrorsMax && ValidateRow(data)) {
+                    settings.data.push(data);
                 }
+                settings.rowIndex++;
             })
             .on('error', (e) => { 
                 if(e.message === "Row length does not match headers") {
                     result = LogError("-CheckData-FileRows-MatchLength-Error",settings.fileName,(settings.rowIndex + 2));
                 }
-                ProcessDataSet();
+                settings.rowIndex++;
+                settings.endValidation = true;
             })
             .on('end', () => { 
                 console.log("data output: ");
