@@ -71,12 +71,27 @@ function (n) {
         }
 
         // View Element by id & return texts
-        var ViewElement = function(id,formatText1,formatText2,formatText3) {
+        var ViewElement = function(id,formatText1,formatText2,formatText3,formatText4, formatText5, formatText6) {
             var result = settings.outputText[id];
             if(formatText1 != null) { 
                 if(formatText2 != null) {
                     if(formatText3 != null) {
-                        result = result.format(formatText1,formatText2,formatText3);
+                        if(formatText4 != null){
+                            if(formatText5 != null){
+                                if(formatText6 != null){
+                                    result = result.format(formatText1,formatText2,formatText3,formatText4,formatText5,formatText6);    
+                                }
+                                else {
+                                    result = result.format(formatText1,formatText2,formatText3,formatText4,formatText5);
+                                }
+                            }
+                            else {
+                                result = result.format(formatText1,formatText2,formatText3,formatText4);
+                            }
+                        }
+                        else {
+                            result = result.format(formatText1,formatText2,formatText3);
+                        }
                     }
                     else {
                         result = result.format(formatText1,formatText2);
@@ -104,6 +119,9 @@ function (n) {
                 if(arguments.length === 2) { text = ViewElement(id,arguments[1],null,null); }
                 if(arguments.length === 3) { text = ViewElement(id,arguments[1],arguments[2],null); }
                 if(arguments.length === 4) { text = ViewElement(id,arguments[1],arguments[2],arguments[3]); }
+                if(arguments.length === 5) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4]); }
+                if(arguments.length === 5) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5]); }
+                if(arguments.length === 5) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5],arguments[6]); }
             }
 
             settings.logCallback().error(settings.logType,GetFolderName(),text);
@@ -119,6 +137,9 @@ function (n) {
                 if(arguments.length === 2) { text = ViewElement(id,arguments[1],null,null); }
                 if(arguments.length === 3) { text = ViewElement(id,arguments[1],arguments[2],null); }
                 if(arguments.length === 4) { text = ViewElement(id,arguments[1],arguments[2],arguments[3]); }
+                if(arguments.length === 5) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4]); }
+                if(arguments.length === 5) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5]); }
+                if(arguments.length === 5) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5],arguments[6]); }
             }
 
             settings.logCallback().warn(settings.logType,GetFolderName(),text);
@@ -132,6 +153,9 @@ function (n) {
                 if(arguments.length === 2) { text = ViewElement(id,arguments[1],null,null); }
                 if(arguments.length === 3) { text = ViewElement(id,arguments[1],arguments[2],null); }
                 if(arguments.length === 4) { text = ViewElement(id,arguments[1],arguments[2],arguments[3]); }
+                if(arguments.length === 5) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4]); }
+                if(arguments.length === 5) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5]); }
+                if(arguments.length === 5) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5],arguments[6]); }
             }
 
             settings.logCallback().info(settings.logType,GetFolderName(),text);
