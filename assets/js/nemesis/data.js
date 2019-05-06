@@ -199,7 +199,6 @@ function (n) {
             switch (dataType) {
                 case 'Time':
                     var matches = dataValue.match(regExp);
-                    console.log(matches);
                     // Check hours valid value
                     if (parseInt(matches[1])) {
                         // Check if the value is within the allowed values for hour.
@@ -216,6 +215,7 @@ function (n) {
                 case 'String':
                     var matches = dataValue.match(regExp);
                     // Check valid format for String variables.
+                    console.log(matches);
                     break;
                 case 'Int':
                     // Check valid format for Int variables.
@@ -253,7 +253,12 @@ function (n) {
                         }
                     });
                     if(!patternMatch) {
-                        console.log('regex match fail: ' + variable.name + ' cell value: ' + dataRow[i]);
+                        if(variable.type === "String") {
+                            var regExSplit = variable.regExps[0].split(','); 
+                            var length = regExSplit[1].split('}');
+                            result = LogError("-CheckData-FileRow-ColumnsStringType-Error",settings.fileName, (settings.rowIndex + 2), variable.name, length);
+                        }
+                        // console.log('regex match fail: ' + variable.name + ' cell value: ' + dataRow[i]);
                         // LogError -CheckData-FileRow-ColumnsFormat-Error
                         // result = LogError;
                     }
