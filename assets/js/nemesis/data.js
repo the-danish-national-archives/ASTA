@@ -177,7 +177,7 @@ function (n) {
                 }
                 else {
                     headers.forEach(header => {
-                        if(!variables.includes(header.trim())) {
+                       if(!variables.includes(header.trim())) {
                            result = LogError("-CheckData-FileHeaders-MatchColumn-Error",settings.fileName,settings.metadataFileName,header);
                         }
                     });  

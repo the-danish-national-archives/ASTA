@@ -419,7 +419,7 @@ function (n) {
         //Get CodeList reklated Key
         var GetCodeListKey = function (expressions) {
             var result = "";
-            if(expressions.length === 3 && expressions[2] !== "") {
+            if(expressions.length >= 3 && expressions[2] !== "") {
                 if(codeListPattern.test(expressions[2])) {
                     result = expressions[2].match(codeListPattern)[1];
                 }
@@ -450,7 +450,10 @@ function (n) {
                             var variable = { "name":variableName, "format":expressions[1], "isKey":isKey, "type":"", "description":"", "refData":"", "refVariable":"", "codeListKey":(codeListKey == null ? "" : codeListKey), "options":[], "regExps":[], "appliedRegExp":-1 }
                             table.variables.push(variable);
                         } 
-                        else { result = false; }                       
+                        else { 
+                            result = false;
+                            settings.errorStop = true; 
+                        }                       
                     }
                     else {
                         result = LogError("-CheckMetadata-FileVariables-RowDouble-Error",settings.fileName,(i + 1));
