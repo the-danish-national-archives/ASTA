@@ -233,10 +233,25 @@ function (n) {
                 case 'String':
                     var matches = dataValue.match(regExp);
                     // Check valid format for String variables.
-                    console.log(matches);
                     break;
                 case 'Int':
                     // Check valid format for Int variables.
+                    var matches = dataValue.match(regExp);
+                    // Check for leading 0 numbers if the value is not just one digit.
+                    if (matches[0].length > 1) {
+                        // Check if the first char in the value is either + or -
+                        if (matches[0].charAt(0) === '-' || matches[0].charAt(0) === '+') {
+                            // Check if the first number in the value is 0
+                            if (matches[1] === '0') {
+                                result = false;
+                            }
+                        } else {
+                            // Check if the first number in the value is 0
+                            if (matches[0].charAt(0) === '0') {
+                                return false;
+                            }
+                        }
+                    }
                     break;
                 case 'Decimal':
                     // Check valid format for Decimal variables.
@@ -275,6 +290,9 @@ function (n) {
                             var regExSplit = variable.regExps[0].split(','); 
                             var length = regExSplit[1].split('}');
                             result = LogError("-CheckData-FileRow-ColumnsStringType-Error",settings.fileName, (settings.rowIndex + 2), variable.name, length[0]);
+                        }
+                        if (variable.type === "Int") {
+                            result = LogWarn("-CheckData-FileRow-ColumnsIntType-Warning", settings.fileName, variable.name, settings.metadataFileName);
                         }
                         // console.log('regex match fail: ' + variable.name + ' cell value: ' + dataRow[i]);
                         // LogError -CheckData-FileRow-ColumnsFormat-Error
