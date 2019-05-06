@@ -211,12 +211,8 @@ function (n) {
             return result;
         }
 
-        // Validate single data cell value format
-        var ValidateFormat = function (dataValue, regExp, dataType) {
-            var result = true;
-            switch (dataType) {
-                case 'Time':
-                    var matches = dataValue.match(regExp);
+        var ValidateTime = function (dataValue, regExp, dataType) {
+            var matches = dataValue.match(regExp);
                     // Check hours valid value
                     if (parseInt(matches[1])) {
                         // Check if the value is within the allowed values for hour.
@@ -229,38 +225,70 @@ function (n) {
                     if (parseInt(matches[3])) {
                         // Check if the value is within the allowed values for seconds.
                     }
+                    return null; // not yet implemented;
+        }
+
+        var ValidateString = function (dataValue, regExp, dataType) {
+            var matches = dataValue.match(regExp);
+                    // Check valid format for String variables.
+                    return null; // Not yet implemented.
+        }
+
+        var ValidateInt = function (dataValue, regExp, dataType) {
+            var result = true;
+            // Check valid format for Int variables.
+            var matches = dataValue.match(regExp);
+            // Check for leading 0 numbers if the value is not just one digit.
+            if (matches[0].length > 1) {
+                // Check if the first char in the value is either + or -
+                if (matches[0].charAt(0) === '-' || matches[0].charAt(0) === '+') {
+                    // Check if the first number in the value is 0
+                    if (matches[1] === '0') {
+                        result = false;
+                    }
+                } else {
+                    // Check if the first number in the value is 0
+                    if (matches[0].charAt(0) === '0') {
+                        result = false;
+                    }
+                }
+            }
+            return result;
+        }
+
+        var ValidateDecimal = function (dataValue, regExp, dataType) {
+            return null; // not yet implemented.
+        }
+
+        var ValidateDate = function (dataValue, regExp, dataType) {
+            return null; // not yet implemented.
+        }
+
+        var ValidateDateTime = function (dataValue, regExp, dataType) {
+            return null; // not yet implemented.
+        }
+
+        // Validate single data cell value format
+        var ValidateFormat = function (dataValue, regExp, dataType) {
+            var result = true;
+            switch (dataType) {
+                case 'Time':
+                    result = ValidateTime(dataValue, regExp, dataType);
                     break;
                 case 'String':
-                    var matches = dataValue.match(regExp);
-                    // Check valid format for String variables.
+                    result = ValidateString(dataValue, regExp, dataType);
                     break;
                 case 'Int':
-                    // Check valid format for Int variables.
-                    var matches = dataValue.match(regExp);
-                    // Check for leading 0 numbers if the value is not just one digit.
-                    if (matches[0].length > 1) {
-                        // Check if the first char in the value is either + or -
-                        if (matches[0].charAt(0) === '-' || matches[0].charAt(0) === '+') {
-                            // Check if the first number in the value is 0
-                            if (matches[1] === '0') {
-                                result = false;
-                            }
-                        } else {
-                            // Check if the first number in the value is 0
-                            if (matches[0].charAt(0) === '0') {
-                                return false;
-                            }
-                        }
-                    }
+                    result = ValidateInt(dataValue, regExp, dataType);
                     break;
                 case 'Decimal':
-                    // Check valid format for Decimal variables.
+                    result = ValidateDecimal(dataValue, regExp, dataType);
                     break;
                 case 'Date':
-                    // Check valid format for Date variables.
+                    result = ValidateDate(dataValue, regExp, dataType);
                     break;
                 case 'DateTime':
-                    // Check valid format for DateTime variables.
+                    result = ValidateDateTime(dataValue, regExp, dataType);
                     break;
                 // Handling user defined values?
                 default:
@@ -292,11 +320,8 @@ function (n) {
                             result = LogError("-CheckData-FileRow-ColumnsStringType-Error",settings.fileName, (settings.rowIndex + 2), variable.name, length[0]);
                         }
                         if (variable.type === "Int") {
-                            result = LogWarn("-CheckData-FileRow-ColumnsIntType-Warning", settings.fileName, variable.name, settings.metadataFileName);
+                            result = LogWarn("-CheckData-FileRow-ColumnsIntType-Warning", settings.fileName, variable.name, settings.metadataFileName, variable.format);
                         }
-                        // console.log('regex match fail: ' + variable.name + ' cell value: ' + dataRow[i]);
-                        // LogError -CheckData-FileRow-ColumnsFormat-Error
-                        // result = LogError;
                     }
                 } else {
                     // Check codelist if value can be missing / empty
