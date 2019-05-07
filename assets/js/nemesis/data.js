@@ -10,6 +10,8 @@ function (n) {
         const fs = require('fs');
         const chardet = require('chardet');
         const csv = require('csv-parser');
+        const doubleApostrophePattern1 = /^"([\w\W\s]*)"$/;
+        const doubleApostrophePattern2 = /["]{2,2}/g;
         const errorsMax = 40;
         
         //private data memebers
@@ -240,6 +242,7 @@ function (n) {
             }
             return result;
         }
+
         //Validate Date time value
         var ValidateDateTime = function (dataValue, regExp, variable) {
             var result = true;
@@ -261,14 +264,28 @@ function (n) {
             return result;
         }
 
+        //Validate String
+        var ValidateString = function (dataValue, regExp, variable) {
+            var result = true;
+            if(dataValue.indexOf("\"") > -1) {
+                if(doubleApostrophePattern1.test(dataValue)) {
+                    var innerText = dataValue.match(doubleApostrophePattern1)[1];
+                }
+                else {
+                    result = LogError("-CheckData-FileRow-ColumnsString-ValueApostrophe-Error",settings.fileName,settings.metadataFileName, (settings.rowIndex + 2), variable.name, dataValue);
+                }
+            }
+            return result;
+        }
+
         // Validate single data cell value format
         var ValidateValue = function (dataValue, regExp, variable) {
             var result = true;
             switch (variable.type) {
-                case 'Time':
-                    result = ValidateTime(dataValue, regExp, variable);
+                case 'String':
+                    result = ValidateString(dataValue, regExp, variable);
                     break;
-               case 'Int':
+                case 'Int':
                     result = ValidateInt(dataValue, regExp, variable);
                     break;
                 case 'Decimal':
@@ -280,9 +297,10 @@ function (n) {
                 case 'DateTime':
                     result = ValidateDateTime(dataValue, regExp, variable);
                     break;
-                // Handling user defined values?
-                default:
-                    break;
+                case 'Time':
+                    result = ValidateTime(dataValue, regExp, variable);
+                    break;                
+                default: break;
             }
             return result;
         }
