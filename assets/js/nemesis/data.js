@@ -219,12 +219,43 @@ function (n) {
             return result;
         }
 
+        //Conver Month MMM to number
+        var GetMonth = function (monthValue) {
+            result = monthValue;
+            if(isNaN(monthValue)) {
+                switch (monthValue) {
+                    case 'JAN': result = "1";break;
+                    case 'FEB': result = "2";break;
+                    case 'MAR': result = "3";break;
+                    case 'APR': result = "4";break;
+                    case 'MAY': result = "5";break;
+                    case 'JUN': result = "6";break;
+                    case 'JUL': result = "7";break;
+                    case 'AUG': result = "8";break;
+                    case 'SEP': result = "9";break;
+                    case 'OCT': result = "10";break;
+                    case 'NOV': result = "11";break;
+                    case 'DEC': result = "12";break;
+                }
+            }
+            return result;
+        }
         //Validate Date time value
         var ValidateDateTime = function (dataValue, regExp, variable) {
             var result = true;
             var matches = dataValue.match(regExp);
-            var date = new Date(parseInt(matches[1]),parseInt(matches[2]) - 1,parseInt(matches[3]),parseInt(matches[4]),parseInt(matches[5]),parseInt(matches[6]));
-            if(date.getFullYear() !== parseInt(matches[1]) || date.getMonth() !== (parseInt(matches[2]) - 1) || date.getDate() !== parseInt(matches[3]) || date.getHours() !== parseInt(matches[4]) || date.getMinutes() !== parseInt(matches[5]) || date.getSeconds() !== parseInt(matches[6])) {
+            var year = parseInt(matches[1]);
+            var month = parseInt(GetMonth(matches[2])) - 1;
+            var day = parseInt(matches[3]);
+            var hour = parseInt(matches[4]);
+            var minute = parseInt(matches[5]);
+            var second = parseInt(matches[6]);
+            if(regExp.toString() === "/^([0-9]{2,2})-([a-zA-Z]{3,3})-([0-9]{4,4})\\s([0-9]{2,2}):([0-9]{2,2}):([0-9]{2,2})$/") {
+                year = parseInt(matches[3]);
+                day = parseInt(matches[1]);
+            }            
+            var date = new Date(year,month,day,hour,minute,second);
+            if(date.getFullYear() !== year || date.getMonth() !== month || date.getDate() !== day || date.getHours() !== hour || date.getMinutes() !== minute || date.getSeconds() !== second) {
                 result = LogError("-CheckData-FileRow-ColumnsDateTimeValue-Error",settings.fileName,settings.metadataFileName, (settings.rowIndex + 2), variable.name, dataValue);
             }
             return result;
