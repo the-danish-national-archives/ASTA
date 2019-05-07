@@ -225,13 +225,13 @@ function (n) {
                     if (parseInt(matches[3])) {
                         // Check if the value is within the allowed values for seconds.
                     }
-                    return null; // not yet implemented;
+                    return true; // not yet implemented;
         }
 
         var ValidateString = function (dataValue, regExp, dataType) {
             var matches = dataValue.match(regExp);
                     // Check valid format for String variables.
-                    return null; // Not yet implemented.
+                    return true; // Not yet implemented.
         }
 
         var ValidateInt = function (dataValue, regExp, dataType) {
@@ -257,15 +257,15 @@ function (n) {
         }
 
         var ValidateDecimal = function (dataValue, regExp, dataType) {
-            return null; // not yet implemented.
+            return true; // not yet implemented.
         }
 
         var ValidateDate = function (dataValue, regExp, dataType) {
-            return null; // not yet implemented.
+            return true; // not yet implemented.
         }
 
         var ValidateDateTime = function (dataValue, regExp, dataType) {
-            return null; // not yet implemented.
+            return true; // not yet implemented.
         }
 
         // Validate single data cell value format
@@ -304,9 +304,9 @@ function (n) {
             console.log(Object.values(data));
             var dataRow = Object.values(data);
             for(var i = 0;i < dataRow.length;i++) {
+                var patternMatch = false;
                 if(dataRow[i].trim() !== ""){
-                        var patternMatch = false;
-                        var variable = settings.table.variables[i];
+                    var variable = settings.table.variables[i];
                     variable.regExps.forEach(regex => {
                         var patt = new RegExp(regex);
                         if(patt.test(dataRow[i])){
