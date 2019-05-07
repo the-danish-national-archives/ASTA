@@ -24,7 +24,7 @@ function (n) {
         templateFileName: "log.html",
         scriptPath: "./assets/scripts/{0}",
         resourceWinPath: "resources\\{0}",
-        filePostfix: "{0}_log.html",
+        filePostfix: "{0}_ASTA_log.html",
         errorElement: "<span id=\"{0}_{1}\" name=\"{2}\" class=\"error\">{3}</span>",
         warnElement: "<span id=\"{0}_{1}\" name=\"{2}\" class=\"warning\" hidden=\"true\">{3}</span>",
         infoElement: "<span id=\"{0}_{1}\" name=\"{2}\" class=\"ok\" hidden=\"true\">{3}</span>",
@@ -53,7 +53,7 @@ function (n) {
         var data = fs.readFileSync(settings.filePath);        
         var folders = settings.filePath.getFolders();
         var folderName = folders[folders.length - 1];
-        folderName = folderName.substring(0,folderName.indexOf("_log.html"));
+        folderName = folderName.substring(0,folderName.indexOf("_ASTA_log.html"));
         var updatedData = data.toString().format(settings.logsDate.getFromFormat("dd-MM-yyyy hh:mm:ss"),folderName,settings.logs.join("\r\n"),settings.errorsCounter);
         fs.writeFileSync(settings.filePath, updatedData);                         
         settings.logs = [];

@@ -37,7 +37,7 @@ function (n) {
             templateFileName: "batchlog.html",
             scriptPath: "./assets/scripts/{0}",
             resourceWinPath: "resources\\{0}",
-            filePostfix: "{0}_log.html",
+            filePostfix: "{0}_ASTA_log.html",
             startLogData: "<!--Start Log Data-->",
             endLogData: "<!--End Log Data-->",
             errorsCounter: 0
@@ -66,8 +66,8 @@ function (n) {
             var data = fs.readFileSync(settings.filePath);        
             var folders = settings.filePath.getFolders();
             var folderName = folders[folders.length - 1];
-            folderName = folderName.substring(0,folderName.indexOf("_log.html"));
-            var updatedData = data.toString().format(settings.logsDate.getFromFormat("dd-MM-yyyy hh:mm:ss"),settings.logs.join("\r\n"),settings.errorsCounter);
+            folderName = folderName.substring(0,folderName.indexOf(".html"));
+            var updatedData = data.toString().format(settings.logsDate.getFromFormat("dd-MM-yyyy hh:mm:ss"),settings.logs.join("\r\n"),settings.errorsCounter, folderName);
             console.log('filepath: ' + settings.filePath + ' selected path:' + settings.selectedPath[0]);
             fs.writeFileSync(settings.filePath, updatedData);
             console.log("Log is updated at: {0}".format(settings.filePath));
@@ -147,7 +147,7 @@ function (n) {
                 }
             });
             var folders = destPath.getFolders();
-            settings.filePath = (destPath.indexOf("\\") > -1) ? "{0}\\{1}.html".format(destPath, folders[folders.length - 1]) : "{0}/{1}.html".format(destPath, folders[folders.length - 1]);//settings.filePostfix.format(destPath);
+            settings.filePath = (destPath.indexOf("\\") > -1) ? "{0}\\{1}.html".format(destPath, folders[folders.length - 1] + '_ASTA_BatchLog') : "{0}/{1}.html".format(destPath, folders[folders.length - 1] + '_ASTA_BatchLog');//settings.filePostfix.format(destPath);
             if(fs.existsSync(settings.filePath)) {                        
                 console.log(`Delete exists log: ${settings.filePath}`);
                 fs.unlinkSync(settings.filePath);
