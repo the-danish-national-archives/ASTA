@@ -261,7 +261,13 @@ function (n) {
         }
 
         var ValidateDate = function (dataValue, regExp, dataType) {
-            return true; // not yet implemented.
+            var result = true;
+            var matches = dataValue.match(regExp);
+            var date = new Date(matches[0]);
+            if(isNaN(date)){
+                result = false;
+            }
+            return result; // not yet implemented.
         }
 
         var ValidateDateTime = function (dataValue, regExp, dataType) {
