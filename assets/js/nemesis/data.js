@@ -32,12 +32,13 @@ function (n) {
             rowIndex: 0,
             dataFiles: [],
             runIndex: -1,
-            endValidation: false,
             dataPathPostfix: "Data",
             logResult: null,
             metadata: [],
             data: [],
-            errors: 0
+            errors: 0,
+            totalErrors: 0,
+            parserStrictError: false
         }
 
         //output system error messages
@@ -103,6 +104,7 @@ function (n) {
 
             settings.logCallback().error(settings.logType,GetFolderName(),text);
             settings.errors += 1;
+            settings.totalErrors += 1;
             return false;
         }
 
@@ -283,7 +285,7 @@ function (n) {
             var result = true;
             switch (variable.type) {
                 case 'String':
-                    result = ValidateString(dataValue, regExp, variable);
+                    //result = ValidateString(dataValue, regExp, variable);
                     break;
                 case 'Int':
                     result = ValidateInt(dataValue, regExp, variable);
@@ -399,7 +401,8 @@ function (n) {
 
         //Validate single CSV file
         var ValidateDataSet = function (dataFilePath) {
-            var result = true;             
+            var result = true; 
+            settings.parserStrictError = false;            
             fs.createReadStream(dataFilePath)
             .pipe(csv({ separator: ';', strict:true }))
             .on('headers', (headers) => {
@@ -420,15 +423,15 @@ function (n) {
             .on('error', (e) => { 
                 if(e.message === "Row length does not match headers") {
                     result = LogError("-CheckData-FileRows-MatchLength-Error",settings.fileName,(settings.rowIndex + 2));
-                }
-                settings.rowIndex++;
-                settings.endValidation = true;
+                    settings.parserStrictError = true;
+                    ProcessDataSet();
+                }              
             })
             .on('end', () => { 
                 console.log("data output: ");
                 console.log(settings.data);
                 if(settings.errors > 0) { result = false; }
-                ProcessDataSet();
+                if(!settings.parserStrictError) { ProcessDataSet(); }
             }); 
             return result;
         }
@@ -438,7 +441,6 @@ function (n) {
             settings.runIndex = settings.runIndex + 1;
             if(settings.runIndex < settings.dataFiles.length) {
                 var dataFilePath = settings.dataFiles[settings.runIndex];
-                settings.endValidation = false;
                 settings.fileName = GetFileName(dataFilePath);
                 settings.metadataFileName =  "{0}.txt".format(settings.fileName.substring(0,settings.fileName.indexOf(".")));
                 settings.table = GetTableData();
@@ -449,7 +451,7 @@ function (n) {
                 ValidateDataSet(dataFilePath);
             }
             else {
-                settings.endValidation = true;
+                CommitLog();
             }
         }
 
@@ -476,35 +478,33 @@ function (n) {
                     console.log("None exist Data file path: {0}".format(dataFilePath));
                 }                              
             });
-            if(settings.dataFiles.length > 0) { ProcessDataSet(); }
-            if(result) { LogInfo("-CheckData-Ok",null); }
+            if(settings.dataFiles.length > 0) { ProcessDataSet(); }            
+            if(result) { LogInfo("-CheckData-Ok",null); }            
             return result; 
         }
 
         //commit end all validation by check every 500 msec 
-        var CommitLog = function () {
-            console.log("endValidation: {0}".format(settings.endValidation));
-            if(!settings.endValidation) {
-                setTimeout(CommitLog, 500);
-            }
-            else {
+        var CommitLog = function () {            
                 var folderName = GetFolderName();
-                if(settings.errorsCounter === 0) {
+                if(settings.totalErrors === 0) {
                     settings.logCallback().section(settings.logType,folderName,settings.logEndNoErrorSpn.innerHTML);
                 } else {
                     settings.logCallback().section(settings.logType,folderName,settings.logEndWithErrorSpn.innerHTML);
                 }
                 settings.logResult = settings.logCallback().commit(settings.deliveryPackagePath);
-            }
         }
+
         //start flow validation
         var Validate = function () {
             console.log(`data selected path: ${settings.deliveryPackagePath}`); 
             try 
-            {
+            {                
                 settings.logCallback().section(settings.logType,GetFolderName(),settings.logStartSpn.innerHTML);            
                 ValidateData(); 
-                CommitLog();                                              
+                if(settings.dataFiles.length === 0) 
+                { 
+                    CommitLog();  
+                }                                                             
             }
             catch(err) 
             {
@@ -535,10 +535,10 @@ function (n) {
                     { 
                         settings.deliveryPackagePath = path;
                         settings.outputText = outputText;
-                        settings.metadata = metadata;
-                        settings.endValidation = true;                        
+                        settings.metadata = metadata;;                        
                         settings.runIndex = -1;
                         settings.dataFiles = [];
+                        settings.totalErrors = 0;
                         return Validate();
                     }  
                 };
