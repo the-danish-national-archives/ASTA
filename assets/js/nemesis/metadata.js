@@ -113,12 +113,12 @@ function (n) {
                 if(arguments.length === 3) { text = ViewElement(id,arguments[1],arguments[2],null); }
                 if(arguments.length === 4) { text = ViewElement(id,arguments[1],arguments[2],arguments[3]); }
                 if(arguments.length === 5) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4]); }
-                if(arguments.length === 5) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5]); }
-                if(arguments.length === 5) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5],arguments[6]); }
+                if(arguments.length === 6) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5]); }
+                if(arguments.length === 7) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5],arguments[6]); }
             }
 
             settings.logCallback().error(settings.logType,GetFolderName(),text);
-            settings.errorsCounter += 1;
+            settings.errors += 1;
             return false;
         }
 
@@ -131,11 +131,12 @@ function (n) {
                 if(arguments.length === 3) { text = ViewElement(id,arguments[1],arguments[2],null); }
                 if(arguments.length === 4) { text = ViewElement(id,arguments[1],arguments[2],arguments[3]); }
                 if(arguments.length === 5) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4]); }
-                if(arguments.length === 5) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5]); }
-                if(arguments.length === 5) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5],arguments[6]); }
+                if(arguments.length === 6) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5]); }
+                if(arguments.length === 7) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5],arguments[6]); }
             }
 
             settings.logCallback().warn(settings.logType,GetFolderName(),text);
+            return true;
         }
         
         //Handle info logging
@@ -147,11 +148,12 @@ function (n) {
                 if(arguments.length === 3) { text = ViewElement(id,arguments[1],arguments[2],null); }
                 if(arguments.length === 4) { text = ViewElement(id,arguments[1],arguments[2],arguments[3]); }
                 if(arguments.length === 5) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4]); }
-                if(arguments.length === 5) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5]); }
-                if(arguments.length === 5) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5],arguments[6]); }
+                if(arguments.length === 6) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5]); }
+                if(arguments.length === 7) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5],arguments[6]); }
             }
 
             settings.logCallback().info(settings.logType,GetFolderName(),text);
+            return true;
         }
 
         //get data JSON table object pointer by table file name

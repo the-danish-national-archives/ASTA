@@ -10,7 +10,7 @@ function (n) {
         const fs = require('fs');
         const chardet = require('chardet');
         const csv = require('csv-parser');
-        const rowErrorsMax = 40;
+        const errorsMax = 40;
         
         //private data memebers
         var settings = { 
@@ -35,7 +35,7 @@ function (n) {
             logResult: null,
             metadata: [],
             data: [],
-            rowErrors: null
+            errors: 0
         }
 
         //output system error messages
@@ -95,12 +95,12 @@ function (n) {
                 if(arguments.length === 3) { text = ViewElement(id,arguments[1],arguments[2],null); }
                 if(arguments.length === 4) { text = ViewElement(id,arguments[1],arguments[2],arguments[3]); }
                 if(arguments.length === 5) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4]); }
-                if(arguments.length === 5) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5]); }
-                if(arguments.length === 5) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5],arguments[6]); }
+                if(arguments.length === 6) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5]); }
+                if(arguments.length === 7) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5],arguments[6]); }
             }
 
             settings.logCallback().error(settings.logType,GetFolderName(),text);
-            settings.errorsCounter += 1;
+            settings.errors += 1;
             return false;
         }
 
@@ -113,11 +113,12 @@ function (n) {
                 if(arguments.length === 3) { text = ViewElement(id,arguments[1],arguments[2],null); }
                 if(arguments.length === 4) { text = ViewElement(id,arguments[1],arguments[2],arguments[3]); }
                 if(arguments.length === 5) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4]); }
-                if(arguments.length === 5) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5]); }
-                if(arguments.length === 5) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5],arguments[6]); }
+                if(arguments.length === 6) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5]); }
+                if(arguments.length === 7) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5],arguments[6]); }
             }
 
             settings.logCallback().warn(settings.logType,GetFolderName(),text);
+            return true;
         }
         
         //Handle info logging
@@ -129,11 +130,12 @@ function (n) {
                 if(arguments.length === 3) { text = ViewElement(id,arguments[1],arguments[2],null); }
                 if(arguments.length === 4) { text = ViewElement(id,arguments[1],arguments[2],arguments[3]); }
                 if(arguments.length === 5) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4]); }
-                if(arguments.length === 5) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5]); }
-                if(arguments.length === 5) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5],arguments[6]); }
+                if(arguments.length === 6) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5]); }
+                if(arguments.length === 7) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5],arguments[6]); }
             }
 
             settings.logCallback().info(settings.logType,GetFolderName(),text);
+            return true;
         }
 
         // get selected folder name 
@@ -157,24 +159,159 @@ function (n) {
         var GetFileName = function(filePath) {
             var folders = filePath.getFolders();
             return folders[folders.length - 1];
+        } 
+
+        //Validate Time value
+        var ValidateTime = function (dataValue, regExp, variable) {
+            var result = true;
+            var matches = dataValue.match(regExp);
+            var date = new Date(2019,01,01,parseInt(matches[1]),parseInt(matches[2]),parseInt(matches[3]));
+            if(date.getFullYear() !== 2019 || date.getMonth() !== 1 || date.getDate() !== 1 || date.getHours() !== parseInt(matches[1]) || date.getMinutes() !== parseInt(matches[2]) || date.getSeconds() !== parseInt(matches[3])) {
+                result = LogError("-CheckData-FileRow-ColumnsTimeValue-Error",settings.fileName,settings.metadataFileName, (settings.rowIndex + 2), variable.name, dataValue);
+            }
+            return result;
         }
 
-        var ProcessDataSet = function() {
-            settings.runIndex = settings.runIndex + 1;
-            if(settings.runIndex < settings.dataFiles.length) {
-                var dataFilePath = settings.dataFiles[settings.runIndex];
-                settings.endValidation = false;
-                settings.fileName = GetFileName(dataFilePath);
-                settings.metadataFileName =  "{0}.txt".format(settings.fileName.substring(0,settings.fileName.indexOf(".")));
-                settings.table = GetTableData();
-                settings.rowIndex = 0;
-                settings.data = [];
-                console.log(`validate: ${dataFilePath}`);
-                ValidateDataSet(dataFilePath);
+        // Check for leading 0 numbers if the value is not just one digit.
+        var ValidateInt = function (dataValue, regExp, variable) {
+            var result = true;
+            var matches = dataValue.match(regExp);
+            if(isNaN(parseInt(matches[0]))){
+                result = LogError("-CheckData-FileRow-ColumnsIntValue-Error",settings.fileName,settings.metadataFileName, (settings.rowIndex + 2), variable.name, dataValue);  
             }
             else {
-                settings.endValidation = true;
+                if (matches[0].length > 1) {
+                    // Check if the first char in the value is either + or -
+                    if (matches[0].charAt(0) === '-' || matches[0].charAt(0) === '+') {
+                        // Check if the first number in the value is 0
+                        if (matches[1] === '0') {
+                            result = LogWarn("-CheckData-FileRow-ColumnsIntValue-Warning", settings.fileName,settings.metadataFileName, (settings.rowIndex + 2), variable.name, variable.format);
+                        }
+                    } else {
+                        // Check if the first number in the value is 0
+                        if (matches[0].charAt(0) === '0') {
+                            result = LogWarn("-CheckData-FileRow-ColumnsIntValue-Warning", settings.fileName,settings.metadataFileName, (settings.rowIndex + 2), variable.name, variable.format);
+                        }
+                    }
+                }
             }
+            return result;
+        }
+
+        //Validate Decimal value
+        var ValidateDecimal = function (dataValue, regExp, variable) {
+            var result = true;
+            var matches = dataValue.match(regExp);
+            if(isNaN(parseFloat(matches[0]))){
+                result = LogError("-CheckData-FileRow-ColumnsDecimalValue-Error",settings.fileName,settings.metadataFileName, (settings.rowIndex + 2), variable.name, dataValue);  
+            }
+            return result;
+        }
+
+        //Validate Date value
+        var ValidateDate = function (dataValue, regExp, variable) {
+            var result = true;
+            var matches = dataValue.match(regExp);
+            var date = new Date(parseInt(matches[1]),parseInt(matches[2]) - 1,parseInt(matches[3]));
+            if(date.getFullYear() !== parseInt(matches[1]) || date.getMonth() !== (parseInt(matches[2]) - 1) || date.getDate() !== parseInt(matches[3])) {
+                result = LogError("-CheckData-FileRow-ColumnsDateValue-Error",settings.fileName,settings.metadataFileName, (settings.rowIndex + 2), variable.name, dataValue);
+            }
+            return result;
+        }
+
+        //Validate Date time value
+        var ValidateDateTime = function (dataValue, regExp, variable) {
+            var result = true;
+            var matches = dataValue.match(regExp);
+            var date = new Date(parseInt(matches[1]),parseInt(matches[2]) - 1,parseInt(matches[3]),parseInt(matches[4]),parseInt(matches[5]),parseInt(matches[6]));
+            if(date.getFullYear() !== parseInt(matches[1]) || date.getMonth() !== (parseInt(matches[2]) - 1) || date.getDate() !== parseInt(matches[3]) || date.getHours() !== parseInt(matches[4]) || date.getMinutes() !== parseInt(matches[5]) || date.getSeconds() !== parseInt(matches[6])) {
+                result = LogError("-CheckData-FileRow-ColumnsDateTimeValue-Error",settings.fileName,settings.metadataFileName, (settings.rowIndex + 2), variable.name, dataValue);
+            }
+            return result;
+        }
+
+        // Validate single data cell value format
+        var ValidateValue = function (dataValue, regExp, variable) {
+            var result = true;
+            switch (variable.type) {
+                case 'Time':
+                    result = ValidateTime(dataValue, regExp, variable);
+                    break;
+               case 'Int':
+                    result = ValidateInt(dataValue, regExp, variable);
+                    break;
+                case 'Decimal':
+                    result = ValidateDecimal(dataValue, regExp, variable);
+                    break;
+                case 'Date':
+                    result = ValidateDate(dataValue, regExp, variable);
+                    break;
+                case 'DateTime':
+                    result = ValidateDateTime(dataValue, regExp, variable);
+                    break;
+                // Handling user defined values?
+                default:
+                    break;
+            }
+            return result;
+        }
+
+        // Validate single data cell value format
+        var ValidateFormat = function (dataValue,variable) {
+            var result = true;
+            switch (variable.type) {
+                case 'String':
+                    {
+                        var regExSplit = variable.regExps[0].split(','); 
+                        var length = regExSplit[1].split('}');
+                        result = LogError("-CheckData-FileRow-ColumnsStringType-Error",settings.fileName, (settings.rowIndex + 2), variable.name, length[0]);
+                    }
+                break;
+                case 'Int':
+                    result = LogError("-CheckData-FileRow-ColumnsIntType-Error",settings.fileName,settings.metadataFileName, (settings.rowIndex + 2), variable.name, variable.format);
+                break;
+                case 'Decimal':
+                    result = LogError("-CheckData-FileRow-ColumnsDecimalType-Error",settings.fileName,settings.metadataFileName, (settings.rowIndex + 2), variable.name, variable.format);
+                break;
+                case 'Date':
+                    result = LogError("-CheckData-FileRow-ColumnsDateType-Error",settings.fileName,settings.metadataFileName, (settings.rowIndex + 2), variable.name, variable.format);
+                break;
+                case 'DateTime':
+                    result = LogError("-CheckData-FileRow-ColumnsDateTimeType-Error",settings.fileName,settings.metadataFileName, (settings.rowIndex + 2), variable.name, variable.format);
+                break;
+                case 'Time':
+                result = LogError("-CheckData-FileRow-ColumnsTimeType-Error",settings.fileName,settings.metadataFileName, (settings.rowIndex + 2), variable.name, variable.format);
+            break;
+                default: break;
+            }
+            return result;
+        }
+
+        //Validate row at CSV file
+        var ValidateRow = function(data) {
+            var result = true;
+            console.log(Object.values(data));
+            var dataRow = Object.values(data);
+            for(var i = 0;i < dataRow.length;i++) {
+                var patternMatch = false;
+                if(dataRow[i].trim() !== ""){
+                    var variable = settings.table.variables[i];
+                    variable.regExps.forEach(regex => {
+                        var patt = new RegExp(regex);
+                        if(patt.test(dataRow[i])){
+                            result = ValidateValue(dataRow[i], patt, variable);
+                            patternMatch = true;
+                        }
+                    });
+                    if(!patternMatch) {
+                        result = ValidateFormat(dataRow[i],variable.type);
+                    }
+                } else {
+                    // Check codelist if value can be missing / empty
+                    
+                }
+            }
+            return result;
         }
 
         //Validate CSV headers
@@ -211,137 +348,9 @@ function (n) {
             return result;
         }
 
-        var ValidateTime = function (dataValue, regExp, dataType) {
-            var matches = dataValue.match(regExp);
-                    // Check hours valid value
-                    if (parseInt(matches[1])) {
-                        // Check if the value is within the allowed values for hour.
-                        // var varTime = new Date(2019, 05, 03, parseInt(matches[1]), parseInt(matches[2]), parseInt(matches[3]));
-                        // if not true -> result = false;
-                    }
-                    if (parseInt(matches[2])) {
-                        // Check if the value is within the allowed values for minute.
-                    }
-                    if (parseInt(matches[3])) {
-                        // Check if the value is within the allowed values for seconds.
-                    }
-                    return true; // not yet implemented;
-        }
-
-        var ValidateString = function (dataValue, regExp, dataType) {
-            var matches = dataValue.match(regExp);
-                    // Check valid format for String variables.
-                    return true; // Not yet implemented.
-        }
-
-        var ValidateInt = function (dataValue, regExp, dataType) {
-            var result = true;
-            // Check valid format for Int variables.
-            var matches = dataValue.match(regExp);
-            // Check for leading 0 numbers if the value is not just one digit.
-            if (matches[0].length > 1) {
-                // Check if the first char in the value is either + or -
-                if (matches[0].charAt(0) === '-' || matches[0].charAt(0) === '+') {
-                    // Check if the first number in the value is 0
-                    if (matches[1] === '0') {
-                        result = false;
-                    }
-                } else {
-                    // Check if the first number in the value is 0
-                    if (matches[0].charAt(0) === '0') {
-                        result = false;
-                    }
-                }
-            }
-            return result;
-        }
-
-        var ValidateDecimal = function (dataValue, regExp, dataType) {
-            return true; // not yet implemented.
-        }
-
-        var ValidateDate = function (dataValue, regExp, dataType) {
-            var result = true;
-            var matches = dataValue.match(regExp);
-            var date = new Date(matches[0]);
-            if(isNaN(date)){
-                result = false;
-            }
-            return result; // not yet implemented.
-        }
-
-        var ValidateDateTime = function (dataValue, regExp, dataType) {
-            return true; // not yet implemented.
-        }
-
-        // Validate single data cell value format
-        var ValidateFormat = function (dataValue, regExp, dataType) {
-            var result = true;
-            switch (dataType) {
-                case 'Time':
-                    result = ValidateTime(dataValue, regExp, dataType);
-                    break;
-                case 'String':
-                    result = ValidateString(dataValue, regExp, dataType);
-                    break;
-                case 'Int':
-                    result = ValidateInt(dataValue, regExp, dataType);
-                    break;
-                case 'Decimal':
-                    result = ValidateDecimal(dataValue, regExp, dataType);
-                    break;
-                case 'Date':
-                    result = ValidateDate(dataValue, regExp, dataType);
-                    break;
-                case 'DateTime':
-                    result = ValidateDateTime(dataValue, regExp, dataType);
-                    break;
-                // Handling user defined values?
-                default:
-                    console.log('Variable did not have a recongnized type: ' + dataValue);
-                    break;
-            }
-            return result;
-        }
-
-        //Validate row at CSV file
-        var ValidateRow = function(data) {
-            var result = true;
-            console.log(Object.values(data));
-            var dataRow = Object.values(data);
-            for(var i = 0;i < dataRow.length;i++) {
-                var patternMatch = false;
-                if(dataRow[i].trim() !== ""){
-                    var variable = settings.table.variables[i];
-                    variable.regExps.forEach(regex => {
-                        var patt = new RegExp(regex);
-                        if(patt.test(dataRow[i])){
-                            patternMatch = ValidateFormat(dataRow[i], patt, variable.type);
-                        }
-                    });
-                    if(!patternMatch) {
-                        if(variable.type === "String") {
-                            var regExSplit = variable.regExps[0].split(','); 
-                            var length = regExSplit[1].split('}');
-                            result = LogError("-CheckData-FileRow-ColumnsStringType-Error",settings.fileName, (settings.rowIndex + 2), variable.name, length[0]);
-                        }
-                        if (variable.type === "Int") {
-                            result = LogWarn("-CheckData-FileRow-ColumnsIntType-Warning", settings.fileName, variable.name, settings.metadataFileName, variable.format);
-                        }
-                    }
-                } else {
-                    // Check codelist if value can be missing / empty
-                    
-                }
-            }
-            return result;
-        }
-
-
         //Validate single CSV file
         var ValidateDataSet = function (dataFilePath) {
-            var result = true;
-            settings.rowErrors = 0;  
+            var result = true;             
             fs.createReadStream(dataFilePath)
             .pipe(csv({ separator: ';', strict:true }))
             .on('headers', (headers) => {
@@ -354,7 +363,7 @@ function (n) {
                 }
             })
             .on('data', (data) => {
-                if(result && settings.rowErrors <= rowErrorsMax && ValidateRow(data)) {
+                if(result && settings.errors <= errorsMax && ValidateRow(data)) {
                     settings.data.push(data);
                 }
                 settings.rowIndex++;
@@ -369,10 +378,30 @@ function (n) {
             .on('end', () => { 
                 console.log("data output: ");
                 console.log(settings.data);
-                if(settings.rowErrors > 0) { result = false; }
+                if(settings.errors > 0) { result = false; }
                 ProcessDataSet();
             }); 
             return result;
+        }
+
+        //Process all data files
+        var ProcessDataSet = function() {
+            settings.runIndex = settings.runIndex + 1;
+            if(settings.runIndex < settings.dataFiles.length) {
+                var dataFilePath = settings.dataFiles[settings.runIndex];
+                settings.endValidation = false;
+                settings.fileName = GetFileName(dataFilePath);
+                settings.metadataFileName =  "{0}.txt".format(settings.fileName.substring(0,settings.fileName.indexOf(".")));
+                settings.table = GetTableData();
+                settings.rowIndex = 0;
+                settings.data = [];
+                settings.errors = 0; 
+                console.log(`validate: ${dataFilePath}`);
+                ValidateDataSet(dataFilePath);
+            }
+            else {
+                settings.endValidation = true;
+            }
         }
 
         //loop Data folder's table & data files
@@ -403,10 +432,11 @@ function (n) {
             return result; 
         }
 
+        //commit end all validation by check every 500 msec 
         var CommitLog = function () {
             console.log("endValidation: {0}".format(settings.endValidation));
             if(!settings.endValidation) {
-                setTimeout(CommitLog, 100);
+                setTimeout(CommitLog, 500);
             }
             else {
                 var folderName = GetFolderName();
