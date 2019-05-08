@@ -371,19 +371,6 @@ function (n) {
             return result;
         }
 
-        //Validate single empty data cell for missing BRUGERKODE
-        var ValidateMissing = function (dataValue,variable) {
-            var result = true;
-            if(variable.options != null && variable.options.length > 0) {
-                variable.options.forEach(option => {
-                    if(option.missing) { 
-                        result = LogError("-CheckData-FileRow-ColumnsMissing-Error",settings.fileName,settings.metadataFileName, (settings.rowIndex + 2), variable.name, option.name); 
-                    }
-                });
-            }
-            return result;
-        }
-
         //Validate row at CSV file
         var ValidateRow = function(data) {
             var result = true;

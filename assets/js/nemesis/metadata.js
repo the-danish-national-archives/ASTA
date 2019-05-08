@@ -208,8 +208,12 @@ function (n) {
         var ValidateUserCodes = function (lines,startIndex) {
             var result = true;
             var table = GetTableData(settings.fileName);
-            var variables = [];
-            table.variables.forEach(variable => variables.push(variable.name));
+            var codeListKeys = [];
+            table.variables.forEach(variable => {
+                if(variable.codeListKey != null && variable.codeListKey !== "") { 
+                    codeListKeys.push(variable.codeListKey); 
+                }
+            });
             var i = startIndex;                        
             do {
                 var info = GetUserCode(lines[i]);
@@ -219,7 +223,7 @@ function (n) {
                         result = false; 
                     }
                     else {
-                        if(!variables.includes(info.name)) {
+                        if(!codeListKeys.includes(info.name)) {
                             result = LogError("-CheckMetadata-FileUserCodes-KeyRequired-Error",settings.fileName,info.name);
                         }
                         else {
@@ -227,16 +231,7 @@ function (n) {
                                 if(!userCodePattern.test(code)) {
                                     settings.errorStop = true;
                                     result = LogError("-CheckMetadata-FileUserCodes-CodeValidation-Error",settings.fileName,info.name,code);
-                                }
-                                else {
-                                    table.variables.forEach(variable => {
-                                        if(variable.name === info.name) {
-                                            variable.options.forEach(option => {
-                                                if(option.name === code.substring(1,code.length - 1)) { option.missing = true; }
-                                            });
-                                        }
-                                    });
-                                }
+                                }                                
                             });
                         }
                     }               
@@ -278,7 +273,7 @@ function (n) {
                 var options = lines[i].trim().reduceWhiteSpace().split("' '");
                 table.variables.forEach(variable => {
                     if(variable.codeListKey === codeName) {
-                        variable.options.push({ "name":options[0].substring(1), "description":options[1].substring(0,options[1].length - 1), "missing":false });
+                        variable.options.push({ "name":options[0].substring(1), "description":options[1].substring(0,options[1].length - 1) });
                     }
                 });
            }
