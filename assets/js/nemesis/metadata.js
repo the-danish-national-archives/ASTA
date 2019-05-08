@@ -754,7 +754,7 @@ function (n) {
         //Validate Time Format type
         var ValidateTimeFormat = function (variable,regExp) {
             var result = true;
-            variable.regExps.push("^([0-9]{2,2}):([0-9]{2,2}):([0-9]{2,2})$");
+            variable.regExps.push("^([0-9]{1,2}):([0-9]{2,2}):([0-9]{2,2})$");
             return result;
         }
 

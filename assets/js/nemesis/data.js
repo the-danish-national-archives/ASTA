@@ -337,21 +337,49 @@ function (n) {
                     }
                 break;
                 case 'Int':
-                    result = LogError("-CheckData-FileRow-ColumnsIntType-Error",settings.fileName,settings.metadataFileName, (settings.rowIndex + 2), variable.name, variable.format);
+                    result = LogError("-CheckData-FileRow-ColumnsIntType-Error",settings.fileName,settings.metadataFileName, (settings.rowIndex + 2), variable.name, variable.format,dataValue);
                 break;
                 case 'Decimal':
-                    result = LogError("-CheckData-FileRow-ColumnsDecimalType-Error",settings.fileName,settings.metadataFileName, (settings.rowIndex + 2), variable.name, variable.format);
+                    result = LogError("-CheckData-FileRow-ColumnsDecimalType-Error",settings.fileName,settings.metadataFileName, (settings.rowIndex + 2), variable.name, variable.format,dataValue);
                 break;
                 case 'Date':
-                    result = LogError("-CheckData-FileRow-ColumnsDateType-Error",settings.fileName,settings.metadataFileName, (settings.rowIndex + 2), variable.name, variable.format);
+                    result = LogError("-CheckData-FileRow-ColumnsDateType-Error",settings.fileName,settings.metadataFileName, (settings.rowIndex + 2), variable.name, variable.format,dataValue);
                 break;
                 case 'DateTime':
-                    result = LogError("-CheckData-FileRow-ColumnsDateTimeType-Error",settings.fileName,settings.metadataFileName, (settings.rowIndex + 2), variable.name, variable.format);
+                    result = LogError("-CheckData-FileRow-ColumnsDateTimeType-Error",settings.fileName,settings.metadataFileName, (settings.rowIndex + 2), variable.name, variable.format,dataValue);
                 break;
                 case 'Time':
-                result = LogError("-CheckData-FileRow-ColumnsTimeType-Error",settings.fileName,settings.metadataFileName, (settings.rowIndex + 2), variable.name, variable.format);
+                result = LogError("-CheckData-FileRow-ColumnsTimeType-Error",settings.fileName,settings.metadataFileName, (settings.rowIndex + 2), variable.name, variable.format,dataValue);
             break;
                 default: break;
+            }
+            return result;
+        }
+
+        //Validate single data cell KODELISTE
+        var ValidateOptions = function (dataValue,variable) {
+            var result = true;
+            if(variable.options != null && variable.options.length > 0) {
+                var exist = false;
+                variable.options.forEach(option => {
+                    if(option.name === dataValue) { exist = true; }
+                });
+                if(!exist) {
+                    result = LogError("-CheckData-FileRow-ColumnsOptions-Error",settings.fileName,settings.metadataFileName, (settings.rowIndex + 2), variable.name, dataValue); 
+                }
+            }
+            return result;
+        }
+
+        //Validate single empty data cell for missing BRUGERKODE
+        var ValidateMissing = function (dataValue,variable) {
+            var result = true;
+            if(variable.options != null && variable.options.length > 0) {
+                variable.options.forEach(option => {
+                    if(option.missing) { 
+                        result = LogError("-CheckData-FileRow-ColumnsMissing-Error",settings.fileName,settings.metadataFileName, (settings.rowIndex + 2), variable.name, option.name); 
+                    }
+                });
             }
             return result;
         }
@@ -363,23 +391,21 @@ function (n) {
             var dataRow = Object.values(data);
             for(var i = 0;i < dataRow.length;i++) {
                 var patternMatch = false;
-                if(dataRow[i].trim() !== ""){
-                    var variable = settings.table.variables[i];
+                var variable = settings.table.variables[i];
+                if(dataRow[i].trim() !== "") {
+                    if(!ValidateOptions(dataRow[i],variable)) { result = false; }
                     for(var j = 0;j < variable.regExps.length;j++) {
                         var patt = new RegExp(variable.regExps[j]);
                         if(patt.test(dataRow[i])) {
                             if(variable.appliedRegExp === -1) { variable.appliedRegExp = j; }
-                            result = ValidateValue(dataRow[i], patt, variable);
+                            if(!ValidateValue(dataRow[i], patt, variable)) { result = false; }
                             patternMatch = true;                            
                         }
                     }
                     if(!patternMatch) {
-                        result = ValidateFormat(dataRow[i],variable);
+                        if(!ValidateFormat(dataRow[i],variable)) { result = false; }
                     }
-                } else {
-                    // Check codelist if value can be missing / empty
-                    
-                }
+                } 
             }
             return result;
         }
