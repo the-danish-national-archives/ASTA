@@ -209,6 +209,12 @@ function (n) {
             if(isNaN(parseFloat(matches[0]))){
                 result = LogError("-CheckData-FileRow-ColumnsDecimalValue-Error",settings.fileName,settings.metadataFileName, (settings.rowIndex + 2), variable.name, dataValue);  
             }
+            else {
+                var currentRegExp = regExp.toString();
+                if(variable.regExps[variable.appliedRegExp] !== currentRegExp.substring(1,currentRegExp.length - 1)) {
+                    result = LogError("-CheckData-FileRow-ColumnsDecimal-InexpedientValue-Error",settings.fileName,settings.metadataFileName, (settings.rowIndex + 2), variable.name, dataValue);
+                }
+            }
             return result;
         }
 
@@ -219,6 +225,12 @@ function (n) {
             var date = new Date(parseInt(matches[1]),parseInt(matches[2]) - 1,parseInt(matches[3]));
             if(date.getFullYear() !== parseInt(matches[1]) || date.getMonth() !== (parseInt(matches[2]) - 1) || date.getDate() !== parseInt(matches[3])) {
                 result = LogError("-CheckData-FileRow-ColumnsDateValue-Error",settings.fileName,settings.metadataFileName, (settings.rowIndex + 2), variable.name, dataValue);
+            }
+            else {
+                var currentRegExp = regExp.toString();
+                if(variable.regExps[variable.appliedRegExp] !== currentRegExp.substring(1,currentRegExp.length - 1)) {
+                    result = LogError("-CheckData-FileRow-ColumnsDate-InexpedientValue-Error",settings.fileName,settings.metadataFileName, (settings.rowIndex + 2), variable.name, dataValue);
+                }
             }
             return result;
         }
@@ -262,6 +274,12 @@ function (n) {
             var date = new Date(year,month,day,hour,minute,second);
             if(date.getFullYear() !== year || date.getMonth() !== month || date.getDate() !== day || date.getHours() !== hour || date.getMinutes() !== minute || date.getSeconds() !== second) {
                 result = LogError("-CheckData-FileRow-ColumnsDateTimeValue-Error",settings.fileName,settings.metadataFileName, (settings.rowIndex + 2), variable.name, dataValue);
+            }
+            else {
+                var currentRegExp = regExp.toString();
+                if(variable.regExps[variable.appliedRegExp] !== currentRegExp.substring(1,currentRegExp.length - 1)) {
+                    result = LogError("-CheckData-FileRow-ColumnsDateTime-InexpedientValue-Error",settings.fileName,settings.metadataFileName, (settings.rowIndex + 2), variable.name, dataValue);
+                }
             }
             return result;
         }
@@ -347,13 +365,14 @@ function (n) {
                 var patternMatch = false;
                 if(dataRow[i].trim() !== ""){
                     var variable = settings.table.variables[i];
-                    variable.regExps.forEach(regex => {
-                        var patt = new RegExp(regex);
-                        if(patt.test(dataRow[i])){
+                    for(var j = 0;j < variable.regExps.length;j++) {
+                        var patt = new RegExp(variable.regExps[j]);
+                        if(patt.test(dataRow[i])) {
+                            if(variable.appliedRegExp === -1) { variable.appliedRegExp = j; }
                             result = ValidateValue(dataRow[i], patt, variable);
-                            patternMatch = true;
+                            patternMatch = true;                            
                         }
-                    });
+                    }
                     if(!patternMatch) {
                         result = ValidateFormat(dataRow[i],variable);
                     }
