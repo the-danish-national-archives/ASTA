@@ -38,6 +38,7 @@ function (n) {
             scriptPath: "./assets/scripts/{0}",
             resourceWinPath: "resources\\{0}",
             filePostfix: "{0}_ASTA_log.html",
+            batchFilePostfix: "{0}_ASTA_BatchLog.html",
             startLogData: "<!--Start Log Data-->",
             endLogData: "<!--End Log Data-->",
             errorsCounter: 0
@@ -129,7 +130,12 @@ function (n) {
         //Validate each delivery Package
         var Validate = function() {
             var deliveryPackagePath = settings.deliveryPackages[settings.runIndex];
-            console.log(`validate path: ${deliveryPackagePath}`); 
+            var logFilePath = settings.filePostfix.format(deliveryPackagePath);
+            if(fs.existsSync(logFilePath)) {                        
+                console.log(`Delete exists log: ${logFilePath}`);
+                fs.unlinkSync(logFilePath);
+            }
+            console.log(`validate path: ${deliveryPackagePath}`);             
             settings.structureCallback().validate(deliveryPackagePath);
             EnsureLogFile();            
         }
@@ -147,7 +153,8 @@ function (n) {
                 }
             });
             var folders = destPath.getFolders();
-            settings.filePath = (destPath.indexOf("\\") > -1) ? "{0}\\{1}.html".format(destPath, folders[folders.length - 1] + '_ASTA_BatchLog') : "{0}/{1}.html".format(destPath, folders[folders.length - 1] + '_ASTA_BatchLog');//settings.filePostfix.format(destPath);
+            var batchFileName = settings.batchFilePostfix.format(folders[folders.length - 1]);
+            settings.filePath = (destPath.indexOf("\\") > -1) ? "{0}\\{1}".format(destPath, batchFileName) : "{0}/{1}".format(destPath, batchFileName);
             if(fs.existsSync(settings.filePath)) {                        
                 console.log(`Delete exists log: ${settings.filePath}`);
                 fs.unlinkSync(settings.filePath);

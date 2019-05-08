@@ -355,7 +355,7 @@ function (n) {
                         }
                     });
                     if(!patternMatch) {
-                        result = ValidateFormat(dataRow[i],variable.type);
+                        result = ValidateFormat(dataRow[i],variable);
                     }
                 } else {
                     // Check codelist if value can be missing / empty
