@@ -847,6 +847,39 @@ function (n) {
             return result;
         }
 
+        //validate tables refernces
+        var ValidateTablesReference = function() {
+            var result = true;
+            var dataTableNames = [];
+            var dataTableFiles = [];
+            settings.data.forEach(table => { 
+                dataTableNames.push(table.name);
+                dataTableFiles.push(table.fileName);
+            });
+            settings.data.forEach(table => {
+                table.variables.forEach(variable => {
+                    if(variable.refData !== "") {
+                        var index = dataTableNames.indexOf(variable.refData);
+                        if(index < 0) {
+                            result = LogError("-CheckMetadata-FileReferences-RowDataReference-Error",table.fileName,variable.refData);
+                        }
+                        else {
+                            if(variable.refVariable !== "") {
+                                var exist = false;
+                                GetTableData(dataTableFiles[index]).variables.forEach(refVariable => {
+                                    if(refVariable.name === variable.refVariable) { exist = true; }
+                                });
+                                if(!exist) {
+                                    result = LogError("-CheckMetadata-FileReferences-RowVariableReference-Error",table.fileName,variable.refData,variable.refVariable);    
+                                }
+                            }                            
+                        }
+                    }
+                });
+            });
+            return result;
+        }
+
         //loop Data folder's table & Metadata files
         var ValidateData = function () {
             var result = true;
@@ -872,6 +905,7 @@ function (n) {
                     console.log("None exist Metadata file path: {0}".format(metadataFilePath));
                 }                              
             });
+            if(!ValidateTablesReference()) { result = false; }
             if(result) { LogInfo("-CheckMetadata-Ok",null); }
             return result; 
         }
