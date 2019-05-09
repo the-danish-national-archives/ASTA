@@ -10,6 +10,7 @@ function (n) {
         const fs = require('fs');
         const chardet = require('chardet');
         const csv = require('csv-parser');
+        const codeListPattern = /^\.[a-zA-Z]$/;
         const doubleApostrophePattern1 = /^"([\w\W\s]*)"$/;
         const doubleApostrophePattern2 = /["]{2,2}/g;
         const errorsMax = 40;
@@ -325,37 +326,6 @@ function (n) {
             return result;
         }
 
-        // Validate single data cell value format
-        var ValidateFormat = function (dataValue,variable) {
-            var result = true;
-            switch (variable.type) {
-                case 'String':
-                    {
-                        var regExSplit = variable.regExps[0].split(','); 
-                        var length = regExSplit[1].split('}');
-                        result = LogError("-CheckData-FileRow-ColumnsStringType-Error",settings.fileName, (settings.rowIndex + 2), variable.name, length[0]);
-                    }
-                break;
-                case 'Int':
-                    result = LogError("-CheckData-FileRow-ColumnsIntType-Error",settings.fileName,settings.metadataFileName, (settings.rowIndex + 2), variable.name, variable.format,dataValue);
-                break;
-                case 'Decimal':
-                    result = LogError("-CheckData-FileRow-ColumnsDecimalType-Error",settings.fileName,settings.metadataFileName, (settings.rowIndex + 2), variable.name, variable.format,dataValue);
-                break;
-                case 'Date':
-                    result = LogError("-CheckData-FileRow-ColumnsDateType-Error",settings.fileName,settings.metadataFileName, (settings.rowIndex + 2), variable.name, variable.format,dataValue);
-                break;
-                case 'DateTime':
-                    result = LogError("-CheckData-FileRow-ColumnsDateTimeType-Error",settings.fileName,settings.metadataFileName, (settings.rowIndex + 2), variable.name, variable.format,dataValue);
-                break;
-                case 'Time':
-                result = LogError("-CheckData-FileRow-ColumnsTimeType-Error",settings.fileName,settings.metadataFileName, (settings.rowIndex + 2), variable.name, variable.format,dataValue);
-            break;
-                default: break;
-            }
-            return result;
-        }
-
         //Validate single data cell KODELISTE
         var ValidateOptions = function (dataValue,variable) {
             var result = true;
@@ -371,6 +341,47 @@ function (n) {
             return result;
         }
 
+        // Validate single data cell value format
+        var ValidateFormat = function (dataValue,variable) {
+            var result = true;
+            switch (variable.type) {
+                case 'String':
+                    {
+                        var regExSplit = variable.regExps[0].split(','); 
+                        var length = regExSplit[1].split('}');
+                        result = LogError("-CheckData-FileRow-ColumnsStringType-Error",settings.fileName, (settings.rowIndex + 2), variable.name, length[0]);
+                    }
+                break;
+                case 'Int':
+                    if(!codeListPattern.test(dataValue)) {
+                        result = LogError("-CheckData-FileRow-ColumnsIntType-Error",settings.fileName,settings.metadataFileName, (settings.rowIndex + 2), variable.name, variable.format,dataValue);
+                    }
+                    else {
+                        result = ValidateOptions(dataValue,variable);
+                    }
+                break;
+                case 'Decimal':
+                    if(!codeListPattern.test(dataValue)) {
+                        result = LogError("-CheckData-FileRow-ColumnsDecimalType-Error",settings.fileName,settings.metadataFileName, (settings.rowIndex + 2), variable.name, variable.format,dataValue);
+                    }
+                    else {
+                        result = ValidateOptions(dataValue,variable);
+                    }
+                break;
+                case 'Date':
+                    result = LogError("-CheckData-FileRow-ColumnsDateType-Error",settings.fileName,settings.metadataFileName, (settings.rowIndex + 2), variable.name, variable.format,dataValue);
+                break;
+                case 'DateTime':
+                    result = LogError("-CheckData-FileRow-ColumnsDateTimeType-Error",settings.fileName,settings.metadataFileName, (settings.rowIndex + 2), variable.name, variable.format,dataValue);
+                break;
+                case 'Time':
+                result = LogError("-CheckData-FileRow-ColumnsTimeType-Error",settings.fileName,settings.metadataFileName, (settings.rowIndex + 2), variable.name, variable.format,dataValue);
+            break;
+                default: break;
+            }
+            return result;
+        }
+
         //Validate row at CSV file
         var ValidateRow = function(data) {
             var result = true;
@@ -379,8 +390,7 @@ function (n) {
             for(var i = 0;i < dataRow.length;i++) {
                 var patternMatch = false;
                 var variable = settings.table.variables[i];
-                if(dataRow[i].trim() !== "") {
-                    if(!ValidateOptions(dataRow[i],variable)) { result = false; }
+                if(dataRow[i].trim() !== "") {                    
                     for(var j = 0;j < variable.regExps.length;j++) {
                         var patt = new RegExp(variable.regExps[j]);
                         if(patt.test(dataRow[i])) {
