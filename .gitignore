@@ -16,3 +16,5 @@ RELEASES
 
 #Include specific files
 !*/release-builds/windows-installer/FileConverterAdmin.exe
+/dotNET/Athena/obj/Debug
+/dotNET/.vs/Athena/v15/Server/sqlite3
