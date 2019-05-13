@@ -18,3 +18,5 @@ RELEASES
 !*/release-builds/windows-installer/FileConverterAdmin.exe
 /dotNET/.vs/Athena/v15/Server/sqlite3
 /dotNET/Athena/obj/Debug
+/dotNET/.vs/Athena/v15
+/electron/assets/scripts/Athena.pdb
