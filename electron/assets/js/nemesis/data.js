@@ -8,6 +8,7 @@ function (n) {
     function (n) {
         const {ipcRenderer} = require('electron');
         const fs = require('fs');
+        const path = require('path');
         const os = require('os');
         const chardet = require('chardet');
         const csv = require('csv-parser');
