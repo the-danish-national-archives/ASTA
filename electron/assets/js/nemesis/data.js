@@ -10,6 +10,7 @@ function (n) {
         const fs = require('fs');
         const chardet = require('chardet');
         const csv = require('csv-parser');
+        const { spawn } = require('child_process');
         const codeListPattern = /^\.[a-zA-Z]$/;
         const doubleApostrophePattern1 = /^"([\w\W\s]*)"$/;
         const doubleApostrophePattern2 = /["]{2,2}/g;
@@ -26,6 +27,7 @@ function (n) {
             logEndWithErrorSpn:null,
             deliveryPackagePath: null,
             outputText: {},
+            ConvertBtn: null,
             logType: "data",
             fileName: null,
             metadataFileName: null,
@@ -534,6 +536,7 @@ function (n) {
                     settings.logCallback().section(settings.logType,folderName,settings.logEndWithErrorSpn.innerHTML);
                 }
                 settings.logResult = settings.logCallback().commit(settings.deliveryPackagePath);
+                settings.ConvertBtn.hidden = false;
         }
 
         //start flow validation
@@ -555,13 +558,25 @@ function (n) {
             return settings.logResult;
         }
 
-        var AddEvents = function (){
-            console.log('events ');
+        var AddEvents = function () {
+            settings.ConvertBtn.addEventListener('click', (event) => {
+                var appFilePath = "./assets/scripts/{0}".format("Athena.exe");
+                var athena = spawn(appFilePath, [settings.deliveryPackagePath,"c:\\"]);
+                athena.stdout.on('data', (data) => {
+                    console.log(`stdout: ${data}`);
+                });                  
+                athena.stderr.on('data', (data) => {
+                    console.log(`stderr: ${data}`);
+                });
+                athena.on('close', (code) => {
+                    console.log(`child process exited with code ${code}`);
+                });
+            });
         }
 
         //Model interfaces functions
         Rigsarkiv.Nemesis.Data = {
-            initialize: function (logCallback,outputErrorId,logStartId,logEndNoErrorId,logEndWithErrorId,outputPrefix) {            
+            initialize: function (logCallback,outputErrorId,logStartId,logEndNoErrorId,logEndWithErrorId,outputPrefix,convertId) {            
                 settings.logCallback = logCallback;
                 settings.outputErrorSpn = document.getElementById(outputErrorId);
                 settings.outputErrorText = settings.outputErrorSpn.innerHTML;
@@ -569,6 +584,7 @@ function (n) {
                 settings.logEndNoErrorSpn = document.getElementById(logEndNoErrorId);  
                 settings.logEndWithErrorSpn = document.getElementById(logEndWithErrorId);
                 settings.outputPrefix = outputPrefix;
+                settings.ConvertBtn = document.getElementById(convertId);
                 AddEvents();
             },
             callback: function () {
@@ -581,6 +597,7 @@ function (n) {
                         settings.runIndex = -1;
                         settings.dataFiles = [];
                         settings.totalErrors = 0;
+                        settings.ConvertBtn.hidden = true;
                         return Validate();
                     }  
                 };

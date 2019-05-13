@@ -10,7 +10,6 @@ function (n) {
         const fs = require('fs');
         const junk = require('junk');
         const domParser = require('xmldom');
-        const { spawn } = require('child_process');
         const deliveryPackagePattern = /^(FD.[1-9]{1}[0-9]{4,})$/;
         const dataTablePattern = /^(table[1-9]{1}([0-9]{0,}))$/;
         const dataFilePattern = /^(table[1-9]{1}([0-9]{0,}).csv)$/;
@@ -33,7 +32,6 @@ function (n) {
             logEndWithErrorSpn:null,
             deliveryPackagePath: null,
             testId: null,
-            ConverBtn: null,
             outputText: {},
             metadataFileName: "{0}.txt",
             dataFileName: "{0}.csv",
@@ -547,20 +545,7 @@ function (n) {
         }
 
         //add Event Listener to HTML elmenets
-        var AddEvents = function () {
-            settings.ConverBtn.addEventListener('click', (event) => {
-                var appFilePath = "./assets/scripts/{0}".format("Athena.exe");
-                var athena = spawn(appFilePath, [settings.deliveryPackagePath,"c:\\"]);
-                athena.stdout.on('data', (data) => {
-                    console.log(`stdout: ${data}`);
-                });                  
-                athena.stderr.on('data', (data) => {
-                    console.log(`stderr: ${data}`);
-                });
-                athena.on('close', (code) => {
-                    console.log(`child process exited with code ${code}`);
-                });
-            });
+        var AddEvents = function () {            
             settings.validateBtn.addEventListener('click', (event) => {
                 Reset();
                 if(settings.selectedPath == null || settings.pathDirTxt.value === "") { return; }                
@@ -579,7 +564,7 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Nemesis.Structure = {        
-            initialize: function (logCallback,metadataCallback,outputErrorId,selectDirectoryId,pathDirectoryId,validateId,logStartId,logEndNoErrorId,logEndWithErrorId,outputPrefix,testId,convertId) {            
+            initialize: function (logCallback,metadataCallback,outputErrorId,selectDirectoryId,pathDirectoryId,validateId,logStartId,logEndNoErrorId,logEndWithErrorId,outputPrefix,testId) {            
                 settings.logCallback = logCallback;
                 settings.metadataCallback = metadataCallback;
                 settings.outputErrorSpn = document.getElementById(outputErrorId);
@@ -592,7 +577,6 @@ function (n) {
                 settings.logEndWithErrorSpn = document.getElementById(logEndWithErrorId);
                 settings.outputPrefix = outputPrefix;
                 settings.testId = document.getElementById(testId);
-                settings.ConverBtn = document.getElementById(convertId);
                 $("span[id^='" + settings.outputPrefix + "']").each(function() {
                     settings.outputText[this.id] = $(this).html();
                     $(this).html("");
