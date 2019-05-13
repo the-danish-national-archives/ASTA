@@ -17,6 +17,8 @@
                                 <button id="nemesis-select-directory">Browse</button>
                                 <br/><br/>                                
                                 <button id="nemesis-validateBtn">Test mappe</button>
+                                <br/>
+                                <button id="nemesis-Athen-StartBtn">Athena</button>
                                 <span id="nemesis-output-Error" hidden="true"><br />Error: {0}</span>
                                 <span id="nemesis-output-Ok" hidden="true"><br/><strong>Bekræftelse!</strong> Log fil [{0}] er nu skabt og placeret i mappen [</span>
                                 <a id="nemesis-select-logFile" hidden="true"></a>
@@ -190,7 +192,7 @@
             Rigsarkiv.Rights.initialize("nemesis-output-Error");
             Rigsarkiv.Log.initialize("nemesis-output-Error","nemesis-output-Ok","nemesis-select-logFile","nemesis-output-Supplement", "nemesis-validate-Spinner");
             Rigsarkiv.Nemesis.Batch.initialize(Rigsarkiv.Rights.callback,Rigsarkiv.Nemesis.Structure.callback,"nemesis-output-Error","nemesis-select-batch-directory","nemesis-batch-path","nemesis-batch-validateBtn","nemesis-validate-Spinner","nemesis-batch-Ok","nemesis-batch-select-logFile","nemesis-batch-Supplement","nemesis-batch-test-panel");
-            Rigsarkiv.Nemesis.Structure.initialize(Rigsarkiv.Log.callback,Rigsarkiv.Nemesis.MetaData.callback,"nemesis-output-Error","nemesis-select-directory","nemesis-path","nemesis-validateBtn","nemesis-output-structure-logStart","nemesis-output-structure-logEndNoError","nemesis-output-structure-logEndWithError","nemesis-processing", "nemesis-test-id");
+            Rigsarkiv.Nemesis.Structure.initialize(Rigsarkiv.Log.callback,Rigsarkiv.Nemesis.MetaData.callback,"nemesis-output-Error","nemesis-select-directory","nemesis-path","nemesis-validateBtn","nemesis-output-structure-logStart","nemesis-output-structure-logEndNoError","nemesis-output-structure-logEndWithError","nemesis-processing", "nemesis-test-id", "nemesis-Athen-StartBtn");
             Rigsarkiv.Nemesis.MetaData.initialize(Rigsarkiv.Log.callback,Rigsarkiv.Nemesis.Data.callback,"nemesis-output-Error","nemesis-output-metadata-logStart","nemesis-output-metadata-logEndNoError","nemesis-output-metadata-logEndWithError","nemesis-processing");
             Rigsarkiv.Nemesis.Data.initialize(Rigsarkiv.Log.callback,"nemesis-output-Error","nemesis-output-data-logStart","nemesis-output-data-logEndNoError","nemesis-output-data-logEndWithError","nemesis-processing");             
           </script>
