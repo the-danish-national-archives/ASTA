@@ -8,6 +8,7 @@ function (n) {
     function (n) {
         const {ipcRenderer} = require('electron');
         const fs = require('fs');
+        const os = require('os');
         const chardet = require('chardet');
         const csv = require('csv-parser');
         const { spawn } = require('child_process');
@@ -21,6 +22,7 @@ function (n) {
             outputErrorSpn: null,
             outputErrorText: null,
             outputPrefix: null,
+            rightsCallback: null,
             logCallback: null,
             logStartSpn: null,
             logEndNoErrorSpn: null,
@@ -41,7 +43,10 @@ function (n) {
             data: [],
             errors: 0,
             totalErrors: 0,
-            parserStrictError: false
+            parserStrictError: false,
+            scriptPath: "./assets/scripts/{0}",
+            resourceWinPath: "resources\\{0}",
+            converterFileName: "Athena.exe"
         }
 
         //output system error messages
@@ -536,7 +541,7 @@ function (n) {
                     settings.logCallback().section(settings.logType,folderName,settings.logEndWithErrorSpn.innerHTML);
                 }
                 settings.logResult = settings.logCallback().commit(settings.deliveryPackagePath);
-                settings.ConvertBtn.hidden = false;
+                settings.ConvertBtn.hidden = !settings.rightsCallback().isAdmin;
         }
 
         //start flow validation
@@ -558,25 +563,33 @@ function (n) {
             return settings.logResult;
         }
 
+        //add Event Listener to HTML elmenets
         var AddEvents = function () {
             settings.ConvertBtn.addEventListener('click', (event) => {
-                var appFilePath = "./assets/scripts/{0}".format("Athena.exe");
-                var athena = spawn(appFilePath, [settings.deliveryPackagePath,"c:\\"]);
-                athena.stdout.on('data', (data) => {
-                    console.log(`stdout: ${data}`);
-                });                  
-                athena.stderr.on('data', (data) => {
-                    console.log(`stderr: ${data}`);
-                });
-                athena.on('close', (code) => {
-                    console.log(`child process exited with code ${code}`);
-                });
+                var converterFilePath = settings.scriptPath.format(settings.converterFileName);        
+                if(!fs.existsSync(converterFilePath)) {
+                    var rootPath = null;
+                    if(os.platform() == "win32") {
+                        rootPath = path.join('./');
+                        converterFilePath = path.join(rootPath,settings.resourceWinPath.format(settings.converterFileName));
+                    }
+                    if(os.platform() == "darwin") {
+                        var folders =  __dirname.split("/");
+                        rootPath = folders.slice(0,folders.length - 3).join("/");
+                        converterFilePath = "{0}/{1}".format(rootPath,settings.converterFileName);
+                    }
+                }        
+                var converter = spawn(converterFilePath, [settings.deliveryPackagePath]);
+                converter.stdout.on('data', (data) => console.log(`stdout: ${data}`));                  
+                converter.stderr.on('data', (data) => HandleError(new Error(data)));
+                converter.on('close', (code) => console.log(`converter process exited with code ${code}`));
             });
         }
 
         //Model interfaces functions
         Rigsarkiv.Nemesis.Data = {
-            initialize: function (logCallback,outputErrorId,logStartId,logEndNoErrorId,logEndWithErrorId,outputPrefix,convertId) {            
+            initialize: function (rightsCallback,logCallback,outputErrorId,logStartId,logEndNoErrorId,logEndWithErrorId,outputPrefix,convertId) {            
+                settings.rightsCallback = rightsCallback;
                 settings.logCallback = logCallback;
                 settings.outputErrorSpn = document.getElementById(outputErrorId);
                 settings.outputErrorText = settings.outputErrorSpn.innerHTML;
