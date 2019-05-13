@@ -38,6 +38,7 @@ function (n) {
             metadata: [],
             data: [],
             errors: 0,
+            tableErrors: 0,
             totalErrors: 0,
             parserStrictError: false
         }
@@ -105,6 +106,7 @@ function (n) {
 
             settings.logCallback().error(settings.logType,GetFolderName(),text);
             settings.errors += 1;
+            settings.tableErrors += 0;
             settings.totalErrors += 1;
             return false;
         }
@@ -385,7 +387,7 @@ function (n) {
         //Validate row at CSV file
         var ValidateRow = function(data) {
             var result = true;
-            console.log(Object.values(data));
+            //console.log(Object.values(data));
             var dataRow = Object.values(data);
             for(var i = 0;i < dataRow.length;i++) {
                 var patternMatch = false;
@@ -400,7 +402,11 @@ function (n) {
                         }
                     }
                     if(!patternMatch) {
-                        if(!ValidateFormat(dataRow[i],variable)) { result = false; }
+                        if(!ValidateFormat(dataRow[i],variable)) 
+                        { 
+                            result = false;
+                            settings.table.errorStop = true; 
+                        }
                     }
                 } 
             }
@@ -455,9 +461,10 @@ function (n) {
                 else {
                     if(!ValidateHeaders(headers)) { result = false; }
                 }
+                if(!result) { settings.table.errorStop = true; }
             })
             .on('data', (data) => {
-                if(result && settings.errors <= errorsMax && ValidateRow(data)) {
+                if(result && settings.tableErrors <= errorsMax && ValidateRow(data)) {
                     settings.data.push(data);
                 }
                 settings.rowIndex++;
@@ -466,13 +473,14 @@ function (n) {
                 if(e.message === "Row length does not match headers") {
                     result = LogError("-CheckData-FileRows-MatchLength-Error",settings.fileName,(settings.rowIndex + 2));
                     settings.parserStrictError = true;
+                    settings.table.errorStop = true;
                     ProcessDataSet();
                 }              
             })
             .on('end', () => { 
-                console.log("data output: ");
+                console.log("{0} data output: ".format(settings.fileName));
                 console.log(settings.data);
-                if(settings.errors > 0) { result = false; }
+                if(settings.tableErrors > 0) { result = false; }
                 if(!settings.parserStrictError) { ProcessDataSet(); }
             }); 
             return result;
@@ -488,7 +496,7 @@ function (n) {
                 settings.table = GetTableData();
                 settings.rowIndex = 0;
                 settings.data = [];
-                settings.errors = 0; 
+                settings.tableErrors = 0; 
                 console.log(`validate: ${dataFilePath}`);
                 ValidateDataSet(dataFilePath);
             }
@@ -528,12 +536,15 @@ function (n) {
         //commit end all validation by check every 500 msec 
         var CommitLog = function () {            
                 var folderName = GetFolderName();
-                if(settings.totalErrors === 0) {
+                if(settings.errors === 0) {
                     settings.logCallback().section(settings.logType,folderName,settings.logEndNoErrorSpn.innerHTML);
                 } else {
                     settings.logCallback().section(settings.logType,folderName,settings.logEndWithErrorSpn.innerHTML);
                 }
                 settings.logResult = settings.logCallback().commit(settings.deliveryPackagePath);
+                console.log(`total errors: ${settings.totalErrors}`);
+                console.log("metadata output: ");
+                console.log(settings.metadata);
         }
 
         //start flow validation
@@ -573,14 +584,15 @@ function (n) {
             },
             callback: function () {
                 return { 
-                    validate: function(path,outputText,metadata) 
+                    validate: function(path,outputText,metadata,errors) 
                     { 
                         settings.deliveryPackagePath = path;
                         settings.outputText = outputText;
                         settings.metadata = metadata;;                        
                         settings.runIndex = -1;
                         settings.dataFiles = [];
-                        settings.totalErrors = 0;
+                        settings.errors = 0;
+                        settings.totalErrors = errors;
                         return Validate();
                     }  
                 };

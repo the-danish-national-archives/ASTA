@@ -41,14 +41,14 @@ function (n) {
             defaultIndicesFiles: ["archiveIndex.xml","contextDocumentationIndex.xml"],
             defaultFolder: "FD.99999",
             logType: "structure",
-            errorsCounter: 0,
+            errors: 0,
             errorStop: false,
             documents: []            
         }
 
         //reset status & input fields
         var Reset = function () {
-            settings.errorsCounter = 0;
+            settings.errors = 0;
             settings.errorStop = false;
             settings.documents = [];
             $("span[id^='" + settings.outputPrefix + "']").hide();
@@ -524,13 +524,13 @@ function (n) {
                 settings.logCallback().section(settings.logType,folderName,settings.logStartSpn.innerHTML);            
                 ValidateName();
                 ValidateStructure();
-                 if(settings.errorsCounter === 0) {
+                 if(settings.errors === 0) {
                     settings.logCallback().section(settings.logType,folderName,settings.logEndNoErrorSpn.innerHTML);
                 } else {
                     settings.logCallback().section(settings.logType,folderName,settings.logEndWithErrorSpn.innerHTML);                    
                 }
                 if(!settings.errorStop) { 
-                    return settings.metadataCallback().validate(settings.deliveryPackagePath,settings.outputText); 
+                    return settings.metadataCallback().validate(settings.deliveryPackagePath,settings.outputText,settings.errors); 
                 } 
                 else {
                     return settings.logCallback().commit(settings.deliveryPackagePath);

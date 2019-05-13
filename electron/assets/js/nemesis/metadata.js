@@ -43,7 +43,8 @@ function (n) {
             fileName: null,
             fileKeys: [],
             fileReferences: [],
-            errorsCounter: 0,
+            errors: 0,
+            totalErrors: 0,
             errorStop: false,
             dataPathPostfix: "Data",
             metadataLabels: ["SYSTEMNAVN","DATAFILNAVN","DATAFILBESKRIVELSE","NØGLEVARIABEL","REFERENCE","VARIABEL","VARIABELBESKRIVELSE","KODELISTE","BRUGERKODE"],
@@ -119,6 +120,7 @@ function (n) {
 
             settings.logCallback().error(settings.logType,GetFolderName(),text);
             settings.errors += 1;
+            settings.totalErrors += 1;
             return false;
         }
 
@@ -918,14 +920,14 @@ function (n) {
                 var folderName = GetFolderName();
                 settings.logCallback().section(settings.logType,folderName,settings.logStartSpn.innerHTML);            
                 ValidateData();
-                console.log("metadata output: ");
-                console.log(settings.data);
-                if(settings.errorsCounter === 0) {
+                //console.log("metadata output: ");
+                //console.log(settings.data);
+                if(settings.errors === 0) {
                     settings.logCallback().section(settings.logType,folderName,settings.logEndNoErrorSpn.innerHTML);
                 } else {
                     settings.logCallback().section(settings.logType,folderName,settings.logEndWithErrorSpn.innerHTML);
                 } 
-                return settings.dataCallback().validate(settings.deliveryPackagePath,settings.outputText,settings.data);               
+                return settings.dataCallback().validate(settings.deliveryPackagePath,settings.outputText,settings.data,settings.totalErrors);               
             }
             catch(err) 
             {
@@ -953,12 +955,14 @@ function (n) {
             },
             callback: function () {
                 return { 
-                    validate: function(path,outputText) 
+                    validate: function(path,outputText,errors) 
                     { 
                         settings.deliveryPackagePath = path;
                         settings.outputText = outputText;
                         settings.data = [];
                         settings.errorStop = false;
+                        settings.errors = 0;
+                        settings.totalErrors = errors;
                         return Validate();
                     }  
                 };
