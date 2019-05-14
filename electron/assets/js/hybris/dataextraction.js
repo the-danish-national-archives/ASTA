@@ -111,7 +111,7 @@ function (n) {
             });
         }
 
-        //Update script file with new dtat table path & file name
+        //Update script file with new data table path & file name
         var UpdateScript = function() {
             var srcFilePath = settings.dataFolderPath;
             srcFilePath += (srcFilePath.indexOf("\\") > -1) ? "\\{0}".format(GetScriptFileName()) : "/{0}".format(GetScriptFileName());
