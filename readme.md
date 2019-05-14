@@ -27,6 +27,11 @@ This project is a minimalistic app created using Electron. It follows the conven
 * * The sidebar (menu) logic is handled in the menu.js file.
 * * All menu items have their own HTML file.
 
+## Guide to packaging
+In order to make a package of the program, use the scripts mentioned in the package.json file.
+Under the section 'scripts' there is listed scripts for both packaging and creation of the installer files.
+
 ## Windows .exe issue
 There can be an issue (the app will open twice) with creating a new .exe file for Windows, when one already exists. 
 It is recommended to delete the contents of the release folder, even though the script is set to overwrite the contents.
+
