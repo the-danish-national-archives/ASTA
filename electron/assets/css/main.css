@@ -301,4 +301,7 @@ a.selected:hover {
     }
   }
 
+  .trinHeader {
+    float:right;
+  }
   /* Spinner END */

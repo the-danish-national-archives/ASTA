@@ -31,6 +31,12 @@ function (n) {
             outputUnvalidDeliveryPackageText: null,
             outputOkSpn: null,
             outputOkText: null,
+            outputStatisticsHeaderTrin1Spn: null,
+            outputStatisticsHeaderTrin1Text: null,
+            outputStatisticsHeaderTrin2Spn: null,
+            outputStatisticsHeaderTrin2Text: null,
+            outputStatisticsHeaderTrin3Spn: null,
+            outputStatisticsHeaderTrin3Text: null,
             statisticsTab: null,
             outputSupplementSpn: null,
             selectDeliveryPackage: null,
@@ -113,6 +119,11 @@ function (n) {
                 }
             })
             settings.nextBtn.addEventListener('click', (event) => {
+                var folders = settings.deliveryPackagePath.getFolders(); 
+                var folder = folders[folders.length - 1];           
+                settings.outputStatisticsHeaderTrin1Spn.innerHTML = settings.outputStatisticsHeaderTrin1Text.format(folder);
+                settings.outputStatisticsHeaderTrin2Spn.innerHTML = settings.outputStatisticsHeaderTrin2Text.format(folder);
+                settings.outputStatisticsHeaderTrin3Spn.innerHTML = settings.outputStatisticsHeaderTrin3Text.format(folder);
                 settings.statisticsTab.click();
             });
             settings.selectDirBtn.addEventListener('click', (event) => {
@@ -132,7 +143,7 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Hybris.Structure = {        
-            initialize: function (selectDirectoryId,pathDirectoryId,deliveryPackageId,okId,outputErrorId,outputExistsId,outputRequiredPathId,outputUnvalidDeliveryPackageId,outputOkId,selectDeliveryPackageId,nextId,statisticsTabId,outputSupplementId) {            
+            initialize: function (selectDirectoryId,pathDirectoryId,deliveryPackageId,okId,outputErrorId,outputExistsId,outputRequiredPathId,outputUnvalidDeliveryPackageId,outputOkId,selectDeliveryPackageId,nextId,statisticsTabId,outputSupplementId,outputStatisticsHeaderTrin1,outputStatisticsHeaderTrin2,outputStatisticsHeaderTrin3) {            
                 settings.selectDirBtn =  document.getElementById(selectDirectoryId);
                 settings.pathDirTxt =  document.getElementById(pathDirectoryId);
                 settings.deliveryPackageTxt =  document.getElementById(deliveryPackageId);
@@ -151,6 +162,12 @@ function (n) {
                 settings.nextBtn =  document.getElementById(nextId);
                 settings.statisticsTab = document.getElementById(statisticsTabId);
                 settings.outputSupplementSpn =  document.getElementById(outputSupplementId);
+                settings.outputStatisticsHeaderTrin1Spn = document.getElementById(outputStatisticsHeaderTrin1);
+                settings.outputStatisticsHeaderTrin1Text = settings.outputStatisticsHeaderTrin1Spn.innerHTML;
+                settings.outputStatisticsHeaderTrin2Spn = document.getElementById(outputStatisticsHeaderTrin2);
+                settings.outputStatisticsHeaderTrin2Text = settings.outputStatisticsHeaderTrin1Spn.innerHTML;
+                settings.outputStatisticsHeaderTrin3Spn = document.getElementById(outputStatisticsHeaderTrin3);
+                settings.outputStatisticsHeaderTrin3Text = settings.outputStatisticsHeaderTrin1Spn.innerHTML;
                 AddEvents();
             },
             callback: function () {
