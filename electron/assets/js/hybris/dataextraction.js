@@ -88,6 +88,13 @@ function (n) {
             return folders[folders.length - 1];
         }
 
+        //get selected Statistics File path
+        var GetFolderPath = function() {
+            var filePath = settings.selectedStatisticsFilePath[0];
+            return filePath.substring(0,filePath.lastIndexOf((filePath.indexOf("\\") > -1) ? "\\" : "/"));
+        }
+
+
         //get renamed script file
         var GetScriptFileName = function() {
             var fileName = GetFileName();
@@ -96,31 +103,16 @@ function (n) {
             return "{0}.{1}".format(fileNameNoExt,scriptExt);        
         }
 
-        //Copy Statistics file to data table folder
-        var CopyData = function(fileName) {
-            var filePath = settings.selectedStatisticsFilePath[0];
-            var folderPath = filePath.substring(0,filePath.lastIndexOf((filePath.indexOf("\\") > -1) ? "\\" : "/"));
-            
-            console.log("copy file " + fileName + " to  " + folderPath);  
-            var srcFilePath = (folderPath.indexOf("\\") > -1) ? "{0}\\{1}".format(folderPath,fileName) : "{0}/{1}".format(folderPath,fileName);   
-            var destFilePath = (settings.dataFolderPath.indexOf("\\") > -1) ? "{0}\\{1}".format(settings.dataFolderPath,fileName) : "{0}/{1}".format(settings.dataFolderPath,fileName);
-            fs.copyFile(srcFilePath , destFilePath, (err) => {
-                if (err) {
-                    HandleError(err);
-                }
-            });
-        }
-
         //Update script file with new data table path & file name
         var UpdateScript = function() {
-            var srcFilePath = settings.dataFolderPath;
+            var srcFilePath = GetFolderPath();
             srcFilePath += (srcFilePath.indexOf("\\") > -1) ? "\\{0}".format(GetScriptFileName()) : "/{0}".format(GetScriptFileName());
             fs.readFile(srcFilePath, (err, data) => {
                 if (err) {
                     HandleError(err);
                 }
                 else {
-                     var filePath = settings.dataFolderPath;
+                    var filePath = GetFolderPath();
                     filePath += (filePath.indexOf("\\") > -1) ? "\\{0}".format(GetScriptFileName()) : "/{0}".format(GetScriptFileName());
                     var fileName = GetFileName();  
                     var folderPath = settings.dataFolderPath;
@@ -129,6 +121,7 @@ function (n) {
                         folderPath = (folderPath.indexOf("\\") > -1) ? "{0}\\".format(folderPath) : "{0}/".format(folderPath);
                     }
                     var updatedData = data.toString().format(folderPath,fileName.substring(0,fileName.indexOf(".")));
+                    console.log(`Update script file ${filePath}`);
                     fs.writeFile(filePath, updatedData, (err) => {
                         if (err) {
                             HandleError(err);
@@ -137,7 +130,7 @@ function (n) {
                             var scriptFileName = GetScriptFileName();
                             settings.outputStatisticsOkCopyScriptSpn.innerHTML = settings.outputStatisticsOkCopyScriptText.format(settings.scriptType,scriptFileName,GetFileName());
                             settings.outputStatisticsOkCopyScriptInfoSpn.innerHTML = settings.outputStatisticsOkCopyScriptInfoText.format(scriptFileName, settings.scriptApplication);
-                            settings.okScriptDataPath.innerHTML = settings.dataFolderPath;
+                            settings.okScriptDataPath.innerHTML = GetFolderPath();
                             settings.scriptPanel1.hidden = true;
                             settings.scriptPanel2.hidden = false;
                         }
@@ -161,17 +154,18 @@ function (n) {
                     rootPath = folders.slice(0,folders.length - 4).join("/");
                     scriptFilePath = "{0}/{1}".format(rootPath,settings.scriptFileName);
                 }
-            }        
-            console.log(`copy script file ${settings.scriptFileName} to ${settings.dataFolderPath}`);
-            var destFilePath = settings.dataFolderPath;
+            }  
+            var destFilePath = GetFolderPath();
             destFilePath += (destFilePath.indexOf("\\") > -1) ? "\\{0}".format(scriptFileName) : "/{0}".format(scriptFileName);
+            console.log(`copy script file ${settings.scriptFileName} to ${destFilePath}`);
             fs.copyFile(scriptFilePath, destFilePath, (err) => {
                 if (err) {
-                HandleError(err);
+                    HandleError(err);
                 }
                 else {
                     var scriptFileName = GetScriptFileName();
-                    console.log(scriptFileName + ' was copied to '+ settings.dataFolderPath);                
+                    var destFilePath = GetFolderPath();
+                    console.log(scriptFileName + ' was copied to ' + destFilePath);                
                     UpdateScript();                
                 }            
             });       
@@ -179,8 +173,7 @@ function (n) {
         
         //copy script file related to selected Statistics file
         var EnsureScript = function() {
-            var filePath = settings.selectedStatisticsFilePath[0];
-            var folderPath = filePath.substring(0,filePath.lastIndexOf((filePath.indexOf("\\") > -1) ? "\\" : "/"));
+            var folderPath = GetFolderPath();
             fs.readdir(folderPath, (err, files) => {
                 if (err) {
                     HandleError(err);
@@ -214,8 +207,6 @@ function (n) {
                         ipcRenderer.send('open-confirm-dialog',settings.outputStatisticsSASWarningTitle.innerHTML,settings.outputStatisticsSASWarningText.innerHTML);
                         return;
                     }
-                    if(sasCatalogExists && fileExt === "sas7bdat") {  CopyData(sasCatalogFileName); }
-                    CopyData(fileName);
                     CopyScript();     
                 }
             });
@@ -318,7 +309,7 @@ function (n) {
                     else {
                         if(fileValidate) 
                         { 
-                            ipcRenderer.send('open-warning-dialog',settings.outputScriptCloseApplicationWarningTitle.innerHTML,settings.outputScriptCloseApplicationWarningText.innerHTML);
+                            //ipcRenderer.send('open-warning-dialog',settings.outputScriptCloseApplicationWarningTitle.innerHTML,settings.outputScriptCloseApplicationWarningText.innerHTML);
                             settings.outputScriptOkSpn.innerHTML = settings.outputScriptOkText.format(GetFileName());
                             settings.outputScriptOkSpn.hidden = false;
                             settings.nextBtn.hidden = false;
@@ -331,7 +322,7 @@ function (n) {
         //add Event Listener to HTML elmenets
         var AddEvents = function () {
             settings.okScriptDataPath.addEventListener('click', (event) => {
-                shell.openItem(settings.dataFolderPath);
+                shell.openItem(GetFolderPath());
             })
             settings.okScriptBtn.addEventListener('click', (event) => {
                 EnsureExport();
@@ -349,7 +340,7 @@ function (n) {
                 }                     
             })
             settings.selectStatisticsFileBtn.addEventListener('click', (event) => {
-            ipcRenderer.send('dataextraction-open-file-dialog');
+                ipcRenderer.send('dataextraction-open-file-dialog');
             })
             ipcRenderer.on('dataextraction-selected-statistics-file', (event, path) => {
                 settings.selectedStatisticsFilePath = path; 
@@ -358,7 +349,6 @@ function (n) {
             })
             ipcRenderer.on('confirm-dialog-selection', (event, index) => {
                 if(index === 0) {
-                    CopyData(GetFileName());
                     CopyScript();
                 } 
                 if(index === 1) { ResetData(); }            
