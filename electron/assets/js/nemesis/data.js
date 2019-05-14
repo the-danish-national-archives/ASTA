@@ -47,7 +47,8 @@ function (n) {
             parserStrictError: false,
             scriptPath: "./assets/scripts/{0}",
             resourceWinPath: "resources\\{0}",
-            converterFileName: "Athena.exe"
+            converterFileName: "Athena.exe",
+            metadataFilePostfix: "{0}.json"
         }
 
         //output system error messages
@@ -533,7 +534,7 @@ function (n) {
             return result; 
         }
 
-        //commit end all validation by check every 500 msec 
+        //commit end all validation 
         var CommitLog = function () {            
                 var folderName = GetFolderName();
                 if(settings.totalErrors === 0) {
@@ -542,7 +543,16 @@ function (n) {
                     settings.logCallback().section(settings.logType,folderName,settings.logEndWithErrorSpn.innerHTML);
                 }
                 settings.logResult = settings.logCallback().commit(settings.deliveryPackagePath);
-                settings.ConvertBtn.hidden = !settings.rightsCallback().isAdmin;
+                if(settings.rightsCallback().isAdmin && settings.dataFiles.length > 0) { 
+                    var enableConvert = true;
+                    settings.metadata.forEach(table => {
+                        if(table.errorStop) { enableConvert = false; }
+                    });
+                    if(enableConvert) {
+                        fs.writeFileSync(settings.metadataFilePostfix.format(settings.deliveryPackagePath), JSON.stringify(settings.metadata)); 
+                        settings.ConvertBtn.hidden = false; 
+                    }
+                }
         }
 
         //start flow validation
