@@ -35,3 +35,4 @@ Under the section 'scripts' there is listed scripts for both packaging and creat
 There can be an issue (the app will open twice) with creating a new .exe file for Windows, when one already exists. 
 It is recommended to delete the contents of the release folder, even though the script is set to overwrite the contents.
 
+![Branching](/docs/Branching.png?raw=true "Branching")
