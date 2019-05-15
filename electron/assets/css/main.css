@@ -18,7 +18,7 @@ body {
 }
 
 a {
-    text-decoration: underline black;
+    text-decoration: underline blue;
     cursor: pointer;
 }
 
@@ -32,14 +32,17 @@ button {
     padding-bottom: 1px;
     padding-left: 10px;
     border-radius: 6px;
-    height: 23px;
+    height: 30px;
+    margin-top: 5px;
 }
 
 input[type=text] {
     border-radius: 6px;
-    border: solid 0.5px #49897f;
-    height: 20px;
+    border: solid 0.5px #b2b2b2;
+    height: 27px;
+    padding-left:5px;
     font-family: SourceSansPro;
+    margin-bottom: 5px;
 }
 
 .path {
@@ -50,6 +53,9 @@ input[type=text] {
     font-family: SourceSansProBold;
 }
 
+.gråTekst {
+    color: #b2b2b2;
+}
 
 i {
     margin-left: 5px;
@@ -65,7 +71,7 @@ i {
     padding-left: 5%;
     margin-top: 0px;
     margin-bottom: 0px;
-    
+    color: #49897f;
 }
 
 .menuBtn {
@@ -90,8 +96,19 @@ i {
     color: #8a6d3b;
 }
 
+.confirmation {
+    background-color: lightgreen;
+    border: solid 0.5px darkgreen;
+    color: #202a1a;
+    font-size: 30px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 7px;
+    padding-right: 5px;
+}
+
 #content {
-    padding-left: 150px;
+    padding-left: 200px;
     margin: -8px;
     margin-top: -10px;
 }
@@ -99,17 +116,20 @@ i {
 /* Table */
 
 th {
-    background-color: #49897f;
+    background-color: #6db1a7;
     border: 1px solid black;
     padding: 6px;
 }
 
 td {
     border: 1px solid black;
+    padding: 6px;
 }
 
 table {
     border-collapse: collapse;
+    margin-bottom: 6px;
+    Margin-top:6px;
 }
 
 /* Table END */
@@ -118,7 +138,7 @@ table {
 
 h1 {
     font-size: 40px;
-    color: #49897f;
+    color: #6db1a7;
 }
 
 h3 {
@@ -139,12 +159,12 @@ h4 {
 
 .side-nav {
     height: 100%;
-    width: 150px;
+    width: 200px;
     position: fixed;
     top: 0;
     left: 0;
-    background-color: #000;
-    opacity: 0.9;
+    background-color: #000000;
+    /*opacity: 0.9;*/
     overflow-x: hidden;
     padding-top: 20px;
 }
@@ -173,7 +193,7 @@ a.selected:hover {
 #logo {
     width: 130px;
     height: 70px;
-    margin: 0px 0px 0px 10px;
+    margin: 0px 0px 0px 35px;
 }
 
 /* Side navigation menu END */
@@ -181,8 +201,9 @@ a.selected:hover {
 /* Header */
 
 .header {
-    background-color: rgb(26, 24, 24);
-    height: 116px;
+    /*background-color: rgb(26, 24, 24);*/
+    background-color: #000000;
+    height: 116.5px;
 }
 
 /* Header END */
