@@ -35,4 +35,9 @@ Under the section 'scripts' there is listed scripts for both packaging and creat
 There can be an issue (the app will open twice) with creating a new .exe file for Windows, when one already exists. 
 It is recommended to delete the contents of the release folder, even though the script is set to overwrite the contents.
 
+## Branching strategy
+In order to make the program development proceed as smoothly as possible, the branching strategy in the picture below have been implemented
+
 ![Branching](https://github.com/the-danish-national-archives/1007plus/blob/master/docs/Branching.PNG "Branching")
+
+In the beginning of a sprint (or when the branch is needed), a branch is created from the master branch to the seperate programs. At the end of the sprint these branches are merged back into master. If needed branches can be made from the individual program branches.
