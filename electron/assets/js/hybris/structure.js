@@ -19,7 +19,6 @@ function (n) {
             selectedPath: null,
             deliveryPackageTxt: null,
             okBtn: null,
-            nextBtn: null,
             outputErrorSpn: null,
             outputErrorText: null,
             outputExistsSpn: null,
@@ -37,6 +36,8 @@ function (n) {
             outputStatisticsHeaderTrin2Text: null,
             outputStatisticsHeaderTrin3Spn: null,
             outputStatisticsHeaderTrin3Text: null,
+            outputStatisticsHeaderInformation2Spn: null,
+            outputStatisticsHeaderInformation2Text: null,
             statisticsTab: null,
             outputSupplementSpn: null,
             selectDeliveryPackage: null,
@@ -52,7 +53,6 @@ function (n) {
             settings.outputOkSpn.hidden = true;
             settings.outputSupplementSpn.hidden = true;
             settings.selectDeliveryPackage.hidden = true;
-            settings.nextBtn.hidden = true;
         }
 
         //Output structure creation status
@@ -64,7 +64,6 @@ function (n) {
             settings.outputOkSpn.hidden = false;
             settings.outputOkSpn.innerHTML = settings.outputOkText.format(folderName);
             settings.outputSupplementSpn.hidden = false;
-            settings.nextBtn.hidden = false;
         }
 
         //create delivery Package folder Structure
@@ -115,35 +114,34 @@ function (n) {
                     ipcRenderer.send('open-error-dialog',settings.outputUnvalidDeliveryPackageTitle.innerHTML,settings.outputUnvalidDeliveryPackageText.innerHTML);
                 }
                 if(settings.selectedPath != null && settings.pathDirTxt.value !== "" && (settings.deliveryPackageTxt.value === "" || (settings.deliveryPackageTxt.value !== "" && pattern.test(settings.deliveryPackageTxt.value)))) {
-                EnsureStructure();
+                    EnsureStructure();
+                    var folders = settings.deliveryPackagePath.getFolders(); 
+                    var folder = folders[folders.length - 1];           
+                    settings.outputStatisticsHeaderTrin1Spn.innerHTML = settings.outputStatisticsHeaderTrin1Text.format(folder);
+                    settings.outputStatisticsHeaderTrin2Spn.innerHTML = settings.outputStatisticsHeaderTrin2Text.format(folder);
+                    settings.outputStatisticsHeaderTrin3Spn.innerHTML = settings.outputStatisticsHeaderTrin3Text.format(folder);
+                    settings.outputStatisticsHeaderInformation2Spn.innerHTML = settings.outputStatisticsHeaderInformation2Text.format(folder);
+                    settings.statisticsTab.click();
                 }
-            })
-            settings.nextBtn.addEventListener('click', (event) => {
-                var folders = settings.deliveryPackagePath.getFolders(); 
-                var folder = folders[folders.length - 1];           
-                settings.outputStatisticsHeaderTrin1Spn.innerHTML = settings.outputStatisticsHeaderTrin1Text.format(folder);
-                settings.outputStatisticsHeaderTrin2Spn.innerHTML = settings.outputStatisticsHeaderTrin2Text.format(folder);
-                settings.outputStatisticsHeaderTrin3Spn.innerHTML = settings.outputStatisticsHeaderTrin3Text.format(folder);
-                settings.statisticsTab.click();
             });
             settings.selectDirBtn.addEventListener('click', (event) => {
                 Reset();
                 ipcRenderer.send('structure-open-file-dialog');
-            })
+            });
             ipcRenderer.on('structure-selected-directory', (event, path) => {
                 settings.selectedPath = path; 
                 console.log(`selected path: ${path}`); 
                 settings.pathDirTxt.value = settings.selectedPath;
-            })
+            });
             settings.selectDeliveryPackage.addEventListener('click', (event) => {
             var folderPath = settings.selectedPath[0];
                 shell.openItem(folderPath);
-            }) 
+            }); 
         }
 
         //Model interfaces functions
         Rigsarkiv.Hybris.Structure = {        
-            initialize: function (selectDirectoryId,pathDirectoryId,deliveryPackageId,okId,outputErrorId,outputExistsId,outputRequiredPathId,outputUnvalidDeliveryPackageId,outputOkId,selectDeliveryPackageId,nextId,statisticsTabId,outputSupplementId,outputStatisticsHeaderTrin1,outputStatisticsHeaderTrin2,outputStatisticsHeaderTrin3) {            
+            initialize: function (selectDirectoryId,pathDirectoryId,deliveryPackageId,okId,outputErrorId,outputExistsId,outputRequiredPathId,outputUnvalidDeliveryPackageId,outputOkId,selectDeliveryPackageId,statisticsTabId,outputSupplementId,outputStatisticsHeaderTrin1,outputStatisticsHeaderTrin2,outputStatisticsHeaderTrin3,outputStatisticsHeaderInformation2) {            
                 settings.selectDirBtn =  document.getElementById(selectDirectoryId);
                 settings.pathDirTxt =  document.getElementById(pathDirectoryId);
                 settings.deliveryPackageTxt =  document.getElementById(deliveryPackageId);
@@ -159,7 +157,6 @@ function (n) {
                 settings.outputOkSpn =  document.getElementById(outputOkId);
                 settings.outputOkText = settings.outputOkSpn.innerHTML;
                 settings.selectDeliveryPackage = document.getElementById(selectDeliveryPackageId);
-                settings.nextBtn =  document.getElementById(nextId);
                 settings.statisticsTab = document.getElementById(statisticsTabId);
                 settings.outputSupplementSpn =  document.getElementById(outputSupplementId);
                 settings.outputStatisticsHeaderTrin1Spn = document.getElementById(outputStatisticsHeaderTrin1);
@@ -168,6 +165,8 @@ function (n) {
                 settings.outputStatisticsHeaderTrin2Text = settings.outputStatisticsHeaderTrin1Spn.innerHTML;
                 settings.outputStatisticsHeaderTrin3Spn = document.getElementById(outputStatisticsHeaderTrin3);
                 settings.outputStatisticsHeaderTrin3Text = settings.outputStatisticsHeaderTrin1Spn.innerHTML;
+                settings.outputStatisticsHeaderInformation2Spn = document.getElementById(outputStatisticsHeaderInformation2);
+                settings.outputStatisticsHeaderInformation2Text = settings.outputStatisticsHeaderInformation2Spn.innerHTML;
                 AddEvents();
             },
             callback: function () {
