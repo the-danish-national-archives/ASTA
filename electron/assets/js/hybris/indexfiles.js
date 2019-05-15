@@ -29,7 +29,9 @@ function (n) {
             IndecesPath: null,
             outputOkSpn: null,
             outputOkText: null,
-            selectDeliveryPackage: null
+            selectDeliveryPackage: null,
+            outputOkInformationTitle: null,
+            outputOkInformationText: null
         }
 
         //output system error messages
@@ -81,6 +83,7 @@ function (n) {
                             var selectedContextDocumentationIndexFileName = GetFileName(settings.selectedContextDocumentationIndexFilePath);
                             settings.outputOkSpn.innerHTML =  settings.outputOkText.format(selectedArchiveIndexFileName,selectedContextDocumentationIndexFileName);
                             settings.selectDeliveryPackage.innerHTML = "[{0}]".format(settings.IndecesPath);
+                            ipcRenderer.send('open-information-dialog',settings.outputOkInformationTitle.innerHTML,settings.outputOkInformationText.innerHTML);
                         }
                     });
                 }
@@ -110,7 +113,7 @@ function (n) {
                 if(settings.pathArchiveIndexFileTxt.value === "" || settings.pathContextDocumentationIndexFileTxt.value === "") {
                     ipcRenderer.send('open-error-dialog',settings.outputRequiredPathTitle.innerHTML,settings.outputRequiredPathText.innerHTML);
                 }
-            if(settings.selectedArchiveIndexFilePath != null && settings.selectedContextDocumentationIndexFilePath != null && settings.pathArchiveIndexFileTxt.value !== "" && settings.pathContextDocumentationIndexFileTxt.value !== "") { 
+                if(settings.selectedArchiveIndexFilePath != null && settings.selectedContextDocumentationIndexFilePath != null && settings.pathArchiveIndexFileTxt.value !== "" && settings.pathContextDocumentationIndexFileTxt.value !== "") { 
                     EnsureFiles(); 
                 }
             })
@@ -121,7 +124,7 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Hybris.IndexFiles = {
-            initialize: function (structureCallback,selectArchiveIndexFileId,pathSArchiveIndexFileId,selectContextDocumentationIndexFileId,pathContextDocumentationIndexFileId,indexFilesOkBtn,outputErrorId,outputRequiredPathId,outputOkId,selectDeliveryPackageId) {
+            initialize: function (structureCallback,selectArchiveIndexFileId,pathSArchiveIndexFileId,selectContextDocumentationIndexFileId,pathContextDocumentationIndexFileId,indexFilesOkBtn,outputErrorId,outputRequiredPathId,outputOkId,selectDeliveryPackageId,outputOkInformationPrefixId) {
                 settings.structureCallback = structureCallback;
                 settings.selectArchiveIndexFileBtn = document.getElementById(selectArchiveIndexFileId);
                 settings.pathArchiveIndexFileTxt = document.getElementById(pathSArchiveIndexFileId);
@@ -135,6 +138,8 @@ function (n) {
                 settings.outputOkSpn =  document.getElementById(outputOkId);
                 settings.outputOkText = settings.outputOkSpn.innerHTML;
                 settings.selectDeliveryPackage = document.getElementById(selectDeliveryPackageId);
+                settings.outputOkInformationTitle = document.getElementById(outputOkInformationPrefixId + "-Title");
+                settings.outputOkInformationText = document.getElementById(outputOkInformationPrefixId + "-Text");
                 AddEvents();
             }
         }
