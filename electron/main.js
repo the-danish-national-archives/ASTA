@@ -44,9 +44,9 @@ function createWindow() {
       {
         type: 'warning',
         cancelId: 1,
-        buttons: ['FORTSÆT', 'FORTRYD'],
+        buttons: ['LUK', 'FORTRYD'],
         title: 'Programmet lukkes',
-        message: 'Du er ved at lukke programmet ned. Er du sikker på at du vil afbryde programmet? OBS: Hvis programmet lukkes, mens du er i gang med at lave et dataudtræk med Hybris, vil dataudtrækket ikke blive færdiggjort og du skal skabe afleveringspakken igen helt forfra. Det du har udført i Hybris allerede vil blive gemt. OBS: Husk at Hybris skal forblive åben, samtidig med at du kører export scriptet i dit statistikprogram i TRIN 2 under et dataudtræk.'
+        message: 'Du er ved at lukke programmet ned. Er du sikker?'
      });
      if(choice == 1){
        e.preventDefault();
