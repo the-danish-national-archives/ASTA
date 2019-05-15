@@ -112,15 +112,17 @@ function (n) {
                     HandleError(err);
                 }
                 else {
-                    var filePath = GetFolderPath();
+                    var folderPath = GetFolderPath();
+                    var filePath = folderPath;
                     filePath += (filePath.indexOf("\\") > -1) ? "\\{0}".format(GetScriptFileName()) : "/{0}".format(GetScriptFileName());
                     var fileName = GetFileName();  
-                    var folderPath = settings.dataFolderPath;
+                    var datafolderPath = settings.dataFolderPath;
                     if(fileName.substring(fileName.indexOf(".") + 1) === "sas7bdat") 
                     { 
+                        datafolderPath = (datafolderPath.indexOf("\\") > -1) ? "{0}\\".format(datafolderPath) : "{0}/".format(datafolderPath);
                         folderPath = (folderPath.indexOf("\\") > -1) ? "{0}\\".format(folderPath) : "{0}/".format(folderPath);
                     }
-                    var updatedData = data.toString().format(folderPath,fileName.substring(0,fileName.indexOf(".")));
+                    var updatedData = data.toString().format(folderPath,datafolderPath,fileName.substring(0,fileName.indexOf(".")));
                     console.log(`Update script file ${filePath}`);
                     fs.writeFile(filePath, updatedData, (err) => {
                         if (err) {
