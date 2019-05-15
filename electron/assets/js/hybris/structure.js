@@ -39,7 +39,6 @@ function (n) {
             outputStatisticsHeaderInformation2Spn: null,
             outputStatisticsHeaderInformation2Text: null,
             statisticsTab: null,
-            outputSupplementSpn: null,
             selectDeliveryPackage: null,
             folderPrefix: "FD.",
             defaultFolderPostfix: "99999",
@@ -51,7 +50,6 @@ function (n) {
         var Reset = function () {
             settings.outputErrorSpn.hidden = true;
             settings.outputOkSpn.hidden = true;
-            settings.outputSupplementSpn.hidden = true;
             settings.selectDeliveryPackage.hidden = true;
         }
 
@@ -59,11 +57,10 @@ function (n) {
         var ShowOutput = function() {
             var folders = settings.deliveryPackagePath.getFolders();
             var folderName = folders[folders.length - 1];
-            settings.selectDeliveryPackage.innerHTML = settings.selectedPath;
+            settings.selectDeliveryPackage.innerHTML = "[{0}]".format(settings.selectedPath);
             settings.selectDeliveryPackage.hidden = false;
             settings.outputOkSpn.hidden = false;
             settings.outputOkSpn.innerHTML = settings.outputOkText.format(folderName);
-            settings.outputSupplementSpn.hidden = false;
         }
 
         //create delivery Package folder Structure
@@ -81,6 +78,7 @@ function (n) {
                             settings.outputErrorSpn.innerHTML = settings.outputErrorText.format(err.message);
                         }
                         else {
+                            ShowOutput();
                             settings.subFolders.forEach(element => {
                                 var subFolderName = (settings.deliveryPackagePath.indexOf("\\") > -1) ? "\\{0}".format(element) : "/{0}".format(element);
                                 fs.mkdir(settings.deliveryPackagePath + subFolderName, { recursive: true }, (err) => {
@@ -88,9 +86,6 @@ function (n) {
                                         settings.outputErrorSpn.hidden = false;
                                         settings.outputErrorSpn.innerHTML = settings.outputErrorText.format(err.message);   
                                         settings.deliveryPackagePath = null;                         
-                                    }
-                                    else {
-                                        ShowOutput();
                                     }
                                 });
                             });                        
@@ -141,7 +136,7 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Hybris.Structure = {        
-            initialize: function (selectDirectoryId,pathDirectoryId,deliveryPackageId,okId,outputErrorId,outputExistsId,outputRequiredPathId,outputUnvalidDeliveryPackageId,outputOkId,selectDeliveryPackageId,statisticsTabId,outputSupplementId,outputStatisticsHeaderTrin1,outputStatisticsHeaderTrin2,outputStatisticsHeaderTrin3,outputStatisticsHeaderInformation2) {            
+            initialize: function (selectDirectoryId,pathDirectoryId,deliveryPackageId,okId,outputErrorId,outputExistsId,outputRequiredPathId,outputUnvalidDeliveryPackageId,outputOkId,selectDeliveryPackageId,statisticsTabId,outputStatisticsHeaderTrin1,outputStatisticsHeaderTrin2,outputStatisticsHeaderTrin3,outputStatisticsHeaderInformation2) {            
                 settings.selectDirBtn =  document.getElementById(selectDirectoryId);
                 settings.pathDirTxt =  document.getElementById(pathDirectoryId);
                 settings.deliveryPackageTxt =  document.getElementById(deliveryPackageId);
@@ -158,7 +153,6 @@ function (n) {
                 settings.outputOkText = settings.outputOkSpn.innerHTML;
                 settings.selectDeliveryPackage = document.getElementById(selectDeliveryPackageId);
                 settings.statisticsTab = document.getElementById(statisticsTabId);
-                settings.outputSupplementSpn =  document.getElementById(outputSupplementId);
                 settings.outputStatisticsHeaderTrin1Spn = document.getElementById(outputStatisticsHeaderTrin1);
                 settings.outputStatisticsHeaderTrin1Text = settings.outputStatisticsHeaderTrin1Spn.innerHTML;
                 settings.outputStatisticsHeaderTrin2Spn = document.getElementById(outputStatisticsHeaderTrin2);

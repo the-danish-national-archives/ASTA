@@ -31,8 +31,7 @@ function (n) {
             pathStatisticsFileTxt: null,
             okStatisticsBtn: null,
             outputStructureOkSpn: null,
-            outputStructureSupplementSpn: null,
-            selectStructureDeliveryPackage: null,
+             selectStructureDeliveryPackage: null,
             outputStatisticsErrorSpn: null,
             outputStatisticsErrorText: null,
             outputStatisticsOkCopyScriptSpn: null,
@@ -83,7 +82,6 @@ function (n) {
             settings.outputScriptOkSpn.hidden = true;
             settings.nextBtn.hidden = true;
             settings.outputStructureOkSpn.hidden = true;
-            settings.outputStructureSupplementSpn.hidden = true;
             settings.selectStructureDeliveryPackage.hidden = true;
         }
 
@@ -136,9 +134,9 @@ function (n) {
                         }
                         else {
                             var scriptFileName = GetScriptFileName();
-                            settings.outputStatisticsOkCopyScriptSpn.innerHTML = settings.outputStatisticsOkCopyScriptText.format(settings.scriptType,scriptFileName,GetFileName());
-                            settings.outputStatisticsOkCopyScriptInfoSpn.innerHTML = settings.outputStatisticsOkCopyScriptInfoText.format(scriptFileName, settings.scriptApplication);
-                            settings.okScriptDataPath.innerHTML = GetFolderPath();
+                            settings.outputStatisticsOkCopyScriptSpn.innerHTML = settings.outputStatisticsOkCopyScriptText.format(scriptFileName);
+                            settings.outputStatisticsOkCopyScriptInfoSpn.innerHTML = settings.outputStatisticsOkCopyScriptInfoText.format(settings.scriptApplication);
+                            settings.okScriptDataPath.innerHTML = "[{0}]".format(GetFolderPath());
                             settings.scriptPanel1.hidden = true;
                             settings.scriptPanel2.hidden = false;
                         }
@@ -320,7 +318,7 @@ function (n) {
                             //ipcRenderer.send('open-warning-dialog',settings.outputScriptCloseApplicationWarningTitle.innerHTML,settings.outputScriptCloseApplicationWarningText.innerHTML);
                             settings.outputScriptOkSpn.innerHTML = settings.outputScriptOkText.format(GetFileName());
                             settings.outputScriptOkSpn.hidden = false;
-                            settings.nextBtn.hidden = false;
+                            settings.metdataTab.click();
                         }
                     }
                 }
@@ -365,7 +363,7 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Hybris.DataExtraction = {        
-            initialize: function (structureCallback,selectStatisticsFileId,pathStatisticsFileId,okStatisticsId,outputStatisticsErrorId,outputStatisticsOkCopyScriptId,outputStatisticsSASWarningPrefixId,scriptPanel1Id,scriptPanel2Id,okScriptBtnId,okScriptDataPathId,outputStatisticsOkCopyScriptInfoId,outputStatisticsRequiredPathId,outputScriptRequiredFilesWarningPrefixId,outputScriptOkId,outputScriptEncodingFileErrorPrefixId,nextId,metdataTabId,outputScriptCloseApplicationWarningPrefixId,outputStructureOkId,selectStructureDeliveryPackageId,outputStructureSupplementId) {
+            initialize: function (structureCallback,selectStatisticsFileId,pathStatisticsFileId,okStatisticsId,outputStatisticsErrorId,outputStatisticsOkCopyScriptId,outputStatisticsSASWarningPrefixId,scriptPanel1Id,scriptPanel2Id,okScriptBtnId,okScriptDataPathId,outputStatisticsOkCopyScriptInfoId,outputStatisticsRequiredPathId,outputScriptRequiredFilesWarningPrefixId,outputScriptOkId,outputScriptEncodingFileErrorPrefixId,nextId,metdataTabId,outputScriptCloseApplicationWarningPrefixId,outputStructureOkId,selectStructureDeliveryPackageId) {
                 settings.structureCallback = structureCallback;
                 settings.selectStatisticsFileBtn = document.getElementById(selectStatisticsFileId);
                 settings.pathStatisticsFileTxt = document.getElementById(pathStatisticsFileId);
@@ -395,7 +393,6 @@ function (n) {
                 settings.outputScriptCloseApplicationWarningTitle = document.getElementById(outputScriptCloseApplicationWarningPrefixId + "-Title");
                 settings.outputScriptCloseApplicationWarningText = document.getElementById(outputScriptCloseApplicationWarningPrefixId + "-Text");
                 settings.outputStructureOkSpn =  document.getElementById(outputStructureOkId);
-                settings.outputStructureSupplementSpn =  document.getElementById(outputStructureSupplementId);
                 settings.selectStructureDeliveryPackage = document.getElementById(selectStructureDeliveryPackageId);
                 AddEvents();
             },
