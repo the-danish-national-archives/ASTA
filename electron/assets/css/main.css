@@ -45,6 +45,15 @@ input[type=text] {
     margin-bottom: 5px;
 }
 
+textarea {
+    border-radius: 6px;
+    border: solid 0.5px #b2b2b2;
+    padding-left:0px;
+    font-family: SourceSansPro;
+    margin-bottom: 5px;
+    width: 150px;
+}
+
 .path {
     width: 30em;
 }
@@ -232,6 +241,7 @@ a.selected:hover {
     margin-right: 20px;
     width: 200px;
     display: inline-block;
+    vertical-align: top;
 }
 
 /* Label elements END */
