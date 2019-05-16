@@ -34,7 +34,7 @@
                             <span id="hybris-message-structure-path-Text" hidden="true">Vælg det drev eller den mappe på computeren eller mediet (fx USB, harddisk, SSD), som afleveringspakken skal placeres på.</span>
                         </p>
                         <div>
-                            <input type="text" class="path" id="hybris-structure-path">
+                            <input type="text" class="path" id="hybris-structure-path" readonly="true" placeholder="Vælg sti med browse knappen">
                             <button id="hybris-select-structure-directory">Browse</button>
                         </div>
                         <button id="hybris-structure-okBtn">Skab mappestruktur</button><br><br>
@@ -49,7 +49,9 @@
                     <div id="hybris-panel-statistics" class="formularContainer" hidden="true">
                         <div id="hybris-panel-script1">
                             <p>
-                                <span id="hybris-output-structure-Ok" hidden="true" class="confirmation"><i class="fas fa-check-circle ok"></i>Mappestrukturen er skabt og placeret i mappen </span><a id="hybris-structure-select-delivery-package" class="confirmation" hidden="true"></a>
+                                <div class="infoBox">
+                                    <span id="hybris-output-structure-Ok" hidden="true" class="confirmation"><i class="fas fa-check-circle ok"></i>Mappestrukturen er skabt</span>
+                                </div>
                                 <h2 class="boldfaced">TRIN 1: Vælg statistikfil <span id="hybris-output-statistics-header-trin1" class="trinHeader">{0}</span></h2>
                             </p>
                             <p>
@@ -62,6 +64,7 @@
                             </p>
                             <span class="alert-warning"><strong>Information!</strong>  Du kan kun lave udtræk fra statistikfiler i formaterne SPSS, SAS og Stata.</span>
                             <br/>
+                            <br>
                             <p>
                                 <span class="boldfaced">Vælg statistikfilen som udtræk skal laves fra:</span>
                                 <i id="hybris-message-statistics-filepath" class="far fa-question-circle"></i>
@@ -74,6 +77,10 @@
                                 <button id="hybris-select-statistics-file">Browse</button>
                             </div>
                             <button id="hybris-statistics-okBtn">Næste</button>
+                            <br>
+                            <div>
+                            <span class="greyText">INFO: Mappestrukturen er skabt og placeret i mappen </span><a id="hybris-structure-select-delivery-package" hidden="true"></a>
+                            </div>
                             <span id="hybris-output-statistics-RequiredPath-Title" hidden="true">Statistikfilen mangler</span>
                             <span id="hybris-output-statistics-RequiredPath-Text" hidden="true">Destination for statistikfilen mangler</span>
                             <span id="hybris-output-statistics-Error" hidden="true"><br/>Error: {0}</span>
@@ -82,10 +89,11 @@
                         </div>                        
                         <div id="hybris-panel-script2" hidden="true">
                             <p>
-                                <span id="hybris-output-script-OKCopyScript" class="confirmation"><i class="fas fa-check-circle ok"></i>Eksport script [{0}] er dannet og ligger her </span><a id="hybris-output-script-dataPath" class="confirmation"></a>
+                                <div class="infoBox">
+                                    <span class="confirmation"><i class="fas fa-check-circle ok"></i>Eksport script er dannet</span>
+                                </div>
                                 <h2 class="boldfaced">TRIN 2: Kør eksport script <span id="hybris-output-statistics-header-trin2" class="trinHeader">{0}</span></h2>
                             </p>
-                            <br/>
                             <span id="hybris-output-script-OKCopyScriptInfo">
                                 <p class="boldfaced">Sådan gør du: </p>
                                 <p>
@@ -96,8 +104,11 @@
                                     </ol>  
                                 </p>
                             </span>
-                            <button id="hybris-script-okBtn">Næste</button>                            
+                            <button id="hybris-script-okBtn">Næste</button> 
                             <div id="hybris-script-Spinner" hidden="true" class="lds-ring"><div></div><div></div><div></div><div></div></div>
+                            <br/>
+                            <br/>
+                            <span id="hybris-output-script-OKCopyScript" class="greyText">INFO: Eksport script [{0}] er dannet og ligger </span><a id="hybris-output-script-dataPath">her</a>                          
                             <span id="hybris-output-script-Ok" hidden="true"><br/>Der er udtrukket data og metadata fra statistikfilen [{0}].</span>
                             <span id="hybris-output-script-Error" hidden="true"><br/>Error: {0}</span>
                             <span id="hybris-output-script-CloseApplicationWarning-Title" hidden="true">Statistikprogrammet</span>
