@@ -86,7 +86,6 @@ function (n) {
             settings.outputScriptOkSpn.hidden = true;
             settings.nextBtn.hidden = true;
             settings.outputStructureOkSpn.hidden = true;
-            settings.selectStructureDeliveryPackage.hidden = true;
         }
 
         //get selected Statistics File name
