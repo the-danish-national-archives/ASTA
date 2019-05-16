@@ -77,8 +77,8 @@ function (n) {
                             HandleError(err);
                         }
                         else {
-                            settings.outputOkSpn.hidden = false;
-                            settings.selectDeliveryPackage.hidden = false;
+                            //settings.outputOkSpn.hidden = false;
+                            //settings.selectDeliveryPackage.hidden = false;
                             var selectedArchiveIndexFileName = GetFileName(settings.selectedArchiveIndexFilePath);
                             var selectedContextDocumentationIndexFileName = GetFileName(settings.selectedContextDocumentationIndexFilePath);
                             settings.outputOkSpn.innerHTML =  settings.outputOkText.format(selectedArchiveIndexFileName,selectedContextDocumentationIndexFileName);
