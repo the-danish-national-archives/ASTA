@@ -18,6 +18,7 @@ function (n) {
         const path = require('path');
         const chardet = require('chardet');
         const os = require('os');
+        const MaxFileSize = 524288000;
 
         //private data memebers
         var settings = {
@@ -30,7 +31,7 @@ function (n) {
             pathStatisticsFileTxt: null,
             okStatisticsBtn: null,
             outputStructureOkSpn: null,
-             selectStructureDeliveryPackage: null,
+            selectStructureDeliveryPackage: null,
             outputStatisticsErrorSpn: null,
             outputStatisticsErrorText: null,
             outputStatisticsOkCopyScriptSpn: null,
@@ -54,7 +55,9 @@ function (n) {
             scriptPanel1: null,
             scriptPanel2: null,  
             okScriptBtn: null,
-            nextBtn: null,  
+            nextBtn: null, 
+            spinner: null, 
+            spinnerClass: null,
             metdataTab: null, 
             okScriptDataPath: null,   
             scriptPath: "./assets/scripts/{0}",
@@ -75,14 +78,14 @@ function (n) {
         }
 
         //reset status & input fields
-        var Reset = function () {        
+        var Reset = function () { 
+            settings.okScriptBtn.hidden = false;       
             settings.outputStatisticsErrorSpn.hidden = true;
             settings.scriptPanel1.hidden = false;
             settings.scriptPanel2.hidden = true;
             settings.outputScriptOkSpn.hidden = true;
             settings.nextBtn.hidden = true;
             settings.outputStructureOkSpn.hidden = true;
-            settings.selectStructureDeliveryPackage.hidden = true;
         }
 
         //get selected Statistics File name
@@ -271,28 +274,34 @@ function (n) {
         }
 
         //validate file encoding
-        var ValidateFile = function(fileName) {
-            /*var filePath = settings.dataFolderPath;
+        var ValidateFile = function(fileName) {            
+            var filePath = settings.dataFolderPath;
             filePath += (settings.dataFolderPath.indexOf("\\") > -1) ? "\\{0}".format(fileName) : "/{0}".format(fileName);
-            var charsetMatch = chardet.detectFileSync(filePath);
-            console.log("File {0} encode: {1}".format(fileName,charsetMatch));
-            if(charsetMatch !== "UTF-8") {
-                var localPath = settings.dataFolderPath;
-                localPath += (localPath.indexOf("\\") > -1) ? "\\{0}".format(fileName) : "/{0}".format(fileName);
-                ipcRenderer.send('open-error-dialog',settings.outputScriptEncodingFileErrorTitle.innerHTML,settings.outputScriptEncodingFileErrorText.innerHTML.format(localPath));
-                return false;
-            }*/
+            var size = fs.statSync(filePath).size
+            if(size < MaxFileSize) {
+                var charsetMatch = chardet.detectFileSync(filePath);
+                console.log("File {0} encode: {1}".format(fileName,charsetMatch));
+                if(charsetMatch !== "UTF-8") {
+                    var localPath = settings.dataFolderPath;
+                    localPath += (localPath.indexOf("\\") > -1) ? "\\{0}".format(fileName) : "/{0}".format(fileName);
+                    ipcRenderer.send('open-error-dialog',settings.outputScriptEncodingFileErrorTitle.innerHTML,settings.outputScriptEncodingFileErrorText.innerHTML.format(localPath));
+                    return false;
+                }
+            }
             return true;
         }
 
         //Ensure output files of statistic program
         var EnsureExport = function() {
             settings.outputScriptOkSpn.hidden = true;
+            settings.spinner.className = settings.spinnerClass;
             fs.readdir(settings.dataFolderPath, (err, files) => {
                 if (err) {
+                    settings.spinner.className = "";
                     HandleError(err);
                 }
                 else {
+                    settings.okScriptBtn.hidden = true;
                     var fileValidate = true;
                     var counter = 0;
                     var fileName = GetFileName();
@@ -309,7 +318,9 @@ function (n) {
                             if(element.format(filePrefix) == file && !ValidateFile(file)) { fileValidate = false; }
                         });
                     });
+                    settings.okScriptBtn.hidden = false;
                     if(counter < 3) {
+                        settings.spinner.className = "";
                         ipcRenderer.send('open-warning-dialog',settings.outputScriptRequiredFilesWarningTitle.innerHTML,settings.outputScriptRequiredFilesWarningText.innerHTML);
                     }
                     else {
@@ -320,6 +331,7 @@ function (n) {
                             settings.outputScriptOkSpn.innerHTML = settings.outputScriptOkText.format(fileName);
                             settings.outputScriptOkSpn.hidden = false;
                             settings.metadataFileName.value = fileName.substring(0,fileName.indexOf("."));
+                            settings.spinner.className = "";
                             settings.metdataTab.click();
                         }
                     }
@@ -365,7 +377,7 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Hybris.DataExtraction = {        
-            initialize: function (structureCallback,selectStatisticsFileId,pathStatisticsFileId,okStatisticsId,outputStatisticsErrorId,outputStatisticsOkCopyScriptId,outputStatisticsSASWarningPrefixId,scriptPanel1Id,scriptPanel2Id,okScriptBtnId,okScriptDataPathId,outputStatisticsOkCopyScriptInfoId,outputStatisticsRequiredPathId,outputScriptRequiredFilesWarningPrefixId,outputScriptOkId,outputScriptEncodingFileErrorPrefixId,nextId,metdataTabId,outputScriptCloseApplicationWarningPrefixId,outputStructureOkId,selectStructureDeliveryPackageId,metadataFileName) {
+            initialize: function (structureCallback,selectStatisticsFileId,pathStatisticsFileId,okStatisticsId,outputStatisticsErrorId,outputStatisticsOkCopyScriptId,outputStatisticsSASWarningPrefixId,scriptPanel1Id,scriptPanel2Id,okScriptBtnId,okScriptDataPathId,outputStatisticsOkCopyScriptInfoId,outputStatisticsRequiredPathId,outputScriptRequiredFilesWarningPrefixId,outputScriptOkId,outputScriptEncodingFileErrorPrefixId,nextId,metdataTabId,outputScriptCloseApplicationWarningPrefixId,outputStructureOkId,selectStructureDeliveryPackageId,metadataFileName,spinnerId) {
                 settings.structureCallback = structureCallback;
                 settings.selectStatisticsFileBtn = document.getElementById(selectStatisticsFileId);
                 settings.pathStatisticsFileTxt = document.getElementById(pathStatisticsFileId);
@@ -397,6 +409,9 @@ function (n) {
                 settings.outputStructureOkSpn =  document.getElementById(outputStructureOkId);
                 settings.selectStructureDeliveryPackage = document.getElementById(selectStructureDeliveryPackageId);
                 settings.metadataFileName = document.getElementById(metadataFileName);
+                settings.spinner = document.getElementById(spinnerId);
+                settings.spinnerClass = settings.spinner.className;
+                settings.spinner.className = "";
                 AddEvents();
             },
             callback: function () {
