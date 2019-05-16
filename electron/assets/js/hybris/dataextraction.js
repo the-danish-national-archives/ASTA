@@ -136,7 +136,7 @@ function (n) {
                             var scriptFileName = GetScriptFileName();
                             settings.outputStatisticsOkCopyScriptSpn.innerHTML = settings.outputStatisticsOkCopyScriptText.format(scriptFileName);
                             settings.outputStatisticsOkCopyScriptInfoSpn.innerHTML = settings.outputStatisticsOkCopyScriptInfoText.format(settings.scriptApplication);
-                            settings.okScriptDataPath.innerHTML = "[{0}]".format(GetFolderPath());
+                            //settings.okScriptDataPath.innerHTML = "[{0}]".format(GetFolderPath());
                             settings.scriptPanel1.hidden = true;
                             settings.scriptPanel2.hidden = false;
                         }
