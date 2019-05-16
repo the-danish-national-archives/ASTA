@@ -68,7 +68,8 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 dataFileName: "{0}.csv",
                 metadataTemplateFileName: "metadata.txt",
                 scriptPath: "./assets/scripts/{0}",
-                resourceWinPath: "resources\\{0}"
+                resourceWinPath: "resources\\{0}",
+                styleBox: null
             }
             
             //output system error messages
@@ -86,6 +87,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 settings.outputErrorSpn.hidden = true;
                 settings.nextBtn.hidden = true;
                 settings.contents = ["","","",""];
+                settings.styleBox.hidden = true;
             }        
 
             //get metadata file name
@@ -357,7 +359,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
 
             //Model interfaces functions
             Rigsarkiv.Hybris.MetaData = {
-                initialize: function (extractionCallback,metadataFileName,metadataFileNameDescription,metadataKeyVariable,metadataForeignFileName,metadataForeignKeyVariableName,metadataReferenceVariable,metdataOkBtn,inputFileNameRequired,inputNumberFirst,inputIllegalChar,outputOkId,okDataPathId,outputErrorId,outputNewExtractionId,newExtractionBtn,extractionTabId,outputNextId,nextBtn,indexFilesTabId,fileNameLengthId,fileNameReservedWordId,fileDescrReqId,informationPanel1Id,informationPanel2Id,indexFilesDescriptionId,outputCloseApplicationErrorPrefixId,referencesId,addReferenceBtn,referenceReqId) {
+                initialize: function (extractionCallback,metadataFileName,metadataFileNameDescription,metadataKeyVariable,metadataForeignFileName,metadataForeignKeyVariableName,metadataReferenceVariable,metdataOkBtn,inputFileNameRequired,inputNumberFirst,inputIllegalChar,outputOkId,okDataPathId,outputErrorId,outputNewExtractionId,newExtractionBtn,extractionTabId,outputNextId,nextBtn,indexFilesTabId,fileNameLengthId,fileNameReservedWordId,fileDescrReqId,informationPanel1Id,informationPanel2Id,indexFilesDescriptionId,outputCloseApplicationErrorPrefixId,referencesId,addReferenceBtn,referenceReqId,resetHideBox) {
                     settings.extractionCallback = extractionCallback;
                     settings.fileName = document.getElementById(metadataFileName);
                     settings.fileDescr = document.getElementById(metadataFileNameDescription);
@@ -400,6 +402,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                     settings.addReferenceBtn = document.getElementById(addReferenceBtn);
                     settings.referenceReqTitle = document.getElementById(referenceReqId + "-Title");
                     settings.referenceReqText = document.getElementById(referenceReqId + "-Text");
+                    settings.styleBox = document.getElementById(resetHideBox);
                     AddEvents();
                 }
             }
