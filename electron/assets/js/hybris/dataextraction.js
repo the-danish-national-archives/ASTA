@@ -51,6 +51,7 @@ function (n) {
             selectedStatisticsFilePath: null,
             outputScriptOkSpn: null,
             outputScriptOkText: null,
+            metadataFileName: null,
             scriptPanel1: null,
             scriptPanel2: null,  
             okScriptBtn: null,
@@ -315,9 +316,11 @@ function (n) {
                     else {
                         if(fileValidate) 
                         { 
+                            var fileName = GetFileName();
                             //ipcRenderer.send('open-warning-dialog',settings.outputScriptCloseApplicationWarningTitle.innerHTML,settings.outputScriptCloseApplicationWarningText.innerHTML);
-                            settings.outputScriptOkSpn.innerHTML = settings.outputScriptOkText.format(GetFileName());
+                            settings.outputScriptOkSpn.innerHTML = settings.outputScriptOkText.format(fileName);
                             settings.outputScriptOkSpn.hidden = false;
+                            settings.metadataFileName.value = fileName.substring(0,fileName.indexOf("."));
                             settings.metdataTab.click();
                         }
                     }
@@ -363,7 +366,7 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Hybris.DataExtraction = {        
-            initialize: function (structureCallback,selectStatisticsFileId,pathStatisticsFileId,okStatisticsId,outputStatisticsErrorId,outputStatisticsOkCopyScriptId,outputStatisticsSASWarningPrefixId,scriptPanel1Id,scriptPanel2Id,okScriptBtnId,okScriptDataPathId,outputStatisticsOkCopyScriptInfoId,outputStatisticsRequiredPathId,outputScriptRequiredFilesWarningPrefixId,outputScriptOkId,outputScriptEncodingFileErrorPrefixId,nextId,metdataTabId,outputScriptCloseApplicationWarningPrefixId,outputStructureOkId,selectStructureDeliveryPackageId) {
+            initialize: function (structureCallback,selectStatisticsFileId,pathStatisticsFileId,okStatisticsId,outputStatisticsErrorId,outputStatisticsOkCopyScriptId,outputStatisticsSASWarningPrefixId,scriptPanel1Id,scriptPanel2Id,okScriptBtnId,okScriptDataPathId,outputStatisticsOkCopyScriptInfoId,outputStatisticsRequiredPathId,outputScriptRequiredFilesWarningPrefixId,outputScriptOkId,outputScriptEncodingFileErrorPrefixId,nextId,metdataTabId,outputScriptCloseApplicationWarningPrefixId,outputStructureOkId,selectStructureDeliveryPackageId,metadataFileName) {
                 settings.structureCallback = structureCallback;
                 settings.selectStatisticsFileBtn = document.getElementById(selectStatisticsFileId);
                 settings.pathStatisticsFileTxt = document.getElementById(pathStatisticsFileId);
@@ -394,6 +397,7 @@ function (n) {
                 settings.outputScriptCloseApplicationWarningText = document.getElementById(outputScriptCloseApplicationWarningPrefixId + "-Text");
                 settings.outputStructureOkSpn =  document.getElementById(outputStructureOkId);
                 settings.selectStructureDeliveryPackage = document.getElementById(selectStructureDeliveryPackageId);
+                settings.metadataFileName = document.getElementById(metadataFileName);
                 AddEvents();
             },
             callback: function () {
