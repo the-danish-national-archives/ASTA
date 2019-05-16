@@ -3,6 +3,7 @@
   File dialogs & Popups
 */
 const {ipcMain, dialog} = require('electron')
+const {shell} = require('electron')
 
 ipcMain.on('structure-open-file-dialog', (event) => {
   dialog.showOpenDialog({
@@ -129,4 +130,8 @@ ipcMain.on('open-error-dialog', (event,title,text) => {
   dialog.showMessageBox(options, (index) => {
     event.sender.send('error-dialog-selection', index)
   })
+})
+
+ipcMain.on('open-item', (event,path) => {
+  shell.openItem(path);
 })

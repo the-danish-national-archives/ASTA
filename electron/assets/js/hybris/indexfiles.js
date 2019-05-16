@@ -8,7 +8,6 @@ function (n) {
     Rigsarkiv.Hybris = Rigsarkiv.Hybris || {},
     function (n) {
         const { ipcRenderer } = require('electron');
-        const {shell} = require('electron');
         const fs = require('fs');
 
         //private data memebers
@@ -118,7 +117,7 @@ function (n) {
                 }
             })
             settings.selectDeliveryPackage.addEventListener('click', (event) => {
-                shell.openItem(settings.IndecesPath);
+                ipcRenderer.send('open-item',settings.IndecesPath);
             }) 
         }
 

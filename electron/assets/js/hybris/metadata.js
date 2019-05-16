@@ -8,7 +8,6 @@ window.Rigsarkiv = window.Rigsarkiv || {},
         Rigsarkiv.Hybris = Rigsarkiv.Hybris || {},
         function (n) {
             const { ipcRenderer } = require('electron');
-            const {shell} = require('electron');
             const fs = require('fs');
             const path = require('path');
             const os = require('os');
@@ -333,7 +332,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                     settings.extractionTab.click();
                 });
                 settings.okDataPath.addEventListener('click', (event) => {
-                    shell.openItem(settings.extractionCallback().localFolderPath);
+                    ipcRenderer.send('open-item',settings.extractionCallback().localFolderPath);
                 })
                 settings.okBtn.addEventListener('click', function (event) {
                     Reset();

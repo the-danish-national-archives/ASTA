@@ -8,7 +8,6 @@ function (n) {
     Rigsarkiv.Hybris = Rigsarkiv.Hybris || {},
     function (n){
         const {ipcRenderer} = require('electron')
-        const {shell} = require('electron')
         const fs = require('fs');
         const pattern = /^([1-9]{1}[0-9]{4,})$/;
 
@@ -132,8 +131,8 @@ function (n) {
                 settings.pathDirTxt.value = settings.selectedPath;
             });
             settings.selectDeliveryPackage.addEventListener('click', (event) => {
-            var folderPath = settings.selectedPath[0];
-                shell.openItem(folderPath);
+                var folderPath = settings.selectedPath[0];
+                ipcRenderer.send('open-item',folderPath);
             }); 
         }
 

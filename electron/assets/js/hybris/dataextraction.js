@@ -14,7 +14,6 @@ function (n) {
     Rigsarkiv.Hybris = Rigsarkiv.Hybris || {},
     function (n) {
         const {ipcRenderer} = require('electron');
-        const {shell} = require('electron');
         const fs = require('fs');
         const path = require('path');
         const chardet = require('chardet');
@@ -331,7 +330,7 @@ function (n) {
         //add Event Listener to HTML elmenets
         var AddEvents = function () {
             settings.okScriptDataPath.addEventListener('click', (event) => {
-                shell.openItem(GetFolderPath());
+                ipcRenderer.send('open-item',GetFolderPath());
             })
             settings.okScriptBtn.addEventListener('click', (event) => {
                 EnsureExport();
