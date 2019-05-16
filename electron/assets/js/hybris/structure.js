@@ -39,6 +39,8 @@ function (n) {
             outputStatisticsHeaderInformation2Text: null,
             outputStatisticsHeaderindexfilesSpn: null,
             outputStatisticsHeaderindexfilesText: null,
+            outputStatisticsHeadercontextdocumentsSpn: null,
+            outputStatisticsHeadercontextdocumentsText: null,
             statisticsTab: null,
             selectDeliveryPackage: null,
             folderPrefix: "FD.",
@@ -118,6 +120,7 @@ function (n) {
                     settings.outputStatisticsHeaderTrin3Spn.innerHTML = settings.outputStatisticsHeaderTrin3Text.format(folder);
                     settings.outputStatisticsHeaderInformation2Spn.innerHTML = settings.outputStatisticsHeaderInformation2Text.format(folder);
                     settings.outputStatisticsHeaderindexfilesSpn.innerHTML = settings.outputStatisticsHeaderindexfilesText.format(folder);
+                    settings.outputStatisticsHeadercontextdocumentsSpn.innerHTML = settings.outputStatisticsHeadercontextdocumentsText.format(folder);
                     settings.statisticsTab.click();
                 }
             });
@@ -138,7 +141,7 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Hybris.Structure = {        
-            initialize: function (selectDirectoryId,pathDirectoryId,deliveryPackageId,okId,outputErrorId,outputExistsId,outputRequiredPathId,outputUnvalidDeliveryPackageId,outputOkId,selectDeliveryPackageId,statisticsTabId,outputStatisticsHeaderTrin1,outputStatisticsHeaderTrin2,outputStatisticsHeaderTrin3,outputStatisticsHeaderInformation2,outputStatisticsHeaderindexfiles) {            
+            initialize: function (selectDirectoryId,pathDirectoryId,deliveryPackageId,okId,outputErrorId,outputExistsId,outputRequiredPathId,outputUnvalidDeliveryPackageId,outputOkId,selectDeliveryPackageId,statisticsTabId,outputStatisticsHeaderTrin1,outputStatisticsHeaderTrin2,outputStatisticsHeaderTrin3,outputStatisticsHeaderInformation2,outputStatisticsHeaderindexfiles,outputStatisticsHeadercontextdocuments) {            
                 settings.selectDirBtn =  document.getElementById(selectDirectoryId);
                 settings.pathDirTxt =  document.getElementById(pathDirectoryId);
                 settings.deliveryPackageTxt =  document.getElementById(deliveryPackageId);
@@ -165,6 +168,8 @@ function (n) {
                 settings.outputStatisticsHeaderInformation2Text = settings.outputStatisticsHeaderInformation2Spn.innerHTML;
                 settings.outputStatisticsHeaderindexfilesSpn = document.getElementById(outputStatisticsHeaderindexfiles);
                 settings.outputStatisticsHeaderindexfilesText = settings.outputStatisticsHeaderindexfilesSpn.innerHTML;
+                settings.outputStatisticsHeadercontextdocumentsSpn = document.getElementById(outputStatisticsHeadercontextdocuments);
+                settings.outputStatisticsHeadercontextdocumentsText = settings.outputStatisticsHeadercontextdocumentsSpn.innerHTML;
                 AddEvents();
             },
             callback: function () {

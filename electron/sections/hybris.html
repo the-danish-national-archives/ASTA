@@ -11,6 +11,7 @@
                         <button name="button" class="menuBtn" id="hybris-tab-statistics">Skab Script Fil</button>
                         <button name="button" class="menuBtn" id="hybris-tab-metdata">Skab Metadata</button>
                         <button name="button" class="menuBtn" id="hybris-tab-indexfiles">Indexfiler</button>
+                        <button name="button" class="menuBtn" id="hybris-tab-contextdocuments">Kontekstdokumenter</button>
                     </div>
                     <div id="hybris-panel-structure" class="formularContainer">
                         <p>
@@ -248,6 +249,11 @@
                         <span id="hybris-output-indexfiles-Ok" hidden="true"><br />Filerne [{0}], [{1}] er nu kopieret til mappen </span>
                         <a id="hybris-indexfiles-delivery-package" hidden="true"></a>
                     </div>
+                    <div id="hybris-panel-contextdocuments" class="formularContainer" hidden="true">
+                        <p>
+                            <h2 class="boldfaced">Upload kontkstdokumenter til afleveringspakken <span id="hybris-output-statistics-header-contextdocuments" class="trinHeader">{0}</span></h2>
+                        </p>
+                    </div>
                     <div class="formularContainer">
                         <p>&copy; 2019 <b>ASTA - Aflevering af Statistikfiler Til Arkiv</b> - Version: 0.0.0.0</p>
                     </div>                  
@@ -262,13 +268,15 @@
             require('./assets/js/hybris/dataextraction');
             require('./assets/js/hybris/metadata');
             require('./assets/js/hybris/indexfiles');
+            require('./assets/js/hybris/contextdocuments');
 
-            Rigsarkiv.Panels.initialize(["hybris-tab-structure","hybris-tab-statistics","hybris-tab-metdata","hybris-tab-indexfiles"]);
+            Rigsarkiv.Panels.initialize(["hybris-tab-structure","hybris-tab-statistics","hybris-tab-metdata","hybris-tab-indexfiles","hybris-tab-contextdocuments"]);
             Rigsarkiv.Messages.initialize(["hybris-message-structure-delivery-package","hybris-message-structure-path","hybris-message-statistics-filepath","hybris-message-metdata-fileName","hybris-message-metdata-fileDescription","hybris-message-metdata-keyVariable","hybris-message-metdata-foreignFile","hybris-message-metdata-foreignVariable","hybris-message-metdata-referenceVariable","hybris-message-indexfiles-archiveIndex","hybris-message-indexfiles-contextDocumentationIndex"]);
-            Rigsarkiv.Hybris.Structure.initialize("hybris-select-structure-directory","hybris-structure-path","hybris-structure-delivery-package","hybris-structure-okBtn","hybris-output-structure-Error","hybris-output-structure-Exists","hybris-output-structure-RequiredPath","hybris-output-structure-UnvalidDeliveryPackage","hybris-output-structure-Ok","hybris-structure-select-delivery-package","hybris-tab-statistics","hybris-output-statistics-header-trin1","hybris-output-statistics-header-trin2","hybris-output-statistics-header-trin3","hybris-output-statistics-header-information2","hybris-output-statistics-header-indexfiles");          
+            Rigsarkiv.Hybris.Structure.initialize("hybris-select-structure-directory","hybris-structure-path","hybris-structure-delivery-package","hybris-structure-okBtn","hybris-output-structure-Error","hybris-output-structure-Exists","hybris-output-structure-RequiredPath","hybris-output-structure-UnvalidDeliveryPackage","hybris-output-structure-Ok","hybris-structure-select-delivery-package","hybris-tab-statistics","hybris-output-statistics-header-trin1","hybris-output-statistics-header-trin2","hybris-output-statistics-header-trin3","hybris-output-statistics-header-information2","hybris-output-statistics-header-indexfiles","hybris-output-statistics-header-contextdocuments");          
             Rigsarkiv.Hybris.DataExtraction.initialize(Rigsarkiv.Hybris.Structure.callback,"hybris-select-statistics-file","hybris-statistics-filepath","hybris-statistics-okBtn","hybris-output-statistics-Error","hybris-output-script-OKCopyScript","hybris-message-statistics-SASCatalogWarning","hybris-panel-script1","hybris-panel-script2","hybris-script-okBtn","hybris-output-script-dataPath","hybris-output-script-OKCopyScriptInfo","hybris-output-statistics-RequiredPath","hybris-output-script-RequiredFilesWarning","hybris-output-script-Ok","hybris-output-script-EncodingFileError","hybris-script-nextBtn","hybris-tab-metdata","hybris-output-script-CloseApplicationWarning","hybris-output-structure-Ok","hybris-structure-select-delivery-package","hybris-metdata-fileName","hybris-script-Spinner");
             Rigsarkiv.Hybris.MetaData.initialize(Rigsarkiv.Hybris.DataExtraction.callback,"hybris-metdata-fileName", "hybris-metdata-fileDescription", "hybris-metdata-keyVar", "hybris-metdata-foreignFileName", "hybris-metdata-foreignKeyVarName", "hybris-metdata-refVar", "hybris-metdata-okBtn", "hybris-output-metdata-fileNameRequired", "hybris-output-metdata-fileNameNumberFirst", "hybris-output-metdata-fileNameIllegalChar","hybris-output-metdata-Ok","hybris-output-metdata-path","hybris-output-metdata-Error","hybris-output-metdata-NewExtraction","hybris-metdata-NewExtractionBtn","hybris-tab-statistics","hybris-output-metdata-Next","hybris-metdata-NextBtn","hybris-tab-indexfiles","hybris-output-metdata-fileNameLength","hybris-output-metdata-fileNamereservedWord","hybris-output-metdata-fileDescrRequired","hybris-panel-information1","hybris-panel-information2","hybris-output-indexfiles-Description","hybris-output-metdata-CloseApplicationError","hybris-metdata-references","hybris-metdata-addReferenceBtn","hybris-output-metdata-referenceRequired");
-            Rigsarkiv.Hybris.IndexFiles.initialize(Rigsarkiv.Hybris.Structure.callback,"hybris-indexfiles-archiveIndex-selectFile","hybris-indexfiles-archiveIndex","hybris-indexfiles-contextDocumentationIndex-selectFile","hybris-indexfiles-contextDocumentationIndex","hybris-indexfiles-okBtn","hybris-output-indexfiles-Error","hybris-output-indexfiles-RequiredPath","hybris-output-indexfiles-Ok","hybris-indexfiles-delivery-package","hybris-output-indexfiles-OkInformation");
+            Rigsarkiv.Hybris.IndexFiles.initialize(Rigsarkiv.Hybris.Structure.callback,"hybris-indexfiles-archiveIndex-selectFile","hybris-indexfiles-archiveIndex","hybris-indexfiles-contextDocumentationIndex-selectFile","hybris-indexfiles-contextDocumentationIndex","hybris-indexfiles-okBtn","hybris-output-indexfiles-Error","hybris-output-indexfiles-RequiredPath","hybris-output-indexfiles-Ok","hybris-indexfiles-delivery-package","hybris-output-indexfiles-OkInformation","hybris-tab-contextdocuments");
+            Rigsarkiv.Hybris.ContextDocuments.initialize(Rigsarkiv.Hybris.Structure.callback);
           </script>
     </section>
 </template>
