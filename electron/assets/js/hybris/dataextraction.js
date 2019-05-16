@@ -272,7 +272,7 @@ function (n) {
 
         //validate file encoding
         var ValidateFile = function(fileName) {
-            var filePath = settings.dataFolderPath;
+            /*var filePath = settings.dataFolderPath;
             filePath += (settings.dataFolderPath.indexOf("\\") > -1) ? "\\{0}".format(fileName) : "/{0}".format(fileName);
             var charsetMatch = chardet.detectFileSync(filePath);
             console.log("File {0} encode: {1}".format(fileName,charsetMatch));
@@ -281,7 +281,7 @@ function (n) {
                 localPath += (localPath.indexOf("\\") > -1) ? "\\{0}".format(fileName) : "/{0}".format(fileName);
                 ipcRenderer.send('open-error-dialog',settings.outputScriptEncodingFileErrorTitle.innerHTML,settings.outputScriptEncodingFileErrorText.innerHTML.format(localPath));
                 return false;
-            }
+            }*/
             return true;
         }
 
