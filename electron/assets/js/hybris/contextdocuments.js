@@ -8,6 +8,7 @@ function (n) {
     Rigsarkiv.Hybris = Rigsarkiv.Hybris || {},
     function (n) {
         const { ipcRenderer } = require('electron');
+        const {shell} = require('electron');
         const fs = require('fs');
         const domParser = require('xmldom');
 
@@ -15,11 +16,18 @@ function (n) {
         var settings = {
             structureCallback: null,
             okBtn: null,
+            printBtn: null,
             outputErrorSpn: null,
             outputErrorText: null,
             uploadsTbl: null,
             documents: [],
+            logs: [],
             documentsPath: null,
+            filePath: null,
+            filePostfix: "{0}_ASTA_contextdocuments.html",
+            templateFileName: "contextdocuments.html",
+            scriptPath: "./assets/scripts/{0}",
+            resourceWinPath: "resources\\{0}",
             contextDocumentationFolder: "ContextDocumentation",
             docCollectionFolderName: "docCollection1"
         }
@@ -119,6 +127,36 @@ function (n) {
             });
         }
 
+        //commit print data
+        var EnsureData = function() {
+            var data = fs.readFileSync(settings.filePath);        
+            var folders = settings.structureCallback().deliveryPackagePath.getFolders();
+            var folderName = folders[folders.length - 1];
+            var updatedData = data.toString().format(folderName,settings.logs.join("\r\n"));
+            fs.writeFileSync(settings.filePath, updatedData);                         
+            settings.logs = [];                               
+        }
+
+        //copy HTML template file to parent folder of selected Delivery Package folder
+        var CopyFile = function() {
+            var filePath = settings.scriptPath.format(settings.templateFileName);        
+            if(!fs.existsSync(filePath)) {
+                var rootPath = null;
+                if(os.platform() == "win32") {
+                    rootPath = path.join('./');
+                    filePath = path.join(rootPath,settings.resourceWinPath.format(settings.templateFileName));
+                }
+                if(os.platform() == "darwin") {
+                    var folders =  __dirname.split("/");
+                    rootPath = folders.slice(0,folders.length - 3).join("/");
+                    filePath = "{0}/{1}".format(rootPath,settings.templateFileName);
+                }
+            }        
+            console.log(`copy ${settings.templateFileName} file to: ${settings.filePath}`);
+            fs.copyFileSync(filePath, settings.filePath);
+            EnsureData();        
+        }
+
         //add Event Listener to HTML elmenets
         var AddEvents = function () {
             settings.okBtn.addEventListener('click', function (event) {
@@ -126,6 +164,14 @@ function (n) {
                     EnsureStructure();
                     EnsureDocuments();
                 }
+            });
+            settings.printBtn.addEventListener('click', function (event) {
+                settings.filePath = settings.filePostfix.format(settings.structureCallback().deliveryPackagePath);
+                settings.documents.forEach(upload => {
+                    settings.logs.push("<tr><td>{0}</td><td>{1}</td><td>{2}</td></tr>".format(upload.id,upload.title,upload.path));
+                });
+                CopyFile();
+                shell.openItem(settings.filePath);
             });
             ipcRenderer.on('contextdocuments-selected-file', (event, path, id) => {
                 console.log(`selected document ${id} with path: ${path}`);
@@ -137,12 +183,13 @@ function (n) {
         
         //Model interfaces functions
         Rigsarkiv.Hybris.ContextDocuments = {
-            initialize: function (structureCallback,outputErrorId,okId,uploadsId) {
+            initialize: function (structureCallback,outputErrorId,okId,uploadsId,printId) {
                 settings.structureCallback = structureCallback;
                 settings.okBtn = document.getElementById(okId);
                 settings.outputErrorSpn =  document.getElementById(outputErrorId);
                 settings.outputErrorText = settings.outputErrorSpn.innerHTML;
                 settings.uploadsTbl = document.getElementById(uploadsId);
+                settings.printBtn = document.getElementById(printId);
                 AddEvents();
             },
             callback: function () {
