@@ -26,13 +26,16 @@ function (n) {
             outputRequiredPathTitle: null,
             outputRequiredPathText: null,
             IndecesPostfix: "Indices",
+            defaultIndicesFiles: ["archiveIndex.xml","contextDocumentationIndex.xml"],
             IndecesPath: null,
             outputOkSpn: null,
             outputOkText: null,
             selectDeliveryPackage: null,
             outputOkInformationTitle: null,
             outputOkInformationText: null,
-            contextDocumentsTab: null
+            contextDocumentsTab: null,
+            outputWrongFileNameTitle: null,
+            outputWrongFileNameText: null
         }
 
         //output system error messages
@@ -84,7 +87,8 @@ function (n) {
                             var selectedContextDocumentationIndexFileName = GetFileName(settings.selectedContextDocumentationIndexFilePath);
                             settings.outputOkSpn.innerHTML =  settings.outputOkText.format(selectedArchiveIndexFileName,selectedContextDocumentationIndexFileName);
                             settings.selectDeliveryPackage.innerHTML = "[{0}]".format(settings.IndecesPath);
-                            settings.contextDocumentsCallback().load();
+                            var filePath = (settings.IndecesPath.indexOf("\\") > -1) ? "{0}\\{1}".format(settings.IndecesPath,selectedContextDocumentationIndexFileName) : "{0}/{1}".format(settings.IndecesPath,selectedContextDocumentationIndexFileName);
+                            settings.contextDocumentsCallback().load(fs.readFileSync(filePath));
                             ipcRenderer.send('open-information-dialog',settings.outputOkInformationTitle.innerHTML,settings.outputOkInformationText.innerHTML);
                             settings.contextDocumentsTab.click();
                         }
@@ -117,7 +121,12 @@ function (n) {
                     ipcRenderer.send('open-error-dialog',settings.outputRequiredPathTitle.innerHTML,settings.outputRequiredPathText.innerHTML);
                 }
                 if(settings.selectedArchiveIndexFilePath != null && settings.selectedContextDocumentationIndexFilePath != null && settings.pathArchiveIndexFileTxt.value !== "" && settings.pathContextDocumentationIndexFileTxt.value !== "") { 
-                    EnsureFiles(); 
+                    if(GetFileName(settings.selectedArchiveIndexFilePath) === settings.defaultIndicesFiles[0] && GetFileName(settings.selectedContextDocumentationIndexFilePath) === settings.defaultIndicesFiles[1]) {
+                        EnsureFiles(); 
+                    }
+                    else {
+                        ipcRenderer.send('open-error-dialog',settings.outputWrongFileNameTitle.innerHTML,settings.outputWrongFileNameText.innerHTML);    
+                    }
                 }
             })
             settings.selectDeliveryPackage.addEventListener('click', (event) => {
@@ -127,7 +136,7 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Hybris.IndexFiles = {
-            initialize: function (structureCallback,contextDocumentsCallback,selectArchiveIndexFileId,pathSArchiveIndexFileId,selectContextDocumentationIndexFileId,pathContextDocumentationIndexFileId,indexFilesOkBtn,outputErrorId,outputRequiredPathId,outputOkId,selectDeliveryPackageId,outputOkInformationPrefixId,contextDocumentsTabId) {
+            initialize: function (structureCallback,contextDocumentsCallback,selectArchiveIndexFileId,pathSArchiveIndexFileId,selectContextDocumentationIndexFileId,pathContextDocumentationIndexFileId,indexFilesOkBtn,outputErrorId,outputRequiredPathId,outputOkId,selectDeliveryPackageId,outputOkInformationPrefixId,contextDocumentsTabId,outputWrongFileNameId) {
                 settings.structureCallback = structureCallback;
                 settings.contextDocumentsCallback = contextDocumentsCallback;
                 settings.selectArchiveIndexFileBtn = document.getElementById(selectArchiveIndexFileId);
@@ -145,6 +154,8 @@ function (n) {
                 settings.outputOkInformationTitle = document.getElementById(outputOkInformationPrefixId + "-Title");
                 settings.outputOkInformationText = document.getElementById(outputOkInformationPrefixId + "-Text");
                 settings.contextDocumentsTab = document.getElementById(contextDocumentsTabId);
+                settings.outputWrongFileNameTitle = document.getElementById(outputWrongFileNameId + "-Title");
+                settings.outputWrongFileNameText = document.getElementById(outputWrongFileNameId + "-Text");
                 AddEvents();
             }
         }
