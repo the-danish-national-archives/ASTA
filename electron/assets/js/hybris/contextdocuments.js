@@ -20,6 +20,8 @@ function (n) {
             outputErrorSpn: null,
             outputErrorText: null,
             uploadsTbl: null,
+            outputEmptyFileTitle: null,
+            outputEmptyFileText: null,
             documents: [],
             logs: [],
             documentsPath: null,
@@ -91,7 +93,7 @@ function (n) {
                 }); 
             }
             else {
-
+                ipcRenderer.send('open-error-dialog',settings.outputEmptyFileTitle.innerHTML,settings.outputEmptyFileText.innerHTML);
             }
         }
 
@@ -102,7 +104,7 @@ function (n) {
                     var folders = upload.path.getFolders();
                     var fileName = folders[folders.length - 1];
                     var fileExt = fileName.substring(fileName.indexOf(".") + 1);
-                    var path = (settings.documentsPath.indexOf("\\") > -1) ? "{0}\\{1}\\{1}.{2}".format(settings.documentsPath,upload.id,fileExt) : "{0}/{1}/{1}.{2}".format(settings.documentsPath,upload.id,fileExt);
+                    var path = (settings.documentsPath.indexOf("\\") > -1) ? "{0}\\{1}\\1.{2}".format(settings.documentsPath,upload.id,fileExt) : "{0}/{1}/1.{2}".format(settings.documentsPath,upload.id,fileExt);
                     console.log(`copy file: ${fileName} to ${path}`);
                     fs.copyFileSync(upload.path, path);
                 }
@@ -183,13 +185,15 @@ function (n) {
         
         //Model interfaces functions
         Rigsarkiv.Hybris.ContextDocuments = {
-            initialize: function (structureCallback,outputErrorId,okId,uploadsId,printId) {
+            initialize: function (structureCallback,outputErrorId,okId,uploadsId,printId,outputEmptyFileId) {
                 settings.structureCallback = structureCallback;
                 settings.okBtn = document.getElementById(okId);
                 settings.outputErrorSpn =  document.getElementById(outputErrorId);
                 settings.outputErrorText = settings.outputErrorSpn.innerHTML;
                 settings.uploadsTbl = document.getElementById(uploadsId);
                 settings.printBtn = document.getElementById(printId);
+                settings.outputEmptyFileTitle = document.getElementById(outputEmptyFileId + "-Title");
+                settings.outputEmptyFileText = document.getElementById(outputEmptyFileId + "-Text");
                 AddEvents();
             },
             callback: function () {
