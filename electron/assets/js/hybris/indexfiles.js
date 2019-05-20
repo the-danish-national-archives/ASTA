@@ -12,7 +12,8 @@ function (n) {
 
         //private data memebers
         var settings = { 
-            metadataCallback: null,
+            structureCallback: null,
+            contextDocumentsCallback: null,
             selectArchiveIndexFileBtn: null,
             pathArchiveIndexFileTxt: null,
             selectedArchiveIndexFilePath: null,
@@ -83,6 +84,7 @@ function (n) {
                             var selectedContextDocumentationIndexFileName = GetFileName(settings.selectedContextDocumentationIndexFilePath);
                             settings.outputOkSpn.innerHTML =  settings.outputOkText.format(selectedArchiveIndexFileName,selectedContextDocumentationIndexFileName);
                             settings.selectDeliveryPackage.innerHTML = "[{0}]".format(settings.IndecesPath);
+                            settings.contextDocumentsCallback().load();
                             ipcRenderer.send('open-information-dialog',settings.outputOkInformationTitle.innerHTML,settings.outputOkInformationText.innerHTML);
                             settings.contextDocumentsTab.click();
                         }
@@ -125,8 +127,9 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Hybris.IndexFiles = {
-            initialize: function (structureCallback,selectArchiveIndexFileId,pathSArchiveIndexFileId,selectContextDocumentationIndexFileId,pathContextDocumentationIndexFileId,indexFilesOkBtn,outputErrorId,outputRequiredPathId,outputOkId,selectDeliveryPackageId,outputOkInformationPrefixId,contextDocumentsTabId) {
+            initialize: function (structureCallback,contextDocumentsCallback,selectArchiveIndexFileId,pathSArchiveIndexFileId,selectContextDocumentationIndexFileId,pathContextDocumentationIndexFileId,indexFilesOkBtn,outputErrorId,outputRequiredPathId,outputOkId,selectDeliveryPackageId,outputOkInformationPrefixId,contextDocumentsTabId) {
                 settings.structureCallback = structureCallback;
+                settings.contextDocumentsCallback = contextDocumentsCallback;
                 settings.selectArchiveIndexFileBtn = document.getElementById(selectArchiveIndexFileId);
                 settings.pathArchiveIndexFileTxt = document.getElementById(pathSArchiveIndexFileId);
                 settings.selectContextDocumentationIndexFileBtn = document.getElementById(selectContextDocumentationIndexFileId);
