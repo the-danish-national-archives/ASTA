@@ -63,6 +63,22 @@ ipcMain.on('indexfiles-open-contextdocumentationindex-file-dialog', (event) => {
   })
 })
 
+ipcMain.on('contextdocuments-open-file-dialog', (event,id) => {
+  dialog.showOpenDialog({
+    properties: ['openFile'],
+    filters: [
+      {
+        "name": "context documentation file",
+        "extensions": ["tif"]
+      }
+    ]  
+  }, (files) => {
+    if (files) {
+      event.sender.send('contextdocuments-selected-file', files, id)
+    }
+  })
+})
+
 ipcMain.on('validation-open-file-dialog', (event) => {
   dialog.showOpenDialog({
     properties: ['openFile', 'openDirectory']
