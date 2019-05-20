@@ -87,10 +87,16 @@ function (n) {
             }
         }
 
+        //Upload documents
         var EnsureDocuments = function () {
             settings.documents.forEach(upload => {
                 if(upload.path !== "") {
-                    
+                    var folders = upload.path.getFolders();
+                    var fileName = folders[folders.length - 1];
+                    var fileExt = fileName.substring(fileName.indexOf(".") + 1);
+                    var path = (settings.documentsPath.indexOf("\\") > -1) ? "{0}\\{1}\\{1}.{2}".format(settings.documentsPath,upload.id,fileExt) : "{0}/{1}/{1}.{2}".format(settings.documentsPath,upload.id,fileExt);
+                    console.log(`copy file: ${fileName} to ${path}`);
+                    fs.copyFileSync(upload.path, path);
                 }
             });
         }
@@ -118,6 +124,7 @@ function (n) {
             settings.okBtn.addEventListener('click', function (event) {
                 if(settings.documents.length > 0) {
                     EnsureStructure();
+                    EnsureDocuments();
                 }
             });
             ipcRenderer.on('contextdocuments-selected-file', (event, path, id) => {
