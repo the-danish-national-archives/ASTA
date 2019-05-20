@@ -8,6 +8,7 @@ function (n) {
     Rigsarkiv.Hybris = Rigsarkiv.Hybris || {},
     function (n) {
         const { ipcRenderer } = require('electron');
+        const fs = require('fs');
         const domParser = require('xmldom');
 
         //private data memebers
@@ -17,7 +18,10 @@ function (n) {
             outputErrorSpn: null,
             outputErrorText: null,
             uploadsTbl: null,
-            documents: []
+            documents: [],
+            documentsPath: null,
+            contextDocumentationFolder: "ContextDocumentation",
+            docCollectionFolderName: "docCollection1"
         }
 
          //output system error messages
@@ -76,13 +80,41 @@ function (n) {
             }
         }
 
+        var EnsureDocuments = function () {
+            settings.documents.forEach(upload => {
+                if(upload.path !== "") {
+                    
+                }
+            });
+        }
+
+        //Ensure documents folder Structure 
+        var EnsureStructure = function () {
+            var destPath = settings.structureCallback().deliveryPackagePath;
+            settings.documentsPath = (destPath.indexOf("\\") > -1) ? "{0}\\{1}\\{2}".format(destPath,settings.contextDocumentationFolder,settings.docCollectionFolderName) : "{0}/{1}/{2}".format(destPath,settings.contextDocumentationFolder,settings.docCollectionFolderName);
+            if(!fs.existsSync(settings.documentsPath)) {
+                console.log(`Create documents Path: ${settings.filePath}`);
+                fs.mkdirSync(settings.documentsPath, { recursive: true });
+            }
+            var path = null;
+            settings.documents.forEach(upload => {
+                path = (settings.documentsPath.indexOf("\\") > -1) ? "{0}\\{1}".format(settings.documentsPath,upload.id) : "{0}/{1}".format(settings.documentsPath,upload.id);
+                if(!fs.existsSync(path)) {                        
+                    console.log(`create document path: ${path}`);
+                    fs.mkdirSync(path, { recursive: true });
+                }
+            });
+        }
+
         //add Event Listener to HTML elmenets
         var AddEvents = function () {
             settings.okBtn.addEventListener('click', function (event) {
+                if(settings.documents.length > 0) {
+                    EnsureStructure();
+                }
             });
             ipcRenderer.on('contextdocuments-selected-file', (event, path, id) => {
-                console.log(`selected document path: ${path}`);
-                console.log(`selected document id: ${id}`);
+                console.log(`selected document ${id} with path: ${path}`);
                 var upload = GetDocument(id);
                 upload.path = path[0]; 
                 document.getElementById("hybris-contextdocuments-document-{0}".format(upload.id)).value = upload.path;          
