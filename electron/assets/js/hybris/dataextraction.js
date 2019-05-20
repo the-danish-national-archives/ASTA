@@ -74,8 +74,15 @@ function (n) {
         //output system error messages
         var HandleError = function(err) {
             console.log(`Error: ${err}`);
+            var msg = ""
+            if (err.code === "ENOENT") {
+                msg = "Der er opstået en fejl i dannelsen af afleveringspakken. Genstart venligst programmet.";
+            }
+            else {
+                msg = err.message
+            }
             settings.outputStatisticsErrorSpn.hidden = false;
-            settings.outputStatisticsErrorSpn.innerHTML = settings.outputStatisticsErrorText.format(err.message);
+            settings.outputStatisticsErrorSpn.innerHTML = settings.outputStatisticsErrorText.format(msg);
         }
 
         //reset status & input fields
