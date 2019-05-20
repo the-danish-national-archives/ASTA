@@ -67,7 +67,8 @@ function (n) {
             outputOptionalPostfixFiles: ["{0}_KODELISTE.txt","{0}_BRUGERKODE.txt"],
             sasCatalogFileExt: "{0}.sas7bcat",
             dataPathPostfix: "Data",
-            dataTablePathPostfix: "table{0}"
+            dataTablePathPostfix: "table{0}",
+            scriptPathLink: null            
         }
 
         //output system error messages
@@ -139,7 +140,7 @@ function (n) {
                             var scriptFileName = GetScriptFileName();
                             settings.outputStatisticsOkCopyScriptSpn.innerHTML = settings.outputStatisticsOkCopyScriptText.format(scriptFileName);
                             settings.outputStatisticsOkCopyScriptInfoSpn.innerHTML = settings.outputStatisticsOkCopyScriptInfoText.format(settings.scriptApplication);
-                            //settings.okScriptDataPath.innerHTML = "[{0}]".format(GetFolderPath());
+                            settings.scriptPathLink.innerHTML = "[{0}]".format(GetFolderPath());
                             settings.scriptPanel1.hidden = true;
                             settings.scriptPanel2.hidden = false;
                         }
@@ -344,6 +345,9 @@ function (n) {
             settings.okScriptDataPath.addEventListener('click', (event) => {
                 ipcRenderer.send('open-item',GetFolderPath());
             })
+            settings.scriptPathLink.addEventListener('click', (event) => {
+                ipcRenderer.send('open-item', GetFolderPath());
+            })
             settings.okScriptBtn.addEventListener('click', (event) => {
                 EnsureExport();
             })
@@ -377,7 +381,7 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Hybris.DataExtraction = {        
-            initialize: function (structureCallback,selectStatisticsFileId,pathStatisticsFileId,okStatisticsId,outputStatisticsErrorId,outputStatisticsOkCopyScriptId,outputStatisticsSASWarningPrefixId,scriptPanel1Id,scriptPanel2Id,okScriptBtnId,okScriptDataPathId,outputStatisticsOkCopyScriptInfoId,outputStatisticsRequiredPathId,outputScriptRequiredFilesWarningPrefixId,outputScriptOkId,outputScriptEncodingFileErrorPrefixId,nextId,metdataTabId,outputScriptCloseApplicationWarningPrefixId,outputStructureOkId,selectStructureDeliveryPackageId,metadataFileName,spinnerId) {
+            initialize: function (structureCallback,selectStatisticsFileId,pathStatisticsFileId,okStatisticsId,outputStatisticsErrorId,outputStatisticsOkCopyScriptId,outputStatisticsSASWarningPrefixId,scriptPanel1Id,scriptPanel2Id,okScriptBtnId,okScriptDataPathId,outputStatisticsOkCopyScriptInfoId,outputStatisticsRequiredPathId,outputScriptRequiredFilesWarningPrefixId,outputScriptOkId,outputScriptEncodingFileErrorPrefixId,nextId,metdataTabId,outputScriptCloseApplicationWarningPrefixId,outputStructureOkId,selectStructureDeliveryPackageId,metadataFileName,spinnerId,outputScriptPath) {
                 settings.structureCallback = structureCallback;
                 settings.selectStatisticsFileBtn = document.getElementById(selectStatisticsFileId);
                 settings.pathStatisticsFileTxt = document.getElementById(pathStatisticsFileId);
@@ -412,6 +416,7 @@ function (n) {
                 settings.spinner = document.getElementById(spinnerId);
                 settings.spinnerClass = settings.spinner.className;
                 settings.spinner.className = "";
+                settings.scriptPathLink = document.getElementById(outputScriptPath);
                 AddEvents();
             },
             callback: function () {
