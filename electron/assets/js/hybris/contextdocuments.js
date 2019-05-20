@@ -12,13 +12,23 @@ function (n) {
 
         //private data memebers
         var settings = {
-            structureCallback: null
+            structureCallback: null,
+            IndecesPath: null,
+            IndecesPostfix: "Indices",
         }
         
         //Model interfaces functions
         Rigsarkiv.Hybris.ContextDocuments = {
             initialize: function (structureCallback) {
                 settings.structureCallback = structureCallback;
+            },
+            callback: function () {
+                return {
+                    load: function() {
+                        settings.IndecesPath = settings.structureCallback().deliveryPackagePath;
+                        settings.IndecesPath += (settings.IndecesPath.indexOf("\\") > -1) ? "\\{0}".format(settings.IndecesPostfix) : "/{0}".format(settings.IndecesPostfix);
+                    }
+                }
             }
         }
     }(jQuery);
