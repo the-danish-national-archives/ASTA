@@ -278,7 +278,7 @@ function (n) {
             var filePath = settings.dataFolderPath;
             filePath += (settings.dataFolderPath.indexOf("\\") > -1) ? "\\{0}".format(fileName) : "/{0}".format(fileName);
             var size = fs.statSync(filePath).size
-            if(size < MaxFileSize) {
+            if(size <= MaxFileSize) {
                 var charsetMatch = chardet.detectFileSync(filePath);
                 console.log("File {0} encode: {1}".format(fileName,charsetMatch));
                 if(charsetMatch !== "UTF-8") {
