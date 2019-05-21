@@ -309,7 +309,7 @@ function (n) {
                     HandleError(err);
                 }
                 else {
-                    settings.okScriptBtn.disabled = true;
+                    settings.okScriptBtn.hidden = true;
                     var fileValidate = true;
                     var counter = 0;
                     var fileName = GetFileName();
@@ -326,9 +326,9 @@ function (n) {
                             if(element.format(filePrefix) == file && !ValidateFile(file)) { fileValidate = false; }
                         });
                     });
-                    settings.okScriptBtn.disabled = false;
-                    settings.spinner.className = "";
+                    settings.okScriptBtn.hidden = false;
                     if(counter < 3) {
+                        settings.spinner.className = "";
                         ipcRenderer.send('open-warning-dialog',settings.outputScriptRequiredFilesWarningTitle.innerHTML,settings.outputScriptRequiredFilesWarningText.innerHTML);
                     }
                     else {
@@ -339,6 +339,7 @@ function (n) {
                             settings.outputScriptOkSpn.innerHTML = settings.outputScriptOkText.format(fileName);
                             settings.outputScriptOkSpn.hidden = false;
                             settings.metadataFileName.value = fileName.substring(0,fileName.indexOf("."));
+                            settings.spinner.className = "";
                             settings.metdataTab.click();
                         }
                     }

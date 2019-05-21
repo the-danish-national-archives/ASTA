@@ -36,10 +36,6 @@ button {
     margin-top: 5px;
 }
 
-button:disabled {
-    background-color: #665c5c;
-}
-
 input[type=text] {
     border: solid 0.5px #b2b2b2;
     height: 27px;
