@@ -41,8 +41,15 @@ function (n) {
         //output system error messages
         var HandleError = function(err) {
             console.log(`Error: ${err}`);
+            var msg = ""
+            if (err.code === "ENOENT") {
+                msg = "Der er opstået en fejl i dannelsen af afleveringspakken. Genstart venligst programmet.";
+            }
+            else {
+                msg = err.message
+            }
             settings.outputErrorSpn.hidden = false;
-            settings.outputErrorSpn.innerHTML = settings.outputErrorText.format(err.message);            
+            settings.outputErrorSpn.innerHTML = settings.outputErrorText.format(msg);     
         }
 
         //reset status & input fields
@@ -81,15 +88,14 @@ function (n) {
                             HandleError(err);
                         }
                         else {
-                            //settings.outputOkSpn.hidden = false;
-                            //settings.selectDeliveryPackage.hidden = false;
+                            settings.outputOkSpn.hidden = false;
                             var selectedArchiveIndexFileName = GetFileName(settings.selectedArchiveIndexFilePath);
                             var selectedContextDocumentationIndexFileName = GetFileName(settings.selectedContextDocumentationIndexFilePath);
                             settings.outputOkSpn.innerHTML =  settings.outputOkText.format(selectedArchiveIndexFileName,selectedContextDocumentationIndexFileName);
                             settings.selectDeliveryPackage.innerHTML = "[{0}]".format(settings.IndecesPath);
                             var filePath = (settings.IndecesPath.indexOf("\\") > -1) ? "{0}\\{1}".format(settings.IndecesPath,selectedContextDocumentationIndexFileName) : "{0}/{1}".format(settings.IndecesPath,selectedContextDocumentationIndexFileName);
                             settings.contextDocumentsCallback().load(fs.readFileSync(filePath));
-                            ipcRenderer.send('open-information-dialog',settings.outputOkInformationTitle.innerHTML,settings.outputOkInformationText.innerHTML);
+                            //ipcRenderer.send('open-information-dialog',settings.outputOkInformationTitle.innerHTML,settings.outputOkInformationText.innerHTML);
                             settings.contextDocumentsTab.click();
                         }
                     });
