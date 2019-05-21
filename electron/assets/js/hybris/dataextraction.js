@@ -83,6 +83,7 @@ function (n) {
             }
             settings.outputStatisticsErrorSpn.hidden = false;
             settings.outputStatisticsErrorSpn.innerHTML = settings.outputStatisticsErrorText.format(msg);
+            ipcRenderer.send('open-error-dialog','Program Fejl','Der er opstået en fejl i dannelsen af afleveringspakken. Genstart venligst programmet.');
         }
 
         //reset status & input fields

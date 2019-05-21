@@ -50,6 +50,7 @@ function (n) {
             }
             settings.outputErrorSpn.hidden = false;
             settings.outputErrorSpn.innerHTML = settings.outputErrorText.format(msg);     
+            ipcRenderer.send('open-error-dialog','Program Fejl','Der er opstået en fejl i dannelsen af afleveringspakken. Genstart venligst programmet.');
         }
 
         //reset status & input fields
