@@ -350,3 +350,7 @@ a.selected:hover {
     padding: 5px 0px;
     width: fit-content;
   }
+
+  td .path {
+    width: 98% !important;
+  }
