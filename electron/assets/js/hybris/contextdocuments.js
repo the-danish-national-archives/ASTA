@@ -9,6 +9,8 @@ function (n) {
     function (n) {
         const { ipcRenderer } = require('electron');
         const {shell} = require('electron');
+        const path = require('path');
+        const os = require('os');
         const fs = require('fs');
         const domParser = require('xmldom');
 
