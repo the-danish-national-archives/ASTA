@@ -13,7 +13,7 @@
                             <div class="nemesisControls">                               
                                 <span>Vælg afleveringspakke til test:</span>
                                 <br>
-                                <input type="text" id="nemesis-path">
+                                <input type="text" id="nemesis-path" readonly="true" placeholder="Vælg sti med browse knappen">
                                 <button id="nemesis-select-directory">Browse</button>
                                 <br/><br/>                                
                                 <button id="nemesis-validateBtn">Test mappe</button>
@@ -35,7 +35,7 @@
                                     <h4>Batch test</h4>
                                     <span>Vælg mappe indeholdende flere afleveringspakker:</span>
                                     <br>
-                                    <input type="text" id="nemesis-batch-path">
+                                    <input type="text" id="nemesis-batch-path" readonly="true" placeholder="Vælg sti med browse knappen">
                                     <button id="nemesis-select-batch-directory">Browse</button>
                                     <br/><br/> 
                                     <button id="nemesis-batch-validateBtn">Batch test</button>
@@ -44,7 +44,9 @@
                                     <span id="nemesis-batch-Supplement" hidden="true">]</span>
                                 </div>
                             </div><br>
-                            <div id="nemesis-validate-Spinner" hidden="true" class="lds-ring"><div></div><div></div><div></div><div></div></div>
+                            <div id="nemesis-spinner-container">
+                                <div id="nemesis-validate-Spinner" hidden="true" class="lds-ring"><div></div><div></div><div></div><div></div></div>
+                            </div>
                             <div class="verticalDivider"> </div>
                             <div class="nemesisOutput">
                                 <h3 id="nemesis-test-id"></h3>

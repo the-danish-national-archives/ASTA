@@ -49,6 +49,15 @@ input[type=text] {
     width: 30%
 }
 
+/* Override the size of the input boxes in nemesis as the general layout of that is more packed. */
+#nemesis-path{
+    width: 45%;
+}
+
+#nemesis-batch-path {
+    width: 45%;
+}
+
 textarea {
     border: solid 0.5px #b2b2b2;
     padding-left:0px;
@@ -169,7 +178,6 @@ h4 {
     font-family: SourceSansProBold;
 }
 
-
 /* Font Headers END */
 
 /* Side navigation menu */ 
@@ -193,7 +201,6 @@ h4 {
     color: #49897f;
     display: block;
 }
-
 
 .side-nav a:hover {
     color: #fff;
@@ -268,10 +275,12 @@ a.selected:hover {
 
 .nemesisOutput {
     height: 400px;
-    width: 40%;
-    border: 1px solid #000;
-    background-color: rgb(207, 190, 143);
+    width: 45%;
+    border: 1px solid #000;    
     overflow-y: auto;
+    box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.4);
+    box-sizing: border-box;
+    padding: 0px 10px;
 }
 
 .box {
