@@ -45,6 +45,15 @@ input[type=text] {
     width: 30%
 }
 
+/* Override the size of the input boxes in nemesis as the general layout of that is more packed. */
+#nemesis-path{
+    width: 45%;
+}
+
+#nemesis-batch-path {
+    width: 45%;
+}
+
 textarea {
     border: solid 0.5px #b2b2b2;
     padding-left:0px;
@@ -165,7 +174,6 @@ h4 {
     font-family: SourceSansProBold;
 }
 
-
 /* Font Headers END */
 
 /* Side navigation menu */ 
@@ -177,7 +185,6 @@ h4 {
     top: 0;
     left: 0;
     background-color: #000000;
-    /*opacity: 0.9;*/
     overflow-x: hidden;
     padding-top: 20px;
 }
@@ -189,7 +196,6 @@ h4 {
     color: #49897f;
     display: block;
 }
-
 
 .side-nav a:hover {
     color: #fff;
@@ -214,7 +220,6 @@ a.selected:hover {
 /* Header */
 
 .header {
-    /*background-color: rgb(26, 24, 24);*/
     background-color: #000000;
     height: 116px;
 }
@@ -264,10 +269,12 @@ a.selected:hover {
 
 .nemesisOutput {
     height: 400px;
-    width: 40%;
+    width: 45%;
     border: 1px solid #000;
-    background-color: rgb(207, 190, 143);
     overflow-y: auto;
+    box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.4);
+    box-sizing: border-box;
+    padding: 0px 10px;
 }
 
 .box {
@@ -339,6 +346,10 @@ a.selected:hover {
   .trinHeader {
     float:right;
   }
+
+  #nemesis-spinner-container {
+      width: 64px;
+  }
   /* Spinner END */
 
   .infoBox{
@@ -346,3 +357,4 @@ a.selected:hover {
     padding: 5px 0px;
     width: fit-content;
   }
+
