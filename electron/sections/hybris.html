@@ -12,6 +12,7 @@
                         <button name="button" class="menuBtn" id="hybris-tab-metdata">Skab Metadata</button>
                         <button name="button" class="menuBtn" id="hybris-tab-indexfiles">Indexfiler</button>
                         <button name="button" class="menuBtn" id="hybris-tab-contextdocuments">Kontekstdokumenter</button>
+                        <button name="button" class="menuBtn" id="hybris-tab-overview">Oversigt</button>
                     </div>
                     <div id="hybris-panel-structure" class="formularContainer">
                         <p>
@@ -77,7 +78,7 @@
                                 <span id="hybris-message-statistics-filepath-Text" hidden="true">Vælg den statistikfil, du ønsker at lave udtræk fra. Filen skal have et af følgende formater: .sas7bdat (SAS-fil), .dta (Stata-fil) eller .sav (SPSS-fil). Når der udtrækkes data for en SAS-fil med katalog, skal katalogfilen (.sas7bcat) placeres i samme mappe som den valgte SAS-datafil (.sas7bdat), der skal laves udtræk fra og navngives på samme måde som datafilen.  Du skal lave en kopi af katalogfilen og omdøbe denne.
                                 </span>
                             <div>
-                                <input type="text" class="path" id="hybris-statistics-filepath">
+                                <input type="text" class="path" id="hybris-statistics-filepath" readonly="true" placeholder="Vælg sti med browse knappen">
                                 <button id="hybris-select-statistics-file">Browse</button>
                             </div>
                             <br>
@@ -247,7 +248,7 @@
                             der har skabt data, perioden data dækker, beskrivelse af indhold osv. Det er den godkendte archiveIndex.xml som du
                             har modtaget fra Rigsarkivet, som du skal uploade til afleveringspakken.</span>
                         <div>
-                            <input type="text" id="hybris-indexfiles-archiveIndex" class="path">
+                            <input type="text" id="hybris-indexfiles-archiveIndex" class="path" readonly="true" placeholder="Vælg sti med browse knappen">
                             <button id="hybris-indexfiles-archiveIndex-selectFile">Browse</button>
                         </div>
                         <br>
@@ -261,7 +262,7 @@
                             modtaget fra Rigsarkivet, du skal uploade til afleveringspakken.</span>
                         
                         <div>
-                            <input type="text" id="hybris-indexfiles-contextDocumentationIndex" class="path">
+                            <input type="text" id="hybris-indexfiles-contextDocumentationIndex" class="path" readonly="true" placeholder="Vælg sti med browse knappen">
                             <button id="hybris-indexfiles-contextDocumentationIndex-selectFile">Browse</button>
                         </div>
                         <br>
@@ -273,18 +274,32 @@
                         <span id="hybris-output-indexfiles-WrongFileName-Text" hidden="true">De valgte filer har forkert navn</span>
                         <span id="hybris-output-indexfiles-OkInformation-Title" hidden="true">Indexfiler</span>
                         <span id="hybris-output-indexfiles-OkInformation-Text" hidden="true">De valgte filer blev kopieret til mappen "Indices" i afleveringspakken</span>
-                        <span id="hybris-output-indexfiles-Ok" hidden="true"><br />Filerne [{0}], [{1}] er nu kopieret til mappen </span>
                         <a id="hybris-indexfiles-delivery-package" hidden="true"></a>
                     </div>
                     <div id="hybris-panel-contextdocuments" class="formularContainer" hidden="true">
                         <p>
                             <h2 class="boldfaced">Upload kontkstdokumenter til afleveringspakken <span id="hybris-output-statistics-header-contextdocuments" class="trinHeader">{0}</span></h2>
                         </p>
+                        <br/>
+                        <span id="hybris-output-indexfiles-Ok" class="alert-warning"><strong>Information!</strong> Filerne [{0}], [{1}] er nu kopieret til mappen "Indices" i afleveringspakken</span>
+                        <br/><br/>
                         <table id="hybris-contextdocuments-uploads">
                             <tr><th>Mappenr</th><th>Dokumenttitle</th><th>Vælg dokument</th><th></th></tr>
                          </table>
-                        <button id="hybris-contextdocuments-okBtn">Næste</button>
+                        <button id="hybris-contextdocuments-okBtn">Tilføj</button>
+                        <button id="hybris-contextdocuments-printBtn">Print</button>
+                        <button id="hybris-contextdocuments-nextBtn">Næste</button>
                         <span id="hybris-output-contextdocuments-Error" hidden="true"><br />Error: {0}</span>
+                        <span id="hybris-output-contextdocuments-EmptyFile-Title" hidden="true">Indexfilen</span>
+                        <span id="hybris-output-contextdocuments-EmptyFile-Text" hidden="true">Indexfilen contextDocumentationIndex.xml er tom</span>
+                        <span id="hybris-output-contextdocuments-OkInformation-Title" hidden="true">Kontkstdokumenter</span>
+                        <span id="hybris-output-contextdocuments-OkInformation-Text" hidden="true">De valgte filer blev uploadet til mappen "ContextDocumentation" i afleveringspakken</span>
+                        <div id="hybris-contextdocuments-Spinner" hidden="true" class="lds-ring"><div></div><div></div><div></div><div></div></div>
+                    </div>
+                    <div id="hybris-panel-overview" class="formularContainer" hidden="true">
+                        <p>
+                            <h2 class="boldfaced">Oversigt til afleveringspakken <span id="hybris-output-statistics-header-overview" class="trinHeader">{0}</span></h2>
+                        </p> 
                     </div>
                     <div class="formularContainer">
                         <p>&copy; 2019 <b>ASTA - Aflevering af Statistikfiler Til Arkiv</b> - Version: 0.0.0.0</p>
@@ -302,13 +317,13 @@
             require('./assets/js/hybris/indexfiles');
             require('./assets/js/hybris/contextdocuments');
 
-            Rigsarkiv.Panels.initialize(["hybris-tab-structure","hybris-tab-statistics","hybris-tab-metdata","hybris-tab-indexfiles","hybris-tab-contextdocuments"]);
+            Rigsarkiv.Panels.initialize(["hybris-tab-structure","hybris-tab-statistics","hybris-tab-metdata","hybris-tab-indexfiles","hybris-tab-contextdocuments","hybris-tab-overview"]);
             Rigsarkiv.Messages.initialize(["hybris-message-structure-delivery-package","hybris-message-structure-path","hybris-message-statistics-filepath","hybris-message-metdata-fileName","hybris-message-metdata-fileDescription","hybris-message-metdata-keyVariable","hybris-message-metdata-foreignFile","hybris-message-metdata-foreignVariable","hybris-message-metdata-referenceVariable","hybris-message-indexfiles-archiveIndex","hybris-message-indexfiles-contextDocumentationIndex"]);
-            Rigsarkiv.Hybris.Structure.initialize("hybris-select-structure-directory","hybris-structure-path","hybris-structure-delivery-package","hybris-structure-okBtn","hybris-output-structure-Error","hybris-output-structure-Exists","hybris-output-structure-RequiredPath","hybris-output-structure-UnvalidDeliveryPackage","hybris-output-structure-Ok","hybris-structure-select-delivery-package","hybris-tab-statistics","hybris-output-statistics-header-trin1","hybris-output-statistics-header-trin2","hybris-output-statistics-header-trin3","hybris-output-statistics-header-information2","hybris-output-statistics-header-indexfiles","hybris-output-statistics-header-contextdocuments");          
+            Rigsarkiv.Hybris.Structure.initialize("hybris-select-structure-directory","hybris-structure-path","hybris-structure-delivery-package","hybris-structure-okBtn","hybris-output-structure-Error","hybris-output-structure-Exists","hybris-output-structure-RequiredPath","hybris-output-structure-UnvalidDeliveryPackage","hybris-output-structure-Ok","hybris-structure-select-delivery-package","hybris-tab-statistics","hybris-output-statistics-header-trin1","hybris-output-statistics-header-trin2","hybris-output-statistics-header-trin3","hybris-output-statistics-header-information2","hybris-output-statistics-header-indexfiles","hybris-output-statistics-header-contextdocuments","hybris-output-statistics-header-overview");          
             Rigsarkiv.Hybris.DataExtraction.initialize(Rigsarkiv.Hybris.Structure.callback,"hybris-select-statistics-file","hybris-statistics-filepath","hybris-statistics-okBtn","hybris-output-statistics-Error","hybris-output-script-OKCopyScript","hybris-message-statistics-SASCatalogWarning","hybris-panel-script1","hybris-panel-script2","hybris-script-okBtn","hybris-output-script-dataPath","hybris-output-script-OKCopyScriptInfo","hybris-output-statistics-RequiredPath","hybris-output-script-RequiredFilesWarning","hybris-output-script-Ok","hybris-output-script-EncodingFileError","hybris-script-nextBtn","hybris-tab-metdata","hybris-output-script-CloseApplicationWarning","hybris-output-structure-Ok","hybris-structure-select-delivery-package","hybris-metdata-fileName","hybris-script-Spinner","hybris-output-script-dataPath-link");
             Rigsarkiv.Hybris.MetaData.initialize(Rigsarkiv.Hybris.DataExtraction.callback,"hybris-metdata-fileName", "hybris-metdata-fileDescription", "hybris-metdata-keyVar", "hybris-metdata-foreignFileName", "hybris-metdata-foreignKeyVarName", "hybris-metdata-refVar", "hybris-metdata-okBtn", "hybris-output-metdata-fileNameRequired", "hybris-output-metdata-fileNameNumberFirst", "hybris-output-metdata-fileNameIllegalChar","hybris-output-metdata-Ok","hybris-output-metdata-path","hybris-output-metdata-Error","hybris-output-metdata-NewExtraction","hybris-metdata-NewExtractionBtn","hybris-tab-statistics","hybris-output-metdata-Next","hybris-metdata-NextBtn","hybris-tab-indexfiles","hybris-output-metdata-fileNameLength","hybris-output-metdata-fileNamereservedWord","hybris-output-metdata-fileDescrRequired","hybris-panel-information1","hybris-panel-information2","hybris-output-indexfiles-Description","hybris-output-metdata-CloseApplicationError","hybris-metdata-references","hybris-metdata-addReferenceBtn","hybris-output-metdata-referenceRequired","hybris-reset-hide-box");
             Rigsarkiv.Hybris.IndexFiles.initialize(Rigsarkiv.Hybris.Structure.callback,Rigsarkiv.Hybris.ContextDocuments.callback,"hybris-indexfiles-archiveIndex-selectFile","hybris-indexfiles-archiveIndex","hybris-indexfiles-contextDocumentationIndex-selectFile","hybris-indexfiles-contextDocumentationIndex","hybris-indexfiles-okBtn","hybris-output-indexfiles-Error","hybris-output-indexfiles-RequiredPath","hybris-output-indexfiles-Ok","hybris-indexfiles-delivery-package","hybris-output-indexfiles-OkInformation","hybris-tab-contextdocuments","hybris-output-indexfiles-WrongFileName");
-            Rigsarkiv.Hybris.ContextDocuments.initialize(Rigsarkiv.Hybris.Structure.callback,"hybris-output-contextdocuments-Error","hybris-contextdocuments-okBtn","hybris-contextdocuments-uploads");
+            Rigsarkiv.Hybris.ContextDocuments.initialize(Rigsarkiv.Hybris.Structure.callback,"hybris-output-contextdocuments-Error","hybris-contextdocuments-okBtn","hybris-contextdocuments-uploads","hybris-contextdocuments-printBtn","hybris-output-contextdocuments-EmptyFile","hybris-contextdocuments-nextBtn","hybris-tab-overview","hybris-output-contextdocuments-OkInformation","hybris-contextdocuments-Spinner");
           </script>
     </section>
 </template>
