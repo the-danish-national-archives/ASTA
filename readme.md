@@ -27,9 +27,6 @@ This project is a minimalistic app created using Electron. It follows the conven
 * * The sidebar (menu) logic is handled in the menu.js file.
 * * All menu items have their own HTML file.
 
-Below is an image that shows the flow of the program:
-![The flow of the program](https://github.com/the-danish-national-archives/1007plus/blob/master/docs/ProgramFlow.jpg "Program Flow.")
-
 ## Guide to packaging
 In order to make a package of the program, use the scripts mentioned in the package.json file.
 Under the section 'scripts' there is listed scripts for both packaging and creation of the installer files.
