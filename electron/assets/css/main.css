@@ -352,6 +352,10 @@ a.selected:hover {
   .trinHeader {
     float:right;
   }
+  
+  #nemesis-spinner-container {
+    width: 64px;
+}
   /* Spinner END */
 
   .infoBox{
