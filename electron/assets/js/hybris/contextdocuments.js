@@ -22,6 +22,11 @@ function (n) {
             uploadsTbl: null,
             outputEmptyFileTitle: null,
             outputEmptyFileText: null,
+            overviewTab: null,
+            outputOkInformationTitle: null,
+            outputOkInformationText: null,
+            spinner: null,
+            spinnerClass: null,
             documents: [],
             logs: [],
             documentsPath: null,
@@ -159,12 +164,30 @@ function (n) {
             EnsureData();        
         }
 
+        //enable/diable waiting spinner
+        var UpdateSpinner = function(spinnerClass) {
+            var disabled = (spinnerClass === "") ? false : true;
+            settings.spinner.className = spinnerClass;
+            settings.okBtn.disabled = disabled;
+            settings.printBtn.disabled = disabled;
+            settings.nextBtn.disabled = disabled;
+            $("button[id^='hybris-contextdocuments-selectFile-']").each(function() {
+                this.disabled = disabled;
+            });                    
+        }
+
         //add Event Listener to HTML elmenets
         var AddEvents = function () {
+            settings.nextBtn.addEventListener('click', function (event) {
+                settings.overviewTab.click();
+            });
             settings.okBtn.addEventListener('click', function (event) {
-                if(settings.documents.length > 0) {
+                if(settings.documents.length > 0) {                    
+                    UpdateSpinner(settings.spinnerClass);
                     EnsureStructure();
                     EnsureDocuments();
+                    UpdateSpinner("");                    
+                    ipcRenderer.send('open-information-dialog',settings.outputOkInformationTitle.innerHTML,settings.outputOkInformationText.innerHTML);
                 }
             });
             settings.printBtn.addEventListener('click', function (event) {
@@ -185,7 +208,7 @@ function (n) {
         
         //Model interfaces functions
         Rigsarkiv.Hybris.ContextDocuments = {
-            initialize: function (structureCallback,outputErrorId,okId,uploadsId,printId,outputEmptyFileId) {
+            initialize: function (structureCallback,outputErrorId,okId,uploadsId,printId,outputEmptyFileId,nextId,overviewTabId,outputOkInformationPrefixId,spinnerId) {
                 settings.structureCallback = structureCallback;
                 settings.okBtn = document.getElementById(okId);
                 settings.outputErrorSpn =  document.getElementById(outputErrorId);
@@ -194,6 +217,13 @@ function (n) {
                 settings.printBtn = document.getElementById(printId);
                 settings.outputEmptyFileTitle = document.getElementById(outputEmptyFileId + "-Title");
                 settings.outputEmptyFileText = document.getElementById(outputEmptyFileId + "-Text");
+                settings.nextBtn = document.getElementById(nextId);
+                settings.overviewTab = document.getElementById(overviewTabId);
+                settings.outputOkInformationTitle = document.getElementById(outputOkInformationPrefixId + "-Title");
+                settings.outputOkInformationText = document.getElementById(outputOkInformationPrefixId + "-Text");
+                settings.spinner = document.getElementById(spinnerId);
+                settings.spinnerClass = settings.spinner.className;
+                settings.spinner.className = "";
                 AddEvents();
             },
             callback: function () {
