@@ -23,11 +23,7 @@
                         <i id="hybris-message-structure-delivery-package" class="far fa-question-circle"></i>
                         <br>
                         <span id="hybris-message-structure-delivery-package-Title" hidden="true">Løbenummer</span>
-                        <span id="hybris-message-structure-delivery-package-Text" hidden="true">Indtast det løbenummer for afleveringspakken, du
-                            har fået udleveret af Rigsarkivet. Det udleverede løbenummer fremgår af afleveringsbestemmelsen og
-                            arkivbeskrivelsesfilen (archiveIndex.xml). Løbenummeret består af minimum 5 cifre uden foranstillede nuller.
-                            Indtastes løbenummer ikke, får afleveringspakken midlertidigt løbenummeret 99999. Løbenummer kan ændres senere ved
-                            at omdøbe mappenavnet i en stifinder.</span>
+                        <span id="hybris-message-structure-delivery-package-Text" hidden="true">Indtast det løbenummer for afleveringspakken, du har fået udleveret af arkivet. Det udleverede løbenummer fremgår af afleveringsbestemmelsen og arkivbeskrivelsesfilen (archiveIndex.xml). Løbenummeret består af minimum 5 cifre uden foranstillede nuller. Indtastes løbenummer ikke, får afleveringspakken midlertidigt løbenummeret 99999. Løbenummer kan ændres senere ved at omdøbe mappenavnet i en stifinder.</span>
                         
                         <input type="text" id="hybris-structure-delivery-package">
                         <br>
@@ -36,8 +32,7 @@
                             <i id="hybris-message-structure-path" class="far fa-question-circle"></i>
                             <br>
                             <span id="hybris-message-structure-path-Title" hidden="true">Destination</span>
-                            <span id="hybris-message-structure-path-Text" hidden="true">Vælg det drev eller den mappe på computeren eller mediet
-                                (fx USB, harddisk, SSD), som afleveringspakken skal placeres på.</span>
+                            <span id="hybris-message-structure-path-Text" hidden="true">Vælg det drev eller den mappe på computeren eller mediet (fx USB, harddisk, SSD), som afleveringspakken skal placeres på.</span>
                         <div>
                             <input type="text" class="path" id="hybris-structure-path" readonly="true" placeholder="Vælg sti med browse knappen">
                             <button id="hybris-select-structure-directory">Browse</button>
@@ -61,7 +56,7 @@
                                 <h2 class="boldfaced">TRIN 1: Vælg statistikfil <span id="hybris-output-statistics-header-trin1" class="trinHeader">{0}</span></h2>
                             </p>
                             <p>
-                                Du kan nu udtrække data- og metadata fra dine statistikfiler til den tomme afleveringspakke du lige har skabt.  
+                                Du kan her udtrække data og metadata fra dine statistikfiler til afleveringspakken  
                                 <br/>
                                 <br/> Udtrækket består af 3 trin for hver statistikfil: 
                                 <br/> TRIN 1: Vælg statistikfil
@@ -84,11 +79,12 @@
                             <br>
                             <button id="hybris-statistics-okBtn">Næste</button>
                             <br>
+                            <br>
                             <div>
-                            <span class="greyText">INFO: Mappestrukturen er skabt og placeret i mappen </span><a id="hybris-structure-select-delivery-package" hidden="true"></a>
+                            <span class="greyText">INFO: Mappestrukturen er skabt og placeret i her: </span><a id="hybris-structure-select-delivery-package" hidden="true"></a>
                             </div>
                             <span id="hybris-output-statistics-RequiredPath-Title" hidden="true">Statistikfilen mangler</span>
-                            <span id="hybris-output-statistics-RequiredPath-Text" hidden="true">Destination for statistikfilen mangler</span>
+                            <span id="hybris-output-statistics-RequiredPath-Text" hidden="true">Vælg en statistikfil</span>
                             <span id="hybris-output-statistics-Error" hidden="true"><br/>Error: {0}</span>
                             <span id="hybris-message-statistics-SASCatalogWarning-Title" hidden="true">SAS fil uden katalog</span>
                             <span id="hybris-message-statistics-SASCatalogWarning-Text" hidden="true">Du er ved at udtrække data fra en SAS-datafil uden katalog. Enten mangler SAS katalogfilen eller den er navngivet forkert. Når der udtrækkes data for en SAS-datafil med katalog, skal katalogfilen (.sas7bcat) placeres i samme mappe som den valgte SAS-datafil (.sas7bdat), der skal laves udtræk fra, og katalogfilen skal navngives på samme måde som SAS-datafilen. OBS: Det er vigtigt at du omdøber en kopi af katalogfilen, ellers kan du ikke åbne statistikfilen korrekt efterfølgende i dit statistikprogram. OBS: Katalogfilen må kun indeholde value labels (formats) som anvendes i den statistikfil, som udtrækket laves fra. Klik ”FORSÆT”, hvis du ønsker at fortsætte udtræk uden katalogfil. Klik ”FORTRYD” hvis du ønsker at vælge ny statistikfil med katalog.</span>
@@ -114,15 +110,15 @@
                             <div id="hybris-script-Spinner" hidden="true" class="lds-ring"><div></div><div></div><div></div><div></div></div>
                             <br/>
                             <br/>
-                            <span id="hybris-output-script-OKCopyScript" class="greyText">INFO: Eksport script [{0}] er dannet og ligger her:</span><a id="hybris-output-script-dataPath-link">[{0}]</a>                          
-                            <span id="hybris-output-script-Ok" hidden="true"><br/>Der er udtrukket data og metadata fra statistikfilen [{0}].</span>
+                            <span id="hybris-output-script-OKCopyScript" class="greyText">INFO: Eksport script {0} er dannet og ligger her:</span><a id="hybris-output-script-dataPath-link">{0}</a>                          
+                            <span id="hybris-output-script-Ok" hidden="true"><br/>Der er udtrukket data og metadata fra statistikfilen {0}.</span>
                             <span id="hybris-output-script-Error" hidden="true"><br/>Error: {0}</span>
                             <span id="hybris-output-script-CloseApplicationWarning-Title" hidden="true">Statistikprogrammet</span>
                             <span id="hybris-output-script-CloseApplicationWarning-Text" hidden="true">Luk statistikfilen og export scriptet, før du klikker på knappen "Næste", for at gå til trin 3.</span>
                             <span id="hybris-output-script-RequiredFilesWarning-Title" hidden="true">Data og metadata fra statistikfilen</span>
                             <span id="hybris-output-script-RequiredFilesWarning-Text" hidden="true">Der er ikke udtrukket data og metadata fra statistikfilen. Kør export scriptet i dit statistikprogram før du klikker på knappen "Næste".</span>
                             <span id="hybris-output-script-EncodingFileError-Title" hidden="true">Fil encoding</span>
-                            <span id="hybris-output-script-EncodingFileError-Text" hidden="true">Filen {0} indeholder karakterer som ikke er UTF-8 tegn. Statistikfilen, der laves udtræk fra, skal være indkodet som UTF-8 før dataudtræk laves med Hybris.  Du skal ændre encoding for statistikfilen i dit statistikprogram og lave nyt dataudtæk med Hybris.</span>
+                            <span id="hybris-output-script-EncodingFileError-Text" hidden="true">Filen {0} indeholder karakterer som ikke er UTF-8 tegn. Statistikfilen, der laves udtræk fra, skal være indkodet som UTF-8 før dataudtræk laves med ASTA.  Du skal ændre encoding for statistikfilen i dit statistikprogram og lave nyt dataudtæk med ASTA.</span>
                             <br /><br />
                             <button id="hybris-script-nextBtn" hidden="true">Næste</button>
                         </div>
@@ -217,12 +213,11 @@
                             <div class="infoBox">
                                 <span class="confirmation"><i class="fas fa-check-circle ok"></i>Dataudtrækket er færdigt</span>
                             </div>
-                            <span id="hybris-output-metdata-Ok" class="greyText"><br /><strong>Bekræftelse!</strong>Udtræk fra den valgte
-                                statistikfil er nu færdigt. En datafil ({0}) og en metadatafil ({1}) med data fra statistikfilen [{2}] er nu
-                                udtrukket og placeret i mappen [</span><a id="hybris-output-metdata-path" class="greyText"></a><span
-                                class="greyText">]</span>
+                            <span id="hybris-output-metdata-Ok" class="greyText"><br />INFO: En datafil ({0}) og en metadatafil ({1}) med informationer fra statistikfilen {2} er nu
+                                udtrukket og placeret i mappen </span><a id="hybris-output-metdata-path"></a>
+                                     
                             <span id="hybris-output-metdata-NewExtraction"><br /><br />Hvis du skal lave udtræk fra flere statistikfiler til
-                                afleveringspakke [{0}], så klik på knappen "Nyt udtræk".<br /></span>
+                                afleveringspakke {0}, så klik på knappen "Nyt udtræk".<br /></span>
                             <button id="hybris-metdata-NewExtractionBtn">Nyt udtræk</button>
                             <span id="hybris-output-metdata-Next"><br /><br />Hvis du ikke skal lave flere udtræk til afleveringspakken, så klik på
                                 knappen "Næste".<br /></span>
@@ -233,20 +228,17 @@
                         <p>
                             <h2 class="boldfaced">Placer indexfiler i afleveringspakken <span id="hybris-output-statistics-header-indexfiles" class="trinHeader">{0}</span></h2>
                         </p>
-                        <span id="hybris-output-indexfiles-Description">Her kan du placere indexfilerne archiveIndex.xml og contextDocumentationIndex.xml korrekt i afleveringspakke [{0}].</span>
+                        <span id="hybris-output-indexfiles-Description">Her kan du placere indexfilerne archiveIndex.xml og contextDocumentationIndex.xml korrekt i afleveringspakke {0}.</span>
                         <br/><br>
                         <span id="hybris-output-indexfiles-Summary" class="alert-warning"><strong>Information!</strong> Indexfilerne skal være
-                            godkendt af Rigsarkivet og navngivet archiveIndex.xml og contextDocumentationIndex.xml. </span>
+                            godkendt af arkivet og navngivet archiveIndex.xml og contextDocumentationIndex.xml. </span>
                         <br>
                         <br>
                         <br>
                         <span class="boldfaced">Vælg archiveIndex.xml filen:</span>
                         <i id="hybris-message-indexfiles-archiveIndex" class="far fa-question-circle"></i>
                         <span id="hybris-message-indexfiles-archiveIndex-Title" hidden="true">archiveIndex.xml</span>
-                        <span id="hybris-message-indexfiles-archiveIndex-Text" hidden="true">Indexfilen archiveIndex.xml er en
-                            arkivbeskrivelsesfil, der indeholder metadata om afleveringspakken, fx navne på de forskere eller den institution
-                            der har skabt data, perioden data dækker, beskrivelse af indhold osv. Det er den godkendte archiveIndex.xml som du
-                            har modtaget fra Rigsarkivet, som du skal uploade til afleveringspakken.</span>
+                        <span id="hybris-message-indexfiles-archiveIndex-Text" hidden="true">Indexfilen archiveIndex.xml er en arkivbeskrivelsesfil, der indeholder metadata om afleveringspakken, fx navne på de forskere eller den institution der har skabt data, perioden data dækker, beskrivelse af indhold osv. Det er den godkendte archiveIndex.xml som du har modtaget fra arkivet, som du skal uploade til afleveringspakken.</span>
                         <div>
                             <input type="text" id="hybris-indexfiles-archiveIndex" class="path" readonly="true" placeholder="Vælg sti med browse knappen">
                             <button id="hybris-indexfiles-archiveIndex-selectFile">Browse</button>
@@ -256,10 +248,7 @@
                         <span class="boldfaced">Vælg contextDocumentationIndex.xml filen:</span>
                         <i id="hybris-message-indexfiles-contextDocumentationIndex" class="far fa-question-circle"></i>
                         <span id="hybris-message-indexfiles-contextDocumentationIndex-Title" hidden="true">contextDocumentationIndex.xml</span>
-                        <span id="hybris-message-indexfiles-contextDocumentationIndex-Text" hidden="true">Indexfilen
-                            contextDocumentationIndex.xml indeholder oplysninger om kontekstdokumenterne i afleveringspakken, fx dokumenttitel,
-                            dokumentdato og opmærkning af dokumentkategori. Det er den godkendte contextDocumentationIndex.xml, som du har
-                            modtaget fra Rigsarkivet, du skal uploade til afleveringspakken.</span>
+                        <span id="hybris-message-indexfiles-contextDocumentationIndex-Text" hidden="true">Indexfilen contextDocumentationIndex.xml indeholder oplysninger om kontekstdokumenterne i afleveringspakken, fx dokumenttitel, dokumentdato og opmærkning af dokumentkategori. Det er den godkendte contextDocumentationIndex.xml, som du har modtaget fra arkivet, du skal uploade til afleveringspakken.</span>
                         
                         <div>
                             <input type="text" id="hybris-indexfiles-contextDocumentationIndex" class="path" readonly="true" placeholder="Vælg sti med browse knappen">
@@ -271,39 +260,60 @@
                         <span id="hybris-output-indexfiles-RequiredPath-Title" hidden="true">Mangler fil</span>
                         <span id="hybris-output-indexfiles-RequiredPath-Text" hidden="true">Vælg begge indexfiler, før du klikker "Næste"</span>
                         <span id="hybris-output-indexfiles-WrongFileName-Title" hidden="true">Forkert filnavn</span>
-                        <span id="hybris-output-indexfiles-WrongFileName-Text" hidden="true">De valgte filer har forkert navn</span>
+                        <span id="hybris-output-indexfiles-WrongFileName-Text" hidden="true">En eller flere af de valgte indexfiler er navngivet forkert. Arkivbeskrivelsesfilen skal navngives "archiveIndex.xml" og kontekstdokumentationsfilen skal navngives "contextDocumentationIndex.xml"  </span>
                         <span id="hybris-output-indexfiles-OkInformation-Title" hidden="true">Indexfiler</span>
                         <span id="hybris-output-indexfiles-OkInformation-Text" hidden="true">De valgte filer blev kopieret til mappen "Indices" i afleveringspakken</span>
                         <a id="hybris-indexfiles-delivery-package" hidden="true"></a>
                     </div>
                     <div id="hybris-panel-contextdocuments" class="formularContainer" hidden="true">
                         <p>
-                            <h2 class="boldfaced">Upload kontkstdokumenter til afleveringspakken <span id="hybris-output-statistics-header-contextdocuments" class="trinHeader">{0}</span></h2>
+                            <div class="infoBox">
+                                <span class="confirmation"><i class="fas fa-check-circle ok"></i>Indexfilerne er placeret</span>
+                            </div>    
+                            <h2 class="boldfaced">Placer kontekstdokumenter i afleveringspakken <span id="hybris-output-statistics-header-contextdocuments" class="trinHeader">{0}</span></h2>
+                            Du skal tilføje nedenstående kontekstdokumenter til afleveringspakken.
+                            <br>Hvis et kontekstdokument ikke tilføjes, oprettes en tom dokumentmappe navngivet med mappenummeret.
                         </p>
+                        <br>
+                        <span id="hybris-output-indexfiles-Ok" class="alert-warning"><strong>Information!</strong> Du kan kun placere en fil per dokumentmappe med dette værktøj. Uploades flere filer til samme mappe overskrives den eksisterende fil.</span>
+                        <br>
+                        <br>
                         <br/>
-                        <span id="hybris-output-indexfiles-Ok" class="alert-warning"><strong>Information!</strong> Filerne [{0}], [{1}] er nu kopieret til mappen "Indices" i afleveringspakken</span>
-                        <br/><br/>
+                        <span id="hybris-output-indexfiles-Ok" class="alert-warning"><strong>Information!</strong> Kontekstdokumenter skal konverteres til et af følgende formater før de afleveres til arkiv: .tif eller .jp2 (dokumenter og billeder), .mp3 eller .wav (lyd) eller .mpg (video)</span>
+                        <br/>
+                        <br/>
+                        <!--<span id="hybris-output-indexfiles-Ok" class="alert-warning"><strong>Information!</strong> Filerne [{0}], [{1}] er nu kopieret til mappen "Indices" i afleveringspakken</span>
+                        <br/>
+                        <br/>-->
                         <table id="hybris-contextdocuments-uploads">
-                            <tr><th>Mappe nr</th><th>Dokumenttitel</th><th>Vælg dokument</th><th></th></tr>
+                            <tr><th>Mappenummer</th><th>Dokumenttitel</th><th>Vælg dokument</th><th></th></tr>
                          </table>
-                        <button id="hybris-contextdocuments-okBtn">Tilføj</button>
-                        <button id="hybris-contextdocuments-printBtn">Print</button>
+                        <button id="hybris-contextdocuments-okBtn">Tilføj dokumenter</button>
+                        <button id="hybris-contextdocuments-printBtn">Print dokumentliste</button>
                         <button id="hybris-contextdocuments-nextBtn">Næste</button>
                         <span id="hybris-output-contextdocuments-Error" hidden="true"><br />Error: {0}</span>
                         <span id="hybris-output-contextdocuments-EmptyFile-Title" hidden="true">Indexfilen</span>
                         <span id="hybris-output-contextdocuments-EmptyFile-Text" hidden="true">Indexfilen contextDocumentationIndex.xml er tom</span>
-                        <span id="hybris-output-contextdocuments-OkInformation-Title" hidden="true">Kontkstdokumenter</span>
+                        <span id="hybris-output-contextdocuments-OkInformation-Title" hidden="true">Kontekstdokumenter</span>
                         <span id="hybris-output-contextdocuments-OkInformation-Text" hidden="true">De valgte filer blev uploadet til mappen "ContextDocumentation" i afleveringspakken</span>
                         <div id="hybris-contextdocuments-Spinner" hidden="true" class="lds-ring"><div></div><div></div><div></div><div></div></div>
                     </div>
                     <div id="hybris-panel-overview" class="formularContainer" hidden="true">
                         <p>
-                            <h2 class="boldfaced">Oversigt til afleveringspakken <span id="hybris-output-statistics-header-overview" class="trinHeader">{0}</span></h2>
+                            <!--<div class="infoBox">
+                                <span class="confirmation"><i class="fas fa-check-circle ok"></i>Afleveringspakken er færdig og ligger <a id="hybris-overview-deliveryPackage">her</a></span>
+                            </div>-->
+                            <h2 class="boldfaced">Afleveringspakken er færdig <span id="hybris-output-statistics-header-overview" class="trinHeader">{0}</span></h2>
                         </p> 
                         <br/>
                         <div>
                             <span class="greyText">INFO: Afleveringspakken er skabt og placeret i mappen </span><a id="hybris-overview-deliveryPackage"></a>
                         </div>
+                        <br>
+                        <br/>
+                        <span id="hybris-output-indexfiles-Ok" class="alert-warning"><strong>Information!</strong> Test afleveringspakken med funktionen "Test afleveringspakke" i menuen til venstre, og ret eventuelle fejl og mangler, før du afleverer den til arkivet.</span>
+                        <br/>
+                        <br/>
                     </div>
                     <div class="formularContainer">
                         <p>&copy; 2019 <b>ASTA - Aflevering af Statistikfiler Til Arkiv</b> - Version: 0.0.0.0</p>
