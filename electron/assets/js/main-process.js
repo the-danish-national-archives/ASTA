@@ -68,8 +68,7 @@ ipcMain.on('contextdocuments-open-file-dialog', (event,id) => {
     properties: ['openFile'],
     filters: [
       {
-        "name": "context documentation file",
-        "extensions": ["tif"]
+        "name": "context documentation file"
       }
     ]  
   }, (files) => {

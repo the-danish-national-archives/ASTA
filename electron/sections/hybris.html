@@ -275,18 +275,13 @@
                             <br>Hvis et kontekstdokument ikke tilføjes, oprettes en tom dokumentmappe navngivet med mappenummeret.
                         </p>
                         <br>
-                        <span id="hybris-output-indexfiles-Ok" class="alert-warning"><strong>Information!</strong> Du kan kun placere en fil per dokumentmappe med dette værktøj. Uploades flere filer til samme mappe overskrives den eksisterende fil.</span>
-                        <br>
-                        <br>
-                        <br/>
-                        <span id="hybris-output-indexfiles-Ok" class="alert-warning"><strong>Information!</strong> Kontekstdokumenter skal konverteres til et af følgende formater før de afleveres til arkiv: .tif eller .jp2 (dokumenter og billeder), .mp3 eller .wav (lyd) eller .mpg (video)</span>
-                        <br/>
-                        <br/>
-                        <!--<span id="hybris-output-indexfiles-Ok" class="alert-warning"><strong>Information!</strong> Filerne [{0}], [{1}] er nu kopieret til mappen "Indices" i afleveringspakken</span>
-                        <br/>
-                        <br/>-->
+                        <span id="hybris-output-contextdocuments-Information1" class="alert-warning"><strong>Information!</strong> Du kan kun placere en fil per dokumentmappe med dette værktøj. Uploades flere filer til samme mappe overskrives den eksisterende fil.</span>
+                        <br/><br/><br/>
+                        <span id="hybris-output-contextdocuments-Information2" class="alert-warning"><strong>Information!</strong> Kontekstdokumenter skal konverteres til et af følgende formater før de afleveres til arkiv: .tif eller .jp2 (dokumenter og billeder), .mp3 eller .wav (lyd) eller .mpg (video)</span>
+                        <br/><br/>
+                        <span id="hybris-output-indexfiles-Ok" hidden="true" class="alert-warning"><strong>Information!</strong> Filerne [{0}], [{1}] er nu kopieret til mappen "Indices" i afleveringspakken</span>
                         <table id="hybris-contextdocuments-uploads">
-                            <tr><th>Mappenummer</th><th>Dokumenttitel</th><th>Vælg dokument</th><th></th></tr>
+                            <tr><th>Mappenummer</th><th>Dokumenttitel</th><th>Vælg dokument</th></tr>
                          </table>
                         <button id="hybris-contextdocuments-okBtn">Tilføj dokumenter</button>
                         <button id="hybris-contextdocuments-printBtn">Print dokumentliste</button>
@@ -300,9 +295,9 @@
                     </div>
                     <div id="hybris-panel-overview" class="formularContainer" hidden="true">
                         <p>
-                            <!--<div class="infoBox">
-                                <span class="confirmation"><i class="fas fa-check-circle ok"></i>Afleveringspakken er færdig og ligger <a id="hybris-overview-deliveryPackage">her</a></span>
-                            </div>-->
+                            <div class="infoBox">
+                                <span class="confirmation"><i class="fas fa-check-circle ok"></i>Afleveringspakken er færdig og ligger <a id="hybris-overview-deliveryPackageLink">her</a></span>
+                            </div>
                             <h2 class="boldfaced">Afleveringspakken er færdig <span id="hybris-output-statistics-header-overview" class="trinHeader">{0}</span></h2>
                         </p> 
                         <br/>
@@ -339,7 +334,7 @@
             Rigsarkiv.Hybris.MetaData.initialize(Rigsarkiv.Hybris.DataExtraction.callback,"hybris-metdata-fileName", "hybris-metdata-fileDescription", "hybris-metdata-keyVar", "hybris-metdata-foreignFileName", "hybris-metdata-foreignKeyVarName", "hybris-metdata-refVar", "hybris-metdata-okBtn", "hybris-output-metdata-fileNameRequired", "hybris-output-metdata-fileNameNumberFirst", "hybris-output-metdata-fileNameIllegalChar","hybris-output-metdata-Ok","hybris-output-metdata-path","hybris-output-metdata-Error","hybris-output-metdata-NewExtraction","hybris-metdata-NewExtractionBtn","hybris-tab-statistics","hybris-output-metdata-Next","hybris-metdata-NextBtn","hybris-tab-indexfiles","hybris-output-metdata-fileNameLength","hybris-output-metdata-fileNamereservedWord","hybris-output-metdata-fileDescrRequired","hybris-panel-information1","hybris-panel-information2","hybris-output-indexfiles-Description","hybris-output-metdata-CloseApplicationError","hybris-metdata-references","hybris-metdata-addReferenceBtn","hybris-output-metdata-referenceRequired","hybris-reset-hide-box");
             Rigsarkiv.Hybris.IndexFiles.initialize(Rigsarkiv.Hybris.Structure.callback,Rigsarkiv.Hybris.ContextDocuments.callback,"hybris-indexfiles-archiveIndex-selectFile","hybris-indexfiles-archiveIndex","hybris-indexfiles-contextDocumentationIndex-selectFile","hybris-indexfiles-contextDocumentationIndex","hybris-indexfiles-okBtn","hybris-output-indexfiles-Error","hybris-output-indexfiles-RequiredPath","hybris-output-indexfiles-Ok","hybris-indexfiles-delivery-package","hybris-output-indexfiles-OkInformation","hybris-tab-contextdocuments","hybris-output-indexfiles-WrongFileName");
             Rigsarkiv.Hybris.ContextDocuments.initialize(Rigsarkiv.Hybris.Structure.callback,"hybris-output-contextdocuments-Error","hybris-contextdocuments-okBtn","hybris-contextdocuments-uploads","hybris-contextdocuments-printBtn","hybris-output-contextdocuments-EmptyFile","hybris-contextdocuments-nextBtn","hybris-tab-overview","hybris-output-contextdocuments-OkInformation","hybris-contextdocuments-Spinner","hybris-overview-deliveryPackage");
-            Rigsarkiv.Hybris.Overview.initialize(Rigsarkiv.Hybris.Structure.callback,"hybris-overview-deliveryPackage");
+            Rigsarkiv.Hybris.Overview.initialize(Rigsarkiv.Hybris.Structure.callback,"hybris-overview-deliveryPackage","hybris-overview-deliveryPackageLink");
           </script>
     </section>
 </template>
