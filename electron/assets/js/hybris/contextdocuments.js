@@ -30,6 +30,10 @@ function (n) {
             spinner: null,
             spinnerClass: null,
             selectDeliveryPackage: null,
+            okConfirm: null,
+            cancelConfirm: null,
+            outputNextConfirmTitle: null,
+            outputNextConfirmText: null,
             documents: [],
             logs: [],
             documentsPath: null,
@@ -62,6 +66,7 @@ function (n) {
             settings.outputErrorSpn.hidden = true;
             $("#{0} tr:not(:first-child)".format(settings.uploadsTbl.id)).remove();
             settings.documents = [];
+            settings.documentsPath = null;
         }
 
         //get JSON upload document by id
@@ -183,8 +188,19 @@ function (n) {
         //add Event Listener to HTML elmenets
         var AddEvents = function () {
             settings.nextBtn.addEventListener('click', function (event) {
-                settings.selectDeliveryPackage.innerHTML = "[{0}]".format(settings.structureCallback().deliveryPackagePath);
-                settings.overviewTab.click();
+                if(settings.documentsPath == null) {
+                    ipcRenderer.send('open-confirm-dialog','contextdocuments',settings.outputNextConfirmTitle.innerHTML,settings.outputNextConfirmText.innerHTML,settings.okConfirm.innerHTML,settings.cancelConfirm.innerHTML);
+                }
+                else {
+                    settings.selectDeliveryPackage.innerHTML = "[{0}]".format(settings.structureCallback().deliveryPackagePath);
+                    settings.overviewTab.click();
+                }
+            });
+            ipcRenderer.on('confirm-dialog-selection-contextdocuments', (event, index) => {
+                if(index === 0) {
+                    settings.selectDeliveryPackage.innerHTML = "[{0}]".format(settings.structureCallback().deliveryPackagePath);
+                    settings.overviewTab.click();
+                }            
             });
             settings.okBtn.addEventListener('click', function (event) {
                 if(settings.documents.length > 0) {                    
@@ -213,7 +229,7 @@ function (n) {
         
         //Model interfaces functions
         Rigsarkiv.Hybris.ContextDocuments = {
-            initialize: function (structureCallback,outputErrorId,okId,uploadsId,printId,outputEmptyFileId,nextId,overviewTabId,outputOkInformationPrefixId,spinnerId,selectDeliveryPackageId) {
+            initialize: function (structureCallback,outputErrorId,okId,uploadsId,printId,outputEmptyFileId,nextId,overviewTabId,outputOkInformationPrefixId,spinnerId,selectDeliveryPackageId,outputOkConfirmId,outputCancelConfirmId,outputNextConfirmId) {
                 settings.structureCallback = structureCallback;
                 settings.okBtn = document.getElementById(okId);
                 settings.outputErrorSpn =  document.getElementById(outputErrorId);
@@ -230,6 +246,10 @@ function (n) {
                 settings.spinnerClass = settings.spinner.className;
                 settings.spinner.className = "";
                 settings.selectDeliveryPackage = document.getElementById(selectDeliveryPackageId);
+                settings.okConfirm = document.getElementById(outputOkConfirmId);
+                settings.cancelConfirm = document.getElementById(outputCancelConfirmId);
+                settings.outputNextConfirmTitle = document.getElementById(outputNextConfirmId + "-Title");
+                settings.outputNextConfirmText = document.getElementById(outputNextConfirmId + "-Text");
                 AddEvents();
             },
             callback: function () {
