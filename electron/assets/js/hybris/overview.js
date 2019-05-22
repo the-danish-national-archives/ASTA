@@ -10,13 +10,24 @@ function (n) {
 
          //private data memebers
          var settings = {
-            structureCallback: null
+            structureCallback: null,
+            selectDeliveryPackage: null
          }
+
+         //add Event Listener to HTML elmenets
+        var AddEvents = function () {
+            settings.selectDeliveryPackage.addEventListener('click', (event) => {
+                var folderPath = settings.structureCallback().deliveryPackagePath;
+                ipcRenderer.send('open-item',folderPath);
+            });
+        }
 
         //Model interfaces functions
         Rigsarkiv.Hybris.Overview = {
-            initialize: function (structureCallback) {
+            initialize: function (structureCallback,selectDeliveryPackageId) {
                 settings.structureCallback = structureCallback;
+                settings.selectDeliveryPackage = document.getElementById(selectDeliveryPackageId);
+                AddEvents();
             }
         }
     }(jQuery);

@@ -29,6 +29,7 @@ function (n) {
             outputOkInformationText: null,
             spinner: null,
             spinnerClass: null,
+            selectDeliveryPackage: null,
             documents: [],
             logs: [],
             documentsPath: null,
@@ -182,6 +183,7 @@ function (n) {
         //add Event Listener to HTML elmenets
         var AddEvents = function () {
             settings.nextBtn.addEventListener('click', function (event) {
+                settings.selectDeliveryPackage.innerHTML = "[{0}]".format(settings.structureCallback().deliveryPackagePath);
                 settings.overviewTab.click();
             });
             settings.okBtn.addEventListener('click', function (event) {
@@ -211,7 +213,7 @@ function (n) {
         
         //Model interfaces functions
         Rigsarkiv.Hybris.ContextDocuments = {
-            initialize: function (structureCallback,outputErrorId,okId,uploadsId,printId,outputEmptyFileId,nextId,overviewTabId,outputOkInformationPrefixId,spinnerId) {
+            initialize: function (structureCallback,outputErrorId,okId,uploadsId,printId,outputEmptyFileId,nextId,overviewTabId,outputOkInformationPrefixId,spinnerId,selectDeliveryPackageId) {
                 settings.structureCallback = structureCallback;
                 settings.okBtn = document.getElementById(okId);
                 settings.outputErrorSpn =  document.getElementById(outputErrorId);
@@ -227,6 +229,7 @@ function (n) {
                 settings.spinner = document.getElementById(spinnerId);
                 settings.spinnerClass = settings.spinner.className;
                 settings.spinner.className = "";
+                settings.selectDeliveryPackage = document.getElementById(selectDeliveryPackageId);
                 AddEvents();
             },
             callback: function () {
