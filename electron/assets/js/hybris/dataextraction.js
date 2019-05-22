@@ -59,6 +59,9 @@ function (n) {
             spinner: null, 
             spinnerClass: null,
             metdataTab: null, 
+            headerLinkTrin2: null,
+            headerLinkTrin3: null,
+            headerLinkInformation2: null,
             okScriptDataPath: null,   
             scriptPath: "./assets/scripts/{0}",
             resourceWinPath: "resources\\{0}",
@@ -95,6 +98,9 @@ function (n) {
             settings.outputScriptOkSpn.hidden = true;
             settings.nextBtn.hidden = true;
             settings.outputStructureOkSpn.hidden = true;
+            settings.headerLinkTrin2.innerHTML = "";
+            settings.headerLinkTrin3.innerHTML = "";
+            settings.headerLinkInformation2.innerHTML = "";
         }
 
         //get selected Statistics File name
@@ -151,6 +157,10 @@ function (n) {
                             settings.scriptPathLink.innerHTML = "[{0}]".format(GetFolderPath());
                             settings.scriptPanel1.hidden = true;
                             settings.scriptPanel2.hidden = false;
+                            var folders = settings.dataFolderPath.getFolders();
+                            settings.headerLinkTrin2.innerHTML = folders[folders.length - 1];
+                            settings.headerLinkTrin3.innerHTML = folders[folders.length - 1];
+                            settings.headerLinkInformation2.innerHTML = folders[folders.length - 1];
                         }
                     });
                 }
@@ -349,6 +359,15 @@ function (n) {
 
         //add Event Listener to HTML elmenets
         var AddEvents = function () {
+            settings.headerLinkTrin2.addEventListener('click', (event) => {
+                ipcRenderer.send('open-item',settings.dataFolderPath);
+            })
+            settings.headerLinkTrin3.addEventListener('click', (event) => {
+                ipcRenderer.send('open-item',settings.dataFolderPath);
+            })
+            settings.headerLinkInformation2.addEventListener('click', (event) => {
+                ipcRenderer.send('open-item',settings.dataFolderPath);
+            })
             settings.okScriptDataPath.addEventListener('click', (event) => {
                 ipcRenderer.send('open-item',GetFolderPath());
             })
@@ -388,7 +407,7 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Hybris.DataExtraction = {        
-            initialize: function (structureCallback,selectStatisticsFileId,pathStatisticsFileId,okStatisticsId,outputStatisticsErrorId,outputStatisticsOkCopyScriptId,outputStatisticsSASWarningPrefixId,scriptPanel1Id,scriptPanel2Id,okScriptBtnId,okScriptDataPathId,outputStatisticsOkCopyScriptInfoId,outputStatisticsRequiredPathId,outputScriptRequiredFilesWarningPrefixId,outputScriptOkId,outputScriptEncodingFileErrorPrefixId,nextId,metdataTabId,outputScriptCloseApplicationWarningPrefixId,outputStructureOkId,selectStructureDeliveryPackageId,metadataFileName,spinnerId,outputScriptPath) {
+            initialize: function (structureCallback,selectStatisticsFileId,pathStatisticsFileId,okStatisticsId,outputStatisticsErrorId,outputStatisticsOkCopyScriptId,outputStatisticsSASWarningPrefixId,scriptPanel1Id,scriptPanel2Id,okScriptBtnId,okScriptDataPathId,outputStatisticsOkCopyScriptInfoId,outputStatisticsRequiredPathId,outputScriptRequiredFilesWarningPrefixId,outputScriptOkId,outputScriptEncodingFileErrorPrefixId,nextId,metdataTabId,outputScriptCloseApplicationWarningPrefixId,outputStructureOkId,selectStructureDeliveryPackageId,metadataFileName,spinnerId,outputScriptPath,outputHeaderLinkTrin2,outputHeaderLinkTrin3,outputHeaderLinkInformation2) {
                 settings.structureCallback = structureCallback;
                 settings.selectStatisticsFileBtn = document.getElementById(selectStatisticsFileId);
                 settings.pathStatisticsFileTxt = document.getElementById(pathStatisticsFileId);
@@ -424,6 +443,9 @@ function (n) {
                 settings.spinnerClass = settings.spinner.className;
                 settings.spinner.className = "";
                 settings.scriptPathLink = document.getElementById(outputScriptPath);
+                settings.headerLinkTrin2 = document.getElementById(outputHeaderLinkTrin2);
+                settings.headerLinkTrin3 = document.getElementById(outputHeaderLinkTrin3);
+                settings.headerLinkInformation2 = document.getElementById(outputHeaderLinkInformation2);
                 AddEvents();
             },
             callback: function () {
