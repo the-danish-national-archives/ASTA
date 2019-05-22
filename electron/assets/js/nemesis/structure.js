@@ -68,7 +68,8 @@ function (n) {
                 msg = err.message
             }
             settings.outputErrorSpn.hidden = false;
-            settings.outputErrorSpn.innerHTML = settings.outputErrorText.format(msg);
+            settings.outputErrorSpn.innerHTML = settings.outputErrorText.format(msg);       
+            ipcRenderer.send('open-error-dialog','Program Fejl','Der er opstået en fejl i dannelsen af afleveringspakken. Genstart venligst programmet.');
         }
 
         // get selected folder name 
