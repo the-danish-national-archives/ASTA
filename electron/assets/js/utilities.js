@@ -45,3 +45,14 @@ if (!String.prototype.format) {
       return format;
   }
 }
+
+const { ipcRenderer } = require('electron');
+Error.prototype.Handle = function(errorSpn,text) {
+  console.log(`Error: ${this}`); 
+  if (this.code === "ENOENT") {
+    this.message = 'Der er opstået en fejl i dannelsen af afleveringspakken. Genstart venligst programmet.';
+    ipcRenderer.send('open-error-dialog','Program Fejl',this.message);
+  }
+  errorSpn.hidden = false;
+  errorSpn.innerHTML = text.format(this.message);
+}
