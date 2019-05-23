@@ -134,6 +134,15 @@ td {
     padding: 6px;
 }
 
+td .path {
+    width: 76% !important;
+}
+
+#hybris-contextdocuments-uploads tr td:nth-child(3) {
+    text-align: center;
+    width: 400px;
+}
+
 table {
     border-collapse: collapse;
     margin-bottom: 6px;
@@ -349,8 +358,4 @@ a.selected:hover {
     border: solid black 1px;
     padding: 5px 0px;
     width: fit-content;
-  }
-
-  td .path {
-    width: 98% !important;
   }
