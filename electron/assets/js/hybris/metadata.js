@@ -65,6 +65,9 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 illegalCharReferenceText: null,
                 referenceLengthText: null,
                 referenceReservedWordText: null,
+                foreignFileTitle: null,
+                foreignVariableTitle: null,
+                referenceVariableTitle: null,
                 contents: ["","","",""],
                 references: [],
                 isValidMetadata: true,
@@ -311,9 +314,9 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 var result = true;
                 var referenceTypeTitle = "";
                 switch(referenceType) {
-                    case "foreignFile" : referenceTypeTitle = "Fremmeddatafilnavn" ;break;
-                    case "foreignVariable" : referenceTypeTitle = "Fremmedvariabelnavn" ;break;
-                    case "referenceVariable" : referenceTypeTitle = "Referencevariabelnavn" ;break;
+                    case "foreignFile" : referenceTypeTitle = settings.foreignFileTitle.innerHTML ;break;
+                    case "foreignVariable" : referenceTypeTitle = settings.foreignVariableTitle.innerHTML ;break;
+                    case "referenceVariable" : referenceTypeTitle = settings.referenceVariableTitle.innerHTML ;break;
                 }
                 if (result && startNumberPattern.test(referenceValue)) {
                     ipcRenderer.send('open-error-dialog',referenceTypeTitle,settings.numberFirstReferenceText.innerHTML.format(referenceTypeTitle));
@@ -388,7 +391,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
 
             //Model interfaces functions
             Rigsarkiv.Hybris.MetaData = {
-                initialize: function (extractionCallback,metadataFileName,metadataFileNameDescription,metadataKeyVariable,metadataForeignFileName,metadataForeignKeyVariableName,metadataReferenceVariable,metdataOkBtn,inputFileNameRequired,inputNumberFirst,inputIllegalChar,outputOkId,okDataPathId,outputErrorId,outputNewExtractionId,newExtractionBtn,extractionTabId,outputNextId,nextBtn,indexFilesTabId,fileNameLengthId,fileNameReservedWordId,fileDescrReqId,informationPanel1Id,informationPanel2Id,indexFilesDescriptionId,outputCloseApplicationErrorPrefixId,referencesId,addReferenceBtn,referenceReqId,resetHideBox,numberFirstReference,illegalCharReference,referenceLength,referenceReservedWord) {
+                initialize: function (extractionCallback,metadataFileName,metadataFileNameDescription,metadataKeyVariable,metadataForeignFileName,metadataForeignKeyVariableName,metadataReferenceVariable,metdataOkBtn,inputFileNameRequired,inputNumberFirst,inputIllegalChar,outputOkId,okDataPathId,outputErrorId,outputNewExtractionId,newExtractionBtn,extractionTabId,outputNextId,nextBtn,indexFilesTabId,fileNameLengthId,fileNameReservedWordId,fileDescrReqId,informationPanel1Id,informationPanel2Id,indexFilesDescriptionId,outputCloseApplicationErrorPrefixId,referencesId,addReferenceBtn,referenceReqId,resetHideBox,numberFirstReference,illegalCharReference,referenceLength,referenceReservedWord,foreignFileId,foreignVariableId,referenceVariableId) {
                     settings.extractionCallback = extractionCallback;
                     settings.fileName = document.getElementById(metadataFileName);
                     settings.fileDescr = document.getElementById(metadataFileNameDescription);
@@ -436,6 +439,9 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                     settings.illegalCharReferenceText = document.getElementById(illegalCharReference + "-Text");
                     settings.referenceLengthText = document.getElementById(referenceLength + "-Text");
                     settings.referenceReservedWordText = document.getElementById(referenceReservedWord + "-Text");
+                    settings.foreignFileTitle = document.getElementById(foreignFileId + "-Title");
+                    settings.foreignVariableTitle = document.getElementById(foreignVariableId + "-Title");
+                    settings.referenceVariableTitle = document.getElementById(referenceVariableId + "-Title");
                     AddEvents();
                 }
             }
