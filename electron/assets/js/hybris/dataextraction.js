@@ -76,21 +76,6 @@ function (n) {
             scriptPathLink: null            
         }
 
-        //output system error messages
-        var HandleError = function(err) {
-            console.log(`Error: ${err}`);
-            var msg = ""
-            if (err.code === "ENOENT") {
-                msg = "Der er opstået en fejl i dannelsen af afleveringspakken. Genstart venligst programmet.";
-            }
-            else {
-                msg = err.message
-            }
-            settings.outputStatisticsErrorSpn.hidden = false;
-            settings.outputStatisticsErrorSpn.innerHTML = settings.outputStatisticsErrorText.format(msg);
-            ipcRenderer.send('open-error-dialog','Program Fejl','Der er opstået en fejl i dannelsen af afleveringspakken. Genstart venligst programmet.');
-        }
-
         //reset status & input fields
         var Reset = function () { 
             settings.okScriptBtn.hidden = false;       
@@ -133,7 +118,7 @@ function (n) {
             srcFilePath += (srcFilePath.indexOf("\\") > -1) ? "\\{0}".format(GetScriptFileName()) : "/{0}".format(GetScriptFileName());
             fs.readFile(srcFilePath, (err, data) => {
                 if (err) {
-                    HandleError(err);
+                    err.Handle(settings.outputStatisticsErrorSpn,settings.outputStatisticsErrorText);
                 }
                 else {
                     var folderPath = GetFolderPath();
@@ -150,7 +135,7 @@ function (n) {
                     console.log(`Update script file ${filePath}`);
                     fs.writeFile(filePath, updatedData, (err) => {
                         if (err) {
-                            HandleError(err);
+                            err.Handle(settings.outputStatisticsErrorSpn,settings.outputStatisticsErrorText);
                         }
                         else {
                             var scriptFileName = GetScriptFileName();
@@ -190,7 +175,7 @@ function (n) {
             console.log(`copy script file ${settings.scriptFileName} to ${destFilePath}`);
             fs.copyFile(scriptFilePath, destFilePath, (err) => {
                 if (err) {
-                    HandleError(err);
+                    err.Handle(settings.outputStatisticsErrorSpn,settings.outputStatisticsErrorText);
                 }
                 else {
                     var scriptFileName = GetScriptFileName();
@@ -206,7 +191,7 @@ function (n) {
             var folderPath = GetFolderPath();
             fs.readdir(folderPath, (err, files) => {
                 if (err) {
-                    HandleError(err);
+                    err.Handle(settings.outputStatisticsErrorSpn,settings.outputStatisticsErrorText);
                 }
                 else {
                     var fileName = GetFileName();
@@ -247,7 +232,7 @@ function (n) {
             settings.pathStatisticsFileTxt.value = "";
             fs.rmdir(settings.dataFolderPath, (err) => {
                 if (err) {
-                    HandleError(err);
+                    err.Handle(settings.outputStatisticsErrorSpn,settings.outputStatisticsErrorText);
                 }
                 else {
                     settings.dataFolderPath = null;
@@ -267,7 +252,7 @@ function (n) {
             fs.readdir(settings.dataFolderPath, (err, files) => {
                 if (err) {
                     settings.dataFolderPath = null;
-                    HandleError(err);
+                    err.Handle(settings.outputStatisticsErrorSpn,settings.outputStatisticsErrorText);
                 }
                 else {
                     var tablecounter = 0;
@@ -283,7 +268,7 @@ function (n) {
                     fs.mkdir(settings.dataFolderPath, { recursive: true }, (err) => {
                         if (err) {
                             settings.dataFolderPath = null;
-                            HandleError(err);
+                            err.Handle(settings.outputStatisticsErrorSpn,settings.outputStatisticsErrorText);
                         }
                         else {
                             console.log(`ensure package data path: ${settings.dataFolderPath}`);
@@ -319,7 +304,7 @@ function (n) {
             fs.readdir(settings.dataFolderPath, (err, files) => {
                 if (err) {
                     settings.spinner.className = "";
-                    HandleError(err);
+                    err.Handle(settings.outputStatisticsErrorSpn,settings.outputStatisticsErrorText);
                 }
                 else {
                     settings.okScriptBtn.disabled = true;
