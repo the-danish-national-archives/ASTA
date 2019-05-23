@@ -1,6 +1,9 @@
 /*
 Implments custum javascript helper functions where it used by other modules
 */
+
+const { ipcRenderer } = require('electron');
+
 if (!String.prototype.format) {
     String.prototype.format = function() {
       var args = arguments;
@@ -46,13 +49,14 @@ if (!String.prototype.format) {
   }
 }
 
-const { ipcRenderer } = require('electron');
 Error.prototype.Handle = function(errorSpn,text) {
   console.log(`Error: ${this}`); 
   if (this.code === "ENOENT") {
     this.message = 'Der er opstået en fejl i dannelsen af afleveringspakken. Genstart venligst programmet.';
     ipcRenderer.send('open-error-dialog','Program Fejl',this.message);
   }
-  errorSpn.hidden = false;
-  errorSpn.innerHTML = text.format(this.message);
+  if(errorSpn != null && text != null) {
+    errorSpn.hidden = false;
+    errorSpn.innerHTML = text.format(this.message);
+  }
 }

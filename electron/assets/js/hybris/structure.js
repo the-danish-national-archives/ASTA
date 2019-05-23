@@ -91,8 +91,7 @@ function (n) {
                     console.log("Create structure: " + settings.deliveryPackagePath);
                     fs.mkdir(settings.deliveryPackagePath, { recursive: true }, (err) => {
                         if (err) {
-                            settings.outputErrorSpn.hidden = false;
-                            settings.outputErrorSpn.innerHTML = settings.outputErrorText.format(err.message);
+                            err.Handle(settings.outputErrorSpn,settings.outputErrorText);
                         }
                         else {
                             settings.foldersCounter += 1;
@@ -100,8 +99,7 @@ function (n) {
                                 var subFolderName = (settings.deliveryPackagePath.indexOf("\\") > -1) ? "\\{0}".format(element) : "/{0}".format(element);
                                 fs.mkdir(settings.deliveryPackagePath + subFolderName, { recursive: true }, (err) => {
                                     if (err) {
-                                        settings.outputErrorSpn.hidden = false;
-                                        settings.outputErrorSpn.innerHTML = settings.outputErrorText.format(err.message);   
+                                        err.Handle(settings.outputErrorSpn,settings.outputErrorText);   
                                         settings.deliveryPackagePath = null;                         
                                     }
                                     else {

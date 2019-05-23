@@ -63,6 +63,8 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 referenceReqText: null,
                 numberFirstReferenceText: null,
                 illegalCharReferenceText: null,
+                referenceLengthText: null,
+                referenceReservedWordText: null,
                 contents: ["","","",""],
                 references: [],
                 isValidMetadata: true,
@@ -72,21 +74,6 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 scriptPath: "./assets/scripts/{0}",
                 resourceWinPath: "resources\\{0}",
                 styleBox: null
-            }
-            
-            //output system error messages
-            var HandleError = function(err) {
-                console.log(`Error: ${err}`);
-                var msg = ""
-                if (err.code === "ENOENT") {
-                    msg = "Der er opstået en fejl i dannelsen af afleveringspakken. Genstart venligst programmet.";
-                }
-                else {
-                    msg = err.message
-                }
-                settings.outputErrorSpn.hidden = false;
-                settings.outputErrorSpn.innerHTML = settings.outputErrorText.format(msg);
-                ipcRenderer.send('open-error-dialog','Program Fejl','Der er opstået en fejl i dannelsen af afleveringspakken. Genstart venligst programmet.');
             }
 
             //reset status & input fields
@@ -117,7 +104,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 var dataFolderPath = settings.extractionCallback().dataFolderPath;
                 fs.readdir(dataFolderPath, (err, files) => {
                     if (err) {
-                        HandleError(err);
+                        err.Handle(settings.outputErrorSpn,settings.outputErrorText);
                     }
                     else {
                         var hasError = false;
@@ -134,7 +121,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                                 }
                                 catch(err) {
                                     hasError = true;
-                                    HandleError(err);
+                                    err.Handle(settings.outputErrorSpn,settings.outputErrorText);
                                 }                            
                             }
                         });
@@ -173,7 +160,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 destFilePath += (destFilePath.indexOf("\\") > -1) ? "\\{0}".format(destFileName) : "/{0}".format(destFileName);
                 fs.rename(srcFilePath,destFilePath, (err) => {
                     if (err) {
-                        HandleError(err);
+                        err.Handle(settings.outputErrorSpn,settings.outputErrorText);
                     }
                     else {
                         console.log('Rename complete!');
@@ -202,7 +189,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 srcFilePath += (srcFilePath.indexOf("\\") > -1) ? "\\{0}".format(metadataFileName) : "/{0}".format(metadataFileName);
                 fs.readFile(srcFilePath, (err, data) => {
                     if (err) {
-                        HandleError(err);
+                        err.Handle(settings.outputErrorSpn,settings.outputErrorText);
                     }
                     else {
                         var callback = settings.extractionCallback();
@@ -216,7 +203,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                         srcFilePath += (srcFilePath.indexOf("\\") > -1) ? "\\{0}".format(metadataFileName) : "/{0}".format(metadataFileName);
                         fs.writeFile(srcFilePath, updatedData, (err) => {
                             if (err) {
-                                HandleError(err);
+                                err.Handle(settings.outputErrorSpn,settings.outputErrorText);
                             }
                             else {
                                 RenameFile();
@@ -249,7 +236,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 destFilePath += (destFilePath.indexOf("\\") > -1) ? "\\{0}".format(metadataFileName) : "/{0}".format(metadataFileName);
                 fs.copyFile(metadataFilePath,destFilePath, (err) => {
                     if (err) {
-                        HandleError(err);
+                        err.Handle(settings.outputErrorSpn,settings.outputErrorText);
                     }
                     else {
                         console.log("{0} was copied to {1}".format(GetMetaDataFileName(),settings.extractionCallback().dataFolderPath));
@@ -263,7 +250,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 var dataFolderPath = settings.extractionCallback().dataFolderPath;
                 fs.readdir(dataFolderPath, (err, files) => {
                     if (err) {
-                        HandleError(err);
+                        err.Handle(settings.outputErrorSpn,settings.outputErrorText);
                     }
                     else {
                         var dataFolderPath = settings.extractionCallback().dataFolderPath;
@@ -342,6 +329,10 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                     ipcRenderer.send('open-error-dialog',referenceTypeTitle,settings.referenceLengthText.innerHTML.format(referenceTypeTitle));
                     result = false;
                 }
+                if (result && reservedWordPattern.test(referenceValue)) {
+                    ipcRenderer.send('open-error-dialog',referenceTypeTitle,settings.referenceReservedWordText.innerHTML.format(referenceTypeTitle));
+                    result = false;
+                }
                 return result;
             }
 
@@ -397,7 +388,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
 
             //Model interfaces functions
             Rigsarkiv.Hybris.MetaData = {
-                initialize: function (extractionCallback,metadataFileName,metadataFileNameDescription,metadataKeyVariable,metadataForeignFileName,metadataForeignKeyVariableName,metadataReferenceVariable,metdataOkBtn,inputFileNameRequired,inputNumberFirst,inputIllegalChar,outputOkId,okDataPathId,outputErrorId,outputNewExtractionId,newExtractionBtn,extractionTabId,outputNextId,nextBtn,indexFilesTabId,fileNameLengthId,fileNameReservedWordId,fileDescrReqId,informationPanel1Id,informationPanel2Id,indexFilesDescriptionId,outputCloseApplicationErrorPrefixId,referencesId,addReferenceBtn,referenceReqId,resetHideBox,numberFirstReference,illegalCharReference) {
+                initialize: function (extractionCallback,metadataFileName,metadataFileNameDescription,metadataKeyVariable,metadataForeignFileName,metadataForeignKeyVariableName,metadataReferenceVariable,metdataOkBtn,inputFileNameRequired,inputNumberFirst,inputIllegalChar,outputOkId,okDataPathId,outputErrorId,outputNewExtractionId,newExtractionBtn,extractionTabId,outputNextId,nextBtn,indexFilesTabId,fileNameLengthId,fileNameReservedWordId,fileDescrReqId,informationPanel1Id,informationPanel2Id,indexFilesDescriptionId,outputCloseApplicationErrorPrefixId,referencesId,addReferenceBtn,referenceReqId,resetHideBox,numberFirstReference,illegalCharReference,referenceLength,referenceReservedWord) {
                     settings.extractionCallback = extractionCallback;
                     settings.fileName = document.getElementById(metadataFileName);
                     settings.fileDescr = document.getElementById(metadataFileNameDescription);
@@ -443,6 +434,8 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                     settings.styleBox = document.getElementById(resetHideBox);
                     settings.numberFirstReferenceText = document.getElementById(numberFirstReference + "-Text");
                     settings.illegalCharReferenceText = document.getElementById(illegalCharReference + "-Text");
+                    settings.referenceLengthText = document.getElementById(referenceLength + "-Text");
+                    settings.referenceReservedWordText = document.getElementById(referenceReservedWord + "-Text");
                     AddEvents();
                 }
             }
