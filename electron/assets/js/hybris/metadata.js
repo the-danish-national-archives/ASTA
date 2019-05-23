@@ -350,10 +350,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                     if(settings.isValidMetadata) { EnsureData(); }
                 })
                 settings.addReferenceBtn.addEventListener('click', function (event) {
-                    if (settings.foreignFileName.value === "" && settings.foreignKeyVarName.value === "" && settings.foreignFileRefVar.value === "") {
-                        ipcRenderer.send('open-error-dialog',settings.referenceReqTitle.innerHTML,settings.referenceReqText.innerHTML);
-                    }
-                    else {
+                    if (settings.foreignFileName.value !== "" && settings.foreignKeyVarName.value !== "" && settings.foreignFileRefVar.value !== "") {
                         var selectedReferences = [settings.foreignFileName.value,settings.foreignKeyVarName.value,settings.foreignFileRefVar.value];
                         settings.references.push(selectedReferences);
                         settings.referencesTbl.hidden = false;
@@ -361,6 +358,9 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                         settings.foreignFileName.value = "";
                         settings.foreignKeyVarName.value = "";
                         settings.foreignFileRefVar.value = "";
+                    }
+                    else {
+                        ipcRenderer.send('open-error-dialog',settings.referenceReqTitle.innerHTML,settings.referenceReqText.innerHTML);
                     }               
                 });
             }
