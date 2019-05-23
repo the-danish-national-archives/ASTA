@@ -10,8 +10,8 @@ window.navigation = window.navigation || {},
             constants: {
                 sectionTemplate: '.section-template',
                 contentContainer: '#content',
-                startSectionMenuItem: "#hybris-menu",
-                startSection: "#hybris"
+                startSectionMenuItem: "#welcome-menu",
+                startSection: "#welcome"
             },
 
             importSectionsToDOM: function () {
