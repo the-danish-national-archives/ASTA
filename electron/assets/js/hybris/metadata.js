@@ -61,6 +61,8 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 addReferenceBtn: null,
                 referenceReqTitle: null,
                 referenceReqText: null,
+                numberFirstReferenceText: null,
+                illegalCharReferenceText: null,
                 contents: ["","","",""],
                 references: [],
                 isValidMetadata: true,
@@ -317,6 +319,32 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 }
             }
 
+            // Validate refernces inputs
+            var ValidateReference = function(referenceType,referenceValue) {
+                var result = true;
+                var referenceTypeTitle = "";
+                switch(referenceType) {
+                    case "foreignFile" : referenceTypeTitle = "Fremmeddatafilnavn" ;break;
+                    case "foreignVariable" : referenceTypeTitle = "Fremmedvariabelnavn" ;break;
+                    case "referenceVariable" : referenceTypeTitle = "Referencevariabelnavn" ;break;
+                }
+                if (result && startNumberPattern.test(referenceValue)) {
+                    ipcRenderer.send('open-error-dialog',referenceTypeTitle,settings.numberFirstReferenceText.innerHTML.format(referenceTypeTitle));
+                    result = false;
+                }
+                if (result && !validFileNamePattern.test(referenceValue)) {
+                    if(!enclosedReservedWordPattern.test(referenceValue)) {
+                        ipcRenderer.send('open-error-dialog',referenceTypeTitle,settings.illegalCharReferenceText.innerHTML.format(referenceTypeTitle));
+                        result = false;
+                    }
+                }
+                if (result && referenceValue.length > strLength) {
+                    ipcRenderer.send('open-error-dialog',referenceTypeTitle,settings.referenceLengthText.innerHTML.format(referenceTypeTitle));
+                    result = false;
+                }
+                return result;
+            }
+
             //implments new data table extraction
             var ResetExtraction = function() {
                 settings.extractionCallback().reset();
@@ -351,13 +379,15 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 })
                 settings.addReferenceBtn.addEventListener('click', function (event) {
                     if (settings.foreignFileName.value !== "" && settings.foreignKeyVarName.value !== "" && settings.foreignFileRefVar.value !== "") {
-                        var selectedReferences = [settings.foreignFileName.value,settings.foreignKeyVarName.value,settings.foreignFileRefVar.value];
-                        settings.references.push(selectedReferences);
-                        settings.referencesTbl.hidden = false;
-                        $(settings.referencesTbl).append("<tr><td>{0}</td><td>{1}</td><td>{2}</td></tr>".format(selectedReferences[0],selectedReferences[1],selectedReferences[2]));
-                        settings.foreignFileName.value = "";
-                        settings.foreignKeyVarName.value = "";
-                        settings.foreignFileRefVar.value = "";
+                        if(ValidateReference("foreignFile",settings.foreignFileName.value) && ValidateReference("foreignVariable",settings.foreignKeyVarName.value) && ValidateReference("referenceVariable",settings.foreignFileRefVar.value)) {
+                            var selectedReferences = [settings.foreignFileName.value,settings.foreignKeyVarName.value,settings.foreignFileRefVar.value];
+                            settings.references.push(selectedReferences);
+                            settings.referencesTbl.hidden = false;
+                            $(settings.referencesTbl).append("<tr><td>{0}</td><td>{1}</td><td>{2}</td></tr>".format(selectedReferences[0],selectedReferences[1],selectedReferences[2]));
+                            settings.foreignFileName.value = "";
+                            settings.foreignKeyVarName.value = "";
+                            settings.foreignFileRefVar.value = "";
+                        }
                     }
                     else {
                         ipcRenderer.send('open-error-dialog',settings.referenceReqTitle.innerHTML,settings.referenceReqText.innerHTML);
@@ -367,7 +397,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
 
             //Model interfaces functions
             Rigsarkiv.Hybris.MetaData = {
-                initialize: function (extractionCallback,metadataFileName,metadataFileNameDescription,metadataKeyVariable,metadataForeignFileName,metadataForeignKeyVariableName,metadataReferenceVariable,metdataOkBtn,inputFileNameRequired,inputNumberFirst,inputIllegalChar,outputOkId,okDataPathId,outputErrorId,outputNewExtractionId,newExtractionBtn,extractionTabId,outputNextId,nextBtn,indexFilesTabId,fileNameLengthId,fileNameReservedWordId,fileDescrReqId,informationPanel1Id,informationPanel2Id,indexFilesDescriptionId,outputCloseApplicationErrorPrefixId,referencesId,addReferenceBtn,referenceReqId,resetHideBox) {
+                initialize: function (extractionCallback,metadataFileName,metadataFileNameDescription,metadataKeyVariable,metadataForeignFileName,metadataForeignKeyVariableName,metadataReferenceVariable,metdataOkBtn,inputFileNameRequired,inputNumberFirst,inputIllegalChar,outputOkId,okDataPathId,outputErrorId,outputNewExtractionId,newExtractionBtn,extractionTabId,outputNextId,nextBtn,indexFilesTabId,fileNameLengthId,fileNameReservedWordId,fileDescrReqId,informationPanel1Id,informationPanel2Id,indexFilesDescriptionId,outputCloseApplicationErrorPrefixId,referencesId,addReferenceBtn,referenceReqId,resetHideBox,numberFirstReference,illegalCharReference) {
                     settings.extractionCallback = extractionCallback;
                     settings.fileName = document.getElementById(metadataFileName);
                     settings.fileDescr = document.getElementById(metadataFileNameDescription);
@@ -411,6 +441,8 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                     settings.referenceReqTitle = document.getElementById(referenceReqId + "-Title");
                     settings.referenceReqText = document.getElementById(referenceReqId + "-Text");
                     settings.styleBox = document.getElementById(resetHideBox);
+                    settings.numberFirstReferenceText = document.getElementById(numberFirstReference + "-Text");
+                    settings.illegalCharReferenceText = document.getElementById(illegalCharReference + "-Text");
                     AddEvents();
                 }
             }
