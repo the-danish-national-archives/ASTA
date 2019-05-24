@@ -1,8 +1,8 @@
 node_modules
 
 #Ignore specific files
-#*.exe
-#*.zip
+*.exe
+*.zip
 *.nupkg
 RELEASES
 
