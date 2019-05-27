@@ -457,6 +457,7 @@ function (n) {
                 else {
                     LogError("-CheckMetadata-FileVariable-CodeList-Error",settings.fileName,expressions[0]);
                     result = null;
+                    settings.errorStop = true; 
                 }
             }
             return result;
@@ -571,7 +572,10 @@ function (n) {
                         }
                     }
                     else {
-                        result = LogError("-CheckMetadata-FileReferences-RowValidation-Error",settings.fileName,i + 1);
+                        var variable = "";
+                        if(expressions[1].length > 1 && (expressions[1][0] !== "'" || expressions[1][expressions[1].length - 1] !== "'")) { variable = expressions[1];}
+                        if(expressions[2].length > 1 && (expressions[2][0] !== "'" || expressions[2][expressions[2].length - 1] !== "'")) { variable = expressions[2];}
+                        result = LogError("-CheckMetadata-FileReferences-RowValidation-Error",settings.fileName,i + 1,variable);
                     }
                 }                
                 if(expressions.length > 3) {
