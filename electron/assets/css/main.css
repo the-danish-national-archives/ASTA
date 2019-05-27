@@ -143,6 +143,15 @@ td {
     padding: 6px;
 }
 
+td .path {
+    width: 76% !important;
+}
+
+#hybris-contextdocuments-uploads tr td:nth-child(3) {
+    text-align: center;
+    width: 400px;
+}
+
 table {
     border-collapse: collapse;
     margin-bottom: 6px;

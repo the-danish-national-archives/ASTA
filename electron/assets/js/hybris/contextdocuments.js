@@ -9,6 +9,8 @@ function (n) {
     function (n) {
         const { ipcRenderer } = require('electron');
         const {shell} = require('electron');
+        const path = require('path');
+        const os = require('os');
         const fs = require('fs');
         const domParser = require('xmldom');
 
@@ -27,6 +29,11 @@ function (n) {
             outputOkInformationText: null,
             spinner: null,
             spinnerClass: null,
+            selectDeliveryPackage: null,
+            okConfirm: null,
+            cancelConfirm: null,
+            outputNextConfirmTitle: null,
+            outputNextConfirmText: null,
             documents: [],
             logs: [],
             documentsPath: null,
@@ -39,25 +46,12 @@ function (n) {
             docCollectionFolderName: "docCollection1"
         }
 
-         //output system error messages
-         var HandleError = function(err) {
-            console.log(`Error: ${err}`);
-            var msg = ""
-            if (err.code === "ENOENT") {
-                msg = "Der er opstået en fejl i dannelsen af afleveringspakken. Genstart venligst programmet.";
-            }
-            else {
-                msg = err.message
-            }
-            settings.outputErrorSpn.hidden = false;
-            settings.outputErrorSpn.innerHTML = settings.outputErrorText.format(msg);       
-        }
-
         //reset status & input fields
         var Reset = function () {
             settings.outputErrorSpn.hidden = true;
             $("#{0} tr:not(:first-child)".format(settings.uploadsTbl.id)).remove();
             settings.documents = [];
+            settings.documentsPath = null;
         }
 
         //get JSON upload document by id
@@ -91,7 +85,7 @@ function (n) {
                     }
                 }
                 settings.documents.forEach(upload => {
-                    $(settings.uploadsTbl).append("<tr><td>{0}</td><td>{1}</td><td><input type=\"text\" id=\"hybris-contextdocuments-document-{0}\" class=\"path\" text=\"{2}\"/></td><td><button id=\"hybris-contextdocuments-selectFile-{0}\">Browse</button></td></tr>".format(upload.id,upload.title,upload.path));
+                    $(settings.uploadsTbl).append("<tr><td>{0}</td><td>{1}</td><td><input type=\"text\" id=\"hybris-contextdocuments-document-{0}\" class=\"path\" text=\"{2}\" readonly=\"true\" placeholder=\"Vælg sti med knappen\"/><button id=\"hybris-contextdocuments-selectFile-{0}\">Browse</button></td></tr>".format(upload.id,upload.title,upload.path));
                     document.getElementById("hybris-contextdocuments-selectFile-{0}".format(upload.id)).addEventListener('click', (event) => {
                         ipcRenderer.send('contextdocuments-open-file-dialog',upload.id);
                     })
@@ -179,7 +173,19 @@ function (n) {
         //add Event Listener to HTML elmenets
         var AddEvents = function () {
             settings.nextBtn.addEventListener('click', function (event) {
-                settings.overviewTab.click();
+                if(settings.documentsPath == null) {
+                    ipcRenderer.send('open-confirm-dialog','contextdocuments',settings.outputNextConfirmTitle.innerHTML,settings.outputNextConfirmText.innerHTML,settings.okConfirm.innerHTML,settings.cancelConfirm.innerHTML);
+                }
+                else {
+                    settings.selectDeliveryPackage.innerHTML = "[{0}]".format(settings.structureCallback().deliveryPackagePath);
+                    settings.overviewTab.click();
+                }
+            });
+            ipcRenderer.on('confirm-dialog-selection-contextdocuments', (event, index) => {
+                if(index === 0) {
+                    settings.selectDeliveryPackage.innerHTML = "[{0}]".format(settings.structureCallback().deliveryPackagePath);
+                    settings.overviewTab.click();
+                }            
             });
             settings.okBtn.addEventListener('click', function (event) {
                 if(settings.documents.length > 0) {                    
@@ -208,7 +214,7 @@ function (n) {
         
         //Model interfaces functions
         Rigsarkiv.Hybris.ContextDocuments = {
-            initialize: function (structureCallback,outputErrorId,okId,uploadsId,printId,outputEmptyFileId,nextId,overviewTabId,outputOkInformationPrefixId,spinnerId) {
+            initialize: function (structureCallback,outputErrorId,okId,uploadsId,printId,outputEmptyFileId,nextId,overviewTabId,outputOkInformationPrefixId,spinnerId,selectDeliveryPackageId,outputOkConfirmId,outputCancelConfirmId,outputNextConfirmId) {
                 settings.structureCallback = structureCallback;
                 settings.okBtn = document.getElementById(okId);
                 settings.outputErrorSpn =  document.getElementById(outputErrorId);
@@ -224,6 +230,11 @@ function (n) {
                 settings.spinner = document.getElementById(spinnerId);
                 settings.spinnerClass = settings.spinner.className;
                 settings.spinner.className = "";
+                settings.selectDeliveryPackage = document.getElementById(selectDeliveryPackageId);
+                settings.okConfirm = document.getElementById(outputOkConfirmId);
+                settings.cancelConfirm = document.getElementById(outputCancelConfirmId);
+                settings.outputNextConfirmTitle = document.getElementById(outputNextConfirmId + "-Title");
+                settings.outputNextConfirmText = document.getElementById(outputNextConfirmId + "-Text");
                 AddEvents();
             },
             callback: function () {
@@ -234,7 +245,7 @@ function (n) {
                             RenderDocuments(data);
                         }
                         catch(err) {
-                            HandleError(err);
+                            err.Handle(settings.outputErrorSpn,settings.outputErrorText);
                         } 
                     }
                 }

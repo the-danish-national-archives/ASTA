@@ -59,6 +59,11 @@ function (n) {
             spinner: null, 
             spinnerClass: null,
             metdataTab: null, 
+            headerLinkTrin2: null,
+            headerLinkTrin3: null,
+            headerLinkInformation2: null,
+            okConfirm: null,
+            cancelConfirm: null,
             okScriptDataPath: null,   
             scriptPath: "./assets/scripts/{0}",
             resourceWinPath: "resources\\{0}",
@@ -71,20 +76,6 @@ function (n) {
             scriptPathLink: null            
         }
 
-        //output system error messages
-        var HandleError = function(err) {
-            console.log(`Error: ${err}`);
-            var msg = ""
-            if (err.code === "ENOENT") {
-                msg = "Der er opstået en fejl i dannelsen af afleveringspakken. Genstart venligst programmet.";
-            }
-            else {
-                msg = err.message
-            }
-            settings.outputStatisticsErrorSpn.hidden = false;
-            settings.outputStatisticsErrorSpn.innerHTML = settings.outputStatisticsErrorText.format(msg);
-        }
-
         //reset status & input fields
         var Reset = function () { 
             settings.okScriptBtn.hidden = false;       
@@ -94,6 +85,9 @@ function (n) {
             settings.outputScriptOkSpn.hidden = true;
             settings.nextBtn.hidden = true;
             settings.outputStructureOkSpn.hidden = true;
+            settings.headerLinkTrin2.innerHTML = "";
+            settings.headerLinkTrin3.innerHTML = "";
+            settings.headerLinkInformation2.innerHTML = "";
         }
 
         //get selected Statistics File name
@@ -124,7 +118,7 @@ function (n) {
             srcFilePath += (srcFilePath.indexOf("\\") > -1) ? "\\{0}".format(GetScriptFileName()) : "/{0}".format(GetScriptFileName());
             fs.readFile(srcFilePath, (err, data) => {
                 if (err) {
-                    HandleError(err);
+                    err.Handle(settings.outputStatisticsErrorSpn,settings.outputStatisticsErrorText);
                 }
                 else {
                     var folderPath = GetFolderPath();
@@ -141,7 +135,7 @@ function (n) {
                     console.log(`Update script file ${filePath}`);
                     fs.writeFile(filePath, updatedData, (err) => {
                         if (err) {
-                            HandleError(err);
+                            err.Handle(settings.outputStatisticsErrorSpn,settings.outputStatisticsErrorText);
                         }
                         else {
                             var scriptFileName = GetScriptFileName();
@@ -150,6 +144,10 @@ function (n) {
                             settings.scriptPathLink.innerHTML = "[{0}]".format(GetFolderPath());
                             settings.scriptPanel1.hidden = true;
                             settings.scriptPanel2.hidden = false;
+                            var folders = settings.dataFolderPath.getFolders();
+                            settings.headerLinkTrin2.innerHTML = folders[folders.length - 1];
+                            settings.headerLinkTrin3.innerHTML = folders[folders.length - 1];
+                            settings.headerLinkInformation2.innerHTML = folders[folders.length - 1];
                         }
                     });
                 }
@@ -177,7 +175,7 @@ function (n) {
             console.log(`copy script file ${settings.scriptFileName} to ${destFilePath}`);
             fs.copyFile(scriptFilePath, destFilePath, (err) => {
                 if (err) {
-                    HandleError(err);
+                    err.Handle(settings.outputStatisticsErrorSpn,settings.outputStatisticsErrorText);
                 }
                 else {
                     var scriptFileName = GetScriptFileName();
@@ -193,7 +191,7 @@ function (n) {
             var folderPath = GetFolderPath();
             fs.readdir(folderPath, (err, files) => {
                 if (err) {
-                    HandleError(err);
+                    err.Handle(settings.outputStatisticsErrorSpn,settings.outputStatisticsErrorText);
                 }
                 else {
                     var fileName = GetFileName();
@@ -221,7 +219,7 @@ function (n) {
                         }; break;
                     }
                     if(!sasCatalogExists && fileExt === "sas7bdat") {
-                        ipcRenderer.send('open-confirm-dialog',settings.outputStatisticsSASWarningTitle.innerHTML,settings.outputStatisticsSASWarningText.innerHTML);
+                        ipcRenderer.send('open-confirm-dialog','dataextraction',settings.outputStatisticsSASWarningTitle.innerHTML,settings.outputStatisticsSASWarningText.innerHTML,settings.okConfirm.innerHTML,settings.cancelConfirm.innerHTML);
                         return;
                     }
                     CopyScript();     
@@ -234,7 +232,7 @@ function (n) {
             settings.pathStatisticsFileTxt.value = "";
             fs.rmdir(settings.dataFolderPath, (err) => {
                 if (err) {
-                    HandleError(err);
+                    err.Handle(settings.outputStatisticsErrorSpn,settings.outputStatisticsErrorText);
                 }
                 else {
                     settings.dataFolderPath = null;
@@ -254,7 +252,7 @@ function (n) {
             fs.readdir(settings.dataFolderPath, (err, files) => {
                 if (err) {
                     settings.dataFolderPath = null;
-                    HandleError(err);
+                    err.Handle(settings.outputStatisticsErrorSpn,settings.outputStatisticsErrorText);
                 }
                 else {
                     var tablecounter = 0;
@@ -270,7 +268,7 @@ function (n) {
                     fs.mkdir(settings.dataFolderPath, { recursive: true }, (err) => {
                         if (err) {
                             settings.dataFolderPath = null;
-                            HandleError(err);
+                            err.Handle(settings.outputStatisticsErrorSpn,settings.outputStatisticsErrorText);
                         }
                         else {
                             console.log(`ensure package data path: ${settings.dataFolderPath}`);
@@ -306,7 +304,7 @@ function (n) {
             fs.readdir(settings.dataFolderPath, (err, files) => {
                 if (err) {
                     settings.spinner.className = "";
-                    HandleError(err);
+                    err.Handle(settings.outputStatisticsErrorSpn,settings.outputStatisticsErrorText);
                 }
                 else {
                     settings.okScriptBtn.disabled = true;
@@ -348,6 +346,15 @@ function (n) {
 
         //add Event Listener to HTML elmenets
         var AddEvents = function () {
+            settings.headerLinkTrin2.addEventListener('click', (event) => {
+                ipcRenderer.send('open-item',settings.dataFolderPath);
+            })
+            settings.headerLinkTrin3.addEventListener('click', (event) => {
+                ipcRenderer.send('open-item',settings.dataFolderPath);
+            })
+            settings.headerLinkInformation2.addEventListener('click', (event) => {
+                ipcRenderer.send('open-item',settings.dataFolderPath);
+            })
             settings.okScriptDataPath.addEventListener('click', (event) => {
                 ipcRenderer.send('open-item',GetFolderPath());
             })
@@ -377,7 +384,7 @@ function (n) {
                 console.log(`selected path: ${path}`); 
                 settings.pathStatisticsFileTxt.value = settings.selectedStatisticsFilePath;            
             })
-            ipcRenderer.on('confirm-dialog-selection', (event, index) => {
+            ipcRenderer.on('confirm-dialog-selection-dataextraction', (event, index) => {
                 if(index === 0) {
                     CopyScript();
                 } 
@@ -387,7 +394,7 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Hybris.DataExtraction = {        
-            initialize: function (structureCallback,selectStatisticsFileId,pathStatisticsFileId,okStatisticsId,outputStatisticsErrorId,outputStatisticsOkCopyScriptId,outputStatisticsSASWarningPrefixId,scriptPanel1Id,scriptPanel2Id,okScriptBtnId,okScriptDataPathId,outputStatisticsOkCopyScriptInfoId,outputStatisticsRequiredPathId,outputScriptRequiredFilesWarningPrefixId,outputScriptOkId,outputScriptEncodingFileErrorPrefixId,nextId,metdataTabId,outputScriptCloseApplicationWarningPrefixId,outputStructureOkId,selectStructureDeliveryPackageId,metadataFileName,spinnerId,outputScriptPath) {
+            initialize: function (structureCallback,selectStatisticsFileId,pathStatisticsFileId,okStatisticsId,outputStatisticsErrorId,outputStatisticsOkCopyScriptId,outputStatisticsSASWarningPrefixId,scriptPanel1Id,scriptPanel2Id,okScriptBtnId,okScriptDataPathId,outputStatisticsOkCopyScriptInfoId,outputStatisticsRequiredPathId,outputScriptRequiredFilesWarningPrefixId,outputScriptOkId,outputScriptEncodingFileErrorPrefixId,nextId,metdataTabId,outputScriptCloseApplicationWarningPrefixId,outputStructureOkId,selectStructureDeliveryPackageId,metadataFileName,spinnerId,outputScriptPath,outputHeaderLinkTrin2,outputHeaderLinkTrin3,outputHeaderLinkInformation2,outputOkConfirmId,outputCancelConfirmId) {
                 settings.structureCallback = structureCallback;
                 settings.selectStatisticsFileBtn = document.getElementById(selectStatisticsFileId);
                 settings.pathStatisticsFileTxt = document.getElementById(pathStatisticsFileId);
@@ -423,6 +430,11 @@ function (n) {
                 settings.spinnerClass = settings.spinner.className;
                 settings.spinner.className = "";
                 settings.scriptPathLink = document.getElementById(outputScriptPath);
+                settings.headerLinkTrin2 = document.getElementById(outputHeaderLinkTrin2);
+                settings.headerLinkTrin3 = document.getElementById(outputHeaderLinkTrin3);
+                settings.headerLinkInformation2 = document.getElementById(outputHeaderLinkInformation2);
+                settings.okConfirm = document.getElementById(outputOkConfirmId);
+                settings.cancelConfirm = document.getElementById(outputCancelConfirmId);
                 AddEvents();
             },
             callback: function () {

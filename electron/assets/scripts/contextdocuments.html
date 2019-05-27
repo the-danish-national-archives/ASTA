@@ -1,22 +1,79 @@
 <html>
-    <head>
-        <meta charset="UTF-8"/>
-        <title>Context Documents</title>
-        <style></style>
-    </head>
-    <body>
-        <div class="header">
-            <h1 class="title">ASTA contextdokumenter</h1>
-            <hr class="divider"/>
-        </div>
-        <div class="content">
-            <h3>Afleveringspakke ID: {0}</h3>
-            <div class="results" id="testContent">
-                <table>
-                    <tr><th>Mappenr</th><th>Dokumenttitle</th><th>Sti</th></tr>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Kontekstdokumenter</title>
+    <style>
+        td, th {
+            border: 1px solid #000;
+            padding: 0.5rem;
+        }
+
+        th {
+            background-color: #49897f;
+        }
+
+        body {
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        }
+
+        h1 {
+            font-size: 40px;
+            color: #49897f;
+        }
+
+        h3 {
+            color: #49897f;
+        }
+
+        .header {
+            background-color: rgb(26, 24, 24);
+            height: 200px;
+            border-radius: 10px;
+        }
+
+        .title {
+            padding-top: 35px;
+            padding-left: 2.5%;
+            margin-top: 0px;
+            margin-bottom: 0px;
+        }
+
+        .divider {
+            background-color: #202a1a;
+            width: 95%;
+            height: 2px;
+            align-self: center;
+        }
+
+        .results {
+            padding: 0% 2.5%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <h1 class="title">ASTA Kontekstdokumenter</h1>
+        <hr class="divider" />
+    </div>
+    <div class="content">
+        <h3>Liste over kontekstdokumenter registeret i contextDocumentationIndex.xml i filen placeret i afleveringspakke: {0}</h3>
+        <div class="results" id="testContent">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Mappe nr</th>
+                        <th>Dokumenttitel</th>
+                        <th>Original dokumentsti for de placerede kontekst dokumenter</th>
+                    </tr>
+                </thead>
+                <tbody>
                     {1}
-                 </table>
-            </div>
+                </tbody>
+            </table>
         </div>
-    </body>
+    </div>
+</body>
+
 </html>

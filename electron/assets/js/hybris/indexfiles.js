@@ -38,20 +38,6 @@ function (n) {
             outputWrongFileNameText: null
         }
 
-        //output system error messages
-        var HandleError = function(err) {
-            console.log(`Error: ${err}`);
-            var msg = ""
-            if (err.code === "ENOENT") {
-                msg = "Der er opstået en fejl i dannelsen af afleveringspakken. Genstart venligst programmet.";
-            }
-            else {
-                msg = err.message
-            }
-            settings.outputErrorSpn.hidden = false;
-            settings.outputErrorSpn.innerHTML = settings.outputErrorText.format(msg);     
-        }
-
         //reset status & input fields
         var Reset = function () {
             settings.outputErrorSpn.hidden = true;
@@ -76,7 +62,7 @@ function (n) {
             destFilePath += (destFilePath.indexOf("\\") > -1) ? "\\{0}".format(fileName) : "/{0}".format(fileName);
             fs.copyFile(settings.selectedArchiveIndexFilePath[0],destFilePath, (err) => {
                 if (err) {
-                    HandleError(err);
+                    err.Handle(settings.outputErrorSpn,settings.outputErrorText);
                 }
                 else {                   
                     var fileName = GetFileName(settings.selectedContextDocumentationIndexFilePath);
@@ -85,7 +71,7 @@ function (n) {
                     destFilePath += (destFilePath.indexOf("\\") > -1) ? "\\{0}".format(fileName) : "/{0}".format(fileName);
                     fs.copyFile(settings.selectedContextDocumentationIndexFilePath[0], "{0}/{1}".format(settings.IndecesPath,fileName), (err) => {
                         if (err) {
-                            HandleError(err);
+                            err.Handle(settings.outputErrorSpn,settings.outputErrorText);
                         }
                         else {
                             settings.outputOkSpn.hidden = false;

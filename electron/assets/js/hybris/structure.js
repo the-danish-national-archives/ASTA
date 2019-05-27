@@ -48,24 +48,36 @@ function (n) {
             folderPrefix: "FD.",
             defaultFolderPostfix: "99999",
             subFolders: ["ContextDocumentation","Data","Indices"],
+            foldersCounter: 0,
             deliveryPackagePath: null
         }
 
         //reset status & input fields
         var Reset = function () {
+            settings.foldersCounter = 0;
             settings.outputErrorSpn.hidden = true;
             settings.outputOkSpn.hidden = true;
             settings.selectDeliveryPackage.hidden = true;
         }
 
-        //Output structure creation status
-        var ShowOutput = function() {
+        //Output structure creation status & redirect
+        var NextTab = function() {
             var folders = settings.deliveryPackagePath.getFolders();
             var folderName = folders[folders.length - 1];
             settings.selectDeliveryPackage.innerHTML = "[{0}]".format(settings.selectedPath);
             settings.selectDeliveryPackage.hidden = false;
             settings.outputOkSpn.hidden = false;
             settings.outputOkSpn.innerHTML = settings.outputOkText.format(folderName);
+            
+            var folder = folders[folders.length - 1];           
+            settings.outputStatisticsHeaderTrin1Spn.innerHTML = settings.outputStatisticsHeaderTrin1Text.format(folder);
+            settings.outputStatisticsHeaderTrin2Spn.innerHTML = settings.outputStatisticsHeaderTrin2Text.format(folder);
+            settings.outputStatisticsHeaderTrin3Spn.innerHTML = settings.outputStatisticsHeaderTrin3Text.format(folder);
+            settings.outputStatisticsHeaderInformation2Spn.innerHTML = settings.outputStatisticsHeaderInformation2Text.format(folder);
+            settings.outputStatisticsHeaderindexfilesSpn.innerHTML = settings.outputStatisticsHeaderindexfilesText.format(folder);
+            settings.outputStatisticsHeadercontextdocumentsSpn.innerHTML = settings.outputStatisticsHeadercontextdocumentsText.format(folder);
+            settings.outputStatisticsHeaderOverviewSpn.innerHTML = settings.outputStatisticsHeaderOverviewText.format(folder);
+            settings.statisticsTab.click();
         }
 
         //create delivery Package folder Structure
@@ -79,18 +91,22 @@ function (n) {
                     console.log("Create structure: " + settings.deliveryPackagePath);
                     fs.mkdir(settings.deliveryPackagePath, { recursive: true }, (err) => {
                         if (err) {
-                            settings.outputErrorSpn.hidden = false;
-                            settings.outputErrorSpn.innerHTML = settings.outputErrorText.format(err.message);
+                            err.Handle(settings.outputErrorSpn,settings.outputErrorText);
                         }
                         else {
-                            ShowOutput();
+                            settings.foldersCounter += 1;
                             settings.subFolders.forEach(element => {
                                 var subFolderName = (settings.deliveryPackagePath.indexOf("\\") > -1) ? "\\{0}".format(element) : "/{0}".format(element);
                                 fs.mkdir(settings.deliveryPackagePath + subFolderName, { recursive: true }, (err) => {
                                     if (err) {
-                                        settings.outputErrorSpn.hidden = false;
-                                        settings.outputErrorSpn.innerHTML = settings.outputErrorText.format(err.message);   
+                                        err.Handle(settings.outputErrorSpn,settings.outputErrorText);   
                                         settings.deliveryPackagePath = null;                         
+                                    }
+                                    else {
+                                        settings.foldersCounter += 1;
+                                        if(settings.foldersCounter === 4) {
+                                            NextTab();
+                                        }
                                     }
                                 });
                             });                        
@@ -115,16 +131,6 @@ function (n) {
                 }
                 if(settings.selectedPath != null && settings.pathDirTxt.value !== "" && (settings.deliveryPackageTxt.value === "" || (settings.deliveryPackageTxt.value !== "" && pattern.test(settings.deliveryPackageTxt.value)))) {
                     EnsureStructure();
-                    var folders = settings.deliveryPackagePath.getFolders(); 
-                    var folder = folders[folders.length - 1];           
-                    settings.outputStatisticsHeaderTrin1Spn.innerHTML = settings.outputStatisticsHeaderTrin1Text.format(folder);
-                    settings.outputStatisticsHeaderTrin2Spn.innerHTML = settings.outputStatisticsHeaderTrin2Text.format(folder);
-                    settings.outputStatisticsHeaderTrin3Spn.innerHTML = settings.outputStatisticsHeaderTrin3Text.format(folder);
-                    settings.outputStatisticsHeaderInformation2Spn.innerHTML = settings.outputStatisticsHeaderInformation2Text.format(folder);
-                    settings.outputStatisticsHeaderindexfilesSpn.innerHTML = settings.outputStatisticsHeaderindexfilesText.format(folder);
-                    settings.outputStatisticsHeadercontextdocumentsSpn.innerHTML = settings.outputStatisticsHeadercontextdocumentsText.format(folder);
-                    settings.outputStatisticsHeaderOverviewSpn.innerHTML = settings.outputStatisticsHeaderOverviewText.format(folder);
-                    settings.statisticsTab.click();
                 }
             });
             settings.selectDirBtn.addEventListener('click', (event) => {

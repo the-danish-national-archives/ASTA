@@ -5,12 +5,13 @@
 */
 window.navigation = window.navigation || {},
     function (n) {
+        const {getCurrentWindow, globalShortcut} = require('electron').remote;
         navigation.menu = {
             constants: {
                 sectionTemplate: '.section-template',
                 contentContainer: '#content',
-                startSectionMenuItem: "#hybris-menu",
-                startSection: "#hybris"
+                startSectionMenuItem: "#welcome-menu",
+                startSection: "#welcome"
             },
 
             importSectionsToDOM: function () {
@@ -59,7 +60,10 @@ window.navigation = window.navigation || {},
         };
 
         n(function () {
-            navigation.menu.init()
+            navigation.menu.init();
+            document.getElementById("menu-reload").addEventListener('click', function (event) {
+                getCurrentWindow().reload();
+            });
         })
 
     }(jQuery);
