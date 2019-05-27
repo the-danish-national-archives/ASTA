@@ -80,14 +80,6 @@ i {
     cursor: pointer;
 }
 
-.title {
-    padding: 50px 10px 10px 0px;
-    padding-left: 5%;
-    margin-top: 0px;
-    margin-bottom: 0px;
-    color: #49897f;
-}
-
 .menuBtn {
     color: black;
     background-color: rgb(1, 128, 11);
@@ -159,6 +151,25 @@ table {
 }
 
 /* Table END */
+
+/* Title content */
+.title {
+    padding: 50px 10px 10px 0px;
+    padding-left: 5%;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    color: #49897f;
+    display: inline-block;
+}
+
+.right {
+    padding: 10px 0px 10px 0px;
+    float: right;
+    padding-right: 5%;
+    color: white;
+    text-shadow: 4px 3px 0 #49897f;
+}
+/* Title content END */
 
 /* Font Headers */
 
