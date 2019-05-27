@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?><arkivalie avid="00000115" tegnsaet="EBCDIC_277" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="..\FSK_SCHE\FS-schema_27xsd.xsd" >
+	<kolofon udarbejdetaf="AMEIJ,BD,(DT)" udarbejdetdato="2006-10-10" kommentar="På grund af forskellen i postdefinitioner (felt NUM8DEC2) er tabel 1977 blevet opdelt i 2 tabeller: 1977_96 og 1977_R6.&#xA;&#xA;&#xA; "/>
+	<arkvertab arkivid="00000115" afltype="2" tidligereafl="" systemnavn="Skibsregister ohsa" startdato="1985-01-01" slutdato="1985-12-31"/>
+	<skabertab skaber="Københavns Havnevæsen" startdato="1985-01-01" slutdato="1985-12-31"/>
+	<fil filtype="fast" skipfoerstepost="false" skipsidstepost="false">
+		<filsegment filnavn="1977"/>
+		<postdef postnavn="1977_96" tabelinfo="Skibs- og godsangivelser.&#xA;Ved oprettelse er recordkode = 96&#xA;Ved korrektioner er den = R6" postlaengde="80" medtages="true" tabelkommentar="" ejerpostnavn="">
+			<feltdef feltnavn="AHH96ID" datatype="STRING_001 : tekst" startpos="1" laengde="2" feltinfo="96 / R6" gruppering="false" medtages="true"/>
+			<feltdef feltnavn="DATOMM" datatype="NUM_001 : heltal, højrestillet, valgfrit fortegn før tal" startpos="3" laengde="2" feltinfo="Månedsnr. nummerisk" gruppering="false" medtages="true"/>
+			<feltdef feltnavn="DATOAA" datatype="NUM_001 : heltal, højrestillet, valgfrit fortegn før tal" startpos="5" laengde="2" feltinfo="2-cifret årstal nummerisk" gruppering="false" medtages="true"/>
+			<feltdef feltnavn="EXPNNR" datatype="NUM_001 : heltal, højrestillet, valgfrit fortegn før tal" startpos="7" laengde="5" feltinfo="Ekspeditioners nr (OHSA)" gruppering="false" medtages="true"/>
+			<feltdef feltnavn="SAEJRUTE" datatype="STRING_001 : tekst" startpos="12" laengde="1" feltinfo="X, hvis ej rutefart" gruppering="false" medtages="true"/>
+			<feltdef feltnavn="KUNRPACK" datatype="NUM_009 : Heltal, pakket, cifre, C/D fortegn til sidst, + erstattes med en blank" startpos="13" laengde="3" feltinfo="Kunde nr. - pakket UHA (RPG)" gruppering="false" medtages="true"/>
+			<feltdef feltnavn="MOMSKODE" datatype="STRING_001 : tekst" startpos="16" laengde="1" feltinfo="MOMSKODE" gruppering="false" medtages="true"><kodedef>
+									<kode kodevaerdi="0" forklaring="momsfri"></kode>
+								<kode kodevaerdi="1" forklaring="momspligtig"></kode><kode kodevaerdi="2" forklaring="ambi"></kode></kodedef></feltdef>
+			<feltdef feltnavn="FILLER_1" datatype="STRING_001 : tekst" startpos="17" laengde="6" feltinfo="FILLER_1" gruppering="false" medtages="true"/>
+			<feltdef feltnavn="DISTRIKT" datatype="NUM_001 : heltal, højrestillet, valgfrit fortegn før tal" startpos="23" laengde="1" feltinfo="Distrikt" gruppering="false" medtages="true"/>
+			<feltdef feltnavn="KAJ" datatype="NUM_001 : heltal, højrestillet, valgfrit fortegn før tal" startpos="24" laengde="3" feltinfo="Kaj" gruppering="false" medtages="true"/>
+			<feltdef feltnavn="GODSMGD" datatype="NUM_001 : heltal, højrestillet, valgfrit fortegn før tal" startpos="27" laengde="5" feltinfo="Mængde i tons/antal passagerer" gruppering="false" medtages="true"/>
+			<feltdef feltnavn="VAREKODE" datatype="NUM_001 : heltal, højrestillet, valgfrit fortegn før tal" startpos="32" laengde="3" feltinfo="Varekode&#xA;Transportstatistik varekode for Københavns Havn. Tilpasset CSTE 1/systemets 52 kapitler. &#xA;I dokumentationen findes tabel over vareafgifter i øre pr. ton pr. varekode.&#xA;&#xA;Vejledende varebetegnelser: " gruppering="false" medtages="true">
+				<kodedef>
+					<kode kodevaerdi="010" forklaring="Levende dyr"/>
+					<kode kodevaerdi="020" forklaring="Kød - fersk, frosset, saltet, røget mv. samt konserves"/>
+					<kode kodevaerdi="030" forklaring="Mejeri produkter"/>
+					<kode kodevaerdi="040" forklaring="Fisk - fersk, frosset, saltet, røget mv. samt konserves"/>
+					<kode kodevaerdi="050" forklaring="Korn og ris"/>
+					<kode kodevaerdi="061" forklaring="Mel og gryn af korn"/>
+					<kode kodevaerdi="062" forklaring="Malt og andre produkter af korn"/>
+					<kode kodevaerdi="071" forklaring="Kartofler og tapioca"/>
+					<kode kodevaerdi="072" forklaring="Frisk frugt og grøntsager mv."/>
+					<kode kodevaerdi="081" forklaring="Vegetabilske produkter iøvrigt, herunder tørrede frugter og konserves"/>
+					<kode kodevaerdi="091" forklaring="Råsukker, melasse, sirup og honning"/>
+					<kode kodevaerdi="092" forklaring="Ikke-spiselige produkter af animalsk oprindelse"/>
+					<kode kodevaerdi="101" forklaring="Roer. pellets. lucernemel mv."/>
+					<kode kodevaerdi="102" forklaring="Sildemel, oliekager og veg, produkter mv. anvendelige til dyrefoder"/>
+					<kode kodevaerdi="111" forklaring="Kaffe, te, kakao, krydderier mv."/>
+					<kode kodevaerdi="112" forklaring="Tilberedte næringsmidler, herunder eddike, ekstrakter og konserves"/>
+					<kode kodevaerdi="120" forklaring="Spiritus, vin, øl og most"/>
+					<kode kodevaerdi="130" forklaring="Tobak og tobaksvarer"/>
+					<kode kodevaerdi="140" forklaring="Rå huder og skind"/>
+					<kode kodevaerdi="151" forklaring="Olieholdige frø og frugter"/>
+					<kode kodevaerdi="152" forklaring="Andre frø og frugter, planter mv."/>
+					<kode kodevaerdi="160" forklaring="Rågummi , naturlig og syntetisk"/>
+					<kode kodevaerdi="170" forklaring="Tømmer, planker, brædder, rundtræ og lignende"/>
+					<kode kodevaerdi="180" forklaring="Papirmasse og -affald"/>
+					<kode kodevaerdi="190" forklaring="Tekstilfibre og -affald"/>
+					<kode kodevaerdi="200" forklaring="Gødningsstoffer - naturlige"/>
+					<kode kodevaerdi="211" forklaring="Sand, sten og grus direkte fra opfiskning"/>
+					<kode kodevaerdi="212" forklaring="Sand, sten og grus iøvrigt"/>
+					<kode kodevaerdi="222" forklaring="Salt"/>
+					<kode kodevaerdi="223" forklaring="Andre mineraler - malme, slagger og aske, undtagen kalk og cement"/>
+					<kode kodevaerdi="224" forklaring="Sten, groft tilhugget"/>
+					<kode kodevaerdi="225" forklaring="Bro- og kantsten"/>
+					<kode kodevaerdi="230" forklaring="Jernmalm, -slagger og -aske"/>
+					<kode kodevaerdi="240" forklaring="Jern- og stålskrot"/>
+					<kode kodevaerdi="250" forklaring="Andre metalmalme og -aske"/>
+					<kode kodevaerdi="261" forklaring="Ubehandlede vegetabilske materialer"/>
+					<kode kodevaerdi="270" forklaring="Kul og -briketter"/>
+					<kode kodevaerdi="280" forklaring="Tørv, brunkul og -briketter"/>
+					<kode kodevaerdi="290" forklaring="Koks og halvkoks"/>
+					<kode kodevaerdi="301" forklaring="Jord- og mineralsk råolie, brændselsolie og petroleum"/>
+					<kode kodevaerdi="302" forklaring="Motorbrændstof, nafta og mørke smøreolier"/>
+					<kode kodevaerdi="311" forklaring="Smøreolier, lyse mv."/>
+					<kode kodevaerdi="312" forklaring="Asfalt - naturlig, bitumen og bitumiøse blandinger"/>
+					<kode kodevaerdi="313" forklaring="Andre mineralske olieprodukter, herunder vaseline og vox"/>
+					<kode kodevaerdi="320" forklaring="Gas - naturlig og fremstillet"/>
+					<kode kodevaerdi="330" forklaring="Animalske og vegetabilske olie- og fedtstoffer"/>
+					<kode kodevaerdi="340" forklaring="Kemikalier"/>
+					<kode kodevaerdi="351" forklaring="Benzol og mineralsk terpentin"/>
+					<kode kodevaerdi="352" forklaring="Mineralsk tjære mv."/>
+					<kode kodevaerdi="360" forklaring="Kunstgødning"/>
+					<kode kodevaerdi="370" forklaring="Plastik, behandlet cellulose og kunstharpiks"/>
+					<kode kodevaerdi="381" forklaring="Blandede kemikalier, herunder medicinske og sprængstoffer"/>
+					<kode kodevaerdi="382" forklaring="Sulfitlud"/>
+					<kode kodevaerdi="390" forklaring="Læder- og gummivarer"/>
+					<kode kodevaerdi="400" forklaring="Trævarer"/>
+					<kode kodevaerdi="411" forklaring="Avispapir"/>
+					<kode kodevaerdi="412" forklaring="Papir i ruller, ark m.v."/>
+					<kode kodevaerdi="420" forklaring="Tekstilgarner mv."/>
+					<kode kodevaerdi="431" forklaring="Kalk"/>
+					<kode kodevaerdi="432" forklaring="Cement"/>
+					<kode kodevaerdi="441" forklaring="Varer af sten, gips, cement mv."/>
+					<kode kodevaerdi="443" forklaring="Klinker, lerrør"/>
+					<kode kodevaerdi="444" forklaring="Synopalskærver og kemigips"/>
+					<kode kodevaerdi="445" forklaring="Andre keramiske produkter og glas"/>
+					<kode kodevaerdi="451" forklaring="Råt og groft tildannet jern"/>
+					<kode kodevaerdi="452" forklaring="Grovvarer af jern og stål"/>
+					<kode kodevaerdi="460" forklaring="Andre varer af jern og stål"/>
+					<kode kodevaerdi="471" forklaring="Uædle metaller, ubearbejdede samt affald og skrot"/>
+					<kode kodevaerdi="472" forklaring="Grovvarer af uædelt metal"/>
+					<kode kodevaerdi="480" forklaring="Andre varer af uædelt metal"/>
+					<kode kodevaerdi="491" forklaring="Traktorer og landbrugsmaskiner mv. samt dele hertil"/>
+					<kode kodevaerdi="492" forklaring="Andre ikke elektriske maskiner samt dele hertil"/>
+					<kode kodevaerdi="493" forklaring="Elektriske maskiner, apparater og elektrisk materiel"/>
+					<kode kodevaerdi="501" forklaring="Personautomobiler, ikke indregistrerede samt dele hertil"/>
+					<kode kodevaerdi="502" forklaring="Last- og vareautomobiler, busser samt dele hertil"/>
+					<kode kodevaerdi="503" forklaring="Andre transportmidler"/>
+					<kode kodevaerdi="510" forklaring="Alle andre varer"/>
+					<kode kodevaerdi="521" forklaring="Bagage og rejsegods"/>
+					<kode kodevaerdi="522" forklaring="Tomme pakningsgenstande, ikke handelsvarer"/>
+				</kodedef>
+			</feltdef>
+			<feltdef feltnavn="IUKODE" datatype="NUM_001 : heltal, højrestillet, valgfrit fortegn før tal" startpos="35" laengde="3" feltinfo="Kommer-fra kode (Nation /By)&#xA;010 - 199 = DANMARK&#xA;231 - 259 = øvr. EUROPA&#xA;261 - 269 = ASIEN&#xA;271 - 279 = AFRIKA&#xA;281 - 289 = AMERIKA&#xA;291 - 294 = STILLEHAVET&#xA;&#xA;BOLVÆRKSEDDELENS i/u kode:&#xA;200 Ankommende fra udland&#xA;---- Ankommende fra indland anvendes kode DANMARK&#xA;ANLØBERE for bunkring:&#xA;001 Danske skibe&#xA;200 Udenlandske skibe" gruppering="false" medtages="true">
+				<kodedef>
+					<kode kodevaerdi="010" forklaring="Københavns amt iøvr."/>
+					<kode kodevaerdi="011" forklaring="Københavns havn"/>
+					<kode kodevaerdi="012" forklaring="Tuborg havn"/>
+					<kode kodevaerdi="019" forklaring="Københavns red"/>
+					<kode kodevaerdi="020" forklaring="Frederiksborg amt"/>
+					<kode kodevaerdi="030" forklaring="Roskilde amt"/>
+					<kode kodevaerdi="040" forklaring="Vestsjællands amt iøvr"/>
+					<kode kodevaerdi="041" forklaring="Sjællands odde"/>
+					<kode kodevaerdi="042" forklaring="Kalundborg"/>
+					<kode kodevaerdi="043" forklaring="Korsør / Stigsnæs"/>
+					<kode kodevaerdi="050" forklaring="Storstrøms amt iøvr."/>
+					<kode kodevaerdi="051" forklaring="Næstved"/>
+					<kode kodevaerdi="052" forklaring="Orehoved"/>
+					<kode kodevaerdi="053" forklaring="Lolland/Falster/Møn"/>
+					<kode kodevaerdi="060" forklaring="Bornholms amt iøvr."/>
+					<kode kodevaerdi="061" forklaring="Rønne"/>
+					<kode kodevaerdi="070" forklaring="Fyns amt iøvr"/>
+					<kode kodevaerdi="071" forklaring="Odense"/>
+					<kode kodevaerdi="072" forklaring="Nyborg"/>
+					<kode kodevaerdi="080" forklaring="Sønderjyllands amt"/>
+					<kode kodevaerdi="090" forklaring="Ribe amt iøvr."/>
+					<kode kodevaerdi="091" forklaring="Esbjerg"/>
+					<kode kodevaerdi="100" forklaring="Vejle amt iøvr."/>
+					<kode kodevaerdi="101" forklaring="Fredericia"/>
+					<kode kodevaerdi="110" forklaring="Ringkøbing amt"/>
+					<kode kodevaerdi="120" forklaring="Århus amt iøvr."/>
+					<kode kodevaerdi="121" forklaring="Århus"/>
+					<kode kodevaerdi="122" forklaring="Mariager"/>
+					<kode kodevaerdi="130" forklaring="Viborg amt"/>
+					<kode kodevaerdi="140" forklaring="Nordjyllands amt iøvr."/>
+					<kode kodevaerdi="141" forklaring="Ålborg / Nørre Sundby"/>
+					<kode kodevaerdi="150" forklaring="Grønland"/>
+					<kode kodevaerdi="160" forklaring="Færøerne"/>
+					<kode kodevaerdi="199" forklaring="Søen (opfiskning af sten, sand &amp; grus m.v.)"/>
+					<kode kodevaerdi="227" forklaring="Estland"/>
+					<kode kodevaerdi="228" forklaring="Letland"/>
+					<kode kodevaerdi="229" forklaring="Litauen"/>
+					<kode kodevaerdi="231" forklaring="Sverige"/>
+					<kode kodevaerdi="232" forklaring="Norge"/>
+					<kode kodevaerdi="233" forklaring="Vesttyskland"/>
+					<kode kodevaerdi="234" forklaring="Østtyskland"/>
+					<kode kodevaerdi="235" forklaring="Polen"/>
+					<kode kodevaerdi="236" forklaring="Rusland"/>
+					<kode kodevaerdi="237" forklaring="Finland"/>
+					<kode kodevaerdi="238" forklaring="Island"/>
+					<kode kodevaerdi="239" forklaring="Storbritanien"/>
+					<kode kodevaerdi="240" forklaring="Irland"/>
+					<kode kodevaerdi="241" forklaring="Holland"/>
+					<kode kodevaerdi="242" forklaring="Belgien"/>
+					<kode kodevaerdi="243" forklaring="Frankrig"/>
+					<kode kodevaerdi="244" forklaring="Spanien"/>
+					<kode kodevaerdi="245" forklaring="Portugal"/>
+					<kode kodevaerdi="246" forklaring="Monaco"/>
+					<kode kodevaerdi="247" forklaring="Italien"/>
+					<kode kodevaerdi="248" forklaring="Jugoslavien"/>
+					<kode kodevaerdi="249" forklaring="Grækenland"/>
+					<kode kodevaerdi="250" forklaring="Cypern"/>
+					<kode kodevaerdi="251" forklaring="Bulgarien"/>
+					<kode kodevaerdi="252" forklaring="Rumænien"/>
+					<kode kodevaerdi="253" forklaring="Østrig"/>
+					<kode kodevaerdi="254" forklaring="Schweiz"/>
+					<kode kodevaerdi="255" forklaring="Malta"/>
+					<kode kodevaerdi="256" forklaring="Tjekko-Slovakiet"/>
+					<kode kodevaerdi="257" forklaring="Kroatien"/>
+					<kode kodevaerdi="258" forklaring="Ukraine"/>
+					<kode kodevaerdi="259" forklaring="Europa iøvr."/>
+					<kode kodevaerdi="261" forklaring="Tyrkiet"/>
+					<kode kodevaerdi="262" forklaring="Israel"/>
+					<kode kodevaerdi="263" forklaring="Mellemøsten iøvr."/>
+					<kode kodevaerdi="265" forklaring="Forindien"/>
+					<kode kodevaerdi="266" forklaring="Sydøstasien"/>
+					<kode kodevaerdi="267" forklaring="Kina"/>
+					<kode kodevaerdi="268" forklaring="Korea"/>
+					<kode kodevaerdi="269" forklaring="Japan"/>
+					<kode kodevaerdi="271" forklaring="Nordafrika"/>
+					<kode kodevaerdi="272" forklaring="Liberia"/>
+					<kode kodevaerdi="273" forklaring="Ghana"/>
+					<kode kodevaerdi="274" forklaring="Vestafrika iøvr."/>
+					<kode kodevaerdi="275" forklaring="Sydvestafrika"/>
+					<kode kodevaerdi="276" forklaring="Sydafrika"/>
+					<kode kodevaerdi="277" forklaring="Kenya"/>
+					<kode kodevaerdi="279" forklaring="Østafrika iøvr."/>
+					<kode kodevaerdi="281" forklaring="Canada"/>
+					<kode kodevaerdi="282" forklaring="U.S.A."/>
+					<kode kodevaerdi="283" forklaring="Panama"/>
+					<kode kodevaerdi="284" forklaring="Mellemamerika iøvr"/>
+					<kode kodevaerdi="285" forklaring="Venezuela"/>
+					<kode kodevaerdi="286" forklaring="Brasilien"/>
+					<kode kodevaerdi="287" forklaring="Argentina"/>
+					<kode kodevaerdi="288" forklaring="Antiqua og Barbuda"/>
+					<kode kodevaerdi="289" forklaring="Sydamerika iøvr."/>
+					<kode kodevaerdi="291" forklaring="Australien"/>
+					<kode kodevaerdi="292" forklaring="New Zealand"/>
+					<kode kodevaerdi="293" forklaring="Oceanien"/>
+					<kode kodevaerdi="294" forklaring="Vanuatu"/>
+					<kode kodevaerdi="200" forklaring="BOLVÆRKSEDDELENS i/u kode: Ankommende fra udland, ANLØBERE for bunkring: Udenlandske skibe"/>
+					<kode kodevaerdi="001" forklaring="ANLØBERE for bunkring: Danske skibe"/>
+				</kodedef>
+			</feltdef>
+			<feltdef feltnavn="LOLAKODE" datatype="NUM_001 : heltal, højrestillet, valgfrit fortegn før tal" startpos="38" laengde="2" feltinfo="losse / lastekode&#xA;&#xA;11 - 19 = LO&#xA;21 - 29 = LA&#xA;&#xA;*) Ikke ruteskibe: X i 1. mængdekolonne" gruppering="false" medtages="true">
+				<kodedef>
+					<kode kodevaerdi="11" forklaring="Losning"/>
+					<kode kodevaerdi="12" forklaring="Containere losset"/>
+					<kode kodevaerdi="13" forklaring="Pass. indg. heraf disembarked"/>
+					<kode kodevaerdi="14" forklaring="Passagerer indg. *)"/>
+					<kode kodevaerdi="17" forklaring="Transitgods losset"/>
+					<kode kodevaerdi="18" forklaring="Transporter i havnen"/>
+					<kode kodevaerdi="19" forklaring="Omladningsgods losset"/>
+					<kode kodevaerdi="21" forklaring="Lastning"/>
+					<kode kodevaerdi="22" forklaring="Containere lastet"/>
+					<kode kodevaerdi="23" forklaring="Pass. udg. heraf embarked"/>
+					<kode kodevaerdi="24" forklaring="Passagerer udg. *)"/>
+					<kode kodevaerdi="25" forklaring="Bunkerolie"/>
+					<kode kodevaerdi="26" forklaring="Videretransporteret gods"/>
+					<kode kodevaerdi="27" forklaring="Transitgods lastet"/>
+					<kode kodevaerdi="28" forklaring="Transporter i havnen"/>
+					<kode kodevaerdi="29" forklaring="Omladningsgods lastet"/>
+				</kodedef>
+			</feltdef>
+			<feltdef feltnavn="FILLER_2" datatype="STRING_SPACE : alle tegn skal være blank (tegn 32)" startpos="40" laengde="2" feltinfo="FILLER_2" gruppering="false" medtages="true"/>
+			<feltdef feltnavn="NUM8DEC2" datatype="REAL_004D02 : decimaltal, Upakket, cifre, C/D fortegn til sidst, 2 decimal" startpos="42" laengde="8" feltinfo="Beløb" gruppering="false" medtages="true"/>
+			<feltdef feltnavn="BILAG" datatype="NUM_001 : heltal, højrestillet, valgfrit fortegn før tal" startpos="50" laengde="5" feltinfo="Bilagsnummer" gruppering="false" medtages="true"/>
+			<feltdef feltnavn="ANKDATO" datatype="DATE_006 : 'ddmmåå' til formen 'ååmmdd' incl. codepage konvertering" startpos="55" laengde="6" feltinfo="ankomst dato" gruppering="false" medtages="true"/>
+			<feltdef feltnavn="SA_SKIBSNAVN" datatype="STRING_001 : tekst" startpos="61" laengde="19" feltinfo="Skibsnavn, forkortet&#xA;(SA SKIBSNAVN)" gruppering="false" medtages="true"/>
+			<feltdef feltnavn="FAKTKODE" datatype="STRING_001 : tekst" startpos="80" laengde="1" feltinfo="= &amp;, hvis fakturering" gruppering="false" medtages="true"/>
+			<autopn></autopn>
+			<forekomst>
+				<harpostid postidfeltnavn="AHH96ID" vaerdi="96"/>
+			</forekomst>
+		</postdef>
+		<postdef postnavn="1977_R6" tabelinfo="Skibs- og godsangivelser.&#xA;Ved oprettelse er recordkode = 96&#xA;Ved korrektioner er den = R6" postlaengde="80" medtages="true" tabelkommentar="" ejerpostnavn="1977_96">
+			<feltdef feltnavn="AHH96ID" datatype="STRING_001 : tekst" startpos="1" laengde="2" feltinfo="96 / R6" gruppering="false" medtages="true"/>
+			<feltdef feltnavn="DATOMM" datatype="NUM_001 : heltal, højrestillet, valgfrit fortegn før tal" startpos="3" laengde="2" feltinfo="Månedsnr. numerisk" gruppering="false" medtages="true"/>
+			<feltdef feltnavn="DATOAA" datatype="NUM_001 : heltal, højrestillet, valgfrit fortegn før tal" startpos="5" laengde="2" feltinfo="2-cifret årstal numerisk" gruppering="false" medtages="true"/>
+			<feltdef feltnavn="EXPNNR" datatype="NUM_001 : heltal, højrestillet, valgfrit fortegn før tal" startpos="7" laengde="5" feltinfo="Ekspeditioners nr (OHSA)" gruppering="false" medtages="true"/>
+			<feltdef feltnavn="SAEJRUTE" datatype="STRING_001 : tekst" startpos="12" laengde="1" feltinfo="X, hvis ej rutefart" gruppering="false" medtages="true"/>
+			<feltdef feltnavn="KUNRPACK" datatype="NUM_009 : Heltal, pakket, cifre, C/D fortegn til sidst, + erstattes med en blank" startpos="13" laengde="3" feltinfo="Kunde nr. - pakket UHA (RPG)" gruppering="false" medtages="true"/>
+			<feltdef feltnavn="MOMSKODE" datatype="STRING_001 : tekst" startpos="16" laengde="1" feltinfo="MOMSKODE" gruppering="false" medtages="true"><kodedef>
+									<koderef postnavn="1977_96" feltnavn="MOMSKODE"></koderef>
+								</kodedef></feltdef>
+			<feltdef feltnavn="FILLER_1" datatype="STRING_001 : tekst" startpos="17" laengde="6" feltinfo="FILLER_1" gruppering="false" medtages="true"/>
+			<feltdef feltnavn="DISTRIKT" datatype="NUM_001 : heltal, højrestillet, valgfrit fortegn før tal" startpos="23" laengde="1" feltinfo="Distrikt" gruppering="false" medtages="true"/>
+			<feltdef feltnavn="KAJ" datatype="NUM_001 : heltal, højrestillet, valgfrit fortegn før tal" startpos="24" laengde="3" feltinfo="Kaj" gruppering="false" medtages="true"/>
+			<feltdef feltnavn="GODSMGD" datatype="NUM_001 : heltal, højrestillet, valgfrit fortegn før tal" startpos="27" laengde="5" feltinfo="Mængde i tons/antal passagerer" gruppering="false" medtages="true"/>
+			<feltdef feltnavn="VAREKODE" datatype="NUM_001 : heltal, højrestillet, valgfrit fortegn før tal" startpos="32" laengde="3" feltinfo="Varekode&#xA;Transportstatistik varekode for Københavns Havn. Tilpasset CSTE 1/systemets 52 kapitler. &#xA;I dokumentationen findes tabel over vareafgifter i øre pr. ton pr. varekode.&#xA;&#xA;Vejledende varebetegnelser: " gruppering="false" medtages="true">
+				<kodedef>
+					<koderef postnavn="1977_96" feltnavn="VAREKODE"/>
+				</kodedef>
+			</feltdef>
+			<feltdef feltnavn="IUKODE" datatype="NUM_001 : heltal, højrestillet, valgfrit fortegn før tal" startpos="35" laengde="3" feltinfo="Kommer-fra kode (Nation /By)&#xA;010 - 199 = DANMARK&#xA;231 - 259 = øvr. EUROPA&#xA;261 - 269 = ASIEN&#xA;271 - 279 = AFRIKA&#xA;281 - 289 = AMERIKA&#xA;291 - 294 = STILLEHAVET&#xA;BOLVÆRKSEDDELENS i/u kode:&#xA;200 Ankommende fra udland&#xA;---- Ankommende fra indland anvendes kode DANMARK&#xA;ANLØBERE for bunkring:&#xA;001 Danske skibe&#xA;200 Udenlandske skibe&#xA;&#xA;&#xA;&#xA;BOLVÆRKSEDDELENS i/u kode:&#xA;200 Ankommende fra udland&#xA;---- Ankommende fra indland anvendes kode DANMARK" gruppering="false" medtages="true">
+				<kodedef>
+					<koderef postnavn="1977_96" feltnavn="IUKODE"/>
+				</kodedef>
+			</feltdef>
+			<feltdef feltnavn="LOLAKODE" datatype="NUM_001 : heltal, højrestillet, valgfrit fortegn før tal" startpos="38" laengde="2" feltinfo="losse / lastekode&#xA;&#xA;11 - 19 = LO&#xA;21 - 29 = LA&#xA;&#xA;*) Ikke ruteskibe: X i 1. mængdekolonne" gruppering="false" medtages="true">
+				<kodedef>
+					<koderef postnavn="1977_96" feltnavn="LOLAKODE"/>
+				</kodedef>
+			</feltdef>
+			<feltdef feltnavn="FILLER_2" datatype="STRING_SPACE : alle tegn skal være blank (tegn 32)" startpos="40" laengde="2" feltinfo="FILLER_2" gruppering="false" medtages="true"/>
+			<feltdef feltnavn="NUM8DEC2" datatype="REAL_007D02 : Konverterer IBM Signed eller IBM Zoned. 2 decimaler. Sidste byte er pakket med en værdi og et fortegn" startpos="42" laengde="8" feltinfo="Beløb" gruppering="false" medtages="true"/>
+			<feltdef feltnavn="BILAG" datatype="NUM_001 : heltal, højrestillet, valgfrit fortegn før tal" startpos="50" laengde="5" feltinfo="Bilagsnummer" gruppering="false" medtages="true"/>
+			<feltdef feltnavn="ANKDATO" datatype="DATE_006 : 'ddmmåå' til formen 'ååmmdd' incl. codepage konvertering" startpos="55" laengde="6" feltinfo="ankomst dato" gruppering="false" medtages="true"/>
+			<feltdef feltnavn="SA_SKIBSNAVN" datatype="STRING_001 : tekst" startpos="61" laengde="19" feltinfo="Skibsnavn, forkortet&#xA;(SA SKIBSNAVN)" gruppering="false" medtages="true"/>
+			<feltdef feltnavn="FAKTKODE" datatype="STRING_001 : tekst" startpos="80" laengde="1" feltinfo="= &amp;, hvis fakturering" gruppering="false" medtages="true"/>
+			<autopn></autopn>
+			<forekomst>
+				<harpostid postidfeltnavn="AHH96ID" vaerdi="R6"/>
+			</forekomst>
+		</postdef>
+	</fil>
+</arkivalie>

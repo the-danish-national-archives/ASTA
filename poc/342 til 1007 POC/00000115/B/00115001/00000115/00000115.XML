@@ -1,0 +1,1145 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<arkiveringsversion xmlns="SA_metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="SA_metadata sa_md_11.xsd" sa_version="1.1">
+    <tabel>
+        <titel>1977_96</titel>
+        <posttype>Fast</posttype>
+        <feltdef>
+            <titel>SYSGENPN</titel>
+            <datatype>NUM</datatype>
+            <bredde>8</bredde>
+            <feltinfo>Primærnøgle genereret ved Format- og Strukturkonvertering 2005-2008.</feltinfo>
+        </feltdef>
+        <feltdef>
+            <titel>AHH96ID</titel>
+            <datatype>STRING</datatype>
+            <bredde>2</bredde>
+            <feltinfo>96 / R6</feltinfo>
+        </feltdef>
+        <feltdef>
+            <titel>DATOMM</titel>
+            <datatype>NUM</datatype>
+            <bredde>2</bredde>
+            <feltinfo>Månedsnr. nummerisk</feltinfo>
+        </feltdef>
+        <feltdef>
+            <titel>DATOAA</titel>
+            <datatype>NUM</datatype>
+            <bredde>2</bredde>
+            <feltinfo>2-cifret årstal nummerisk</feltinfo>
+        </feltdef>
+        <feltdef>
+            <titel>EXPNNR</titel>
+            <datatype>NUM</datatype>
+            <bredde>5</bredde>
+            <feltinfo>Ekspeditioners nr (OHSA)</feltinfo>
+        </feltdef>
+        <feltdef>
+            <titel>SAEJRUTE</titel>
+            <datatype>STRING</datatype>
+            <bredde>1</bredde>
+            <feltinfo>X, hvis ej rutefart</feltinfo>
+        </feltdef>
+        <feltdef>
+            <titel>KUNRPACK</titel>
+            <datatype>NUM</datatype>
+            <bredde>6</bredde>
+            <feltinfo>Kunde nr. - pakket UHA (RPG)</feltinfo>
+        </feltdef>
+        <feltdef>
+            <titel>MOMSKODE</titel>
+            <datatype>STRING</datatype>
+            <bredde>1</bredde>
+            <feltinfo>MOMSKODE</feltinfo>
+        </feltdef>
+        <kodedef>
+            <titel>MOMSKODE</titel>
+            <kode>0</kode>
+            <kode>momsfri</kode>
+            <kode>1</kode>
+            <kode>momspligtig</kode>
+            <kode>2</kode>
+            <kode>ambi</kode>
+        </kodedef>
+        <feltdef>
+            <titel>FILLER_1</titel>
+            <datatype>STRING</datatype>
+            <bredde>6</bredde>
+            <feltinfo>FILLER_1</feltinfo>
+        </feltdef>
+        <feltdef>
+            <titel>DISTRIKT</titel>
+            <datatype>NUM</datatype>
+            <bredde>1</bredde>
+            <feltinfo>Distrikt</feltinfo>
+        </feltdef>
+        <feltdef>
+            <titel>KAJ</titel>
+            <datatype>NUM</datatype>
+            <bredde>3</bredde>
+            <feltinfo>Kaj</feltinfo>
+        </feltdef>
+        <feltdef>
+            <titel>GODSMGD</titel>
+            <datatype>NUM</datatype>
+            <bredde>5</bredde>
+            <feltinfo>Mængde i tons/antal passagerer</feltinfo>
+        </feltdef>
+        <feltdef>
+            <titel>VAREKODE</titel>
+            <datatype>NUM</datatype>
+            <bredde>3</bredde>
+            <feltinfo>Varekode
+Transportstatistik varekode for Københavns Havn. Tilpasset CSTE 1/systemets 52 kapitler. 
+I dokumentationen findes tabel over vareafgifter i øre pr. ton pr. varekode.
+
+Vejledende varebetegnelser: </feltinfo>
+        </feltdef>
+        <kodedef>
+            <titel>VAREKODE</titel>
+            <kode>010</kode>
+            <kode>Levende dyr</kode>
+            <kode>020</kode>
+            <kode>Kød - fersk, frosset, saltet, røget mv. samt konserves</kode>
+            <kode>030</kode>
+            <kode>Mejeri produkter</kode>
+            <kode>040</kode>
+            <kode>Fisk - fersk, frosset, saltet, røget mv. samt konserves</kode>
+            <kode>050</kode>
+            <kode>Korn og ris</kode>
+            <kode>061</kode>
+            <kode>Mel og gryn af korn</kode>
+            <kode>062</kode>
+            <kode>Malt og andre produkter af korn</kode>
+            <kode>071</kode>
+            <kode>Kartofler og tapioca</kode>
+            <kode>072</kode>
+            <kode>Frisk frugt og grøntsager mv.</kode>
+            <kode>081</kode>
+            <kode>Vegetabilske produkter iøvrigt, herunder tørrede frugter og konserves</kode>
+            <kode>091</kode>
+            <kode>Råsukker, melasse, sirup og honning</kode>
+            <kode>092</kode>
+            <kode>Ikke-spiselige produkter af animalsk oprindelse</kode>
+            <kode>101</kode>
+            <kode>Roer. pellets. lucernemel mv.</kode>
+            <kode>102</kode>
+            <kode>Sildemel, oliekager og veg, produkter mv. anvendelige til dyrefoder</kode>
+            <kode>111</kode>
+            <kode>Kaffe, te, kakao, krydderier mv.</kode>
+            <kode>112</kode>
+            <kode>Tilberedte næringsmidler, herunder eddike, ekstrakter og konserves</kode>
+            <kode>120</kode>
+            <kode>Spiritus, vin, øl og most</kode>
+            <kode>130</kode>
+            <kode>Tobak og tobaksvarer</kode>
+            <kode>140</kode>
+            <kode>Rå huder og skind</kode>
+            <kode>151</kode>
+            <kode>Olieholdige frø og frugter</kode>
+            <kode>152</kode>
+            <kode>Andre frø og frugter, planter mv.</kode>
+            <kode>160</kode>
+            <kode>Rågummi , naturlig og syntetisk</kode>
+            <kode>170</kode>
+            <kode>Tømmer, planker, brædder, rundtræ og lignende</kode>
+            <kode>180</kode>
+            <kode>Papirmasse og -affald</kode>
+            <kode>190</kode>
+            <kode>Tekstilfibre og -affald</kode>
+            <kode>200</kode>
+            <kode>Gødningsstoffer - naturlige</kode>
+            <kode>211</kode>
+            <kode>Sand, sten og grus direkte fra opfiskning</kode>
+            <kode>212</kode>
+            <kode>Sand, sten og grus iøvrigt</kode>
+            <kode>222</kode>
+            <kode>Salt</kode>
+            <kode>223</kode>
+            <kode>Andre mineraler - malme, slagger og aske, undtagen kalk og cement</kode>
+            <kode>224</kode>
+            <kode>Sten, groft tilhugget</kode>
+            <kode>225</kode>
+            <kode>Bro- og kantsten</kode>
+            <kode>230</kode>
+            <kode>Jernmalm, -slagger og -aske</kode>
+            <kode>240</kode>
+            <kode>Jern- og stålskrot</kode>
+            <kode>250</kode>
+            <kode>Andre metalmalme og -aske</kode>
+            <kode>261</kode>
+            <kode>Ubehandlede vegetabilske materialer</kode>
+            <kode>270</kode>
+            <kode>Kul og -briketter</kode>
+            <kode>280</kode>
+            <kode>Tørv, brunkul og -briketter</kode>
+            <kode>290</kode>
+            <kode>Koks og halvkoks</kode>
+            <kode>301</kode>
+            <kode>Jord- og mineralsk råolie, brændselsolie og petroleum</kode>
+            <kode>302</kode>
+            <kode>Motorbrændstof, nafta og mørke smøreolier</kode>
+            <kode>311</kode>
+            <kode>Smøreolier, lyse mv.</kode>
+            <kode>312</kode>
+            <kode>Asfalt - naturlig, bitumen og bitumiøse blandinger</kode>
+            <kode>313</kode>
+            <kode>Andre mineralske olieprodukter, herunder vaseline og vox</kode>
+            <kode>320</kode>
+            <kode>Gas - naturlig og fremstillet</kode>
+            <kode>330</kode>
+            <kode>Animalske og vegetabilske olie- og fedtstoffer</kode>
+            <kode>340</kode>
+            <kode>Kemikalier</kode>
+            <kode>351</kode>
+            <kode>Benzol og mineralsk terpentin</kode>
+            <kode>352</kode>
+            <kode>Mineralsk tjære mv.</kode>
+            <kode>360</kode>
+            <kode>Kunstgødning</kode>
+            <kode>370</kode>
+            <kode>Plastik, behandlet cellulose og kunstharpiks</kode>
+            <kode>381</kode>
+            <kode>Blandede kemikalier, herunder medicinske og sprængstoffer</kode>
+            <kode>382</kode>
+            <kode>Sulfitlud</kode>
+            <kode>390</kode>
+            <kode>Læder- og gummivarer</kode>
+            <kode>400</kode>
+            <kode>Trævarer</kode>
+            <kode>411</kode>
+            <kode>Avispapir</kode>
+            <kode>412</kode>
+            <kode>Papir i ruller, ark m.v.</kode>
+            <kode>420</kode>
+            <kode>Tekstilgarner mv.</kode>
+            <kode>431</kode>
+            <kode>Kalk</kode>
+            <kode>432</kode>
+            <kode>Cement</kode>
+            <kode>441</kode>
+            <kode>Varer af sten, gips, cement mv.</kode>
+            <kode>443</kode>
+            <kode>Klinker, lerrør</kode>
+            <kode>444</kode>
+            <kode>Synopalskærver og kemigips</kode>
+            <kode>445</kode>
+            <kode>Andre keramiske produkter og glas</kode>
+            <kode>451</kode>
+            <kode>Råt og groft tildannet jern</kode>
+            <kode>452</kode>
+            <kode>Grovvarer af jern og stål</kode>
+            <kode>460</kode>
+            <kode>Andre varer af jern og stål</kode>
+            <kode>471</kode>
+            <kode>Uædle metaller, ubearbejdede samt affald og skrot</kode>
+            <kode>472</kode>
+            <kode>Grovvarer af uædelt metal</kode>
+            <kode>480</kode>
+            <kode>Andre varer af uædelt metal</kode>
+            <kode>491</kode>
+            <kode>Traktorer og landbrugsmaskiner mv. samt dele hertil</kode>
+            <kode>492</kode>
+            <kode>Andre ikke elektriske maskiner samt dele hertil</kode>
+            <kode>493</kode>
+            <kode>Elektriske maskiner, apparater og elektrisk materiel</kode>
+            <kode>501</kode>
+            <kode>Personautomobiler, ikke indregistrerede samt dele hertil</kode>
+            <kode>502</kode>
+            <kode>Last- og vareautomobiler, busser samt dele hertil</kode>
+            <kode>503</kode>
+            <kode>Andre transportmidler</kode>
+            <kode>510</kode>
+            <kode>Alle andre varer</kode>
+            <kode>521</kode>
+            <kode>Bagage og rejsegods</kode>
+            <kode>522</kode>
+            <kode>Tomme pakningsgenstande, ikke handelsvarer</kode>
+        </kodedef>
+        <feltdef>
+            <titel>IUKODE</titel>
+            <datatype>NUM</datatype>
+            <bredde>3</bredde>
+            <feltinfo>Kommer-fra kode (Nation /By)
+010 - 199 = DANMARK
+231 - 259 = øvr. EUROPA
+261 - 269 = ASIEN
+271 - 279 = AFRIKA
+281 - 289 = AMERIKA
+291 - 294 = STILLEHAVET
+
+BOLVÆRKSEDDELENS i/u kode:
+200 Ankommende fra udland
+---- Ankommende fra indland anvendes kode DANMARK
+ANLØBERE for bunkring:
+001 Danske skibe
+200 Udenlandske skibe</feltinfo>
+        </feltdef>
+        <kodedef>
+            <titel>IUKODE</titel>
+            <kode>010</kode>
+            <kode>Københavns amt iøvr.</kode>
+            <kode>011</kode>
+            <kode>Københavns havn</kode>
+            <kode>012</kode>
+            <kode>Tuborg havn</kode>
+            <kode>019</kode>
+            <kode>Københavns red</kode>
+            <kode>020</kode>
+            <kode>Frederiksborg amt</kode>
+            <kode>030</kode>
+            <kode>Roskilde amt</kode>
+            <kode>040</kode>
+            <kode>Vestsjællands amt iøvr</kode>
+            <kode>041</kode>
+            <kode>Sjællands odde</kode>
+            <kode>042</kode>
+            <kode>Kalundborg</kode>
+            <kode>043</kode>
+            <kode>Korsør / Stigsnæs</kode>
+            <kode>050</kode>
+            <kode>Storstrøms amt iøvr.</kode>
+            <kode>051</kode>
+            <kode>Næstved</kode>
+            <kode>052</kode>
+            <kode>Orehoved</kode>
+            <kode>053</kode>
+            <kode>Lolland/Falster/Møn</kode>
+            <kode>060</kode>
+            <kode>Bornholms amt iøvr.</kode>
+            <kode>061</kode>
+            <kode>Rønne</kode>
+            <kode>070</kode>
+            <kode>Fyns amt iøvr</kode>
+            <kode>071</kode>
+            <kode>Odense</kode>
+            <kode>072</kode>
+            <kode>Nyborg</kode>
+            <kode>080</kode>
+            <kode>Sønderjyllands amt</kode>
+            <kode>090</kode>
+            <kode>Ribe amt iøvr.</kode>
+            <kode>091</kode>
+            <kode>Esbjerg</kode>
+            <kode>100</kode>
+            <kode>Vejle amt iøvr.</kode>
+            <kode>101</kode>
+            <kode>Fredericia</kode>
+            <kode>110</kode>
+            <kode>Ringkøbing amt</kode>
+            <kode>120</kode>
+            <kode>Århus amt iøvr.</kode>
+            <kode>121</kode>
+            <kode>Århus</kode>
+            <kode>122</kode>
+            <kode>Mariager</kode>
+            <kode>130</kode>
+            <kode>Viborg amt</kode>
+            <kode>140</kode>
+            <kode>Nordjyllands amt iøvr.</kode>
+            <kode>141</kode>
+            <kode>Ålborg / Nørre Sundby</kode>
+            <kode>150</kode>
+            <kode>Grønland</kode>
+            <kode>160</kode>
+            <kode>Færøerne</kode>
+            <kode>199</kode>
+            <kode>Søen (opfiskning af sten, sand &amp; grus m.v.)</kode>
+            <kode>227</kode>
+            <kode>Estland</kode>
+            <kode>228</kode>
+            <kode>Letland</kode>
+            <kode>229</kode>
+            <kode>Litauen</kode>
+            <kode>231</kode>
+            <kode>Sverige</kode>
+            <kode>232</kode>
+            <kode>Norge</kode>
+            <kode>233</kode>
+            <kode>Vesttyskland</kode>
+            <kode>234</kode>
+            <kode>Østtyskland</kode>
+            <kode>235</kode>
+            <kode>Polen</kode>
+            <kode>236</kode>
+            <kode>Rusland</kode>
+            <kode>237</kode>
+            <kode>Finland</kode>
+            <kode>238</kode>
+            <kode>Island</kode>
+            <kode>239</kode>
+            <kode>Storbritanien</kode>
+            <kode>240</kode>
+            <kode>Irland</kode>
+            <kode>241</kode>
+            <kode>Holland</kode>
+            <kode>242</kode>
+            <kode>Belgien</kode>
+            <kode>243</kode>
+            <kode>Frankrig</kode>
+            <kode>244</kode>
+            <kode>Spanien</kode>
+            <kode>245</kode>
+            <kode>Portugal</kode>
+            <kode>246</kode>
+            <kode>Monaco</kode>
+            <kode>247</kode>
+            <kode>Italien</kode>
+            <kode>248</kode>
+            <kode>Jugoslavien</kode>
+            <kode>249</kode>
+            <kode>Grækenland</kode>
+            <kode>250</kode>
+            <kode>Cypern</kode>
+            <kode>251</kode>
+            <kode>Bulgarien</kode>
+            <kode>252</kode>
+            <kode>Rumænien</kode>
+            <kode>253</kode>
+            <kode>Østrig</kode>
+            <kode>254</kode>
+            <kode>Schweiz</kode>
+            <kode>255</kode>
+            <kode>Malta</kode>
+            <kode>256</kode>
+            <kode>Tjekko-Slovakiet</kode>
+            <kode>257</kode>
+            <kode>Kroatien</kode>
+            <kode>258</kode>
+            <kode>Ukraine</kode>
+            <kode>259</kode>
+            <kode>Europa iøvr.</kode>
+            <kode>261</kode>
+            <kode>Tyrkiet</kode>
+            <kode>262</kode>
+            <kode>Israel</kode>
+            <kode>263</kode>
+            <kode>Mellemøsten iøvr.</kode>
+            <kode>265</kode>
+            <kode>Forindien</kode>
+            <kode>266</kode>
+            <kode>Sydøstasien</kode>
+            <kode>267</kode>
+            <kode>Kina</kode>
+            <kode>268</kode>
+            <kode>Korea</kode>
+            <kode>269</kode>
+            <kode>Japan</kode>
+            <kode>271</kode>
+            <kode>Nordafrika</kode>
+            <kode>272</kode>
+            <kode>Liberia</kode>
+            <kode>273</kode>
+            <kode>Ghana</kode>
+            <kode>274</kode>
+            <kode>Vestafrika iøvr.</kode>
+            <kode>275</kode>
+            <kode>Sydvestafrika</kode>
+            <kode>276</kode>
+            <kode>Sydafrika</kode>
+            <kode>277</kode>
+            <kode>Kenya</kode>
+            <kode>279</kode>
+            <kode>Østafrika iøvr.</kode>
+            <kode>281</kode>
+            <kode>Canada</kode>
+            <kode>282</kode>
+            <kode>U.S.A.</kode>
+            <kode>283</kode>
+            <kode>Panama</kode>
+            <kode>284</kode>
+            <kode>Mellemamerika iøvr</kode>
+            <kode>285</kode>
+            <kode>Venezuela</kode>
+            <kode>286</kode>
+            <kode>Brasilien</kode>
+            <kode>287</kode>
+            <kode>Argentina</kode>
+            <kode>288</kode>
+            <kode>Antiqua og Barbuda</kode>
+            <kode>289</kode>
+            <kode>Sydamerika iøvr.</kode>
+            <kode>291</kode>
+            <kode>Australien</kode>
+            <kode>292</kode>
+            <kode>New Zealand</kode>
+            <kode>293</kode>
+            <kode>Oceanien</kode>
+            <kode>294</kode>
+            <kode>Vanuatu</kode>
+            <kode>200</kode>
+            <kode>BOLVÆRKSEDDELENS i/u kode: Ankommende fra udland, ANLØBERE for bunkring: Udenlandske skibe</kode>
+            <kode>001</kode>
+            <kode>ANLØBERE for bunkring: Danske skibe</kode>
+        </kodedef>
+        <feltdef>
+            <titel>LOLAKODE</titel>
+            <datatype>NUM</datatype>
+            <bredde>2</bredde>
+            <feltinfo>losse / lastekode
+
+11 - 19 = LO
+21 - 29 = LA
+
+*) Ikke ruteskibe: X i 1. mængdekolonne</feltinfo>
+        </feltdef>
+        <kodedef>
+            <titel>LOLAKODE</titel>
+            <kode>11</kode>
+            <kode>Losning</kode>
+            <kode>12</kode>
+            <kode>Containere losset</kode>
+            <kode>13</kode>
+            <kode>Pass. indg. heraf disembarked</kode>
+            <kode>14</kode>
+            <kode>Passagerer indg. *)</kode>
+            <kode>17</kode>
+            <kode>Transitgods losset</kode>
+            <kode>18</kode>
+            <kode>Transporter i havnen</kode>
+            <kode>19</kode>
+            <kode>Omladningsgods losset</kode>
+            <kode>21</kode>
+            <kode>Lastning</kode>
+            <kode>22</kode>
+            <kode>Containere lastet</kode>
+            <kode>23</kode>
+            <kode>Pass. udg. heraf embarked</kode>
+            <kode>24</kode>
+            <kode>Passagerer udg. *)</kode>
+            <kode>25</kode>
+            <kode>Bunkerolie</kode>
+            <kode>26</kode>
+            <kode>Videretransporteret gods</kode>
+            <kode>27</kode>
+            <kode>Transitgods lastet</kode>
+            <kode>28</kode>
+            <kode>Transporter i havnen</kode>
+            <kode>29</kode>
+            <kode>Omladningsgods lastet</kode>
+        </kodedef>
+        <feltdef>
+            <titel>FILLER_2</titel>
+            <datatype>STRING</datatype>
+            <bredde>2</bredde>
+            <feltinfo>FILLER_2</feltinfo>
+        </feltdef>
+        <feltdef>
+            <titel>NUM8DEC2</titel>
+            <datatype>REAL</datatype>
+            <bredde>9</bredde>
+            <feltinfo>Beløb</feltinfo>
+        </feltdef>
+        <feltdef>
+            <titel>BILAG</titel>
+            <datatype>NUM</datatype>
+            <bredde>5</bredde>
+            <feltinfo>Bilagsnummer</feltinfo>
+        </feltdef>
+        <feltdef>
+            <titel>ANKDATO</titel>
+            <datatype>DATE</datatype>
+            <bredde>6</bredde>
+            <feltinfo>ankomst dato</feltinfo>
+        </feltdef>
+        <feltdef>
+            <titel>SA_SKIBSNAVN</titel>
+            <datatype>STRING</datatype>
+            <bredde>19</bredde>
+            <feltinfo>Skibsnavn, forkortet
+(SA SKIBSNAVN)</feltinfo>
+        </feltdef>
+        <feltdef>
+            <titel>FAKTKODE</titel>
+            <datatype>STRING</datatype>
+            <bredde>1</bredde>
+            <feltinfo>= &amp;, hvis fakturering</feltinfo>
+        </feltdef>
+        <pn>
+            <titel>SYSGENPN</titel>
+        </pn>
+        <tabelinfo>Skibs- og godsangivelser.
+Ved oprettelse er recordkode = 96
+Ved korrektioner er den = R6 (Oprindeligt filnavn &quot;1977&quot;)</tabelinfo>
+    </tabel>
+    <tabel>
+        <titel>1977_R6</titel>
+        <posttype>Fast</posttype>
+        <feltdef>
+            <titel>SYSGENPN</titel>
+            <datatype>NUM</datatype>
+            <bredde>8</bredde>
+            <feltinfo>Primærnøgle genereret ved Format- og Strukturkonvertering 2005-2008.</feltinfo>
+        </feltdef>
+        <feltdef>
+            <titel>SYSGENFN</titel>
+            <datatype>NUM</datatype>
+            <bredde>8</bredde>
+            <feltinfo>Fremmednøgle genereret ved Format- og Strukturkonvertering 2005-2008.</feltinfo>
+        </feltdef>
+        <feltdef>
+            <titel>AHH96ID</titel>
+            <datatype>STRING</datatype>
+            <bredde>2</bredde>
+            <feltinfo>96 / R6</feltinfo>
+        </feltdef>
+        <feltdef>
+            <titel>DATOMM</titel>
+            <datatype>NUM</datatype>
+            <bredde>2</bredde>
+            <feltinfo>Månedsnr. numerisk</feltinfo>
+        </feltdef>
+        <feltdef>
+            <titel>DATOAA</titel>
+            <datatype>NUM</datatype>
+            <bredde>2</bredde>
+            <feltinfo>2-cifret årstal numerisk</feltinfo>
+        </feltdef>
+        <feltdef>
+            <titel>EXPNNR</titel>
+            <datatype>NUM</datatype>
+            <bredde>5</bredde>
+            <feltinfo>Ekspeditioners nr (OHSA)</feltinfo>
+        </feltdef>
+        <feltdef>
+            <titel>SAEJRUTE</titel>
+            <datatype>STRING</datatype>
+            <bredde>1</bredde>
+            <feltinfo>X, hvis ej rutefart</feltinfo>
+        </feltdef>
+        <feltdef>
+            <titel>KUNRPACK</titel>
+            <datatype>NUM</datatype>
+            <bredde>6</bredde>
+            <feltinfo>Kunde nr. - pakket UHA (RPG)</feltinfo>
+        </feltdef>
+        <feltdef>
+            <titel>MOMSKODE</titel>
+            <datatype>STRING</datatype>
+            <bredde>1</bredde>
+            <feltinfo>MOMSKODE</feltinfo>
+        </feltdef>
+        <kodedef>
+            <titel>MOMSKODE</titel>
+            <kode>0</kode>
+            <kode>momsfri</kode>
+            <kode>1</kode>
+            <kode>momspligtig</kode>
+            <kode>2</kode>
+            <kode>ambi</kode>
+        </kodedef>
+        <feltdef>
+            <titel>FILLER_1</titel>
+            <datatype>STRING</datatype>
+            <bredde>6</bredde>
+            <feltinfo>FILLER_1</feltinfo>
+        </feltdef>
+        <feltdef>
+            <titel>DISTRIKT</titel>
+            <datatype>NUM</datatype>
+            <bredde>1</bredde>
+            <feltinfo>Distrikt</feltinfo>
+        </feltdef>
+        <feltdef>
+            <titel>KAJ</titel>
+            <datatype>NUM</datatype>
+            <bredde>3</bredde>
+            <feltinfo>Kaj</feltinfo>
+        </feltdef>
+        <feltdef>
+            <titel>GODSMGD</titel>
+            <datatype>NUM</datatype>
+            <bredde>5</bredde>
+            <feltinfo>Mængde i tons/antal passagerer</feltinfo>
+        </feltdef>
+        <feltdef>
+            <titel>VAREKODE</titel>
+            <datatype>NUM</datatype>
+            <bredde>3</bredde>
+            <feltinfo>Varekode
+Transportstatistik varekode for Københavns Havn. Tilpasset CSTE 1/systemets 52 kapitler. 
+I dokumentationen findes tabel over vareafgifter i øre pr. ton pr. varekode.
+
+Vejledende varebetegnelser: </feltinfo>
+        </feltdef>
+        <kodedef>
+            <titel>VAREKODE</titel>
+            <kode>010</kode>
+            <kode>Levende dyr</kode>
+            <kode>020</kode>
+            <kode>Kød - fersk, frosset, saltet, røget mv. samt konserves</kode>
+            <kode>030</kode>
+            <kode>Mejeri produkter</kode>
+            <kode>040</kode>
+            <kode>Fisk - fersk, frosset, saltet, røget mv. samt konserves</kode>
+            <kode>050</kode>
+            <kode>Korn og ris</kode>
+            <kode>061</kode>
+            <kode>Mel og gryn af korn</kode>
+            <kode>062</kode>
+            <kode>Malt og andre produkter af korn</kode>
+            <kode>071</kode>
+            <kode>Kartofler og tapioca</kode>
+            <kode>072</kode>
+            <kode>Frisk frugt og grøntsager mv.</kode>
+            <kode>081</kode>
+            <kode>Vegetabilske produkter iøvrigt, herunder tørrede frugter og konserves</kode>
+            <kode>091</kode>
+            <kode>Råsukker, melasse, sirup og honning</kode>
+            <kode>092</kode>
+            <kode>Ikke-spiselige produkter af animalsk oprindelse</kode>
+            <kode>101</kode>
+            <kode>Roer. pellets. lucernemel mv.</kode>
+            <kode>102</kode>
+            <kode>Sildemel, oliekager og veg, produkter mv. anvendelige til dyrefoder</kode>
+            <kode>111</kode>
+            <kode>Kaffe, te, kakao, krydderier mv.</kode>
+            <kode>112</kode>
+            <kode>Tilberedte næringsmidler, herunder eddike, ekstrakter og konserves</kode>
+            <kode>120</kode>
+            <kode>Spiritus, vin, øl og most</kode>
+            <kode>130</kode>
+            <kode>Tobak og tobaksvarer</kode>
+            <kode>140</kode>
+            <kode>Rå huder og skind</kode>
+            <kode>151</kode>
+            <kode>Olieholdige frø og frugter</kode>
+            <kode>152</kode>
+            <kode>Andre frø og frugter, planter mv.</kode>
+            <kode>160</kode>
+            <kode>Rågummi , naturlig og syntetisk</kode>
+            <kode>170</kode>
+            <kode>Tømmer, planker, brædder, rundtræ og lignende</kode>
+            <kode>180</kode>
+            <kode>Papirmasse og -affald</kode>
+            <kode>190</kode>
+            <kode>Tekstilfibre og -affald</kode>
+            <kode>200</kode>
+            <kode>Gødningsstoffer - naturlige</kode>
+            <kode>211</kode>
+            <kode>Sand, sten og grus direkte fra opfiskning</kode>
+            <kode>212</kode>
+            <kode>Sand, sten og grus iøvrigt</kode>
+            <kode>222</kode>
+            <kode>Salt</kode>
+            <kode>223</kode>
+            <kode>Andre mineraler - malme, slagger og aske, undtagen kalk og cement</kode>
+            <kode>224</kode>
+            <kode>Sten, groft tilhugget</kode>
+            <kode>225</kode>
+            <kode>Bro- og kantsten</kode>
+            <kode>230</kode>
+            <kode>Jernmalm, -slagger og -aske</kode>
+            <kode>240</kode>
+            <kode>Jern- og stålskrot</kode>
+            <kode>250</kode>
+            <kode>Andre metalmalme og -aske</kode>
+            <kode>261</kode>
+            <kode>Ubehandlede vegetabilske materialer</kode>
+            <kode>270</kode>
+            <kode>Kul og -briketter</kode>
+            <kode>280</kode>
+            <kode>Tørv, brunkul og -briketter</kode>
+            <kode>290</kode>
+            <kode>Koks og halvkoks</kode>
+            <kode>301</kode>
+            <kode>Jord- og mineralsk råolie, brændselsolie og petroleum</kode>
+            <kode>302</kode>
+            <kode>Motorbrændstof, nafta og mørke smøreolier</kode>
+            <kode>311</kode>
+            <kode>Smøreolier, lyse mv.</kode>
+            <kode>312</kode>
+            <kode>Asfalt - naturlig, bitumen og bitumiøse blandinger</kode>
+            <kode>313</kode>
+            <kode>Andre mineralske olieprodukter, herunder vaseline og vox</kode>
+            <kode>320</kode>
+            <kode>Gas - naturlig og fremstillet</kode>
+            <kode>330</kode>
+            <kode>Animalske og vegetabilske olie- og fedtstoffer</kode>
+            <kode>340</kode>
+            <kode>Kemikalier</kode>
+            <kode>351</kode>
+            <kode>Benzol og mineralsk terpentin</kode>
+            <kode>352</kode>
+            <kode>Mineralsk tjære mv.</kode>
+            <kode>360</kode>
+            <kode>Kunstgødning</kode>
+            <kode>370</kode>
+            <kode>Plastik, behandlet cellulose og kunstharpiks</kode>
+            <kode>381</kode>
+            <kode>Blandede kemikalier, herunder medicinske og sprængstoffer</kode>
+            <kode>382</kode>
+            <kode>Sulfitlud</kode>
+            <kode>390</kode>
+            <kode>Læder- og gummivarer</kode>
+            <kode>400</kode>
+            <kode>Trævarer</kode>
+            <kode>411</kode>
+            <kode>Avispapir</kode>
+            <kode>412</kode>
+            <kode>Papir i ruller, ark m.v.</kode>
+            <kode>420</kode>
+            <kode>Tekstilgarner mv.</kode>
+            <kode>431</kode>
+            <kode>Kalk</kode>
+            <kode>432</kode>
+            <kode>Cement</kode>
+            <kode>441</kode>
+            <kode>Varer af sten, gips, cement mv.</kode>
+            <kode>443</kode>
+            <kode>Klinker, lerrør</kode>
+            <kode>444</kode>
+            <kode>Synopalskærver og kemigips</kode>
+            <kode>445</kode>
+            <kode>Andre keramiske produkter og glas</kode>
+            <kode>451</kode>
+            <kode>Råt og groft tildannet jern</kode>
+            <kode>452</kode>
+            <kode>Grovvarer af jern og stål</kode>
+            <kode>460</kode>
+            <kode>Andre varer af jern og stål</kode>
+            <kode>471</kode>
+            <kode>Uædle metaller, ubearbejdede samt affald og skrot</kode>
+            <kode>472</kode>
+            <kode>Grovvarer af uædelt metal</kode>
+            <kode>480</kode>
+            <kode>Andre varer af uædelt metal</kode>
+            <kode>491</kode>
+            <kode>Traktorer og landbrugsmaskiner mv. samt dele hertil</kode>
+            <kode>492</kode>
+            <kode>Andre ikke elektriske maskiner samt dele hertil</kode>
+            <kode>493</kode>
+            <kode>Elektriske maskiner, apparater og elektrisk materiel</kode>
+            <kode>501</kode>
+            <kode>Personautomobiler, ikke indregistrerede samt dele hertil</kode>
+            <kode>502</kode>
+            <kode>Last- og vareautomobiler, busser samt dele hertil</kode>
+            <kode>503</kode>
+            <kode>Andre transportmidler</kode>
+            <kode>510</kode>
+            <kode>Alle andre varer</kode>
+            <kode>521</kode>
+            <kode>Bagage og rejsegods</kode>
+            <kode>522</kode>
+            <kode>Tomme pakningsgenstande, ikke handelsvarer</kode>
+        </kodedef>
+        <feltdef>
+            <titel>IUKODE</titel>
+            <datatype>NUM</datatype>
+            <bredde>3</bredde>
+            <feltinfo>Kommer-fra kode (Nation /By)
+010 - 199 = DANMARK
+231 - 259 = øvr. EUROPA
+261 - 269 = ASIEN
+271 - 279 = AFRIKA
+281 - 289 = AMERIKA
+291 - 294 = STILLEHAVET
+BOLVÆRKSEDDELENS i/u kode:
+200 Ankommende fra udland
+---- Ankommende fra indland anvendes kode DANMARK
+ANLØBERE for bunkring:
+001 Danske skibe
+200 Udenlandske skibe
+
+
+
+BOLVÆRKSEDDELENS i/u kode:
+200 Ankommende fra udland
+---- Ankommende fra indland anvendes kode DANMARK</feltinfo>
+        </feltdef>
+        <kodedef>
+            <titel>IUKODE</titel>
+            <kode>010</kode>
+            <kode>Københavns amt iøvr.</kode>
+            <kode>011</kode>
+            <kode>Københavns havn</kode>
+            <kode>012</kode>
+            <kode>Tuborg havn</kode>
+            <kode>019</kode>
+            <kode>Københavns red</kode>
+            <kode>020</kode>
+            <kode>Frederiksborg amt</kode>
+            <kode>030</kode>
+            <kode>Roskilde amt</kode>
+            <kode>040</kode>
+            <kode>Vestsjællands amt iøvr</kode>
+            <kode>041</kode>
+            <kode>Sjællands odde</kode>
+            <kode>042</kode>
+            <kode>Kalundborg</kode>
+            <kode>043</kode>
+            <kode>Korsør / Stigsnæs</kode>
+            <kode>050</kode>
+            <kode>Storstrøms amt iøvr.</kode>
+            <kode>051</kode>
+            <kode>Næstved</kode>
+            <kode>052</kode>
+            <kode>Orehoved</kode>
+            <kode>053</kode>
+            <kode>Lolland/Falster/Møn</kode>
+            <kode>060</kode>
+            <kode>Bornholms amt iøvr.</kode>
+            <kode>061</kode>
+            <kode>Rønne</kode>
+            <kode>070</kode>
+            <kode>Fyns amt iøvr</kode>
+            <kode>071</kode>
+            <kode>Odense</kode>
+            <kode>072</kode>
+            <kode>Nyborg</kode>
+            <kode>080</kode>
+            <kode>Sønderjyllands amt</kode>
+            <kode>090</kode>
+            <kode>Ribe amt iøvr.</kode>
+            <kode>091</kode>
+            <kode>Esbjerg</kode>
+            <kode>100</kode>
+            <kode>Vejle amt iøvr.</kode>
+            <kode>101</kode>
+            <kode>Fredericia</kode>
+            <kode>110</kode>
+            <kode>Ringkøbing amt</kode>
+            <kode>120</kode>
+            <kode>Århus amt iøvr.</kode>
+            <kode>121</kode>
+            <kode>Århus</kode>
+            <kode>122</kode>
+            <kode>Mariager</kode>
+            <kode>130</kode>
+            <kode>Viborg amt</kode>
+            <kode>140</kode>
+            <kode>Nordjyllands amt iøvr.</kode>
+            <kode>141</kode>
+            <kode>Ålborg / Nørre Sundby</kode>
+            <kode>150</kode>
+            <kode>Grønland</kode>
+            <kode>160</kode>
+            <kode>Færøerne</kode>
+            <kode>199</kode>
+            <kode>Søen (opfiskning af sten, sand &amp; grus m.v.)</kode>
+            <kode>227</kode>
+            <kode>Estland</kode>
+            <kode>228</kode>
+            <kode>Letland</kode>
+            <kode>229</kode>
+            <kode>Litauen</kode>
+            <kode>231</kode>
+            <kode>Sverige</kode>
+            <kode>232</kode>
+            <kode>Norge</kode>
+            <kode>233</kode>
+            <kode>Vesttyskland</kode>
+            <kode>234</kode>
+            <kode>Østtyskland</kode>
+            <kode>235</kode>
+            <kode>Polen</kode>
+            <kode>236</kode>
+            <kode>Rusland</kode>
+            <kode>237</kode>
+            <kode>Finland</kode>
+            <kode>238</kode>
+            <kode>Island</kode>
+            <kode>239</kode>
+            <kode>Storbritanien</kode>
+            <kode>240</kode>
+            <kode>Irland</kode>
+            <kode>241</kode>
+            <kode>Holland</kode>
+            <kode>242</kode>
+            <kode>Belgien</kode>
+            <kode>243</kode>
+            <kode>Frankrig</kode>
+            <kode>244</kode>
+            <kode>Spanien</kode>
+            <kode>245</kode>
+            <kode>Portugal</kode>
+            <kode>246</kode>
+            <kode>Monaco</kode>
+            <kode>247</kode>
+            <kode>Italien</kode>
+            <kode>248</kode>
+            <kode>Jugoslavien</kode>
+            <kode>249</kode>
+            <kode>Grækenland</kode>
+            <kode>250</kode>
+            <kode>Cypern</kode>
+            <kode>251</kode>
+            <kode>Bulgarien</kode>
+            <kode>252</kode>
+            <kode>Rumænien</kode>
+            <kode>253</kode>
+            <kode>Østrig</kode>
+            <kode>254</kode>
+            <kode>Schweiz</kode>
+            <kode>255</kode>
+            <kode>Malta</kode>
+            <kode>256</kode>
+            <kode>Tjekko-Slovakiet</kode>
+            <kode>257</kode>
+            <kode>Kroatien</kode>
+            <kode>258</kode>
+            <kode>Ukraine</kode>
+            <kode>259</kode>
+            <kode>Europa iøvr.</kode>
+            <kode>261</kode>
+            <kode>Tyrkiet</kode>
+            <kode>262</kode>
+            <kode>Israel</kode>
+            <kode>263</kode>
+            <kode>Mellemøsten iøvr.</kode>
+            <kode>265</kode>
+            <kode>Forindien</kode>
+            <kode>266</kode>
+            <kode>Sydøstasien</kode>
+            <kode>267</kode>
+            <kode>Kina</kode>
+            <kode>268</kode>
+            <kode>Korea</kode>
+            <kode>269</kode>
+            <kode>Japan</kode>
+            <kode>271</kode>
+            <kode>Nordafrika</kode>
+            <kode>272</kode>
+            <kode>Liberia</kode>
+            <kode>273</kode>
+            <kode>Ghana</kode>
+            <kode>274</kode>
+            <kode>Vestafrika iøvr.</kode>
+            <kode>275</kode>
+            <kode>Sydvestafrika</kode>
+            <kode>276</kode>
+            <kode>Sydafrika</kode>
+            <kode>277</kode>
+            <kode>Kenya</kode>
+            <kode>279</kode>
+            <kode>Østafrika iøvr.</kode>
+            <kode>281</kode>
+            <kode>Canada</kode>
+            <kode>282</kode>
+            <kode>U.S.A.</kode>
+            <kode>283</kode>
+            <kode>Panama</kode>
+            <kode>284</kode>
+            <kode>Mellemamerika iøvr</kode>
+            <kode>285</kode>
+            <kode>Venezuela</kode>
+            <kode>286</kode>
+            <kode>Brasilien</kode>
+            <kode>287</kode>
+            <kode>Argentina</kode>
+            <kode>288</kode>
+            <kode>Antiqua og Barbuda</kode>
+            <kode>289</kode>
+            <kode>Sydamerika iøvr.</kode>
+            <kode>291</kode>
+            <kode>Australien</kode>
+            <kode>292</kode>
+            <kode>New Zealand</kode>
+            <kode>293</kode>
+            <kode>Oceanien</kode>
+            <kode>294</kode>
+            <kode>Vanuatu</kode>
+            <kode>200</kode>
+            <kode>BOLVÆRKSEDDELENS i/u kode: Ankommende fra udland, ANLØBERE for bunkring: Udenlandske skibe</kode>
+            <kode>001</kode>
+            <kode>ANLØBERE for bunkring: Danske skibe</kode>
+        </kodedef>
+        <feltdef>
+            <titel>LOLAKODE</titel>
+            <datatype>NUM</datatype>
+            <bredde>2</bredde>
+            <feltinfo>losse / lastekode
+
+11 - 19 = LO
+21 - 29 = LA
+
+*) Ikke ruteskibe: X i 1. mængdekolonne</feltinfo>
+        </feltdef>
+        <kodedef>
+            <titel>LOLAKODE</titel>
+            <kode>11</kode>
+            <kode>Losning</kode>
+            <kode>12</kode>
+            <kode>Containere losset</kode>
+            <kode>13</kode>
+            <kode>Pass. indg. heraf disembarked</kode>
+            <kode>14</kode>
+            <kode>Passagerer indg. *)</kode>
+            <kode>17</kode>
+            <kode>Transitgods losset</kode>
+            <kode>18</kode>
+            <kode>Transporter i havnen</kode>
+            <kode>19</kode>
+            <kode>Omladningsgods losset</kode>
+            <kode>21</kode>
+            <kode>Lastning</kode>
+            <kode>22</kode>
+            <kode>Containere lastet</kode>
+            <kode>23</kode>
+            <kode>Pass. udg. heraf embarked</kode>
+            <kode>24</kode>
+            <kode>Passagerer udg. *)</kode>
+            <kode>25</kode>
+            <kode>Bunkerolie</kode>
+            <kode>26</kode>
+            <kode>Videretransporteret gods</kode>
+            <kode>27</kode>
+            <kode>Transitgods lastet</kode>
+            <kode>28</kode>
+            <kode>Transporter i havnen</kode>
+            <kode>29</kode>
+            <kode>Omladningsgods lastet</kode>
+        </kodedef>
+        <feltdef>
+            <titel>FILLER_2</titel>
+            <datatype>STRING</datatype>
+            <bredde>2</bredde>
+            <feltinfo>FILLER_2</feltinfo>
+        </feltdef>
+        <feltdef>
+            <titel>NUM8DEC2</titel>
+            <datatype>REAL</datatype>
+            <bredde>10</bredde>
+            <feltinfo>Beløb</feltinfo>
+        </feltdef>
+        <feltdef>
+            <titel>BILAG</titel>
+            <datatype>NUM</datatype>
+            <bredde>5</bredde>
+            <feltinfo>Bilagsnummer</feltinfo>
+        </feltdef>
+        <feltdef>
+            <titel>ANKDATO</titel>
+            <datatype>DATE</datatype>
+            <bredde>6</bredde>
+            <feltinfo>ankomst dato</feltinfo>
+        </feltdef>
+        <feltdef>
+            <titel>SA_SKIBSNAVN</titel>
+            <datatype>STRING</datatype>
+            <bredde>19</bredde>
+            <feltinfo>Skibsnavn, forkortet
+(SA SKIBSNAVN)</feltinfo>
+        </feltdef>
+        <feltdef>
+            <titel>FAKTKODE</titel>
+            <datatype>STRING</datatype>
+            <bredde>1</bredde>
+            <feltinfo>= &amp;, hvis fakturering</feltinfo>
+        </feltdef>
+        <pn>
+            <titel>SYSGENPN</titel>
+        </pn>
+        <fn>
+            <titel>SYSGENFN</titel>
+            <fremmedtabel>
+                <titel>1977_96</titel>
+                <titel>SYSGENPN</titel>
+            </fremmedtabel>
+            <kardinalitet>M</kardinalitet>
+            <kardinalitet>1</kardinalitet>
+        </fn>
+        <tabelinfo>Skibs- og godsangivelser.
+Ved oprettelse er recordkode = 96
+Ved korrektioner er den = R6 (Oprindeligt filnavn &quot;1977&quot;)</tabelinfo>
+    </tabel>
+</arkiveringsversion>
