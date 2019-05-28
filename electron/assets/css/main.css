@@ -122,6 +122,34 @@ i {
     margin-top: -10px;
 }
 
+/* Welcome (Start) page */
+
+.welcomeImg {
+    width: 73%;
+    height: 100%;
+}
+
+.welcomeTextContainer {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.imageText {
+    font-style: italic;
+}
+
+.welcomeHeadline {
+    text-align: center;
+    margin: 10px 0px;
+}
+
+.subHeader {
+    text-align: center;
+}
+
+
+/* Welcome (Start) page END */
+
 /* Table */
 
 th {
