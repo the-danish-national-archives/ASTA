@@ -265,8 +265,11 @@ function (n) {
                 result = LogError("-CheckMetadata-FileCodeList-CodeValidation-Error",settings.fileName,codeName,(i + 1));
             }
             else {
-                var options = lines[i].trim().reduceWhiteSpace().split("' '");
-                var description = options[1].substring(0,options[1].length - 1);
+                var text = lines[i].trim().reduceWhiteSpace();
+                var options = text.split("' '");
+                var index = text.indexOf("' '");
+                var description = text.substring(index + 3);
+                description = description.substring(0,description.length - 1);
                 if(description.reduceWhiteSpace() === "") {
                     result = LogError("-CheckMetadata-FileCodeList-CodeValidationEmpty-Error",settings.fileName,codeName,options[0].substring(1));  
                 }
