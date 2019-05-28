@@ -41,20 +41,6 @@ function (n) {
         settings.outputSupplementSpn.hidden = true;
     }
 
-    //output system error messages
-    var HandleError = function(err) {
-        console.log(`Error: ${err}`);
-        var msg = ""
-        if (err.code === "ENOENT") {
-            msg = "Der er opstået en fejl i dannelsen af afleveringspakken. Genstart venligst programmet.";
-        }
-        else {
-            msg = err.message
-        }
-        settings.outputErrorSpn.hidden = false;
-        settings.outputErrorSpn.innerHTML = settings.outputErrorText.format(msg);
-    }
-
     //commit log data
     var EnsureData = function() {
         var data = fs.readFileSync(settings.filePath);        
@@ -173,7 +159,7 @@ function (n) {
                     }
                     catch(err) 
                     {
-                        HandleError(err);
+                        err.Handle(settings.outputErrorSpn,settings.outputErrorText);
                     }
                 } 
             };

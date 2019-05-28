@@ -51,21 +51,6 @@ function (n) {
             data: []
         }
 
-        //output system error messages
-        var HandleError = function(err) {
-            console.log(`Error: ${err}`);
-            var msg = ""
-            if (err.code === "ENOENT") {
-                msg = "Der er opstået en fejl i dannelsen af afleveringspakken. Genstart venligst programmet.";
-            }
-            else {
-                msg = err.message
-            }
-            settings.outputErrorSpn.hidden = false;
-            settings.outputErrorSpn.innerHTML = settings.outputErrorText.format(msg);       
-            ipcRenderer.send('open-error-dialog','Program Fejl','Der er opstået en fejl i dannelsen af afleveringspakken. Genstart venligst programmet.');
-        }
-
         // get selected folder name 
         var GetFolderName = function() {
             var folders = settings.deliveryPackagePath.getFolders();
@@ -358,7 +343,7 @@ function (n) {
                     }
                 }
                 else {
-                    LogError("-CheckMetadata-FileVariable-DescriptionFormat-Error",settings.fileName,info.name);
+                    LogError("-CheckMetadata-FileVariable-DescriptionFormat-Error",settings.fileName,name);
                     description = "";
                 }
             }
@@ -943,7 +928,7 @@ function (n) {
             }
             catch(err) 
             {
-                HandleError(err);
+                err.Handle(settings.outputErrorSpn,settings.outputErrorText);
             }
             return null;
         }
