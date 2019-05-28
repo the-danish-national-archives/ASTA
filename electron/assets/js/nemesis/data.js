@@ -439,14 +439,8 @@ function (n) {
                 else {
                     headers.forEach(header => {
                        if(!variables.includes(header.trim())) {
-                            if(!variables.includes("\"{0}\"".format(header.trim()))) {
-                                result = LogError("-CheckData-FileHeaders-MatchColumn-Error",settings.fileName,settings.metadataFileName,header);
-                            }
-                            else {
-                                result = LogError("-CheckData-FileHeaders-ColumnApostrophe-Error",settings.fileName,settings.metadataFileName,header); 
-                            }
+                            result = LogError("-CheckData-FileHeaders-MatchColumn-Error",settings.fileName,settings.metadataFileName,header);
                         }
-                        
                     });  
                 }
                 if(result) {
