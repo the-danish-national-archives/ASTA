@@ -308,6 +308,14 @@ a.selected:hover {
     justify-content: space-between;
 }
 
+.titleContainer {
+    display: inline-flex;
+}
+
+.rightTitle {
+    padding-left: 175%;
+}
+
 /* Nemesis layout END */
 
 /* Nemesis output log elements */
