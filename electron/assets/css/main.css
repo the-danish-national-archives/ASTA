@@ -308,12 +308,9 @@ a.selected:hover {
     justify-content: space-between;
 }
 
-.titleContainer {
-    display: inline-flex;
-}
-
-.rightTitle {
-    padding-left: 175%;
+.testlogTitle {
+    color: black;
+    text-decoration-line: underline;
 }
 
 /* Nemesis layout END */
