@@ -12,7 +12,7 @@ function (n) {
         const csv = require('csv-parser');
         const codeListPattern = /^\.[a-zA-Z]$/;
         const doubleApostrophePattern1 = /^"([\w\W\s]*)"$/;
-        const doubleApostrophePattern2 = /["]{2,2}/g;
+        const doubleApostrophePattern2 = /(")/g;
         const errorsMax = 40;
         
         //private data memebers
@@ -282,14 +282,26 @@ function (n) {
 
         //Validate String
         var ValidateString = function (dataValue, regExp, variable) {
-            var result = true;
+            var result = false;
             if(dataValue.indexOf("\"") > -1) {
                 if(doubleApostrophePattern1.test(dataValue)) {
                     var innerText = dataValue.match(doubleApostrophePattern1)[1];
+                    if(doubleApostrophePattern2.test(innerText)) {
+                        if((innerText.match(doubleApostrophePattern2).length % 2) === 0){
+                            var doubleApostrophePattern3 = /["]{2,2}/g;
+                            if(doubleApostrophePattern3.test(innerText)) 
+                            { 
+                                result = true; 
+                            }
+                        }
+                    }
                 }
-                else {
-                    result = LogError("-CheckData-FileRow-ColumnsString-ValueApostrophe-Error",settings.fileName,settings.metadataFileName, (settings.rowIndex + 2), variable.name, dataValue);
+                if(!result) {
+                    result = LogError("-CheckData-FileRow-ColumnsString-ValueApostrophe-Error",settings.fileName,settings.metadataFileName, (settings.rowIndex + 2), variable.name,dataValue);
                 }
+            }
+            else {
+                result = true;
             }
             return result;
         }
@@ -299,7 +311,7 @@ function (n) {
             var result = true;
             switch (variable.type) {
                 case 'String':
-                    //result = ValidateString(dataValue, regExp, variable);
+                    result = ValidateString(dataValue, regExp, variable);
                     break;
                 case 'Int':
                     result = ValidateInt(dataValue, regExp, variable);
@@ -451,7 +463,7 @@ function (n) {
             var result = true; 
             settings.parserStrictError = false;            
             fs.createReadStream(dataFilePath)
-            .pipe(csv({ separator: ';', strict:true }))
+            .pipe(csv({ separator: ';', quote:'#', strict:true }))
             .on('headers', (headers) => {
                 console.log(`CSV headers: ${headers.length}`);
                 if(headers.length === 1) {
