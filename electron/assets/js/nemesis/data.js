@@ -43,21 +43,6 @@ function (n) {
             parserStrictError: false
         }
 
-        //output system error messages
-        var HandleError = function(err) {
-            console.log(`Error: ${err}`);
-            var msg = ""
-            if (err.code === "ENOENT") {
-                msg = "Der er opstået en fejl i dannelsen af afleveringspakken. Genstart venligst programmet.";
-            }
-            else {
-                msg = err.message
-            }
-            settings.outputErrorSpn.hidden = false;
-            settings.outputErrorSpn.innerHTML = settings.outputErrorText.format(msg);       
-            ipcRenderer.send('open-error-dialog','Program Fejl','Der er opstået en fejl i dannelsen af afleveringspakken. Genstart venligst programmet.');
-        }
-
         // View Element by id & return texts
         var ViewElement = function(id,formatText1,formatText2,formatText3,formatText4, formatText5, formatText6) {
             var result = settings.outputText[id];
@@ -440,8 +425,14 @@ function (n) {
                 else {
                     headers.forEach(header => {
                        if(!variables.includes(header.trim())) {
-                           result = LogError("-CheckData-FileHeaders-MatchColumn-Error",settings.fileName,settings.metadataFileName,header);
+                            if(!variables.includes("\"{0}\"".format(header.trim()))) {
+                                result = LogError("-CheckData-FileHeaders-MatchColumn-Error",settings.fileName,settings.metadataFileName,header);
+                            }
+                            else {
+                                result = LogError("-CheckData-FileHeaders-ColumnApostrophe-Error",settings.fileName,settings.metadataFileName,header); 
+                            }
                         }
+                        
                     });  
                 }
                 if(result) {
@@ -569,7 +560,7 @@ function (n) {
             }
             catch(err) 
             {
-                HandleError(err);
+                err.Handle(settings.outputErrorSpn,settings.outputErrorText);
             }
             return settings.logResult;
         }

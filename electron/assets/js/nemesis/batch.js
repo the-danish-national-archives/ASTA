@@ -167,8 +167,14 @@ function (n) {
         //add Event Listener to HTML elmenets
         var AddEvents = function () {
             settings.validateBtn.addEventListener('click', (event) => {
-                if(settings.selectedPath == null || settings.pathDirTxt.value === "") { return; }                
-                Run();
+                if(settings.selectedPath == null || settings.pathDirTxt.value === "") { return; }
+                try {
+                    Run();
+                }
+                catch(err) 
+                {
+                    err.Handle(settings.outputErrorSpn,settings.outputErrorText);
+                } 
             })
             settings.selectDirBtn.addEventListener('click', (event) => {
                 ipcRenderer.send('batch-open-file-dialog');
