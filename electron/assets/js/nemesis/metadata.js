@@ -348,6 +348,7 @@ function (n) {
             else {
                 name = line.substring(0,index);
                 var descriptionTemp = line.substring(index + 1);
+                descriptionMultiPattern.lastIndex = 0;
                 var matches = descriptionTemp.match(descriptionMultiPattern)
                 if(matches != null && matches.length > 0) {
                     description = matches[0].substring(1,matches[0].length - 1);

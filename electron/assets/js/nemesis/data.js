@@ -13,6 +13,7 @@ function (n) {
         const codeListPattern = /^\.[a-zA-Z]$/;
         const doubleApostrophePattern1 = /^"([\w\W\s]*)"$/;
         const doubleApostrophePattern2 = /(")/g;
+        const doubleApostrophePattern3 = /["]{2,2}/g
         const errorsMax = 40;
         
         //private data memebers
@@ -286,9 +287,10 @@ function (n) {
             if(dataValue.indexOf("\"") > -1) {
                 if(doubleApostrophePattern1.test(dataValue)) {
                     var innerText = dataValue.match(doubleApostrophePattern1)[1];
+                    doubleApostrophePattern2.lastIndex = 0;
                     if(doubleApostrophePattern2.test(innerText)) {
                         if((innerText.match(doubleApostrophePattern2).length % 2) === 0){
-                            var doubleApostrophePattern3 = /["]{2,2}/g;
+                            doubleApostrophePattern3.lastIndex = 0;
                             if(doubleApostrophePattern3.test(innerText)) 
                             { 
                                 result = true; 
