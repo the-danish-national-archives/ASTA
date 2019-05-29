@@ -139,12 +139,15 @@ i {
 }
 
 .welcomeHeadline {
-    text-align: center;
-    margin: 10px 0px;
+    margin: 10px 0px 0px 0px;
+}
+
+h2.subHeader {
+    margin-bottom: 0px;
 }
 
 .subHeader {
-    text-align: center;
+    margin-top: 0px;
 }
 
 
