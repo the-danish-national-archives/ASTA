@@ -13,7 +13,7 @@ function (n) {
         const codeListPattern = /^\.[a-zA-Z]$/;
         const doubleApostrophePattern1 = /^"([\w\W\s]*)"$/;
         const doubleApostrophePattern2 = /(")/g;
-        const doubleApostrophePattern3 = /["]{2,2}/g
+        const doubleApostrophePattern3 = /(["]{2,2})/g
         const errorsMax = 40;
         
         //private data memebers
@@ -286,18 +286,23 @@ function (n) {
         var ValidateString = function (dataValue, regExp, variable) {
             var result = false;
             if(dataValue.indexOf("\"") > -1) {
-                doubleApostrophePattern2.lastIndex = 0;
-                if(doubleApostrophePattern2.test(dataValue)) {
-                    if((dataValue.match(doubleApostrophePattern2).length % 2) === 0){
-                        doubleApostrophePattern3.lastIndex = 0;
-                        if(doubleApostrophePattern3.test(dataValue)) 
-                        { 
-                            result = true; 
+                if(doubleApostrophePattern1.test(dataValue)) {
+                    var innerText = dataValue.match(doubleApostrophePattern1)[1];
+                    doubleApostrophePattern2.lastIndex = 0;
+                    if(doubleApostrophePattern2.test(innerText)) {
+                        var singleApostrophes = innerText.match(doubleApostrophePattern2).length;
+                        if((singleApostrophes % 2) === 0){
+                            doubleApostrophePattern3.lastIndex = 0;
+                            if(doubleApostrophePattern3.test(innerText)) 
+                            { 
+                                var doubleApostrophes = innerText.match(doubleApostrophePattern3).length;
+                                result = ((doubleApostrophes * 2) === singleApostrophes); 
+                            }
                         }
                     }
-                }
-                else {
-                    result = true;   
+                    else {
+                        result = true;   
+                    }
                 }
                 if(!result) {
                     result = LogError("-CheckData-FileRow-ColumnsString-ValueApostrophe-Error",settings.fileName,settings.metadataFileName, (settings.rowIndex + 2), variable.name,dataValue);
@@ -431,7 +436,7 @@ function (n) {
             settings.rowIndex = 0;
             settings.tableErrors = 0;
             fs.createReadStream(dataFilePath)
-            .pipe(csv({ separator: settings.separator, escape: '#' }))
+            .pipe(csv({ separator: settings.separator, quote: '#' }))
             .on('data', (data) => {
                 if(settings.tableErrors <= errorsMax && ValidateRow(data)) {
                     settings.data.push(data);
