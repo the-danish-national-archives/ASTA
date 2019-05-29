@@ -286,18 +286,18 @@ function (n) {
         var ValidateString = function (dataValue, regExp, variable) {
             var result = false;
             if(dataValue.indexOf("\"") > -1) {
-                if(doubleApostrophePattern1.test(dataValue)) {
-                    var innerText = dataValue.match(doubleApostrophePattern1)[1];
-                    doubleApostrophePattern2.lastIndex = 0;
-                    if(doubleApostrophePattern2.test(innerText)) {
-                        if((innerText.match(doubleApostrophePattern2).length % 2) === 0){
-                            doubleApostrophePattern3.lastIndex = 0;
-                            if(doubleApostrophePattern3.test(innerText)) 
-                            { 
-                                result = true; 
-                            }
+                doubleApostrophePattern2.lastIndex = 0;
+                if(doubleApostrophePattern2.test(dataValue)) {
+                    if((dataValue.match(doubleApostrophePattern2).length % 2) === 0){
+                        doubleApostrophePattern3.lastIndex = 0;
+                        if(doubleApostrophePattern3.test(dataValue)) 
+                        { 
+                            result = true; 
                         }
                     }
+                }
+                else {
+                    result = true;   
                 }
                 if(!result) {
                     result = LogError("-CheckData-FileRow-ColumnsString-ValueApostrophe-Error",settings.fileName,settings.metadataFileName, (settings.rowIndex + 2), variable.name,dataValue);
@@ -400,7 +400,7 @@ function (n) {
             for(var i = 0;i < dataRow.length;i++) {
                 var patternMatch = false;
                 var variable = settings.table.variables[i];
-                if(dataRow[i].trim() !== "") {                    
+                if(dataRow[i] !== undefined && dataRow[i].trim() !== "") {                    
                     for(var j = 0;j < variable.regExps.length;j++) {
                         var patt = new RegExp(variable.regExps[j]);
                         if(patt.test(dataRow[i])) {
@@ -460,7 +460,7 @@ function (n) {
             var result = true; 
             settings.parserStrictError = false;            
             fs.createReadStream(dataFilePath)
-            .pipe(csv({ separator: ';', quote:'#', strict:true }))
+            .pipe(csv({ separator: ';', escape: '#' }))
             .on('headers', (headers) => {
                 console.log(`CSV headers: ${headers.length}`);
                 if(headers.length === 1) {
