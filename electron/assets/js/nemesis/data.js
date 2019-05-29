@@ -208,7 +208,8 @@ function (n) {
             }
             else {
                 var currentRegExp = regExp.toString();
-                if(variable.regExps[variable.appliedRegExp] !== currentRegExp.substring(1,currentRegExp.length - 1)) {
+                if(currentRegExp.indexOf("\\.") === -1 && currentRegExp.indexOf("\\,") === -1) { variable.appliedRegExp = -1; }
+                if(variable.appliedRegExp > -1 && variable.regExps[variable.appliedRegExp] !== currentRegExp.substring(1,currentRegExp.length - 1)) {
                     result = LogError("-CheckData-FileRow-ColumnsDecimal-InexpedientValue-Error",settings.fileName,settings.metadataFileName, (settings.rowIndex + 2), variable.name, dataValue);
                 }
             }

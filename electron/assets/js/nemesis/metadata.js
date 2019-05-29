@@ -757,6 +757,7 @@ function (n) {
             });
             variable.regExps.push("^(\\+|\\-){0,1}[0-9]{1," + intLength + "}\\.[0-9]{1," + decimalLength + "}$");
             variable.regExps.push("^(\\+|\\-){0,1}[0-9]{1," + intLength + "}\\,[0-9]{1," + decimalLength + "}$");
+            variable.regExps.push("^(\\+|\\-){0,1}[0-9]{1," + intLength + "}$");
             return result;
         }
 
