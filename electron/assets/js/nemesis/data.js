@@ -32,6 +32,7 @@ function (n) {
             metadataFileName: null,
             table: null,
             rowIndex: 0,
+            tableRows: 0,
             dataFiles: [],
             runIndex: -1,
             dataPathPostfix: "Data",
@@ -41,7 +42,7 @@ function (n) {
             errors: 0,
             tableErrors: 0,
             totalErrors: 0,
-            parserStrictError: false
+            separator: ';'
         }
 
         // View Element by id & return texts
@@ -100,7 +101,6 @@ function (n) {
 
             settings.logCallback().error(settings.logType,GetFolderName(),text);
             settings.errors += 1;
-            settings.tableErrors += 0;
             settings.totalErrors += 1;
             return false;
         }
@@ -421,77 +421,97 @@ function (n) {
             return result;
         }
 
-        //Validate CSV headers
-        var ValidateHeaders = function(headers) {
-            var result = true;
-            var variables = [];
-            settings.table.variables.forEach(variable => variables.push(variable.name));
-            if(variables.length !== headers.length) {
-                result = LogError("-CheckData-FileHeaders-MatchColumns-Error",settings.fileName,settings.metadataFileName);
+        //Validate single CSV file datarows
+        var ValidateDataSet = function () {
+            if(settings.table.errorStop) {
+                ProcessDataSet();
+                return;  
             }
-            else {
-                var notExists = 0;
-                headers.forEach(header => {
-                    if(!variables.includes(header.trim())) { notExists++; }
-                });
-                if(notExists === headers.length) {
-                    result = LogError("-CheckData-FileHeaders-MatchAll-Error",settings.fileName,settings.metadataFileName);
-                }
-                else {
-                    headers.forEach(header => {
-                       if(!variables.includes(header.trim())) {
-                            result = LogError("-CheckData-FileHeaders-MatchColumn-Error",settings.fileName,settings.metadataFileName,header);
-                        }
-                    });  
-                }
-                if(result) {
-                    for(var i = 0;i < headers.length;i++) {
-                        if(headers[i].trim() !== variables[i]) {
-                            result = LogError("-CheckData-FileHeaders-ColumnsOrder-Error",settings.fileName,settings.metadataFileName,headers[i]);  
-                        }
-                    }
-                }
-            }
-            return result;
-        }
-
-        //Validate single CSV file
-        var ValidateDataSet = function (dataFilePath) {
-            var result = true; 
-            settings.parserStrictError = false;            
+            var dataFilePath = settings.dataFiles[settings.runIndex];
+            settings.rowIndex = 0;
+            settings.tableErrors = 0;
             fs.createReadStream(dataFilePath)
-            .pipe(csv({ separator: ';', escape: '#' }))
-            .on('headers', (headers) => {
-                console.log(`CSV headers: ${headers.length}`);
-                if(headers.length === 1) {
-                    result = LogError("-CheckData-FileSeprator-Error",settings.fileName);
-                }
-                else {
-                    if(!ValidateHeaders(headers)) { result = false; }
-                }
-                if(!result) { settings.table.errorStop = true; }
-            })
+            .pipe(csv({ separator: settings.separator, escape: '#' }))
             .on('data', (data) => {
-                if(result && settings.tableErrors <= errorsMax && ValidateRow(data)) {
+                if(settings.tableErrors <= errorsMax && ValidateRow(data)) {
                     settings.data.push(data);
                 }
                 settings.rowIndex++;
-            })
-            .on('error', (e) => { 
-                if(e.message === "Row length does not match headers") {
-                    result = LogError("-CheckData-FileRows-MatchLength-Error",settings.fileName,(settings.rowIndex + 2));
-                    settings.parserStrictError = true;
-                    settings.table.errorStop = true;
-                    ProcessDataSet();
-                }              
             })
             .on('end', () => { 
                 console.log("{0} data output: ".format(settings.fileName));
                 console.log(settings.data);
                 if(settings.tableErrors > 0) { result = false; }
-                if(!settings.parserStrictError) { ProcessDataSet(); }
-            }); 
-            return result;
+                ProcessDataSet(); 
+            });
+        }
+
+        // Validate CSV rows structure
+        var ValidateStructure = function () {
+            settings.rowIndex = 0;
+            var dataFilePath = settings.dataFiles[settings.runIndex];
+            fs.createReadStream(dataFilePath)
+            .pipe(csv({ separator: settings.separator, strict:true, quote: '#' }))
+            .on('data', (data) => {
+                settings.rowIndex++;
+                if(settings.rowIndex === settings.tableRows && settings.table.errorStop) { ValidateDataSet(); }
+            })
+            .on('error', (e) => {
+                settings.rowIndex++;
+                if(settings.tableErrors <= errorsMax && e.message === "Row length does not match headers") {
+                    result = LogError("-CheckData-FileRows-MatchLength-Error",settings.fileName,(settings.rowIndex + 1));
+                    settings.table.errorStop = true;
+                } 
+                if(settings.rowIndex === settings.tableRows && settings.table.errorStop) { ValidateDataSet(); }             
+            })
+            .on('end', () => { 
+                if(settings.rowIndex === settings.tableRows && !settings.table.errorStop) { ValidateDataSet(); }    
+            });
+        }
+
+        // Validate CSV header row
+        var ValidateHeaders = function () {            
+            var dataFilePath = settings.dataFiles[settings.runIndex];
+            fs.createReadStream(dataFilePath)
+            .pipe(csv({ separator: settings.separator, quote: '#' }))
+            .on('headers', (headers) => {
+                console.log(`CSV headers: ${headers.length}`);
+                var result = true;
+                var variables = [];
+                if(headers.length === 1) { result = LogError("-CheckData-FileSeprator-Error",settings.fileName); }
+                else {                    
+                    settings.table.variables.forEach(variable => variables.push(variable.name));
+                    if(variables.length !== headers.length) {
+                        result = LogError("-CheckData-FileHeaders-MatchColumns-Error",settings.fileName,settings.metadataFileName);
+                    }
+                    else {
+                        var notExists = 0;
+                        headers.forEach(header => {
+                            if(!variables.includes(header.trim())) { notExists++; }
+                        });
+                        if(notExists === headers.length) {
+                            result = LogError("-CheckData-FileHeaders-MatchAll-Error",settings.fileName,settings.metadataFileName);
+                        }
+                        else {
+                            headers.forEach(header => {
+                               if(!variables.includes(header.trim())) { result = LogError("-CheckData-FileHeaders-MatchColumn-Error",settings.fileName,settings.metadataFileName,header); }
+                            });  
+                        }
+                        if(result) {
+                            for(var i = 0;i < headers.length;i++) {
+                                if(headers[i].trim() !== variables[i]) { result = LogError("-CheckData-FileHeaders-ColumnsOrder-Error",settings.fileName,settings.metadataFileName,headers[i]);  }
+                            }
+                        }
+                    }
+                }
+                if(!result) { settings.table.errorStop = true; }
+            })
+            .on('data', (data) => { settings.rowIndex++; })
+            .on('end', () => { 
+                settings.tableRows = settings.rowIndex;
+                if(!settings.table.errorStop) {  ValidateStructure();  }
+                else { ProcessDataSet();  }
+            });
         }
 
         //Process all data files
@@ -503,10 +523,11 @@ function (n) {
                 settings.metadataFileName =  "{0}.txt".format(settings.fileName.substring(0,settings.fileName.indexOf(".")));
                 settings.table = GetTableData();
                 settings.rowIndex = 0;
+                settings.tableRows = 0;
                 settings.data = [];
                 settings.tableErrors = 0; 
                 console.log(`validate: ${dataFilePath}`);
-                ValidateDataSet(dataFilePath);
+                ValidateHeaders();
             }
             else {
                 CommitLog();
