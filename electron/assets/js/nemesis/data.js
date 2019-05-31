@@ -469,7 +469,7 @@ function (n) {
             if(startIndex === offset) {
                 endIndex = data.indexOf("\";",offset);
                 if(endIndex === -1) {
-                    endIndex = data.indexOf("\"",offset);
+                    endIndex = data.indexOf(";",offset);
                 }
                 if(endIndex > -1) { endIndex++; }
             }
@@ -503,25 +503,24 @@ function (n) {
             .pipe(csv({ delimiter: settings.separator, quote:null }))
             .on("data", function(data){  })
             .validate(function(data){
-                var result = true;
                 settings.rowIndex++;
-                if(settings.rowIndex === 1 && !ValidateHeader(data)) {
-                    settings.table.errorStop = true;
-                    result = false; 
-                }
+                if(settings.rowIndex === 1 && !ValidateHeader(data)) { settings.table.errorStop = true; }
                 if(!settings.table.errorStop && settings.rowIndex > 1 && settings.tableErrors <= errorsMax) {
-                    var row = data.join(settings.separator);
-                    var newData = (row.indexOf("\"") === -1) ? data : ParseRow(row);
-                    result = (settings.table.variables.length === newData.length);
+                    var newData = data;
+                    var result = (settings.table.variables.length === newData.length);
                     if(!result) {
-                        result = LogError("-CheckData-FileRows-MatchLength-Error",settings.fileName,(settings.rowIndex));
+                        var row = data.join(settings.separator);
+                        if(row.indexOf("\"") > -1) { 
+                            newData = ParseRow(row);
+                            result = (settings.table.variables.length === newData.length); 
+                        }
+                    }
+                    if(!result) { 
+                        result = LogError("-CheckData-FileRows-MatchLength-Error",settings.fileName,settings.rowIndex);
                         settings.convertStop = true;
                     }
-                    else {
-                        if(ValidateRow(newData)) { settings.data.push(newData); } 
-                    }
+                    if(result && ValidateRow(newData)) { settings.data.push(newData); } 
                 }
-                return result; 
             })
             .on("end", function(){
                 console.log("{0} data output: ".format(settings.fileName));
