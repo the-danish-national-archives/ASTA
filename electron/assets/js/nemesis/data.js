@@ -307,6 +307,7 @@ function (n) {
                     }
                 }
                 if(!result) {
+                    settings.convertStop = true;
                     result = LogError("-CheckData-FileRow-ColumnsString-ValueApostrophe-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name,dataValue);
                 }
             }
