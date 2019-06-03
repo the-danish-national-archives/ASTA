@@ -513,12 +513,12 @@ function (n) {
                     result = (settings.table.variables.length === newData.length);
                     if(!result) {
                         var row = data.join(settings.separator);
-                        if(row.indexOf("\"") > -1) { 
+                        if(row.indexOf("\"") > -1) { //Reparsing of row if it contains double apstrof
                             newData = ParseRow(row);
                             result = (settings.table.variables.length === newData.length); 
                         }
                     }
-                    if(!result) { 
+                    if(!result) { //less or more separators
                         result = LogError("-CheckData-FileRows-MatchLength-Error",settings.fileName,settings.rowIndex);
                         settings.convertStop = true;
                     }
