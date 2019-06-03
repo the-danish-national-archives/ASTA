@@ -119,7 +119,9 @@ function (n) {
                 else {
                     settings.spinner.className = "";                
                     CopyFile();
-                    EnsureData();                
+                    EnsureData(); 
+                    settings.selectDirBtn.disabled = false;
+                    settings.validateBtn.disabled = false;               
                 }           
             }
             else {
@@ -142,6 +144,8 @@ function (n) {
 
         //start run batching delete existing log
         var Run = function () {
+            settings.selectDirBtn.disabled = true;
+            settings.validateBtn.disabled = true;
             settings.logsDate = new Date();            
             settings.spinner.className = settings.spinnerClass;
             Reset();

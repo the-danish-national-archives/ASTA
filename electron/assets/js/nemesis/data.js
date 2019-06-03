@@ -26,6 +26,8 @@ function (n) {
             logStartSpn: null,
             logEndNoErrorSpn: null,
             logEndWithErrorSpn:null,
+            selectDirBtn: null,
+            validateBtn: null,
             deliveryPackagePath: null,
             outputText: {},
             logType: "data",
@@ -595,6 +597,8 @@ function (n) {
                     settings.logCallback().section(settings.logType,folderName,settings.logEndWithErrorSpn.innerHTML);
                 }
                 settings.logResult = settings.logCallback().commit(settings.deliveryPackagePath);
+                settings.selectDirBtn.disabled = false;
+                settings.validateBtn.disabled = false;
                 console.log(`total errors: ${settings.totalErrors}`);
                 console.log("metadata output: ");
                 console.log(settings.metadata);
@@ -625,7 +629,7 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Nemesis.Data = {
-            initialize: function (logCallback,outputErrorId,logStartId,logEndNoErrorId,logEndWithErrorId,outputPrefix) {            
+            initialize: function (logCallback,outputErrorId,logStartId,logEndNoErrorId,logEndWithErrorId,outputPrefix,selectDirectoryId,validateId) {            
                 settings.logCallback = logCallback;
                 settings.outputErrorSpn = document.getElementById(outputErrorId);
                 settings.outputErrorText = settings.outputErrorSpn.innerHTML;
@@ -633,6 +637,8 @@ function (n) {
                 settings.logEndNoErrorSpn = document.getElementById(logEndNoErrorId);  
                 settings.logEndWithErrorSpn = document.getElementById(logEndWithErrorId);
                 settings.outputPrefix = outputPrefix;
+                settings.selectDirBtn = document.getElementById(selectDirectoryId);
+                settings.validateBtn = document.getElementById(validateId);
                 AddEvents();
             },
             callback: function () {

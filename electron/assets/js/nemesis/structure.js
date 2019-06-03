@@ -510,8 +510,11 @@ function (n) {
 
         //start flow validation
         var Validate = function() {
+            
             try 
             {
+                settings.selectDirBtn.disabled = true;
+                settings.validateBtn.disabled = true;
                 var folderName = GetFolderName();
                 settings.testId.innerText = folderName;
                 settings.logCallback().section(settings.logType,folderName,settings.logStartSpn.innerHTML);            
@@ -526,9 +529,10 @@ function (n) {
                     return settings.metadataCallback().validate(settings.deliveryPackagePath,settings.outputText,settings.errors); 
                 } 
                 else {
+                    settings.selectDirBtn.disabled = false;
+                    settings.validateBtn.disabled = false;
                     return settings.logCallback().commit(settings.deliveryPackagePath);
-                }                  
-                                
+                }               
             }
             catch(err) 
             {

@@ -941,8 +941,6 @@ function (n) {
                 var folderName = GetFolderName();
                 settings.logCallback().section(settings.logType,folderName,settings.logStartSpn.innerHTML);            
                 ValidateData();
-                //console.log("metadata output: ");
-                //console.log(settings.data);
                 if(settings.errors === 0) {
                     settings.logCallback().section(settings.logType,folderName,settings.logEndNoErrorSpn.innerHTML);
                 } else {
