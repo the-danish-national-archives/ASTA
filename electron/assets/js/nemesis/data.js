@@ -525,7 +525,7 @@ function (n) {
                     else {
                        result = ValidateRow(newData); 
                     }
-                    if(result) { settings.data.push(newData); } 
+                    if(result && settings.data.length <= 100) { settings.data.push(newData); } 
                     return result;
                 }
             })
