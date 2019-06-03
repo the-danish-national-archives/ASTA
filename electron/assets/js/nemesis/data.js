@@ -400,10 +400,9 @@ function (n) {
         }
 
         //Validate row at CSV file
-        var ValidateRow = function(data) {
+        var ValidateRow = function(dataRow) {
             var result = true;
-            //console.log(Object.values(data));
-            var dataRow = Object.values(data);
+            //console.log(dataRow);
             for(var i = 0;i < dataRow.length;i++) {
                 var patternMatch = false;
                 var variable = settings.table.variables[i];
