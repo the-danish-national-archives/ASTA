@@ -334,6 +334,10 @@ a.selected:hover {
     padding: 0px 10px;
 }
 
+.nemesisOutput i {
+    word-wrap: break-word;
+}
+
 .box {
     display: flex;
     justify-content: space-between;
