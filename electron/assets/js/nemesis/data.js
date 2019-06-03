@@ -307,6 +307,7 @@ function (n) {
                     }
                 }
                 if(!result) {
+                    settings.convertStop = true;
                     result = LogError("-CheckData-FileRow-ColumnsString-ValueApostrophe-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name,dataValue);
                 }
             }
@@ -400,10 +401,9 @@ function (n) {
         }
 
         //Validate row at CSV file
-        var ValidateRow = function(data) {
+        var ValidateRow = function(dataRow) {
             var result = true;
-            //console.log(Object.values(data));
-            var dataRow = Object.values(data);
+            //console.log(dataRow);
             for(var i = 0;i < dataRow.length;i++) {
                 var patternMatch = false;
                 var variable = settings.table.variables[i];
@@ -514,19 +514,19 @@ function (n) {
                     result = (settings.table.variables.length === newData.length);
                     if(!result) {
                         var row = data.join(settings.separator);
-                        if(row.indexOf("\"") > -1) { 
+                        if(row.indexOf("\"") > -1) { //Reparsing of row if it contains double apstrof
                             newData = ParseRow(row);
                             result = (settings.table.variables.length === newData.length); 
                         }
                     }
-                    if(!result) { 
+                    if(!result) { //less or more separators
                         result = LogError("-CheckData-FileRows-MatchLength-Error",settings.fileName,settings.rowIndex);
                         settings.convertStop = true;
                     }
                     else {
                        result = ValidateRow(newData); 
                     }
-                    if(result) { settings.data.push(newData); } 
+                    if(result && settings.data.length <= 100) { settings.data.push(newData); } 
                     return result;
                 }
             })
