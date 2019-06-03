@@ -51,11 +51,11 @@ input[type=text] {
 
 /* Override the size of the input boxes in nemesis as the general layout of that is more packed. */
 #nemesis-path{
-    width: 45%;
+    width: 75%;
 }
 
 #nemesis-batch-path {
-    width: 45%;
+    width: 75%;
 }
 
 textarea {
