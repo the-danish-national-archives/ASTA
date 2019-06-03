@@ -30,7 +30,8 @@ function (n) {
         infoElement: "<span id=\"{0}_{1}\" name=\"{2}\" class=\"ok\" hidden=\"true\">{3}</span>",
         sectionElement: "<span id=\"{0}_{1}\" name=\"{2}\" class=\"section\">{3}</span>",
         spinner: null,
-        spinnerClass: null
+        spinnerClass: null,
+        spinnerEnable: true
     }
 
     //reset status & input fields
@@ -91,7 +92,7 @@ function (n) {
 
     //Model interfaces functions
     Rigsarkiv.Log = {
-        initialize: function (outputErrorId,outputOkId,selectLogfileId,outputSupplementId, spinnerId) {
+        initialize: function (outputErrorId,outputOkId,selectLogfileId,outputSupplementId, spinnerId,spinnerClassName) {
             settings.outputErrorSpn = document.getElementById(outputErrorId);
             settings.outputErrorText = settings.outputErrorSpn.innerHTML;
             settings.outputOkSpn =  document.getElementById(outputOkId);
@@ -99,44 +100,44 @@ function (n) {
             settings.selectLogfile = document.getElementById(selectLogfileId);
             settings.outputSupplementSpn =  document.getElementById(outputSupplementId);
             settings.spinner = document.getElementById(spinnerId);
-            settings.spinnerClass = settings.spinner.className;
+            settings.spinnerClass = spinnerClassName;
             settings.spinner.className = "";
             AddEvents();               
         },
         callback: function () {
             return { 
+                spinnerEnable: function(enable)
+                {
+                    settings.spinnerEnable = enable;
+                },
                 error: function(logType,folderName,text) 
                 { 
                     if(settings.logsDate == null) { settings.logsDate = new Date(); }
                     console.log(`error ${text}`);
                     settings.logs.push(settings.errorElement.format(logType,(new Date()).getFromFormat("yyyyMMddhhmmss"),folderName,text));
                     settings.errorsCounter += 1;
-                    // start spinner
-                    settings.spinner.className = settings.spinnerClass;
+                    if(settings.spinnerEnable) { settings.spinner.className = settings.spinnerClass; }
                 },
                 warn: function(logType,folderName,text) 
                 { 
                     if(settings.logsDate == null) { settings.logsDate = new Date(); }
                     console.log(`warn ${text}`);
                     settings.logs.push(settings.warnElement.format(logType,(new Date()).getFromFormat("yyyyMMddhhmmss"),folderName,text));
-                    // start spinner
-                    settings.spinner.className = settings.spinnerClass;
+                    if(settings.spinnerEnable) { settings.spinner.className = settings.spinnerClass; }
                 },
                 info: function(logType,folderName,text) 
                 { 
                     if(settings.logsDate == null) { settings.logsDate = new Date(); }
                     console.log(`info ${text}`);
                     settings.logs.push(settings.infoElement.format(logType,(new Date()).getFromFormat("yyyyMMddhhmmss"),folderName,text));
-                    // start spinner
-                    settings.spinner.className = settings.spinnerClass;
+                    if(settings.spinnerEnable) { settings.spinner.className = settings.spinnerClass; }
                 },
                 section: function(logType,folderName,text) 
                 { 
                     if(settings.logsDate == null) { settings.logsDate = new Date(); }
                     console.log(`info ${text}`);
                     settings.logs.push(settings.sectionElement.format(logType,(new Date()).getFromFormat("yyyyMMddhhmmss"),folderName,text));
-                    // start spinner
-                    settings.spinner.className = settings.spinnerClass;
+                    if(settings.spinnerEnable) { settings.spinner.className = settings.spinnerClass; }
                 },
                 commit: function(selectedFolderPath)
                 {
@@ -150,8 +151,7 @@ function (n) {
                         }
                         var errorsCounter = settings.errorsCounter;
                         CopyFile();
-                        // stop spinner
-                        settings.spinner.className = ""; 
+                        if(settings.spinnerEnable) { settings.spinner.className = ""; }
                         return { 
                             filePath: settings.filePath,
                             errors: errorsCounter

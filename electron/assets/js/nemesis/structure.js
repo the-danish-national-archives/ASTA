@@ -543,6 +543,7 @@ function (n) {
                 Reset();
                 if(settings.selectedPath == null || settings.pathDirTxt.value === "") { return; }                
                 settings.deliveryPackagePath = settings.selectedPath[0];
+                settings.logCallback().spinnerEnable(true);
                 Validate();                           
             })
             settings.selectDirBtn.addEventListener('click', (event) => {
@@ -580,6 +581,7 @@ function (n) {
                 return { 
                     validate: function(path) 
                     { 
+                        settings.logCallback().spinnerEnable(false);
                         settings.deliveryPackagePath = path;
                         Reset();
                         return Validate();

@@ -191,7 +191,7 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Nemesis.Batch = { 
-            initialize: function (rightsCallback,structureCallback,outputErrorId,selectDirectoryId,pathDirectoryId,validateId,spinnerId,okId,selectLogfileId,supplementId,panelId) {            
+            initialize: function (rightsCallback,structureCallback,outputErrorId,selectDirectoryId,pathDirectoryId,validateId,spinnerId,okId,selectLogfileId,supplementId,panelId,spinnerClassName) {            
                 settings.rightsCallback = rightsCallback;
                 settings.structureCallback = structureCallback;
                 settings.outputErrorSpn = document.getElementById(outputErrorId);
@@ -200,7 +200,7 @@ function (n) {
                 settings.pathDirTxt = document.getElementById(pathDirectoryId);
                 settings.validateBtn = document.getElementById(validateId);
                 settings.spinner = document.getElementById(spinnerId);
-                settings.spinnerClass = settings.spinner.className;
+                settings.spinnerClass = spinnerClassName;
                 settings.spinner.className = "";
                 settings.okSpn =  document.getElementById(okId);
                 settings.okText = settings.okSpn.innerHTML;
