@@ -26,7 +26,7 @@ function (n) {
         resourceWinPath: "resources\\{0}",
         filePostfix: "{0}_ASTA_log.html",
         errorElement: "<span id=\"{0}_{1}\" name=\"{2}\" class=\"error\">{3}</span>",
-        warnElement: "<span id=\"{0}_{1}\" name=\"{2}\" class=\"warning\" hidden=\"true\">{3}</span>",
+        warnElement: "<span id=\"{0}_{1}\" name=\"{2}\" class=\"warning\">{3}</span>",
         infoElement: "<span id=\"{0}_{1}\" name=\"{2}\" class=\"ok\" hidden=\"true\">{3}</span>",
         sectionElement: "<span id=\"{0}_{1}\" name=\"{2}\" class=\"section\">{3}</span>",
         spinner: null,
