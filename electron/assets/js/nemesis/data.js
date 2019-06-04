@@ -11,7 +11,7 @@ function (n) {
         const chardet = require('chardet');
        const csv = require('fast-csv');
 
-        const codeListPattern = /^\.[a-zA-Z]$/;
+        const codeListPattern = /^(\.[a-z])|([A-Z])$/;
         const doubleApostrophePattern1 = /^"([\w\W\s]*)"$/;
         const doubleApostrophePattern2 = /(")/g;
         const doubleApostrophePattern3 = /(["]{2,2})/g
@@ -383,19 +383,13 @@ function (n) {
                     }
                 break;
                 case 'Int':
-                    if(!codeListPattern.test(dataValue)) {
+                    if(!codeListPattern.test(dataValue) && !ValidateOptions(dataValue,variable)) {
                         result = LogError("-CheckData-FileRow-ColumnsIntType-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, variable.format,dataValue);
-                    }
-                    else {
-                        result = ValidateOptions(dataValue,variable);
                     }
                 break;
                 case 'Decimal':
-                    if(!codeListPattern.test(dataValue)) {
+                    if(!codeListPattern.test(dataValue) && !ValidateOptions(dataValue,variable)) {
                         result = LogError("-CheckData-FileRow-ColumnsDecimalType-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, variable.format,dataValue);
-                    }
-                    else {
-                        result = ValidateOptions(dataValue,variable);
                     }
                 break;
                 case 'Date':
