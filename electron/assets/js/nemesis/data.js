@@ -11,7 +11,7 @@ function (n) {
         const chardet = require('chardet');
        const csv = require('fast-csv');
 
-        const codeListPattern = /^\.[a-zA-Z]$/;
+        const codeListPattern = /^(\.[a-z])|([A-Z])$/;
         const doubleApostrophePattern1 = /^"([\w\W\s]*)"$/;
         const doubleApostrophePattern2 = /(")/g;
         const doubleApostrophePattern3 = /(["]{2,2})/g
@@ -286,6 +286,16 @@ function (n) {
             return result;
         }
 
+        //strip text double Apostrophe
+        var ApostropheNormalizer = function(dataValue) {
+            var result = dataValue;
+            if(result.indexOf("\"") > -1 && doubleApostrophePattern1.test(result)) {
+                result = result.match(doubleApostrophePattern1)[1];
+                result = result.replace(/""/g, "\"");
+            }
+            return result;
+        }
+
         //Validate String
         var ValidateString = function (dataValue, regExp, variable) {
             var result = false;
@@ -324,7 +334,10 @@ function (n) {
             var result = true;
             switch (variable.type) {
                 case 'String':
-                    result = ValidateString(dataValue, regExp, variable);
+                    {
+                        result = ValidateString(dataValue, regExp, variable);
+                        if(result) { result = ValidateOptions(ApostropheNormalizer(dataValue),variable); }
+                    }
                     break;
                 case 'Int':
                     result = ValidateInt(dataValue, regExp, variable);
@@ -369,24 +382,16 @@ function (n) {
                     {
                         var regExSplit = variable.regExps[0].split(','); 
                         var length = regExSplit[1].split('}');
-                        result = LogError("-CheckData-FileRow-ColumnsStringType-Error",settings.fileName, settings.rowIndex, variable.name, length[0]);
+                        result = LogError("-CheckData-FileRow-ColumnsStringType-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, variable.format,dataValue);
                     }
                 break;
                 case 'Int':
-                    if(!codeListPattern.test(dataValue)) {
+                    if(!codeListPattern.test(dataValue) && !ValidateOptions(dataValue,variable)) {
                         result = LogError("-CheckData-FileRow-ColumnsIntType-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, variable.format,dataValue);
-                    }
-                    else {
-                        result = ValidateOptions(dataValue,variable);
                     }
                 break;
                 case 'Decimal':
-                    if(!codeListPattern.test(dataValue)) {
-                        result = LogError("-CheckData-FileRow-ColumnsDecimalType-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, variable.format,dataValue);
-                    }
-                    else {
-                        result = ValidateOptions(dataValue,variable);
-                    }
+                    result = LogError("-CheckData-FileRow-ColumnsDecimalType-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, variable.format,dataValue);
                 break;
                 case 'Date':
                     result = LogError("-CheckData-FileRow-ColumnsDateType-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, variable.format,dataValue);
@@ -412,21 +417,19 @@ function (n) {
                 if(dataRow[i] !== undefined && dataRow[i].trim() !== "") {                    
                     for(var j = 0;j < variable.regExps.length;j++) {
                         var patt = new RegExp(variable.regExps[j]);
-                        if(patt.test(dataRow[i])) {
+                        var dataValue = (variable.type != "String") ? dataRow[i] : ApostropheNormalizer(dataRow[i]);
+                        if(patt.test(dataValue)) {
                             if(variable.appliedRegExp === -1) { variable.appliedRegExp = j; }
                             if(!ValidateValue(dataRow[i], patt, variable)) { result = false; }
                             patternMatch = true;                            
                         }
                     }
                     if(!patternMatch) {
-                        if(!ValidateFormat(dataRow[i],variable)) 
-                        { 
-                            result = false;
-                            settings.convertStop = true;
-                        }
+                        if(!ValidateFormat(dataRow[i],variable))  { result = false; }
                     }
                 } 
             }
+            if(!result) { settings.convertStop = true; }
             return result;
         }
 
