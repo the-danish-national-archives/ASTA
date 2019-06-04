@@ -15,7 +15,9 @@ namespace Rigsarkiv.Athena
         public Form1(string sourcePath)
         {
             InitializeComponent();
-            if(sourcePath != null)
+
+            PopulateTableBox();
+            if (sourcePath != null)
             {
                 textBox1.Text = sourcePath;
                 folderBrowserDialog1.SelectedPath = sourcePath;
@@ -30,5 +32,18 @@ namespace Rigsarkiv.Athena
                 textBox1.Text = folderBrowserDialog1.SelectedPath;
             }
         }
+
+        private void PopulateTableBox()
+        {
+            var data = new DummyData.FauxData();
+            var keys = data.Tabl1.Keys.ToArray();
+            this.tablesBox.Items.AddRange(new object[]
+            {
+                keys[0],
+                keys[1],
+                keys[2]
+            });
+        }
+
     }
 }

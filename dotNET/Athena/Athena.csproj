@@ -52,6 +52,7 @@
     <Compile Include="Convertion.Designer.cs">
       <DependentUpon>Convertion.cs</DependentUpon>
     </Compile>
+    <Compile Include="DummyData\FauxData.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

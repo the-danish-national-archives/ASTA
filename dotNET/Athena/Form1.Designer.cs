@@ -32,7 +32,7 @@
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.label1 = new System.Windows.Forms.Label();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-            this.listBox1 = new System.Windows.Forms.ListBox();
+            this.tablesBox = new System.Windows.Forms.ListBox();
             this.listBox2 = new System.Windows.Forms.ListBox();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.Before = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -50,7 +50,7 @@
             // textBox1
             // 
             this.textBox1.Location = new System.Drawing.Point(101, 25);
-            this.textBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBox1.Margin = new System.Windows.Forms.Padding(2);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(101, 20);
             this.textBox1.TabIndex = 0;
@@ -69,17 +69,17 @@
             this.label1.TabIndex = 2;
             this.label1.Text = "Afleveringspakke";
             // 
-            // listBox1
+            // tablesBox
             // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.Items.AddRange(new object[] {
+            this.tablesBox.FormattingEnabled = true;
+            this.tablesBox.Items.AddRange(new object[] {
             "table1",
             "table2",
             "table3"});
-            this.listBox1.Location = new System.Drawing.Point(11, 64);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(76, 251);
-            this.listBox1.TabIndex = 3;
+            this.tablesBox.Location = new System.Drawing.Point(11, 64);
+            this.tablesBox.Name = "tablesBox";
+            this.tablesBox.Size = new System.Drawing.Size(76, 251);
+            this.tablesBox.TabIndex = 3;
             // 
             // listBox2
             // 
@@ -189,10 +189,10 @@
             this.Controls.Add(this.button1);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.listBox2);
-            this.Controls.Add(this.listBox1);
+            this.Controls.Add(this.tablesBox);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.textBox1);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Form1";
             this.Text = "Athena";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
@@ -207,7 +207,7 @@
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
-        private System.Windows.Forms.ListBox listBox1;
+        private System.Windows.Forms.ListBox tablesBox;
         private System.Windows.Forms.ListBox listBox2;
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Before;
