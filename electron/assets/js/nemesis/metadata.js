@@ -199,6 +199,29 @@ function (n) {
             return { "name":name, "codes":codes}
         }
 
+        //Validate BRUGERKODE missing values
+        var ValidateUserCodeValues = function(table,info) {
+            var result = true;
+            var options = null;
+            table.variables.forEach(variable => {
+                if(variable.codeListKey === info.name) { 
+                    options = variable.options;
+                }
+            });
+            info.codes.forEach(code => {
+                if(!userCodePattern.test(code)) {
+                    settings.errorStop = true;
+                    result = LogError("-CheckMetadata-FileUserCodes-CodeValidation-Error",settings.fileName,info.name,code);
+                } 
+                else {
+                    options.forEach(option => {
+                        if(option.name === code.substring(1,code.length - 1)) { option.isMissing = true; }
+                    });
+                }                               
+            });
+            return result; 
+        }
+
         //Validate BRUGERKODE
         var ValidateUserCodes = function (lines,startIndex) {
             var result = true;
@@ -222,12 +245,7 @@ function (n) {
                             result = LogError("-CheckMetadata-FileUserCodes-KeyRequired-Error",settings.fileName,info.name);
                         }
                         else {
-                            info.codes.forEach(code => {
-                                if(!userCodePattern.test(code)) {
-                                    settings.errorStop = true;
-                                    result = LogError("-CheckMetadata-FileUserCodes-CodeValidation-Error",settings.fileName,info.name,code);
-                                }                                
-                            });
+                            if(!ValidateUserCodeValues(table,info)) { result = false; }
                         }
                     }               
                 }
@@ -275,7 +293,7 @@ function (n) {
                 }
                 table.variables.forEach(variable => {
                     if(variable.codeListKey === codeName) {
-                        variable.options.push({ "name":options[0].substring(1), "description":description });
+                        variable.options.push({ "name":options[0].substring(1), "description":description, "isMissing":false });
                     }
                 });
            }
