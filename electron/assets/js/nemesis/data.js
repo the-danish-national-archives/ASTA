@@ -334,7 +334,10 @@ function (n) {
             var result = true;
             switch (variable.type) {
                 case 'String':
-                    result = ValidateString(dataValue, regExp, variable);
+                    {
+                        result = ValidateString(dataValue, regExp, variable);
+                        if(result) { result = ValidateOptions(ApostropheNormalizer(dataValue),variable); }
+                    }
                     break;
                 case 'Int':
                     result = ValidateInt(dataValue, regExp, variable);
@@ -388,9 +391,7 @@ function (n) {
                     }
                 break;
                 case 'Decimal':
-                    if(!codeListPattern.test(dataValue) && !ValidateOptions(dataValue,variable)) {
-                        result = LogError("-CheckData-FileRow-ColumnsDecimalType-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, variable.format,dataValue);
-                    }
+                    result = LogError("-CheckData-FileRow-ColumnsDecimalType-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, variable.format,dataValue);
                 break;
                 case 'Date':
                     result = LogError("-CheckData-FileRow-ColumnsDateType-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, variable.format,dataValue);
