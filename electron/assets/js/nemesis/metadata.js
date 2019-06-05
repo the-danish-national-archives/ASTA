@@ -288,7 +288,7 @@ function (n) {
                 var index = text.indexOf("' '");
                 var description = text.substring(index + 3);
                 description = description.substring(0,description.length - 1);
-                if(description.reduceWhiteSpace() === "") {
+                if(description.reduceWhiteSpace() === "" || description === " ") {
                     result = LogError("-CheckMetadata-FileCodeList-CodeValidationEmpty-Error",settings.fileName,codeName,options[0].substring(1));  
                 }
                 table.variables.forEach(variable => {
@@ -370,7 +370,7 @@ function (n) {
                 var matches = descriptionTemp.match(descriptionMultiPattern)
                 if(matches != null && matches.length > 0) {
                     description = matches[0].substring(1,matches[0].length - 1);
-                    if(description.reduceWhiteSpace() === '' || description === '<none>' || description === 'n.a.') {
+                    if(description.reduceWhiteSpace() === "" || description === "<none>" || description === "n.a." || description === " ") {
                         LogError("-CheckMetadata-FileVariable-DescriptionEmpty-Error",settings.fileName,name);
                     }
                     if(matches.length > 1) {
