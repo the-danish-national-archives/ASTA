@@ -33,8 +33,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.tablesBox = new System.Windows.Forms.ListBox();
-            this.listBox2 = new System.Windows.Forms.ListBox();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.dataRows = new System.Windows.Forms.ListBox();
+            this.dataValues = new System.Windows.Forms.DataGridView();
             this.Before = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.After = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.button1 = new System.Windows.Forms.Button();
@@ -44,7 +44,7 @@
             this.button5 = new System.Windows.Forms.Button();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataValues)).BeginInit();
             this.SuspendLayout();
             // 
             // textBox1
@@ -72,37 +72,30 @@
             // tablesBox
             // 
             this.tablesBox.FormattingEnabled = true;
-            this.tablesBox.Items.AddRange(new object[] {
-            "table1",
-            "table2",
-            "table3"});
-            this.tablesBox.Location = new System.Drawing.Point(11, 64);
+            this.tablesBox.Location = new System.Drawing.Point(19, 64);
             this.tablesBox.Name = "tablesBox";
             this.tablesBox.Size = new System.Drawing.Size(76, 251);
             this.tablesBox.TabIndex = 3;
+            this.tablesBox.Click += new System.EventHandler(this.tablesBox_Click);
             // 
-            // listBox2
+            // dataRows
             // 
-            this.listBox2.FormattingEnabled = true;
-            this.listBox2.Items.AddRange(new object[] {
-            "køn",
-            "arbejde",
-            "hobby"});
-            this.listBox2.Location = new System.Drawing.Point(101, 64);
-            this.listBox2.Name = "listBox2";
-            this.listBox2.Size = new System.Drawing.Size(202, 251);
-            this.listBox2.TabIndex = 4;
+            this.dataRows.FormattingEnabled = true;
+            this.dataRows.Location = new System.Drawing.Point(101, 63);
+            this.dataRows.Name = "dataRows";
+            this.dataRows.Size = new System.Drawing.Size(202, 251);
+            this.dataRows.TabIndex = 4;
             // 
-            // dataGridView1
+            // dataValues
             // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataValues.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataValues.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Before,
             this.After});
-            this.dataGridView1.Location = new System.Drawing.Point(362, 69);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(456, 245);
-            this.dataGridView1.TabIndex = 5;
+            this.dataValues.Location = new System.Drawing.Point(375, 70);
+            this.dataValues.Name = "dataValues";
+            this.dataValues.Size = new System.Drawing.Size(456, 245);
+            this.dataValues.TabIndex = 5;
             // 
             // Before
             // 
@@ -187,15 +180,15 @@
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
-            this.Controls.Add(this.dataGridView1);
-            this.Controls.Add(this.listBox2);
+            this.Controls.Add(this.dataValues);
+            this.Controls.Add(this.dataRows);
             this.Controls.Add(this.tablesBox);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.textBox1);
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Form1";
             this.Text = "Athena";
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataValues)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -208,8 +201,8 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
         private System.Windows.Forms.ListBox tablesBox;
-        private System.Windows.Forms.ListBox listBox2;
-        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.ListBox dataRows;
+        private System.Windows.Forms.DataGridView dataValues;
         private System.Windows.Forms.DataGridViewTextBoxColumn Before;
         private System.Windows.Forms.DataGridViewTextBoxColumn After;
         private System.Windows.Forms.Button button1;
