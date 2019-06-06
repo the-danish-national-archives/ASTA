@@ -12,136 +12,186 @@
                         <h2 class="boldfaced">Quick-guide til produktion og test af en afleveringspakke</h2>
                         <table>
                             <tr>
-                                <td>
-                                    <h4>Sådan kvalitetssikrer du statistikfilen før du anvender
-                                        Hybris</h4>
-                                    <p> <b>Hybris udtrækker blot de data- og metadata der
-                                            findes i statistikfilen.
-                                            </br>Det er derfor vigtigt at du sikrer dig at kvaliteten af data- og
-                                            metadata i statistikfilen lever op til Rigsarkivets krav, før du laver
-                                            udtræk med Hybris.
-                                            </br>
-                                            </br>Krav til data- og metadatakvalitet er listet herunder. Du kan også
-                                            finde quickguiden her: <a id="hybris-help-link1"
-                                                href="#Quickguide.pdf">Quickguide.pdf</a>:</b>
-                                        <ul>
-                                            <li>Tegnsættet for statistikfilerne skal være indkodet som UTF-8.</li>
-                                            <li>Der må ikke være linjeskift i indhold i sidste variabel.</li>
-                                            <li>Variabelnavne [Variable name] skal være angivet for alle variable.</li>
-                                            <li>Variabelnavne skal være unikke inden for statistikfilen.</li>
-                                            <li>Variabelnavne må aldrig begynde med et tal, men må godt være en blanding
-                                                af bogstaver og tal.</li>
-                                            <li>Variabelnavne må max være 128 tegn lange.</li>
-                                            <li>Variabelbeskrivelser [Variable labels] skal være angivet for alle
-                                                variable.</li>
-                                            <li>Hvis der kun er angivet kodeforklaringer [value labels] for nogle af
-                                                koderne [values] der fremgår af en skala, skal dette beskrives i
-                                                variabelbeskrivelsen for variablen.</li>
-                                            <li>Der må konsekvent kun anvendes enten specialkoder (Special numeric)
-                                                eller brugerdefinerede koder for manglende værdier.</li>
-                                            <li>Specialkoder og brugerdefinerede koder for manglende værdier må kun
-                                                anvendes for numeriske og kategoriske variable med datatyperne numerisk
-                                                heltal og decimal.</li>
-                                            <li>Hvis brugerdefinerede koder for manglende værdier er anvendt for
-                                                variable med tekst, dato eller tidstempel skal dette beskrives i et
-                                                kontekstdokument i afleveringspakken.</li>
-                                            <li>Brugerdefinerede koder for manglende værdier skal altid fremgå af
-                                                kodelisten [Value labels]</li>
-                                            <li>Specialkoder for manglende værdier må kun antage værdier A-Z eller
-                                                .a-.z.</li>
-                                            <li>Datatyper for variable i statistikfilen skal overholde de tilladte
-                                                datatyper i en afleveringspakke. Hvis dette ikke er tilfældet, skal du
-                                                selv konvertere datatyperne til tilladte formater før udtræk laves med
-                                                Hybris.</li>
-                                            <li>Der skal være fuld overensstemmelse mellem datatype og længde for de
-                                                variable, der indgår i en reference mellem flere statistikfiler i
-                                                afleveringspakken.</li>
-                                            <li>Alle koderværdier i data [Value] skal være beskrevet med en
-                                                kodeforklaring [Value labels]</li>
-                                            <li>Kodelister [Value labels] må kun være tilknyttet numeriske og
-                                                kategoriske variable med datatyperne numerisk heltal, decimal og tekst.
-                                            </li>
-                                            <li>Koder [Values] skal være unikke inden for samme kodeliste [Value labels
-                                                knyttet til en variabel]</li>
-                                        </ul>
-                                        </br><b>Læs <a id="hybris-help-link2"
-                                                href="#Bilag9Kravtilafleveringspakke.pdf">Bilag 9_Krav til
-                                                afleveringspakke.pdf</a> igennem, hvis du vil have en bedre ide om hvad
-                                            en afleveringspakke er og hvilke krav der stilles til data- og
-                                            metadatafilen.</b>
-                                        </br>Her findes hele <a id="hybris-help-link3"
-                                            href="#Bekendtgoerelse1007plusinklbilag9.pdf">Bekendtgørelse 1007+ inkl
-                                            bilag 9.pdf</a>.
-                                    </p>
+                                <td class="bottomBorderTd">
+                                    <div class="tdContent">
+                                        <div class="tdLeftContent">
+                                                <h4>Sådan kvalitetssikrer du statistikfilen før du anvender
+                                                        Hybris</h4>
+                                                    <p> <b>Hybris udtrækker blot de data- og metadata der
+                                                            findes i statistikfilen.
+                                                            </br>Det er derfor vigtigt at du sikrer dig at kvaliteten af data- og
+                                                            metadata i statistikfilen lever op til Rigsarkivets krav, før du laver
+                                                            udtræk med Hybris.
+                                                            </br>
+                                                            </br>Krav til data- og metadatakvalitet er listet herunder. Du kan også
+                                                            finde quickguiden her: <a id="hybris-help-link1"
+                                                                href="#Quickguide.pdf">Quickguide.pdf</a>:</b>
+                                                        <ul>
+                                                            <li>Tegnsættet for statistikfilerne skal være indkodet som UTF-8.</li>
+                                                            <li>Der må ikke være linjeskift i indhold i sidste variabel.</li>
+                                                            <li>Variabelnavne [Variable name] skal være angivet for alle variable.</li>
+                                                            <li>Variabelnavne skal være unikke inden for statistikfilen.</li>
+                                                            <li>Variabelnavne må aldrig begynde med et tal, men må godt være en blanding
+                                                                af bogstaver og tal.</li>
+                                                            <li>Variabelnavne må max være 128 tegn lange.</li>
+                                                            <li>Variabelbeskrivelser [Variable labels] skal være angivet for alle
+                                                                variable.</li>
+                                                            <li>Hvis der kun er angivet kodeforklaringer [value labels] for nogle af
+                                                                koderne [values] der fremgår af en skala, skal dette beskrives i
+                                                                variabelbeskrivelsen for variablen.</li>
+                                                            <li>Der må konsekvent kun anvendes enten specialkoder (Special numeric)
+                                                                eller brugerdefinerede koder for manglende værdier.</li>
+                                                            <li>Specialkoder og brugerdefinerede koder for manglende værdier må kun
+                                                                anvendes for numeriske og kategoriske variable med datatyperne numerisk
+                                                                heltal og decimal.</li>
+                                                            <li>Hvis brugerdefinerede koder for manglende værdier er anvendt for
+                                                                variable med tekst, dato eller tidstempel skal dette beskrives i et
+                                                                kontekstdokument i afleveringspakken.</li>
+                                                            <li>Brugerdefinerede koder for manglende værdier skal altid fremgå af
+                                                                kodelisten [Value labels]</li>
+                                                            <li>Specialkoder for manglende værdier må kun antage værdier A-Z eller
+                                                                .a-.z.</li>
+                                                            <li>Datatyper for variable i statistikfilen skal overholde de tilladte
+                                                                datatyper i en afleveringspakke. Hvis dette ikke er tilfældet, skal du
+                                                                selv konvertere datatyperne til tilladte formater før udtræk laves med
+                                                                Hybris.</li>
+                                                            <li>Der skal være fuld overensstemmelse mellem datatype og længde for de
+                                                                variable, der indgår i en reference mellem flere statistikfiler i
+                                                                afleveringspakken.</li>
+                                                            <li>Alle koderværdier i data [Value] skal være beskrevet med en
+                                                                kodeforklaring [Value labels]</li>
+                                                            <li>Kodelister [Value labels] må kun være tilknyttet numeriske og
+                                                                kategoriske variable med datatyperne numerisk heltal, decimal og tekst.
+                                                            </li>
+                                                            <li>Koder [Values] skal være unikke inden for samme kodeliste [Value labels
+                                                                knyttet til en variabel]</li>
+                                                        </ul>
+                                                        </br><b>Læs <a id="hybris-help-link2"
+                                                                href="#Bilag9Kravtilafleveringspakke.pdf">Bilag 9_Krav til
+                                                                afleveringspakke.pdf</a> igennem, hvis du vil have en bedre ide om hvad
+                                                            en afleveringspakke er og hvilke krav der stilles til data- og
+                                                            metadatafilen.</b>
+                                                        </br>Her findes hele <a id="hybris-help-link3"
+                                                            href="#Bekendtgoerelse1007plusinklbilag9.pdf">Bekendtgørelse 1007+ inkl
+                                                            bilag 9.pdf</a>.
+                                                    </p>
+                                        </div>
+                                        <div class="tdRightContent">
+                                            <ul>
+                                                <li><a id="hybris-help-link1" href="#Quickguide.pdf">Quickguide.pdf</a></li>
+                                                <li><a id="hybris-help-link2"
+                                                    href="#Bilag9Kravtilafleveringspakke.pdf">Bilag 9_Krav til
+                                                    afleveringspakke.pdf</a></li>
+                                                <li><a id="hybris-help-link3"
+                                                    href="#Bekendtgoerelse1007plusinklbilag9.pdf">Bekendtgørelse 1007+ inkl
+                                                    bilag 9.pdf</a></li>
+                                                <li><a id="hybris-help-link4" href="#SkabarchiveIndexvejledning.pdf">Skab archiveIndex vejledning.pdf</a></li>
+                                                <li><a id="hybris-help-link5" href="#SkabcontextDocumentationIndexvejledning.pdf">Skab contextDocumentationIndex vejledning.pdf</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>
                             <tr>
-                                <td>
-                                    <h4>Dette skal du have klar før du anvender Hybris</h4>
-                                    <p>
-                                        <b>Du bør have nedenstående filer og informationer klar, før du anvender Hybris:
-                                        </b>
-                                        <ul>
-                                            <li>Fremfinde de statistikfiler der skal afleveres til Rigsarkivet. OBS: Hvis personfølsomme oplysninger er adskilt fra statistikfilen i en nøglefil, skal både statistikfilen og nøglefilen indgå i afleveringspakken.</li>
-                                            <li>Fremfinde løbenummer for afleveringspakken. Løbenummere er udleveret af Rigsarkivet og fremgår af afleveringsbestemmelsen.</li>
-                                            <li>Udfylde indexfilerne archiveIndex.xml og contextDocumentationIndex.xml. Rigsarkivet har udviklet indtastningsværktøjer til udfyldning af indexfilerne. Se vejledningerne "Skab archiveIndex" og "Skab contextDocumentationIndex".</li>
-                                            <li>Rigsarkivet skal godkende de udfyldte indexfiler, før du placerer dem i afleveringspakken.</li>
-                                            <li>Fremfinde de kontekstdokumenter, der skal indgå i afleveringspakken. Disse fremgår af Rigsarkivets afleveringsbestemmelse.</li>
-                                            <li>Konvertere kontekstdokumenterne til TIFF. Se hvordan i vejledningen om "TIFF-konvertering".</li>
-                                            <li>Afklar om der findes unikke variable i statistikfilene som skal angives som nøglevariable under udtræk med Hybris.</li>
-                                            <li>Afklar om der skal dannes referencer mellem flere statistikfiler i afleveringspakken samt over hvilke variable disse referencer skal dannes.</li>
-                                        </ul>
-                                    </p>
+                                <td class="bottomBorderTd">
+                                    <div class="tdContent">
+                                        <div class="tdLeftContent">
+                                            <h4>Dette skal du have klar før du anvender Hybris</h4>
+                                            <p>
+                                                <b>Du bør have nedenstående filer og informationer klar, før du anvender Hybris:
+                                                </b>
+                                                <ul>
+                                                    <li>Fremfinde de statistikfiler der skal afleveres til Rigsarkivet. OBS: Hvis personfølsomme oplysninger er adskilt fra statistikfilen i en nøglefil, skal både statistikfilen og nøglefilen indgå i afleveringspakken.</li>
+                                                    <li>Fremfinde løbenummer for afleveringspakken. Løbenummere er udleveret af Rigsarkivet og fremgår af afleveringsbestemmelsen.</li>
+                                                    <li>Udfylde indexfilerne archiveIndex.xml og contextDocumentationIndex.xml. Rigsarkivet har udviklet indtastningsværktøjer til udfyldning af indexfilerne. Se vejledningerne "Skab archiveIndex" og "Skab contextDocumentationIndex".</li>
+                                                    <li>Rigsarkivet skal godkende de udfyldte indexfiler, før du placerer dem i afleveringspakken.</li>
+                                                    <li>Fremfinde de kontekstdokumenter, der skal indgå i afleveringspakken. Disse fremgår af Rigsarkivets afleveringsbestemmelse.</li>
+                                                    <li>Konvertere kontekstdokumenterne til TIFF. Se hvordan i vejledningen om "TIFF-konvertering".</li>
+                                                    <li>Afklar om der findes unikke variable i statistikfilene som skal angives som nøglevariable under udtræk med Hybris.</li>
+                                                    <li>Afklar om der skal dannes referencer mellem flere statistikfiler i afleveringspakken samt over hvilke variable disse referencer skal dannes.</li>
+                                                </ul>
+                                            </p>
+                                        </div>
+                                        <div class="tdRightContent">
+
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>
                             <tr>
-                                <td>
-                                    <h4>Disse dele af afleveringspakken kan du skabe med Hybris</h4>
-                                    <p>
-                                        <ul>
-                                            <li>Navngive afleveringspakken med korrekt løbenummer.</li>
-                                            <li>Danne en tom mappestruktur til afleveringspakken med struktur og navngivning af mapper, der overholder krav i bilag 9.</li>
-                                            <li>Lave udtræk af data og metadata fra dine originale statistikfiler til data- og metadatafiler, der overholder de strukturelle krav til disse filer i  bilag 9.</li>
-                                            <li>Uploade archiveIndex.xml og contextDocumentationIndex.xml til afleveringspakken. Læs <a id="hybris-help-link4" href="#SkabarchiveIndexvejledning.pdf">Skab archiveIndex_vejledning.pdf</a> og <a id="hybris-help-link5" href="#SkabcontextDocumentationIndexvejledning.pdf"> Skab contextDocumentationIndex_vejledning.pdf</a> for vejledning i udfyldning af disse indexfiler.</li>
-                                        </ul>
-                                    </p>
+                                <td class="bottomBorderTd">
+                                    <div class="tdContent">
+                                        <div class="tdLeftContent">
+                                            <h4>Disse dele af afleveringspakken kan du skabe med Hybris</h4>
+                                            <p>
+                                                <ul>
+                                                    <li>Navngive afleveringspakken med korrekt løbenummer.</li>
+                                                    <li>Danne en tom mappestruktur til afleveringspakken med struktur og navngivning af mapper, der overholder krav i bilag 9.</li>
+                                                    <li>Lave udtræk af data og metadata fra dine originale statistikfiler til data- og metadatafiler, der overholder de strukturelle krav til disse filer i  bilag 9.</li>
+                                                    <li>Uploade archiveIndex.xml og contextDocumentationIndex.xml til afleveringspakken. Læs <a id="hybris-help-link4" href="#SkabarchiveIndexvejledning.pdf">Skab archiveIndex_vejledning.pdf</a> og <a id="hybris-help-link5" href="#SkabcontextDocumentationIndexvejledning.pdf"> Skab contextDocumentationIndex_vejledning.pdf</a> for vejledning i udfyldning af disse indexfiler.</li>
+                                                </ul>
+                                            </p>
+                                        </div>
+                                        <div class="tdRightContent">
+                                            <ul>
+                                            </ul>
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>
                             <tr>
-                                <td>
-                                    <h4>Disse dele af afleveringspakken skal du selv lave</h4>
-                                    <p>
-                                        <ul>
-                                            <li>Placere kontekstdokumenter i afleveringspakken i en rækkefølge der stemmer overens med rækkefølgen af dokumenter i contextDocumentationIndex.xml filen.</li>
-                                        </ul>
-                                    </p>
+                                <td class="bottomBorderTd">
+                                    <div class="tdContent">
+                                        <div class="tdLeftContent">
+                                            <h4>Disse dele af afleveringspakken skal du selv lave</h4>
+                                            <p>
+                                                <ul>
+                                                    <li>Placere kontekstdokumenter i afleveringspakken i en rækkefølge der stemmer overens med rækkefølgen af dokumenter i contextDocumentationIndex.xml filen.</li>
+                                                </ul>
+                                            </p>
+                                        </div>
+                                        <div class="tdRightContent">
+
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>
                             <tr>
-                                <td>
-                                    <h4>Sådan tester du med testværktøjet Nemesis</h4>
-                                    <p>
-                                        <ul>
-                                            <li>Klik på menupunktet NEMESIS og vælg den afleveringspakke, du vil teste. Klik på "Start".</li>
-                                            <li>Læse fejlbeskeder fra testen i fejlloggen</li>
-                                            <li>Nærstudere de krav i bilag 9 som fejlene omhandler, for at forstå hvordan fejlene rettes.</li>
-                                        </ul>
-                                    </p>
+                                <td class="bottomBorderTd">
+                                    <div class="tdContent">
+                                        <div class="tdRightContent">
+                                            <h4>Sådan tester du med testværktøjet Nemesis</h4>
+                                            <p>
+                                                <ul>
+                                                    <li>Klik på menupunktet NEMESIS og vælg den afleveringspakke, du vil teste. Klik på "Start".</li>
+                                                    <li>Læse fejlbeskeder fra testen i fejlloggen</li>
+                                                    <li>Nærstudere de krav i bilag 9 som fejlene omhandler, for at forstå hvordan fejlene rettes.</li>
+                                                </ul>
+                                            </p>
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>
                             <tr>
-                                <td>
-                                    <h4>Sådan retter du fejl i en eksisterende afleveringspakke</h4>
-                                    <p>
-                                        <ul>
-                                            <li>Små fejl i metadatafilen kan rettes manuelt i en teksteditor.</li>
-                                            <li>Komplekse eller mange repeterende fejl i metadatafilen bør rettes direkte i statistikfilen, hvorefter der laves et nyt udtræk med Hybris.</li>
-                                            <li>Fejl i datafilen rettes direkte i statistikfilen, hvorefter der laves et nyt udtræk med Hybris.</li>
-                                            <li>Fejl i indexfilerne kan rettes i Rigsarkivets indtastningsværktøjer til disse. Værktøjerne validerer om filerne overholder krav til indexfiler. Ændringer i indexfilerne skal godkendes af Rigsarkivet.</li>
-                                            <li>Fejl i kontekstdokumenter rettes ved at erstatte det eksisterende TIFF-dokument med et tilrettet.</li>
-                                            <li>Tilføjes nye kontekstdokumenter til afleveringspakken som ikke fremgår af afleveringsbestemmelsen, skal afleveringsbestemmelsen opdateres med disse dokumenter og godkendes af Rigsarkivet.</li>
-                                        </ul>  
-                                    </p>
+                                <td class="bottomBorderTd">
+                                    <div class="tdContent">
+                                        <div class="tdLeftContent">
+                                            <h4>Sådan retter du fejl i en eksisterende afleveringspakke</h4>
+                                            <p>
+                                                <ul>
+                                                    <li>Små fejl i metadatafilen kan rettes manuelt i en teksteditor.</li>
+                                                    <li>Komplekse eller mange repeterende fejl i metadatafilen bør rettes direkte i statistikfilen, hvorefter der laves et nyt udtræk med Hybris.</li>
+                                                    <li>Fejl i datafilen rettes direkte i statistikfilen, hvorefter der laves et nyt udtræk med Hybris.</li>
+                                                    <li>Fejl i indexfilerne kan rettes i Rigsarkivets indtastningsværktøjer til disse. Værktøjerne validerer om filerne overholder krav til indexfiler. Ændringer i indexfilerne skal godkendes af Rigsarkivet.</li>
+                                                    <li>Fejl i kontekstdokumenter rettes ved at erstatte det eksisterende TIFF-dokument med et tilrettet.</li>
+                                                    <li>Tilføjes nye kontekstdokumenter til afleveringspakken som ikke fremgår af afleveringsbestemmelsen, skal afleveringsbestemmelsen opdateres med disse dokumenter og godkendes af Rigsarkivet.</li>
+                                                </ul>  
+                                            </p>
+                                        </div>
+                                        <div class="tdRightContent">
+
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>
                         </table>
