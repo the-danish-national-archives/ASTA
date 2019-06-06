@@ -219,7 +219,7 @@ function (n) {
                         }; break;
                     }
                     if(!sasCatalogExists && fileExt === "sas7bdat") {
-                        ipcRenderer.send('open-confirm-dialog','dataextraction',settings.outputStatisticsSASWarningTitle.innerHTML,settings.outputStatisticsSASWarningText.innerHTML,settings.okConfirm.innerHTML,settings.cancelConfirm.innerHTML);
+                        ipcRenderer.send('open-confirm-dialog','dataextraction-catalogexists',settings.outputStatisticsSASWarningTitle.innerHTML,settings.outputStatisticsSASWarningText.innerHTML,settings.okConfirm.innerHTML,settings.cancelConfirm.innerHTML);
                         return;
                     }
                     CopyScript();     
@@ -288,13 +288,31 @@ function (n) {
                 var charsetMatch = chardet.detectFileSync(filePath);
                 console.log("File {0} encode: {1}".format(fileName,charsetMatch));
                 if(charsetMatch !== "UTF-8") {
-                    var localPath = settings.dataFolderPath;
-                    localPath += (localPath.indexOf("\\") > -1) ? "\\{0}".format(fileName) : "/{0}".format(fileName);
-                    ipcRenderer.send('open-error-dialog',settings.outputScriptEncodingFileErrorTitle.innerHTML,settings.outputScriptEncodingFileErrorText.innerHTML.format(localPath));
                     return false;
                 }
             }
             return true;
+        }
+
+        //get Export files info  
+        var GetExportInfo = function(files) {
+            var unvalidFiles = [];
+            var counter = 0;
+            var fileName = GetFileName();
+            var filePrefix = fileName.substring(0,fileName.indexOf("."));
+            files.forEach(file => {
+                settings.outputPostfixFiles.forEach(element => {
+                    if(element.format(filePrefix) == file) 
+                    { 
+                        counter = counter + 1;
+                        if(!ValidateFile(file)) { unvalidFiles.push(file); } 
+                    }
+                });
+                settings.outputOptionalPostfixFiles.forEach(element => {
+                    if(element.format(filePrefix) == file && !ValidateFile(file)) { unvalidFiles.push(file); }
+                });
+            });
+            return { "counter":counter, "unvalidFiles":unvalidFiles};
         }
 
         //Ensure output files of statistic program
@@ -308,40 +326,36 @@ function (n) {
                 }
                 else {
                     settings.okScriptBtn.disabled = true;
-                    var fileValidate = true;
-                    var counter = 0;
-                    var fileName = GetFileName();
-                    var filePrefix = fileName.substring(0,fileName.indexOf("."));
-                    files.forEach(file => {
-                        settings.outputPostfixFiles.forEach(element => {
-                            if(element.format(filePrefix) == file) 
-                            { 
-                                counter = counter + 1;
-                                if(!ValidateFile(file)) { fileValidate = false; } 
-                            }
-                        });
-                        settings.outputOptionalPostfixFiles.forEach(element => {
-                            if(element.format(filePrefix) == file && !ValidateFile(file)) { fileValidate = false; }
-                        });
-                    });
+                    var info = GetExportInfo(files);
+                    var counter = info.counter;
+                    var unvalidFiles = info.unvalidFiles;
                     settings.okScriptBtn.disabled = false;
                     settings.spinner.className = "";
                     if(counter < 3) {
                         ipcRenderer.send('open-warning-dialog',settings.outputScriptRequiredFilesWarningTitle.innerHTML,settings.outputScriptRequiredFilesWarningText.innerHTML);
                     }
                     else {
-                        if(fileValidate) 
+                        if(unvalidFiles.length > 0) 
                         { 
-                            var fileName = GetFileName();
-                            //ipcRenderer.send('open-warning-dialog',settings.outputScriptCloseApplicationWarningTitle.innerHTML,settings.outputScriptCloseApplicationWarningText.innerHTML);
-                            settings.outputScriptOkSpn.innerHTML = settings.outputScriptOkText.format(fileName);
-                            settings.outputScriptOkSpn.hidden = false;
-                            settings.metadataFileName.value = fileName.substring(0,fileName.indexOf("."));
-                            settings.metdataTab.click();
+                            var localPath = settings.dataFolderPath;
+                            var filesText = unvalidFiles.join(",");
+                            ipcRenderer.send('open-confirm-dialog','dataextraction-encodingfile',settings.outputScriptEncodingFileErrorTitle.innerHTML,settings.outputScriptEncodingFileErrorText.innerHTML.format(filesText,localPath),settings.okConfirm.innerHTML,settings.cancelConfirm.innerHTML); 
+                        }
+                        else {
+                            Redirect();
                         }
                     }
                 }
             });
+        }
+
+        //Redirect to metadata tab
+        var Redirect = function() {
+            var fileName = GetFileName();
+            settings.outputScriptOkSpn.innerHTML = settings.outputScriptOkText.format(fileName);
+            settings.outputScriptOkSpn.hidden = false;
+            settings.metadataFileName.value = fileName.substring(0,fileName.indexOf("."));
+            settings.metdataTab.click();
         }
 
         //add Event Listener to HTML elmenets
@@ -384,11 +398,17 @@ function (n) {
                 console.log(`selected path: ${path}`); 
                 settings.pathStatisticsFileTxt.value = settings.selectedStatisticsFilePath;            
             })
-            ipcRenderer.on('confirm-dialog-selection-dataextraction', (event, index) => {
+            ipcRenderer.on('confirm-dialog-selection-dataextraction-catalogexists', (event, index) => {
                 if(index === 0) {
                     CopyScript();
                 } 
                 if(index === 1) { ResetData(); }            
+            })
+            ipcRenderer.on('confirm-dialog-selection-dataextraction-encodingfile', (event, index) => {
+                if(index === 0) {
+                    Redirect();
+                } 
+                if(index === 1) {  }            
             })
         }
 
