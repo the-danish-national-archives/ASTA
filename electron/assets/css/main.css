@@ -288,6 +288,14 @@ a.selected:hover {
     justify-content: space-between;
 }
 
+.rightContent {
+    width: 50%;
+}
+
+#hybris-structure-path, #hybris-structure-delivery-package{
+    width: 75%;
+}
+
 /* Nemesis layout END */
 
 /* Nemesis output log elements */

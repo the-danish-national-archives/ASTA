@@ -80,11 +80,11 @@ drop v1 v2
 gen v1=_n
 order v1 var1 var2
 save $fileDir\varNameFormat, replace
-* Create output with variable name and format
+* Create output with variable name, format and codelist ref.
 merge 1:1 v1 using $fileDir\valLabelName, nogenerate
 drop v1
-replace var2=var3+"." if var3!=""
-gen var=var1+" "+var2
+replace var3=var3+"." if var3!=""
+gen var=var1+" "+var2+" "+var3
 drop var1 var2 var3
 * Write output to file
 export delimited using $fileDir\tempB.txt, delimiter(",") novarnames nolabel replace
