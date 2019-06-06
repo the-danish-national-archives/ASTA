@@ -391,7 +391,9 @@ function (n) {
                     }
                 break;
                 case 'Decimal':
-                    result = LogError("-CheckData-FileRow-ColumnsDecimalType-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, variable.format,dataValue);
+                    if(!codeListPattern.test(dataValue) && !ValidateOptions(dataValue,variable)) {
+                        result = LogError("-CheckData-FileRow-ColumnsDecimalType-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, variable.format,dataValue);
+                    }
                 break;
                 case 'Date':
                     result = LogError("-CheckData-FileRow-ColumnsDateType-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, variable.format,dataValue);

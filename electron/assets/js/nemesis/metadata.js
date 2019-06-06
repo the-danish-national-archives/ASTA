@@ -202,15 +202,14 @@ function (n) {
         //Validate BRUGERKODE missing values
         var ValidateUserCodeValues = function(table,info) {
             var result = true;
-            var options = null;
+            var options = [];
             table.variables.forEach(variable => {
-                if(variable.codeListKey === info.name) { 
+                if(variable.name === info.name) { 
                     options = variable.options;
                 }
             });
             info.codes.forEach(code => {
                 if(!userCodePattern.test(code)) {
-                    settings.errorStop = true;
                     result = LogError("-CheckMetadata-FileUserCodes-CodeValidation-Error",settings.fileName,info.name,code);
                 } 
                 else {
@@ -226,22 +225,17 @@ function (n) {
         var ValidateUserCodes = function (lines,startIndex) {
             var result = true;
             var table = GetTableData(settings.fileName);
-            var codeListKeys = [];
-            table.variables.forEach(variable => {
-                if(variable.codeListKey != null && variable.codeListKey !== "") { 
-                    codeListKeys.push(variable.codeListKey); 
-                }
-            });
+            var variables = [];
+            table.variables.forEach(variable => { variables.push(variable.name);  });
             var i = startIndex;                        
             do {
                 var info = GetUserCode(lines[i]);
                 if(info.codes != null && info.codes.length > 0) {
                     if(!ValidateUserCodeName(info.name)) {
-                        settings.errorStop = true;
                         result = false; 
                     }
                     else {
-                        if(!codeListKeys.includes(info.name)) {
+                        if(!variables.includes(info.name)) {
                             result = LogError("-CheckMetadata-FileUserCodes-KeyRequired-Error",settings.fileName,info.name);
                         }
                         else {
@@ -252,6 +246,7 @@ function (n) {
                 else {
                     result = LogError("-CheckMetadata-FileUserCodes-CodeRequired-Error",settings.fileName,(i + 1));                    
                 }
+                if(!result) { settings.errorStop = true; }
                 i++;
             }
             while (lines[i].trim() !== ""); 
