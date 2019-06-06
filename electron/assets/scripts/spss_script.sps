@@ -137,11 +137,14 @@ match files file 'dataDir\variable.sav' /in=master
 /by varName.
 string type(a1) variable(a32767).
 alter type varFormat(a66).
-* If variable has a code list, overwrite variable format with variable or code list name.
+* If variable has a code list, make sure to use it
 compute type=char.substr(varFormat, 1, 1).
-if codeVar eq 1 varFormat=concat(varName_, '.').
-if codeVar eq 1 and type eq 'a' varFormat=concat('$', varFormat).
-compute variable=concat(ltrim(rtrim(varName)), ' ', ltrim(rtrim(varFormat))).
+*if codeVar eq 1 varFormat=concat(varName_, '.').
+*if codeVar eq 1 and type eq 'a' varFormat=concat('$', varFormat).
+if codeVar eq 1 varName_=concat(varName_, '.').
+if codeVar eq 1 and type eq 'a' varName_=concat('$', varName_).
+*compute variable=concat(ltrim(rtrim(varName)), ' ', ltrim(rtrim(varFormat))).
+compute variable=concat(ltrim(rtrim(varName)), ' ', ltrim(rtrim(varFormat)), ' ', ltrim(rtrim(varName_))).
 sort cases by casenum.
 select if varName ne 'absoluteDum'.
 alter type variable(amin).
