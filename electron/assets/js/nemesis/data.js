@@ -337,22 +337,19 @@ function (n) {
                     {
                         result = ValidateString(dataValue, regExp, variable);
                         if(result) { result = ValidateOptions(ApostropheNormalizer(dataValue),variable); }
-                    }
-                    break;
+                    };break;
                 case 'Int':
                     {
                         result = ValidateInt(dataValue, regExp, variable);
                         if(result) { result = ValidateOptions(dataValue,variable); }
-                    }
-                    break;
+                    };break;
                 case 'Decimal':
                     {
                         result = ValidateDecimal(dataValue, regExp, variable);
                         if(result) { result = ValidateOptions(dataValue,variable); }
-                    }
-                    break;
-                case 'Date':
-                    result = ValidateDate(dataValue, regExp, variable);
+                    };break;
+                case 'Date': 
+                result = ValidateDate(dataValue, regExp, variable);
                     break;
                 case 'DateTime':
                     result = ValidateDateTime(dataValue, regExp, variable);
@@ -389,18 +386,33 @@ function (n) {
                         var regExSplit = variable.regExps[0].split(','); 
                         var length = regExSplit[1].split('}');
                         result = LogError("-CheckData-FileRow-ColumnsStringType-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, variable.format,dataValue);
-                    }
-                break;
+                    };break;
                 case 'Int':
-                    if(!codeListPattern.test(dataValue) && !ValidateOptions(dataValue,variable)) {
-                        result = LogError("-CheckData-FileRow-ColumnsIntType-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, variable.format,dataValue);
-                    }
-                break;
+                    {
+                        if(!codeListPattern.test(dataValue)) {
+                            result = LogError("-CheckData-FileRow-ColumnsIntType-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, variable.format,dataValue);
+                        }
+                        else 
+                        {
+                            result = ValidateOptions(dataValue,variable);
+                            if(result && (variable.options == null || (variable.options != null && variable.options.length === 0))) {
+                                result = LogError("-CheckData-FileRow-ColumnsIntType-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, variable.format,dataValue);
+                            }
+                        }
+                    };break;
                 case 'Decimal':
-                    if(!codeListPattern.test(dataValue) && !ValidateOptions(dataValue,variable)) {
-                        result = LogError("-CheckData-FileRow-ColumnsDecimalType-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, variable.format,dataValue);
-                    }
-                break;
+                    {
+                        if(!codeListPattern.test(dataValue)) {
+                            result = LogError("-CheckData-FileRow-ColumnsDecimalType-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, variable.format,dataValue);
+                        }
+                        else 
+                        {
+                            result = ValidateOptions(dataValue,variable);
+                            if(result && (variable.options == null || (variable.options != null && variable.options.length === 0))) {
+                                result = LogError("-CheckData-FileRow-ColumnsDecimalType-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, variable.format,dataValue);
+                            }
+                        }
+                    };break;
                 case 'Date':
                     result = LogError("-CheckData-FileRow-ColumnsDateType-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, variable.format,dataValue);
                 break;
@@ -408,8 +420,8 @@ function (n) {
                     result = LogError("-CheckData-FileRow-ColumnsDateTimeType-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, variable.format,dataValue);
                 break;
                 case 'Time':
-                result = LogError("-CheckData-FileRow-ColumnsTimeType-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, variable.format,dataValue);
-            break;
+                    result = LogError("-CheckData-FileRow-ColumnsTimeType-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, variable.format,dataValue);
+                break;
                 default: break;
             }
             return result;
