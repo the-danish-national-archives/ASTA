@@ -340,10 +340,16 @@ function (n) {
                     }
                     break;
                 case 'Int':
-                    result = ValidateInt(dataValue, regExp, variable);
+                    {
+                        result = ValidateInt(dataValue, regExp, variable);
+                        if(result) { result = ValidateOptions(dataValue,variable); }
+                    }
                     break;
                 case 'Decimal':
-                    result = ValidateDecimal(dataValue, regExp, variable);
+                    {
+                        result = ValidateDecimal(dataValue, regExp, variable);
+                        if(result) { result = ValidateOptions(dataValue,variable); }
+                    }
                     break;
                 case 'Date':
                     result = ValidateDate(dataValue, regExp, variable);
