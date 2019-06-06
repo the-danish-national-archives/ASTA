@@ -249,7 +249,7 @@ function (n) {
                 if(!result) { settings.errorStop = true; }
                 i++;
             }
-            while (lines[i].trim() !== ""); 
+            while (lines[i] !== undefined && lines[i].trim() !== ""); 
             return result;
         }
 
@@ -341,7 +341,7 @@ function (n) {
                 }
                 i++;
             }
-            while (lines[i].trim() !== "");
+            while (lines[i] !== undefined && lines[i].trim() !== "");
             table.variables.forEach(variable => {
                 if(variable.codeListKey !== "" && !validKeys.includes(variable.codeListKey)) {
                     result = LogError("-CheckMetadata-FileVariable-CodeListRequired-Error",settings.fileName,variable.name,variable.codeListKey);    
@@ -413,7 +413,7 @@ function (n) {
                 }                             
                 i++;
             }
-            while (lines[i].trim() !== "");
+            while (lines[i] !== undefined && lines[i].trim() !== "");
             if(variableDescriptions.length > 0) {
                 variableDescriptions.forEach(variable => {
                     result = LogError("-CheckMetadata-FileVariable-DescriptionExists-Error",settings.fileName,variable);
@@ -522,7 +522,7 @@ function (n) {
                 }
                 i++;
             }
-            while (lines[i].trim() !== "");           
+            while (lines[i] !== undefined && lines[i].trim() !== "");           
             if(!ValidateVariablesRelated(variables)) { result = false; }  
             return result;
         }
@@ -607,7 +607,7 @@ function (n) {
                 } 
                 i++;
             }
-            while (lines[i].trim() !== "");
+            while (lines[i] !== undefined && lines[i].trim() !== "");
             return result;
         }
 
