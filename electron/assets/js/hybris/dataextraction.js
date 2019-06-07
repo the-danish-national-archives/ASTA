@@ -298,6 +298,7 @@ function (n) {
         var GetExportInfo = function(files) {
             var unvalidFiles = [];
             var counter = 0;
+            var localPath = (settings.dataFolderPath.indexOf("\\") > -1) ? "{0}\\".format(settings.dataFolderPath) : "{0}/".format(settings.dataFolderPath);                           
             var fileName = GetFileName();
             var filePrefix = fileName.substring(0,fileName.indexOf("."));
             files.forEach(file => {
@@ -305,11 +306,11 @@ function (n) {
                     if(element.format(filePrefix) == file) 
                     { 
                         counter = counter + 1;
-                        if(!ValidateFile(file)) { unvalidFiles.push(file); } 
+                        if(!ValidateFile(file)) { unvalidFiles.push(localPath + file); } 
                     }
                 });
                 settings.outputOptionalPostfixFiles.forEach(element => {
-                    if(element.format(filePrefix) == file && !ValidateFile(file)) { unvalidFiles.push(file); }
+                    if(element.format(filePrefix) == file && !ValidateFile(file)) { unvalidFiles.push(localPath + file); }
                 });
             });
             return { "counter":counter, "unvalidFiles":unvalidFiles};
@@ -337,9 +338,8 @@ function (n) {
                     else {
                         if(unvalidFiles.length > 0) 
                         { 
-                            var localPath = settings.dataFolderPath;
                             var filesText = unvalidFiles.join(",");
-                            ipcRenderer.send('open-confirm-dialog','dataextraction-encodingfile',settings.outputScriptEncodingFileErrorTitle.innerHTML,settings.outputScriptEncodingFileErrorText.innerHTML.format(filesText,localPath),settings.okConfirm.innerHTML,settings.cancelConfirm.innerHTML); 
+                            ipcRenderer.send('open-confirm-dialog','dataextraction-encodingfile',settings.outputScriptEncodingFileErrorTitle.innerHTML,settings.outputScriptEncodingFileErrorText.innerHTML.format(filesText),settings.okConfirm.innerHTML,settings.cancelConfirm.innerHTML); 
                         }
                         else {
                             Redirect();
