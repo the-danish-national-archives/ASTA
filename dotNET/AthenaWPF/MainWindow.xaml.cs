@@ -85,6 +85,7 @@ namespace AthenaWPF
             _converter = new Rigsarkiv.Athena.Converter(_logManager, _srcPath, _destPath);
             _converter.Run();
 
+            i = 0;
             var timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromMilliseconds(1000);
             timer.Tick += new EventHandler(timer_Tick);
