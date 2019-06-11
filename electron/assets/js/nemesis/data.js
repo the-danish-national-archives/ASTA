@@ -47,7 +47,7 @@ function (n) {
             parserStrictError: false,
             scriptPath: "./assets/scripts/{0}",
             resourceWinPath: "resources\\{0}",
-            converterFileName: "Athena.exe",
+            converterFileName: "AthenaWPF.exe",
             metadataFilePostfix: "{0}.json"
         }
 

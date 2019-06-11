@@ -26,10 +26,10 @@ namespace AthenaWPF
         {
             InitializeComponent();
             var args = Environment.GetCommandLineArgs();
-            if (args != null && args.Length == 3)
+            if (args != null && args.Length > 1)
             {
                 _srcPath = args[1];
-                _destPath = args[2];
+                if (args.Length == 3) { _destPath = args[2]; }
             }
             var srcPathTextBox = (TextBox)this.FindName("srcPath");
             srcPathTextBox.Text = _srcPath;
