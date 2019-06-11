@@ -11,7 +11,7 @@ namespace Rigsarkiv.Athena
     //https://stackoverflow.com/questions/5282999/reading-csv-file-and-storing-values-into-an-array
     static class Program
     {
-        private static string _sourcePath = null;
+        private static string _srcPath = null;
         private static StringBuilder _logs = new StringBuilder();
 
         /// <summary>
@@ -21,13 +21,13 @@ namespace Rigsarkiv.Athena
         static void Main(string[] args)
         {
             if (args != null && args.Length > 0) {
-                _sourcePath = args[0];
-                Log(string.Format("Process Dataset: {0}", _sourcePath));
+                _srcPath = args[0];
+                Log(string.Format("Process Dataset: {0}", _srcPath));
             }
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1(_sourcePath));
+            Application.Run(new Form1(_srcPath));
         }
 
         public static void Log(string text)

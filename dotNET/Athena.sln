@@ -3,7 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.572
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Athena", "Athena\Athena.csproj", "{301AE7CD-C0FE-401B-87AF-1C9C9DB6CFD5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AthenaConsole", "AthenaConsole\AthenaConsole.csproj", "{CC823017-1DDA-47CA-9F1D-4939FC2B26D4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AthenaWPF", "AthenaWPF\AthenaWPF.csproj", "{084D87A1-7848-4417-A3B6-628E7D6B682C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AthenaForm", "AthenaForm\AthenaForm.csproj", "{301AE7CD-C0FE-401B-87AF-1C9C9DB6CFD5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Athena", "Athena\Athena.csproj", "{50CCC99C-D3E6-49B9-87E4-D9DAACD28C36}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +17,22 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CC823017-1DDA-47CA-9F1D-4939FC2B26D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC823017-1DDA-47CA-9F1D-4939FC2B26D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC823017-1DDA-47CA-9F1D-4939FC2B26D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC823017-1DDA-47CA-9F1D-4939FC2B26D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{084D87A1-7848-4417-A3B6-628E7D6B682C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{084D87A1-7848-4417-A3B6-628E7D6B682C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{084D87A1-7848-4417-A3B6-628E7D6B682C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{084D87A1-7848-4417-A3B6-628E7D6B682C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{301AE7CD-C0FE-401B-87AF-1C9C9DB6CFD5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{301AE7CD-C0FE-401B-87AF-1C9C9DB6CFD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{301AE7CD-C0FE-401B-87AF-1C9C9DB6CFD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{301AE7CD-C0FE-401B-87AF-1C9C9DB6CFD5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50CCC99C-D3E6-49B9-87E4-D9DAACD28C36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50CCC99C-D3E6-49B9-87E4-D9DAACD28C36}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50CCC99C-D3E6-49B9-87E4-D9DAACD28C36}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50CCC99C-D3E6-49B9-87E4-D9DAACD28C36}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
