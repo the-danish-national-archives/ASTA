@@ -1,17 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using WinForms = System.Windows.Forms;
 
 namespace AthenaWPF
 {
@@ -31,8 +21,51 @@ namespace AthenaWPF
                 _srcPath = args[1];
                 if (args.Length == 3) { _destPath = args[2]; }
             }
-            var srcPathTextBox = (TextBox)this.FindName("srcPath");
-            srcPathTextBox.Text = _srcPath;
+            Update();
+        }
+
+        private void Update()
+        {
+            var pathTextBox = (TextBox)FindName("sipTextBox");
+            pathTextBox.Text = _srcPath;
+            pathTextBox = (TextBox)FindName("aipTextBox");
+            pathTextBox.Text = _destPath;
+        }
+
+        private void SipButton_Click(object sender, RoutedEventArgs e)
+        {
+            var openFileDlg = new WinForms.OpenFileDialog();
+            openFileDlg.DefaultExt = ".json";
+            openFileDlg.Filter = "SIP metadata (.json)|*.json";
+            if(_srcPath != null) {
+                openFileDlg.FileName = _srcPath;
+                openFileDlg.InitialDirectory = _srcPath;
+            }
+            var result = openFileDlg.ShowDialog();
+            if (result == WinForms.DialogResult.OK)
+            {
+                _srcPath = openFileDlg.FileName;
+                Update();
+            }
+        }
+
+        private void AipButton_Click(object sender, RoutedEventArgs e)
+        {
+            var folderDialog = new WinForms.FolderBrowserDialog();
+            folderDialog.ShowNewFolderButton = false;
+
+            if (_destPath != null) { folderDialog.SelectedPath = _destPath; }
+            var result = folderDialog.ShowDialog();
+            if (result == WinForms.DialogResult.OK)
+            {
+                _destPath = folderDialog.SelectedPath;
+                Update();
+            }
+        }
+
+        private void ConvertButton_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

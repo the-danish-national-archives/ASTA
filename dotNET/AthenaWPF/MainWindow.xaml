@@ -5,9 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AthenaWPF"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="ASTA - Athena" Height="450" Width="800">
     <Grid>
-        <Label Content="Afleveringspakke:" HorizontalAlignment="Left" Margin="21,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.01,0.073"/>
-        <TextBox x:Name="srcPath" HorizontalAlignment="Left" Height="23" Margin="136,13,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <Label Content="SIP mappe:" HorizontalAlignment="Left" Margin="21,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.01,0.073"/>
+        <TextBox x:Name="sipTextBox" HorizontalAlignment="Left" Height="23" Margin="136,13,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="445"/>
+        <Button x:Name="sipButton" Click="SipButton_Click" Content="Browse" HorizontalAlignment="Left" Margin="616,13,0,0" VerticalAlignment="Top" Width="75"/>
+        <Label Content="AIP mappe:" HorizontalAlignment="Left" Margin="22,57,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="aipTextBox" HorizontalAlignment="Left" Height="23" Margin="136,57,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="445"/>
+        <Button x:Name="aipButton" Click="AipButton_Click" Content="Browse" HorizontalAlignment="Left" Margin="616,57,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button x:Name="convertButton" Click="ConvertButton_Click" Content="Convert" HorizontalAlignment="Left" Margin="616,114,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="-0.224,-0.081"/>
     </Grid>
 </Window>

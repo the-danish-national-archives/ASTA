@@ -589,8 +589,8 @@ function (n) {
                         rootPath = folders.slice(0,folders.length - 3).join("/");
                         converterFilePath = "{0}/{1}".format(rootPath,settings.converterFileName);
                     }
-                }        
-                var converter = spawn(converterFilePath, [settings.deliveryPackagePath]);
+                }   
+                var converter = spawn(converterFilePath, [settings.metadataFilePostfix.format(settings.deliveryPackagePath) ]);
                 converter.stdout.on('data', (data) => console.log(`stdout: ${data}`));                  
                 converter.stderr.on('data', (data) => HandleError(new Error(data)));
                 converter.on('close', (code) => console.log(`converter process exited with code ${code}`));
