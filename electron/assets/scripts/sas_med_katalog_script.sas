@@ -121,7 +121,7 @@ run;
 
 * CREATE KODELISTE;
 %let name=%str(valLabels);
-%let outfile=&outDir&name;
+%let outfile=&dataDir&name;
 * Get content from the catalog file;
 proc format out="&outfile" fmtlib library=mylib.&inputSas;
 run;
