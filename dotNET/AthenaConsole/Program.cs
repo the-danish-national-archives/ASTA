@@ -34,18 +34,19 @@ namespace Rigsarkiv.AthenaConsole
                 break;
                 case LogLevel.Info:
                 {
-                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.ForegroundColor = ConsoleColor.White;
                     Console.WriteLine(e.LogEntity.Message);
                 }
                 break;
                 case LogLevel.Warning:
                 {
-                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.ForegroundColor = ConsoleColor.Yellow;
                     Console.WriteLine(e.LogEntity.Message);
                 }
                 break;
             }
             Console.ResetColor();
+            System.Threading.Thread.Sleep(1000);
         }
     }
 }

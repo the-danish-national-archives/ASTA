@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Rigsarkiv.Athena.Logging
 {
@@ -31,6 +32,7 @@ namespace Rigsarkiv.Athena.Logging
             _entities.Add(entity);
             var args = new LogEventArgs();
             args.LogEntity = entity;
+
             LogAdded?.Invoke(this, args);
         }
 

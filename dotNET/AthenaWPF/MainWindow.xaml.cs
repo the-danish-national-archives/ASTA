@@ -1,6 +1,12 @@
-﻿using System;
+﻿using Rigsarkiv.Athena.Logging;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
+using System.Windows.Media;
+using System.Windows.Threading;
 using WinForms = System.Windows.Forms;
 
 namespace AthenaWPF
@@ -12,6 +18,12 @@ namespace AthenaWPF
     {
         private string _srcPath = null;
         private string _destPath = null;
+        private LogManager _logManager = null;
+        private Rigsarkiv.Athena.Converter _converter = null;
+        private RichTextBox _outputRichTextBox = null;
+
+        private List<LogEntity> _logEntities = null;
+        private int i = 0;
         public MainWindow()
         {
             InitializeComponent();
@@ -22,6 +34,7 @@ namespace AthenaWPF
                 if (args.Length == 3) { _destPath = args[2]; }
             }
             Update();
+            _outputRichTextBox = (RichTextBox)FindName("outputRichTextBox");
         }
 
         private void Update()
@@ -65,7 +78,36 @@ namespace AthenaWPF
 
         private void ConvertButton_Click(object sender, RoutedEventArgs e)
         {
+            _logEntities = new List<LogEntity>();
+            _outputRichTextBox.Document.Blocks.Clear();
+            _logManager = new LogManager();
+            _logManager.LogAdded += OnLogAdded;
+            _converter = new Rigsarkiv.Athena.Converter(_logManager, _srcPath, _destPath);
+            _converter.Run();
 
+            var timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromMilliseconds(1000);
+            timer.Tick += new EventHandler(timer_Tick);
+            timer.Start();
+        }
+
+        private void timer_Tick(object sender, EventArgs e)
+        {
+            Paragraph para = new Paragraph(new Run(_logEntities[i].Message));
+            switch (_logEntities[i].Level)
+            {
+                case LogLevel.Error: para.Foreground = Brushes.Red; break;
+                case LogLevel.Info: para.Foreground = Brushes.Black; break;
+                case LogLevel.Warning: para.Foreground = Brushes.Yellow; break;
+            }
+            _outputRichTextBox.Document.Blocks.Add(para);
+            i++;
+            if (i >= _logEntities.Count) { ((DispatcherTimer)sender).Stop(); }
+        }
+
+        private void OnLogAdded(object arg1, LogEventArgs e)
+        {
+            _logEntities.Add(e.LogEntity);
         }
     }
 }

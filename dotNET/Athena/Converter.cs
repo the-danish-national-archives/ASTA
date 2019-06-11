@@ -22,11 +22,12 @@ namespace Rigsarkiv.Athena
 
         public void Run()
         {
+            
             _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = "", Message = "Start Convert" });
             for(var i =0; i < 10; i++)
             {
-                System.Threading.Thread.Sleep(1000);
-                _logManager.Add(new LogEntity() { Level = ((i <5) ? LogLevel.Info : LogLevel.Warning), Section = "Structure", Message = "Processs ...." });
+                var level = (i < 5) ? LogLevel.Info : LogLevel.Warning;
+                _logManager.Add(new LogEntity() { Level = level, Section = "Structure", Message = "Processs ...." });
             }
             _logManager.Add(new LogEntity() { Level = LogLevel.Error, Section = "Data", Message = "Error ...." });
             _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = "", Message = "End Convert" });
