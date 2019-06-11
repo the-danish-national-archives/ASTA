@@ -6,7 +6,7 @@ Note: The working directory must contain the data file (dta)
 
 * Set the working directory and data file name
 global fileDir "{0}"
-global outDir "{1}"
+global outDir "{1}\"
 global inputStata $fileDir\{2}
 global inputStata_ "{2}"
 
