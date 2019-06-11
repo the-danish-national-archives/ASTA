@@ -126,10 +126,10 @@ function (n) {
                     filePath += (filePath.indexOf("\\") > -1) ? "\\{0}".format(GetScriptFileName()) : "/{0}".format(GetScriptFileName());
                     var fileName = GetFileName();  
                     var datafolderPath = settings.dataFolderPath;
-                    if(fileName.substring(fileName.indexOf(".") + 1) === "sas7bdat") 
+                    if(settings.scriptType === "SAS" || settings.scriptType === "Stata") 
                     { 
                         datafolderPath = (datafolderPath.indexOf("\\") > -1) ? "{0}\\".format(datafolderPath) : "{0}/".format(datafolderPath);
-                        folderPath = (folderPath.indexOf("\\") > -1) ? "{0}\\".format(folderPath) : "{0}/".format(folderPath);
+                        if(settings.scriptType !== "Stata") { folderPath = (folderPath.indexOf("\\") > -1) ? "{0}\\".format(folderPath) : "{0}/".format(folderPath); }
                     }
                     var updatedData = data.toString().format(folderPath,datafolderPath,fileName.substring(0,fileName.indexOf(".")));
                     console.log(`Update script file ${filePath}`);
