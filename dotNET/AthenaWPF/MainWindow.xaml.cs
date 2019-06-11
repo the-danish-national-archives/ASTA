@@ -38,8 +38,8 @@ namespace AthenaWPF
             openFileDlg.DefaultExt = ".json";
             openFileDlg.Filter = "SIP metadata (.json)|*.json";
             if(_srcPath != null) {
-                openFileDlg.FileName = _srcPath;
-                openFileDlg.InitialDirectory = _srcPath;
+                openFileDlg.FileName = _srcPath.Substring(_srcPath.LastIndexOf("\\") + 1);
+                openFileDlg.InitialDirectory = _srcPath.Substring(0, _srcPath.LastIndexOf("\\"));
             }
             var result = openFileDlg.ShowDialog();
             if (result == WinForms.DialogResult.OK)
