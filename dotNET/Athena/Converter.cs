@@ -19,9 +19,9 @@ namespace Rigsarkiv.Athena
             _srcPath = srcPath;           
         }
 
-        public virtual void Run()
+        public virtual bool Run()
         {
-
+            return true;
         }
     }
 }

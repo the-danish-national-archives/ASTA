@@ -113,7 +113,7 @@ namespace AthenaWPF
             {
                 case LogLevel.Error: para.Foreground = Brushes.Red; break;
                 case LogLevel.Info: para.Foreground = Brushes.Black; break;
-                case LogLevel.Warning: para.Foreground = Brushes.Yellow; break;
+                case LogLevel.Warning: para.Foreground = Brushes.Orange; break;
             }
             _outputRichTextBox.Document.Blocks.Add(para);
             i++;

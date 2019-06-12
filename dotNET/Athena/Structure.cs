@@ -14,6 +14,7 @@ namespace Rigsarkiv.Athena
         const string SchemasPath = "{0}\\Schemas";
         const string SchemasLocalSharedPath = "{0}\\Schemas\\localShared";
         const string SchemasStandardPath = "{0}\\Schemas\\standard";
+        const string TablesPath = "{0}\\Tables";
         private string _destPath = null;
         private string _destFolder = null;
         private string _destFolderPath = null;
@@ -36,16 +37,16 @@ namespace Rigsarkiv.Athena
         /// <summary>
         /// 
         /// </summary>
-        public override void Run()
+        public override bool Run()
         {
+            var result = false;
             var folderName = _srcPath.Substring(_srcPath.LastIndexOf("\\") + 1);
             folderName = folderName.Substring(0, folderName.LastIndexOf("."));
             _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = "", Message = string.Format("Start Converting structure {0} -> {1}", folderName, _destFolder) });
-            if (EnsureRootFolder() && CopyFolders() && EnsureSchemas())
-            {
-                
-            }
-            _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = "", Message = "End Converting structure" });
+            if (EnsureRootFolder() && CopyFolders() && EnsureSchemas() && EnsureTables()) { result = true; }
+            var message = result ? "End Converting structure" : "End Converting structure with errors";
+            _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = "", Message = message });
+            return result;
         }
 
         private bool EnsureRootFolder()
@@ -59,7 +60,7 @@ namespace Rigsarkiv.Athena
                     Directory.Delete(_destFolderPath, true);
                 }
                 _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Create path: {0}", _destFolderPath) });
-                DirectoryInfo di = Directory.CreateDirectory(_destFolderPath);
+                Directory.CreateDirectory(_destFolderPath);
             }
             catch (IOException ex)
             {
@@ -69,6 +70,22 @@ namespace Rigsarkiv.Athena
             return result;
         }
 
+        private bool EnsureTables()
+        {
+            var result = true;
+            try
+            {
+                var path = string.Format(TablesPath, _destFolderPath);
+                _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Ensure Tables : {0}", path) });
+                Directory.CreateDirectory(path);
+            }
+            catch (IOException ex)
+            {
+                result = false;
+                _logManager.Add(new LogEntity() { Level = LogLevel.Error, Section = _logSection, Message = string.Format("EnsureTables Failed: {0}", ex.Message) });
+            }
+            return result;
+        }
         private bool EnsureSchemas()
         {
             var result = true;
