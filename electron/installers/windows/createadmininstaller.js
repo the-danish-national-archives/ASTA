@@ -17,7 +17,7 @@ function getInstallerConfig () {
     appDirectory: path.join(outPath, 'file-converter-admin-app-win32-ia32/'),
     authors: 'ProActive',
     noMsi: true,
-    outputDirectory: path.join(outPath, 'windows-installer'),
+    outputDirectory: path.join(outPath, 'windows-installer-admin'),
     exe: 'file-converter-admin-app.exe',
     setupExe: 'FileConverterAdmin.exe',
     setupIcon: path.join(rootPath, 'assets', 'icons', 'win', 'SA_Krone_App.ico')
