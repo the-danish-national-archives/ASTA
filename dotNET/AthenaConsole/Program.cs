@@ -13,11 +13,11 @@ namespace Rigsarkiv.AthenaConsole
         private static Athena.Converter _converter = null;
         static void Main(string[] args)
         {
-            if (args != null && args.Length > 1)
+            if (args != null && args.Length > 2)
             {
                 _logManager = new LogManager();
                 _logManager.LogAdded += OnLogAdded;
-                _converter = new Athena.Converter(_logManager, args[0], args[1]);
+                _converter = new Athena.Structure(_logManager, args[0], args[1], args[2]);
                 _converter.Run();
             }
         }

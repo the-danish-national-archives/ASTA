@@ -1,4 +1,5 @@
 ﻿using Rigsarkiv.Athena.Logging;
+using Rigsarkiv.AthenaWPF;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -16,8 +17,11 @@ namespace AthenaWPF
     /// </summary>
     public partial class MainWindow : Window
     {
+        const string DestFolderName = "AVID.SA.{0}.1";
+        private StructureViewModel _viewModel = new StructureViewModel();
         private string _srcPath = null;
         private string _destPath = null;
+        private string _destFolder = null;
         private LogManager _logManager = null;
         private Rigsarkiv.Athena.Converter _converter = null;
         private RichTextBox _outputRichTextBox = null;
@@ -27,11 +31,15 @@ namespace AthenaWPF
         public MainWindow()
         {
             InitializeComponent();
+            DataContext = _viewModel;
             var args = Environment.GetCommandLineArgs();
             if (args != null && args.Length > 1)
             {
                 _srcPath = args[1];
                 if (args.Length == 3) { _destPath = args[2]; }
+                var folderName = _srcPath.Substring(_srcPath.LastIndexOf("\\") + 1);
+                folderName = folderName.Substring(0, folderName.LastIndexOf("."));
+                _destFolder = string.Format(DestFolderName, folderName.Substring(3));
             }
             Update();
             _outputRichTextBox = (RichTextBox)FindName("outputRichTextBox");
@@ -39,10 +47,13 @@ namespace AthenaWPF
 
         private void Update()
         {
-            var pathTextBox = (TextBox)FindName("sipTextBox");
-            pathTextBox.Text = _srcPath;
-            pathTextBox = (TextBox)FindName("aipTextBox");
-            pathTextBox.Text = _destPath;
+            _destPath = "xxx";
+            var textBox = (TextBox)FindName("sipTextBox");
+            textBox.Text = _srcPath;
+            textBox = (TextBox)FindName("aipTextBox");
+            textBox.Text = _destPath;
+            textBox = (TextBox)FindName("aipNameTextBox");
+            textBox.Text = _destFolder;
         }
 
         private void SipButton_Click(object sender, RoutedEventArgs e)
@@ -58,7 +69,7 @@ namespace AthenaWPF
             if (result == WinForms.DialogResult.OK)
             {
                 _srcPath = openFileDlg.FileName;
-                Update();
+                ((TextBox)FindName("sipTextBox")).Text = _srcPath;
             }
         }
 
@@ -72,20 +83,23 @@ namespace AthenaWPF
             if (result == WinForms.DialogResult.OK)
             {
                 _destPath = folderDialog.SelectedPath;
-                Update();
+                ((TextBox)FindName("aipTextBox")).Text = _destPath;
             }
         }
 
         private void ConvertButton_Click(object sender, RoutedEventArgs e)
         {
-            _logEntities = new List<LogEntity>();
+            i = 0;
             _outputRichTextBox.Document.Blocks.Clear();
+            _viewModel.Validate();
+            if(_viewModel.HasErrors) { return; }
+
+            _logEntities = new List<LogEntity>();            
             _logManager = new LogManager();
             _logManager.LogAdded += OnLogAdded;
-            _converter = new Rigsarkiv.Athena.Converter(_logManager, _srcPath, _destPath);
+            _converter = new Rigsarkiv.Athena.Structure(_logManager, _srcPath, _destPath, _destFolder);
             _converter.Run();
-
-            i = 0;
+            
             var timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromMilliseconds(1000);
             timer.Tick += new EventHandler(timer_Tick);

@@ -6,19 +6,29 @@
         xmlns:local="clr-namespace:AthenaWPF"
         mc:Ignorable="d"
         Title="ASTA - Athena" Height="450" Width="800">
+    <Window.Resources>
+        <ControlTemplate x:Key="validationTemplate">
+            <DockPanel>
+                <TextBlock Foreground="Red" FontSize="25" Text="*" DockPanel.Dock="Right" />
+                <AdornedElementPlaceholder/>
+            </DockPanel>
+        </ControlTemplate>
+    </Window.Resources>
     <Grid>
         <Label Content="SIP mappe:" HorizontalAlignment="Left" Margin="21,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.01,0.073"/>
-        <TextBox x:Name="sipTextBox" HorizontalAlignment="Left" Height="23" Margin="136,13,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="445"/>
-        <Button x:Name="sipButton" Click="SipButton_Click" Content="Browse" HorizontalAlignment="Left" Margin="616,13,0,0" VerticalAlignment="Top" Width="75"/>
-        <Label Content="AIP mappe:" HorizontalAlignment="Left" Margin="22,57,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="aipTextBox" HorizontalAlignment="Left" Height="23" Margin="136,57,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="445"/>
-        <Button x:Name="aipButton" Click="AipButton_Click" Content="Browse" HorizontalAlignment="Left" Margin="616,57,0,0" VerticalAlignment="Top" Width="75"/>
-        <Button x:Name="convertButton" Click="ConvertButton_Click" Content="Convert" HorizontalAlignment="Left" Margin="616,114,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="-0.224,-0.081"/>
-        <RichTextBox x:Name="outputRichTextBox" HorizontalAlignment="Left" Height="217" Margin="22,168,0,0" VerticalAlignment="Top" Width="739" IsDocumentEnabled="True" VerticalScrollBarVisibility="Visible">
+        <TextBox x:Name="sipTextBox" HorizontalAlignment="Left" Height="23" Margin="136,13,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="511"/>
+        <Button x:Name="sipButton" Click="SipButton_Click" Content="Browse" HorizontalAlignment="Left" Margin="676,13,0,0" VerticalAlignment="Top" Width="75"/>
+        <Label Content="AIP mappe:" HorizontalAlignment="Left" Margin="21,92,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="aipTextBox" Text="{Binding Text}" Validation.ErrorTemplate="{StaticResource validationTemplate}" HorizontalAlignment="Left" Height="23" Margin="136,95,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="511"/>
+        <Button x:Name="aipButton" Click="AipButton_Click" Content="Browse" HorizontalAlignment="Left" Margin="676,95,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button x:Name="convertButton" Click="ConvertButton_Click" Content="Convert" HorizontalAlignment="Left" Margin="676,139,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="-0.224,-0.081"/>
+        <RichTextBox x:Name="outputRichTextBox" HorizontalAlignment="Left" Height="239" Margin="22,172,0,0" VerticalAlignment="Top" Width="739" IsDocumentEnabled="True" VerticalScrollBarVisibility="Visible">
             <FlowDocument>
-                
+
             </FlowDocument>
         </RichTextBox>
         <Label x:Name="test" Content="" HorizontalAlignment="Left" Margin="31,129,0,0" VerticalAlignment="Top" Width="62"/>
+        <Label Content="AIP navn:" HorizontalAlignment="Left" Margin="22,49,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="aipNameTextBox" HorizontalAlignment="Left" Height="23" Margin="136,52,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="511"/>
     </Grid>
 </Window>

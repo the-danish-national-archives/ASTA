@@ -9,28 +9,19 @@ namespace Rigsarkiv.Athena
 {
     public class Converter
     {
-        private LogManager _logManager = null;
-        private string _srcPath = null;
-        private string _destPath = null;
+        protected LogManager _logManager = null;
+        protected string _srcPath = null;
+        protected string _logSection = "";
 
-        public Converter(LogManager logManager,string srcPath,string destPath)
+        public Converter(LogManager logManager,string srcPath)
         {
             _logManager = logManager;
-            _srcPath = srcPath;
-            _destPath = destPath;
+            _srcPath = srcPath;           
         }
 
-        public void Run()
+        public virtual void Run()
         {
-            
-            _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = "", Message = "Start Convert" });
-            for(var i =0; i < 10; i++)
-            {
-                var level = (i < 5) ? LogLevel.Info : LogLevel.Warning;
-                _logManager.Add(new LogEntity() { Level = level, Section = "Structure", Message = "Processs ...." });
-            }
-            _logManager.Add(new LogEntity() { Level = LogLevel.Error, Section = "Data", Message = "Error ...." });
-            _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = "", Message = "End Convert" });
+
         }
     }
 }
