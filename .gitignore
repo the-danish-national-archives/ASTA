@@ -21,3 +21,9 @@ RELEASES
 /dotNET/.vs/Athena/v15
 /dotNET/Athena/bin/Release/Athena.pdb
 /dotNET/Athena/obj/Release
+/dotNET/Athena/bin/Debug
+/dotNET/AthenaConsole/obj/Debug
+/dotNET/AthenaForm/obj/Debug
+/dotNET/AthenaWPF/obj/Debug
+/electron/assets/scripts/Athena.pdb
+/electron/assets/scripts/AthenaWPF.pdb

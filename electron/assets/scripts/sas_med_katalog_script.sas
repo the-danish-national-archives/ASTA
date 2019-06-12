@@ -1,5 +1,5 @@
 /*
-Version: 1.0
+Version: 2.0
 Encoding: UTF-8 without byte order mark
 Note: The working directory must contain the data file (sas7bdat) and catalog file (sas7bcat)
 NB: The data and catalog files must have the same name
@@ -46,21 +46,49 @@ if varnum(id, 'Format')=0 then Format='';
 rc=close(id);
 drop rc id;
 run;
-* Create output with variable name and format;
+* Get code list items;
+proc catalog catalog=mylib.&inputSas;
+contents out=mylib.odsFmtOut;
+run;
+* Get ready for merge;
+data mylib.odsFmtOut(keep=FmtNam CodeList);
+set mylib.odsFmtOut;
+FmtNam=upcase(cat(strip(name),'.'));
+if type='FORMATC' then FmtNam=upcase(cat('$',strip(name),'.'));
+CodeList=1;
+run;
+* Merge to get code-list vars flagged;
+proc sql;
+create table mylib.odsOut as
+select a.*, b.Codelist
+from mylib.odsOut a left join mylib.odsFmtOut b on upcase(a.Format)=b.FmtNam;
+quit;
+* Sort according to original order;
+proc sort data=mylib.odsOut;by num;run;
+* Create output with variable name, type and format;
 data mylib.varNames(keep=varNameFormat);
 set mylib.odsOut;
 format Format $char200.;
-*If format is missing, map the generic type to format;
-if lowcase(type) eq 'num' then type='';
+format VarType $char200.;
+*If format is missing, or we have a UserFormat, map the generic type to type;
+if lowcase(type) eq 'num' then type='f';
 else
 do;
 if lowcase(type) EQ 'char' then type='$';
 end;
-if Format eq '' then Format=cats(type,len,'.');
-* If present in format, remove "char" and "best";
-if prxmatch('/\$char\d+\./',lowcase(strip(Format)))>0 then Format=cats(type,len,'.');
-if prxmatch('/best\d*\./',lowcase(strip(Format)))>0 then Format=cats(type,len,'.');
-varNameFormat=cat(strip(Variable),' ',strip(lowcase(Format)));
+if Format eq '' or CodeList=1 then do;
+VarType=cats(type,len,'.');
+if CodeList=1 then Format=lowcase(Format);
+end;
+else do;
+if indexc('char',lowcase(Format))>0 then Format=cats(type,len,'.');
+if prxmatch('/f\d*\./',lowcase(strip(Format)))>0 then Format=cats(type,len,'.');
+if prxmatch('/\d*\./',lowcase(strip(Format)))=1 then Format=cats(type,len,'.');
+VarType=Format;
+Format='';
+end;								  
+
+varNameFormat=cat(strip(Variable),' ',strip(lowcase(VarType)),' ',strip(lowcase(Format)));
 run;
 * Write output to file;
 %let name=%str({2}_VARIABEL.txt);
@@ -70,6 +98,8 @@ set mylib.varNames;
 file "&outfile" encoding='utf-8' dsd dlm='09'x lrecl=2000000;
 put(_all_)(+0);
 run;
+
+proc datasets lib=mylib;delete odsFmtOut;quit;
 
 * CREATE VARIABELBESKRIVELSE;
 data mylib.varLabels(keep=varLabels);
@@ -91,7 +121,7 @@ run;
 
 * CREATE KODELISTE;
 %let name=%str(valLabels);
-%let outfile=&outDir&name;
+%let outfile=&dataDir&name;
 * Get content from the catalog file;
 proc format out="&outfile" fmtlib library=mylib.&inputSas;
 run;

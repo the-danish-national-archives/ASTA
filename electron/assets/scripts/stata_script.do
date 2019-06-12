@@ -1,5 +1,5 @@
 /*
-Version: 1.0
+Version: 2.0
 Encoding: UTF-8 without byte order mark
 Note: The working directory must contain the data file (dta)
 */
