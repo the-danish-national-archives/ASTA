@@ -101,9 +101,6 @@ i {
     border: solid 0.5px #faebcc; 
     color: #8a6d3b;
     padding: 10px;
-    /* background-color: #fcffe3;
-    border: solid 1.5px #000; 
-    color: #8a6d3b; */
 }
 
 .confirmation {
@@ -367,6 +364,13 @@ a.selected:hover {
     text-decoration-line: underline;
 }
 
+.rightContent {
+    width: 50%;
+}
+
+#hybris-structure-path, #hybris-structure-delivery-package{
+    width: 75%;
+}
 /* Nemesis layout END */
 
 /* Nemesis output log elements */
