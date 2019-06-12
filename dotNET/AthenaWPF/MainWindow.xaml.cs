@@ -124,5 +124,21 @@ namespace AthenaWPF
         {
             _logEntities.Add(e.LogEntity);
         }
+
+        /// <summary>
+        /// https://docs.microsoft.com/en-us/dotnet/framework/wpf/controls/how-to-save-load-and-print-richtextbox-content
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void PrintButton_Click(object sender, RoutedEventArgs e)
+        {
+            PrintDialog pd = new PrintDialog();
+            if ((pd.ShowDialog() == true))
+            {
+                //use either one of the below      
+                pd.PrintVisual(_outputRichTextBox as Visual, "printing as visual");
+                pd.PrintDocument((((IDocumentPaginatorSource)_outputRichTextBox.Document).DocumentPaginator), "printing as paginator");
+            }
+        }
     }
 }

@@ -5,7 +5,7 @@ using System.Reflection;
 namespace Rigsarkiv.Athena
 {
     /// <summary>
-    /// 
+    /// Structure Converter
     /// </summary>
     public class Structure : Converter
     {
@@ -15,37 +15,29 @@ namespace Rigsarkiv.Athena
         const string SchemasLocalSharedPath = "{0}\\Schemas\\localShared";
         const string SchemasStandardPath = "{0}\\Schemas\\standard";
         const string TablesPath = "{0}\\Tables";
-        private string _destPath = null;
-        private string _destFolder = null;
-        private string _destFolderPath = null;
-
+        
         /// <summary>
-        /// 
+        /// Constructore
         /// </summary>
         /// <param name="logManager"></param>
         /// <param name="srcPath"></param>
         /// <param name="destPath"></param>
         /// <param name="destFolder"></param>
-        public Structure(LogManager logManager, string srcPath, string destPath, string destFolder) : base(logManager, srcPath)
+        public Structure(LogManager logManager, string srcPath, string destPath, string destFolder) : base(logManager, srcPath, destPath, destFolder)
         {
             _logSection = "Structure";
-            _destPath = destPath;
-            _destFolder = destFolder;
-            _destFolderPath = string.Format("{0}\\{1}", _destPath, _destFolder);
         }
 
         /// <summary>
-        /// 
+        /// start converter
         /// </summary>
         public override bool Run()
         {
             var result = false;
-            var folderName = _srcPath.Substring(_srcPath.LastIndexOf("\\") + 1);
-            folderName = folderName.Substring(0, folderName.LastIndexOf("."));
-            _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = "", Message = string.Format("Start Converting structure {0} -> {1}", folderName, _destFolder) });
-            if (EnsureRootFolder() && CopyFolders() && EnsureSchemas() && EnsureTables()) { result = true; }
+            _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Start Converting structure {0} -> {1}", _srcFolder, _destFolder) });
+            if (EnsureRootFolder() && CopyFolders() && EnsureSchemas() && EnsureTables() && CopySchemas()) { result = true; }
             var message = result ? "End Converting structure" : "End Converting structure with errors";
-            _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = "", Message = message });
+            _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = message });
             return result;
         }
 
@@ -96,26 +88,43 @@ namespace Rigsarkiv.Athena
                 Directory.CreateDirectory(path);
                 Directory.CreateDirectory(string.Format(SchemasLocalSharedPath, _destFolderPath));
                 path = string.Format(SchemasStandardPath, _destFolderPath);
-                Directory.CreateDirectory(path);
-                var assembly = Assembly.GetExecutingAssembly();
-                foreach(string name in assembly.GetManifestResourceNames())
-                {
-                    var names = name.Split('.');
-                    var fileName = string.Format("{0}.{1}", names[names.Length - 2], names[names.Length - 1]);
-                    _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Ensure resource : {0}", fileName) });
-                    using (Stream stream = assembly.GetManifestResourceStream(name))
-                    {
-                        using (var fileStream = new FileStream(string.Format("{0}\\{1}", path, fileName), FileMode.Create, FileAccess.Write))
-                        {
-                            stream.CopyTo(fileStream);
-                        }
-                    }
-                }
+                Directory.CreateDirectory(path);                
             }
             catch (IOException ex)
             {
                 result = false;
                 _logManager.Add(new LogEntity() { Level = LogLevel.Error, Section = _logSection, Message = string.Format("EnsureSchemas Failed: {0}", ex.Message) });
+            }
+            return result;
+        }
+        private bool CopySchemas()
+        {
+            var result = true;
+            try
+            {
+                var path = string.Format(SchemasStandardPath, _destFolderPath);
+                var assembly = Assembly.GetExecutingAssembly();
+                foreach(string name in assembly.GetManifestResourceNames())
+                {
+                    var names = name.Split('.');
+                    if(names[names.Length - 1].ToLower() == "xsd")
+                    {
+                        var fileName = string.Format("{0}.{1}", names[names.Length - 2], names[names.Length - 1]);
+                        _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Ensure resource : {0}", fileName) });
+                        using (Stream stream = assembly.GetManifestResourceStream(name))
+                        {
+                            using (var fileStream = new FileStream(string.Format("{0}\\{1}", path, fileName), FileMode.Create, FileAccess.Write))
+                            {
+                                stream.CopyTo(fileStream);
+                            }
+                        }
+                    }                    
+                }
+            }
+            catch (IOException ex)
+            {
+                result = false;
+                _logManager.Add(new LogEntity() { Level = LogLevel.Error, Section = _logSection, Message = string.Format("CopySchemas Failed: {0}", ex.Message) });
             }
             return result;
         }

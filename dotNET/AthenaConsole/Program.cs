@@ -18,7 +18,11 @@ namespace Rigsarkiv.AthenaConsole
                 _logManager = new LogManager();
                 _logManager.LogAdded += OnLogAdded;
                 _converter = new Athena.Structure(_logManager, args[0], args[1], args[2]);
-                _converter.Run();
+                if(_converter.Run())
+                {
+                    _converter = new Athena.MetaData(_logManager, args[0], args[1], args[2]);
+                    _converter.Run();
+                }
             }
         }
 
