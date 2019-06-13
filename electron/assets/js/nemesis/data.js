@@ -11,7 +11,7 @@ function (n) {
         const path = require('path');
         const os = require('os');
         const chardet = require('chardet');
-        const csv = require('csv-parser');
+        const csv = require('fast-csv');
         const { spawn } = require('child_process');
         const codeListPattern = /^\.[a-zA-Z]$/;
         const doubleApostrophePattern1 = /^"([\w\W\s]*)"$/;
