@@ -50,6 +50,9 @@ namespace Rigsarkiv.Athena
                 foreach(var table in (object[])_metadata)
                 {
                     var tableInfo = ((Dictionary<string, object>)table);
+                    var fragment = _tableDocument.CreateDocumentFragment();
+                    fragment.InnerXml = TableNode;
+
                 }
 
                 result = true;
