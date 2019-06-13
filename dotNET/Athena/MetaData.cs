@@ -14,11 +14,15 @@ namespace Rigsarkiv.Athena
     public class MetaData : Converter
     {
         const string ResourcePrefix = "Rigsarkiv.Athena.Resources.{0}";
-        const string ColumnNode = "<column><name>{0}</name><columnID>c{1}</columnID><type>{2}</type><typeOriginal>{3}</typeOriginal><nullable>false</nullable><description>{4}</description></column>";
+        const string ColumnNode = "<column><name></name><columnID></columnID><type></type><typeOriginal></typeOriginal><nullable>false</nullable><description></description></column>";
         const string TableNode = "<table><name></name><folder></folder><description></description><columns></columns><primaryKey><name>PK_</name><column></column></primaryKey><foreignKeys></foreignKeys><rows></rows></table>";
-
+        const string IndicesPath = "{0}\\Indices";
+        const string TableIndex = "tableIndex.xml";
+        const string TableFolderPrefix = "table{0}";
         private dynamic _metadata = null;
         private XmlDocument _tableDocument = null;
+        private int _tablesCounter = 0;
+
         /// <summary>
         /// Constructore
         /// </summary>
@@ -31,7 +35,7 @@ namespace Rigsarkiv.Athena
             var assembly = Assembly.GetExecutingAssembly();
             _logSection = "Metadata";
             _tableDocument = new XmlDocument();
-            using (Stream stream = assembly.GetManifestResourceStream(string.Format(ResourcePrefix,"tableIndex.xml")))
+            using (Stream stream = assembly.GetManifestResourceStream(string.Format(ResourcePrefix, TableIndex)))
             {
                 _tableDocument.Load(stream);
             }
@@ -45,16 +49,8 @@ namespace Rigsarkiv.Athena
         {
             var result = false;
              _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Start Converting Metadata {0} -> {1}", _srcFolder, _destFolder) });
-            if(LoadJson())
-            {
-                foreach(var table in (object[])_metadata)
-                {
-                    var tableInfo = ((Dictionary<string, object>)table);
-                    var fragment = _tableDocument.CreateDocumentFragment();
-                    fragment.InnerXml = TableNode;
-
-                }
-
+            if(LoadJson() && EnsureTableIndex())
+            {                
                 result = true;
             }
             var message = result ? "End Converting Metadata" : "End Converting Metadata with errors";
@@ -62,7 +58,54 @@ namespace Rigsarkiv.Athena
             return result;
         }
 
-        private bool LoadJson()
+        private bool EnsureTableIndex()
+        {
+            var result = true;
+            try
+            {
+                var path = string.Format(IndicesPath, _destFolderPath);
+                _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Updade tableIndex.xml: {0}", path) });
+                foreach (var table in (object[])_metadata)
+                {
+                    var tableInfo = (Dictionary<string, object>)table;
+                    AddTableNode(tableInfo);
+                }
+                _tableDocument.DocumentElement.SetAttribute("xmlns", "http://www.sa.dk/xmlns/diark/1.0");
+                _tableDocument.Save(string.Format("{0}\\{1}", path, TableIndex));
+            }
+            catch (Exception ex)
+            {
+                result = false;
+                _logManager.Add(new LogEntity() { Level = LogLevel.Error, Section = _logSection, Message = string.Format("EnsureTableIndex Failed: {0}", ex.Message) });
+            }
+            return result;
+        }
+
+        private void AddTableNode(Dictionary<string, object> tableInfo)
+        {
+            var fragment = _tableDocument.CreateDocumentFragment();
+            fragment.InnerXml = TableNode;
+            _tablesCounter++;
+            var node = _tableDocument.SelectSingleNode("//tables").AppendChild(fragment);
+            node.SelectSingleNode("name").InnerText = tableInfo["name"].ToString();
+
+            node.SelectSingleNode("folder").InnerText = string.Format(TableFolderPrefix, _tablesCounter);
+            node.SelectSingleNode("rows").InnerText = tableInfo["rows"].ToString();
+            node.SelectSingleNode("description").InnerText = tableInfo["description"].ToString();
+            foreach (var variable in (object[])tableInfo["variables"])
+            {
+                var variableInfo = (Dictionary<string, object>)variable;
+                AddColumnNode(variableInfo,node);
+            }
+        }
+
+        private void AddColumnNode(Dictionary<string, object> variableInfo,XmlNode tableNode)
+        {
+            var fragment = _tableDocument.CreateDocumentFragment();
+            fragment.InnerXml = ColumnNode;
+        }
+
+            private bool LoadJson()
         {
             var result = true;
             try

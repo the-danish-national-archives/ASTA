@@ -649,6 +649,10 @@ function (n) {
                         table.name = lines[index].trim(); 
                     } 
                 }
+                if(label === settings.metadataLabels[2]) 
+                { 
+                    table.description = lines[index].trim(); 
+                }
                 if(lines[index + 1].trim() !== "") {
                     result = LogError("-CheckMetadata-FileLabel-ValueMax-Error",settings.fileName,label);
                 }
@@ -931,7 +935,7 @@ function (n) {
                         result = LogError("-CheckMetadata-FileEncoding-Error",settings.fileName);
                     } 
                     else {
-                        settings.data.push({ "fileName":settings.fileName,"errorStop":false, "system":"", "name":"", "variables":[], "rows":0 })
+                        settings.data.push({ "fileName":settings.fileName,"errorStop":false, "system":"", "name":"", "description":"", "rows":0, "variables":[] })
                         if(!ValidateMetadata(metadataFilePath)) { result = false; }
                         GetTableData(settings.fileName).errorStop = settings.errorStop;
                         settings.errorStop = false;
