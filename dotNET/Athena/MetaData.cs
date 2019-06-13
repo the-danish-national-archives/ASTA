@@ -15,11 +15,13 @@ namespace Rigsarkiv.Athena
     {
         const string ResourcePrefix = "Rigsarkiv.Athena.Resources.{0}";
         const string ColumnNode = "<column><name></name><columnID></columnID><type></type><typeOriginal></typeOriginal><nullable>false</nullable><description></description></column>";
-        const string TableNode = "<table><name></name><folder></folder><description></description><columns></columns><primaryKey><name>PK_</name><column></column></primaryKey><foreignKeys></foreignKeys><rows></rows></table>";
+        const string TableNode = "<table><name></name><folder></folder><description></description><columns></columns><primaryKey><name></name></primaryKey><foreignKeys></foreignKeys><rows></rows></table>";
+        const string PrimaryKeyColumnNode = "<column></column>";
         const string IndicesPath = "{0}\\Indices";
         const string TableIndex = "tableIndex.xml";
         const string TableFolderPrefix = "table{0}";
         const string ColumnIDPrefix = "c{0}";
+        const string PrimaryKeyPrefix = "PK_{0}";
         const string VarCharPrefix = "VARCHAR({0})";
         private dynamic _metadata = null;
         private XmlDocument _tableDocument = null;
@@ -91,10 +93,12 @@ namespace Rigsarkiv.Athena
             _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add {0} to tableIndex.xml", folder) });
 
             var node = CreateNode(_tableDocument, _tableDocument.SelectSingleNode("//tables"), TableNode);
-            node.SelectSingleNode("name").InnerText = tableInfo["name"].ToString();
+            var tableName = tableInfo["name"].ToString();
+            node.SelectSingleNode("name").InnerText = tableName;
             node.SelectSingleNode("folder").InnerText = folder;
             node.SelectSingleNode("rows").InnerText = tableInfo["rows"].ToString();
             node.SelectSingleNode("description").InnerText = tableInfo["description"].ToString();
+            node.SelectSingleNode("primaryKey/name").InnerText = string.Format(PrimaryKeyPrefix, tableName);
             foreach (var variable in (object[])tableInfo["variables"])
             {
                 var variableInfo = (Dictionary<string, object>)variable;
@@ -105,11 +109,18 @@ namespace Rigsarkiv.Athena
         private void AddColumnNode(Dictionary<string, object> variableInfo,XmlNode tableNode,int index)
         {
             var node = CreateNode(_tableDocument, tableNode.SelectSingleNode("columns"), ColumnNode);
-            node.SelectSingleNode("name").InnerText = variableInfo["name"].ToString();
+            var columnName = variableInfo["name"].ToString();
+            node.SelectSingleNode("name").InnerText = columnName;
             node.SelectSingleNode("columnID").InnerText = string.Format(ColumnIDPrefix, index);
             node.SelectSingleNode("typeOriginal").InnerText = variableInfo["format"].ToString();
             node.SelectSingleNode("description").InnerText = variableInfo["description"].ToString();
             node.SelectSingleNode("type").InnerText = GetMappedType(variableInfo);
+            if((bool)variableInfo["isKey"])
+            {
+                _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add key: {0} ", columnName) });
+                var primaryKeyNode = CreateNode(_tableDocument, tableNode.SelectSingleNode("primaryKey"), PrimaryKeyColumnNode);
+                primaryKeyNode.InnerText = columnName;
+            }
         }
 
         private string GetMappedType(Dictionary<string, object> variableInfo)
