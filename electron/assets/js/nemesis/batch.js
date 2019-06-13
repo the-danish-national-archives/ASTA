@@ -119,7 +119,9 @@ function (n) {
                 else {
                     settings.spinner.className = "";                
                     CopyFile();
-                    EnsureData();                
+                    EnsureData(); 
+                    settings.selectDirBtn.disabled = false;
+                    settings.validateBtn.disabled = false;               
                 }           
             }
             else {
@@ -142,6 +144,8 @@ function (n) {
 
         //start run batching delete existing log
         var Run = function () {
+            settings.selectDirBtn.disabled = true;
+            settings.validateBtn.disabled = true;
             settings.logsDate = new Date();            
             settings.spinner.className = settings.spinnerClass;
             Reset();
@@ -167,8 +171,14 @@ function (n) {
         //add Event Listener to HTML elmenets
         var AddEvents = function () {
             settings.validateBtn.addEventListener('click', (event) => {
-                if(settings.selectedPath == null || settings.pathDirTxt.value === "") { return; }                
-                Run();
+                if(settings.selectedPath == null || settings.pathDirTxt.value === "") { return; }
+                try {
+                    Run();
+                }
+                catch(err) 
+                {
+                    err.Handle(settings.outputErrorSpn,settings.outputErrorText);
+                } 
             })
             settings.selectDirBtn.addEventListener('click', (event) => {
                 ipcRenderer.send('batch-open-file-dialog');
@@ -185,7 +195,7 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Nemesis.Batch = { 
-            initialize: function (rightsCallback,structureCallback,outputErrorId,selectDirectoryId,pathDirectoryId,validateId,spinnerId,okId,selectLogfileId,supplementId,panelId) {            
+            initialize: function (rightsCallback,structureCallback,outputErrorId,selectDirectoryId,pathDirectoryId,validateId,spinnerId,okId,selectLogfileId,supplementId,panelId,spinnerClassName) {            
                 settings.rightsCallback = rightsCallback;
                 settings.structureCallback = structureCallback;
                 settings.outputErrorSpn = document.getElementById(outputErrorId);
@@ -194,7 +204,7 @@ function (n) {
                 settings.pathDirTxt = document.getElementById(pathDirectoryId);
                 settings.validateBtn = document.getElementById(validateId);
                 settings.spinner = document.getElementById(spinnerId);
-                settings.spinnerClass = settings.spinner.className;
+                settings.spinnerClass = spinnerClassName;
                 settings.spinner.className = "";
                 settings.okSpn =  document.getElementById(okId);
                 settings.okText = settings.okSpn.innerHTML;

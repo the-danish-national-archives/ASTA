@@ -46,16 +46,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+<<<<<<< HEAD
     <Compile Include="Convertion.cs">
       <SubType>Form</SubType>
     </Compile>
+=======
+    <Compile Include="Convertion.cs" />
+>>>>>>> 1897294e563458d987df719b76eabb996a971dc4
     <Compile Include="Convertion.Designer.cs">
       <DependentUpon>Convertion.cs</DependentUpon>
     </Compile>
     <Compile Include="DummyData\FauxData.cs" />
+<<<<<<< HEAD
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
+=======
+    <Compile Include="Form1.cs" />
+>>>>>>> 1897294e563458d987df719b76eabb996a971dc4
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>

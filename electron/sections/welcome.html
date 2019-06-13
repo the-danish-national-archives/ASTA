@@ -1,0 +1,36 @@
+<template class="section-template">
+    <section id="welcome">
+        <header class="section-header">
+            <div class="section-wrapper">
+                <div class="header">
+                    <h1 class="title">Velkommen til ASTA</h1>
+                    <h1 class="title right">ASTA</h1>
+                </div>
+                <section>
+                    <div class="formularContainer">
+                        <div class="welcomeTextContainer">
+                            <div>
+                                <p>Når du skal aflevere statistikdata til Rigsarkivet eller til et stadsarkiv i Danmark skal de
+                                    afleveres i form af en afleveringspakke.</p>
+                                <p>Med ASTA kan du både skabe en afleveringspakke og teste om en afleveringspakke overholder de
+                                    krav til en afleveringspakke, som er specificeret i bilag 9 i bekendtgørelsen om arkiveringsversioner.</p>
+                                <p>Bekendtgørelsen og nyttige vejledninger finder du under menupunktet Vejledning.</p>
+                                <span id="welcome-Error" hidden="true"><br />Error: {0}</span>
+                                <p id="welcome-versionfooter">&copy; {0} <b>ASTA - Aflevering af Statistikfiler Til Arkiv</b> - Version: {1}</p>                                
+                            </div>
+                            <div>
+                                <img class="welcomeImg" src="./assets/images/Afleveringspakke_struktur.png" alt="Afleveringspakke struktur">
+                                <span class="imageText">Mappestruktur og indhold i en afleveringspakke</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </header>
+        <script type="text/javascript">
+            require('./assets/js/utilities');
+            require('./assets/js/version.js');
+            Rigsarkiv.Version.initialize("welcome-Error","welcome-versionfooter");
+          </script>
+    </section>
+</template>

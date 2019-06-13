@@ -21,13 +21,6 @@ function (n) {
         adminRight: "Rigsarkiv-Admin-20190401"
     }
 
-    //output system error messages
-    var HandleError = function(err) {
-        console.log(`Error: ${err}`);
-        settings.outputErrorSpn.hidden = false;
-        settings.outputErrorSpn.innerHTML = settings.outputErrorText.format(err.message);
-    }
-
     // Ensure rights Data
     var EnsureData = function() {
         var rightsFilePath = settings.scriptPath.format(settings.rightsFileName);        
@@ -65,7 +58,7 @@ function (n) {
             }
             catch(err) 
             {
-                HandleError(err);
+                err.Handle(settings.outputErrorSpn,settings.outputErrorText); 
             }            
         },
         callback: function () {

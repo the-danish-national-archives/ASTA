@@ -41,27 +41,20 @@ function (n) {
             defaultIndicesFiles: ["archiveIndex.xml","contextDocumentationIndex.xml"],
             defaultFolder: "FD.99999",
             logType: "structure",
-            errorsCounter: 0,
+            errors: 0,
             errorStop: false,
             documents: []            
         }
 
         //reset status & input fields
         var Reset = function () {
-            settings.errorsCounter = 0;
+            settings.errors = 0;
             settings.errorStop = false;
             settings.documents = [];
             $("span[id^='" + settings.outputPrefix + "']").hide();
              $("span[id^='" + settings.outputPrefix + "']").each(function() {
                 $(this).html("");
             });
-        }
-
-        //output system error messages
-        var HandleError = function(err) {
-            console.log(`Error: ${err}`);
-            settings.outputErrorSpn.hidden = false;
-            settings.outputErrorSpn.innerHTML = settings.outputErrorText.format(err.message);
         }
 
         // get selected folder name 
@@ -517,29 +510,33 @@ function (n) {
 
         //start flow validation
         var Validate = function() {
+            
             try 
             {
+                settings.selectDirBtn.disabled = true;
+                settings.validateBtn.disabled = true;
                 var folderName = GetFolderName();
                 settings.testId.innerText = folderName;
                 settings.logCallback().section(settings.logType,folderName,settings.logStartSpn.innerHTML);            
                 ValidateName();
                 ValidateStructure();
-                 if(settings.errorsCounter === 0) {
+                 if(settings.errors === 0) {
                     settings.logCallback().section(settings.logType,folderName,settings.logEndNoErrorSpn.innerHTML);
                 } else {
                     settings.logCallback().section(settings.logType,folderName,settings.logEndWithErrorSpn.innerHTML);                    
                 }
                 if(!settings.errorStop) { 
-                    return settings.metadataCallback().validate(settings.deliveryPackagePath,settings.outputText); 
+                    return settings.metadataCallback().validate(settings.deliveryPackagePath,settings.outputText,settings.errors); 
                 } 
                 else {
+                    settings.selectDirBtn.disabled = false;
+                    settings.validateBtn.disabled = false;
                     return settings.logCallback().commit(settings.deliveryPackagePath);
-                }                  
-                                
+                }               
             }
             catch(err) 
             {
-                HandleError(err);
+                err.Handle(settings.outputErrorSpn,settings.outputErrorText);
             }
             return null;
         }
@@ -550,6 +547,7 @@ function (n) {
                 Reset();
                 if(settings.selectedPath == null || settings.pathDirTxt.value === "") { return; }                
                 settings.deliveryPackagePath = settings.selectedPath[0];
+                settings.logCallback().spinnerEnable(true);
                 Validate();                           
             })
             settings.selectDirBtn.addEventListener('click', (event) => {
@@ -587,6 +585,7 @@ function (n) {
                 return { 
                     validate: function(path) 
                     { 
+                        settings.logCallback().spinnerEnable(false);
                         settings.deliveryPackagePath = path;
                         Reset();
                         return Validate();

@@ -3,6 +3,7 @@
   File dialogs & Popups
 */
 const {ipcMain, dialog} = require('electron')
+const {shell} = require('electron')
 
 ipcMain.on('structure-open-file-dialog', (event) => {
   dialog.showOpenDialog({
@@ -62,6 +63,21 @@ ipcMain.on('indexfiles-open-contextdocumentationindex-file-dialog', (event) => {
   })
 })
 
+ipcMain.on('contextdocuments-open-file-dialog', (event,id) => {
+  dialog.showOpenDialog({
+    properties: ['openFile'],
+    filters: [
+      {
+        "name": "context documentation file"
+      }
+    ]  
+  }, (files) => {
+    if (files) {
+      event.sender.send('contextdocuments-selected-file', files, id)
+    }
+  })
+})
+
 ipcMain.on('validation-open-file-dialog', (event) => {
   dialog.showOpenDialog({
     properties: ['openFile', 'openDirectory']
@@ -106,16 +122,16 @@ ipcMain.on('open-warning-dialog', (event,title,text) => {
   })
 })
 
-ipcMain.on('open-confirm-dialog', (event,title,text) => {
+ipcMain.on('open-confirm-dialog', (event,callbackId,title,text,okTest,cancelText) => {
   const options = {
     type: 'warning',
     title: title,
     message: text,
     cancelId: 1,
-    buttons: ['FORTSÆT', 'FORTRYD']
+    buttons: [okTest, cancelText]
   }
   dialog.showMessageBox(options, (index) => {
-    event.sender.send('confirm-dialog-selection', index)
+    event.sender.send('confirm-dialog-selection-' + callbackId, index)
   })
 })
 
@@ -129,4 +145,8 @@ ipcMain.on('open-error-dialog', (event,title,text) => {
   dialog.showMessageBox(options, (index) => {
     event.sender.send('error-dialog-selection', index)
   })
+})
+
+ipcMain.on('open-item', (event,path) => {
+  shell.openItem(path);
 })

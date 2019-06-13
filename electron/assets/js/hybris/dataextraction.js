@@ -14,11 +14,11 @@ function (n) {
     Rigsarkiv.Hybris = Rigsarkiv.Hybris || {},
     function (n) {
         const {ipcRenderer} = require('electron');
-        const {shell} = require('electron');
         const fs = require('fs');
         const path = require('path');
         const chardet = require('chardet');
         const os = require('os');
+        const MaxFileSize = 524288000;
 
         //private data memebers
         var settings = {
@@ -30,6 +30,8 @@ function (n) {
             selectStatisticsFileBtn: null,
             pathStatisticsFileTxt: null,
             okStatisticsBtn: null,
+            outputStructureOkSpn: null,
+            selectStructureDeliveryPackage: null,
             outputStatisticsErrorSpn: null,
             outputStatisticsErrorText: null,
             outputStatisticsOkCopyScriptSpn: null,
@@ -49,11 +51,19 @@ function (n) {
             selectedStatisticsFilePath: null,
             outputScriptOkSpn: null,
             outputScriptOkText: null,
+            metadataFileName: null,
             scriptPanel1: null,
             scriptPanel2: null,  
             okScriptBtn: null,
-            nextBtn: null,  
+            nextBtn: null, 
+            spinner: null, 
+            spinnerClass: null,
             metdataTab: null, 
+            headerLinkTrin2: null,
+            headerLinkTrin3: null,
+            headerLinkInformation2: null,
+            okConfirm: null,
+            cancelConfirm: null,
             okScriptDataPath: null,   
             scriptPath: "./assets/scripts/{0}",
             resourceWinPath: "resources\\{0}",
@@ -62,23 +72,22 @@ function (n) {
             outputOptionalPostfixFiles: ["{0}_KODELISTE.txt","{0}_BRUGERKODE.txt"],
             sasCatalogFileExt: "{0}.sas7bcat",
             dataPathPostfix: "Data",
-            dataTablePathPostfix: "table{0}"
-        }
-
-        //output system error messages
-        var HandleError = function(err) {
-            console.log(`Error: ${err}`);
-            settings.outputStatisticsErrorSpn.hidden = false;
-            settings.outputStatisticsErrorSpn.innerHTML = settings.outputStatisticsErrorText.format(err.message);
+            dataTablePathPostfix: "table{0}",
+            scriptPathLink: null            
         }
 
         //reset status & input fields
-        var Reset = function () {        
+        var Reset = function () { 
+            settings.okScriptBtn.hidden = false;       
             settings.outputStatisticsErrorSpn.hidden = true;
             settings.scriptPanel1.hidden = false;
             settings.scriptPanel2.hidden = true;
             settings.outputScriptOkSpn.hidden = true;
             settings.nextBtn.hidden = true;
+            settings.outputStructureOkSpn.hidden = true;
+            settings.headerLinkTrin2.innerHTML = "";
+            settings.headerLinkTrin3.innerHTML = "";
+            settings.headerLinkInformation2.innerHTML = "";
         }
 
         //get selected Statistics File name
@@ -88,6 +97,13 @@ function (n) {
             return folders[folders.length - 1];
         }
 
+        //get selected Statistics File path
+        var GetFolderPath = function() {
+            var filePath = settings.selectedStatisticsFilePath[0];
+            return filePath.substring(0,filePath.lastIndexOf((filePath.indexOf("\\") > -1) ? "\\" : "/"));
+        }
+
+
         //get renamed script file
         var GetScriptFileName = function() {
             var fileName = GetFileName();
@@ -96,50 +112,42 @@ function (n) {
             return "{0}.{1}".format(fileNameNoExt,scriptExt);        
         }
 
-        //Copy Statistics file to data table folder
-        var CopyData = function(fileName) {
-            var filePath = settings.selectedStatisticsFilePath[0];
-            var folderPath = filePath.substring(0,filePath.lastIndexOf((filePath.indexOf("\\") > -1) ? "\\" : "/"));
-            
-            console.log("copy file " + fileName + " to  " + folderPath);  
-            var srcFilePath = (folderPath.indexOf("\\") > -1) ? "{0}\\{1}".format(folderPath,fileName) : "{0}/{1}".format(folderPath,fileName);   
-            var destFilePath = (settings.dataFolderPath.indexOf("\\") > -1) ? "{0}\\{1}".format(settings.dataFolderPath,fileName) : "{0}/{1}".format(settings.dataFolderPath,fileName);
-            fs.copyFile(srcFilePath , destFilePath, (err) => {
-                if (err) {
-                    HandleError(err);
-                }
-            });
-        }
-
-        //Update script file with new dtat table path & file name
+        //Update script file with new data table path & file name
         var UpdateScript = function() {
-            var srcFilePath = settings.dataFolderPath;
+            var srcFilePath = GetFolderPath();
             srcFilePath += (srcFilePath.indexOf("\\") > -1) ? "\\{0}".format(GetScriptFileName()) : "/{0}".format(GetScriptFileName());
             fs.readFile(srcFilePath, (err, data) => {
                 if (err) {
-                    HandleError(err);
+                    err.Handle(settings.outputStatisticsErrorSpn,settings.outputStatisticsErrorText);
                 }
                 else {
-                     var filePath = settings.dataFolderPath;
+                    var folderPath = GetFolderPath();
+                    var filePath = folderPath;
                     filePath += (filePath.indexOf("\\") > -1) ? "\\{0}".format(GetScriptFileName()) : "/{0}".format(GetScriptFileName());
                     var fileName = GetFileName();  
-                    var folderPath = settings.dataFolderPath;
-                    if(fileName.substring(fileName.indexOf(".") + 1) === "sas7bdat") 
+                    var datafolderPath = settings.dataFolderPath;
+                    if(settings.scriptType === "SAS" || settings.scriptType === "Stata") 
                     { 
-                        folderPath = (folderPath.indexOf("\\") > -1) ? "{0}\\".format(folderPath) : "{0}/".format(folderPath);
+                        datafolderPath = (datafolderPath.indexOf("\\") > -1) ? "{0}\\".format(datafolderPath) : "{0}/".format(datafolderPath);
+                        if(settings.scriptType !== "Stata") { folderPath = (folderPath.indexOf("\\") > -1) ? "{0}\\".format(folderPath) : "{0}/".format(folderPath); }
                     }
-                    var updatedData = data.toString().format(folderPath,fileName.substring(0,fileName.indexOf(".")));
+                    var updatedData = data.toString().format(folderPath,datafolderPath,fileName.substring(0,fileName.indexOf(".")));
+                    console.log(`Update script file ${filePath}`);
                     fs.writeFile(filePath, updatedData, (err) => {
                         if (err) {
-                            HandleError(err);
+                            err.Handle(settings.outputStatisticsErrorSpn,settings.outputStatisticsErrorText);
                         }
                         else {
                             var scriptFileName = GetScriptFileName();
-                            settings.outputStatisticsOkCopyScriptSpn.innerHTML = settings.outputStatisticsOkCopyScriptText.format(settings.scriptType,scriptFileName,GetFileName());
-                            settings.outputStatisticsOkCopyScriptInfoSpn.innerHTML = settings.outputStatisticsOkCopyScriptInfoText.format(scriptFileName, settings.scriptApplication);
-                            settings.okScriptDataPath.innerHTML = settings.dataFolderPath;
+                            settings.outputStatisticsOkCopyScriptSpn.innerHTML = settings.outputStatisticsOkCopyScriptText.format(scriptFileName);
+                            settings.outputStatisticsOkCopyScriptInfoSpn.innerHTML = settings.outputStatisticsOkCopyScriptInfoText.format(settings.scriptApplication);
+                            settings.scriptPathLink.innerHTML = "[{0}]".format(GetFolderPath());
                             settings.scriptPanel1.hidden = true;
                             settings.scriptPanel2.hidden = false;
+                            var folders = settings.dataFolderPath.getFolders();
+                            settings.headerLinkTrin2.innerHTML = folders[folders.length - 1];
+                            settings.headerLinkTrin3.innerHTML = folders[folders.length - 1];
+                            settings.headerLinkInformation2.innerHTML = folders[folders.length - 1];
                         }
                     });
                 }
@@ -161,17 +169,18 @@ function (n) {
                     rootPath = folders.slice(0,folders.length - 4).join("/");
                     scriptFilePath = "{0}/{1}".format(rootPath,settings.scriptFileName);
                 }
-            }        
-            console.log(`copy script file ${settings.scriptFileName} to ${settings.dataFolderPath}`);
-            var destFilePath = settings.dataFolderPath;
+            }  
+            var destFilePath = GetFolderPath();
             destFilePath += (destFilePath.indexOf("\\") > -1) ? "\\{0}".format(scriptFileName) : "/{0}".format(scriptFileName);
+            console.log(`copy script file ${settings.scriptFileName} to ${destFilePath}`);
             fs.copyFile(scriptFilePath, destFilePath, (err) => {
                 if (err) {
-                HandleError(err);
+                    err.Handle(settings.outputStatisticsErrorSpn,settings.outputStatisticsErrorText);
                 }
                 else {
                     var scriptFileName = GetScriptFileName();
-                    console.log(scriptFileName + ' was copied to '+ settings.dataFolderPath);                
+                    var destFilePath = GetFolderPath();
+                    console.log(scriptFileName + ' was copied to ' + destFilePath);                
                     UpdateScript();                
                 }            
             });       
@@ -179,11 +188,10 @@ function (n) {
         
         //copy script file related to selected Statistics file
         var EnsureScript = function() {
-            var filePath = settings.selectedStatisticsFilePath[0];
-            var folderPath = filePath.substring(0,filePath.lastIndexOf((filePath.indexOf("\\") > -1) ? "\\" : "/"));
+            var folderPath = GetFolderPath();
             fs.readdir(folderPath, (err, files) => {
                 if (err) {
-                    HandleError(err);
+                    err.Handle(settings.outputStatisticsErrorSpn,settings.outputStatisticsErrorText);
                 }
                 else {
                     var fileName = GetFileName();
@@ -211,11 +219,9 @@ function (n) {
                         }; break;
                     }
                     if(!sasCatalogExists && fileExt === "sas7bdat") {
-                        ipcRenderer.send('open-confirm-dialog',settings.outputStatisticsSASWarningTitle.innerHTML,settings.outputStatisticsSASWarningText.innerHTML);
+                        ipcRenderer.send('open-confirm-dialog','dataextraction-catalogexists',settings.outputStatisticsSASWarningTitle.innerHTML,settings.outputStatisticsSASWarningText.innerHTML,settings.okConfirm.innerHTML,settings.cancelConfirm.innerHTML);
                         return;
                     }
-                    if(sasCatalogExists && fileExt === "sas7bdat") {  CopyData(sasCatalogFileName); }
-                    CopyData(fileName);
                     CopyScript();     
                 }
             });
@@ -226,7 +232,7 @@ function (n) {
             settings.pathStatisticsFileTxt.value = "";
             fs.rmdir(settings.dataFolderPath, (err) => {
                 if (err) {
-                    HandleError(err);
+                    err.Handle(settings.outputStatisticsErrorSpn,settings.outputStatisticsErrorText);
                 }
                 else {
                     settings.dataFolderPath = null;
@@ -246,7 +252,7 @@ function (n) {
             fs.readdir(settings.dataFolderPath, (err, files) => {
                 if (err) {
                     settings.dataFolderPath = null;
-                    HandleError(err);
+                    err.Handle(settings.outputStatisticsErrorSpn,settings.outputStatisticsErrorText);
                 }
                 else {
                     var tablecounter = 0;
@@ -262,7 +268,7 @@ function (n) {
                     fs.mkdir(settings.dataFolderPath, { recursive: true }, (err) => {
                         if (err) {
                             settings.dataFolderPath = null;
-                            HandleError(err);
+                            err.Handle(settings.outputStatisticsErrorSpn,settings.outputStatisticsErrorText);
                         }
                         else {
                             console.log(`ensure package data path: ${settings.dataFolderPath}`);
@@ -274,64 +280,100 @@ function (n) {
         }
 
         //validate file encoding
-        var ValidateFile = function(fileName) {
+        var ValidateFile = function(fileName) {            
             var filePath = settings.dataFolderPath;
             filePath += (settings.dataFolderPath.indexOf("\\") > -1) ? "\\{0}".format(fileName) : "/{0}".format(fileName);
-            var charsetMatch = chardet.detectFileSync(filePath);
-            console.log("File {0} encode: {1}".format(fileName,charsetMatch));
-            if(charsetMatch !== "UTF-8") {
-                var localPath = settings.dataFolderPath;
-                localPath += (localPath.indexOf("\\") > -1) ? "\\{0}".format(fileName) : "/{0}".format(fileName);
-                ipcRenderer.send('open-error-dialog',settings.outputScriptEncodingFileErrorTitle.innerHTML,settings.outputScriptEncodingFileErrorText.innerHTML.format(localPath));
-                return false;
+            var size = fs.statSync(filePath).size
+            if(size <= MaxFileSize) {
+                var charsetMatch = chardet.detectFileSync(filePath);
+                console.log("File {0} encode: {1}".format(fileName,charsetMatch));
+                if(charsetMatch !== "UTF-8") {
+                    return false;
+                }
             }
             return true;
+        }
+
+        //get Export files info  
+        var GetExportInfo = function(files) {
+            var unvalidFiles = [];
+            var counter = 0;
+            var localPath = (settings.dataFolderPath.indexOf("\\") > -1) ? "{0}\\".format(settings.dataFolderPath) : "{0}/".format(settings.dataFolderPath);                           
+            var fileName = GetFileName();
+            var filePrefix = fileName.substring(0,fileName.indexOf("."));
+            files.forEach(file => {
+                settings.outputPostfixFiles.forEach(element => {
+                    if(element.format(filePrefix) == file) 
+                    { 
+                        counter = counter + 1;
+                        if(!ValidateFile(file)) { unvalidFiles.push(localPath + file); } 
+                    }
+                });
+                settings.outputOptionalPostfixFiles.forEach(element => {
+                    if(element.format(filePrefix) == file && !ValidateFile(file)) { unvalidFiles.push(localPath + file); }
+                });
+            });
+            return { "counter":counter, "unvalidFiles":unvalidFiles};
         }
 
         //Ensure output files of statistic program
         var EnsureExport = function() {
             settings.outputScriptOkSpn.hidden = true;
+            settings.spinner.className = settings.spinnerClass;
             fs.readdir(settings.dataFolderPath, (err, files) => {
                 if (err) {
-                    HandleError(err);
+                    settings.spinner.className = "";
+                    err.Handle(settings.outputStatisticsErrorSpn,settings.outputStatisticsErrorText);
                 }
                 else {
-                    var fileValidate = true;
-                    var counter = 0;
-                    var fileName = GetFileName();
-                    var filePrefix = fileName.substring(0,fileName.indexOf("."));
-                    files.forEach(file => {
-                        settings.outputPostfixFiles.forEach(element => {
-                            if(element.format(filePrefix) == file) 
-                            { 
-                                counter = counter + 1;
-                                if(!ValidateFile(file)) { fileValidate = false; } 
-                            }
-                        });
-                        settings.outputOptionalPostfixFiles.forEach(element => {
-                            if(element.format(filePrefix) == file && !ValidateFile(file)) { fileValidate = false; }
-                        });
-                    });
+                    settings.okScriptBtn.disabled = true;
+                    var info = GetExportInfo(files);
+                    var counter = info.counter;
+                    var unvalidFiles = info.unvalidFiles;
+                    settings.okScriptBtn.disabled = false;
+                    settings.spinner.className = "";
                     if(counter < 3) {
                         ipcRenderer.send('open-warning-dialog',settings.outputScriptRequiredFilesWarningTitle.innerHTML,settings.outputScriptRequiredFilesWarningText.innerHTML);
                     }
                     else {
-                        if(fileValidate) 
+                        if(unvalidFiles.length > 0) 
                         { 
-                            ipcRenderer.send('open-warning-dialog',settings.outputScriptCloseApplicationWarningTitle.innerHTML,settings.outputScriptCloseApplicationWarningText.innerHTML);
-                            settings.outputScriptOkSpn.innerHTML = settings.outputScriptOkText.format(GetFileName());
-                            settings.outputScriptOkSpn.hidden = false;
-                            settings.nextBtn.hidden = false;
+                            var filesText = unvalidFiles.join(",");
+                            ipcRenderer.send('open-confirm-dialog','dataextraction-encodingfile',settings.outputScriptEncodingFileErrorTitle.innerHTML,settings.outputScriptEncodingFileErrorText.innerHTML.format(filesText),settings.okConfirm.innerHTML,settings.cancelConfirm.innerHTML); 
+                        }
+                        else {
+                            Redirect();
                         }
                     }
                 }
             });
         }
 
+        //Redirect to metadata tab
+        var Redirect = function() {
+            var fileName = GetFileName();
+            settings.outputScriptOkSpn.innerHTML = settings.outputScriptOkText.format(fileName);
+            settings.outputScriptOkSpn.hidden = false;
+            settings.metadataFileName.value = fileName.substring(0,fileName.indexOf("."));
+            settings.metdataTab.click();
+        }
+
         //add Event Listener to HTML elmenets
         var AddEvents = function () {
+            settings.headerLinkTrin2.addEventListener('click', (event) => {
+                ipcRenderer.send('open-item',settings.dataFolderPath);
+            })
+            settings.headerLinkTrin3.addEventListener('click', (event) => {
+                ipcRenderer.send('open-item',settings.dataFolderPath);
+            })
+            settings.headerLinkInformation2.addEventListener('click', (event) => {
+                ipcRenderer.send('open-item',settings.dataFolderPath);
+            })
             settings.okScriptDataPath.addEventListener('click', (event) => {
-                shell.openItem(settings.dataFolderPath);
+                ipcRenderer.send('open-item',GetFolderPath());
+            })
+            settings.scriptPathLink.addEventListener('click', (event) => {
+                ipcRenderer.send('open-item', GetFolderPath());
             })
             settings.okScriptBtn.addEventListener('click', (event) => {
                 EnsureExport();
@@ -349,25 +391,30 @@ function (n) {
                 }                     
             })
             settings.selectStatisticsFileBtn.addEventListener('click', (event) => {
-            ipcRenderer.send('dataextraction-open-file-dialog');
+                ipcRenderer.send('dataextraction-open-file-dialog');
             })
             ipcRenderer.on('dataextraction-selected-statistics-file', (event, path) => {
                 settings.selectedStatisticsFilePath = path; 
                 console.log(`selected path: ${path}`); 
                 settings.pathStatisticsFileTxt.value = settings.selectedStatisticsFilePath;            
             })
-            ipcRenderer.on('confirm-dialog-selection', (event, index) => {
+            ipcRenderer.on('confirm-dialog-selection-dataextraction-catalogexists', (event, index) => {
                 if(index === 0) {
-                    CopyData(GetFileName());
                     CopyScript();
                 } 
                 if(index === 1) { ResetData(); }            
+            })
+            ipcRenderer.on('confirm-dialog-selection-dataextraction-encodingfile', (event, index) => {
+                if(index === 0) {
+                    Redirect();
+                } 
+                if(index === 1) {  }            
             })
         }
 
         //Model interfaces functions
         Rigsarkiv.Hybris.DataExtraction = {        
-            initialize: function (structureCallback,selectStatisticsFileId,pathStatisticsFileId,okStatisticsId,outputStatisticsErrorId,outputStatisticsOkCopyScriptId,outputStatisticsSASWarningPrefixId,scriptPanel1Id,scriptPanel2Id,okScriptBtnId,okScriptDataPathId,outputStatisticsOkCopyScriptInfoId,outputStatisticsRequiredPathId,outputScriptRequiredFilesWarningPrefixId,outputScriptOkId,outputScriptEncodingFileErrorPrefixId,nextId,metdataTabId,outputScriptCloseApplicationWarningPrefixId) {
+            initialize: function (structureCallback,selectStatisticsFileId,pathStatisticsFileId,okStatisticsId,outputStatisticsErrorId,outputStatisticsOkCopyScriptId,outputStatisticsSASWarningPrefixId,scriptPanel1Id,scriptPanel2Id,okScriptBtnId,okScriptDataPathId,outputStatisticsOkCopyScriptInfoId,outputStatisticsRequiredPathId,outputScriptRequiredFilesWarningPrefixId,outputScriptOkId,outputScriptEncodingFileErrorPrefixId,nextId,metdataTabId,outputScriptCloseApplicationWarningPrefixId,outputStructureOkId,selectStructureDeliveryPackageId,metadataFileName,spinnerId,outputScriptPath,outputHeaderLinkTrin2,outputHeaderLinkTrin3,outputHeaderLinkInformation2,outputOkConfirmId,outputCancelConfirmId) {
                 settings.structureCallback = structureCallback;
                 settings.selectStatisticsFileBtn = document.getElementById(selectStatisticsFileId);
                 settings.pathStatisticsFileTxt = document.getElementById(pathStatisticsFileId);
@@ -396,6 +443,18 @@ function (n) {
                 settings.metdataTab = document.getElementById(metdataTabId);
                 settings.outputScriptCloseApplicationWarningTitle = document.getElementById(outputScriptCloseApplicationWarningPrefixId + "-Title");
                 settings.outputScriptCloseApplicationWarningText = document.getElementById(outputScriptCloseApplicationWarningPrefixId + "-Text");
+                settings.outputStructureOkSpn =  document.getElementById(outputStructureOkId);
+                settings.selectStructureDeliveryPackage = document.getElementById(selectStructureDeliveryPackageId);
+                settings.metadataFileName = document.getElementById(metadataFileName);
+                settings.spinner = document.getElementById(spinnerId);
+                settings.spinnerClass = settings.spinner.className;
+                settings.spinner.className = "";
+                settings.scriptPathLink = document.getElementById(outputScriptPath);
+                settings.headerLinkTrin2 = document.getElementById(outputHeaderLinkTrin2);
+                settings.headerLinkTrin3 = document.getElementById(outputHeaderLinkTrin3);
+                settings.headerLinkInformation2 = document.getElementById(outputHeaderLinkInformation2);
+                settings.okConfirm = document.getElementById(outputOkConfirmId);
+                settings.cancelConfirm = document.getElementById(outputCancelConfirmId);
                 AddEvents();
             },
             callback: function () {

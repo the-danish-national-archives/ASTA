@@ -14,10 +14,10 @@ function (n) {
         const validFileNamePattern = /^([a-zA-ZæøåÆØÅ])([a-zA-ZæøåÆØÅ0-9_]*)$/;
         const reservedWordPattern = /^(ABSOLUTE|ACTION|ADD|ADMIN|AFTER|AGGREGATE|ALIAS|ALL|ALLOCATE|ALTER|AND|ANY|ARE|ARRAY|AS|ASC|ASSERTION|AT|AUTHORIZATION|BEFORE|BEGIN|BINARY|BIT|BLOB|BOOLEAN|BOTH|BREADTH|BY|CALL|CASCADE|CASCADED|CASE|CAST|CATALOG|CHAR|CHARACTER|CHECK|CLASS|CLOB|CLOSE|COLLATE|COLLATION|COLUMN|COMMIT|COMPLETION|CONNECT|CONNECTION|CONSTRAINT|CONSTRAINTS ||CONSTRUCTOR|CONTINUE|CORRESPONDING|CREATE|CROSS|CUBE|CURRENT|CURRENT_DATE|CURRENT_PATH|CURRENT_ROLE|CURRENT_TIME|CURRENT_TIMESTAMP|CURRENT_USER|CURSOR|CYCLE|DATA|DATE|DAY|DEALLOCATE|DEC|DECIMAL|DECLARE|DEFAULT|DEFERRABLE|DEFERRED|DELETE|DEPTH|DEREF|DESC|DESCRIBE|DESCRIPTOR|DESTROY|DESTRUCTOR|DETERMINISTIC|DICTIONARY|DIAGNOSTICS|DISCONNECT|DISTINCT|DOMAIN|DOUBLE|DROP|DYNAMIC|EACH|ELSE|END|END-EXEC|EQUALS|ESCAPE|EVERY|EXCEPT|EXCEPTION|EXEC|EXECUTE|EXTERNAL|FALSE|FETCH|FIRST|FLOAT|FOR|FOREIGN|FOUND|FROM|FREE|FULL|FUNCTION|GENERAL|GET|GLOBAL|GO|GOTO|GRANT|GROUP|GROUPING|HAVING|HOST|HOUR|IDENTITY|IGNORE|IMMEDIATE|IN|INDICATOR|INITIALIZE|INITIALLY|INNER|INOUT|INPUT|INSERT|INT|INTEGER|INTERSECT|INTERVAL|INTO|IS|ISOLATION|ITERATE|JOIN|KEY|LANGUAGE|LARGE|LAST|LATERAL|LEADING|LEFT|LESS|LEVEL|LIKE|LIMIT|LOCAL|LOCALTIME|LOCALTIMESTAMP|LOCATOR|MAP|MATCH|MINUTE|MODIFIES|MODIFY|MODULE|MONTH|NAMES|NATIONAL|NATURAL|NCHAR|NCLOB|NEW|NEXT|NO|NONE|NOT|NULL|NUMERIC|OBJECT|OF|OFF|OLD|ON|ONLY|OPEN|OPERATION|OPTION|OR|ORDER|ORDINALITY|OUT|OUTER|OUTPUT|PAD|PARAMETER|PARAMETERS|PARTIAL|PATH|POSTFIX|PRECISION|PREFIX|PREORDER|PREPARE|PRESERVE|PRIMARY|PRIOR|PRIVILEGES|PROCEDURE|PUBLIC|READ|READS|REAL|RECURSIVE|REF|REFERENCES|REFERENCING|RELATIVE|RESTRICT|RESULT|RETURN|RETURNS|REVOKE|RIGHT|ROLE|ROLLBACK|ROLLUP|ROUTINE|ROW|ROWS|SAVEPOINT|SCHEMA|SCROLL|SCOPE|SEARCH|SECOND|SECTION|SELECT|SEQUENCE|SESSION|SESSION_USER|SET|SETS|SIZE|SMALLINT|SOME|SPACE|SPECIFIC|SPECIFICTYPE|SQL|SQLEXCEPTION|SQLSTATE|SQLWARNING|START|STATE|STATEMENT|STATIC|STRUCTURE|SYSTEM_USER|TABLE|TEMPORARY|TERMINATE|THAN|THEN|TIME|TIMESTAMP|TIMEZONE_HOUR|TIMEZONE_MINUTE|TO|TRAILING|TRANSACTION|TRANSLATION|TREAT|TRIGGER|TRUE|UNDER|UNION|UNIQUE|UNKNOWN|UNNEST|UPDATE|USAGE|USER|USING|VALUE|VALUES|VARCHAR|VARIABLE|VARYING|VIEW|WHEN|WHENEVER|WHERE|WITH|WITHOUT|WORK|WRITE|YEAR|ZONE)$/i;
         const enclosedReservedWordPattern = /^(")(ABSOLUTE|ACTION|ADD|ADMIN|AFTER|AGGREGATE|ALIAS|ALL|ALLOCATE|ALTER|AND|ANY|ARE|ARRAY|AS|ASC|ASSERTION|AT|AUTHORIZATION|BEFORE|BEGIN|BINARY|BIT|BLOB|BOOLEAN|BOTH|BREADTH|BY|CALL|CASCADE|CASCADED|CASE|CAST|CATALOG|CHAR|CHARACTER|CHECK|CLASS|CLOB|CLOSE|COLLATE|COLLATION|COLUMN|COMMIT|COMPLETION|CONNECT|CONNECTION|CONSTRAINT|CONSTRAINTS ||CONSTRUCTOR|CONTINUE|CORRESPONDING|CREATE|CROSS|CUBE|CURRENT|CURRENT_DATE|CURRENT_PATH|CURRENT_ROLE|CURRENT_TIME|CURRENT_TIMESTAMP|CURRENT_USER|CURSOR|CYCLE|DATA|DATE|DAY|DEALLOCATE|DEC|DECIMAL|DECLARE|DEFAULT|DEFERRABLE|DEFERRED|DELETE|DEPTH|DEREF|DESC|DESCRIBE|DESCRIPTOR|DESTROY|DESTRUCTOR|DETERMINISTIC|DICTIONARY|DIAGNOSTICS|DISCONNECT|DISTINCT|DOMAIN|DOUBLE|DROP|DYNAMIC|EACH|ELSE|END|END-EXEC|EQUALS|ESCAPE|EVERY|EXCEPT|EXCEPTION|EXEC|EXECUTE|EXTERNAL|FALSE|FETCH|FIRST|FLOAT|FOR|FOREIGN|FOUND|FROM|FREE|FULL|FUNCTION|GENERAL|GET|GLOBAL|GO|GOTO|GRANT|GROUP|GROUPING|HAVING|HOST|HOUR|IDENTITY|IGNORE|IMMEDIATE|IN|INDICATOR|INITIALIZE|INITIALLY|INNER|INOUT|INPUT|INSERT|INT|INTEGER|INTERSECT|INTERVAL|INTO|IS|ISOLATION|ITERATE|JOIN|KEY|LANGUAGE|LARGE|LAST|LATERAL|LEADING|LEFT|LESS|LEVEL|LIKE|LIMIT|LOCAL|LOCALTIME|LOCALTIMESTAMP|LOCATOR|MAP|MATCH|MINUTE|MODIFIES|MODIFY|MODULE|MONTH|NAMES|NATIONAL|NATURAL|NCHAR|NCLOB|NEW|NEXT|NO|NONE|NOT|NULL|NUMERIC|OBJECT|OF|OFF|OLD|ON|ONLY|OPEN|OPERATION|OPTION|OR|ORDER|ORDINALITY|OUT|OUTER|OUTPUT|PAD|PARAMETER|PARAMETERS|PARTIAL|PATH|POSTFIX|PRECISION|PREFIX|PREORDER|PREPARE|PRESERVE|PRIMARY|PRIOR|PRIVILEGES|PROCEDURE|PUBLIC|READ|READS|REAL|RECURSIVE|REF|REFERENCES|REFERENCING|RELATIVE|RESTRICT|RESULT|RETURN|RETURNS|REVOKE|RIGHT|ROLE|ROLLBACK|ROLLUP|ROUTINE|ROW|ROWS|SAVEPOINT|SCHEMA|SCROLL|SCOPE|SEARCH|SECOND|SECTION|SELECT|SEQUENCE|SESSION|SESSION_USER|SET|SETS|SIZE|SMALLINT|SOME|SPACE|SPECIFIC|SPECIFICTYPE|SQL|SQLEXCEPTION|SQLSTATE|SQLWARNING|START|STATE|STATEMENT|STATIC|STRUCTURE|SYSTEM_USER|TABLE|TEMPORARY|TERMINATE|THAN|THEN|TIME|TIMESTAMP|TIMEZONE_HOUR|TIMEZONE_MINUTE|TO|TRAILING|TRANSACTION|TRANSLATION|TREAT|TRIGGER|TRUE|UNDER|UNION|UNIQUE|UNKNOWN|UNNEST|UPDATE|USAGE|USER|USING|VALUE|VALUES|VARCHAR|VARIABLE|VARYING|VIEW|WHEN|WHENEVER|WHERE|WITH|WITHOUT|WORK|WRITE|YEAR|ZONE)(")$/i;
-        const codePattern = /^('(((\+|\-){0,1}[0-9]+)|([a-zA-ZæøåÆØÅ0-9]+)|(\.[a-zA-ZæøåÆØÅ])|((\+|\-){0,1}[0-9]+(\.|\,){0,1}[0-9]*))' '[\w\W\s]+')$/;
+        const codePattern = /^('(((\+|\-){0,1}[0-9]+)|([a-zA-ZæøåÆØÅ0-9]+)|(\.[a-zA-ZæøåÆØÅ])|((\+|\-){0,1}[0-9]+(\.|\,){0,1}[0-9]*))' '[\w\W\s]*')$/;
         const userCodePattern = /^('(((\+|\-){0,1}[0-9]+)|([a-zA-ZæøåÆØÅ0-9]+)|((\+|\-){0,1}[0-9]+(\.|\,){0,1}[0-9]*))')$/;
         const codeListPattern = /^\${0,1}([\w\W\s^\.]*)\.$/;
-        const descriptionMultiPattern = /'([^']+)'/g;
+        const descriptionMultiPattern = /'([^']*)'/g;
         const datatypeString = [/^(string)$/,/^(\%([0-9]+)s)$/,/^(\$([0-9]+)\.)$/,/^(a([0-9]+))$/];
         const datatypeInt = [/^(int)$/,/^((\%([0-9]+)\.0f)|(\%([0-9]+)\.0g))$/,/^(f([0-9]+)\.)$/,/^(f([0-9]+))$/];
         const datatypeDecimal = [/^(decimal)$/,/^((\%([0-9]+)\.([0-9]+f))|(\%([0-9]+)\.([0-9]+)g))$/,/^(f([0-9]+)\.([0-9]+))$/,/^(f([0-9]+)\.([0-9]+))$/];
@@ -43,18 +43,12 @@ function (n) {
             fileName: null,
             fileKeys: [],
             fileReferences: [],
-            errorsCounter: 0,
+            errors: 0,
+            totalErrors: 0,
             errorStop: false,
             dataPathPostfix: "Data",
             metadataLabels: ["SYSTEMNAVN","DATAFILNAVN","DATAFILBESKRIVELSE","NØGLEVARIABEL","REFERENCE","VARIABEL","VARIABELBESKRIVELSE","KODELISTE","BRUGERKODE"],
             data: []
-        }
-
-        //output system error messages
-        var HandleError = function(err) {
-            console.log(`Error: ${err}`);
-            settings.outputErrorSpn.hidden = false;
-            settings.outputErrorSpn.innerHTML = settings.outputErrorText.format(err.message);
         }
 
         // get selected folder name 
@@ -119,6 +113,7 @@ function (n) {
 
             settings.logCallback().error(settings.logType,GetFolderName(),text);
             settings.errors += 1;
+            settings.totalErrors += 1;
             return false;
         }
 
@@ -204,44 +199,57 @@ function (n) {
             return { "name":name, "codes":codes}
         }
 
+        //Validate BRUGERKODE missing values
+        var ValidateUserCodeValues = function(table,info) {
+            var result = true;
+            var options = [];
+            table.variables.forEach(variable => {
+                if(variable.name === info.name) { 
+                    options = variable.options;
+                }
+            });
+            info.codes.forEach(code => {
+                if(!userCodePattern.test(code)) {
+                    result = LogError("-CheckMetadata-FileUserCodes-CodeValidation-Error",settings.fileName,info.name,code);
+                } 
+                else {
+                    options.forEach(option => {
+                        if(option.name === code.substring(1,code.length - 1)) { option.isMissing = true; }
+                    });
+                }                               
+            });
+            return result; 
+        }
+
         //Validate BRUGERKODE
         var ValidateUserCodes = function (lines,startIndex) {
             var result = true;
             var table = GetTableData(settings.fileName);
-            var codeListKeys = [];
-            table.variables.forEach(variable => {
-                if(variable.codeListKey != null && variable.codeListKey !== "") { 
-                    codeListKeys.push(variable.codeListKey); 
-                }
-            });
+            var variables = [];
+            table.variables.forEach(variable => { variables.push(variable.name);  });
             var i = startIndex;                        
             do {
                 var info = GetUserCode(lines[i]);
                 if(info.codes != null && info.codes.length > 0) {
                     if(!ValidateUserCodeName(info.name)) {
-                        settings.errorStop = true;
                         result = false; 
                     }
                     else {
-                        if(!codeListKeys.includes(info.name)) {
+                        if(!variables.includes(info.name)) {
                             result = LogError("-CheckMetadata-FileUserCodes-KeyRequired-Error",settings.fileName,info.name);
                         }
                         else {
-                            info.codes.forEach(code => {
-                                if(!userCodePattern.test(code)) {
-                                    settings.errorStop = true;
-                                    result = LogError("-CheckMetadata-FileUserCodes-CodeValidation-Error",settings.fileName,info.name,code);
-                                }                                
-                            });
+                            if(!ValidateUserCodeValues(table,info)) { result = false; }
                         }
                     }               
                 }
                 else {
                     result = LogError("-CheckMetadata-FileUserCodes-CodeRequired-Error",settings.fileName,(i + 1));                    
                 }
+                if(!result) { settings.errorStop = true; }
                 i++;
             }
-            while (lines[i].trim() !== ""); 
+            while (lines[i] !== undefined && lines[i].trim() !== ""); 
             return result;
         }
 
@@ -270,10 +278,17 @@ function (n) {
                 result = LogError("-CheckMetadata-FileCodeList-CodeValidation-Error",settings.fileName,codeName,(i + 1));
             }
             else {
-                var options = lines[i].trim().reduceWhiteSpace().split("' '");
+                var text = lines[i].trim().reduceWhiteSpace();
+                var options = text.split("' '");
+                var index = text.indexOf("' '");
+                var description = text.substring(index + 3);
+                description = description.substring(0,description.length - 1);
+                if(description.reduceWhiteSpace() === "" || description === " ") {
+                    result = LogError("-CheckMetadata-FileCodeList-CodeValidationEmpty-Error",settings.fileName,codeName,options[0].substring(1));  
+                }
                 table.variables.forEach(variable => {
                     if(variable.codeListKey === codeName) {
-                        variable.options.push({ "name":options[0].substring(1), "description":options[1].substring(0,options[1].length - 1) });
+                        variable.options.push({ "name":options[0].substring(1), "description":description, "isMissing":false });
                     }
                 });
            }
@@ -293,25 +308,32 @@ function (n) {
             var i = startIndex;                        
             do {                
                 if(!codePattern.test(lines[i].trim().reduceWhiteSpace())) {
-                    var expressions = lines[i].trim().reduceWhiteSpace().split(" ");
-                    if(expressions.length === 1) {
-                        codeName = expressions[0];
-                        if(!ValidateCodeName(codeName)) 
-                        { 
-                            settings.errorStop = true;
-                            result = false; 
-                            codeName = null;
-                        }
-                        else {
+                    if(lines[i].trim().reduceWhiteSpace().indexOf("'") > -1)
+                    {
+                        result = LogError("-CheckMetadata-FileCodeList-CodeValidation-Error",settings.fileName,codeName,(i + 1));
+                    }
+                    else 
+                    {
+                        var expressions = lines[i].trim().reduceWhiteSpace().split(" ");
+                        if(expressions.length === 1) {
+                            codeName = expressions[0];
                             validKeys.push(codeName);
-                            if(!codeListKeys.includes(codeName)) {
-                                    result = LogError("-CheckMetadata-FileCodeList-KeyRequired-Error",settings.fileName,codeName);
-                                    codeName = null;
+                            if(!ValidateCodeName(codeName)) 
+                            { 
+                                settings.errorStop = true;
+                                result = false; 
+                                codeName = null;
+                            }
+                            else {
+                                if(!codeListKeys.includes(codeName)) {
+                                        result = LogError("-CheckMetadata-FileCodeList-KeyRequired-Error",settings.fileName,codeName);
+                                        codeName = null;
+                                }
                             }
                         }
-                    }
-                    else {
-                        result = LogError("-CheckMetadata-FileCodeList-Name-Error",settings.fileName,expressions[0],(i + 1));
+                        else {
+                            result = LogError("-CheckMetadata-FileCodeList-Name-Error",settings.fileName,expressions[0],(i + 1));
+                        }
                     }
                 }
                 else {
@@ -319,7 +341,7 @@ function (n) {
                 }
                 i++;
             }
-            while (lines[i].trim() !== "");
+            while (lines[i] !== undefined && lines[i].trim() !== "");
             table.variables.forEach(variable => {
                 if(variable.codeListKey !== "" && !validKeys.includes(variable.codeListKey)) {
                     result = LogError("-CheckMetadata-FileVariable-CodeListRequired-Error",settings.fileName,variable.name,variable.codeListKey);    
@@ -339,16 +361,20 @@ function (n) {
             else {
                 name = line.substring(0,index);
                 var descriptionTemp = line.substring(index + 1);
+                descriptionMultiPattern.lastIndex = 0;
                 var matches = descriptionTemp.match(descriptionMultiPattern)
                 if(matches != null && matches.length > 0) {
                     description = matches[0].substring(1,matches[0].length - 1);
+                    if(description.reduceWhiteSpace() === "" || description === "<none>" || description === "n.a." || description === " ") {
+                        LogError("-CheckMetadata-FileVariable-DescriptionEmpty-Error",settings.fileName,name);
+                    }
                     if(matches.length > 1) {
                         LogError("-CheckMetadata-FileVariable-DescriptionMax-Error",settings.fileName,startIndex); 
                         description = "";
                     }
                 }
                 else {
-                    LogError("-CheckMetadata-FileVariable-DescriptionFormat-Error",settings.fileName,info.name);
+                    LogError("-CheckMetadata-FileVariable-DescriptionFormat-Error",settings.fileName,name);
                     description = "";
                 }
             }
@@ -371,9 +397,14 @@ function (n) {
                 if(variableDescriptions.includes(info.name)) {
                     variableDescriptions.splice(variableDescriptions.indexOf(info.name),1);
                     table.variables.forEach(variable => {
-                        if(variable.name === info.name && info.description != null) {
+                        if(variable.name === info.name) {
                             exitsCounter++ 
-                            variable.description = info.description;                            
+                            if(info.description != null) {                                
+                                variable.description = info.description;  
+                            }
+                            else {
+                                result = LogError("-CheckMetadata-FileVariable-DescriptionTextRequired-Error",settings.fileName,info.name);   
+                            }                         
                         }
                     });
                 } 
@@ -382,7 +413,7 @@ function (n) {
                 }                             
                 i++;
             }
-            while (lines[i].trim() !== "");
+            while (lines[i] !== undefined && lines[i].trim() !== "");
             if(variableDescriptions.length > 0) {
                 variableDescriptions.forEach(variable => {
                     result = LogError("-CheckMetadata-FileVariable-DescriptionExists-Error",settings.fileName,variable);
@@ -447,6 +478,7 @@ function (n) {
                 else {
                     LogError("-CheckMetadata-FileVariable-CodeList-Error",settings.fileName,expressions[0]);
                     result = null;
+                    settings.errorStop = true; 
                 }
             }
             return result;
@@ -490,7 +522,7 @@ function (n) {
                 }
                 i++;
             }
-            while (lines[i].trim() !== "");           
+            while (lines[i] !== undefined && lines[i].trim() !== "");           
             if(!ValidateVariablesRelated(variables)) { result = false; }  
             return result;
         }
@@ -561,7 +593,10 @@ function (n) {
                         }
                     }
                     else {
-                        result = LogError("-CheckMetadata-FileReferences-RowValidation-Error",settings.fileName,i + 1);
+                        var variable = "";
+                        if(expressions[1].length > 1 && (expressions[1][0] !== "'" || expressions[1][expressions[1].length - 1] !== "'")) { variable = expressions[1];}
+                        if(expressions[2].length > 1 && (expressions[2][0] !== "'" || expressions[2][expressions[2].length - 1] !== "'")) { variable = expressions[2];}
+                        result = LogError("-CheckMetadata-FileReferences-RowValidation-Error",settings.fileName,i + 1,variable);
                     }
                 }                
                 if(expressions.length > 3) {
@@ -572,7 +607,7 @@ function (n) {
                 } 
                 i++;
             }
-            while (lines[i].trim() !== "");
+            while (lines[i] !== undefined && lines[i].trim() !== "");
             return result;
         }
 
@@ -735,6 +770,7 @@ function (n) {
             });
             variable.regExps.push("^(\\+|\\-){0,1}[0-9]{1," + intLength + "}\\.[0-9]{1," + decimalLength + "}$");
             variable.regExps.push("^(\\+|\\-){0,1}[0-9]{1," + intLength + "}\\,[0-9]{1," + decimalLength + "}$");
+            variable.regExps.push("^(\\+|\\-){0,1}[0-9]{1," + intLength + "}$");
             return result;
         }
 
@@ -918,18 +954,16 @@ function (n) {
                 var folderName = GetFolderName();
                 settings.logCallback().section(settings.logType,folderName,settings.logStartSpn.innerHTML);            
                 ValidateData();
-                console.log("metadata output: ");
-                console.log(settings.data);
-                if(settings.errorsCounter === 0) {
+                if(settings.errors === 0) {
                     settings.logCallback().section(settings.logType,folderName,settings.logEndNoErrorSpn.innerHTML);
                 } else {
                     settings.logCallback().section(settings.logType,folderName,settings.logEndWithErrorSpn.innerHTML);
                 } 
-                return settings.dataCallback().validate(settings.deliveryPackagePath,settings.outputText,settings.data);               
+                return settings.dataCallback().validate(settings.deliveryPackagePath,settings.outputText,settings.data,settings.totalErrors);               
             }
             catch(err) 
             {
-                HandleError(err);
+                err.Handle(settings.outputErrorSpn,settings.outputErrorText);
             }
             return null;
         }
@@ -953,12 +987,14 @@ function (n) {
             },
             callback: function () {
                 return { 
-                    validate: function(path,outputText) 
+                    validate: function(path,outputText,errors) 
                     { 
                         settings.deliveryPackagePath = path;
                         settings.outputText = outputText;
                         settings.data = [];
                         settings.errorStop = false;
+                        settings.errors = 0;
+                        settings.totalErrors = errors;
                         return Validate();
                     }  
                 };

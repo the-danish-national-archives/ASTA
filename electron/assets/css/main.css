@@ -18,8 +18,9 @@ body {
 }
 
 a {
-    text-decoration: underline black;
+    text-decoration: underline #49897f;
     cursor: pointer;
+    color: #49897f;
 }
 
 button {
@@ -31,23 +32,42 @@ button {
     padding-right: 10px;
     padding-bottom: 1px;
     padding-left: 10px;
-    border-radius: 6px;
-    height: 23px;
+    height: 30px;
+    margin-top: 5px;
+}
+
+button:disabled {
+    background-color: #665c5c;
 }
 
 input[type=text] {
-    border-radius: 6px;
-    border: solid 0.5px #49897f;
-    height: 20px;
+    border: solid 0.5px #b2b2b2;
+    height: 27px;
+    padding-left:5px;
     font-family: SourceSansPro;
+    margin-bottom: 5px;
+    width: 30%
+}
+
+/* Override the size of the input boxes in nemesis as the general layout of that is more packed. */
+#nemesis-path{
+    width: 75%;
+}
+
+#nemesis-batch-path {
+    width: 75%;
+}
+
+textarea {
+    border: solid 0.5px #b2b2b2;
+    padding-left:0px;
+    font-family: SourceSansPro;
+    margin-bottom: 5px;
+    width: 30%;
 }
 
 .path {
     width: 30em;
-}
-
-.boldfaced {
-    font-family: SourceSansProBold;
 }
 
 
@@ -58,14 +78,6 @@ i {
 
 .fa-question-circle {
     cursor: pointer;
-}
-
-.title {
-    padding: 50px 10px 10px 0px;
-    padding-left: 5%;
-    margin-top: 0px;
-    margin-bottom: 0px;
-    
 }
 
 .menuBtn {
@@ -86,39 +98,131 @@ i {
 
 .alert-warning {
     background-color: #fcffe3;
-    /* border: solid 0.5px #faebcc; */
+    border: solid 0.5px #faebcc; 
     color: #8a6d3b;
+    padding: 10px;
+}
+
+.confirmation {
+    background-color: lightgreen;
+    color: #202a1a;
+    font-size: 30px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 7px;
+    padding-right: 5px;
 }
 
 #content {
-    padding-left: 150px;
+    padding-left: 200px;
     margin: -8px;
     margin-top: -10px;
 }
 
+/* Welcome (Start) page */
+
+.welcomeImg {
+    width: 73%;
+    height: 100%;
+}
+
+.welcomeTextContainer {
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 20px;
+}
+
+.imageText {
+    font-style: italic;
+}
+
+.welcomeHeadline {
+    margin: 10px 0px 0px 0px;
+}
+
+h2.subHeader {
+    margin-bottom: 0px;
+}
+
+.subHeader {
+    margin-top: 0px;
+}
+
+.bottomBorderTd {
+    border: none;
+    border-bottom: 2px solid grey;
+    padding: 6px;
+}
+
+.tdContent {
+    display: flex;
+}
+
+.tdLeftContent {
+    width: 60%;
+}
+
+.tdRightContent {
+    width: 40%
+}
+
+
+/* Welcome (Start) page END */
+
 /* Table */
 
 th {
-    background-color: #49897f;
+    background-color: #6db1a7;
     border: 1px solid black;
     padding: 6px;
 }
 
 td {
     border: 1px solid black;
+    padding: 6px;
+}
+
+td .path {
+    width: 76% !important;
+}
+
+#hybris-contextdocuments-uploads tr td:nth-child(3) {
+    text-align: center;
+    width: 400px;
 }
 
 table {
     border-collapse: collapse;
+    margin-bottom: 6px;
+    Margin-top:6px;
 }
 
 /* Table END */
+
+/* Title content */
+.title {
+    padding: 50px 10px 10px 0px;
+    padding-left: 5%;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    color: #49897f;
+    display: inline-block;
+}
+
+.right {
+    padding: 10px 0px 10px 0px;
+    float: right;
+    padding-right: 5%;
+    color: white;
+    text-shadow: 4px 3px 0 #49897f;
+}
+/* Title content END */
 
 /* Font Headers */
 
 h1 {
     font-size: 40px;
-    color: #49897f;
+    color: #6db1a7;
 }
 
 h3 {
@@ -133,18 +237,26 @@ h4 {
     color: red;
 }
 
+.greyText {
+    color: #b2b2b2;
+}
+
+.boldfaced {
+    font-family: SourceSansProBold;
+}
+
 /* Font Headers END */
 
 /* Side navigation menu */ 
 
 .side-nav {
     height: 100%;
-    width: 150px;
+    width: 200px;
     position: fixed;
     top: 0;
     left: 0;
-    background-color: #000;
-    opacity: 0.9;
+    background-color: #000000;
+    /*opacity: 0.9;*/
     overflow-x: hidden;
     padding-top: 20px;
 }
@@ -156,7 +268,6 @@ h4 {
     color: #49897f;
     display: block;
 }
-
 
 .side-nav a:hover {
     color: #fff;
@@ -173,7 +284,7 @@ a.selected:hover {
 #logo {
     width: 130px;
     height: 70px;
-    margin: 0px 0px 0px 10px;
+    margin: 0px 0px 0px 35px;
 }
 
 /* Side navigation menu END */
@@ -181,7 +292,8 @@ a.selected:hover {
 /* Header */
 
 .header {
-    background-color: rgb(26, 24, 24);
+    /*background-color: rgb(26, 24, 24);*/
+    background-color: #000000;
     height: 116px;
 }
 
@@ -211,6 +323,7 @@ a.selected:hover {
     margin-right: 20px;
     width: 200px;
     display: inline-block;
+    vertical-align: top;
 }
 
 /* Label elements END */
@@ -229,10 +342,16 @@ a.selected:hover {
 
 .nemesisOutput {
     height: 400px;
-    width: 40%;
-    border: 1px solid #000;
-    background-color: rgb(207, 190, 143);
+    width: 45%;
+    border: 1px solid #000;    
     overflow-y: auto;
+    box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.4);
+    box-sizing: border-box;
+    padding: 0px 10px;
+}
+
+.nemesisOutput i {
+    word-wrap: break-word;
 }
 
 .box {
@@ -240,6 +359,18 @@ a.selected:hover {
     justify-content: space-between;
 }
 
+.testlogTitle {
+    color: black;
+    text-decoration-line: underline;
+}
+
+.rightContent {
+    width: 50%;
+}
+
+#hybris-structure-path, #hybris-structure-delivery-package{
+    width: 75%;
+}
 /* Nemesis layout END */
 
 /* Nemesis output log elements */
@@ -301,4 +432,17 @@ a.selected:hover {
     }
   }
 
+  .trinHeader {
+    float:right;
+  }
+  
+  #nemesis-spinner-container {
+    width: 64px;
+}
   /* Spinner END */
+
+  .infoBox{
+    border: solid black 1px;
+    padding: 5px 0px;
+    width: fit-content;
+  }

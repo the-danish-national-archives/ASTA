@@ -8,12 +8,12 @@ function (n) {
     Rigsarkiv.Hybris = Rigsarkiv.Hybris || {},
     function (n) {
         const { ipcRenderer } = require('electron');
-        const {shell} = require('electron');
         const fs = require('fs');
 
         //private data memebers
         var settings = { 
-            metadataCallback: null,
+            structureCallback: null,
+            contextDocumentsCallback: null,
             selectArchiveIndexFileBtn: null,
             pathArchiveIndexFileTxt: null,
             selectedArchiveIndexFilePath: null,
@@ -26,17 +26,16 @@ function (n) {
             outputRequiredPathTitle: null,
             outputRequiredPathText: null,
             IndecesPostfix: "Indices",
+            defaultIndicesFiles: ["archiveIndex.xml","contextDocumentationIndex.xml"],
             IndecesPath: null,
             outputOkSpn: null,
             outputOkText: null,
-            selectDeliveryPackage: null
-        }
-
-        //output system error messages
-        var HandleError = function(err) {
-            console.log(`Error: ${err}`);
-            settings.outputErrorSpn.hidden = false;
-            settings.outputErrorSpn.innerHTML = settings.outputErrorText.format(err.message);            
+            selectDeliveryPackage: null,
+            outputOkInformationTitle: null,
+            outputOkInformationText: null,
+            contextDocumentsTab: null,
+            outputWrongFileNameTitle: null,
+            outputWrongFileNameText: null
         }
 
         //reset status & input fields
@@ -63,7 +62,7 @@ function (n) {
             destFilePath += (destFilePath.indexOf("\\") > -1) ? "\\{0}".format(fileName) : "/{0}".format(fileName);
             fs.copyFile(settings.selectedArchiveIndexFilePath[0],destFilePath, (err) => {
                 if (err) {
-                    HandleError(err);
+                    err.Handle(settings.outputErrorSpn,settings.outputErrorText);
                 }
                 else {                   
                     var fileName = GetFileName(settings.selectedContextDocumentationIndexFilePath);
@@ -72,15 +71,18 @@ function (n) {
                     destFilePath += (destFilePath.indexOf("\\") > -1) ? "\\{0}".format(fileName) : "/{0}".format(fileName);
                     fs.copyFile(settings.selectedContextDocumentationIndexFilePath[0], "{0}/{1}".format(settings.IndecesPath,fileName), (err) => {
                         if (err) {
-                            HandleError(err);
+                            err.Handle(settings.outputErrorSpn,settings.outputErrorText);
                         }
                         else {
                             settings.outputOkSpn.hidden = false;
-                            settings.selectDeliveryPackage.hidden = false;
                             var selectedArchiveIndexFileName = GetFileName(settings.selectedArchiveIndexFilePath);
                             var selectedContextDocumentationIndexFileName = GetFileName(settings.selectedContextDocumentationIndexFilePath);
                             settings.outputOkSpn.innerHTML =  settings.outputOkText.format(selectedArchiveIndexFileName,selectedContextDocumentationIndexFileName);
                             settings.selectDeliveryPackage.innerHTML = "[{0}]".format(settings.IndecesPath);
+                            var filePath = (settings.IndecesPath.indexOf("\\") > -1) ? "{0}\\{1}".format(settings.IndecesPath,selectedContextDocumentationIndexFileName) : "{0}/{1}".format(settings.IndecesPath,selectedContextDocumentationIndexFileName);
+                            settings.contextDocumentsCallback().load(fs.readFileSync(filePath));
+                            //ipcRenderer.send('open-information-dialog',settings.outputOkInformationTitle.innerHTML,settings.outputOkInformationText.innerHTML);
+                            settings.contextDocumentsTab.click();
                         }
                     });
                 }
@@ -110,19 +112,25 @@ function (n) {
                 if(settings.pathArchiveIndexFileTxt.value === "" || settings.pathContextDocumentationIndexFileTxt.value === "") {
                     ipcRenderer.send('open-error-dialog',settings.outputRequiredPathTitle.innerHTML,settings.outputRequiredPathText.innerHTML);
                 }
-            if(settings.selectedArchiveIndexFilePath != null && settings.selectedContextDocumentationIndexFilePath != null && settings.pathArchiveIndexFileTxt.value !== "" && settings.pathContextDocumentationIndexFileTxt.value !== "") { 
-                    EnsureFiles(); 
+                if(settings.selectedArchiveIndexFilePath != null && settings.selectedContextDocumentationIndexFilePath != null && settings.pathArchiveIndexFileTxt.value !== "" && settings.pathContextDocumentationIndexFileTxt.value !== "") { 
+                    if(GetFileName(settings.selectedArchiveIndexFilePath) === settings.defaultIndicesFiles[0] && GetFileName(settings.selectedContextDocumentationIndexFilePath) === settings.defaultIndicesFiles[1]) {
+                        EnsureFiles(); 
+                    }
+                    else {
+                        ipcRenderer.send('open-error-dialog',settings.outputWrongFileNameTitle.innerHTML,settings.outputWrongFileNameText.innerHTML);    
+                    }
                 }
             })
             settings.selectDeliveryPackage.addEventListener('click', (event) => {
-                shell.openItem(settings.IndecesPath);
+                ipcRenderer.send('open-item',settings.IndecesPath);
             }) 
         }
 
         //Model interfaces functions
         Rigsarkiv.Hybris.IndexFiles = {
-            initialize: function (structureCallback,selectArchiveIndexFileId,pathSArchiveIndexFileId,selectContextDocumentationIndexFileId,pathContextDocumentationIndexFileId,indexFilesOkBtn,outputErrorId,outputRequiredPathId,outputOkId,selectDeliveryPackageId) {
+            initialize: function (structureCallback,contextDocumentsCallback,selectArchiveIndexFileId,pathSArchiveIndexFileId,selectContextDocumentationIndexFileId,pathContextDocumentationIndexFileId,indexFilesOkBtn,outputErrorId,outputRequiredPathId,outputOkId,selectDeliveryPackageId,outputOkInformationPrefixId,contextDocumentsTabId,outputWrongFileNameId) {
                 settings.structureCallback = structureCallback;
+                settings.contextDocumentsCallback = contextDocumentsCallback;
                 settings.selectArchiveIndexFileBtn = document.getElementById(selectArchiveIndexFileId);
                 settings.pathArchiveIndexFileTxt = document.getElementById(pathSArchiveIndexFileId);
                 settings.selectContextDocumentationIndexFileBtn = document.getElementById(selectContextDocumentationIndexFileId);
@@ -135,6 +143,11 @@ function (n) {
                 settings.outputOkSpn =  document.getElementById(outputOkId);
                 settings.outputOkText = settings.outputOkSpn.innerHTML;
                 settings.selectDeliveryPackage = document.getElementById(selectDeliveryPackageId);
+                settings.outputOkInformationTitle = document.getElementById(outputOkInformationPrefixId + "-Title");
+                settings.outputOkInformationText = document.getElementById(outputOkInformationPrefixId + "-Text");
+                settings.contextDocumentsTab = document.getElementById(contextDocumentsTabId);
+                settings.outputWrongFileNameTitle = document.getElementById(outputWrongFileNameId + "-Title");
+                settings.outputWrongFileNameText = document.getElementById(outputWrongFileNameId + "-Text");
                 AddEvents();
             }
         }

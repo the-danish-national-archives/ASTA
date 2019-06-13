@@ -8,7 +8,6 @@ window.Rigsarkiv = window.Rigsarkiv || {},
         Rigsarkiv.Hybris = Rigsarkiv.Hybris || {},
         function (n) {
             const { ipcRenderer } = require('electron');
-            const {shell} = require('electron');
             const fs = require('fs');
             const path = require('path');
             const os = require('os');
@@ -62,6 +61,21 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 addReferenceBtn: null,
                 referenceReqTitle: null,
                 referenceReqText: null,
+                numberFirstReferenceText: null,
+                illegalCharReferenceText: null,
+                referenceLengthText: null,
+                referenceReservedWordText: null,
+                foreignFileTitle: null,
+                foreignVariableTitle: null,
+                referenceVariableTitle: null,
+                numberFirstKeyTitle: null,
+                numberFirstKeyText: null,
+                illegalCharKeyTitle: null,
+                illegalCharKeyText: null,
+                keyLengthTitle: null,
+                keyLengthText: null,
+                keyReservedWordTitle: null,
+                keyReservedWordText: null,
                 contents: ["","","",""],
                 references: [],
                 isValidMetadata: true,
@@ -69,14 +83,8 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 dataFileName: "{0}.csv",
                 metadataTemplateFileName: "metadata.txt",
                 scriptPath: "./assets/scripts/{0}",
-                resourceWinPath: "resources\\{0}"
-            }
-            
-            //output system error messages
-            var HandleError = function(err) {
-                console.log(`Error: ${err}`);
-                settings.outputErrorSpn.hidden = false;
-                settings.outputErrorSpn.innerHTML = settings.outputErrorText.format(err.message);
+                resourceWinPath: "resources\\{0}",
+                styleBox: null
             }
 
             //reset status & input fields
@@ -87,6 +95,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 settings.outputErrorSpn.hidden = true;
                 settings.nextBtn.hidden = true;
                 settings.contents = ["","","",""];
+                settings.styleBox.hidden = true;
             }        
 
             //get metadata file name
@@ -106,7 +115,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 var dataFolderPath = settings.extractionCallback().dataFolderPath;
                 fs.readdir(dataFolderPath, (err, files) => {
                     if (err) {
-                        HandleError(err);
+                        err.Handle(settings.outputErrorSpn,settings.outputErrorText);
                     }
                     else {
                         var hasError = false;
@@ -123,7 +132,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                                 }
                                 catch(err) {
                                     hasError = true;
-                                    HandleError(err);
+                                    err.Handle(settings.outputErrorSpn,settings.outputErrorText);
                                 }                            
                             }
                         });
@@ -162,7 +171,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 destFilePath += (destFilePath.indexOf("\\") > -1) ? "\\{0}".format(destFileName) : "/{0}".format(destFileName);
                 fs.rename(srcFilePath,destFilePath, (err) => {
                     if (err) {
-                        HandleError(err);
+                        err.Handle(settings.outputErrorSpn,settings.outputErrorText);
                     }
                     else {
                         console.log('Rename complete!');
@@ -191,7 +200,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 srcFilePath += (srcFilePath.indexOf("\\") > -1) ? "\\{0}".format(metadataFileName) : "/{0}".format(metadataFileName);
                 fs.readFile(srcFilePath, (err, data) => {
                     if (err) {
-                        HandleError(err);
+                        err.Handle(settings.outputErrorSpn,settings.outputErrorText);
                     }
                     else {
                         var callback = settings.extractionCallback();
@@ -205,7 +214,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                         srcFilePath += (srcFilePath.indexOf("\\") > -1) ? "\\{0}".format(metadataFileName) : "/{0}".format(metadataFileName);
                         fs.writeFile(srcFilePath, updatedData, (err) => {
                             if (err) {
-                                HandleError(err);
+                                err.Handle(settings.outputErrorSpn,settings.outputErrorText);
                             }
                             else {
                                 RenameFile();
@@ -238,7 +247,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 destFilePath += (destFilePath.indexOf("\\") > -1) ? "\\{0}".format(metadataFileName) : "/{0}".format(metadataFileName);
                 fs.copyFile(metadataFilePath,destFilePath, (err) => {
                     if (err) {
-                        HandleError(err);
+                        err.Handle(settings.outputErrorSpn,settings.outputErrorText);
                     }
                     else {
                         console.log("{0} was copied to {1}".format(GetMetaDataFileName(),settings.extractionCallback().dataFolderPath));
@@ -252,7 +261,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 var dataFolderPath = settings.extractionCallback().dataFolderPath;
                 fs.readdir(dataFolderPath, (err, files) => {
                     if (err) {
-                        HandleError(err);
+                        err.Handle(settings.outputErrorSpn,settings.outputErrorText);
                     }
                     else {
                         var dataFolderPath = settings.extractionCallback().dataFolderPath;
@@ -308,6 +317,58 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 }
             }
 
+            // Validate refernces inputs
+            var ValidateReference = function(referenceType,referenceValue) {
+                var result = true;
+                var referenceTypeTitle = "";
+                switch(referenceType) {
+                    case "foreignFile" : referenceTypeTitle = settings.foreignFileTitle.innerHTML ;break;
+                    case "foreignVariable" : referenceTypeTitle = settings.foreignVariableTitle.innerHTML ;break;
+                    case "referenceVariable" : referenceTypeTitle = settings.referenceVariableTitle.innerHTML ;break;
+                }
+                if (result && startNumberPattern.test(referenceValue)) {
+                    ipcRenderer.send('open-error-dialog',referenceTypeTitle,settings.numberFirstReferenceText.innerHTML.format(referenceTypeTitle));
+                    result = false;
+                }
+                if (result && !validFileNamePattern.test(referenceValue)) {
+                    if(!enclosedReservedWordPattern.test(referenceValue)) {
+                        ipcRenderer.send('open-error-dialog',referenceTypeTitle,settings.illegalCharReferenceText.innerHTML.format(referenceTypeTitle));
+                        result = false;
+                    }
+                }
+                if (result && referenceValue.length > strLength) {
+                    ipcRenderer.send('open-error-dialog',referenceTypeTitle,settings.referenceLengthText.innerHTML.format(referenceTypeTitle));
+                    result = false;
+                }
+                if (result && reservedWordPattern.test(referenceValue)) {
+                    ipcRenderer.send('open-error-dialog',referenceTypeTitle,settings.referenceReservedWordText.innerHTML.format(referenceTypeTitle));
+                    result = false;
+                }
+                return result;
+            }
+
+            // validate keys
+            var ValidateKey = function(keyValue) {
+                if (settings.isValidMetadata && startNumberPattern.test(keyValue)) {
+                    ipcRenderer.send('open-error-dialog',settings.numberFirstKeyTitle.innerHTML,settings.numberFirstKeyText.innerHTML);
+                    settings.isValidMetadata = false;
+                }
+                if (settings.isValidMetadata && !validFileNamePattern.test(keyValue)) {
+                    if(!enclosedReservedWordPattern.test(keyValue)) {
+                        ipcRenderer.send('open-error-dialog',settings.illegalCharKeyTitle.innerHTML,settings.illegalCharKeyText.innerHTML);
+                        settings.isValidMetadata = false;
+                    }
+                }
+                if (settings.isValidMetadata && keyValue.length > strLength) {
+                    ipcRenderer.send('open-error-dialog',settings.keyLengthTitle.innerHTML,settings.keyLengthText.innerHTML);
+                    settings.isValidMetadata = false;
+                }
+                if (settings.isValidMetadata && reservedWordPattern.test(keyValue)) {
+                    ipcRenderer.send('open-error-dialog',settings.keyReservedWordTitle.innerHTML,settings.keyReservedWordText.innerHTML);
+                    settings.isValidMetadata = false;
+                }
+            }
+
             //implments new data table extraction
             var ResetExtraction = function() {
                 settings.extractionCallback().reset();
@@ -333,32 +394,37 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                     settings.extractionTab.click();
                 });
                 settings.okDataPath.addEventListener('click', (event) => {
-                    shell.openItem(settings.extractionCallback().localFolderPath);
+                    ipcRenderer.send('open-item',settings.extractionCallback().localFolderPath);
                 })
                 settings.okBtn.addEventListener('click', function (event) {
                     Reset();
                     ValidateFields();
+                    if(settings.keyVar.value != null && settings.keyVar.value !== "") {
+                        settings.keyVar.value.split(" ").forEach(keyValue => ValidateKey(keyValue));
+                    }
                     if(settings.isValidMetadata) { EnsureData(); }
                 })
                 settings.addReferenceBtn.addEventListener('click', function (event) {
-                    if (settings.foreignFileName.value === "" && settings.foreignKeyVarName.value === "" && settings.foreignFileRefVar.value === "") {
-                        ipcRenderer.send('open-error-dialog',settings.referenceReqTitle.innerHTML,settings.referenceReqText.innerHTML);
+                    if (settings.foreignFileName.value !== "" && settings.foreignKeyVarName.value !== "" && settings.foreignFileRefVar.value !== "") {
+                        if(ValidateReference("foreignFile",settings.foreignFileName.value) && ValidateReference("foreignVariable",settings.foreignKeyVarName.value) && ValidateReference("referenceVariable",settings.foreignFileRefVar.value)) {
+                            var selectedReferences = [settings.foreignFileName.value,settings.foreignKeyVarName.value,settings.foreignFileRefVar.value];
+                            settings.references.push(selectedReferences);
+                            settings.referencesTbl.hidden = false;
+                            $(settings.referencesTbl).append("<tr><td>{0}</td><td>{1}</td><td>{2}</td></tr>".format(selectedReferences[0],selectedReferences[1],selectedReferences[2]));
+                            settings.foreignFileName.value = "";
+                            settings.foreignKeyVarName.value = "";
+                            settings.foreignFileRefVar.value = "";
+                        }
                     }
                     else {
-                        var selectedReferences = [settings.foreignFileName.value,settings.foreignKeyVarName.value,settings.foreignFileRefVar.value];
-                        settings.references.push(selectedReferences);
-                        settings.referencesTbl.hidden = false;
-                        $(settings.referencesTbl).append("<tr><td>{0}</td><td>{1}</td><td>{2}</td></tr>".format(selectedReferences[0],selectedReferences[1],selectedReferences[2]));
-                        settings.foreignFileName.value = "";
-                        settings.foreignKeyVarName.value = "";
-                        settings.foreignFileRefVar.value = "";
+                        ipcRenderer.send('open-error-dialog',settings.referenceReqTitle.innerHTML,settings.referenceReqText.innerHTML);
                     }               
                 });
             }
 
             //Model interfaces functions
             Rigsarkiv.Hybris.MetaData = {
-                initialize: function (extractionCallback,metadataFileName,metadataFileNameDescription,metadataKeyVariable,metadataForeignFileName,metadataForeignKeyVariableName,metadataReferenceVariable,metdataOkBtn,inputFileNameRequired,inputNumberFirst,inputIllegalChar,outputOkId,okDataPathId,outputErrorId,outputNewExtractionId,newExtractionBtn,extractionTabId,outputNextId,nextBtn,indexFilesTabId,fileNameLengthId,fileNameReservedWordId,fileDescrReqId,informationPanel1Id,informationPanel2Id,indexFilesDescriptionId,outputCloseApplicationErrorPrefixId,referencesId,addReferenceBtn,referenceReqId) {
+                initialize: function (extractionCallback,metadataFileName,metadataFileNameDescription,metadataKeyVariable,metadataForeignFileName,metadataForeignKeyVariableName,metadataReferenceVariable,metdataOkBtn,inputFileNameRequired,inputNumberFirst,inputIllegalChar,outputOkId,okDataPathId,outputErrorId,outputNewExtractionId,newExtractionBtn,extractionTabId,outputNextId,nextBtn,indexFilesTabId,fileNameLengthId,fileNameReservedWordId,fileDescrReqId,informationPanel1Id,informationPanel2Id,indexFilesDescriptionId,outputCloseApplicationErrorPrefixId,referencesId,addReferenceBtn,referenceReqId,resetHideBox,numberFirstReference,illegalCharReference,referenceLength,referenceReservedWord,foreignFileId,foreignVariableId,referenceVariableId,numberFirstKeyId,illegalCharKeyId,keyLengthId,keyReservedWordId) {
                     settings.extractionCallback = extractionCallback;
                     settings.fileName = document.getElementById(metadataFileName);
                     settings.fileDescr = document.getElementById(metadataFileNameDescription);
@@ -401,6 +467,22 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                     settings.addReferenceBtn = document.getElementById(addReferenceBtn);
                     settings.referenceReqTitle = document.getElementById(referenceReqId + "-Title");
                     settings.referenceReqText = document.getElementById(referenceReqId + "-Text");
+                    settings.styleBox = document.getElementById(resetHideBox);
+                    settings.numberFirstReferenceText = document.getElementById(numberFirstReference + "-Text");
+                    settings.illegalCharReferenceText = document.getElementById(illegalCharReference + "-Text");
+                    settings.referenceLengthText = document.getElementById(referenceLength + "-Text");
+                    settings.referenceReservedWordText = document.getElementById(referenceReservedWord + "-Text");
+                    settings.foreignFileTitle = document.getElementById(foreignFileId + "-Title");
+                    settings.foreignVariableTitle = document.getElementById(foreignVariableId + "-Title");
+                    settings.referenceVariableTitle = document.getElementById(referenceVariableId + "-Title");
+                    settings.numberFirstKeyTitle = document.getElementById(numberFirstKeyId + "-Title");
+                    settings.numberFirstKeyText = document.getElementById(numberFirstKeyId + "-Text");
+                    settings.illegalCharKeyTitle = document.getElementById(illegalCharKeyId + "-Title");
+                    settings.illegalCharKeyText = document.getElementById(illegalCharKeyId + "-Text");
+                    settings.keyLengthTitle = document.getElementById(keyLengthId + "-Title");
+                    settings.keyLengthText = document.getElementById(keyLengthId + "-Text");
+                    settings.keyReservedWordTitle = document.getElementById(keyReservedWordId + "-Title");
+                    settings.keyReservedWordText = document.getElementById(keyReservedWordId + "-Text");
                     AddEvents();
                 }
             }
