@@ -98,8 +98,12 @@ namespace AthenaWPF
             _logManager = new LogManager();
             _logManager.LogAdded += OnLogAdded;
             _converter = new Rigsarkiv.Athena.Structure(_logManager, _srcPath, _destPath, _destFolder);
-            _converter.Run();
-            
+            if (_converter.Run())
+            {
+                _converter = new Rigsarkiv.Athena.MetaData(_logManager, _srcPath, _destPath, _destFolder);
+                _converter.Run();
+            }
+
             var timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromMilliseconds(1000);
             timer.Tick += new EventHandler(timer_Tick);

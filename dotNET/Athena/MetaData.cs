@@ -19,6 +19,8 @@ namespace Rigsarkiv.Athena
         const string IndicesPath = "{0}\\Indices";
         const string TableIndex = "tableIndex.xml";
         const string TableFolderPrefix = "table{0}";
+        const string ColumnIDPrefix = "c{0}";
+        const string VarCharPrefix = "VARCHAR({0})";
         private dynamic _metadata = null;
         private XmlDocument _tableDocument = null;
         private int _tablesCounter = 0;
@@ -83,29 +85,63 @@ namespace Rigsarkiv.Athena
 
         private void AddTableNode(Dictionary<string, object> tableInfo)
         {
-            var fragment = _tableDocument.CreateDocumentFragment();
-            fragment.InnerXml = TableNode;
+            var index = 1;
             _tablesCounter++;
-            var node = _tableDocument.SelectSingleNode("//tables").AppendChild(fragment);
-            node.SelectSingleNode("name").InnerText = tableInfo["name"].ToString();
+            var folder = string.Format(TableFolderPrefix, _tablesCounter);
+            _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add {0} to tableIndex.xml", folder) });
 
-            node.SelectSingleNode("folder").InnerText = string.Format(TableFolderPrefix, _tablesCounter);
+            var node = CreateNode(_tableDocument, _tableDocument.SelectSingleNode("//tables"), TableNode);
+            node.SelectSingleNode("name").InnerText = tableInfo["name"].ToString();
+            node.SelectSingleNode("folder").InnerText = folder;
             node.SelectSingleNode("rows").InnerText = tableInfo["rows"].ToString();
             node.SelectSingleNode("description").InnerText = tableInfo["description"].ToString();
             foreach (var variable in (object[])tableInfo["variables"])
             {
                 var variableInfo = (Dictionary<string, object>)variable;
-                AddColumnNode(variableInfo,node);
+                AddColumnNode(variableInfo,node,index++);
             }
         }
 
-        private void AddColumnNode(Dictionary<string, object> variableInfo,XmlNode tableNode)
+        private void AddColumnNode(Dictionary<string, object> variableInfo,XmlNode tableNode,int index)
         {
-            var fragment = _tableDocument.CreateDocumentFragment();
-            fragment.InnerXml = ColumnNode;
+            var node = CreateNode(_tableDocument, tableNode.SelectSingleNode("columns"), ColumnNode);
+            node.SelectSingleNode("name").InnerText = variableInfo["name"].ToString();
+            node.SelectSingleNode("columnID").InnerText = string.Format(ColumnIDPrefix, index);
+            node.SelectSingleNode("typeOriginal").InnerText = variableInfo["format"].ToString();
+            node.SelectSingleNode("description").InnerText = variableInfo["description"].ToString();
+            node.SelectSingleNode("type").InnerText = GetMappedType(variableInfo);
         }
 
-            private bool LoadJson()
+        private string GetMappedType(Dictionary<string, object> variableInfo)
+        {
+            var result = "";
+            switch (variableInfo["type"].ToString())
+            {
+                case "Int": result = "INTEGER"; break;
+                case "Decimal": result = "DECIMAL"; break;
+                case "Date": result = "DATE"; break;
+                case "Time": result = "TIME"; break;
+                case "DateTime": result = "TIMESTAMP"; break;
+                case "String":
+                    {
+                        var index = (int)variableInfo["appliedRegExp"];
+                        var regExSplit = ((object[])variableInfo["regExps"])[index].ToString().Split(',');
+                        var length = regExSplit[1].Split('}');
+                        result = string.Format(VarCharPrefix,length);
+                    };
+                    break;
+            }
+            return result;
+        }
+
+        private XmlNode CreateNode(XmlDocument xmlDocument,XmlNode parentNode,string xml)
+        {
+            var fragment = xmlDocument.CreateDocumentFragment();
+            fragment.InnerXml = xml;
+            return parentNode.AppendChild(fragment);
+        }
+
+        private bool LoadJson()
         {
             var result = true;
             try

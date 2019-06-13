@@ -683,7 +683,7 @@ function (n) {
                 }   
                 var converter = spawn(converterFilePath, [settings.metadataFilePostfix.format(settings.deliveryPackagePath) ]);
                 converter.stdout.on('data', (data) => console.log(`stdout: ${data}`));                  
-                converter.stderr.on('data', (data) => HandleError(new Error(data)));
+                converter.stderr.on('data', (data) => (new Error(data).Handle(settings.outputErrorSpn,settings.outputErrorText)));
                 converter.on('close', (code) => console.log(`converter process exited with code ${code}`));
             });
         }
