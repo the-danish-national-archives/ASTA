@@ -16,7 +16,6 @@ RELEASES
 
 #Include specific files
 !*/release-builds/windows-installer/FileConverterAdmin.exe
-<<<<<<< HEAD
 /dotNET/.vs/Athena/v15/Server/sqlite3
 /dotNET/Athena/obj/Debug
 /dotNET/.vs/Athena/v15
@@ -30,18 +29,6 @@ RELEASES
 /dotNET/AthenaWPF/obj/Debug
 /electron/assets/scripts/AthenaWPF.pdb
 /electron/assets/scripts/Athena.pdb
+/electron/assets/scripts/AthenaConsole.pdb
 electron/assets/scripts/Athena.exe
 electron/assets/scripts/Athena.exe.config
-=======
-/dotNET/Athena/obj/Debug
-/dotNET/.vs/Athena/v15/Server/sqlite3
-/dotNET/.vs/Athena/v15
-/dotNET/Athena/bin/Release/Athena.pdb
-/dotNET/Athena/obj/Release
-/dotNET/Athena/bin/Debug
-/dotNET/AthenaConsole/obj/Debug
-/dotNET/AthenaForm/obj/Debug
-/dotNET/AthenaWPF/obj/Debug
-/electron/assets/scripts/Athena.pdb
-/electron/assets/scripts/AthenaWPF.pdb
->>>>>>> 1897294e563458d987df719b76eabb996a971dc4

@@ -931,7 +931,7 @@ function (n) {
                         result = LogError("-CheckMetadata-FileEncoding-Error",settings.fileName);
                     } 
                     else {
-                        settings.data.push({ "fileName":settings.fileName,"errorStop":false, "system":"", "name":"", "variables":[] })
+                        settings.data.push({ "fileName":settings.fileName,"errorStop":false, "system":"", "name":"", "variables":[], "rows":0 })
                         if(!ValidateMetadata(metadataFilePath)) { result = false; }
                         GetTableData(settings.fileName).errorStop = settings.errorStop;
                         settings.errorStop = false;

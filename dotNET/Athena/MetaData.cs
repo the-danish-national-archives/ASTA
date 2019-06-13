@@ -2,7 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Web.Script.Serialization;
+using System.Xml;
 
 namespace Rigsarkiv.Athena
 {
@@ -11,10 +13,12 @@ namespace Rigsarkiv.Athena
     /// </summary>
     public class MetaData : Converter
     {
+        const string ResourcePrefix = "Rigsarkiv.Athena.Resources.{0}";
         const string ColumnNode = "<column><name>{0}</name><columnID>c{1}</columnID><type>{2}</type><typeOriginal>{3}</typeOriginal><nullable>false</nullable><description>{4}</description></column>";
-        const string TableNode = "<table><name>{1}</name><folder>{0}</folder><description>{2}</description><columns></columns><primaryKey><name>PK_{1}</name><column>{3}</column></primaryKey><foreignKeys></foreignKeys><rows>{4}</rows></table>";
-        private dynamic _metadata = null;
+        const string TableNode = "<table><name></name><folder></folder><description></description><columns></columns><primaryKey><name>PK_</name><column></column></primaryKey><foreignKeys></foreignKeys><rows></rows></table>";
 
+        private dynamic _metadata = null;
+        private XmlDocument _tableDocument = null;
         /// <summary>
         /// Constructore
         /// </summary>
@@ -24,7 +28,13 @@ namespace Rigsarkiv.Athena
         /// <param name="destFolder"></param>
         public MetaData(LogManager logManager, string srcPath, string destPath, string destFolder) : base(logManager, srcPath, destPath, destFolder)
         {
+            var assembly = Assembly.GetExecutingAssembly();
             _logSection = "Metadata";
+            _tableDocument = new XmlDocument();
+            using (Stream stream = assembly.GetManifestResourceStream(string.Format(ResourcePrefix,"tableIndex.xml")))
+            {
+                _tableDocument.Load(stream);
+            }
         }
 
         /// <summary>

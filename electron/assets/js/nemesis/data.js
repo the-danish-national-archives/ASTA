@@ -567,6 +567,7 @@ function (n) {
                 console.log("{0} data output: ".format(settings.fileName));
                 console.log(settings.data);
                 if(settings.convertStop) { settings.table.errorStop = true; }
+                settings.table.rows = settings.rowIndex;
                 ProcessDataSet();
             });
         }
