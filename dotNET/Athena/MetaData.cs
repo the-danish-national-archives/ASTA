@@ -19,8 +19,13 @@ namespace Rigsarkiv.Athena
         const string PrimaryKeyColumnNode = "<column></column>";
         const string ForeignKeyNode = "<foreignKey><name></name><referencedTable></referencedTable><reference><column></column><referenced>Kode</referenced></reference></foreignKey>";
         const string ReferencedTableNode = "<table><name></name><folder></folder><description></description><columns><column><name>Kode</name><columnID>c1</columnID><type></type><typeOriginal></typeOriginal><nullable>false</nullable><description>Kode</description></column><column><name>Kodeværdi</name><columnID>c2</columnID><type></type><typeOriginal></typeOriginal><nullable>false</nullable><description>Kodeværdi</description></column></columns><primaryKey><name></name><column>Kode</column></primaryKey><rows></rows></table>";
+        const string CodeTableRow = "<row><c1></c1><c2></c2></row>";
         const string IndicesPath = "{0}\\Indices";
         const string TableIndex = "tableIndex.xml";
+        const string TableIndexXmlNs = "http://www.sa.dk/xmlns/diark/1.0";
+        const string Table = "table.xml";
+        const string TableXmlNs = "http://www.sa.dk/xmlns/siard/1.0/schema0/{0}.xsd";
+        const string TableSchemaLocation = "http://www.sa.dk/xmlns/siard/1.0/schema0/{0}.xsd {0}.xsd";
         const string TableFolderPrefix = "table{0}";
         const string ColumnIDPrefix = "c{0}";
         const string PrimaryKeyPrefix = "PK_{0}";
@@ -28,8 +33,10 @@ namespace Rigsarkiv.Athena
         const string ReferencedTable = "{0}_{1}";
         const string ReferencedTableDescription = "Kodeliste til tabel {0}";
         const string VarCharPrefix = "VARCHAR({0})";
+        const string TablePath = "{0}\\Tables\\{1}";
         private dynamic _metadata = null;
-        private XmlDocument _tableDocument = null;
+        private XmlDocument _tableIndexDocument = null;
+        private string _tableXmlTemplate = null;
         private int _tablesCounter = 0;
 
         /// <summary>
@@ -43,10 +50,16 @@ namespace Rigsarkiv.Athena
         {
             var assembly = Assembly.GetExecutingAssembly();
             _logSection = "Metadata";
-            _tableDocument = new XmlDocument();
+            _tableIndexDocument = new XmlDocument();
             using (Stream stream = assembly.GetManifestResourceStream(string.Format(ResourcePrefix, TableIndex)))
             {
-                _tableDocument.Load(stream);
+                _tableIndexDocument.Load(stream);
+            }
+            var tableDocument = new XmlDocument();
+            using (Stream stream = assembly.GetManifestResourceStream(string.Format(ResourcePrefix, Table)))
+            {
+                tableDocument.Load(stream);
+                _tableXmlTemplate = tableDocument.OuterXml;
             }
         }
 
@@ -79,8 +92,8 @@ namespace Rigsarkiv.Athena
                     var tableInfo = (Dictionary<string, object>)table;
                     AddTableNode(tableInfo);
                 }
-                _tableDocument.DocumentElement.SetAttribute("xmlns", "http://www.sa.dk/xmlns/diark/1.0");
-                _tableDocument.Save(string.Format("{0}\\{1}", path, TableIndex));
+                _tableIndexDocument.DocumentElement.SetAttribute("xmlns", TableIndexXmlNs);
+                _tableIndexDocument.Save(string.Format("{0}\\{1}", path, TableIndex));
             }
             catch (Exception ex)
             {
@@ -96,8 +109,8 @@ namespace Rigsarkiv.Athena
             _tablesCounter++;
             var folder = string.Format(TableFolderPrefix, _tablesCounter);
             _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add {0} to tableIndex.xml", folder) });
-
-            var node = CreateNode(_tableDocument, _tableDocument.SelectSingleNode("//tables"), TableNode);
+            Directory.CreateDirectory(string.Format(TablePath, _destFolderPath, folder));
+            var node = CreateNode(_tableIndexDocument, _tableIndexDocument.SelectSingleNode("//tables"), TableNode);
             var tableName = tableInfo["name"].ToString();
             node.SelectSingleNode("name").InnerText = tableName;
             node.SelectSingleNode("folder").InnerText = folder;
@@ -113,7 +126,7 @@ namespace Rigsarkiv.Athena
 
         private void AddColumnNode(Dictionary<string, object> variableInfo,XmlNode tableNode,int index)
         {
-            var node = CreateNode(_tableDocument, tableNode.SelectSingleNode("columns"), ColumnNode);
+            var node = CreateNode(_tableIndexDocument, tableNode.SelectSingleNode("columns"), ColumnNode);
             var columnName = variableInfo["name"].ToString();
             var columnType = GetMappedType(variableInfo);
             node.SelectSingleNode("name").InnerText = columnName;
@@ -122,50 +135,75 @@ namespace Rigsarkiv.Athena
             node.SelectSingleNode("nullable").InnerText = variableInfo["nullable"].ToString().ToLower();
             node.SelectSingleNode("description").InnerText = variableInfo["description"].ToString();
             node.SelectSingleNode("type").InnerText = columnType;
-            if((bool)variableInfo["isKey"])
+
+            AddKeys(variableInfo, tableNode, columnName, columnType, index);
+        }
+
+        private void AddKeys(Dictionary<string, object> variableInfo, XmlNode tableNode,string columnName, string columnType, int index)
+        {
+            if ((bool)variableInfo["isKey"])
             {
-                _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add key: {0} ", columnName) });
-                var primaryKeyNode = CreateNode(_tableDocument, tableNode.SelectSingleNode("primaryKey"), PrimaryKeyColumnNode);
+                _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add primary Key columnName: {0} ", columnName) });
+                var primaryKeyNode = CreateNode(_tableIndexDocument, tableNode.SelectSingleNode("primaryKey"), PrimaryKeyColumnNode);
                 primaryKeyNode.InnerText = columnName;
             }
             if (variableInfo["codeListKey"] != null && !string.IsNullOrEmpty(variableInfo["codeListKey"].ToString()))
             {
-                AddReferencedTable(variableInfo, tableNode, index, columnType);
+                var tableName = tableNode.SelectSingleNode("name").InnerText;
+                var codeListKey = variableInfo["codeListKey"].ToString();
+                var refTableName = string.Format(ReferencedTable, tableName, codeListKey);
+                var foreignKeyName = string.Format(ForeignKeyPrefix, tableName, codeListKey, index); ;
+                _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add foreign key: {0} ", foreignKeyName) });
+
+                var foreignKeyNode = CreateNode(_tableIndexDocument, tableNode.SelectSingleNode("foreignKeys"), ForeignKeyNode);
+                foreignKeyNode.SelectSingleNode("name").InnerText = foreignKeyName;
+                foreignKeyNode.SelectSingleNode("referencedTable").InnerText = refTableName;
+                foreignKeyNode.SelectSingleNode("reference/column").InnerText = variableInfo["name"].ToString();
+
+                AddReferencedTable(variableInfo, tableNode, tableName, columnType, refTableName, index);
             }
         }
         
-        private void AddReferencedTable(Dictionary<string, object> variableInfo, XmlNode tableNode, int index, string columnType)
+        private void AddReferencedTable(Dictionary<string, object> variableInfo, XmlNode tableNode,string tableName, string columnType, string refTableName, int index)
         {
             _tablesCounter++;
-            var tableName = tableNode.SelectSingleNode("name").InnerText;
-            var codeListKey = variableInfo["codeListKey"].ToString();
-            var refTableName = string.Format(ReferencedTable, tableName, codeListKey);
             _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add referenced Table: {0} ", refTableName) });
 
-            var node = CreateNode(_tableDocument, tableNode.SelectSingleNode("foreignKeys"), ForeignKeyNode);
-            node.SelectSingleNode("name").InnerText = string.Format(ForeignKeyPrefix, tableName, codeListKey, index);
-            node.SelectSingleNode("referencedTable").InnerText = refTableName;
-            node.SelectSingleNode("reference/column").InnerText = variableInfo["name"].ToString();
-           
-            var refTableNode = CreateNode(_tableDocument, tableNode.ParentNode, ReferencedTableNode);
+            var folder = string.Format(TableFolderPrefix, _tablesCounter);
+            Directory.CreateDirectory(string.Format(TablePath, _destFolderPath, folder));
+
+            var refTableNode = CreateNode(_tableIndexDocument, tableNode.ParentNode, ReferencedTableNode);
             refTableNode.SelectSingleNode("name").InnerText = refTableName;
-            refTableNode.SelectSingleNode("folder").InnerText = string.Format(TableFolderPrefix, _tablesCounter);
+            refTableNode.SelectSingleNode("folder").InnerText = folder;
             refTableNode.SelectSingleNode("description").InnerText = string.Format(ReferencedTableDescription, tableName);
             refTableNode.SelectSingleNode("primaryKey/name").InnerText = string.Format(PrimaryKeyPrefix, refTableName);
             var columnNodes = refTableNode.SelectNodes("columns/column");
             columnNodes[0].SelectSingleNode("type").InnerText = columnType;
-            columnNodes[1].SelectSingleNode("type").InnerText = ParseOptions((object[])variableInfo["options"], refTableNode);
+            columnNodes[1].SelectSingleNode("type").InnerText = ParseOptions((object[])variableInfo["options"], refTableNode, folder);
         }
 
-        private string ParseOptions(object[] options, XmlNode refTableNode)
+        private string ParseOptions(object[] options, XmlNode refTableNode, string folder)
         {
             var result = 0;
+            var path = string.Format(TablePath, _destFolderPath, string.Format("{0}\\{0}.xml", folder));
+            _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add file: {0} ", path) });
+            var tableDocument = new XmlDocument();
+            tableDocument.LoadXml(_tableXmlTemplate);
             refTableNode.SelectSingleNode("rows").InnerText = options.Length.ToString();
             foreach (var option in options)
             {
-                var length = ((Dictionary<string, object>)option)["description"].ToString().Length;
+                var code = (Dictionary<string, object>)option;
+                var length = code["description"].ToString().Length;
                 if(length > result) { result = length; }
-            }
+
+                var node = CreateNode(tableDocument, tableDocument.SelectSingleNode("//table"), CodeTableRow);
+                node.SelectSingleNode("c1").InnerText = code["name"].ToString();
+                node.SelectSingleNode("c2").InnerText = code["description"].ToString();
+            }           
+            tableDocument.DocumentElement.SetAttribute("xmlns", string.Format(TableXmlNs, folder));
+            tableDocument.DocumentElement.SetAttribute("xsi:schemaLocation", string.Format(TableSchemaLocation, folder));
+            tableDocument.Save(path);
+
             return string.Format(VarCharPrefix, result);
         }
 
