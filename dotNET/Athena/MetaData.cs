@@ -14,7 +14,7 @@ namespace Rigsarkiv.Athena
     public class MetaData : Converter
     {
         const string ResourcePrefix = "Rigsarkiv.Athena.Resources.{0}";
-        const string ColumnNode = "<column><name></name><columnID></columnID><type></type><typeOriginal></typeOriginal><nullable>false</nullable><description></description></column>";
+        const string ColumnNode = "<column><name></name><columnID></columnID><type></type><typeOriginal></typeOriginal><nullable></nullable><description></description></column>";
         const string TableNode = "<table><name></name><folder></folder><description></description><columns></columns><primaryKey><name></name></primaryKey><foreignKeys></foreignKeys><rows></rows></table>";
         const string PrimaryKeyColumnNode = "<column></column>";
         const string IndicesPath = "{0}\\Indices";
@@ -113,6 +113,7 @@ namespace Rigsarkiv.Athena
             node.SelectSingleNode("name").InnerText = columnName;
             node.SelectSingleNode("columnID").InnerText = string.Format(ColumnIDPrefix, index);
             node.SelectSingleNode("typeOriginal").InnerText = variableInfo["format"].ToString();
+            node.SelectSingleNode("nullable").InnerText = variableInfo["nullable"].ToString().ToLower();
             node.SelectSingleNode("description").InnerText = variableInfo["description"].ToString();
             node.SelectSingleNode("type").InnerText = GetMappedType(variableInfo);
             if((bool)variableInfo["isKey"])

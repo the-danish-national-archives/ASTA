@@ -455,6 +455,9 @@ function (n) {
                     if(!patternMatch) {
                         if(!ValidateFormat(dataRow[i],variable))  { result = false; }
                     }
+                }
+                else {
+                    if(dataRow[i].trim() === "") { variable.nullable = true; } 
                 } 
             }
             if(!result) { settings.convertStop = true; }
