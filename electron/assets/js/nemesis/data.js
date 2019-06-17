@@ -52,7 +52,7 @@ function (n) {
             convertStop: false,
             scriptPath: "./assets/scripts/{0}",
             resourceWinPath: "resources\\{0}",
-            converterFileName: "AthenaWPF.exe",
+            converterFileName: "AthenaForm.exe",
             metadataFilePostfix: "{0}.json"
         }
 

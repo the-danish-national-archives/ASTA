@@ -27,8 +27,10 @@ RELEASES
 /dotNET/AthenaForm/obj/Debug
 /dotNET/AthenaWPF/bin/Debug
 /dotNET/AthenaWPF/obj/Debug
+/electron/assets/scripts/AthenaForm.pdb
 /electron/assets/scripts/AthenaWPF.pdb
 /electron/assets/scripts/Athena.pdb
 /electron/assets/scripts/AthenaConsole.pdb
 electron/assets/scripts/Athena.exe
 electron/assets/scripts/Athena.exe.config
+/dotNET/AthenaForm/Athena.pdb
