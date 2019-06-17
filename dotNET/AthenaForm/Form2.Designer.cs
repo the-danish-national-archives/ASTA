@@ -42,6 +42,7 @@
             this.sipPathRequired = new System.Windows.Forms.ErrorProvider(this.components);
             this.aipNameRequired = new System.Windows.Forms.ErrorProvider(this.components);
             this.aipPathRequired = new System.Windows.Forms.ErrorProvider(this.components);
+            this.nextForm = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.sipPathRequired)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.aipNameRequired)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.aipPathRequired)).BeginInit();
@@ -145,11 +146,23 @@
             // 
             this.aipPathRequired.ContainerControl = this;
             // 
+            // nextForm
+            // 
+            this.nextForm.Enabled = false;
+            this.nextForm.Location = new System.Drawing.Point(1057, 328);
+            this.nextForm.Name = "nextForm";
+            this.nextForm.Size = new System.Drawing.Size(75, 34);
+            this.nextForm.TabIndex = 10;
+            this.nextForm.Text = "Next";
+            this.nextForm.UseVisualStyleBackColor = true;
+            this.nextForm.Click += new System.EventHandler(this.nextForm_Click);
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1155, 626);
+            this.Controls.Add(this.nextForm);
             this.Controls.Add(this.outputRichTextBox);
             this.Controls.Add(this.convertButton);
             this.Controls.Add(this.aipButton);
@@ -185,5 +198,6 @@
         private System.Windows.Forms.ErrorProvider sipPathRequired;
         private System.Windows.Forms.ErrorProvider aipNameRequired;
         private System.Windows.Forms.ErrorProvider aipPathRequired;
+        private System.Windows.Forms.Button nextForm;
     }
 }

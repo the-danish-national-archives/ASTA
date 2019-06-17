@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Rigsarkiv.Athena.Logging;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,16 +13,17 @@ namespace Rigsarkiv.Athena
 {
     public partial class Form1 : Form
     {
+        private LogManager _logManager = null;
         DummyData.FauxData data = new DummyData.FauxData();
-        public Form1(string sourcePath)
+        public Form1(string srcPath, string destPath,string destFolder, LogManager logManager)
         {
             InitializeComponent();
-
             PopulateTableBox();
-            if (sourcePath != null)
+            _logManager = logManager;
+            if (srcPath != null)
             {
-                textBox1.Text = sourcePath;
-                folderBrowserDialog1.SelectedPath = sourcePath;
+                textBox1.Text = srcPath;
+                folderBrowserDialog1.SelectedPath = srcPath;
             }
         }
 

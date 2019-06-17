@@ -11,6 +11,7 @@ namespace Rigsarkiv.Athena
         const string DestFolderName = "AVID.SA.{0}.1";
         private LogManager _logManager = null;
         private Converter _converter = null;
+        private Form1 _form;
 
         /// <summary>
         /// Constructors
@@ -71,7 +72,11 @@ namespace Rigsarkiv.Athena
             if (_converter.Run())
             {
                 _converter = new MetaData(_logManager, srcPath, destPath, destFolder);
-                _converter.Run();
+                if(_converter.Run())
+                {
+                    _form = new Form1(srcPath, destPath, destFolder, _logManager);
+                    nextForm.Enabled = true;
+                }
             }
         }
 
@@ -84,7 +89,7 @@ namespace Rigsarkiv.Athena
                 case LogLevel.Info: outputRichTextBox.AppendText(message, Color.Black); break;
                 case LogLevel.Warning: outputRichTextBox.AppendText(message, Color.Orange); break;
             }
-            System.Threading.Thread.Sleep(500);
+            System.Threading.Thread.Sleep(200);
         }
 
         private bool ValidateInputs()
@@ -118,6 +123,12 @@ namespace Rigsarkiv.Athena
                 aipPathRequired.SetError(aipTextBox, string.Empty);
             }
             return result;
+        }
+
+        private void nextForm_Click(object sender, EventArgs e)
+        {
+            _form.Show();
+            this.Hide();
         }
     }
 }

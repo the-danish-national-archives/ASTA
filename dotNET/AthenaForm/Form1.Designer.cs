@@ -49,10 +49,9 @@
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(101, 25);
-            this.textBox1.Margin = new System.Windows.Forms.Padding(2);
+            this.textBox1.Location = new System.Drawing.Point(152, 38);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(101, 20);
+            this.textBox1.Size = new System.Drawing.Size(150, 26);
             this.textBox1.TabIndex = 0;
             // 
             // openFileDialog1
@@ -62,28 +61,31 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(8, 27);
-            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label1.Location = new System.Drawing.Point(12, 42);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(89, 13);
+            this.label1.Size = new System.Drawing.Size(130, 20);
             this.label1.TabIndex = 2;
             this.label1.Text = "Afleveringspakke";
             // 
             // tablesBox
             // 
             this.tablesBox.FormattingEnabled = true;
-            this.tablesBox.Location = new System.Drawing.Point(19, 64);
+            this.tablesBox.ItemHeight = 20;
+            this.tablesBox.Location = new System.Drawing.Point(28, 98);
+            this.tablesBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tablesBox.Name = "tablesBox";
-            this.tablesBox.Size = new System.Drawing.Size(76, 251);
+            this.tablesBox.Size = new System.Drawing.Size(112, 384);
             this.tablesBox.TabIndex = 3;
             this.tablesBox.Click += new System.EventHandler(this.tablesBox_Click);
             // 
             // dataRows
             // 
             this.dataRows.FormattingEnabled = true;
-            this.dataRows.Location = new System.Drawing.Point(101, 63);
+            this.dataRows.ItemHeight = 20;
+            this.dataRows.Location = new System.Drawing.Point(152, 97);
+            this.dataRows.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.dataRows.Name = "dataRows";
-            this.dataRows.Size = new System.Drawing.Size(202, 251);
+            this.dataRows.Size = new System.Drawing.Size(301, 384);
             this.dataRows.TabIndex = 4;
             // 
             // dataValues
@@ -92,9 +94,10 @@
             this.dataValues.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Before,
             this.After});
-            this.dataValues.Location = new System.Drawing.Point(375, 70);
+            this.dataValues.Location = new System.Drawing.Point(562, 108);
+            this.dataValues.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.dataValues.Name = "dataValues";
-            this.dataValues.Size = new System.Drawing.Size(456, 245);
+            this.dataValues.Size = new System.Drawing.Size(684, 377);
             this.dataValues.TabIndex = 5;
             // 
             // Before
@@ -109,70 +112,77 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(362, 320);
+            this.button1.Location = new System.Drawing.Point(543, 492);
+            this.button1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.Size = new System.Drawing.Size(112, 35);
             this.button1.TabIndex = 6;
             this.button1.Text = "Auto Kørsel";
             this.button1.UseVisualStyleBackColor = true;
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(443, 320);
+            this.button2.Location = new System.Drawing.Point(664, 492);
+            this.button2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.Size = new System.Drawing.Size(112, 35);
             this.button2.TabIndex = 7;
             this.button2.Text = "Stop";
             this.button2.UseVisualStyleBackColor = true;
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(524, 320);
+            this.button3.Location = new System.Drawing.Point(786, 492);
+            this.button3.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 23);
+            this.button3.Size = new System.Drawing.Size(112, 35);
             this.button3.TabIndex = 8;
             this.button3.Text = "Forrige";
             this.button3.UseVisualStyleBackColor = true;
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(605, 320);
+            this.button4.Location = new System.Drawing.Point(908, 492);
+            this.button4.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(75, 23);
+            this.button4.Size = new System.Drawing.Size(112, 35);
             this.button4.TabIndex = 9;
             this.button4.Text = "Næste";
             this.button4.UseVisualStyleBackColor = true;
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(743, 320);
+            this.button5.Location = new System.Drawing.Point(1114, 492);
+            this.button5.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(75, 23);
+            this.button5.Size = new System.Drawing.Size(112, 35);
             this.button5.TabIndex = 10;
             this.button5.Text = "Konvertér";
             this.button5.UseVisualStyleBackColor = true;
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(718, 43);
+            this.textBox2.Location = new System.Drawing.Point(1077, 66);
+            this.textBox2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(100, 20);
+            this.textBox2.Size = new System.Drawing.Size(148, 26);
             this.textBox2.TabIndex = 11;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(686, 46);
+            this.label2.Location = new System.Drawing.Point(1029, 71);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(26, 13);
+            this.label2.Size = new System.Drawing.Size(38, 20);
             this.label2.TabIndex = 12;
             this.label2.Text = "Søg";
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(843, 393);
+            this.ClientSize = new System.Drawing.Size(1264, 605);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.button5);
@@ -185,9 +195,8 @@
             this.Controls.Add(this.tablesBox);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.textBox1);
-            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Form1";
-            this.Text = "Athena";
+            this.Text = "ASTA - Athena";
             ((System.ComponentModel.ISupportInitialize)(this.dataValues)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
