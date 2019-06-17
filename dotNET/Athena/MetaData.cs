@@ -19,8 +19,7 @@ namespace Rigsarkiv.Athena
         const string PrimaryKeyColumnNode = "<column></column>";
         const string ForeignKeyNode = "<foreignKey><name></name><referencedTable></referencedTable><reference><column></column><referenced>Kode</referenced></reference></foreignKey>";
         const string ReferencedTableNode = "<table><name></name><folder></folder><description></description><columns><column><name>Kode</name><columnID>c1</columnID><type></type><typeOriginal></typeOriginal><nullable>false</nullable><description>Kode</description></column><column><name>Kodeværdi</name><columnID>c2</columnID><type></type><typeOriginal></typeOriginal><nullable>false</nullable><description>Kodeværdi</description></column></columns><primaryKey><name></name><column>Kode</column></primaryKey><rows></rows></table>";
-        const string ResearchIndexTableNode = "<table><tableID></tableID><source></source></table>";
-        const string ResearchIndexSspecialNumericNode = "<specialNumeric></specialNumeric>";
+        const string ResearchIndexTableNode = "<table><tableID></tableID><source></source><specialNumeric></specialNumeric></table>";
         const string ResearchIndexColumnsNode = "<columns></columns>";
         const string ResearchIndexColumnNode = "<column><columnID></columnID><missingValues></missingValues></column>";
         const string ResearchIndexValueNode = "<value></value>";
@@ -128,20 +127,20 @@ namespace Rigsarkiv.Athena
             var researchIndexNode = CreateNode(_researchIndexDocument, _researchIndexDocument.SelectSingleNode("//mainTables"), ResearchIndexTableNode);
             researchIndexNode.SelectSingleNode("tableID").InnerText = folder;
             researchIndexNode.SelectSingleNode("source").InnerText = tableInfo["system"].ToString();
-            var node = CreateNode(_tableIndexDocument, _tableIndexDocument.SelectSingleNode("//tables"), TableNode);
-            node.SelectSingleNode("name").InnerText = tableName;
-            node.SelectSingleNode("folder").InnerText = folder;
-            node.SelectSingleNode("rows").InnerText = tableInfo["rows"].ToString();
-            node.SelectSingleNode("description").InnerText = tableInfo["description"].ToString();
-            node.SelectSingleNode("primaryKey/name").InnerText = string.Format(PrimaryKeyPrefix, tableName);
+            var tableNode = CreateNode(_tableIndexDocument, _tableIndexDocument.SelectSingleNode("//tables"), TableNode);
+            tableNode.SelectSingleNode("name").InnerText = tableName;
+            tableNode.SelectSingleNode("folder").InnerText = folder;
+            tableNode.SelectSingleNode("rows").InnerText = tableInfo["rows"].ToString();
+            tableNode.SelectSingleNode("description").InnerText = tableInfo["description"].ToString();
+            tableNode.SelectSingleNode("primaryKey/name").InnerText = string.Format(PrimaryKeyPrefix, tableName);
             foreach (var variable in (object[])tableInfo["variables"])
             {
                 var variableInfo = (Dictionary<string, object>)variable;
-                AddColumnNode(variableInfo,node,index++);
+                AddColumnNode(variableInfo,tableNode, researchIndexNode, index++);
             }
         }
 
-        private void AddColumnNode(Dictionary<string, object> variableInfo,XmlNode tableNode,int index)
+        private void AddColumnNode(Dictionary<string, object> variableInfo,XmlNode tableNode,XmlNode researchIndexNode, int index)
         {
             var tableName = tableNode.SelectSingleNode("name").InnerText;
             var node = CreateNode(_tableIndexDocument, tableNode.SelectSingleNode("columns"), ColumnNode);
@@ -151,6 +150,7 @@ namespace Rigsarkiv.Athena
             node.SelectSingleNode("columnID").InnerText = string.Format(ColumnIDPrefix, index);
             node.SelectSingleNode("typeOriginal").InnerText = variableInfo["format"].ToString();
             node.SelectSingleNode("nullable").InnerText = variableInfo["nullable"].ToString().ToLower();
+            researchIndexNode.SelectSingleNode("specialNumeric").InnerText = variableInfo["specialNumeric"].ToString();
             node.SelectSingleNode("description").InnerText = variableInfo["description"].ToString();
             node.SelectSingleNode("type").InnerText = columnType;
             if (!string.IsNullOrEmpty(variableInfo["refData"].ToString()) && !string.IsNullOrEmpty(variableInfo["refVariable"].ToString()))
@@ -163,10 +163,10 @@ namespace Rigsarkiv.Athena
                 foreignKeyNode.SelectSingleNode("reference/column").InnerText = columnName;
                 foreignKeyNode.SelectSingleNode("reference/referenced").InnerText = variableInfo["refVariable"].ToString();
             }
-            AddKeys(variableInfo, tableNode, tableName, columnName, columnType, index);
+            AddKeys(variableInfo, tableNode, researchIndexNode, tableName, columnName, columnType, index);
         }
 
-        private void AddKeys(Dictionary<string, object> variableInfo, XmlNode tableNode,string tableName ,string columnName, string columnType, int index)
+        private void AddKeys(Dictionary<string, object> variableInfo, XmlNode tableNode, XmlNode researchIndexNode, string tableName ,string columnName, string columnType, int index)
         {
             if ((bool)variableInfo["isKey"])
             {
@@ -186,11 +186,11 @@ namespace Rigsarkiv.Athena
                 foreignKeyNode.SelectSingleNode("referencedTable").InnerText = refTableName;
                 foreignKeyNode.SelectSingleNode("reference/column").InnerText = variableInfo["name"].ToString();
 
-                AddReferencedTable(variableInfo, tableNode, tableName, columnType, refTableName, index);
+                AddReferencedTable(variableInfo, tableNode, researchIndexNode, tableName, columnName,columnType, refTableName, index);
             }
         }
         
-        private void AddReferencedTable(Dictionary<string, object> variableInfo, XmlNode tableNode,string tableName, string columnType, string refTableName, int index)
+        private void AddReferencedTable(Dictionary<string, object> variableInfo, XmlNode tableNode,XmlNode researchIndexNode, string tableName, string columnName,string columnType, string refTableName, int index)
         {
             _tablesCounter++;
             _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add referenced Table: {0} ", refTableName) });
@@ -205,10 +205,10 @@ namespace Rigsarkiv.Athena
             refTableNode.SelectSingleNode("primaryKey/name").InnerText = string.Format(PrimaryKeyPrefix, refTableName);
             var columnNodes = refTableNode.SelectNodes("columns/column");
             columnNodes[0].SelectSingleNode("type").InnerText = columnType;
-            columnNodes[1].SelectSingleNode("type").InnerText = ParseOptions((object[])variableInfo["options"], refTableNode, folder);
+            columnNodes[1].SelectSingleNode("type").InnerText = ParseOptions((object[])variableInfo["options"], refTableNode, researchIndexNode, folder, columnName);
         }
-
-        private string ParseOptions(object[] options, XmlNode refTableNode, string folder)
+        
+        private string ParseOptions(object[] options, XmlNode refTableNode,XmlNode researchIndexNode, string folder, string columnName)
         {
             var result = 0;
             var path = string.Format(TablePath, _destFolderPath, string.Format("{0}\\{0}.xml", folder));
@@ -221,7 +221,7 @@ namespace Rigsarkiv.Athena
                 var code = (Dictionary<string, object>)option;
                 var length = code["description"].ToString().Length;
                 if(length > result) { result = length; }
-
+                if((bool)code["isMissing"]) { AddMissingColumnNode(code["name"].ToString(), researchIndexNode, columnName); }
                 var node = CreateNode(tableDocument, tableDocument.SelectSingleNode("//table"), CodeTableRow);
                 node.SelectSingleNode("c1").InnerText = code["name"].ToString();
                 node.SelectSingleNode("c2").InnerText = code["description"].ToString();
@@ -232,6 +232,27 @@ namespace Rigsarkiv.Athena
 
             return string.Format(VarCharPrefix, result);
         }
+
+        private void AddMissingColumnNode(string codeName, XmlNode researchIndexNode,string columnName)
+        {
+
+            _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add missing value: {0} ", codeName) });
+            XmlNode node = null;
+            if(researchIndexNode.SelectSingleNode("columns") == null)
+            {
+                node = CreateNode(_researchIndexDocument, researchIndexNode, ResearchIndexColumnsNode);
+            }
+            var xpath = string.Format("columns/column[columnID = '{0}']", columnName);
+            if (researchIndexNode.SelectSingleNode(xpath) == null)
+            {
+                node = CreateNode(_researchIndexDocument, researchIndexNode.SelectSingleNode("columns"), ResearchIndexColumnNode);
+                node.SelectSingleNode("columnID").InnerText = columnName;
+            }
+            node = researchIndexNode.SelectSingleNode(xpath);
+            node = CreateNode(_researchIndexDocument, node.SelectSingleNode("missingValues"), ResearchIndexValueNode);
+            node.InnerText = codeName;
+        }
+
 
         private string GetMappedType(Dictionary<string, object> variableInfo)
         {
