@@ -1,13 +1,7 @@
 ﻿using Rigsarkiv.Athena.Extensions;
 using Rigsarkiv.Athena.Logging;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Rigsarkiv.Athena
@@ -18,6 +12,11 @@ namespace Rigsarkiv.Athena
         private LogManager _logManager = null;
         private Converter _converter = null;
 
+        /// <summary>
+        /// Constructors
+        /// </summary>
+        /// <param name="srcPath"></param>
+        /// <param name="destPath"></param>
         public Form2(string srcPath, string destPath)
         {
             InitializeComponent();
@@ -60,6 +59,7 @@ namespace Rigsarkiv.Athena
 
         private void convertButton_Click(object sender, EventArgs e)
         {
+            if (!ValidateInputs()) { return; }
             outputRichTextBox.Clear();
             _logManager = new LogManager();
             _logManager.LogAdded += OnLogAdded;
@@ -85,6 +85,39 @@ namespace Rigsarkiv.Athena
                 case LogLevel.Warning: outputRichTextBox.AppendText(message, Color.Orange); break;
             }
             System.Threading.Thread.Sleep(500);
+        }
+
+        private bool ValidateInputs()
+        {
+            var result = true;            
+            if (string.IsNullOrEmpty(sipTextBox.Text))
+            {
+                sipPathRequired.SetError(sipTextBox, "Mappe mangler");
+                result = false;
+            }
+            else
+            {
+                sipPathRequired.SetError(sipTextBox, string.Empty);
+            }
+            if (string.IsNullOrEmpty(aipNameTextBox.Text))
+            {
+                aipNameRequired.SetError(aipNameTextBox, "Navn mangler");
+                result = false;
+            }
+            else
+            {
+                aipNameRequired.SetError(aipNameTextBox, string.Empty);
+            }
+            if (string.IsNullOrEmpty(aipTextBox.Text))
+            {
+                aipPathRequired.SetError(aipTextBox, "Mappe mangler");
+                result = false;
+            }
+            else
+            {
+                aipPathRequired.SetError(aipTextBox, string.Empty);
+            }
+            return result;
         }
     }
 }

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.label1 = new System.Windows.Forms.Label();
             this.sipTextBox = new System.Windows.Forms.TextBox();
             this.sipButton = new System.Windows.Forms.Button();
@@ -38,6 +39,12 @@
             this.aipButton = new System.Windows.Forms.Button();
             this.convertButton = new System.Windows.Forms.Button();
             this.outputRichTextBox = new System.Windows.Forms.RichTextBox();
+            this.sipPathRequired = new System.Windows.Forms.ErrorProvider(this.components);
+            this.aipNameRequired = new System.Windows.Forms.ErrorProvider(this.components);
+            this.aipPathRequired = new System.Windows.Forms.ErrorProvider(this.components);
+            ((System.ComponentModel.ISupportInitialize)(this.sipPathRequired)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.aipNameRequired)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.aipPathRequired)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -126,6 +133,18 @@
             this.outputRichTextBox.TabIndex = 9;
             this.outputRichTextBox.Text = "";
             // 
+            // sipPathRequired
+            // 
+            this.sipPathRequired.ContainerControl = this;
+            // 
+            // aipNameRequired
+            // 
+            this.aipNameRequired.ContainerControl = this;
+            // 
+            // aipPathRequired
+            // 
+            this.aipPathRequired.ContainerControl = this;
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -143,6 +162,9 @@
             this.Controls.Add(this.label1);
             this.Name = "Form2";
             this.Text = "ASTA - Athena";
+            ((System.ComponentModel.ISupportInitialize)(this.sipPathRequired)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.aipNameRequired)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.aipPathRequired)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -160,5 +182,8 @@
         private System.Windows.Forms.Button aipButton;
         private System.Windows.Forms.Button convertButton;
         private System.Windows.Forms.RichTextBox outputRichTextBox;
+        private System.Windows.Forms.ErrorProvider sipPathRequired;
+        private System.Windows.Forms.ErrorProvider aipNameRequired;
+        private System.Windows.Forms.ErrorProvider aipPathRequired;
     }
 }
