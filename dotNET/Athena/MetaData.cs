@@ -19,9 +19,15 @@ namespace Rigsarkiv.Athena
         const string PrimaryKeyColumnNode = "<column></column>";
         const string ForeignKeyNode = "<foreignKey><name></name><referencedTable></referencedTable><reference><column></column><referenced>Kode</referenced></reference></foreignKey>";
         const string ReferencedTableNode = "<table><name></name><folder></folder><description></description><columns><column><name>Kode</name><columnID>c1</columnID><type></type><typeOriginal></typeOriginal><nullable>false</nullable><description>Kode</description></column><column><name>Kodeværdi</name><columnID>c2</columnID><type></type><typeOriginal></typeOriginal><nullable>false</nullable><description>Kodeværdi</description></column></columns><primaryKey><name></name><column>Kode</column></primaryKey><rows></rows></table>";
+        const string ResearchIndexTableNode = "<table><tableID></tableID><source></source></table>";
+        const string ResearchIndexSspecialNumericNode = "<specialNumeric></specialNumeric>";
+        const string ResearchIndexColumnsNode = "<columns></columns>";
+        const string ResearchIndexColumnNode = "<column><columnID></columnID><missingValues></missingValues></column>";
+        const string ResearchIndexValueNode = "<value></value>";
         const string CodeTableRow = "<row><c1></c1><c2></c2></row>";
         const string IndicesPath = "{0}\\Indices";
         const string TableIndex = "tableIndex.xml";
+        const string ResearchIndex = "researchIndex.xml";
         const string TableIndexXmlNs = "http://www.sa.dk/xmlns/diark/1.0";
         const string Table = "table.xml";
         const string TableXmlNs = "http://www.sa.dk/xmlns/siard/1.0/schema0/{0}.xsd";
@@ -29,13 +35,14 @@ namespace Rigsarkiv.Athena
         const string TableFolderPrefix = "table{0}";
         const string ColumnIDPrefix = "c{0}";
         const string PrimaryKeyPrefix = "PK_{0}";
-        const string ForeignKeyPrefix = "PK_{0}_{1}_{2}";
+        const string ForeignKeyPrefix = "FK_{0}_{1}_{2}";
         const string ReferencedTable = "{0}_{1}";
         const string ReferencedTableDescription = "Kodeliste til tabel {0}";
         const string VarCharPrefix = "VARCHAR({0})";
         const string TablePath = "{0}\\Tables\\{1}";
         private dynamic _metadata = null;
         private XmlDocument _tableIndexDocument = null;
+        private XmlDocument _researchIndexDocument = null;
         private string _tableXmlTemplate = null;
         private int _tablesCounter = 0;
 
@@ -55,6 +62,11 @@ namespace Rigsarkiv.Athena
             {
                 _tableIndexDocument.Load(stream);
             }
+            _researchIndexDocument = new XmlDocument();
+            using (Stream stream = assembly.GetManifestResourceStream(string.Format(ResourcePrefix, ResearchIndex)))
+            {
+                _researchIndexDocument.Load(stream);
+            }
             var tableDocument = new XmlDocument();
             using (Stream stream = assembly.GetManifestResourceStream(string.Format(ResourcePrefix, Table)))
             {
@@ -70,8 +82,8 @@ namespace Rigsarkiv.Athena
         public override bool Run()
         {
             var result = false;
-             _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Start Converting Metadata {0} -> {1}", _srcFolder, _destFolder) });
-            if(LoadJson() && EnsureTableIndex())
+            _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Start Converting Metadata {0} -> {1}", _srcFolder, _destFolder) });
+            if(LoadJson() && EnsureTables())
             {                
                 result = true;
             }
@@ -80,7 +92,7 @@ namespace Rigsarkiv.Athena
             return result;
         }
 
-        private bool EnsureTableIndex()
+        private bool EnsureTables()
         {
             var result = true;
             try
@@ -92,8 +104,10 @@ namespace Rigsarkiv.Athena
                     var tableInfo = (Dictionary<string, object>)table;
                     AddTableNode(tableInfo);
                 }
+                _researchIndexDocument.DocumentElement.SetAttribute("xmlns", TableIndexXmlNs);
                 _tableIndexDocument.DocumentElement.SetAttribute("xmlns", TableIndexXmlNs);
                 _tableIndexDocument.Save(string.Format("{0}\\{1}", path, TableIndex));
+                _researchIndexDocument.Save(string.Format("{0}\\{1}", path, ResearchIndex));
             }
             catch (Exception ex)
             {
@@ -110,8 +124,11 @@ namespace Rigsarkiv.Athena
             var folder = string.Format(TableFolderPrefix, _tablesCounter);
             _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add {0} to tableIndex.xml", folder) });
             Directory.CreateDirectory(string.Format(TablePath, _destFolderPath, folder));
-            var node = CreateNode(_tableIndexDocument, _tableIndexDocument.SelectSingleNode("//tables"), TableNode);
             var tableName = tableInfo["name"].ToString();
+            var researchIndexNode = CreateNode(_researchIndexDocument, _researchIndexDocument.SelectSingleNode("//mainTables"), ResearchIndexTableNode);
+            researchIndexNode.SelectSingleNode("tableID").InnerText = folder;
+            researchIndexNode.SelectSingleNode("source").InnerText = tableInfo["system"].ToString();
+            var node = CreateNode(_tableIndexDocument, _tableIndexDocument.SelectSingleNode("//tables"), TableNode);
             node.SelectSingleNode("name").InnerText = tableName;
             node.SelectSingleNode("folder").InnerText = folder;
             node.SelectSingleNode("rows").InnerText = tableInfo["rows"].ToString();
@@ -126,6 +143,7 @@ namespace Rigsarkiv.Athena
 
         private void AddColumnNode(Dictionary<string, object> variableInfo,XmlNode tableNode,int index)
         {
+            var tableName = tableNode.SelectSingleNode("name").InnerText;
             var node = CreateNode(_tableIndexDocument, tableNode.SelectSingleNode("columns"), ColumnNode);
             var columnName = variableInfo["name"].ToString();
             var columnType = GetMappedType(variableInfo);
@@ -135,11 +153,20 @@ namespace Rigsarkiv.Athena
             node.SelectSingleNode("nullable").InnerText = variableInfo["nullable"].ToString().ToLower();
             node.SelectSingleNode("description").InnerText = variableInfo["description"].ToString();
             node.SelectSingleNode("type").InnerText = columnType;
-
-            AddKeys(variableInfo, tableNode, columnName, columnType, index);
+            if (!string.IsNullOrEmpty(variableInfo["refData"].ToString()) && !string.IsNullOrEmpty(variableInfo["refVariable"].ToString()))
+            {
+                var foreignKeyName = string.Format(ForeignKeyPrefix, tableName, columnName, index);
+                _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add foreign key: {0} ", foreignKeyName) });
+                var foreignKeyNode = CreateNode(_tableIndexDocument, tableNode.SelectSingleNode("foreignKeys"), ForeignKeyNode);
+                foreignKeyNode.SelectSingleNode("name").InnerText = foreignKeyName;
+                foreignKeyNode.SelectSingleNode("referencedTable").InnerText = variableInfo["refData"].ToString();
+                foreignKeyNode.SelectSingleNode("reference/column").InnerText = columnName;
+                foreignKeyNode.SelectSingleNode("reference/referenced").InnerText = variableInfo["refVariable"].ToString();
+            }
+            AddKeys(variableInfo, tableNode, tableName, columnName, columnType, index);
         }
 
-        private void AddKeys(Dictionary<string, object> variableInfo, XmlNode tableNode,string columnName, string columnType, int index)
+        private void AddKeys(Dictionary<string, object> variableInfo, XmlNode tableNode,string tableName ,string columnName, string columnType, int index)
         {
             if ((bool)variableInfo["isKey"])
             {
@@ -149,10 +176,9 @@ namespace Rigsarkiv.Athena
             }
             if (variableInfo["codeListKey"] != null && !string.IsNullOrEmpty(variableInfo["codeListKey"].ToString()))
             {
-                var tableName = tableNode.SelectSingleNode("name").InnerText;
                 var codeListKey = variableInfo["codeListKey"].ToString();
                 var refTableName = string.Format(ReferencedTable, tableName, codeListKey);
-                var foreignKeyName = string.Format(ForeignKeyPrefix, tableName, codeListKey, index); ;
+                var foreignKeyName = string.Format(ForeignKeyPrefix, tableName, codeListKey, index);
                 _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add foreign key: {0} ", foreignKeyName) });
 
                 var foreignKeyNode = CreateNode(_tableIndexDocument, tableNode.SelectSingleNode("foreignKeys"), ForeignKeyNode);
