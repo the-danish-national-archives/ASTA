@@ -87,5 +87,8 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\researchIndex.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\log.html" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

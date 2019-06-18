@@ -78,6 +78,7 @@ namespace Rigsarkiv.Athena
                     nextForm.Enabled = true;
                 }
             }
+            logButton.Enabled = true;
         }
 
         private void OnLogAdded(object sender, LogEventArgs e)
@@ -129,6 +130,15 @@ namespace Rigsarkiv.Athena
         {
             _form.Show();
             this.Hide();
+        }
+
+        private void logButton_Click(object sender, EventArgs e)
+        {
+            var path = string.Format("{0}\\{1}.html", aipTextBox.Text, aipNameTextBox.Text);
+            if (_logManager.Flush(path))
+            {
+                System.Diagnostics.Process.Start(path);
+            }
         }
     }
 }

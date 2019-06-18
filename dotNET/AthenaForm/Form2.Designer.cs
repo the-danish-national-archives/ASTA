@@ -43,6 +43,7 @@
             this.aipNameRequired = new System.Windows.Forms.ErrorProvider(this.components);
             this.aipPathRequired = new System.Windows.Forms.ErrorProvider(this.components);
             this.nextForm = new System.Windows.Forms.Button();
+            this.logButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.sipPathRequired)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.aipNameRequired)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.aipPathRequired)).BeginInit();
@@ -157,11 +158,23 @@
             this.nextForm.UseVisualStyleBackColor = true;
             this.nextForm.Click += new System.EventHandler(this.nextForm_Click);
             // 
+            // logButton
+            // 
+            this.logButton.Enabled = false;
+            this.logButton.Location = new System.Drawing.Point(52, 272);
+            this.logButton.Name = "logButton";
+            this.logButton.Size = new System.Drawing.Size(75, 32);
+            this.logButton.TabIndex = 11;
+            this.logButton.Text = "Log";
+            this.logButton.UseVisualStyleBackColor = true;
+            this.logButton.Click += new System.EventHandler(this.logButton_Click);
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1040, 626);
+            this.Controls.Add(this.logButton);
             this.Controls.Add(this.nextForm);
             this.Controls.Add(this.outputRichTextBox);
             this.Controls.Add(this.convertButton);
@@ -199,5 +212,6 @@
         private System.Windows.Forms.ErrorProvider aipNameRequired;
         private System.Windows.Forms.ErrorProvider aipPathRequired;
         private System.Windows.Forms.Button nextForm;
+        private System.Windows.Forms.Button logButton;
     }
 }
