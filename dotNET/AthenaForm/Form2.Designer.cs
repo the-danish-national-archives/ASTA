@@ -118,9 +118,9 @@
             // 
             // convertButton
             // 
-            this.convertButton.Location = new System.Drawing.Point(941, 276);
+            this.convertButton.Location = new System.Drawing.Point(830, 272);
             this.convertButton.Name = "convertButton";
-            this.convertButton.Size = new System.Drawing.Size(93, 29);
+            this.convertButton.Size = new System.Drawing.Size(93, 32);
             this.convertButton.TabIndex = 8;
             this.convertButton.Text = "Convert";
             this.convertButton.UseVisualStyleBackColor = true;
@@ -149,11 +149,11 @@
             // nextForm
             // 
             this.nextForm.Enabled = false;
-            this.nextForm.Location = new System.Drawing.Point(1057, 328);
+            this.nextForm.Location = new System.Drawing.Point(941, 272);
             this.nextForm.Name = "nextForm";
-            this.nextForm.Size = new System.Drawing.Size(75, 34);
+            this.nextForm.Size = new System.Drawing.Size(93, 32);
             this.nextForm.TabIndex = 10;
-            this.nextForm.Text = "Next";
+            this.nextForm.Text = "Næste";
             this.nextForm.UseVisualStyleBackColor = true;
             this.nextForm.Click += new System.EventHandler(this.nextForm_Click);
             // 
@@ -161,7 +161,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1155, 626);
+            this.ClientSize = new System.Drawing.Size(1040, 626);
             this.Controls.Add(this.nextForm);
             this.Controls.Add(this.outputRichTextBox);
             this.Controls.Add(this.convertButton);

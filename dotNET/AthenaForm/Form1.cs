@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Drawing;
 
 namespace Rigsarkiv.Athena
 {
@@ -15,31 +16,18 @@ namespace Rigsarkiv.Athena
     {
         private LogManager _logManager = null;
         private Data _converter = null;
+        private Dictionary<string, string> _mainTables = null;
+        private Dictionary<string, string> _codeTables = null;
         public Form1(string srcPath, string destPath,string destFolder, LogManager logManager)
         {
             InitializeComponent();            
             _logManager = logManager;
             if (srcPath != null)
             {
-                textBox1.Text = srcPath;
                 _converter = new Data(logManager, srcPath, destPath, destFolder);
             }
-            PopulateTableBox();
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            var result = folderBrowserDialog1.ShowDialog();
-            if (result == DialogResult.OK)
-            {
-                textBox1.Text = folderBrowserDialog1.SelectedPath;
-            }
-        }
-
-        private void PopulateTableBox()
-        {
-            var tables = _converter.GetTables(true);
-            this.mainTablesListBox.Items.AddRange(tables.Keys.ToArray());
+            _mainTables = _converter.GetMainTables();
+            mainTablesListBox.Items.AddRange(_mainTables.Keys.ToArray());
         }
 
         public void tablesBox_Click(object sender, EventArgs e)
@@ -74,5 +62,34 @@ namespace Rigsarkiv.Athena
             }*/
         }
 
+        private void mainTablesListBox_DrawItem(object sender, DrawItemEventArgs e)
+        {
+
+        }
+
+        private void codeTablesListBox_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            e.DrawBackground();
+
+            Graphics g = e.Graphics;
+            g.FillRectangle(new SolidBrush(Color.White), e.Bounds);
+            ListBox lb = (ListBox)sender;
+            g.DrawString(lb.Items[e.Index].ToString(), e.Font, new SolidBrush(Color.Red), new PointF(e.Bounds.X, e.Bounds.Y));
+
+            e.DrawFocusRectangle();
+        }
+
+        private void codeTablesListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void mainTablesListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            codeTablesListBox.Items.Clear();
+            var folder = _mainTables[mainTablesListBox.SelectedItem.ToString()];
+            _codeTables = _converter.GetCodeTables(folder);
+            codeTablesListBox.Items.AddRange(_codeTables.Keys.ToArray());
+        }
     }
 }
