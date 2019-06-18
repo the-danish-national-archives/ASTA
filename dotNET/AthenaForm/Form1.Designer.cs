@@ -96,7 +96,7 @@
             this.dataValues.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.dataValues.Name = "dataValues";
             this.dataValues.ReadOnly = true;
-            this.dataValues.Size = new System.Drawing.Size(916, 377);
+            this.dataValues.Size = new System.Drawing.Size(733, 377);
             this.dataValues.TabIndex = 5;
             // 
             // variableName
@@ -229,7 +229,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1140, 605);
+            this.ClientSize = new System.Drawing.Size(1297, 605);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label1);

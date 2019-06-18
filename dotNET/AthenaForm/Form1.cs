@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing;
+using Rigsarkiv.Athena.Entities;
 
 namespace Rigsarkiv.Athena
 {
@@ -16,8 +17,7 @@ namespace Rigsarkiv.Athena
     {
         private LogManager _logManager = null;
         private Data _converter = null;
-        private Dictionary<string, string> _mainTables = null;
-        private Dictionary<string, string> _codeTables = null;
+        private List<Table> _tables = null;
         public Form1(string srcPath, string destPath,string destFolder, LogManager logManager)
         {
             InitializeComponent();            
@@ -26,8 +26,8 @@ namespace Rigsarkiv.Athena
             {
                 _converter = new Data(logManager, srcPath, destPath, destFolder);
             }
-            _mainTables = _converter.GetMainTables();
-            mainTablesListBox.Items.AddRange(_mainTables.Keys.ToArray());
+            _tables = _converter.GetTables();
+            mainTablesListBox.Items.AddRange(_tables.Select(t => t.Name).ToArray());
         }
 
         public void tablesBox_Click(object sender, EventArgs e)
@@ -87,9 +87,11 @@ namespace Rigsarkiv.Athena
         private void mainTablesListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             codeTablesListBox.Items.Clear();
-            var folder = _mainTables[mainTablesListBox.SelectedItem.ToString()];
-            _codeTables = _converter.GetCodeTables(folder);
-            codeTablesListBox.Items.AddRange(_codeTables.Keys.ToArray());
+            var table = _tables[mainTablesListBox.SelectedIndex];
+            if(table.CodeList != null && table.CodeList.Count > 0)
+            {
+                codeTablesListBox.Items.AddRange(table.CodeList.Select(t => t.Name).ToArray());
+            }
         }
     }
 }

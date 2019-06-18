@@ -1,4 +1,5 @@
-﻿using Rigsarkiv.Athena.Logging;
+﻿using Rigsarkiv.Athena.Entities;
+using Rigsarkiv.Athena.Logging;
 using System.Collections.Generic;
 using System.Xml;
 
@@ -39,38 +40,39 @@ namespace Rigsarkiv.Athena
         }
 
         /// <summary>
-        /// Get Main Tables name/folder pair
+        /// Get Tables structure name/folder pair
         /// </summary>
         /// <returns></returns>
-        public Dictionary<string, string> GetMainTables()
+        public List<Table> GetTables()
         {
-            Dictionary<string, string> result = new Dictionary<string, string>();
+            List<Table> result = new List<Table>();
+            List<string> ids = new List<string>();
             string id = null;
             string name = null;
             foreach (XmlNode node in _researchIndexDocument.SelectNodes("//diark:table", _researchIndexNS))
             {
                 id = node.SelectSingleNode("diark:tableID", _researchIndexNS).InnerText;
                 name = _tableIndexDocument.SelectSingleNode(string.Format("//diark:table[diark:folder = '{0}']/diark:name", id), _tableIndexNS).InnerText;
-                result.Add(name, id);
+                ids.Add(id);
+                result.Add(new Table() { Name = name, Folder = id });
             }
+            result.ForEach(t => t.CodeList = GetCodeTables(t.Folder, ids));
             return result;
         }
 
-        /// <summary>
-        /// Get related code Tables name/folder pair
-        /// </summary>
-        /// <param name="folder"></param>
-        /// <returns></returns>
-        public Dictionary<string,string> GetCodeTables(string folder)
+        private List<Table> GetCodeTables(string folder, List<string> excludeIds)
         {
-            Dictionary<string, string> result = new Dictionary<string, string>();
+            List<Table> result = new List<Table>();
             string id = null;
             string name = null;
             foreach (XmlNode node in _tableIndexDocument.SelectNodes(string.Format("//diark:table[diark:folder = '{0}']/diark:foreignKeys/diark:foreignKey/diark:referencedTable", folder), _tableIndexNS))
             {
                 name = node.InnerText;
                 id = _tableIndexDocument.SelectSingleNode(string.Format("//diark:table[diark:name = '{0}']/diark:folder", name), _tableIndexNS).InnerText;
-                result.Add(name, id);
+                if(!excludeIds.Contains(id))
+                {
+                    result.Add(new Table() { Name = name, Folder = id });
+                }
             }            
             return result;
         }
