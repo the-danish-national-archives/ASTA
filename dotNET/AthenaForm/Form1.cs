@@ -14,17 +14,17 @@ namespace Rigsarkiv.Athena
     public partial class Form1 : Form
     {
         private LogManager _logManager = null;
-        DummyData.FauxData data = new DummyData.FauxData();
+        private Data _converter = null;
         public Form1(string srcPath, string destPath,string destFolder, LogManager logManager)
         {
-            InitializeComponent();
-            PopulateTableBox();
+            InitializeComponent();            
             _logManager = logManager;
             if (srcPath != null)
             {
                 textBox1.Text = srcPath;
-                folderBrowserDialog1.SelectedPath = srcPath;
+                _converter = new Data(logManager, srcPath, destPath, destFolder);
             }
+            PopulateTableBox();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -38,34 +38,30 @@ namespace Rigsarkiv.Athena
 
         private void PopulateTableBox()
         {
-            var keys = data.Tabl1.Keys.ToArray();
-            this.tablesBox.Items.AddRange(new object[]
-            {
-                "Table1",
-                "Table2"
-            });
+            var tables = _converter.GetTables(true);
+            this.mainTablesListBox.Items.AddRange(tables.Keys.ToArray());
         }
 
         public void tablesBox_Click(object sender, EventArgs e)
         {
-            Console.WriteLine("clicked");
-            String selectedItem = tablesBox.SelectedItem.ToString();
-            this.dataRows.Items.Clear();
+            /*Console.WriteLine("clicked");
+            String selectedItem = mainTablesListBox.SelectedItem.ToString();
+            this.codeTablesListBox.Items.Clear();
             Dictionary<String, List<String>> tableData = null;
             if(selectedItem == "Table1")
             {
-                tableData = data.Tabl1;
+                //tableData = data.Tabl1;
             }
             else
             {
-                tableData = data.Tabl2;
+                //tableData = data.Tabl2;
             }
 
             foreach (var row in tableData)
             {
-                this.dataRows.Items.Add(row.Key);
+                //this.codeTablesListBox.Items.Add(row.Key);
             }
-            this.dataRows.SelectedIndex = 0;
+            this.codeTablesListBox.SelectedIndex = 0;
             var dataList = tableData.Keys.ToList();
             var indexKey = dataList[0];
             dataValues.Rows.Clear();
@@ -75,7 +71,7 @@ namespace Rigsarkiv.Athena
             {
                 this.dataValues[0, i].Value = dataInput[i];
                 this.dataValues[1, i].Value = dataInput[i];
-            }
+            }*/
         }
 
     }

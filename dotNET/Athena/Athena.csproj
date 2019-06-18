@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Converter.cs" />
+    <Compile Include="Data.cs" />
     <Compile Include="Logging\LogEntity.cs" />
     <Compile Include="Logging\LogEventArgs.cs" />
     <Compile Include="Logging\LogLevel.cs" />

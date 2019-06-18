@@ -103,15 +103,14 @@ namespace Rigsarkiv.Athena
             try
             {
                 var path = string.Format(SchemasStandardPath, _destFolderPath);
-                var assembly = Assembly.GetExecutingAssembly();
-                foreach(string name in assembly.GetManifestResourceNames())
+                foreach(string name in _assembly.GetManifestResourceNames())
                 {
                     var names = name.Split('.');
                     if(names[names.Length - 1].ToLower() == "xsd")
                     {
                         var fileName = string.Format("{0}.{1}", names[names.Length - 2], names[names.Length - 1]);
                         _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Ensure resource : {0}", fileName) });
-                        using (Stream stream = assembly.GetManifestResourceStream(name))
+                        using (Stream stream = _assembly.GetManifestResourceStream(name))
                         {
                             using (var fileStream = new FileStream(string.Format("{0}\\{1}", path, fileName), FileMode.Create, FileAccess.Write))
                             {

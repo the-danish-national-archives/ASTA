@@ -30,10 +30,9 @@
         {
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.label1 = new System.Windows.Forms.Label();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-            this.tablesBox = new System.Windows.Forms.ListBox();
-            this.dataRows = new System.Windows.Forms.ListBox();
+            this.mainTablesListBox = new System.Windows.Forms.ListBox();
+            this.codeTablesListBox = new System.Windows.Forms.ListBox();
             this.dataValues = new System.Windows.Forms.DataGridView();
             this.Before = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.After = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -49,7 +48,7 @@
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(152, 38);
+            this.textBox1.Location = new System.Drawing.Point(414, 12);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(150, 26);
             this.textBox1.TabIndex = 0;
@@ -58,35 +57,26 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
-            // label1
+            // mainTablesListBox
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 42);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(130, 20);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "Afleveringspakke";
+            this.mainTablesListBox.FormattingEnabled = true;
+            this.mainTablesListBox.ItemHeight = 20;
+            this.mainTablesListBox.Location = new System.Drawing.Point(16, 97);
+            this.mainTablesListBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.mainTablesListBox.Name = "mainTablesListBox";
+            this.mainTablesListBox.Size = new System.Drawing.Size(154, 384);
+            this.mainTablesListBox.TabIndex = 3;
+            this.mainTablesListBox.Click += new System.EventHandler(this.tablesBox_Click);
             // 
-            // tablesBox
+            // codeTablesListBox
             // 
-            this.tablesBox.FormattingEnabled = true;
-            this.tablesBox.ItemHeight = 20;
-            this.tablesBox.Location = new System.Drawing.Point(28, 98);
-            this.tablesBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.tablesBox.Name = "tablesBox";
-            this.tablesBox.Size = new System.Drawing.Size(112, 384);
-            this.tablesBox.TabIndex = 3;
-            this.tablesBox.Click += new System.EventHandler(this.tablesBox_Click);
-            // 
-            // dataRows
-            // 
-            this.dataRows.FormattingEnabled = true;
-            this.dataRows.ItemHeight = 20;
-            this.dataRows.Location = new System.Drawing.Point(152, 97);
-            this.dataRows.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.dataRows.Name = "dataRows";
-            this.dataRows.Size = new System.Drawing.Size(301, 384);
-            this.dataRows.TabIndex = 4;
+            this.codeTablesListBox.FormattingEnabled = true;
+            this.codeTablesListBox.ItemHeight = 20;
+            this.codeTablesListBox.Location = new System.Drawing.Point(188, 97);
+            this.codeTablesListBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.codeTablesListBox.Name = "codeTablesListBox";
+            this.codeTablesListBox.Size = new System.Drawing.Size(159, 384);
+            this.codeTablesListBox.TabIndex = 4;
             // 
             // dataValues
             // 
@@ -191,9 +181,8 @@
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.dataValues);
-            this.Controls.Add(this.dataRows);
-            this.Controls.Add(this.tablesBox);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.codeTablesListBox);
+            this.Controls.Add(this.mainTablesListBox);
             this.Controls.Add(this.textBox1);
             this.Name = "Form1";
             this.Text = "ASTA - Athena";
@@ -207,10 +196,9 @@
 
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
-        private System.Windows.Forms.ListBox tablesBox;
-        private System.Windows.Forms.ListBox dataRows;
+        private System.Windows.Forms.ListBox mainTablesListBox;
+        private System.Windows.Forms.ListBox codeTablesListBox;
         private System.Windows.Forms.DataGridView dataValues;
         private System.Windows.Forms.DataGridViewTextBoxColumn Before;
         private System.Windows.Forms.DataGridViewTextBoxColumn After;

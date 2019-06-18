@@ -40,9 +40,9 @@ namespace Rigsarkiv.Athena.Logging
         /// flush and save log file
         /// </summary>
         /// <param name="path"></param>
-        public void Flush(string path)
+        public bool Flush(string path)
         {
-
+            return true;
         }
     }
 }

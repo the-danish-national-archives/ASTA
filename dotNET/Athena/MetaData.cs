@@ -13,7 +13,6 @@ namespace Rigsarkiv.Athena
     /// </summary>
     public class MetaData : Converter
     {
-        const string ResourcePrefix = "Rigsarkiv.Athena.Resources.{0}";
         const string ColumnNode = "<column><name></name><columnID></columnID><type></type><typeOriginal></typeOriginal><nullable></nullable><description></description></column>";
         const string TableNode = "<table><name></name><folder></folder><description></description><columns></columns><primaryKey><name></name></primaryKey><foreignKeys></foreignKeys><rows></rows></table>";
         const string PrimaryKeyColumnNode = "<column></column>";
@@ -23,14 +22,8 @@ namespace Rigsarkiv.Athena
         const string ResearchIndexColumnsNode = "<columns></columns>";
         const string ResearchIndexColumnNode = "<column><columnID></columnID><missingValues></missingValues></column>";
         const string ResearchIndexValueNode = "<value></value>";
-        const string CodeTableRow = "<row><c1></c1><c2></c2></row>";
-        const string IndicesPath = "{0}\\Indices";
-        const string TableIndex = "tableIndex.xml";
-        const string ResearchIndex = "researchIndex.xml";
-        const string TableIndexXmlNs = "http://www.sa.dk/xmlns/diark/1.0";
+        const string CodeTableRow = "<row><c1></c1><c2></c2></row>";              
         const string Table = "table.xml";
-        const string TableXmlNs = "http://www.sa.dk/xmlns/siard/1.0/schema0/{0}.xsd";
-        const string TableSchemaLocation = "http://www.sa.dk/xmlns/siard/1.0/schema0/{0}.xsd {0}.xsd";
         const string TableFolderPrefix = "table{0}";
         const string ColumnIDPrefix = "c{0}";
         const string PrimaryKeyPrefix = "PK_{0}";
@@ -39,9 +32,7 @@ namespace Rigsarkiv.Athena
         const string ReferencedTableDescription = "Kodeliste til tabel {0}";
         const string VarCharPrefix = "VARCHAR({0})";
         const string TablePath = "{0}\\Tables\\{1}";
-        private dynamic _metadata = null;
-        private XmlDocument _tableIndexDocument = null;
-        private XmlDocument _researchIndexDocument = null;
+        private dynamic _metadata = null;        
         private string _tableXmlTemplate = null;
         private int _tablesCounter = 0;
 
@@ -54,20 +45,17 @@ namespace Rigsarkiv.Athena
         /// <param name="destFolder"></param>
         public MetaData(LogManager logManager, string srcPath, string destPath, string destFolder) : base(logManager, srcPath, destPath, destFolder)
         {
-            var assembly = Assembly.GetExecutingAssembly();
-            _logSection = "Metadata";
-            _tableIndexDocument = new XmlDocument();
-            using (Stream stream = assembly.GetManifestResourceStream(string.Format(ResourcePrefix, TableIndex)))
+            _logSection = "Metadata";            
+            using (Stream stream = _assembly.GetManifestResourceStream(string.Format(ResourcePrefix, TableIndex)))
             {
                 _tableIndexDocument.Load(stream);
             }
-            _researchIndexDocument = new XmlDocument();
-            using (Stream stream = assembly.GetManifestResourceStream(string.Format(ResourcePrefix, ResearchIndex)))
+            using (Stream stream = _assembly.GetManifestResourceStream(string.Format(ResourcePrefix, ResearchIndex)))
             {
                 _researchIndexDocument.Load(stream);
             }
             var tableDocument = new XmlDocument();
-            using (Stream stream = assembly.GetManifestResourceStream(string.Format(ResourcePrefix, Table)))
+            using (Stream stream = _assembly.GetManifestResourceStream(string.Format(ResourcePrefix, Table)))
             {
                 tableDocument.Load(stream);
                 _tableXmlTemplate = tableDocument.OuterXml;
