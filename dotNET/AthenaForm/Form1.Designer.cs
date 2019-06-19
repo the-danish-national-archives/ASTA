@@ -32,23 +32,25 @@
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.mainTablesListBox = new System.Windows.Forms.ListBox();
             this.dataValues = new System.Windows.Forms.DataGridView();
-            this.variableName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.variableType = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.variableValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.columnType = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.columnValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.button1 = new System.Windows.Forms.Button();
             this.previewButton = new System.Windows.Forms.Button();
             this.prevButton = new System.Windows.Forms.Button();
             this.nextButton = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
+            this.searchTextBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.codeTablesListBox = new System.Windows.Forms.ListBox();
             this.previewProgressBar = new System.Windows.Forms.ProgressBar();
+            this.rowLabel = new System.Windows.Forms.Label();
+            this.searchButton = new System.Windows.Forms.Button();
+            this.tableInfoLabel = new System.Windows.Forms.Label();
+            this.variableName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.variableType = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.variableValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.columnType = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.columnValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataValues)).BeginInit();
             this.SuspendLayout();
             // 
@@ -71,6 +73,7 @@
             // 
             this.dataValues.AllowUserToAddRows = false;
             this.dataValues.AllowUserToDeleteRows = false;
+            this.dataValues.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataValues.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataValues.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.variableName,
@@ -81,39 +84,9 @@
             this.dataValues.Location = new System.Drawing.Point(520, 97);
             this.dataValues.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.dataValues.Name = "dataValues";
-            this.dataValues.ReadOnly = true;
+            this.dataValues.RowTemplate.ReadOnly = true;
             this.dataValues.Size = new System.Drawing.Size(745, 384);
             this.dataValues.TabIndex = 5;
-            // 
-            // variableName
-            // 
-            this.variableName.HeaderText = "Variabelnavn";
-            this.variableName.Name = "variableName";
-            this.variableName.ReadOnly = true;
-            // 
-            // variableType
-            // 
-            this.variableType.HeaderText = "Datatype (orginal)";
-            this.variableType.Name = "variableType";
-            this.variableType.ReadOnly = true;
-            // 
-            // variableValue
-            // 
-            this.variableValue.HeaderText = "Værdi";
-            this.variableValue.Name = "variableValue";
-            this.variableValue.ReadOnly = true;
-            // 
-            // columnType
-            // 
-            this.columnType.HeaderText = "Datatype (SQL)";
-            this.columnType.Name = "columnType";
-            this.columnType.ReadOnly = true;
-            // 
-            // columnValue
-            // 
-            this.columnValue.HeaderText = "Værdi";
-            this.columnValue.Name = "columnValue";
-            this.columnValue.ReadOnly = true;
             // 
             // button1
             // 
@@ -127,6 +100,7 @@
             // 
             // previewButton
             // 
+            this.previewButton.Enabled = false;
             this.previewButton.Location = new System.Drawing.Point(16, 504);
             this.previewButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.previewButton.Name = "previewButton";
@@ -139,10 +113,10 @@
             // prevButton
             // 
             this.prevButton.Enabled = false;
-            this.prevButton.Location = new System.Drawing.Point(786, 492);
+            this.prevButton.Location = new System.Drawing.Point(726, 52);
             this.prevButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.prevButton.Name = "prevButton";
-            this.prevButton.Size = new System.Drawing.Size(112, 35);
+            this.prevButton.Size = new System.Drawing.Size(71, 35);
             this.prevButton.TabIndex = 8;
             this.prevButton.Text = "Forrige";
             this.prevButton.UseVisualStyleBackColor = true;
@@ -150,10 +124,11 @@
             // 
             // nextButton
             // 
-            this.nextButton.Location = new System.Drawing.Point(908, 492);
+            this.nextButton.Enabled = false;
+            this.nextButton.Location = new System.Drawing.Point(805, 52);
             this.nextButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.nextButton.Name = "nextButton";
-            this.nextButton.Size = new System.Drawing.Size(112, 35);
+            this.nextButton.Size = new System.Drawing.Size(71, 34);
             this.nextButton.TabIndex = 9;
             this.nextButton.Text = "Næste";
             this.nextButton.UseVisualStyleBackColor = true;
@@ -169,23 +144,13 @@
             this.button5.Text = "Konvertér";
             this.button5.UseVisualStyleBackColor = true;
             // 
-            // textBox2
+            // searchTextBox
             // 
-            this.textBox2.Location = new System.Drawing.Point(989, 66);
-            this.textBox2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(148, 26);
-            this.textBox2.TabIndex = 11;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(943, 66);
-            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(38, 20);
-            this.label2.TabIndex = 12;
-            this.label2.Text = "Søg";
+            this.searchTextBox.Location = new System.Drawing.Point(975, 52);
+            this.searchTextBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.searchTextBox.Name = "searchTextBox";
+            this.searchTextBox.Size = new System.Drawing.Size(148, 26);
+            this.searchTextBox.TabIndex = 11;
             // 
             // label1
             // 
@@ -232,18 +197,84 @@
             this.previewProgressBar.Size = new System.Drawing.Size(471, 23);
             this.previewProgressBar.TabIndex = 18;
             // 
+            // rowLabel
+            // 
+            this.rowLabel.AutoSize = true;
+            this.rowLabel.Location = new System.Drawing.Point(520, 66);
+            this.rowLabel.Name = "rowLabel";
+            this.rowLabel.Size = new System.Drawing.Size(0, 20);
+            this.rowLabel.TabIndex = 19;
+            // 
+            // searchButton
+            // 
+            this.searchButton.Enabled = false;
+            this.searchButton.Location = new System.Drawing.Point(1131, 52);
+            this.searchButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.searchButton.Name = "searchButton";
+            this.searchButton.Size = new System.Drawing.Size(71, 35);
+            this.searchButton.TabIndex = 20;
+            this.searchButton.Text = "Søg";
+            this.searchButton.UseVisualStyleBackColor = true;
+            this.searchButton.Click += new System.EventHandler(this.searchButton_Click);
+            // 
+            // tableInfoLabel
+            // 
+            this.tableInfoLabel.AutoSize = true;
+            this.tableInfoLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tableInfoLabel.Location = new System.Drawing.Point(519, 9);
+            this.tableInfoLabel.Name = "tableInfoLabel";
+            this.tableInfoLabel.Size = new System.Drawing.Size(0, 29);
+            this.tableInfoLabel.TabIndex = 21;
+            // 
+            // variableName
+            // 
+            this.variableName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.variableName.HeaderText = "Variabelnavn";
+            this.variableName.Name = "variableName";
+            this.variableName.Width = 137;
+            // 
+            // variableType
+            // 
+            this.variableType.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.variableType.HeaderText = "Datatype (orginal)";
+            this.variableType.Name = "variableType";
+            this.variableType.Width = 157;
+            // 
+            // variableValue
+            // 
+            this.variableValue.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.variableValue.HeaderText = "Værdi";
+            this.variableValue.Name = "variableValue";
+            this.variableValue.Width = 88;
+            // 
+            // columnType
+            // 
+            this.columnType.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.columnType.HeaderText = "Datatype (SQL)";
+            this.columnType.Name = "columnType";
+            this.columnType.Width = 143;
+            // 
+            // columnValue
+            // 
+            this.columnValue.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.columnValue.HeaderText = "Værdi";
+            this.columnValue.Name = "columnValue";
+            this.columnValue.Width = 88;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1297, 605);
+            this.Controls.Add(this.tableInfoLabel);
+            this.Controls.Add(this.searchButton);
+            this.Controls.Add(this.rowLabel);
             this.Controls.Add(this.previewProgressBar);
             this.Controls.Add(this.codeTablesListBox);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.textBox2);
+            this.Controls.Add(this.searchTextBox);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.nextButton);
             this.Controls.Add(this.prevButton);
@@ -269,18 +300,20 @@
         private System.Windows.Forms.Button prevButton;
         private System.Windows.Forms.Button nextButton;
         private System.Windows.Forms.Button button5;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox searchTextBox;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.ListBox codeTablesListBox;
+        private System.Windows.Forms.ProgressBar previewProgressBar;
+        private System.Windows.Forms.Label rowLabel;
+        private System.Windows.Forms.Button searchButton;
+        private System.Windows.Forms.Label tableInfoLabel;
         private System.Windows.Forms.DataGridViewTextBoxColumn variableName;
         private System.Windows.Forms.DataGridViewTextBoxColumn variableType;
         private System.Windows.Forms.DataGridViewTextBoxColumn variableValue;
         private System.Windows.Forms.DataGridViewTextBoxColumn columnType;
         private System.Windows.Forms.DataGridViewTextBoxColumn columnValue;
-        private System.Windows.Forms.ListBox codeTablesListBox;
-        private System.Windows.Forms.ProgressBar previewProgressBar;
     }
 }
 

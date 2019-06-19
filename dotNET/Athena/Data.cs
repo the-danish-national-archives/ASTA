@@ -43,11 +43,9 @@ namespace Rigsarkiv.Athena
         public Row GetRow(Table table,int index)
         {
             var result = new Row() { DestValues = new Dictionary<string, string>(), SrcValues = new Dictionary<string, string>(), ErrorsColumns = new List<string>() } ;
-            
             var path = string.Format(TablePath, _destFolderPath, string.Format("{0}\\{0}.xml", table.Folder));
             if (File.Exists(path))
-            {
-                
+            {   
                 var tableDocument = new XmlDocument();
                 tableDocument.Load(path);
                 var tableNS = new XmlNamespaceManager(tableDocument.NameTable);
@@ -55,10 +53,16 @@ namespace Rigsarkiv.Athena
                 var rowNode = tableDocument.SelectSingleNode(string.Format("//tbns:row[{0}]", index), tableNS);
                 table.Columns.ForEach(c =>
                 {
+                    var hasError = false;
                     var value = rowNode.SelectSingleNode(string.Format("tbns:{0}", c.Id), tableNS).InnerText;
-                    var newValue = GetConvertedValue(c.Type, value);
+                    var newValue = GetConvertedValue(c.Type, value, out hasError);
                     result.SrcValues.Add(c.Id, value);
                     result.DestValues.Add(c.Id, newValue);
+                    if(hasError)
+                    {
+                        result.ErrorsColumns.Add(c.Id);                        
+                        table.Errors++;
+                    }
                 });
             }
             else
@@ -68,20 +72,20 @@ namespace Rigsarkiv.Athena
             return result;
         }
 
-        private string GetConvertedValue(string type,string value)
+        private string GetConvertedValue(string type,string value, out bool hasError)
         {
             switch (type)
             {
                 case "INTEGER":
                     {
                         int result = -1;
-                        int.TryParse(value, out result);
+                        hasError = int.TryParse(value, out result);
                         return result.ToString();
                     }; break;
                 case "DECIMAL":
                     {
                         float result = -1;
-                        float.TryParse(value, out result);
+                        hasError = float.TryParse(value, out result);
                         return result.ToString();
                     }; break;
                 /*case "DATE": result = "DATE"; break;
@@ -89,6 +93,7 @@ namespace Rigsarkiv.Athena
                 case "TIMESTAMP": result = "TIMESTAMP"; break;*/
                 default:
                     {
+                        hasError = true;
                         return value;
                     }; break;
             }
