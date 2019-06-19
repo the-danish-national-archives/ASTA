@@ -39,8 +39,8 @@
             this.columnValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.button1 = new System.Windows.Forms.Button();
             this.previewButton = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
+            this.prevButton = new System.Windows.Forms.Button();
+            this.nextButton = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -136,25 +136,28 @@
             this.previewButton.UseVisualStyleBackColor = true;
             this.previewButton.Click += new System.EventHandler(this.previewButton_Click);
             // 
-            // button3
+            // prevButton
             // 
-            this.button3.Location = new System.Drawing.Point(786, 492);
-            this.button3.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(112, 35);
-            this.button3.TabIndex = 8;
-            this.button3.Text = "Forrige";
-            this.button3.UseVisualStyleBackColor = true;
+            this.prevButton.Enabled = false;
+            this.prevButton.Location = new System.Drawing.Point(786, 492);
+            this.prevButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.prevButton.Name = "prevButton";
+            this.prevButton.Size = new System.Drawing.Size(112, 35);
+            this.prevButton.TabIndex = 8;
+            this.prevButton.Text = "Forrige";
+            this.prevButton.UseVisualStyleBackColor = true;
+            this.prevButton.Click += new System.EventHandler(this.prevButton_Click);
             // 
-            // button4
+            // nextButton
             // 
-            this.button4.Location = new System.Drawing.Point(908, 492);
-            this.button4.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(112, 35);
-            this.button4.TabIndex = 9;
-            this.button4.Text = "Næste";
-            this.button4.UseVisualStyleBackColor = true;
+            this.nextButton.Location = new System.Drawing.Point(908, 492);
+            this.nextButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.nextButton.Name = "nextButton";
+            this.nextButton.Size = new System.Drawing.Size(112, 35);
+            this.nextButton.TabIndex = 9;
+            this.nextButton.Text = "Næste";
+            this.nextButton.UseVisualStyleBackColor = true;
+            this.nextButton.Click += new System.EventHandler(this.nextButton_Click);
             // 
             // button5
             // 
@@ -242,8 +245,8 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.button5);
-            this.Controls.Add(this.button4);
-            this.Controls.Add(this.button3);
+            this.Controls.Add(this.nextButton);
+            this.Controls.Add(this.prevButton);
             this.Controls.Add(this.previewButton);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.dataValues);
@@ -263,8 +266,8 @@
         private System.Windows.Forms.DataGridView dataValues;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button previewButton;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button prevButton;
+        private System.Windows.Forms.Button nextButton;
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.Label label2;

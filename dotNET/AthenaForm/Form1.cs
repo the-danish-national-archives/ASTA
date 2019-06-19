@@ -35,34 +35,7 @@ namespace Rigsarkiv.Athena
 
         public void tablesBox_Click(object sender, EventArgs e)
         {
-            /*Console.WriteLine("clicked");
-            String selectedItem = mainTablesListBox.SelectedItem.ToString();
-            this.codeTablesListBox.Items.Clear();
-            Dictionary<String, List<String>> tableData = null;
-            if(selectedItem == "Table1")
-            {
-                //tableData = data.Tabl1;
-            }
-            else
-            {
-                //tableData = data.Tabl2;
-            }
-
-            foreach (var row in tableData)
-            {
-                //this.codeTablesListBox.Items.Add(row.Key);
-            }
-            this.codeTablesListBox.SelectedIndex = 0;
-            var dataList = tableData.Keys.ToList();
-            var indexKey = dataList[0];
-            dataValues.Rows.Clear();
-            this.dataValues.Rows.Add(tableData[indexKey].Capacity - 1);
-            var dataInput = tableData[indexKey];
-            for (int i = 0; i < tableData[indexKey].Capacity - 1; i++)
-            {
-                this.dataValues[0, i].Value = dataInput[i];
-                this.dataValues[1, i].Value = dataInput[i];
-            }*/
+           
         }
 
         private void mainTablesListBox_DrawItem(object sender, DrawItemEventArgs e)
@@ -86,6 +59,7 @@ namespace Rigsarkiv.Athena
 
         private void codeTablesListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
+            _rowIndex = 1;
             dataValues.Rows.Clear();
             previewProgressBar.Value = 0;
             _codeTable = _mainTable.CodeList[codeTablesListBox.SelectedIndex];
@@ -93,6 +67,7 @@ namespace Rigsarkiv.Athena
 
         private void mainTablesListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
+            _rowIndex = 1;
             dataValues.Rows.Clear();
             previewProgressBar.Value = 0;
             _codeTable = null;
@@ -119,7 +94,43 @@ namespace Rigsarkiv.Athena
                 _converter.GetRow(table, i);
                 //System.Threading.Thread.Sleep(200);
             }
-            var row = _converter.GetRow(table, _rowIndex); 
+            UpdateDataRow(table);
+        }
+
+        private void nextButton_Click(object sender, EventArgs e)
+        {
+            var table = (_codeTable != null) ? _codeTable : _mainTable;
+            if (table.Rows > _rowIndex)
+            {
+                _rowIndex++;
+                UpdateDataRow(table);
+            }
+            else
+            {
+                nextButton.Enabled = false;
+            }
+            prevButton.Enabled = true;
+        }
+
+        private void prevButton_Click(object sender, EventArgs e)
+        {
+            var table = (_codeTable != null) ? _codeTable : _mainTable;
+            if (_rowIndex > 1)
+            {
+                _rowIndex--;
+                UpdateDataRow(table);
+            }
+            else
+            {
+                prevButton.Enabled = false;
+            }
+            nextButton.Enabled = true;
+        }
+
+        private void UpdateDataRow(Table table)
+        {
+            dataValues.Rows.Clear();
+            var row = _converter.GetRow(table, _rowIndex);
             dataValues.Rows.Add(table.Columns.Count);
             for (int i = 0; i < table.Columns.Count; i++)
             {
