@@ -1,6 +1,7 @@
 ﻿using Rigsarkiv.Athena.Entities;
 using Rigsarkiv.Athena.Logging;
 using System.Collections.Generic;
+using System.IO;
 using System.Xml;
 
 namespace Rigsarkiv.Athena
@@ -39,6 +40,60 @@ namespace Rigsarkiv.Athena
             return true;
         }
 
+        public Row GetRow(Table table,int index)
+        {
+            var result = new Row() { DestValues = new Dictionary<string, string>(), SrcValues = new Dictionary<string, string>(), ErrorsColumns = new List<string>() } ;
+            
+            var path = string.Format(TablePath, _destFolderPath, string.Format("{0}\\{0}.xml", table.Folder));
+            if (File.Exists(path))
+            {
+                
+                var tableDocument = new XmlDocument();
+                tableDocument.Load(path);
+                var tableNS = new XmlNamespaceManager(tableDocument.NameTable);
+                tableNS.AddNamespace("tbns", string.Format(TableXmlNs, table.Folder));
+                var rowNode = tableDocument.SelectSingleNode(string.Format("//tbns:row[{0}]", index), tableNS);
+                table.Columns.ForEach(c =>
+                {
+                    var value = rowNode.SelectSingleNode(string.Format("tbns:{0}", c.Id), tableNS).InnerText;
+                    var newValue = GetConvertedValue(c.Type, value);
+                    result.SrcValues.Add(c.Id, value);
+                    result.DestValues.Add(c.Id, newValue);
+                });
+            }
+            else
+            {
+                //CSV file
+            }
+            return result;
+        }
+
+        private string GetConvertedValue(string type,string value)
+        {
+            switch (type)
+            {
+                case "INTEGER":
+                    {
+                        int result = -1;
+                        int.TryParse(value, out result);
+                        return result.ToString();
+                    }; break;
+                case "DECIMAL":
+                    {
+                        float result = -1;
+                        float.TryParse(value, out result);
+                        return result.ToString();
+                    }; break;
+                /*case "DATE": result = "DATE"; break;
+                case "TIME": result = "TIME"; break;
+                case "TIMESTAMP": result = "TIMESTAMP"; break;*/
+                default:
+                    {
+                        return value;
+                    }; break;
+            }
+        }
+
         /// <summary>
         /// Get Tables structure name/folder pair
         /// </summary>
@@ -49,13 +104,15 @@ namespace Rigsarkiv.Athena
             List<string> ids = new List<string>();
             string id = null;
             string name = null;
+            int rows = 0;
             foreach (XmlNode node in _researchIndexDocument.SelectNodes("//diark:table", _researchIndexNS))
             {
                 id = node.SelectSingleNode("diark:tableID", _researchIndexNS).InnerText;
                 XmlNode tableNode = _tableIndexDocument.SelectSingleNode(string.Format("//diark:table[diark:folder = '{0}']", id), _tableIndexNS);
                 name = tableNode.SelectSingleNode("diark:name", _tableIndexNS).InnerText;
+                rows = int.Parse(tableNode.SelectSingleNode("diark:rows", _tableIndexNS).InnerText);
                 ids.Add(id);
-                var table = new Table() { Name = name, Folder = id, Columns = GetColumn(tableNode) };
+                var table = new Table() { Name = name, Folder = id, Rows = rows, Columns = GetColumn(tableNode) };
                 result.Add(table);
             }
             result.ForEach(t => t.CodeList = GetCodeTables(t.Folder, ids));
@@ -67,14 +124,16 @@ namespace Rigsarkiv.Athena
             List<Table> result = new List<Table>();
             string id = null;
             string name = null;
+            int rows = 0;
             foreach (XmlNode node in _tableIndexDocument.SelectNodes(string.Format("//diark:table[diark:folder = '{0}']/diark:foreignKeys/diark:foreignKey/diark:referencedTable", folder), _tableIndexNS))
             {
                 name = node.InnerText;
                 XmlNode tableNode = _tableIndexDocument.SelectSingleNode(string.Format("//diark:table[diark:name = '{0}']", name), _tableIndexNS);
                 id = tableNode.SelectSingleNode("diark:folder", _tableIndexNS).InnerText;
-                if(!excludeIds.Contains(id))
+                rows = int.Parse(tableNode.SelectSingleNode("diark:rows", _tableIndexNS).InnerText);
+                if (!excludeIds.Contains(id))
                 {
-                    var table = new Table() { Name = name, Folder = id, Columns = GetColumn(tableNode) };
+                    var table = new Table() { Name = name, Folder = id, Rows = rows, Columns = GetColumn(tableNode) };
                     result.Add(table);
                 }
             }            

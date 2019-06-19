@@ -18,6 +18,9 @@ namespace Rigsarkiv.Athena
         private LogManager _logManager = null;
         private Data _converter = null;
         private List<Table> _tables = null;
+        private Table _mainTable = null;
+        private Table _codeTable = null;
+        private int _rowIndex = 1;
         public Form1(string srcPath, string destPath,string destFolder, LogManager logManager)
         {
             InitializeComponent();            
@@ -83,16 +86,49 @@ namespace Rigsarkiv.Athena
 
         private void codeTablesListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-
+            dataValues.Rows.Clear();
+            previewProgressBar.Value = 0;
+            _codeTable = _mainTable.CodeList[codeTablesListBox.SelectedIndex];
         }
 
         private void mainTablesListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
+            dataValues.Rows.Clear();
+            previewProgressBar.Value = 0;
+            _codeTable = null;
             codeTablesListBox.Items.Clear();
-            var table = _tables[mainTablesListBox.SelectedIndex];
-            if(table.CodeList != null && table.CodeList.Count > 0)
+            _mainTable = _tables[mainTablesListBox.SelectedIndex];
+            if(_mainTable.CodeList != null && _mainTable.CodeList.Count > 0)
             {
-                codeTablesListBox.Items.AddRange(table.CodeList.Select(t => t.Name).ToArray());
+                codeTablesListBox.Items.AddRange(_mainTable.CodeList.Select(t => t.Name).ToArray());
+            }
+        }
+
+        private void previewButton_Click(object sender, EventArgs e)
+        {
+            previewProgressBar.ResumeLayout();
+            previewProgressBar.Minimum = 0;
+            previewProgressBar.Step = 1;
+            dataValues.Rows.Clear();
+            var table = (_codeTable != null) ? _codeTable : _mainTable;
+            previewProgressBar.Maximum = table.Rows;
+
+            for (int i = 1; i <= table.Rows; i++)
+            {
+                previewProgressBar.PerformStep();
+                _converter.GetRow(table, i);
+                //System.Threading.Thread.Sleep(200);
+            }
+            var row = _converter.GetRow(table, _rowIndex); 
+            dataValues.Rows.Add(table.Columns.Count);
+            for (int i = 0; i < table.Columns.Count; i++)
+            {
+                var column = table.Columns[i];
+                dataValues[0, i].Value = column.Name;
+                dataValues[1, i].Value = column.TypeOriginal;
+                if (row.SrcValues.ContainsKey(column.Id)) { dataValues[2, i].Value = row.SrcValues[column.Id]; }
+                dataValues[3, i].Value = column.Type;
+                if (row.SrcValues.ContainsKey(column.Id)) { dataValues[4, i].Value = row.DestValues[column.Id]; }
             }
         }
     }

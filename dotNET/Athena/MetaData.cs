@@ -31,7 +31,6 @@ namespace Rigsarkiv.Athena
         const string ReferencedTable = "{0}_{1}";
         const string ReferencedTableDescription = "Kodeliste til tabel {0}";
         const string VarCharPrefix = "VARCHAR({0})";
-        const string TablePath = "{0}\\Tables\\{1}";
         private dynamic _metadata = null;        
         private string _tableXmlTemplate = null;
         private int _tablesCounter = 0;

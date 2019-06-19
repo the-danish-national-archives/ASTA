@@ -17,6 +17,7 @@ namespace Rigsarkiv.Athena
         protected const string TableIndexXmlNs = "http://www.sa.dk/xmlns/diark/1.0";
         protected const string TableXmlNs = "http://www.sa.dk/xmlns/siard/1.0/schema0/{0}.xsd";
         protected const string TableSchemaLocation = "http://www.sa.dk/xmlns/siard/1.0/schema0/{0}.xsd {0}.xsd";
+        protected const string TablePath = "{0}\\Tables\\{1}";
         protected Assembly _assembly = null;
         protected LogManager _logManager = null;
         protected XmlDocument _tableIndexDocument = null;

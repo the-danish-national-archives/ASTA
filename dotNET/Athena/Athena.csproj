@@ -45,6 +45,7 @@
     <Compile Include="Converter.cs" />
     <Compile Include="Data.cs" />
     <Compile Include="Entities\Column.cs" />
+    <Compile Include="Entities\Row.cs" />
     <Compile Include="Entities\Table.cs" />
     <Compile Include="Logging\LogEntity.cs" />
     <Compile Include="Logging\LogEventArgs.cs" />
