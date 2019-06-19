@@ -354,13 +354,13 @@ function (n) {
         var GetVariableDescription = function (line,startIndex) {
             var name = null;
             var description = null;
-            var index = line.reduceWhiteSpace().indexOf(" "); 
+            var index = line.trim().reduceWhiteSpace().indexOf(" "); 
             if(index < 0) {
                 name = line;
             } 
             else {
-                name = line.substring(0,index);
-                var descriptionTemp = line.substring(index + 1);
+                name = line.trim().reduceWhiteSpace().substring(0,index);
+                var descriptionTemp = line.trim().reduceWhiteSpace().substring(index + 1);
                 descriptionMultiPattern.lastIndex = 0;
                 var matches = descriptionTemp.match(descriptionMultiPattern)
                 if(matches != null && matches.length > 0) {
