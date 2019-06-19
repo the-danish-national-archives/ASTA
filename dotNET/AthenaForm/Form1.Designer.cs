@@ -31,7 +31,6 @@
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.mainTablesListBox = new System.Windows.Forms.ListBox();
-            this.codeTablesListBox = new System.Windows.Forms.ListBox();
             this.dataValues = new System.Windows.Forms.DataGridView();
             this.variableName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.variableType = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -48,6 +47,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
+            this.codeTablesListBox = new System.Windows.Forms.ListBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataValues)).BeginInit();
             this.SuspendLayout();
             // 
@@ -64,22 +64,7 @@
             this.mainTablesListBox.Name = "mainTablesListBox";
             this.mainTablesListBox.Size = new System.Drawing.Size(223, 384);
             this.mainTablesListBox.TabIndex = 3;
-            this.mainTablesListBox.Click += new System.EventHandler(this.tablesBox_Click);
-            this.mainTablesListBox.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.mainTablesListBox_DrawItem);
             this.mainTablesListBox.SelectedIndexChanged += new System.EventHandler(this.mainTablesListBox_SelectedIndexChanged);
-            // 
-            // codeTablesListBox
-            // 
-            this.codeTablesListBox.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.codeTablesListBox.FormattingEnabled = true;
-            this.codeTablesListBox.ItemHeight = 20;
-            this.codeTablesListBox.Location = new System.Drawing.Point(263, 97);
-            this.codeTablesListBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.codeTablesListBox.Name = "codeTablesListBox";
-            this.codeTablesListBox.Size = new System.Drawing.Size(228, 384);
-            this.codeTablesListBox.TabIndex = 4;
-            this.codeTablesListBox.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.codeTablesListBox_DrawItem);
-            this.codeTablesListBox.SelectedIndexChanged += new System.EventHandler(this.codeTablesListBox_SelectedIndexChanged);
             // 
             // dataValues
             // 
@@ -92,11 +77,11 @@
             this.variableValue,
             this.columnType,
             this.columnValue});
-            this.dataValues.Location = new System.Drawing.Point(541, 105);
+            this.dataValues.Location = new System.Drawing.Point(520, 97);
             this.dataValues.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.dataValues.Name = "dataValues";
             this.dataValues.ReadOnly = true;
-            this.dataValues.Size = new System.Drawing.Size(733, 377);
+            this.dataValues.Size = new System.Drawing.Size(745, 384);
             this.dataValues.TabIndex = 5;
             // 
             // variableName
@@ -225,11 +210,22 @@
             this.label5.TabIndex = 16;
             this.label5.Text = "Kodetabeller";
             // 
+            // codeTablesListBox
+            // 
+            this.codeTablesListBox.FormattingEnabled = true;
+            this.codeTablesListBox.ItemHeight = 20;
+            this.codeTablesListBox.Location = new System.Drawing.Point(269, 97);
+            this.codeTablesListBox.Name = "codeTablesListBox";
+            this.codeTablesListBox.Size = new System.Drawing.Size(218, 384);
+            this.codeTablesListBox.TabIndex = 17;
+            this.codeTablesListBox.SelectedIndexChanged += new System.EventHandler(this.codeTablesListBox_SelectedIndexChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1297, 605);
+            this.Controls.Add(this.codeTablesListBox);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label1);
@@ -241,7 +237,6 @@
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.dataValues);
-            this.Controls.Add(this.codeTablesListBox);
             this.Controls.Add(this.mainTablesListBox);
             this.Name = "Form1";
             this.Text = "ASTA - Athena";
@@ -255,7 +250,6 @@
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
         private System.Windows.Forms.ListBox mainTablesListBox;
-        private System.Windows.Forms.ListBox codeTablesListBox;
         private System.Windows.Forms.DataGridView dataValues;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
@@ -272,6 +266,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn variableValue;
         private System.Windows.Forms.DataGridViewTextBoxColumn columnType;
         private System.Windows.Forms.DataGridViewTextBoxColumn columnValue;
+        private System.Windows.Forms.ListBox codeTablesListBox;
     }
 }
 

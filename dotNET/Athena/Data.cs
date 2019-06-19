@@ -52,10 +52,11 @@ namespace Rigsarkiv.Athena
             foreach (XmlNode node in _researchIndexDocument.SelectNodes("//diark:table", _researchIndexNS))
             {
                 id = node.SelectSingleNode("diark:tableID", _researchIndexNS).InnerText;
-                var tableNode = _tableIndexDocument.SelectSingleNode(string.Format("//diark:table[diark:folder = '{0}']", id), _tableIndexNS);
+                XmlNode tableNode = _tableIndexDocument.SelectSingleNode(string.Format("//diark:table[diark:folder = '{0}']", id), _tableIndexNS);
                 name = tableNode.SelectSingleNode("diark:name", _tableIndexNS).InnerText;
                 ids.Add(id);
-                result.Add(new Table() { Name = name, Folder = id });
+                var table = new Table() { Name = name, Folder = id, Columns = GetColumn(tableNode) };
+                result.Add(table);
             }
             result.ForEach(t => t.CodeList = GetCodeTables(t.Folder, ids));
             return result;
@@ -69,13 +70,29 @@ namespace Rigsarkiv.Athena
             foreach (XmlNode node in _tableIndexDocument.SelectNodes(string.Format("//diark:table[diark:folder = '{0}']/diark:foreignKeys/diark:foreignKey/diark:referencedTable", folder), _tableIndexNS))
             {
                 name = node.InnerText;
-                var tableNode = _tableIndexDocument.SelectSingleNode(string.Format("//diark:table[diark:name = '{0}']", name), _tableIndexNS);
+                XmlNode tableNode = _tableIndexDocument.SelectSingleNode(string.Format("//diark:table[diark:name = '{0}']", name), _tableIndexNS);
                 id = tableNode.SelectSingleNode("diark:folder", _tableIndexNS).InnerText;
                 if(!excludeIds.Contains(id))
                 {
-                    result.Add(new Table() { Name = name, Folder = id });
+                    var table = new Table() { Name = name, Folder = id, Columns = GetColumn(tableNode) };
+                    result.Add(table);
                 }
             }            
+            return result;
+        }
+
+        private List<Column> GetColumn(XmlNode tableNode)
+        {
+            List<Column> result = new List<Column>();
+            foreach (XmlNode node in tableNode.SelectNodes("diark:columns/diark:column", _tableIndexNS))
+            {
+                var column = new Column();
+                column.Name = node.SelectSingleNode("diark:name", _tableIndexNS).InnerText;
+                column.Id = node.SelectSingleNode("diark:columnID", _tableIndexNS).InnerText;
+                column.Type = node.SelectSingleNode("diark:type", _tableIndexNS).InnerText;
+                column.TypeOriginal = node.SelectSingleNode("diark:typeOriginal", _tableIndexNS).InnerText;
+                result.Add(column);
+            }
             return result;
         }
     }

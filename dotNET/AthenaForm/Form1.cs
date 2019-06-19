@@ -69,6 +69,7 @@ namespace Rigsarkiv.Athena
 
         private void codeTablesListBox_DrawItem(object sender, DrawItemEventArgs e)
         {
+            this.SuspendLayout();
             e.DrawBackground();
 
             Graphics g = e.Graphics;
@@ -77,6 +78,7 @@ namespace Rigsarkiv.Athena
             g.DrawString(lb.Items[e.Index].ToString(), e.Font, new SolidBrush(Color.Red), new PointF(e.Bounds.X, e.Bounds.Y));
 
             e.DrawFocusRectangle();
+            this.ResumeLayout();
         }
 
         private void codeTablesListBox_SelectedIndexChanged(object sender, EventArgs e)
