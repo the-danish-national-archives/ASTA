@@ -184,13 +184,13 @@ function (n) {
         var GetUserCode = function (line) {
             var name = null;
             var codes = null;
-            var index = line.reduceWhiteSpace().indexOf(" "); 
+            var index = line.trim().reduceWhiteSpace().indexOf(" "); 
             if(index < 0) {
                 name = line;
             } 
             else {
-                name = line.substring(0,index);
-                var codesTemp = line.substring(index + 1);
+                name = line.trim().reduceWhiteSpace().substring(0,index);
+                var codesTemp = line.trim().reduceWhiteSpace().substring(index + 1);
                 codes = [];
                 codesTemp.reduceWhiteSpace().split(" ").forEach(code => {                    
                     codes.push(code);
@@ -354,13 +354,13 @@ function (n) {
         var GetVariableDescription = function (line,startIndex) {
             var name = null;
             var description = null;
-            var index = line.reduceWhiteSpace().indexOf(" "); 
+            var index = line.trim().reduceWhiteSpace().indexOf(" ");
             if(index < 0) {
                 name = line;
             } 
             else {
-                name = line.substring(0,index);
-                var descriptionTemp = line.substring(index + 1);
+                name = line.trim().reduceWhiteSpace().substring(0,index);
+                var descriptionTemp = line.trim().reduceWhiteSpace().substring(index + 1);
                 descriptionMultiPattern.lastIndex = 0;
                 var matches = descriptionTemp.match(descriptionMultiPattern)
                 if(matches != null && matches.length > 0) {
@@ -389,7 +389,7 @@ function (n) {
             table.variables.forEach(variable => variableDescriptions.push(variable.name));
             var i = startIndex;
             do {
-                if(lines[i].reduceWhiteSpace().indexOf("' '") > -1) {
+                if(lines[i].trim().reduceWhiteSpace().indexOf("' '") > -1) {
                 
                 }          
                 var info = GetVariableDescription(lines[i],startIndex);                
