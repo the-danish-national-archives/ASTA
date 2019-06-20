@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Web.Script.Serialization;
 using System.Xml;
 using System.Xml.Linq;
@@ -15,10 +14,6 @@ namespace Rigsarkiv.Athena
     /// </summary>
     public class MetaData : Converter
     {
-        const string ResearchIndexColumnNode = "<column><columnID></columnID><missingValues></missingValues></column>";
-        const string ResearchIndexValueNode = "<value></value>";
-        const string CodeTableRow = "<row><c1></c1><c2></c2></row>";              
-        const string Table = "table.xml";
         const string TableFolderPrefix = "table{0}";
         const string ColumnIDPrefix = "c{0}";
         const string PrimaryKeyPrefix = "PK_{0}";
@@ -27,7 +22,6 @@ namespace Rigsarkiv.Athena
         const string ReferencedTableDescription = "Kodeliste til tabel {0}";
         const string VarCharPrefix = "VARCHAR({0})";
         private dynamic _metadata = null;        
-        private string _tableXmlTemplate = null;
         private int _tablesCounter = 0;
         private XNamespace _tableIndexXNS = TableIndexXmlNs;
 
@@ -48,13 +42,7 @@ namespace Rigsarkiv.Athena
             using (Stream stream = _assembly.GetManifestResourceStream(string.Format(ResourcePrefix, ResearchIndex)))
             {
                 _researchIndexXDocument = XDocument.Load(stream);
-            }
-            var tableDocument = new XmlDocument();
-            using (Stream stream = _assembly.GetManifestResourceStream(string.Format(ResourcePrefix, Table)))
-            {
-                tableDocument.Load(stream);
-                _tableXmlTemplate = tableDocument.OuterXml;
-            }
+            }           
         }
 
         /// <summary>
@@ -201,22 +189,20 @@ namespace Rigsarkiv.Athena
             var result = 0;
             var path = string.Format(TablePath, _destFolderPath, string.Format("{0}\\{0}.xml", folder));
             _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add file: {0} ", path) });
-            var tableDocument = new XmlDocument();
-            tableDocument.LoadXml(_tableXmlTemplate);
+            StartWriter(folder);            
+            
             foreach (var option in options)
             {
                 var code = (Dictionary<string, object>)option;
                 var length = code["description"].ToString().Length;
                 if(length > result) { result = length; }
                 if((bool)code["isMissing"]) { AddMissingColumnNode(code["name"].ToString(), researchIndexNode, columnName); }
-                var node = CreateNode(tableDocument, tableDocument.SelectSingleNode("//table"), CodeTableRow);
-                node.SelectSingleNode("c1").InnerText = code["name"].ToString();
-                node.SelectSingleNode("c2").InnerText = code["description"].ToString();
-            }           
-            tableDocument.DocumentElement.SetAttribute("xmlns", string.Format(TableXmlNs, folder));
-            tableDocument.DocumentElement.SetAttribute("xsi:schemaLocation", string.Format(TableSchemaLocation, folder));
-            tableDocument.Save(path);
-
+                _writer.WriteStartElement("row");
+                _writer.WriteElementString("c1", code["name"].ToString());
+                _writer.WriteElementString("c2", code["description"].ToString());
+                _writer.WriteEndElement();
+            }
+            EndWriter();
             return string.Format(VarCharPrefix, result);
         }
 

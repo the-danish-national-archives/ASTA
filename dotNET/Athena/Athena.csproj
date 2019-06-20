@@ -84,9 +84,6 @@
     <EmbeddedResource Include="Resources\tableIndex.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\table.xml" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Resources\researchIndex.xml" />
   </ItemGroup>
   <ItemGroup>
