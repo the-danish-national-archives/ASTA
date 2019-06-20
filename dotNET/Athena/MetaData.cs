@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Web.Script.Serialization;
 using System.Xml;
@@ -14,9 +15,6 @@ namespace Rigsarkiv.Athena
     /// </summary>
     public class MetaData : Converter
     {
-        const string ReferencedTableNode = "<table><name></name><folder></folder><description></description><columns><column><name>Kode</name><columnID>c1</columnID><type></type><typeOriginal></typeOriginal><nullable>false</nullable><description>Kode</description></column><column><name>Kodeværdi</name><columnID>c2</columnID><type></type><typeOriginal></typeOriginal><nullable>false</nullable><description>Kodeværdi</description></column></columns><primaryKey><name></name><column>Kode</column></primaryKey><rows></rows></table>";
-        const string ResearchIndexTableNode = "<table><tableID></tableID><source></source><specialNumeric></specialNumeric></table>";
-        const string ResearchIndexColumnsNode = "<columns></columns>";
         const string ResearchIndexColumnNode = "<column><columnID></columnID><missingValues></missingValues></column>";
         const string ResearchIndexValueNode = "<value></value>";
         const string CodeTableRow = "<row><c1></c1><c2></c2></row>";              
@@ -49,7 +47,7 @@ namespace Rigsarkiv.Athena
             }
             using (Stream stream = _assembly.GetManifestResourceStream(string.Format(ResourcePrefix, ResearchIndex)))
             {
-                _researchIndexDocument.Load(stream);
+                _researchIndexXDocument = XDocument.Load(stream);
             }
             var tableDocument = new XmlDocument();
             using (Stream stream = _assembly.GetManifestResourceStream(string.Format(ResourcePrefix, Table)))
@@ -88,9 +86,8 @@ namespace Rigsarkiv.Athena
                     var tableInfo = (Dictionary<string, object>)table;
                    AddTableNode(tableInfo);
                 }
-                _researchIndexDocument.DocumentElement.SetAttribute("xmlns", TableIndexXmlNs);
-                _tableIndexXDocument.Save(string.Format("{0}\\{1}", path, TableIndex));
-                _researchIndexDocument.Save(string.Format("{0}\\{1}", path, ResearchIndex));
+                 _tableIndexXDocument.Save(string.Format("{0}\\{1}", path, TableIndex));
+                _researchIndexXDocument.Save(string.Format("{0}\\{1}", path, ResearchIndex));
             }
             catch (Exception ex)
             {
@@ -108,9 +105,11 @@ namespace Rigsarkiv.Athena
             _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add {0} to tableIndex.xml", folder) });
             Directory.CreateDirectory(string.Format(TablePath, _destFolderPath, folder));
             var tableName = tableInfo["name"].ToString();
-            var researchIndexNode = CreateNode(_researchIndexDocument, _researchIndexDocument.SelectSingleNode("//mainTables"), ResearchIndexTableNode);
-            researchIndexNode.SelectSingleNode("tableID").InnerText = folder;
-            researchIndexNode.SelectSingleNode("source").InnerText = tableInfo["system"].ToString();
+            var researchIndexNode = new XElement(_tableIndexXNS + "table",
+                new XElement(_tableIndexXNS + "tableID", folder),
+                new XElement(_tableIndexXNS + "source", tableInfo["system"].ToString()),
+                new XElement(_tableIndexXNS + "specialNumeric"));
+            _researchIndexXDocument.Element(_tableIndexXNS + "researchIndex").Element(_tableIndexXNS + "mainTables").Add(researchIndexNode);            
             var tableNode = new XElement(_tableIndexXNS + "table",
                 new XElement(_tableIndexXNS + "name", tableName),
                 new XElement(_tableIndexXNS + "folder", folder),
@@ -127,7 +126,7 @@ namespace Rigsarkiv.Athena
             }
         }
         
-        private void AddColumnNode(Dictionary<string, object> variableInfo, XElement tableNode,XmlNode researchIndexNode, string tableName, int index)
+        private void AddColumnNode(Dictionary<string, object> variableInfo, XElement tableNode, XElement researchIndexNode, string tableName, int index)
         {
             var columnName = variableInfo["name"].ToString();
             var columnType = GetMappedType(variableInfo);
@@ -140,7 +139,7 @@ namespace Rigsarkiv.Athena
                  new XElement(_tableIndexXNS + "description", variableInfo["description"].ToString()));
             tableNode.Element(_tableIndexXNS + "columns").Add(columnNode);
            
-            researchIndexNode.SelectSingleNode("specialNumeric").InnerText = variableInfo["specialNumeric"].ToString();
+            researchIndexNode.Element(_tableIndexXNS + "specialNumeric").Value = variableInfo["specialNumeric"].ToString();
             if (!string.IsNullOrEmpty(variableInfo["refData"].ToString()) && !string.IsNullOrEmpty(variableInfo["refVariable"].ToString()))
             {
                 var foreignKeyName = string.Format(ForeignKeyPrefix, tableName, columnName, index);
@@ -153,7 +152,7 @@ namespace Rigsarkiv.Athena
             }
             AddKeys(variableInfo, tableNode, researchIndexNode, tableName, columnName, columnType, index);
         }       
-        private void AddKeys(Dictionary<string, object> variableInfo, XElement tableNode, XmlNode researchIndexNode, string tableName ,string columnName, string columnType, int index)
+        private void AddKeys(Dictionary<string, object> variableInfo, XElement tableNode, XElement researchIndexNode, string tableName ,string columnName, string columnType, int index)
         {
             if ((bool)variableInfo["isKey"])
             {
@@ -175,7 +174,7 @@ namespace Rigsarkiv.Athena
             }
         }
         
-        private void AddReferencedTable(Dictionary<string, object> variableInfo, XElement tableNode,XmlNode researchIndexNode, string tableName, string columnName,string columnType, string refTableName, int index)
+        private void AddReferencedTable(Dictionary<string, object> variableInfo, XElement tableNode, XElement researchIndexNode, string tableName, string columnName,string columnType, string refTableName, int index)
         {
             _tablesCounter++;
             _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add referenced Table: {0} ", refTableName) });
@@ -191,13 +190,13 @@ namespace Rigsarkiv.Athena
                 new XElement(_tableIndexXNS + "name", refTableName),
                 new XElement(_tableIndexXNS + "folder", folder),
                 new XElement(_tableIndexXNS + "description", string.Format(ReferencedTableDescription, tableName)),
-                new XElement(_tableIndexXNS + "columns", columnNode1),
+                new XElement(_tableIndexXNS + "columns", columnNode1, columnNode2),
                 new XElement(_tableIndexXNS + "primaryKey", new XElement(_tableIndexXNS + "name", string.Format(PrimaryKeyPrefix, refTableName)), new XElement(_tableIndexXNS + "column", "Kode")),
                 new XElement(_tableIndexXNS + "rows", options.Length.ToString()));
             tableNode.Parent.Add(refTableNode);            
         }
         
-        private string ParseOptions(object[] options, XmlNode researchIndexNode, string folder, string columnName)
+        private string ParseOptions(object[] options, XElement researchIndexNode, string folder, string columnName)
         {
             var result = 0;
             var path = string.Format(TablePath, _destFolderPath, string.Format("{0}\\{0}.xml", folder));
@@ -221,24 +220,27 @@ namespace Rigsarkiv.Athena
             return string.Format(VarCharPrefix, result);
         }
 
-        private void AddMissingColumnNode(string codeName, XmlNode researchIndexNode,string columnName)
+        private void AddMissingColumnNode(string codeName, XElement researchIndexNode,string columnName)
         {
 
             _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add missing value: {0} ", codeName) });
-            XmlNode node = null;
-            if(researchIndexNode.SelectSingleNode("columns") == null)
+            XElement columnsNode = researchIndexNode.Element(_tableIndexXNS + "columns");
+            XElement columnNode = new XElement(_tableIndexXNS + "column", new XElement(_tableIndexXNS + "columnID", columnName), new XElement(_tableIndexXNS + "missingValues"));
+            if (columnsNode == null)
             {
-                node = CreateNode(_researchIndexDocument, researchIndexNode, ResearchIndexColumnsNode);
+                columnsNode = new XElement(_tableIndexXNS + "columns", columnNode);
+                researchIndexNode.Add(columnsNode);
             }
-            var xpath = string.Format("columns/column[columnID = '{0}']", columnName);
-            if (researchIndexNode.SelectSingleNode(xpath) == null)
+            if (!columnsNode.Elements().Where(e => e.Element(_tableIndexXNS + "columnID").Value == columnName).Any())
             {
-                node = CreateNode(_researchIndexDocument, researchIndexNode.SelectSingleNode("columns"), ResearchIndexColumnNode);
-                node.SelectSingleNode("columnID").InnerText = columnName;
+                columnsNode.Add(columnNode);
             }
-            node = researchIndexNode.SelectSingleNode(xpath);
-            node = CreateNode(_researchIndexDocument, node.SelectSingleNode("missingValues"), ResearchIndexValueNode);
-            node.InnerText = codeName;
+            else
+            {
+                columnNode = columnsNode.Elements().Where(e => e.Element(_tableIndexXNS + "columnID").Value == columnName).FirstOrDefault();
+            }
+            var missingValueNode = new XElement(_tableIndexXNS + "value", codeName);
+            columnNode.Element(_tableIndexXNS + "missingValues").Add(missingValueNode);
         }
 
         private string GetMappedType(Dictionary<string, object> variableInfo)

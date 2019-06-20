@@ -8,6 +8,7 @@ namespace Rigsarkiv.Athena
 {
     /// <summary>
     /// Data converter
+    /// https://lennilobel.wordpress.com/2009/09/02/streaming-into-linq-to-xml-using-c-custom-iterators-and-xmlreader/
     /// </summary>
     public class Data : Converter
     {

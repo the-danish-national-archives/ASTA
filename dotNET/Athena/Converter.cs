@@ -20,7 +20,8 @@ namespace Rigsarkiv.Athena
         protected const string TablePath = "{0}\\Tables\\{1}";
         protected Assembly _assembly = null;
         protected LogManager _logManager = null;
-        protected XDocument _tableIndexXDocument = null;        
+        protected XDocument _tableIndexXDocument = null;
+        protected XDocument _researchIndexXDocument = null;
         protected XmlDocument _tableIndexDocument = null;
         protected XmlDocument _researchIndexDocument = null;
         protected string _srcPath = null;
