@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<siardDiark xsi:schemaLocation="http://www.sa.dk/xmlns/diark/1.0 ../Schemas/standard/tableIndex.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<siardDiark xsi:schemaLocation="http://www.sa.dk/xmlns/diark/1.0 ../Schemas/standard/tableIndex.xsd" xmlns="http://www.sa.dk/xmlns/diark/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <version>1.0</version>
   <dbName>ikke_relevant</dbName>
   <databaseProduct>Microsoft SQL server</databaseProduct>

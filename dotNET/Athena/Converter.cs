@@ -1,7 +1,7 @@
 ﻿using Rigsarkiv.Athena.Logging;
-using System.IO;
 using System.Reflection;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace Rigsarkiv.Athena
 {
@@ -20,6 +20,7 @@ namespace Rigsarkiv.Athena
         protected const string TablePath = "{0}\\Tables\\{1}";
         protected Assembly _assembly = null;
         protected LogManager _logManager = null;
+        protected XDocument _tableIndexXDocument = null;        
         protected XmlDocument _tableIndexDocument = null;
         protected XmlDocument _researchIndexDocument = null;
         protected string _srcPath = null;

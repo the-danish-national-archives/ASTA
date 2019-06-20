@@ -10,7 +10,6 @@ namespace Rigsarkiv.Athena
     public class Structure : Converter
     {
         const string ContextDocumentationPath = "{0}\\ContextDocumentation";
-        const string IndicesPath = "{0}\\Indices";
         const string SchemasPath = "{0}\\Schemas";
         const string SchemasLocalSharedPath = "{0}\\Schemas\\localShared";
         const string SchemasStandardPath = "{0}\\Schemas\\standard";
