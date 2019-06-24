@@ -206,13 +206,13 @@ namespace Rigsarkiv.Athena
                 case "INTEGER":
                     {
                         int result = -1;
-                        hasError = int.TryParse(value, out result);
+                        hasError = !int.TryParse(value, out result);
                         return result.ToString();
                     }; break;
                 case "DECIMAL":
                     {
                         float result = -1;
-                        hasError = float.TryParse(value, out result);
+                        hasError = !float.TryParse(value, out result);
                         return result.ToString();
                     }; break;
                 /*case "DATE": result = "DATE"; break;
@@ -220,7 +220,7 @@ namespace Rigsarkiv.Athena
                 case "TIMESTAMP": result = "TIMESTAMP"; break;*/
                 default:
                     {
-                        hasError = true;
+                        hasError = false;
                         return value;
                     }; break;
             }

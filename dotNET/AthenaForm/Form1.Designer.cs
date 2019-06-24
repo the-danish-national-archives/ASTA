@@ -32,6 +32,11 @@
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.mainTablesListBox = new System.Windows.Forms.ListBox();
             this.dataValues = new System.Windows.Forms.DataGridView();
+            this.variableName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.variableType = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.variableValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.columnType = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.columnValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.button1 = new System.Windows.Forms.Button();
             this.previewButton = new System.Windows.Forms.Button();
             this.prevButton = new System.Windows.Forms.Button();
@@ -46,11 +51,8 @@
             this.rowLabel = new System.Windows.Forms.Label();
             this.searchButton = new System.Windows.Forms.Button();
             this.tableInfoLabel = new System.Windows.Forms.Label();
-            this.variableName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.variableType = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.variableValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.columnType = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.columnValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.rowErrorsLabel = new System.Windows.Forms.Label();
+            this.tableErrorsLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataValues)).BeginInit();
             this.SuspendLayout();
             // 
@@ -87,6 +89,39 @@
             this.dataValues.RowTemplate.ReadOnly = true;
             this.dataValues.Size = new System.Drawing.Size(745, 384);
             this.dataValues.TabIndex = 5;
+            // 
+            // variableName
+            // 
+            this.variableName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.variableName.HeaderText = "Variabelnavn";
+            this.variableName.Name = "variableName";
+            this.variableName.Width = 137;
+            // 
+            // variableType
+            // 
+            this.variableType.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.variableType.HeaderText = "Datatype (orginal)";
+            this.variableType.Name = "variableType";
+            this.variableType.Width = 157;
+            // 
+            // variableValue
+            // 
+            this.variableValue.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.variableValue.HeaderText = "Værdi";
+            this.variableValue.Name = "variableValue";
+            // 
+            // columnType
+            // 
+            this.columnType.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.columnType.HeaderText = "Datatype (SQL)";
+            this.columnType.Name = "columnType";
+            this.columnType.Width = 143;
+            // 
+            // columnValue
+            // 
+            this.columnValue.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.columnValue.HeaderText = "Værdi";
+            this.columnValue.Name = "columnValue";
             // 
             // button1
             // 
@@ -136,7 +171,7 @@
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(1114, 492);
+            this.button5.Location = new System.Drawing.Point(978, 492);
             this.button5.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(112, 35);
@@ -146,7 +181,7 @@
             // 
             // searchTextBox
             // 
-            this.searchTextBox.Location = new System.Drawing.Point(975, 52);
+            this.searchTextBox.Location = new System.Drawing.Point(923, 52);
             this.searchTextBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.searchTextBox.Name = "searchTextBox";
             this.searchTextBox.Size = new System.Drawing.Size(148, 26);
@@ -202,16 +237,17 @@
             this.rowLabel.AutoSize = true;
             this.rowLabel.Location = new System.Drawing.Point(520, 66);
             this.rowLabel.Name = "rowLabel";
-            this.rowLabel.Size = new System.Drawing.Size(0, 20);
+            this.rowLabel.Size = new System.Drawing.Size(73, 20);
             this.rowLabel.TabIndex = 19;
+            this.rowLabel.Text = "rowLabel";
             // 
             // searchButton
             // 
             this.searchButton.Enabled = false;
-            this.searchButton.Location = new System.Drawing.Point(1131, 52);
+            this.searchButton.Location = new System.Drawing.Point(1079, 52);
             this.searchButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.searchButton.Name = "searchButton";
-            this.searchButton.Size = new System.Drawing.Size(71, 35);
+            this.searchButton.Size = new System.Drawing.Size(53, 35);
             this.searchButton.TabIndex = 20;
             this.searchButton.Text = "Søg";
             this.searchButton.UseVisualStyleBackColor = true;
@@ -223,49 +259,35 @@
             this.tableInfoLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tableInfoLabel.Location = new System.Drawing.Point(519, 9);
             this.tableInfoLabel.Name = "tableInfoLabel";
-            this.tableInfoLabel.Size = new System.Drawing.Size(0, 29);
+            this.tableInfoLabel.Size = new System.Drawing.Size(165, 29);
             this.tableInfoLabel.TabIndex = 21;
+            this.tableInfoLabel.Text = "tableInfoLabel";
             // 
-            // variableName
+            // rowErrorsLabel
             // 
-            this.variableName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.variableName.HeaderText = "Variabelnavn";
-            this.variableName.Name = "variableName";
-            this.variableName.Width = 137;
+            this.rowErrorsLabel.AutoSize = true;
+            this.rowErrorsLabel.Location = new System.Drawing.Point(1149, 67);
+            this.rowErrorsLabel.Name = "rowErrorsLabel";
+            this.rowErrorsLabel.Size = new System.Drawing.Size(116, 20);
+            this.rowErrorsLabel.TabIndex = 22;
+            this.rowErrorsLabel.Text = "rowErrorsLabel";
             // 
-            // variableType
+            // tableErrorsLabel
             // 
-            this.variableType.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.variableType.HeaderText = "Datatype (orginal)";
-            this.variableType.Name = "variableType";
-            this.variableType.Width = 157;
-            // 
-            // variableValue
-            // 
-            this.variableValue.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.variableValue.HeaderText = "Værdi";
-            this.variableValue.Name = "variableValue";
-            this.variableValue.Width = 88;
-            // 
-            // columnType
-            // 
-            this.columnType.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.columnType.HeaderText = "Datatype (SQL)";
-            this.columnType.Name = "columnType";
-            this.columnType.Width = 143;
-            // 
-            // columnValue
-            // 
-            this.columnValue.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.columnValue.HeaderText = "Værdi";
-            this.columnValue.Name = "columnValue";
-            this.columnValue.Width = 88;
+            this.tableErrorsLabel.AutoSize = true;
+            this.tableErrorsLabel.Location = new System.Drawing.Point(1139, 492);
+            this.tableErrorsLabel.Name = "tableErrorsLabel";
+            this.tableErrorsLabel.Size = new System.Drawing.Size(126, 20);
+            this.tableErrorsLabel.TabIndex = 23;
+            this.tableErrorsLabel.Text = "tableErrorsLabel";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1297, 605);
+            this.Controls.Add(this.tableErrorsLabel);
+            this.Controls.Add(this.rowErrorsLabel);
             this.Controls.Add(this.tableInfoLabel);
             this.Controls.Add(this.searchButton);
             this.Controls.Add(this.rowLabel);
@@ -314,6 +336,8 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn variableValue;
         private System.Windows.Forms.DataGridViewTextBoxColumn columnType;
         private System.Windows.Forms.DataGridViewTextBoxColumn columnValue;
+        private System.Windows.Forms.Label rowErrorsLabel;
+        private System.Windows.Forms.Label tableErrorsLabel;
     }
 }
 

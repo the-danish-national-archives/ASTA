@@ -12,6 +12,7 @@ namespace Rigsarkiv.Athena
     public partial class Form1 : Form
     {
         const string RowsLabel = "Række {0} ud af {1}";
+        const string RowErrorsLabel = "Fejl: {0}";
         const string CodeTableLabel = "Kodetabel: {0}";
         const string MainTableLabel = "Hovedtabel: {0}";
         private LogManager _logManager = null;
@@ -36,6 +37,10 @@ namespace Rigsarkiv.Athena
              _converter = new Data(logManager, srcPath, destPath, destFolder, tables);
             _tables = tables;
             mainTablesListBox.Items.AddRange(_tables.Select(t => t.Name).ToArray());
+            rowLabel.Text = "";
+            tableInfoLabel.Text = "";
+            rowErrorsLabel.Text = "";
+            tableErrorsLabel.Text = "";
         }
 
         public void tablesBox_Click(object sender, EventArgs e)
@@ -66,6 +71,8 @@ namespace Rigsarkiv.Athena
         {            
             _rowIndex = 1;
             rowLabel.Text = "";
+            rowErrorsLabel.Text = "";
+            tableErrorsLabel.Text = "";
             dataValues.Rows.Clear();            
             _codeTable = _mainTable.CodeList[codeTablesListBox.SelectedIndex];
             tableInfoLabel.Text = string.Format(CodeTableLabel, _codeTable.Name);
@@ -88,6 +95,8 @@ namespace Rigsarkiv.Athena
         {
             _rowIndex = 1;
             rowLabel.Text = "";
+            rowErrorsLabel.Text = "";
+            tableErrorsLabel.Text = "";
             nextButton.Enabled = prevButton.Enabled = searchButton.Enabled = false;
             dataValues.Rows.Clear();
             previewProgressBar.Value = 0;
@@ -130,6 +139,7 @@ namespace Rigsarkiv.Athena
                 _converter.GetRow(table, i);
             }
             nextButton.Enabled = searchButton.Enabled = true;
+            tableErrorsLabel.Text = string.Format("Fejl i alt {0}", table.Errors.HasValue ? table.Errors.Value : 0);
             UpdateDataRow(table);
         }
 
@@ -186,6 +196,7 @@ namespace Rigsarkiv.Athena
                 dataValues[3, i].Value = column.Type;
                 if (row != null && row.SrcValues.ContainsKey(column.Id)) { dataValues[4, i].Value = row.DestValues[column.Id]; }
             }
+            if (row != null) { rowErrorsLabel.Text = string.Format(RowErrorsLabel, row.ErrorsColumns.Count); }
         }
     }
 }
