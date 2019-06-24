@@ -26,6 +26,7 @@ namespace Rigsarkiv.Athena
         protected LogManager _logManager = null;
         protected XDocument _tableIndexXDocument = null;
         protected XDocument _researchIndexXDocument = null;
+        protected XNamespace _tableIndexXNS = TableIndexXmlNs;
         protected XmlWriter _writer = null;
         protected List<Table> _tables = null;
         protected string _srcPath = null;

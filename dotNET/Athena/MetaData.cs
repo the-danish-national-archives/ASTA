@@ -27,8 +27,7 @@ namespace Rigsarkiv.Athena
         const string C1 = "c1";
         const string C2 = "c2";
         private dynamic _metadata = null;        
-        private int _tablesCounter = 0;
-        private XNamespace _tableIndexXNS = TableIndexXmlNs;
+        private int _tablesCounter = 0;        
 
         /// <summary>
         /// Constructore

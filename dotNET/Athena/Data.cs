@@ -3,6 +3,7 @@ using Rigsarkiv.Athena.Logging;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace Rigsarkiv.Athena
 {
@@ -38,22 +39,19 @@ namespace Rigsarkiv.Athena
             var result = new Row() { DestValues = new Dictionary<string, string>(), SrcValues = new Dictionary<string, string>(), ErrorsColumns = new List<string>() } ;
             var path = string.Format(TablePath, _destFolderPath, string.Format("{0}\\{0}.xml", table.Folder));
             if (File.Exists(path))
-            {   
-                var tableDocument = new XmlDocument();
-                tableDocument.Load(path);
-                var tableNS = new XmlNamespaceManager(tableDocument.NameTable);
-                tableNS.AddNamespace("tbns", string.Format(TableXmlNs, table.Folder));
-                var rowNode = tableDocument.SelectSingleNode(string.Format("//tbns:row[{0}]", index), tableNS);
+            {
+                XNamespace tableNS = string.Format(TableXmlNs, table.Folder);
+                XElement rowNode = StreamElement(path, index);
                 table.Columns.ForEach(c =>
                 {
                     var hasError = false;
-                    var value = rowNode.SelectSingleNode(string.Format("tbns:{0}", c.Id), tableNS).InnerText;
+                    var value = rowNode.Element(tableNS + c.Id).Value;
                     var newValue = GetConvertedValue(c.Type, value, out hasError);
                     result.SrcValues.Add(c.Id, value);
                     result.DestValues.Add(c.Id, newValue);
-                    if(hasError)
+                    if (hasError)
                     {
-                        result.ErrorsColumns.Add(c.Id);                        
+                        result.ErrorsColumns.Add(c.Id);
                         table.Errors++;
                     }
                 });
@@ -61,6 +59,26 @@ namespace Rigsarkiv.Athena
             else
             {
                 //CSV file
+            }
+            return result;
+        }
+
+        private static XElement StreamElement(string fileName, int index)
+        {
+            XElement result = null;
+            int counter = 0;
+            using (var rdr = XmlReader.Create(fileName))
+            {
+                rdr.MoveToContent();
+                while (rdr.Read() && counter < index)
+                {
+                    if ((rdr.NodeType == XmlNodeType.Element) && (rdr.Name == "row"))
+                    {
+                        result = XNode.ReadFrom(rdr) as XElement;
+                        counter++;
+                    }
+                }
+                rdr.Close();
             }
             return result;
         }
