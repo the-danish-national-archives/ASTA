@@ -136,7 +136,7 @@ namespace Rigsarkiv.Athena
             for (int i = 1; i <= table.Rows; i++)
             {
                 previewProgressBar.PerformStep();
-                _converter.GetRow(table, i);
+                _converter.GetRow(table, i, true);
             }
             nextButton.Enabled = searchButton.Enabled = true;
             tableErrorsLabel.Text = string.Format("Fejl i alt {0}", table.Errors.HasValue ? table.Errors.Value : 0);
@@ -192,9 +192,17 @@ namespace Rigsarkiv.Athena
                 var column = table.Columns[i];
                 dataValues[0, i].Value = column.Name;
                 dataValues[1, i].Value = column.TypeOriginal;
-                if (row != null && row.SrcValues.ContainsKey(column.Id)) { dataValues[2, i].Value = row.SrcValues[column.Id]; }
+                if (row != null && row.SrcValues.ContainsKey(column.Id))
+                {
+                    dataValues[2, i].Value = row.SrcValues[column.Id];
+                    if (row.ErrorsColumns.Contains(column.Id)) { dataValues[2, i].Style.BackColor = Color.Red; }
+                }
                 dataValues[3, i].Value = column.Type;
-                if (row != null && row.SrcValues.ContainsKey(column.Id)) { dataValues[4, i].Value = row.DestValues[column.Id]; }
+                if (row != null && row.SrcValues.ContainsKey(column.Id))
+                {
+                    dataValues[4, i].Value = row.DestValues[column.Id];
+                    if (row.ErrorsColumns.Contains(column.Id)) { dataValues[4, i].Style.BackColor = Color.Red; }
+                }
             }
             if (row != null) { rowErrorsLabel.Text = string.Format(RowErrorsLabel, row.ErrorsColumns.Count); }
         }

@@ -59,8 +59,9 @@ namespace Rigsarkiv.Athena
         /// </summary>
         /// <param name="table"></param>
         /// <param name="index"></param>
+        /// <param name="preview"></param>
         /// <returns></returns>
-        public Row GetRow(Table table,int index)
+        public Row GetRow(Table table,int index, bool preview = false)
         {
             Row result = null;
             var path = string.Format(TablePath, _destFolderPath, string.Format("{0}\\{0}.xml", table.Folder));
@@ -70,17 +71,20 @@ namespace Rigsarkiv.Athena
                 XElement rowNode = StreamElement(path, index);
                 if(rowNode != null)
                 {
-                    result = new Row() { DestValues = new Dictionary<string, string>(), SrcValues = new Dictionary<string, string>(), ErrorsColumns = new List<string>() };
+                    if (!preview) { result = new Row() { DestValues = new Dictionary<string, string>(), SrcValues = new Dictionary<string, string>(), ErrorsColumns = new List<string>() }; }
                     table.Columns.ForEach(c =>
                     {
                         var hasError = false;
                         var value = rowNode.Element(tableNS + c.Id).Value;
-                        var newValue = GetConvertedValue(c.Type, value, out hasError);
-                        result.SrcValues.Add(c.Id, value);
-                        result.DestValues.Add(c.Id, newValue);
-                        if (hasError)
+                        var newValue = (string.IsNullOrEmpty(value.Trim()) && c.Nullable) ? value : GetConvertedValue(c.Type, value, out hasError);
+                        if (!preview)
                         {
-                            result.ErrorsColumns.Add(c.Id);
+                            result.SrcValues.Add(c.Id, value);
+                            result.DestValues.Add(c.Id, newValue);
+                        }
+                        if (hasError || value != newValue)
+                        {
+                            if (!preview) { result.ErrorsColumns.Add(c.Id); }
                             table.Errors++;
                         }
                     });
