@@ -1,4 +1,6 @@
-﻿using Rigsarkiv.Athena.Logging;
+﻿using Rigsarkiv.Athena.Entities;
+using Rigsarkiv.Athena.Logging;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using System.Xml;
@@ -25,8 +27,7 @@ namespace Rigsarkiv.Athena
         protected XDocument _tableIndexXDocument = null;
         protected XDocument _researchIndexXDocument = null;
         protected XmlWriter _writer = null;
-        protected XmlDocument _tableIndexDocument = null;
-        protected XmlDocument _researchIndexDocument = null;
+        protected List<Table> _tables = null;
         protected string _srcPath = null;
         protected string _destPath = null;
         protected string _destFolder = null;
@@ -45,8 +46,7 @@ namespace Rigsarkiv.Athena
         {
             _assembly = Assembly.GetExecutingAssembly();
             _logManager = logManager;
-            _tableIndexDocument = new XmlDocument();
-            _researchIndexDocument = new XmlDocument();
+            _tables = new List<Table>();
             _srcPath = srcPath;
             _destPath = destPath;
             _destFolder = destFolder;
@@ -63,6 +63,10 @@ namespace Rigsarkiv.Athena
         public virtual bool Run()
         {
             return true;
+        }
+
+        public List<Table> Tables {
+            get { return _tables; }
         }
 
         /// <summary>

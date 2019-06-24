@@ -74,7 +74,7 @@ namespace Rigsarkiv.Athena
                 _converter = new MetaData(_logManager, srcPath, destPath, destFolder);
                 if(_converter.Run())
                 {
-                    _form = new Form1(srcPath, destPath, destFolder, _logManager);
+                    _form = new Form1(srcPath, destPath, destFolder, _logManager, _converter.Tables);
                     nextForm.Enabled = true;
                 }
             }

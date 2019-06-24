@@ -1,14 +1,10 @@
 ﻿using Rigsarkiv.Athena.Logging;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Drawing;
 using Rigsarkiv.Athena.Entities;
 
 namespace Rigsarkiv.Athena
@@ -24,7 +20,16 @@ namespace Rigsarkiv.Athena
         private Table _mainTable = null;
         private Table _codeTable = null;
         private int _rowIndex = 1;
-        public Form1(string srcPath, string destPath,string destFolder, LogManager logManager)
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="srcPath"></param>
+        /// <param name="destPath"></param>
+        /// <param name="destFolder"></param>
+        /// <param name="logManager"></param>
+        /// <param name="tables"></param>
+        public Form1(string srcPath, string destPath,string destFolder, LogManager logManager, List<Table> tables)
         {
             InitializeComponent();            
             _logManager = logManager;
@@ -32,7 +37,7 @@ namespace Rigsarkiv.Athena
             {
                 _converter = new Data(logManager, srcPath, destPath, destFolder);
             }
-            _tables = _converter.GetTables();
+            _tables = tables;
             mainTablesListBox.Items.AddRange(_tables.Select(t => t.Name).ToArray());
         }
 

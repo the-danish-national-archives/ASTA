@@ -17,7 +17,16 @@ namespace Rigsarkiv.AthenaConsole
                 if(_converter.Run())
                 {
                     _converter = new Athena.MetaData(_logManager, args[0], args[1], args[2]);
-                    _converter.Run();
+                    if (_converter.Run())
+                    {
+                        var path = string.Format("{0}\\{1}.html", args[1], args[2]);
+                        if (_logManager.Flush(path))
+                        {
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.WriteLine("Log file at: {0}", path);
+                            Console.ResetColor();
+                        }
+                    }
                 }
             }
         }
@@ -46,7 +55,7 @@ namespace Rigsarkiv.AthenaConsole
                 break;
             }
             Console.ResetColor();
-            System.Threading.Thread.Sleep(1000);
+            System.Threading.Thread.Sleep(200);
         }
     }
 }
