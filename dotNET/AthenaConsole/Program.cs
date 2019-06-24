@@ -13,18 +13,25 @@ namespace Rigsarkiv.AthenaConsole
             {
                 _logManager = new LogManager();
                 _logManager.LogAdded += OnLogAdded;
-                _converter = new Athena.Structure(_logManager, args[0], args[1], args[2]);
+                var srcPath = args[0];
+                var destPath = args[1];
+                var destFolder = args[2];
+                _converter = new Athena.Structure(_logManager, srcPath, destPath, destFolder);
                 if(_converter.Run())
                 {
-                    _converter = new Athena.MetaData(_logManager, args[0], args[1], args[2]);
+                    _converter = new Athena.MetaData(_logManager, srcPath, destPath, destFolder);
                     if (_converter.Run())
                     {
-                        var path = string.Format("{0}\\{1}.html", args[1], args[2]);
-                        if (_logManager.Flush(path))
+                        _converter = new Athena.Data(_logManager, srcPath, destPath, destFolder, _converter.Tables);
+                        if (_converter.Run())
                         {
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            Console.WriteLine("Log file at: {0}", path);
-                            Console.ResetColor();
+                            var path = string.Format("{0}\\{1}.html", destPath, destFolder);
+                            if (_logManager.Flush(path))
+                            {
+                                Console.ForegroundColor = ConsoleColor.Green;
+                                Console.WriteLine("Log file at: {0}", path);
+                                Console.ResetColor();
+                            }
                         }
                     }
                 }

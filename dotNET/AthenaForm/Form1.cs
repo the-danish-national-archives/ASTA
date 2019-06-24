@@ -33,10 +33,7 @@ namespace Rigsarkiv.Athena
         {
             InitializeComponent();            
             _logManager = logManager;
-            if (srcPath != null)
-            {
-                _converter = new Data(logManager, srcPath, destPath, destFolder);
-            }
+             _converter = new Data(logManager, srcPath, destPath, destFolder, tables);
             _tables = tables;
             mainTablesListBox.Items.AddRange(_tables.Select(t => t.Name).ToArray());
         }
@@ -185,9 +182,9 @@ namespace Rigsarkiv.Athena
                 var column = table.Columns[i];
                 dataValues[0, i].Value = column.Name;
                 dataValues[1, i].Value = column.TypeOriginal;
-                if (row.SrcValues.ContainsKey(column.Id)) { dataValues[2, i].Value = row.SrcValues[column.Id]; }
+                if (row != null && row.SrcValues.ContainsKey(column.Id)) { dataValues[2, i].Value = row.SrcValues[column.Id]; }
                 dataValues[3, i].Value = column.Type;
-                if (row.SrcValues.ContainsKey(column.Id)) { dataValues[4, i].Value = row.DestValues[column.Id]; }
+                if (row != null && row.SrcValues.ContainsKey(column.Id)) { dataValues[4, i].Value = row.DestValues[column.Id]; }
             }
         }
     }

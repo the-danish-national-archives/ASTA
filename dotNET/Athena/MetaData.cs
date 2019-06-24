@@ -61,8 +61,7 @@ namespace Rigsarkiv.Athena
             {                
                 result = true;
             }
-            var message = result ? "End Converting Metadata" : "End Converting Metadata with errors";
-            _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = message });
+            _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = (result ? "End Converting Metadata" : "End Converting Metadata with errors") });
             return result;
         }
 
@@ -112,7 +111,9 @@ namespace Rigsarkiv.Athena
                 new XElement(_tableIndexXNS + "foreignKeys"),
                 new XElement(_tableIndexXNS + "rows", rows));
             _tableIndexXDocument.Element(_tableIndexXNS + "siardDiark").Element(_tableIndexXNS + "tables").Add(tableNode);
-            var table = new Table() { Name = tableName, Folder = folder, Rows = int.Parse(rows), Columns = new List<Column>() };
+            var srcFolder = tableInfo["fileName"].ToString();
+            srcFolder = srcFolder.Substring(0, srcFolder.LastIndexOf("."));
+            var table = new Table() { SrcFolder = srcFolder, Name = tableName, Folder = folder, Rows = int.Parse(rows), Columns = new List<Column>() };
             _tables.Add(table);
             foreach (var variable in (object[])tableInfo["variables"])
             {

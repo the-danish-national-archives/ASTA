@@ -54,7 +54,6 @@ namespace Rigsarkiv.Athena
             _destFolderPath = string.Format("{0}\\{1}", _destPath, _destFolder);
             var folderName = _srcPath.Substring(_srcPath.LastIndexOf("\\") + 1);
             _srcFolder = folderName.Substring(0, folderName.LastIndexOf("."));
-
         }
 
         /// <summary>

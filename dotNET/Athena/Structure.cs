@@ -35,8 +35,7 @@ namespace Rigsarkiv.Athena
             var result = false;
             _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Start Converting structure {0} -> {1}", _srcFolder, _destFolder) });
             if (EnsureRootFolder() && CopyFolders() && EnsureSchemas() && EnsureTables() && CopySchemas()) { result = true; }
-            var message = result ? "End Converting structure" : "End Converting structure with errors";
-            _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = message });
+            _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = (result ? "End Converting structure" : "End Converting structure with errors") });
             return result;
         }
 

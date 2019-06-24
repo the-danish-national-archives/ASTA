@@ -7,6 +7,7 @@ namespace Rigsarkiv.Athena.Entities
     /// </summary>
     public class Table
     {
+        public string SrcFolder { get; set; }
         public string Folder { get; set; }
         public string Name { get; set; }
         public int Rows { get; set; }
