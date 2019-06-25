@@ -1,5 +1,8 @@
 ﻿using Rigsarkiv.Athena.Logging;
+using System;
 using System.IO;
+using System.Linq;
+using System.Security.Cryptography;
 using System.Xml.Linq;
 
 namespace Rigsarkiv.Athena
@@ -24,7 +27,7 @@ namespace Rigsarkiv.Athena
             _logSection = "Index";
             using (Stream stream = _assembly.GetManifestResourceStream(string.Format(ResourcePrefix, FileIndex)))
             {
-                _tableIndexXDocument = XDocument.Load(stream);
+                _fileIndexXDocument = XDocument.Load(stream);
             }
         }
 
@@ -36,9 +39,55 @@ namespace Rigsarkiv.Athena
         {
             var result = false;
             _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Start Indexing files at {0}", _destFolderPath) });
-            var files = Directory.GetFiles(_destFolderPath, "*.*", SearchOption.AllDirectories);
-
+            if(IndexFiles()) { result = true; }
             _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = (result ? "End Indexing files" : "End Indexing files with errors") });
+            return result;
+        }
+
+        private bool IndexFiles()
+        {
+            var result = true;
+            try
+            {
+                var path = string.Format("{0}\\{1}", string.Format(IndicesPath, _destFolderPath), FileIndex);
+                var files = Directory.GetFiles(_destFolderPath, "*.*", SearchOption.AllDirectories);
+                files.Where(filePath => path != filePath).ToList().ForEach(filePath =>
+                {
+                    var relativePath = filePath.Substring(_destPath.Length + 1);
+                    _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Index file: {0}", relativePath) });
+                    var folder = relativePath.Substring(0, relativePath.LastIndexOf("\\"));
+                    var fileName = relativePath.Substring(relativePath.LastIndexOf("\\") + 1);
+                    if (folder.StartsWith("\\")) { folder = folder.Substring(1); }
+                    var fileNode = new XElement(_tableIndexXNS + "f",
+                        new XElement(_tableIndexXNS + "foN", folder),
+                        new XElement(_tableIndexXNS + "fiN", fileName),
+                        new XElement(_tableIndexXNS + "md5", CalculateHash(filePath)));
+                    _fileIndexXDocument.Element(_tableIndexXNS + "fileIndex").Add(fileNode);
+                });
+                _fileIndexXDocument.Save(path);
+            }
+            catch (Exception ex)
+            {
+                result = false;
+                _logManager.Add(new LogEntity() { Level = LogLevel.Error, Section = _logSection, Message = string.Format("IndexFiles Failed: {0}", ex.Message) });
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Calculates the hash
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        private string CalculateHash(string filePath)
+        {
+            string result = null;
+            using (var stream = File.OpenRead(filePath))
+            {
+                MD5 md5 = MD5.Create();
+                byte[] checsum = md5.ComputeHash(stream);
+                result = BitConverter.ToString(checsum).Replace("-", string.Empty).ToUpper();
+            }
             return result;
         }
     }
