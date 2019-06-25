@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Linq;
 
@@ -16,6 +17,9 @@ namespace Rigsarkiv.Athena
     public class Data : Converter
     {
         const char Separator = ';';
+        const string SpecialNumericPattern = "^\\.[a-zA-Z]$";
+        private Regex _specialNumeric = null;
+        private bool _updateDocuments = false;
 
         /// <summary>
         /// Constructore
@@ -29,6 +33,7 @@ namespace Rigsarkiv.Athena
         {
             _logSection = "Data";
             _tables = tables;
+           _specialNumeric = new Regex(SpecialNumericPattern, RegexOptions.Compiled | RegexOptions.IgnoreCase);
         }
 
         /// <summary>
@@ -44,6 +49,12 @@ namespace Rigsarkiv.Athena
                 _tables.ForEach(t => {
                     if(!AddFile(t)) { result = false; }
                 });
+                if(_updateDocuments)
+                {
+                    var path = string.Format(IndicesPath, _destFolderPath);
+                    _tableIndexXDocument.Save(string.Format("{0}\\{1}", path, TableIndex));
+                    _researchIndexXDocument.Save(string.Format("{0}\\{1}", path, ResearchIndex));
+                }
                 result = true;
             }
             else
@@ -102,6 +113,7 @@ namespace Rigsarkiv.Athena
             var result = true;
             try
             {
+                var tableNode = _tableIndexXDocument.Element(_tableIndexXNS + "siardDiark").Element(_tableIndexXNS + "tables").Elements().Where(e => e.Element(_tableIndexXNS + "folder").Value == table.Folder).FirstOrDefault();
                 var counter = 1;
                 var path = string.Format(TablePath, _destFolderPath, string.Format("{0}\\{0}.xml", table.Folder));
                 _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add file: {0} ", path) });
@@ -113,7 +125,7 @@ namespace Rigsarkiv.Athena
                     while (!reader.EndOfStream)
                     {
                         if (counter == 1) { reader.ReadLine(); }
-                        if (counter > 1) { AddRow(table, reader.ReadLine()); }
+                        if (counter > 1) { AddRow(table, tableNode, reader.ReadLine()); }
                         if ((counter % 500) == 0) {
                             _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("{0} rows added", counter) });
                         }
@@ -131,7 +143,7 @@ namespace Rigsarkiv.Athena
             return result;
         }
 
-        private void AddRow(Table table,string line)
+        private void AddRow(Table table, XElement tableNode, string line)
         {
             _writer.WriteStartElement("row");
             var row = line.Split(Separator).ToList();
@@ -144,9 +156,22 @@ namespace Rigsarkiv.Athena
                 var column = table.Columns[i];
                 var value = row[i];
                 if(string.IsNullOrEmpty(value.Trim()) && column.Nullable) { value = string.Empty; }
+                HandleSpecialNumeric(column, tableNode, value);
                 _writer.WriteElementString(column.Id, value);
             }
             _writer.WriteEndElement();
+        }
+
+        private void HandleSpecialNumeric(Column column, XElement tableNode,string value)
+        {
+            if((column.Type == "INTEGER" || column.Type == "DECIMAL") && _specialNumeric.IsMatch(value))
+            {
+                column.Type = string.Format(VarCharPrefix,50);
+                column.Modified = true;
+                var columnNode = tableNode.Element(_tableIndexXNS + "columns").Elements().Where(e => e.Element(_tableIndexXNS + "columnID").Value == column.Id).FirstOrDefault();
+                columnNode.Element(_tableIndexXNS + "type").Value = column.Type;
+                _updateDocuments = true;
+            }
         }
 
         private List<string> ParseRow(string line)

@@ -1,4 +1,5 @@
-﻿using Rigsarkiv.Athena.Logging;
+﻿using Rigsarkiv.Athena;
+using Rigsarkiv.Athena.Logging;
 using System;
 
 namespace Rigsarkiv.AthenaConsole
@@ -16,13 +17,15 @@ namespace Rigsarkiv.AthenaConsole
                 var srcPath = args[0];
                 var destPath = args[1];
                 var destFolder = args[2];
-                _converter = new Athena.Structure(_logManager, srcPath, destPath, destFolder);
+                _converter = new Structure(_logManager, srcPath, destPath, destFolder);
                 if(_converter.Run())
                 {
-                    _converter = new Athena.MetaData(_logManager, srcPath, destPath, destFolder);
+                    _converter = new MetaData(_logManager, srcPath, destPath, destFolder);
                     if (_converter.Run())
                     {
-                        _converter = new Athena.Data(_logManager, srcPath, destPath, destFolder, _converter.Tables);
+                        var tableIndexXDocument = _converter.TableIndexXDocument;
+                        var researchIndexXDocument = _converter.ResearchIndexXDocument;
+                        _converter = new Data(_logManager, srcPath, destPath, destFolder, _converter.Tables) { TableIndexXDocument = tableIndexXDocument, ResearchIndexXDocument = researchIndexXDocument };
                         if (_converter.Run())
                         {
                             var path = string.Format("{0}\\{1}.html", destPath, destFolder);

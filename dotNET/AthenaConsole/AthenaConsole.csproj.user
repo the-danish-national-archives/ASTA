@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <StartArguments>"C:\VSO\Rigsarkivet\User Story 1 Testsuiten_AKE_final\FD.15005_fejlfri.json" "C:\VSO\Rigsarkivet\test" "AVID.SA.15005_fejlfri.2"</StartArguments>
+    <StartArguments>"C:\VSO\Rigsarkivet\test\FD.15002_2datasæt_fejlfri_SPSS.json" "C:\VSO\Rigsarkivet\test" "AVID.SA.15002_2datasæt_fejlfri_SPSS.1"</StartArguments>
   </PropertyGroup>
 </Project>

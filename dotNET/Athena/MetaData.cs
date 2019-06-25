@@ -21,7 +21,6 @@ namespace Rigsarkiv.Athena
         const string ForeignKeyPrefix = "FK_{0}_{1}_{2}";
         const string ReferencedTable = "{0}_{1}";
         const string ReferencedTableDescription = "Kodeliste til tabel {0}";
-        const string VarCharPrefix = "VARCHAR({0})";
         const string Code = "Kode";
         const string CodeValue = "Kodeværdi";
         const string C1 = "c1";

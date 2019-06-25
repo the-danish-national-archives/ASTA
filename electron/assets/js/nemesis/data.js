@@ -379,7 +379,7 @@ function (n) {
                     if(option.name === dataValue) { exist = true; }
                 });
                 if(!exist) {
-                    result = LogError("-CheckData-FileRow-ColumnsOptions-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue); 
+                    result = LogWarn("-CheckData-FileRow-ColumnsOptions-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue); 
                 }
             }
             return result;

@@ -74,7 +74,9 @@ namespace Rigsarkiv.Athena
                 _converter = new MetaData(_logManager, srcPath, destPath, destFolder);
                 if(_converter.Run())
                 {
-                    _converter = new Data(_logManager, srcPath, destPath, destFolder, _converter.Tables);
+                    var tableIndexXDocument = _converter.TableIndexXDocument;
+                    var researchIndexXDocument = _converter.ResearchIndexXDocument;
+                    _converter = new Data(_logManager, srcPath, destPath, destFolder, _converter.Tables) { TableIndexXDocument = tableIndexXDocument, ResearchIndexXDocument = researchIndexXDocument }  ;
                     if (_converter.Run())
                     {
                         _form = new Form1(srcPath, destPath, destFolder, _logManager, _converter.Tables);

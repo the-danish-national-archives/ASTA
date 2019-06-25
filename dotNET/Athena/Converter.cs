@@ -22,6 +22,7 @@ namespace Rigsarkiv.Athena
         protected const string TableSchemaLocation = "http://www.sa.dk/xmlns/siard/1.0/schema0/{0}.xsd {0}.xsd";
         protected const string TableXsiNs = "http://www.w3.org/2001/XMLSchema-instance";
         protected const string TablePath = "{0}\\Tables\\{1}";
+        protected const string VarCharPrefix = "VARCHAR({0})";
         protected Assembly _assembly = null;
         protected LogManager _logManager = null;
         protected XDocument _tableIndexXDocument = null;
@@ -65,8 +66,29 @@ namespace Rigsarkiv.Athena
             return true;
         }
 
+        /// <summary>
+        /// Tables metadata
+        /// </summary>
         public List<Table> Tables {
-            get { return _tables; }
+            get { return _tables; }            
+        }
+
+        /// <summary>
+        /// Table Index XDocument
+        /// </summary>
+        public XDocument TableIndexXDocument
+        {
+            get { return _tableIndexXDocument; }
+            set { _tableIndexXDocument = value; }
+        }
+
+        /// <summary>
+        /// Research Index XDocument
+        /// </summary>
+        public XDocument ResearchIndexXDocument
+        {
+            get { return _researchIndexXDocument; }
+            set { _researchIndexXDocument = value; }
         }
 
         /// <summary>
