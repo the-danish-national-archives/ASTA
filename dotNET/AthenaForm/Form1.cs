@@ -17,6 +17,9 @@ namespace Rigsarkiv.Athena
         const string CodeTableLabel = "Kodetabel: {0}";
         const string MainTableLabel = "Hovedtabel: {0}";
         private LogManager _logManager = null;
+        private string _srcPath = null;
+        private string _destPath = null;
+        private string _destFolder = null;
         private Data _converter = null;
         private List<Table> _tables = null;
         private Table _mainTable = null;
@@ -35,6 +38,9 @@ namespace Rigsarkiv.Athena
         {
             InitializeComponent();            
             _logManager = logManager;
+            _srcPath = srcPath;
+            _destPath = destPath;
+            _destFolder = destFolder;
              _converter = new Data(logManager, srcPath, destPath, destFolder, tables);
             _tables = tables;
             mainTablesListBox.Items.AddRange(_tables.Select(t => t.Name).ToArray());
@@ -208,6 +214,14 @@ namespace Rigsarkiv.Athena
             }
             tableErrorsLabel.Text = string.Format(TableErrorsLabel, table.Errors.HasValue ? table.Errors.Value : 0);
             if (row != null) { rowErrorsLabel.Text = string.Format(RowErrorsLabel, row.ErrorsColumns.Count); }
+        }
+
+        private void IndexButton_Click(object sender, EventArgs e)
+        {
+            var converter = new Index(_logManager, _srcPath, _destPath, _destFolder);
+            if (converter.Run())
+            {
+            }
         }
     }
 }

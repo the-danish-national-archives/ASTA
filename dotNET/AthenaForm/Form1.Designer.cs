@@ -37,11 +37,10 @@
             this.variableValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.columnType = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.columnValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.button1 = new System.Windows.Forms.Button();
             this.previewButton = new System.Windows.Forms.Button();
             this.prevButton = new System.Windows.Forms.Button();
             this.nextButton = new System.Windows.Forms.Button();
-            this.button5 = new System.Windows.Forms.Button();
+            this.IndexButton = new System.Windows.Forms.Button();
             this.searchTextBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
@@ -53,6 +52,7 @@
             this.tableInfoLabel = new System.Windows.Forms.Label();
             this.rowErrorsLabel = new System.Windows.Forms.Label();
             this.tableErrorsLabel = new System.Windows.Forms.Label();
+            this.reportButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataValues)).BeginInit();
             this.SuspendLayout();
             // 
@@ -123,16 +123,6 @@
             this.columnValue.HeaderText = "Værdi";
             this.columnValue.Name = "columnValue";
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(655, 492);
-            this.button1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(112, 35);
-            this.button1.TabIndex = 6;
-            this.button1.Text = "Auto Kørsel";
-            this.button1.UseVisualStyleBackColor = true;
-            // 
             // previewButton
             // 
             this.previewButton.Enabled = false;
@@ -169,15 +159,16 @@
             this.nextButton.UseVisualStyleBackColor = true;
             this.nextButton.Click += new System.EventHandler(this.nextButton_Click);
             // 
-            // button5
+            // IndexButton
             // 
-            this.button5.Location = new System.Drawing.Point(978, 492);
-            this.button5.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(112, 35);
-            this.button5.TabIndex = 10;
-            this.button5.Text = "Konvertér";
-            this.button5.UseVisualStyleBackColor = true;
+            this.IndexButton.Location = new System.Drawing.Point(881, 493);
+            this.IndexButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.IndexButton.Name = "IndexButton";
+            this.IndexButton.Size = new System.Drawing.Size(158, 35);
+            this.IndexButton.TabIndex = 10;
+            this.IndexButton.Text = "Afslut konvertering";
+            this.IndexButton.UseVisualStyleBackColor = true;
+            this.IndexButton.Click += new System.EventHandler(this.IndexButton_Click);
             // 
             // searchTextBox
             // 
@@ -281,11 +272,21 @@
             this.tableErrorsLabel.TabIndex = 23;
             this.tableErrorsLabel.Text = "tableErrorsLabel";
             // 
+            // reportButton
+            // 
+            this.reportButton.Location = new System.Drawing.Point(774, 492);
+            this.reportButton.Name = "reportButton";
+            this.reportButton.Size = new System.Drawing.Size(84, 36);
+            this.reportButton.TabIndex = 24;
+            this.reportButton.Text = "Report";
+            this.reportButton.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1297, 605);
+            this.Controls.Add(this.reportButton);
             this.Controls.Add(this.tableErrorsLabel);
             this.Controls.Add(this.rowErrorsLabel);
             this.Controls.Add(this.tableInfoLabel);
@@ -297,11 +298,10 @@
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.searchTextBox);
-            this.Controls.Add(this.button5);
+            this.Controls.Add(this.IndexButton);
             this.Controls.Add(this.nextButton);
             this.Controls.Add(this.prevButton);
             this.Controls.Add(this.previewButton);
-            this.Controls.Add(this.button1);
             this.Controls.Add(this.dataValues);
             this.Controls.Add(this.mainTablesListBox);
             this.Name = "Form1";
@@ -317,11 +317,10 @@
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
         private System.Windows.Forms.ListBox mainTablesListBox;
         private System.Windows.Forms.DataGridView dataValues;
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button previewButton;
         private System.Windows.Forms.Button prevButton;
         private System.Windows.Forms.Button nextButton;
-        private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Button IndexButton;
         private System.Windows.Forms.TextBox searchTextBox;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label4;
@@ -338,6 +337,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn columnValue;
         private System.Windows.Forms.Label rowErrorsLabel;
         private System.Windows.Forms.Label tableErrorsLabel;
+        private System.Windows.Forms.Button reportButton;
     }
 }
 
