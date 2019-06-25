@@ -28,13 +28,17 @@ namespace Rigsarkiv.AthenaConsole
                         _converter = new Data(_logManager, srcPath, destPath, destFolder, _converter.Tables) { TableIndexXDocument = tableIndexXDocument, ResearchIndexXDocument = researchIndexXDocument };
                         if (_converter.Run())
                         {
-                            var path = string.Format("{0}\\{1}.html", destPath, destFolder);
-                            if (_logManager.Flush(path))
+                            _converter = new Index(_logManager, srcPath, destPath, destFolder);
+                            if (_converter.Run())
                             {
-                                Console.ForegroundColor = ConsoleColor.Green;
-                                Console.WriteLine("Log file at: {0}", path);
-                                Console.ResetColor();
-                            }
+                                var path = string.Format("{0}\\{1}.html", destPath, destFolder);
+                                if (_logManager.Flush(path))
+                                {
+                                    Console.ForegroundColor = ConsoleColor.Green;
+                                    Console.WriteLine("Log file at: {0}", path);
+                                    Console.ResetColor();
+                                }
+                            }                            
                         }
                     }
                 }

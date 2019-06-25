@@ -47,6 +47,7 @@
     <Compile Include="Entities\Column.cs" />
     <Compile Include="Entities\Row.cs" />
     <Compile Include="Entities\Table.cs" />
+    <Compile Include="Index.cs" />
     <Compile Include="Logging\LogEntity.cs" />
     <Compile Include="Logging\LogEventArgs.cs" />
     <Compile Include="Logging\LogLevel.cs" />
