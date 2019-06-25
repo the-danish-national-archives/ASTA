@@ -136,7 +136,8 @@ namespace Rigsarkiv.Athena
                  new XElement(_tableIndexXNS + "nullable", variableInfo["nullable"].ToString().ToLower()),
                  new XElement(_tableIndexXNS + "description", variableInfo["description"].ToString()));
             tableNode.Element(_tableIndexXNS + "columns").Add(columnNode);
-            table.Columns.Add(new Column() { Name = columnName, Id = columnId, Type = columnType, TypeOriginal = columnTypeOriginal, Nullable = (bool)variableInfo["nullable"] });
+            var appliedRegExp = ((object[])variableInfo["regExps"])[(int)variableInfo["appliedRegExp"]].ToString();
+            table.Columns.Add(new Column() { Name = columnName, Id = columnId, Type = columnType, TypeOriginal = columnTypeOriginal, Nullable = (bool)variableInfo["nullable"], RegExp = appliedRegExp });
             researchIndexNode.Element(_tableIndexXNS + "specialNumeric").Value = variableInfo["specialNumeric"].ToString();
             if (!string.IsNullOrEmpty(variableInfo["refData"].ToString()) && !string.IsNullOrEmpty(variableInfo["refVariable"].ToString()))
             {

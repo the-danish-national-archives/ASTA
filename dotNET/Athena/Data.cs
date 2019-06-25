@@ -106,19 +106,20 @@ namespace Rigsarkiv.Athena
                 var path = string.Format(TablePath, _destFolderPath, string.Format("{0}\\{0}.xml", table.Folder));
                 _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add file: {0} ", path) });
                 StartWriter(table.Folder);
-                path = _srcPath.Substring(0, _srcPath.LastIndexOf("."));
+                path = string.Format("{0}\\Data\\{1}\\{1}.csv", _srcPath.Substring(0, _srcPath.LastIndexOf(".")), table.SrcFolder);
                 _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Loop file: {0} ", path) });
-                using (var reader = new StreamReader(string.Format("{0}\\Data\\{1}\\{1}.csv", path, table.SrcFolder)))
+                using (var reader = new StreamReader(path))
                 {                    
                     while (!reader.EndOfStream)
                     {
                         if (counter == 1) { reader.ReadLine(); }
                         if (counter > 1) { AddRow(table, reader.ReadLine()); }
-                        if ((counter % 10) == 0) {
+                        if ((counter % 500) == 0) {
                             _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("{0} rows added", counter) });
                         }
                         counter++;
                     }
+                    _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("{0} rows added", counter - 1) });
                 }                
                 EndWriter();
             }
@@ -139,8 +140,11 @@ namespace Rigsarkiv.Athena
                 row = ParseRow(line);
             }
             for(int i = 0; i < table.Columns.Count; i++)
-            {                
-                _writer.WriteElementString(table.Columns[i].Id, row[i]);
+            {
+                var column = table.Columns[i];
+                var value = row[i];
+                if(string.IsNullOrEmpty(value.Trim()) && column.Nullable) { value = string.Empty; }
+                _writer.WriteElementString(column.Id, value);
             }
             _writer.WriteEndElement();
         }
