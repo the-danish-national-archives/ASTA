@@ -99,7 +99,7 @@ namespace Rigsarkiv.Athena
             var researchIndexNode = new XElement(_tableIndexXNS + "table",
                 new XElement(_tableIndexXNS + "tableID", folder),
                 new XElement(_tableIndexXNS + "source", tableInfo["system"].ToString()),
-                new XElement(_tableIndexXNS + "specialNumeric"),false.ToString().ToLower());
+                new XElement(_tableIndexXNS + "specialNumeric", false.ToString().ToLower()));
             _researchIndexXDocument.Element(_tableIndexXNS + "researchIndex").Element(_tableIndexXNS + "mainTables").Add(researchIndexNode);
             var tableNode = new XElement(_tableIndexXNS + "table",
                 new XElement(_tableIndexXNS + "name", tableName),

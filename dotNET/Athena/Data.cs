@@ -96,7 +96,7 @@ namespace Rigsarkiv.Athena
                         if (hasError || value != newValue)
                         {
                             if (!preview) { result.ErrorsColumns.Add(c.Id); }
-                            table.Errors++;
+                            if(preview) table.Errors++;
                         }
                     });
                 }

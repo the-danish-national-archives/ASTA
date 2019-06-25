@@ -12,6 +12,7 @@ namespace Rigsarkiv.Athena
     public partial class Form1 : Form
     {
         const string RowsLabel = "Række {0} ud af {1}";
+        const string TableErrorsLabel = "Fejl i alt {0}";
         const string RowErrorsLabel = "Fejl: {0}";
         const string CodeTableLabel = "Kodetabel: {0}";
         const string MainTableLabel = "Hovedtabel: {0}";
@@ -139,7 +140,6 @@ namespace Rigsarkiv.Athena
                 _converter.GetRow(table, i, true);
             }
             nextButton.Enabled = searchButton.Enabled = true;
-            tableErrorsLabel.Text = string.Format("Fejl i alt {0}", table.Errors.HasValue ? table.Errors.Value : 0);
             UpdateDataRow(table);
         }
 
@@ -192,18 +192,21 @@ namespace Rigsarkiv.Athena
                 var column = table.Columns[i];
                 dataValues[0, i].Value = column.Name;
                 dataValues[1, i].Value = column.TypeOriginal;
+                if(column.Modified) { dataValues[1, i].Style.BackColor = Color.Green; }
                 if (row != null && row.SrcValues.ContainsKey(column.Id))
                 {
                     dataValues[2, i].Value = row.SrcValues[column.Id];
                     if (row.ErrorsColumns.Contains(column.Id)) { dataValues[2, i].Style.BackColor = Color.Red; }
                 }
                 dataValues[3, i].Value = column.Type;
+                if (column.Modified) { dataValues[3, i].Style.BackColor = Color.Green; }
                 if (row != null && row.SrcValues.ContainsKey(column.Id))
                 {
                     dataValues[4, i].Value = row.DestValues[column.Id];
                     if (row.ErrorsColumns.Contains(column.Id)) { dataValues[4, i].Style.BackColor = Color.Red; }
                 }
             }
+            tableErrorsLabel.Text = string.Format(TableErrorsLabel, table.Errors.HasValue ? table.Errors.Value : 0);
             if (row != null) { rowErrorsLabel.Text = string.Format(RowErrorsLabel, row.ErrorsColumns.Count); }
         }
     }
