@@ -113,6 +113,7 @@ namespace Rigsarkiv.Athena
             var result = true;
             try
             {
+                var researchIndexNode = _researchIndexXDocument.Element(_tableIndexXNS + "researchIndex").Element(_tableIndexXNS + "mainTables").Elements().Where(e => e.Element(_tableIndexXNS + "tableID").Value == table.Folder).FirstOrDefault();
                 var tableNode = _tableIndexXDocument.Element(_tableIndexXNS + "siardDiark").Element(_tableIndexXNS + "tables").Elements().Where(e => e.Element(_tableIndexXNS + "folder").Value == table.Folder).FirstOrDefault();
                 var counter = 1;
                 var path = string.Format(TablePath, _destFolderPath, string.Format("{0}\\{0}.xml", table.Folder));
@@ -125,7 +126,7 @@ namespace Rigsarkiv.Athena
                     while (!reader.EndOfStream)
                     {
                         if (counter == 1) { reader.ReadLine(); }
-                        if (counter > 1) { AddRow(table, tableNode, reader.ReadLine()); }
+                        if (counter > 1) { AddRow(table, tableNode, researchIndexNode, reader.ReadLine()); }
                         if ((counter % 500) == 0) {
                             _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("{0} rows added", counter) });
                         }
@@ -143,7 +144,7 @@ namespace Rigsarkiv.Athena
             return result;
         }
 
-        private void AddRow(Table table, XElement tableNode, string line)
+        private void AddRow(Table table, XElement tableNode, XElement researchIndexNode, string line)
         {
             _writer.WriteStartElement("row");
             var row = line.Split(Separator).ToList();
@@ -156,21 +157,26 @@ namespace Rigsarkiv.Athena
                 var column = table.Columns[i];
                 var value = row[i];
                 if(string.IsNullOrEmpty(value.Trim()) && column.Nullable) { value = string.Empty; }
-                HandleSpecialNumeric(column, tableNode, value);
+                HandleSpecialNumeric(column, tableNode, researchIndexNode, value);
                 _writer.WriteElementString(column.Id, value);
             }
             _writer.WriteEndElement();
         }
 
-        private void HandleSpecialNumeric(Column column, XElement tableNode,string value)
+        private void HandleSpecialNumeric(Column column, XElement tableNode, XElement researchIndexNode, string value)
         {
             if((column.Type == "INTEGER" || column.Type == "DECIMAL") && _specialNumeric.IsMatch(value))
             {
-                column.Type = string.Format(VarCharPrefix,50);
+                _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Handle Special Numeric value {0} at column {1}", value, column.Name) });
+                column.Type = string.Format(VarCharPrefix, GetColumnLength(column.Type, column.RegExp));
                 column.Modified = true;
+
                 var columnNode = tableNode.Element(_tableIndexXNS + "columns").Elements().Where(e => e.Element(_tableIndexXNS + "columnID").Value == column.Id).FirstOrDefault();
                 columnNode.Element(_tableIndexXNS + "type").Value = column.Type;
-                _updateDocuments = true;
+
+                researchIndexNode.Element(_tableIndexXNS + "specialNumeric").Value = true.ToString().ToLower();
+                AddMissingColumnNode(value, researchIndexNode, column.Id);
+               _updateDocuments = true;
             }
         }
 

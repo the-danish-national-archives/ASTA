@@ -1,6 +1,7 @@
 ﻿using Rigsarkiv.Athena.Entities;
 using Rigsarkiv.Athena.Logging;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Xml;
@@ -89,6 +90,79 @@ namespace Rigsarkiv.Athena
         {
             get { return _researchIndexXDocument; }
             set { _researchIndexXDocument = value; }
+        }
+
+        protected int GetColumnLength(string type,string regExp)
+        {
+            var result = 0;
+            var startIndex = -1;
+            var endIndex = -1;
+            switch (type)
+            {
+                case "INTEGER":
+                    {
+                        startIndex = regExp.IndexOf("{1,") + 3;
+                        endIndex = regExp.IndexOf("}$");
+                        result = int.Parse(regExp.Substring(startIndex, endIndex - startIndex));
+                        result++;
+                        if (result < 2) { result = 2; }                        
+                    };
+                    break;
+                case "DECIMAL":
+                    {
+                        startIndex = regExp.IndexOf("{1,") + 3;
+                        endIndex = regExp.IndexOf("}", startIndex);
+                        result = int.Parse(regExp.Substring(startIndex, endIndex - startIndex));
+                        result++;
+                        startIndex = regExp.IndexOf("{1,", endIndex + 1);
+                        if(startIndex > -1)
+                        {
+                            startIndex = startIndex + 3;
+                            endIndex = regExp.LastIndexOf("}");
+                            result += int.Parse(regExp.Substring(startIndex, endIndex - startIndex));
+                            result++;
+                        }
+                        if (result < 2) { result = 2; }
+                    };
+                    break;
+                case "VARCHAR({0})":
+                    {
+                        startIndex = regExp.IndexOf("{0,") + 3;
+                        endIndex = regExp.IndexOf("}$");
+                        result = int.Parse(regExp.Substring(startIndex, endIndex - startIndex));
+                    };
+                    break;
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Add Missing Column Node
+        /// </summary>
+        /// <param name="codeName"></param>
+        /// <param name="researchIndexNode"></param>
+        /// <param name="columnId"></param>
+        protected void AddMissingColumnNode(string codeName, XElement researchIndexNode, string columnId)
+        {
+
+            _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add missing value: {0} ", codeName) });
+            XElement columnsNode = researchIndexNode.Element(_tableIndexXNS + "columns");
+            XElement columnNode = new XElement(_tableIndexXNS + "column", new XElement(_tableIndexXNS + "columnID", columnId), new XElement(_tableIndexXNS + "missingValues"));
+            if (columnsNode == null)
+            {
+                columnsNode = new XElement(_tableIndexXNS + "columns", columnNode);
+                researchIndexNode.Add(columnsNode);
+            }
+            if (!columnsNode.Elements().Where(e => e.Element(_tableIndexXNS + "columnID").Value == columnId).Any())
+            {
+                columnsNode.Add(columnNode);
+            }
+            else
+            {
+                columnNode = columnsNode.Elements().Where(e => e.Element(_tableIndexXNS + "columnID").Value == columnId).FirstOrDefault();
+            }
+            var missingValueNode = new XElement(_tableIndexXNS + "value", codeName);
+            columnNode.Element(_tableIndexXNS + "missingValues").Add(missingValueNode);
         }
 
         /// <summary>
