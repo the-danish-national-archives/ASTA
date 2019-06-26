@@ -16,6 +16,7 @@ function (n) {
         const doubleApostrophePattern2 = /(")/g;
         const doubleApostrophePattern3 = /(["]{2,2})/g
         const errorsMax = 40;
+        const warningMax = 10;
         
         //private data memebers
         var settings = { 
@@ -28,6 +29,8 @@ function (n) {
             logEndWithErrorSpn:null,
             selectDirBtn: null,
             validateBtn: null,
+            inProgressSpn: null,
+            inProgressText: null,
             deliveryPackagePath: null,
             outputText: {},
             logType: "data",
@@ -43,6 +46,8 @@ function (n) {
             data: [],
             errors: 0,
             tableErrors: 0,
+            tableRows: 0,
+            tableWarnings: 0,
             totalErrors: 0,
             separator: ';',
             convertStop: false
@@ -111,18 +116,20 @@ function (n) {
 
         //Handle warn logging
         var LogWarn = function(postfixId) {
-            var id = "{0}{1}".format(settings.outputPrefix,postfixId);
-            var text = null;
-            if (arguments.length > 1) {                
-                if(arguments.length === 2) { text = ViewElement(id,arguments[1],null,null); }
-                if(arguments.length === 3) { text = ViewElement(id,arguments[1],arguments[2],null); }
-                if(arguments.length === 4) { text = ViewElement(id,arguments[1],arguments[2],arguments[3]); }
-                if(arguments.length === 5) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4]); }
-                if(arguments.length === 6) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5]); }
-                if(arguments.length === 7) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5],arguments[6]); }
-            }
-
-            settings.logCallback().warn(settings.logType,GetFolderName(),text);
+            if(settings.tableWarnings <= warningMax) {
+                var id = "{0}{1}".format(settings.outputPrefix,postfixId);
+                var text = null;
+                if (arguments.length > 1) {                
+                    if(arguments.length === 2) { text = ViewElement(id,arguments[1],null,null); }
+                    if(arguments.length === 3) { text = ViewElement(id,arguments[1],arguments[2],null); }
+                    if(arguments.length === 4) { text = ViewElement(id,arguments[1],arguments[2],arguments[3]); }
+                    if(arguments.length === 5) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4]); }
+                    if(arguments.length === 6) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5]); }
+                    if(arguments.length === 7) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5],arguments[6]); }
+                }
+                settings.logCallback().warn(settings.logType,GetFolderName(),text);
+            }                
+            settings.tableWarnings += 1;
             return true;
         }
         
@@ -535,6 +542,8 @@ function (n) {
                     result = false; 
                 }
                 if(!settings.table.errorStop && settings.rowIndex > 1 && settings.tableErrors <= errorsMax) {
+                    settings.inProgressSpn.innerHTML = settings.inProgressText.format(settings.rowIndex,settings.tableRows);
+                    console.log("validate row: {0}".format(settings.rowIndex));
                     var newData = data;
                     result = (settings.table.variables.length === newData.length);
                     if(!result) {
@@ -558,6 +567,7 @@ function (n) {
             .on("end", function(){
                 console.log("{0} data output: ".format(settings.fileName));
                 console.log(settings.data);
+                settings.inProgressSpn.innerHTML = "";
                 if(settings.convertStop) { settings.table.errorStop = true; }
                 ProcessDataSet();
             });
@@ -573,10 +583,21 @@ function (n) {
                 settings.table = GetTableData();
                 settings.rowIndex = 0;
                 settings.data = [];
-                settings.tableErrors = 0; 
+                settings.tableErrors = 0;
+                settings.tableWarnings = 0; 
                 settings.convertStop = false;
                 console.log(`validate: ${dataFilePath}`);
-                ValidateDataSet();
+                settings.tableRows = 0;                
+                 fs.createReadStream(dataFilePath)
+                .on('data', function(chunk) {
+                  for (i=0; i < chunk.length; ++i)
+                    if (chunk[i] == 10) settings.tableRows++;
+                })
+                .on('end', function() {
+                    console.log(`total rows: ${settings.tableRows}`);                    
+                    ValidateDataSet();
+                });
+                
             }
             else {
                 CommitLog();
@@ -652,7 +673,7 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Nemesis.Data = {
-            initialize: function (logCallback,outputErrorId,logStartId,logEndNoErrorId,logEndWithErrorId,outputPrefix,selectDirectoryId,validateId) {            
+            initialize: function (logCallback,outputErrorId,logStartId,logEndNoErrorId,logEndWithErrorId,outputPrefix,selectDirectoryId,validateId,inProgressId) {            
                 settings.logCallback = logCallback;
                 settings.outputErrorSpn = document.getElementById(outputErrorId);
                 settings.outputErrorText = settings.outputErrorSpn.innerHTML;
@@ -662,6 +683,9 @@ function (n) {
                 settings.outputPrefix = outputPrefix;
                 settings.selectDirBtn = document.getElementById(selectDirectoryId);
                 settings.validateBtn = document.getElementById(validateId);
+                settings.inProgressSpn  = document.getElementById(inProgressId);
+                settings.inProgressText = settings.inProgressSpn.innerHTML;
+                settings.inProgressSpn.innerHTML = "";
                 AddEvents();
             },
             callback: function () {
