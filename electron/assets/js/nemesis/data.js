@@ -612,16 +612,19 @@ function (n) {
                 var dataFilePath = (destPath.indexOf("\\") > -1) ? "{0}\\{1}\\{1}.csv".format(destPath,folder) : "{0}/{1}/{1}.csv".format(destPath,folder);                 
                 if(fs.existsSync(dataFilePath)) {
                     console.log("validate data file: {0}".format(dataFilePath));
-                    var charsetMatch = chardet.detectFileSync(dataFilePath);
+                    chardet.detectFile(dataFilePath, function(err, encoding) {
+                        if (err) {
+                            err.Handle(settings.outputErrorSpn,settings.outputErrorText);   
+                        }
+                        if(encoding !== "UTF-8") {
+                            result = LogWarn("-CheckData-FileEncoding-Error",settings.fileName);
+                        } 
+                    });
+                    //var charsetMatch = chardet.detectFileSync(dataFilePath);
                     settings.fileName = GetFileName(dataFilePath);
                     settings.metadataFileName =  "{0}.txt".format(settings.fileName.substring(0,settings.fileName.indexOf(".")));
                     settings.table = GetTableData();
-                    if(charsetMatch !== "UTF-8") {
-                        result = LogError("-CheckData-FileEncoding-Error",settings.fileName);
-                    } 
-                    else {
-                        if(settings.table != null && !settings.table.errorStop) { settings.dataFiles.push(dataFilePath); }                                                              
-                    } 
+                    if(settings.table != null && !settings.table.errorStop) { settings.dataFiles.push(dataFilePath); }                                                              
                 }
                 else {
                     console.log("None exist Data file path: {0}".format(dataFilePath));
