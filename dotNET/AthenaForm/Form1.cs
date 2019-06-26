@@ -79,7 +79,7 @@ namespace Rigsarkiv.Athena
                     _converter = new Data(_logManager, srcPath, destPath, destFolder, _converter.Tables) { TableIndexXDocument = tableIndexXDocument, ResearchIndexXDocument = researchIndexXDocument }  ;
                     if (_converter.Run())
                     {
-                        _form = new Form2(srcPath, destPath, destFolder, _logManager, _converter.Tables);
+                        _form = new Form2(srcPath, destPath, destFolder, _logManager, _converter.Tables,outputRichTextBox);
                         nextForm.Enabled = true;
                     }                    
                 }
@@ -96,7 +96,7 @@ namespace Rigsarkiv.Athena
                 case LogLevel.Info: outputRichTextBox.AppendText(message, Color.Black); break;
                 case LogLevel.Warning: outputRichTextBox.AppendText(message, Color.Orange); break;
             }
-            System.Threading.Thread.Sleep(200);
+            //System.Threading.Thread.Sleep(200);
         }
 
         private bool ValidateInputs()

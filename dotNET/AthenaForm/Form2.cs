@@ -24,6 +24,7 @@ namespace Rigsarkiv.Athena
         private List<Table> _tables = null;
         private Table _mainTable = null;
         private Table _codeTable = null;
+        private RichTextBox _outputRichTextBox = null;
         private int _rowIndex = 1;
 
         /// <summary>
@@ -34,7 +35,8 @@ namespace Rigsarkiv.Athena
         /// <param name="destFolder"></param>
         /// <param name="logManager"></param>
         /// <param name="tables"></param>
-        public Form2(string srcPath, string destPath,string destFolder, LogManager logManager, List<Table> tables)
+        /// <param name="outputRichTextBox"></param>
+        public Form2(string srcPath, string destPath,string destFolder, LogManager logManager, List<Table> tables, RichTextBox outputRichTextBox)
         {
             InitializeComponent();            
             _logManager = logManager;
@@ -43,6 +45,7 @@ namespace Rigsarkiv.Athena
             _destFolder = destFolder;
              _converter = new Data(logManager, srcPath, destPath, destFolder, tables);
             _tables = tables;
+            _outputRichTextBox = outputRichTextBox;
             mainTablesListBox.Items.AddRange(_tables.Select(t => t.Name).ToArray());
             rowLabel.Text = "";
             tableInfoLabel.Text = "";
@@ -218,10 +221,9 @@ namespace Rigsarkiv.Athena
 
         private void IndexButton_Click(object sender, EventArgs e)
         {
-            var converter = new Index(_logManager, _srcPath, _destPath, _destFolder);
-            if (converter.Run())
-            {
-            }
+            Form3 form = new Form3(_srcPath, _destPath, _destFolder, _logManager, _converter.Tables, _outputRichTextBox);
+            form.Show();
+            this.Hide();           
         }
     }
 }
