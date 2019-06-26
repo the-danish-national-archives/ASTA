@@ -1,149 +1,226 @@
-﻿using Rigsarkiv.Athena.Extensions;
-using Rigsarkiv.Athena.Logging;
+﻿using Rigsarkiv.Athena.Logging;
 using System;
+using System.Collections.Generic;
+using System.Data;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
+using Rigsarkiv.Athena.Entities;
 
 namespace Rigsarkiv.Athena
 {
     public partial class Form2 : Form
     {
-        const string DestFolderName = "AVID.SA.{0}.1";
+        const string RowsLabel = "Række {0} ud af {1}";
+        const string TableErrorsLabel = "Fejl i alt {0}";
+        const string RowErrorsLabel = "Fejl: {0}";
+        const string CodeTableLabel = "Kodetabel: {0}";
+        const string MainTableLabel = "Hovedtabel: {0}";
         private LogManager _logManager = null;
-        private Converter _converter = null;
-        private Form1 _form;
+        private string _srcPath = null;
+        private string _destPath = null;
+        private string _destFolder = null;
+        private Data _converter = null;
+        private List<Table> _tables = null;
+        private Table _mainTable = null;
+        private Table _codeTable = null;
+        private int _rowIndex = 1;
 
         /// <summary>
-        /// Constructors
+        /// 
         /// </summary>
         /// <param name="srcPath"></param>
         /// <param name="destPath"></param>
-        public Form2(string srcPath, string destPath)
+        /// <param name="destFolder"></param>
+        /// <param name="logManager"></param>
+        /// <param name="tables"></param>
+        public Form2(string srcPath, string destPath,string destFolder, LogManager logManager, List<Table> tables)
         {
-            InitializeComponent();
-            sipTextBox.Text = srcPath;
-            aipTextBox.Text = destPath;
-            var folderName = srcPath.Substring(srcPath.LastIndexOf("\\") + 1);
-            folderName = folderName.Substring(0, folderName.LastIndexOf("."));
-            aipNameTextBox.Text = string.Format(DestFolderName, folderName.Substring(3));
+            InitializeComponent();            
+            _logManager = logManager;
+            _srcPath = srcPath;
+            _destPath = destPath;
+            _destFolder = destFolder;
+             _converter = new Data(logManager, srcPath, destPath, destFolder, tables);
+            _tables = tables;
+            mainTablesListBox.Items.AddRange(_tables.Select(t => t.Name).ToArray());
+            rowLabel.Text = "";
+            tableInfoLabel.Text = "";
+            rowErrorsLabel.Text = "";
+            tableErrorsLabel.Text = "";
         }
 
-        private void sipButton_Click(object sender, EventArgs e)
+        public void tablesBox_Click(object sender, EventArgs e)
         {
-            var openFileDlg = new OpenFileDialog();
-            openFileDlg.DefaultExt = ".json";
-            openFileDlg.Filter = "SIP metadata (.json)|*.json";
-            if (!string.IsNullOrEmpty(sipTextBox.Text))
+           
+        }
+
+        private void mainTablesListBox_DrawItem(object sender, DrawItemEventArgs e)
+        {
+
+        }
+
+        private void codeTablesListBox_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            this.SuspendLayout();
+            e.DrawBackground();
+
+            Graphics g = e.Graphics;
+            g.FillRectangle(new SolidBrush(Color.White), e.Bounds);
+            ListBox lb = (ListBox)sender;
+            g.DrawString(lb.Items[e.Index].ToString(), e.Font, new SolidBrush(Color.Red), new PointF(e.Bounds.X, e.Bounds.Y));
+
+            e.DrawFocusRectangle();
+            this.ResumeLayout();
+        }
+
+        private void codeTablesListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {            
+            _rowIndex = 1;
+            rowLabel.Text = "";
+            rowErrorsLabel.Text = "";
+            tableErrorsLabel.Text = "";
+            dataValues.Rows.Clear();            
+            _codeTable = _mainTable.CodeList[codeTablesListBox.SelectedIndex];
+            tableInfoLabel.Text = string.Format(CodeTableLabel, _codeTable.Name);
+            if (_codeTable.Errors.HasValue)
             {
-                openFileDlg.FileName = sipTextBox.Text.Substring(sipTextBox.Text.LastIndexOf("\\") + 1);
-                openFileDlg.InitialDirectory = sipTextBox.Text.Substring(0, sipTextBox.Text.LastIndexOf("\\"));
+                UpdateDataRow(_codeTable);
+                nextButton.Enabled = prevButton.Enabled = searchButton.Enabled = true;
+                previewProgressBar.Value = previewProgressBar.Maximum;
+                previewButton.Enabled = false;                
             }
-            var result = openFileDlg.ShowDialog();
-            if (result == DialogResult.OK)
+            else
             {
-                sipTextBox.Text = openFileDlg.FileName;
+                nextButton.Enabled = prevButton.Enabled = searchButton.Enabled = false;
+                previewProgressBar.Value = 0;
+                previewButton.Enabled = true;
             }
         }
 
-        private void aipButton_Click(object sender, EventArgs e)
+        private void mainTablesListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var folderDialog = new FolderBrowserDialog();
-            folderDialog.ShowNewFolderButton = false;
-
-            if (!string.IsNullOrEmpty(aipTextBox.Text)) { folderDialog.SelectedPath = aipTextBox.Text; }
-            var result = folderDialog.ShowDialog();
-            if (result == DialogResult.OK)
+            _rowIndex = 1;
+            rowLabel.Text = "";
+            rowErrorsLabel.Text = "";
+            tableErrorsLabel.Text = "";
+            nextButton.Enabled = prevButton.Enabled = searchButton.Enabled = false;
+            dataValues.Rows.Clear();
+            previewProgressBar.Value = 0;
+            _codeTable = null;
+            codeTablesListBox.Items.Clear();
+            _mainTable = _tables[mainTablesListBox.SelectedIndex];
+            if(_mainTable.CodeList != null && _mainTable.CodeList.Count > 0)
             {
-                aipTextBox.Text = folderDialog.SelectedPath;
+                codeTablesListBox.Items.AddRange(_mainTable.CodeList.Select(t => t.Name).ToArray());
+            }
+            tableInfoLabel.Text = string.Format(MainTableLabel, _mainTable.Name);
+            if (_mainTable.Errors.HasValue)
+            {
+                UpdateDataRow(_mainTable);
+                nextButton.Enabled = prevButton.Enabled = searchButton.Enabled = true;
+                previewProgressBar.Value = previewProgressBar.Maximum;
+                previewButton.Enabled = false;
+            }
+            else
+            {
+                nextButton.Enabled = prevButton.Enabled = searchButton.Enabled = false;
+                previewProgressBar.Value = 0;
+                previewButton.Enabled = true;
             }
         }
 
-        private void convertButton_Click(object sender, EventArgs e)
+        private void previewButton_Click(object sender, EventArgs e)
         {
-            if (!ValidateInputs()) { return; }
-            outputRichTextBox.Clear();
-            _logManager = new LogManager();
-            _logManager.LogAdded += OnLogAdded;
-            var srcPath = sipTextBox.Text;
-            var destPath = aipTextBox.Text;
-            var destFolder = aipNameTextBox.Text;
+            previewProgressBar.ResumeLayout();
+            previewProgressBar.Minimum = 0;
+            previewProgressBar.Step = 1;
+            dataValues.Rows.Clear();
+            var table = (_codeTable != null) ? _codeTable : _mainTable;
+            if (!table.Errors.HasValue) { table.Errors = 0; }
+            previewProgressBar.Maximum = table.Rows;
 
-            _converter = new Structure(_logManager, srcPath, destPath, destFolder);
-            if (_converter.Run())
+            for (int i = 1; i <= table.Rows; i++)
             {
-                _converter = new MetaData(_logManager, srcPath, destPath, destFolder);
-                if(_converter.Run())
+                previewProgressBar.PerformStep();
+                _converter.GetRow(table, i, true);
+            }
+            nextButton.Enabled = searchButton.Enabled = true;
+            UpdateDataRow(table);
+        }
+
+        private void nextButton_Click(object sender, EventArgs e)
+        {
+            _rowIndex++;
+            var table = (_codeTable != null) ? _codeTable : _mainTable;
+            if (table.Rows >= _rowIndex)
+            {
+                UpdateDataRow(table);
+            }
+            nextButton.Enabled = (table.Rows > _rowIndex);
+            prevButton.Enabled = true;
+        }
+
+        private void prevButton_Click(object sender, EventArgs e)
+        {
+            _rowIndex--;
+            var table = (_codeTable != null) ? _codeTable : _mainTable;
+            if (_rowIndex >= 1 && _rowIndex <= table.Rows)
+            {
+               UpdateDataRow(table);
+            }
+            prevButton.Enabled = (_rowIndex > 1);            
+            nextButton.Enabled = true;
+        }
+
+        private void searchButton_Click(object sender, EventArgs e)
+        {
+            if(int.TryParse(searchTextBox.Text,out _rowIndex))
+            {
+                var table = (_codeTable != null) ? _codeTable : _mainTable;
+                if (_rowIndex > 0 && _rowIndex <= table.Rows)
                 {
-                    var tableIndexXDocument = _converter.TableIndexXDocument;
-                    var researchIndexXDocument = _converter.ResearchIndexXDocument;
-                    _converter = new Data(_logManager, srcPath, destPath, destFolder, _converter.Tables) { TableIndexXDocument = tableIndexXDocument, ResearchIndexXDocument = researchIndexXDocument }  ;
-                    if (_converter.Run())
-                    {
-                        _form = new Form1(srcPath, destPath, destFolder, _logManager, _converter.Tables);
-                        nextForm.Enabled = true;
-                    }                    
+                    UpdateDataRow(table);
+                    prevButton.Enabled = (_rowIndex > 1);
+                    nextButton.Enabled = (table.Rows > _rowIndex);
                 }
             }
-            logButton.Enabled = true;
+        }
+        
+        private void UpdateDataRow(Table table)
+        {
+            rowLabel.Text = string.Format(RowsLabel, _rowIndex, table.Rows);
+            dataValues.Rows.Clear();
+            var row = _converter.GetRow(table, _rowIndex);
+            dataValues.Rows.Add(table.Columns.Count);
+            for (int i = 0; i < table.Columns.Count; i++)
+            {
+                var column = table.Columns[i];
+                dataValues[0, i].Value = column.Name;
+                dataValues[1, i].Value = column.TypeOriginal;
+                if(column.Modified) { dataValues[1, i].Style.BackColor = Color.Green; }
+                if (row != null && row.SrcValues.ContainsKey(column.Id))
+                {
+                    dataValues[2, i].Value = row.SrcValues[column.Id];
+                    if (row.ErrorsColumns.Contains(column.Id)) { dataValues[2, i].Style.BackColor = Color.Red; }
+                }
+                dataValues[3, i].Value = column.Type;
+                if (column.Modified) { dataValues[3, i].Style.BackColor = Color.Green; }
+                if (row != null && row.SrcValues.ContainsKey(column.Id))
+                {
+                    dataValues[4, i].Value = row.DestValues[column.Id];
+                    if (row.ErrorsColumns.Contains(column.Id)) { dataValues[4, i].Style.BackColor = Color.Red; }
+                }
+            }
+            tableErrorsLabel.Text = string.Format(TableErrorsLabel, table.Errors.HasValue ? table.Errors.Value : 0);
+            if (row != null) { rowErrorsLabel.Text = string.Format(RowErrorsLabel, row.ErrorsColumns.Count); }
         }
 
-        private void OnLogAdded(object sender, LogEventArgs e)
+        private void IndexButton_Click(object sender, EventArgs e)
         {
-            var message = e.LogEntity.Message;
-            switch (e.LogEntity.Level)
+            var converter = new Index(_logManager, _srcPath, _destPath, _destFolder);
+            if (converter.Run())
             {
-                case LogLevel.Error: outputRichTextBox.AppendText(message, Color.Red); break;
-                case LogLevel.Info: outputRichTextBox.AppendText(message, Color.Black); break;
-                case LogLevel.Warning: outputRichTextBox.AppendText(message, Color.Orange); break;
-            }
-            System.Threading.Thread.Sleep(200);
-        }
-
-        private bool ValidateInputs()
-        {
-            var result = true;            
-            if (string.IsNullOrEmpty(sipTextBox.Text))
-            {
-                sipPathRequired.SetError(sipTextBox, "Mappe mangler");
-                result = false;
-            }
-            else
-            {
-                sipPathRequired.SetError(sipTextBox, string.Empty);
-            }
-            if (string.IsNullOrEmpty(aipNameTextBox.Text))
-            {
-                aipNameRequired.SetError(aipNameTextBox, "Navn mangler");
-                result = false;
-            }
-            else
-            {
-                aipNameRequired.SetError(aipNameTextBox, string.Empty);
-            }
-            if (string.IsNullOrEmpty(aipTextBox.Text))
-            {
-                aipPathRequired.SetError(aipTextBox, "Mappe mangler");
-                result = false;
-            }
-            else
-            {
-                aipPathRequired.SetError(aipTextBox, string.Empty);
-            }
-            return result;
-        }
-
-        private void nextForm_Click(object sender, EventArgs e)
-        {
-            _form.Show();
-            this.Hide();
-        }
-
-        private void logButton_Click(object sender, EventArgs e)
-        {
-            var path = string.Format("{0}\\{1}.html", aipTextBox.Text, aipNameTextBox.Text);
-            if (_logManager.Flush(path))
-            {
-                System.Diagnostics.Process.Start(path);
             }
         }
     }

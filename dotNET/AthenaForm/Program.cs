@@ -27,7 +27,7 @@ namespace Rigsarkiv.Athena
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form2(_srcPath, _destPath));
+            Application.Run(new Form1(_srcPath, _destPath));
         }
     }
 }
