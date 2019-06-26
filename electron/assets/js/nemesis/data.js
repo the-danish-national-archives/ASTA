@@ -9,7 +9,7 @@ function (n) {
         const {ipcRenderer} = require('electron');
         const fs = require('fs');
         const chardet = require('chardet');
-       const csv = require('fast-csv');
+        const csv = require('fast-csv');
 
         const codeListPattern = /^(\.[a-z])|([A-Z])$/;
         const doubleApostrophePattern1 = /^"([\w\W\s]*)"$/;
@@ -29,8 +29,11 @@ function (n) {
             logEndWithErrorSpn:null,
             selectDirBtn: null,
             validateBtn: null,
-            inProgressSpn: null,
-            inProgressText: null,
+            confirmationSpn: null,
+            validateRowsText: null,
+            checkEncodingText: null,
+            convertDisabledText: null,
+            convertEnabledText: null,
             deliveryPackagePath: null,
             outputText: {},
             logType: "data",
@@ -537,13 +540,13 @@ function (n) {
             .validate(function(data){
                 var result = true;
                 settings.rowIndex++;
+                settings.confirmationSpn.innerHTML = settings.validateRowsText.format(settings.rowIndex,settings.tableRows,settings.fileName);
+                //console.log("validate row: {0}".format(settings.rowIndex));
                 if(settings.rowIndex === 1 && !ValidateHeader(data)) { 
                     settings.table.errorStop = true;
                     result = false; 
                 }
                 if(!settings.table.errorStop && settings.rowIndex > 1 && settings.tableErrors <= errorsMax) {
-                    settings.inProgressSpn.innerHTML = settings.inProgressText.format(settings.rowIndex,settings.tableRows);
-                    console.log("validate row: {0}".format(settings.rowIndex));
                     var newData = data;
                     result = (settings.table.variables.length === newData.length);
                     if(!result) {
@@ -567,10 +570,20 @@ function (n) {
             .on("end", function(){
                 console.log("{0} data output: ".format(settings.fileName));
                 console.log(settings.data);
-                settings.inProgressSpn.innerHTML = "";
+                settings.confirmationSpn.innerHTML = "";
                 if(settings.convertStop) { settings.table.errorStop = true; }
                 ProcessDataSet();
             });
+        }
+
+        //Validate data file encoding
+        var ValidateEncoding = function() {
+            var dataFilePath = settings.dataFiles[settings.runIndex];
+            var charsetMatch = chardet.detectFileSync(dataFilePath);
+            if(charsetMatch !== "UTF-8") {
+                result = LogWarn("-CheckData-FileEncoding-Error",settings.fileName);
+            }
+            settings.confirmationSpn.innerHTML = "";
         }
 
         //Process all data files
@@ -579,6 +592,8 @@ function (n) {
             if(settings.runIndex < settings.dataFiles.length) {
                 var dataFilePath = settings.dataFiles[settings.runIndex];
                 settings.fileName = GetFileName(dataFilePath);
+                settings.confirmationSpn.innerHTML = settings.checkEncodingText.format(settings.fileName);
+                setTimeout(ValidateEncoding, 1);
                 settings.metadataFileName =  "{0}.txt".format(settings.fileName.substring(0,settings.fileName.indexOf(".")));
                 settings.table = GetTableData();
                 settings.rowIndex = 0;
@@ -596,8 +611,7 @@ function (n) {
                 .on('end', function() {
                     console.log(`total rows: ${settings.tableRows}`);                    
                     ValidateDataSet();
-                });
-                
+                });                
             }
             else {
                 CommitLog();
@@ -611,17 +625,8 @@ function (n) {
             fs.readdirSync(destPath).forEach(folder => {
                 var dataFilePath = (destPath.indexOf("\\") > -1) ? "{0}\\{1}\\{1}.csv".format(destPath,folder) : "{0}/{1}/{1}.csv".format(destPath,folder);                 
                 if(fs.existsSync(dataFilePath)) {
-                    console.log("validate data file: {0}".format(dataFilePath));
-                    chardet.detectFile(dataFilePath, function(err, encoding) {
-                        if (err) {
-                            err.Handle(settings.outputErrorSpn,settings.outputErrorText);   
-                        }
-                        if(encoding !== "UTF-8") {
-                            result = LogWarn("-CheckData-FileEncoding-Error",settings.fileName);
-                        } 
-                    });
-                    //var charsetMatch = chardet.detectFileSync(dataFilePath);
-                    settings.fileName = GetFileName(dataFilePath);
+                    console.log("validate data file: {0}".format(dataFilePath));                    
+                    settings.fileName = GetFileName(dataFilePath);                                       
                     settings.metadataFileName =  "{0}.txt".format(settings.fileName.substring(0,settings.fileName.indexOf(".")));
                     settings.table = GetTableData();
                     if(settings.table != null && !settings.table.errorStop) { settings.dataFiles.push(dataFilePath); }                                                              
@@ -642,6 +647,18 @@ function (n) {
                     settings.logCallback().section(settings.logType,folderName,settings.logEndNoErrorSpn.innerHTML);
                 } else {
                     settings.logCallback().section(settings.logType,folderName,settings.logEndWithErrorSpn.innerHTML);
+                }                
+                if(settings.dataFiles.length > 0) {
+                    var enableConvert = true;
+                    settings.metadata.forEach(table => {
+                        if(table.errorStop) { enableConvert = false; }
+                    });
+                    if(enableConvert) {
+                        settings.confirmationSpn.innerHTML = settings.convertEnabledText;
+                    }
+                    else {
+                        settings.confirmationSpn.innerHTML = settings.convertDisabledText;
+                    }
                 }
                 settings.logResult = settings.logCallback().commit(settings.deliveryPackagePath);
                 settings.selectDirBtn.disabled = false;
@@ -676,7 +693,7 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Nemesis.Data = {
-            initialize: function (logCallback,outputErrorId,logStartId,logEndNoErrorId,logEndWithErrorId,outputPrefix,selectDirectoryId,validateId,inProgressId) {            
+            initialize: function (logCallback,outputErrorId,logStartId,logEndNoErrorId,logEndWithErrorId,outputPrefix,selectDirectoryId,validateId,confirmationId,validateRowsId,checkEncodingId,convertDisabledId,convertEnabledId) {            
                 settings.logCallback = logCallback;
                 settings.outputErrorSpn = document.getElementById(outputErrorId);
                 settings.outputErrorText = settings.outputErrorSpn.innerHTML;
@@ -686,9 +703,12 @@ function (n) {
                 settings.outputPrefix = outputPrefix;
                 settings.selectDirBtn = document.getElementById(selectDirectoryId);
                 settings.validateBtn = document.getElementById(validateId);
-                settings.inProgressSpn  = document.getElementById(inProgressId);
-                settings.inProgressText = settings.inProgressSpn.innerHTML;
-                settings.inProgressSpn.innerHTML = "";
+                settings.confirmationSpn  = document.getElementById(confirmationId);
+                settings.validateRowsText = document.getElementById(validateRowsId).innerHTML;
+                settings.checkEncodingText = document.getElementById(checkEncodingId).innerHTML;
+                settings.convertDisabledText = document.getElementById(convertDisabledId).innerHTML;
+                settings.convertEnabledText = document.getElementById(convertEnabledId).innerHTML;
+                settings.confirmationSpn.innerHTML = "";
                 AddEvents();
             },
             callback: function () {

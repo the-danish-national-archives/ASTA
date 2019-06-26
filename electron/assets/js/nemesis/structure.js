@@ -32,6 +32,8 @@ function (n) {
             logEndWithErrorSpn:null,
             deliveryPackagePath: null,
             testId: null,
+            confirmationSpn: null,
+            convertDisabledText: null,
             outputText: {},
             metadataFileName: "{0}.txt",
             dataFileName: "{0}.csv",
@@ -529,6 +531,7 @@ function (n) {
                     return settings.metadataCallback().validate(settings.deliveryPackagePath,settings.outputText,settings.errors); 
                 } 
                 else {
+                    settings.confirmationSpn.innerHTML = settings.convertDisabledText;
                     settings.selectDirBtn.disabled = false;
                     settings.validateBtn.disabled = false;
                     return settings.logCallback().commit(settings.deliveryPackagePath);
@@ -562,7 +565,7 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Nemesis.Structure = {        
-            initialize: function (logCallback,metadataCallback,outputErrorId,selectDirectoryId,pathDirectoryId,validateId,logStartId,logEndNoErrorId,logEndWithErrorId,outputPrefix,testId) {            
+            initialize: function (logCallback,metadataCallback,outputErrorId,selectDirectoryId,pathDirectoryId,validateId,logStartId,logEndNoErrorId,logEndWithErrorId,outputPrefix,testId,confirmationId,convertDisabledId) {            
                 settings.logCallback = logCallback;
                 settings.metadataCallback = metadataCallback;
                 settings.outputErrorSpn = document.getElementById(outputErrorId);
@@ -575,6 +578,8 @@ function (n) {
                 settings.logEndWithErrorSpn = document.getElementById(logEndWithErrorId);
                 settings.outputPrefix = outputPrefix;
                 settings.testId = document.getElementById(testId);
+                settings.confirmationSpn = document.getElementById(confirmationId);
+                settings.convertDisabledText = document.getElementById(convertDisabledId).innerHTML;
                 $("span[id^='" + settings.outputPrefix + "']").each(function() {
                     settings.outputText[this.id] = $(this).html();
                     $(this).html("");
