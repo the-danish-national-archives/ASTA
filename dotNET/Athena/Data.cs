@@ -174,7 +174,11 @@ namespace Rigsarkiv.Athena
                 else
                 {
                     var hasError = false;
-                    HandleSpecialNumeric(column, tableNode, researchIndexNode, value);
+                    if (HasSpecialNumeric(column, value))
+                    {
+                        HandleSpecialNumeric(column, tableNode, researchIndexNode, value, true);
+                        _updateDocuments = true;
+                    }
                     convertedValue = GetConvertedValue(column, value, out hasError);
                     if (hasError)
                     {
@@ -188,28 +192,7 @@ namespace Rigsarkiv.Athena
             if (rowError) { table.ErrorsRows.Add(index); }
             _writer.WriteEndElement();
         }
-
-        private void HandleSpecialNumeric(Column column, XElement tableNode, XElement researchIndexNode, string value)
-        {
-            if(!_regExps.ContainsKey(SpecialNumericPattern))
-            {
-                _regExps.Add(SpecialNumericPattern, new Regex(SpecialNumericPattern, RegexOptions.Compiled | RegexOptions.IgnoreCase));
-            }
-            if((column.Type == "INTEGER" || column.Type == "DECIMAL") && _regExps[SpecialNumericPattern].IsMatch(value))
-            {
-                _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Handle Special Numeric value {0} at column {1}", value, column.Name) });
-                column.Type = string.Format(VarCharPrefix, GetColumnLength(column.Type, column.RegExp));
-                column.Modified = true;
-
-                var columnNode = tableNode.Element(_tableIndexXNS + "columns").Elements().Where(e => e.Element(_tableIndexXNS + "columnID").Value == column.Id).FirstOrDefault();
-                columnNode.Element(_tableIndexXNS + "type").Value = column.Type;
-
-                researchIndexNode.Element(_tableIndexXNS + "specialNumeric").Value = true.ToString().ToLower();
-                AddMissingColumnNode(value, researchIndexNode, column.Id);
-               _updateDocuments = true;
-            }
-        }
-
+        
         private List<string> ParseRow(string line)
         {
             var result = new List<string>();

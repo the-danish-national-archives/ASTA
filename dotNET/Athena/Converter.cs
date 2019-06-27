@@ -26,6 +26,8 @@ namespace Rigsarkiv.Athena
         protected const string TableXsiNs = "http://www.w3.org/2001/XMLSchema-instance";
         protected const string TablePath = "{0}\\Tables\\{1}";
         protected const string VarCharPrefix = "VARCHAR({0})";
+        protected const string C1 = "c1";
+        protected const string C2 = "c2";
         protected string SpecialNumericPattern = "^\\.[a-zA-Z]$";
         protected string DoubleApostrophePattern = "^\"([\\w\\W\\s]*)\"$";
         protected Dictionary<string, Regex> _regExps = null;
@@ -196,7 +198,73 @@ namespace Rigsarkiv.Athena
             _writer.Flush();
             _writer.Dispose();
         }
-        
+
+        /// <summary>
+        /// Check Special Numeric
+        /// </summary>
+        /// <param name="column"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        protected bool HasSpecialNumeric(Column column, string value)
+        {
+            if (!_regExps.ContainsKey(SpecialNumericPattern))
+            {
+                _regExps.Add(SpecialNumericPattern, new Regex(SpecialNumericPattern, RegexOptions.Compiled | RegexOptions.IgnoreCase));
+            }
+            if ((column.Type == "INTEGER" || column.Type == "DECIMAL") && _regExps[SpecialNumericPattern].IsMatch(value))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Handle Special Numeric i xml 
+        /// </summary>
+        /// <param name="column"></param>
+        /// <param name="tableNode"></param>
+        /// <param name="researchIndexNode"></param>
+        /// <param name="value"></param>
+        /// <param name="addMissing"></param>
+        protected void HandleSpecialNumeric(Column column, XElement tableNode, XElement researchIndexNode, string value, bool addMissing)
+        {
+            _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Handle Special Numeric value {0} at column {1}", value, column.Name) });
+            column.Type = string.Format(VarCharPrefix, GetColumnLength(column.Type, column.RegExp));
+            column.Modified = true;
+
+            var columnNode = tableNode.Element(_tableIndexXNS + "columns").Elements().Where(e => e.Element(_tableIndexXNS + "columnID").Value == column.Id).FirstOrDefault();
+            columnNode.Element(_tableIndexXNS + "type").Value = column.Type;
+
+            var foreignKeyNode = tableNode.Element(_tableIndexXNS + "foreignKeys").Elements().Where(e => e.Element(_tableIndexXNS + "reference").Element(_tableIndexXNS + "column").Value == column.Name).FirstOrDefault();
+            var codeListTableName = foreignKeyNode.Element(_tableIndexXNS + "referencedTable").Value;
+            var codeListNode = tableNode.Parent.Elements().Where(e => e.Element(_tableIndexXNS + "name").Value == codeListTableName).FirstOrDefault();
+            columnNode = codeListNode.Element(_tableIndexXNS + "columns").Elements().Where(e => e.Element(_tableIndexXNS + "columnID").Value == C1).FirstOrDefault();
+            columnNode.Element(_tableIndexXNS + "type").Value = column.Type;
+            _tables.ForEach(table => {
+                if (table.CodeList != null)
+                {
+                    var refTable = table.CodeList.Where(subTable => subTable.Name == codeListTableName).FirstOrDefault();
+                    if (refTable != null)
+                    {
+                        refTable.Columns[0].TypeOriginal = refTable.Columns[0].Type;
+                        refTable.Columns[0].Type = column.Type;
+                        refTable.Columns[0].Modified = true;
+                    }
+                }
+            });
+
+            researchIndexNode.Element(_tableIndexXNS + "specialNumeric").Value = true.ToString().ToLower();
+            if (addMissing) { AddMissingColumnNode(value, researchIndexNode, column.Id); }          
+        }
+
+
+        /// <summary>
+        /// Get Converted column Value
+        /// </summary>
+        /// <param name="column"></param>
+        /// <param name="value"></param>
+        /// <param name="hasError"></param>
+        /// <returns></returns>
         protected string GetConvertedValue(Column column, string value, out bool hasError)
         {
             string result = null;

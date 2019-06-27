@@ -22,9 +22,7 @@ namespace Rigsarkiv.Athena
         const string ReferencedTable = "{0}_{1}";
         const string ReferencedTableDescription = "Kodeliste til tabel {0}";
         const string Code = "Kode";
-        const string CodeValue = "Kodeværdi";
-        const string C1 = "c1";
-        const string C2 = "c2";
+        const string CodeValue = "Kodeværdi";        
         private dynamic _metadata = null;        
         private int _tablesCounter = 0;        
 
@@ -117,11 +115,11 @@ namespace Rigsarkiv.Athena
             foreach (var variable in (object[])tableInfo["variables"])
             {
                 var variableInfo = (Dictionary<string, object>)variable;
-                AddColumnNode(variableInfo,tableNode, researchIndexNode, table, tableName, index++);
+                AddColumnNode(variableInfo,tableNode, researchIndexNode, table, index++);
             }
         }
         
-        private void AddColumnNode(Dictionary<string, object> variableInfo, XElement tableNode, XElement researchIndexNode, Table table,string tableName, int index)
+        private void AddColumnNode(Dictionary<string, object> variableInfo, XElement tableNode, XElement researchIndexNode, Table table, int index)
         {
             var columnName = variableInfo["name"].ToString();
             var columnType = GetMappedType(variableInfo);
@@ -140,7 +138,7 @@ namespace Rigsarkiv.Athena
             table.Columns.Add(column);
             if (!string.IsNullOrEmpty(variableInfo["refData"].ToString()) && !string.IsNullOrEmpty(variableInfo["refVariable"].ToString()))
             {
-                var foreignKeyName = string.Format(ForeignKeyPrefix, tableName, columnName, index);
+                var foreignKeyName = string.Format(ForeignKeyPrefix, table.Name, columnName, index);
                 _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add foreign key: {0} ", foreignKeyName) });
 
                 tableNode.Element(_tableIndexXNS + "foreignKeys").Add(new XElement(_tableIndexXNS + "foreignKey",
@@ -148,32 +146,32 @@ namespace Rigsarkiv.Athena
                     new XElement(_tableIndexXNS + "referencedTable", variableInfo["refData"].ToString()),
                     new XElement(_tableIndexXNS + "reference", new XElement(_tableIndexXNS + "column", columnName), new XElement(_tableIndexXNS + "referenced", variableInfo["refVariable"].ToString()))));
             }
-            AddKeys(variableInfo, tableNode, researchIndexNode, table, tableName, columnId, columnName, columnType, index);
+            AddKeys(variableInfo, tableNode, researchIndexNode, table, column, index);
         }
         
-        private void AddKeys(Dictionary<string, object> variableInfo, XElement tableNode, XElement researchIndexNode, Table table, string tableName ,string columnId, string columnName, string columnType, int index)
+        private void AddKeys(Dictionary<string, object> variableInfo, XElement tableNode, XElement researchIndexNode, Table table , Column column, int index)
         {
             if ((bool)variableInfo["isKey"])
             {
-                _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add primary Key columnName: {0} ", columnName) });
-                tableNode.Element(_tableIndexXNS + "primaryKey").Add(new XElement(_tableIndexXNS + "column", columnName));
+                _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add primary Key columnName: {0} ", column.Name) });
+                tableNode.Element(_tableIndexXNS + "primaryKey").Add(new XElement(_tableIndexXNS + "column", column.Name));
             }
             if (variableInfo["codeListKey"] != null && !string.IsNullOrEmpty(variableInfo["codeListKey"].ToString()))
             {
                 var codeListKey = variableInfo["codeListKey"].ToString();
-                var refTableName = string.Format(ReferencedTable, tableName, codeListKey);
-                var foreignKeyName = string.Format(ForeignKeyPrefix, tableName, codeListKey, index);
+                var refTableName = string.Format(ReferencedTable, table.Name, codeListKey);
+                var foreignKeyName = string.Format(ForeignKeyPrefix, table.Name, codeListKey, index);
                 _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add foreign key: {0} ", foreignKeyName) });
                 if(table.CodeList == null) { table.CodeList = new List<Table>(); }
                 tableNode.Element(_tableIndexXNS + "foreignKeys").Add(new XElement(_tableIndexXNS + "foreignKey",
                     new XElement(_tableIndexXNS + "name", foreignKeyName),
                     new XElement(_tableIndexXNS + "referencedTable", refTableName),
                     new XElement(_tableIndexXNS + "reference", new XElement(_tableIndexXNS + "column", variableInfo["name"].ToString()), new XElement(_tableIndexXNS + "referenced", "Kode"))));
-                AddReferencedTable(variableInfo, tableNode, researchIndexNode, table, tableName, columnId, columnName, columnType, refTableName, index);
+                AddReferencedTable(variableInfo, tableNode, researchIndexNode, table, column, refTableName, index);
             }
         }
         
-        private void AddReferencedTable(Dictionary<string, object> variableInfo, XElement tableNode, XElement researchIndexNode, Table table, string tableName, string columnId, string columnName, string columnType, string refTableName, int index)
+        private void AddReferencedTable(Dictionary<string, object> variableInfo, XElement tableNode, XElement researchIndexNode, Table table, Column column, string refTableName, int index)
         {
             _tablesCounter++;
             _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add referenced Table: {0} ", refTableName) });
@@ -183,27 +181,30 @@ namespace Rigsarkiv.Athena
 
             var options = (object[])variableInfo["options"];
             var codeList = new Table() { Name = refTableName, Folder = folder, Rows = options.Length, Errors = 0, ErrorsRows = new List<int>(), Options= new List<string>() };
-            codeList.Columns = new List<Column>() { (new Column() { Name = Code, Id = C1, Type = columnType, TypeOriginal = "" }), (new Column() { Name = CodeValue, Id = C2, Type = "", TypeOriginal = "" }) };
-            var optionsType = ParseOptions(options, researchIndexNode, codeList, folder, columnId);
-            var columnNode1 = new XElement(_tableIndexXNS + "column", new XElement(_tableIndexXNS + "name", Code),new XElement(_tableIndexXNS + "columnID", C1),new XElement(_tableIndexXNS + "type", columnType),new XElement(_tableIndexXNS + "typeOriginal"),new XElement(_tableIndexXNS + "nullable", "false"), new XElement(_tableIndexXNS + "description", "Kode"));
+            codeList.Columns = new List<Column>() { (new Column() { Name = Code, Id = C1, Type = column.Type, TypeOriginal = "" }), (new Column() { Name = CodeValue, Id = C2, Type = "", TypeOriginal = "" }) };
+            var optionsType = ParseOptions(options, researchIndexNode, codeList, folder, column);
+            var columnNode1 = new XElement(_tableIndexXNS + "column", new XElement(_tableIndexXNS + "name", Code),new XElement(_tableIndexXNS + "columnID", C1),new XElement(_tableIndexXNS + "type", column.Type),new XElement(_tableIndexXNS + "typeOriginal"),new XElement(_tableIndexXNS + "nullable", "false"), new XElement(_tableIndexXNS + "description", "Kode"));
             var columnNode2 = new XElement(_tableIndexXNS + "column", new XElement(_tableIndexXNS + "name", CodeValue), new XElement(_tableIndexXNS + "columnID", C2), new XElement(_tableIndexXNS + "type", optionsType), new XElement(_tableIndexXNS + "typeOriginal"), new XElement(_tableIndexXNS + "nullable", "false"), new XElement(_tableIndexXNS + "description", "Kodeværdi"));
             var refTableNode = new XElement(_tableIndexXNS + "table",
                 new XElement(_tableIndexXNS + "name", refTableName),
                 new XElement(_tableIndexXNS + "folder", folder),
-                new XElement(_tableIndexXNS + "description", string.Format(ReferencedTableDescription, tableName)),
+                new XElement(_tableIndexXNS + "description", string.Format(ReferencedTableDescription, table.Name)),
                 new XElement(_tableIndexXNS + "columns", columnNode1, columnNode2),
                 new XElement(_tableIndexXNS + "primaryKey", new XElement(_tableIndexXNS + "name", string.Format(PrimaryKeyPrefix, refTableName)), new XElement(_tableIndexXNS + "column", "Kode")),
                 new XElement(_tableIndexXNS + "rows", options.Length.ToString()));
             tableNode.Parent.Add(refTableNode);
             codeList.Columns[1].Type = optionsType;
             table.CodeList.Add(codeList);
+            codeList.Options.ForEach(value => {
+                if (HasSpecialNumeric(column, value)) { HandleSpecialNumeric(column, tableNode, researchIndexNode, value, false); }
+            });
         }
         
-        private string ParseOptions(object[] options, XElement researchIndexNode, Table codeList, string folder, string columnId)
+        private string ParseOptions(object[] options, XElement researchIndexNode, Table codeList, string folder, Column column)
         {
             var result = 0;
             var index = 0;
-            var column = codeList.Columns[0];
+            var codeListColumn = codeList.Columns[0];
             var path = string.Format(TablePath, _destFolderPath, string.Format("{0}\\{0}.xml", folder));
             _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add file: {0} ", path) });
             StartWriter(folder);
@@ -215,16 +216,16 @@ namespace Rigsarkiv.Athena
                 var length = code["description"].ToString().Length;
                 codeList.Options.Add(value);
                 if (length > result) { result = length; }
-                if((bool)code["isMissing"]) { AddMissingColumnNode(value, researchIndexNode, columnId); }
+                if((bool)code["isMissing"]) { AddMissingColumnNode(value, researchIndexNode, column.Id); }
                 _writer.WriteStartElement("row");                
-                _writer.WriteElementString("c1", GetConvertedValue(column, value, out hasError));
+                _writer.WriteElementString("c1", GetConvertedValue(codeListColumn, value, out hasError));
                 _writer.WriteElementString("c2", code["description"].ToString());
                 _writer.WriteEndElement();
                 if (hasError)
                 {
                     codeList.Errors++;
                     codeList.ErrorsRows.Add(index);
-                    _logManager.Add(new LogEntity() { Level = LogLevel.Warning, Section = _logSection, Message = string.Format("Convert column {0} of type {1} with value {2} has error", column.Name, column.Type, value) });
+                    _logManager.Add(new LogEntity() { Level = LogLevel.Warning, Section = _logSection, Message = string.Format("Convert column {0} of type {1} with value {2} has error", codeListColumn.Name, codeListColumn.Type, value) });
                 }
                 index++;
             }
