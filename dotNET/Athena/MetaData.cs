@@ -182,7 +182,9 @@ namespace Rigsarkiv.Athena
             Directory.CreateDirectory(string.Format(TablePath, _destFolderPath, folder));
 
             var options = (object[])variableInfo["options"];
-            var optionsType = ParseOptions(options, researchIndexNode, folder, columnId);
+            var codeList = new Table() { Name = refTableName, Folder = folder, Rows = options.Length, Errors = 0, ErrorsRows = new List<int>(), Options= new List<string>() };
+            codeList.Columns = new List<Column>() { (new Column() { Name = Code, Id = C1, Type = columnType, TypeOriginal = "" }), (new Column() { Name = CodeValue, Id = C2, Type = "", TypeOriginal = "" }) };
+            var optionsType = ParseOptions(options, researchIndexNode, codeList, folder, columnId);
             var columnNode1 = new XElement(_tableIndexXNS + "column", new XElement(_tableIndexXNS + "name", Code),new XElement(_tableIndexXNS + "columnID", C1),new XElement(_tableIndexXNS + "type", columnType),new XElement(_tableIndexXNS + "typeOriginal"),new XElement(_tableIndexXNS + "nullable", "false"), new XElement(_tableIndexXNS + "description", "Kode"));
             var columnNode2 = new XElement(_tableIndexXNS + "column", new XElement(_tableIndexXNS + "name", CodeValue), new XElement(_tableIndexXNS + "columnID", C2), new XElement(_tableIndexXNS + "type", optionsType), new XElement(_tableIndexXNS + "typeOriginal"), new XElement(_tableIndexXNS + "nullable", "false"), new XElement(_tableIndexXNS + "description", "Kodeværdi"));
             var refTableNode = new XElement(_tableIndexXNS + "table",
@@ -193,27 +195,38 @@ namespace Rigsarkiv.Athena
                 new XElement(_tableIndexXNS + "primaryKey", new XElement(_tableIndexXNS + "name", string.Format(PrimaryKeyPrefix, refTableName)), new XElement(_tableIndexXNS + "column", "Kode")),
                 new XElement(_tableIndexXNS + "rows", options.Length.ToString()));
             tableNode.Parent.Add(refTableNode);
-            var columns = new List<Column>() { (new Column() { Name = Code, Id = C1, Type = columnType, TypeOriginal = "" }), (new Column() { Name = CodeValue, Id = C2, Type = optionsType, TypeOriginal = "" }) };
-            table.CodeList.Add(new Table() { Name = refTableName, Folder = folder, Rows = options.Length, Columns = columns });
+            codeList.Columns[1].Type = optionsType;
+            table.CodeList.Add(codeList);
         }
         
-        private string ParseOptions(object[] options, XElement researchIndexNode, string folder, string columnId)
+        private string ParseOptions(object[] options, XElement researchIndexNode, Table codeList, string folder, string columnId)
         {
             var result = 0;
+            var index = 0;
+            var column = codeList.Columns[0];
             var path = string.Format(TablePath, _destFolderPath, string.Format("{0}\\{0}.xml", folder));
             _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add file: {0} ", path) });
-            StartWriter(folder);            
-            
+            StartWriter(folder);
             foreach (var option in options)
             {
+                var hasError = false;
                 var code = (Dictionary<string, object>)option;
+                var value = code["name"].ToString();
                 var length = code["description"].ToString().Length;
-                if(length > result) { result = length; }
-                if((bool)code["isMissing"]) { AddMissingColumnNode(code["name"].ToString(), researchIndexNode, columnId); }
-                _writer.WriteStartElement("row");
-                _writer.WriteElementString("c1", code["name"].ToString());
+                codeList.Options.Add(value);
+                if (length > result) { result = length; }
+                if((bool)code["isMissing"]) { AddMissingColumnNode(value, researchIndexNode, columnId); }
+                _writer.WriteStartElement("row");                
+                _writer.WriteElementString("c1", GetConvertedValue(column, value, out hasError));
                 _writer.WriteElementString("c2", code["description"].ToString());
                 _writer.WriteEndElement();
+                if (hasError)
+                {
+                    codeList.Errors++;
+                    codeList.ErrorsRows.Add(index);
+                    _logManager.Add(new LogEntity() { Level = LogLevel.Warning, Section = _logSection, Message = string.Format("Convert column {0} of type {1} with value {2} has error", column.Name, column.Type, value) });
+                }
+                index++;
             }
             EndWriter();
             return string.Format(VarCharPrefix, result);

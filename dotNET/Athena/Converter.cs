@@ -1,9 +1,11 @@
 ﻿using Rigsarkiv.Athena.Entities;
 using Rigsarkiv.Athena.Logging;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Linq;
 
@@ -24,6 +26,9 @@ namespace Rigsarkiv.Athena
         protected const string TableXsiNs = "http://www.w3.org/2001/XMLSchema-instance";
         protected const string TablePath = "{0}\\Tables\\{1}";
         protected const string VarCharPrefix = "VARCHAR({0})";
+        protected string SpecialNumericPattern = "^\\.[a-zA-Z]$";
+        protected string DoubleApostrophePattern = "^\"([\\w\\W\\s]*)\"$";
+        protected Dictionary<string, Regex> _regExps = null;
         protected Assembly _assembly = null;
         protected LogManager _logManager = null;
         protected XDocument _tableIndexXDocument = null;
@@ -50,6 +55,7 @@ namespace Rigsarkiv.Athena
             _assembly = Assembly.GetExecutingAssembly();
             _logManager = logManager;
             _tables = new List<Table>();
+            _regExps = new Dictionary<string, Regex>();
             _srcPath = srcPath;
             _destPath = destPath;
             _destFolder = destFolder;
@@ -190,5 +196,137 @@ namespace Rigsarkiv.Athena
             _writer.Flush();
             _writer.Dispose();
         }
+        
+        protected string GetConvertedValue(Column column, string value, out bool hasError)
+        {
+            string result = null;
+            switch (column.Type)
+            {
+                case "INTEGER": result = GetIntegerValue(column, value, out hasError); break;
+                case "DECIMAL": result = GetDecimalValue(column, value, out hasError); break;
+                case "DATE": result = GetDateValue(column, value, out hasError); break;
+                case "TIME": result = GetTimeValue(column, value, out hasError); break;
+                case "TIMESTAMP": result = GetTimeStampValue(column, value, out hasError); break;
+                default: result = GetStringValue(column, value, out hasError); break;
+            }
+            return result;
+        }
+
+        private string GetTimeStampValue(Column column, string value, out bool hasError)
+        {
+            hasError = false;
+            var result = value;
+            if (!_regExps.ContainsKey(column.RegExp))
+            {
+                _regExps.Add(column.RegExp, new Regex(column.RegExp, RegexOptions.Compiled | RegexOptions.IgnoreCase));
+            }
+            hasError = !_regExps[column.RegExp].IsMatch(result);
+            if (!hasError)
+            {
+                var groups = _regExps[column.RegExp].Match(result).Groups;
+                if (column.RegExp == "^([0-9]{2,2})-([a-zA-Z]{3,3})-([0-9]{4,4})\\s([0-9]{2,2}):([0-9]{2,2}):([0-9]{2,2})$")
+                {
+                    result = string.Format("{0}-{1}-{2}T{3}:{4}:{5}", groups[3].Value, GetMonth(groups[2].Value), groups[1].Value, groups[4].Value, groups[5].Value, groups[5].Value);
+                }
+                else
+                {
+                    result = string.Format("{0}-{1}-{2}T{3}:{4}:{5}", groups[1].Value, groups[2].Value, groups[3].Value, groups[4].Value, groups[5].Value, groups[5].Value);
+                }
+
+            }
+            return result;
+        }
+
+        private string GetMonth(string monthValue)
+        {
+            string result = null;
+            switch (monthValue)
+            {
+                case "JAN": result = "01"; break;
+                case "FEB": result = "02"; break;
+                case "MAR": result = "03"; break;
+                case "APR": result = "04"; break;
+                case "MAY": result = "05"; break;
+                case "JUN": result = "06"; break;
+                case "JUL": result = "07"; break;
+                case "AUG": result = "08"; break;
+                case "SEP": result = "09"; break;
+                case "OCT": result = "10"; break;
+                case "NOV": result = "11"; break;
+                case "DEC": result = "12"; break;
+            }
+            return result;
+        }
+
+        private string GetTimeValue(Column column, string value, out bool hasError)
+        {
+            hasError = false;
+            var result = value;
+            if (!_regExps.ContainsKey(column.RegExp))
+            {
+                _regExps.Add(column.RegExp, new Regex(column.RegExp, RegexOptions.Compiled | RegexOptions.IgnoreCase));
+            }
+            hasError = !_regExps[column.RegExp].IsMatch(result);
+            if (!hasError)
+            {
+                var groups = _regExps[column.RegExp].Match(result).Groups;
+                result = string.Format("{0}:{1}:{2}", groups[1].Value, groups[2].Value, groups[3].Value);
+            }
+            return result;
+        }
+
+        private string GetDateValue(Column column, string value, out bool hasError)
+        {
+            hasError = false;
+            var result = value;
+            if (!_regExps.ContainsKey(column.RegExp))
+            {
+                _regExps.Add(column.RegExp, new Regex(column.RegExp, RegexOptions.Compiled | RegexOptions.IgnoreCase));
+            }
+            hasError = !_regExps[column.RegExp].IsMatch(result);
+            if (!hasError)
+            {
+                var groups = _regExps[column.RegExp].Match(result).Groups;
+                result = string.Format("{0}-{1}-{2}", groups[1].Value, groups[2].Value, groups[3].Value);
+            }
+            return result;
+        }
+
+        private string GetStringValue(Column column, string value, out bool hasError)
+        {
+            hasError = false;
+            var result = value;
+            if (result.IndexOf("\"") > -1)
+            {
+                if (!_regExps.ContainsKey(DoubleApostrophePattern))
+                {
+                    _regExps.Add(DoubleApostrophePattern, new Regex(DoubleApostrophePattern, RegexOptions.Compiled | RegexOptions.IgnoreCase));
+                }
+                hasError = !_regExps[DoubleApostrophePattern].IsMatch(result);
+                if (!hasError)
+                {
+                    result = _regExps[DoubleApostrophePattern].Match(result).Groups[1].Value;
+                    result = result.Replace("\"\"", "\"");
+                }
+            }
+            return result;
+        }
+
+        private string GetIntegerValue(Column column, string value, out bool hasError)
+        {
+            int result = -1;
+            hasError = !int.TryParse(value, out result);
+            return result.ToString();
+        }
+
+        private string GetDecimalValue(Column column, string value, out bool hasError)
+        {
+            float result = -1;
+            hasError = !float.TryParse(value.Replace(",", "."), NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out result);
+            NumberFormatInfo nfi = new NumberFormatInfo();
+            nfi.NumberDecimalSeparator = ".";
+            return result.ToString(nfi);
+        }
+
     }
 }

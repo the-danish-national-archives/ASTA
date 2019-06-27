@@ -15,5 +15,6 @@ namespace Rigsarkiv.Athena.Entities
         public List<Column> Columns { get; set; }
         public int? Errors { get; set; }
         public List<int> ErrorsRows { get; set; }
+        public List<string> Options { get; set; }
     }
 }
