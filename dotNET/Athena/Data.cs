@@ -2,6 +2,7 @@
 using Rigsarkiv.Athena.Logging;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -70,40 +71,40 @@ namespace Rigsarkiv.Athena
         /// </summary>
         /// <param name="table"></param>
         /// <param name="index"></param>
-        /// <param name="preview"></param>
         /// <returns></returns>
-        public Row GetRow(Table table,int index, bool preview = false)
+        public Row GetRow(Table table,int index)
         {
             Row result = null;
-            var path = string.Format(TablePath, _destFolderPath, string.Format("{0}\\{0}.xml", table.Folder));
-            if (File.Exists(path))
+            var xmlPath = string.Format(TablePath, _destFolderPath, string.Format("{0}\\{0}.xml", table.Folder));
+            var csvPath = string.Format("{0}\\Data\\{1}\\{1}.csv", _srcPath.Substring(0, _srcPath.LastIndexOf(".")), table.SrcFolder);
+            if (File.Exists(xmlPath) && File.Exists(csvPath))
             {
                 XNamespace tableNS = string.Format(TableXmlNs, table.Folder);
-                XElement rowNode = StreamElement(path, index);
-                if(rowNode != null)
+                XElement rowNode = StreamElement(xmlPath, index);
+                List<string> rowLine = StreamLine(csvPath, index);
+                if (rowNode != null && rowLine != null)
                 {
-                    if (!preview) { result = new Row() { DestValues = new Dictionary<string, string>(), SrcValues = new Dictionary<string, string>(), ErrorsColumns = new List<string>() }; }
+                    var counter = 0;
+                    result = new Row() { DestValues = new Dictionary<string, string>(), SrcValues = new Dictionary<string, string>(), ErrorsColumns = new List<string>() };
                     table.Columns.ForEach(c =>
                     {
                         var hasError = false;
-                        var value = rowNode.Element(tableNS + c.Id).Value;
-                        var newValue = (string.IsNullOrEmpty(value.Trim()) && c.Nullable) ? value : GetConvertedValue(c.Type, value, out hasError);
-                        if (!preview)
+                        var value = rowLine[counter];
+                        if (string.IsNullOrEmpty(value.Trim()) && c.Nullable) { value = string.Empty; }
+                        var newValue = rowNode.Element(tableNS + c.Id).Value;                        
+                        result.SrcValues.Add(c.Id, value);
+                        result.DestValues.Add(c.Id, newValue);                        
+                        if (hasError)
                         {
-                            result.SrcValues.Add(c.Id, value);
-                            result.DestValues.Add(c.Id, newValue);
+                            result.ErrorsColumns.Add(c.Id);
                         }
-                        if (hasError || value != newValue)
-                        {
-                            if (!preview) { result.ErrorsColumns.Add(c.Id); }
-                            if(preview) table.Errors++;
-                        }
+                        counter++;
                     });
                 }
             }
             else
             {
-                _logManager.Add(new LogEntity() { Level = LogLevel.Error, Section = _logSection, Message = string.Format("None Exists data file: {0}", path) });
+                _logManager.Add(new LogEntity() { Level = LogLevel.Error, Section = _logSection, Message = string.Format("None Exists files: {0}", xmlPath) });
             }
             return result;
         }
@@ -121,6 +122,7 @@ namespace Rigsarkiv.Athena
                 StartWriter(table.Folder);
                 path = string.Format("{0}\\Data\\{1}\\{1}.csv", _srcPath.Substring(0, _srcPath.LastIndexOf(".")), table.SrcFolder);
                 _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Loop file: {0} ", path) });
+                if (!table.Errors.HasValue) { table.Errors = 0; }
                 using (var reader = new StreamReader(path))
                 {                    
                     while (!reader.EndOfStream)
@@ -148,17 +150,28 @@ namespace Rigsarkiv.Athena
         {
             _writer.WriteStartElement("row");
             var row = line.Split(Separator).ToList();
-            if(line.IndexOf("\"") > -1)
-            {
-                row = ParseRow(line);
-            }
+            if(line.IndexOf("\"") > -1) { row = ParseRow(line); }
             for(int i = 0; i < table.Columns.Count; i++)
-            {
+            {                
                 var column = table.Columns[i];
                 var value = row[i];
-                if(string.IsNullOrEmpty(value.Trim()) && column.Nullable) { value = string.Empty; }
-                HandleSpecialNumeric(column, tableNode, researchIndexNode, value);
-                _writer.WriteElementString(column.Id, value);
+                string convertedValue = null;
+                if (string.IsNullOrEmpty(value.Trim()) && column.Nullable)
+                {
+                    convertedValue = string.Empty;
+                }
+                else
+                {
+                    var hasError = false;
+                    HandleSpecialNumeric(column, tableNode, researchIndexNode, value);
+                    convertedValue = GetConvertedValue(column.Type, value, out hasError);
+                    if (hasError)
+                    {
+                        table.Errors++;
+                        _logManager.Add(new LogEntity() { Level = LogLevel.Warning, Section = _logSection, Message = string.Format("Convert column {0} of type {1} with value {2} has error", column.Name, column.Type, value) });
+                    }
+                }
+                _writer.WriteElementString(column.Id, convertedValue);
             }
             _writer.WriteEndElement();
         }
@@ -218,6 +231,25 @@ namespace Rigsarkiv.Athena
             return (endIndex > -1) ? line.Substring(startIndex, endIndex - startIndex) : line.Substring(startIndex);
         }
 
+        private List<string> StreamLine(string fileName, int index)
+        {
+            List<string> result = null;
+            var counter = 0;
+            using (var reader = new StreamReader(fileName))
+            {
+                while (!reader.EndOfStream && counter <= index)
+                {
+                    var line = reader.ReadLine();
+                    if (counter == index) {
+                        result = line.Split(Separator).ToList();
+                        if (line.IndexOf("\"") > -1) { result = ParseRow(line); }
+                    }
+                    counter++;
+                }
+            }
+            return result;
+        }
+
         private XElement StreamElement(string fileName, int index)
         {
             XElement result = null;
@@ -251,8 +283,10 @@ namespace Rigsarkiv.Athena
                 case "DECIMAL":
                     {
                         float result = -1;
-                        hasError = !float.TryParse(value, out result);
-                        return result.ToString();
+                        hasError = !float.TryParse(value.Replace(",","."),NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out result);
+                        NumberFormatInfo nfi = new NumberFormatInfo();
+                        nfi.NumberDecimalSeparator = ".";
+                        return result.ToString(nfi);
                     }; break;
                 /*case "DATE": result = "DATE"; break;
                 case "TIME": result = "TIME"; break;

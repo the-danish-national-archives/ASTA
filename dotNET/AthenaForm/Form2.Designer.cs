@@ -37,7 +37,6 @@
             this.variableValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.columnType = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.columnValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.previewButton = new System.Windows.Forms.Button();
             this.prevButton = new System.Windows.Forms.Button();
             this.nextButton = new System.Windows.Forms.Button();
             this.IndexButton = new System.Windows.Forms.Button();
@@ -46,7 +45,6 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.codeTablesListBox = new System.Windows.Forms.ListBox();
-            this.previewProgressBar = new System.Windows.Forms.ProgressBar();
             this.rowLabel = new System.Windows.Forms.Label();
             this.searchButton = new System.Windows.Forms.Button();
             this.tableInfoLabel = new System.Windows.Forms.Label();
@@ -122,18 +120,6 @@
             this.columnValue.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.columnValue.HeaderText = "Værdi";
             this.columnValue.Name = "columnValue";
-            // 
-            // previewButton
-            // 
-            this.previewButton.Enabled = false;
-            this.previewButton.Location = new System.Drawing.Point(16, 504);
-            this.previewButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.previewButton.Name = "previewButton";
-            this.previewButton.Size = new System.Drawing.Size(112, 35);
-            this.previewButton.TabIndex = 7;
-            this.previewButton.Text = "Preview";
-            this.previewButton.UseVisualStyleBackColor = true;
-            this.previewButton.Click += new System.EventHandler(this.previewButton_Click);
             // 
             // prevButton
             // 
@@ -216,13 +202,6 @@
             this.codeTablesListBox.TabIndex = 17;
             this.codeTablesListBox.SelectedIndexChanged += new System.EventHandler(this.codeTablesListBox_SelectedIndexChanged);
             // 
-            // previewProgressBar
-            // 
-            this.previewProgressBar.Location = new System.Drawing.Point(16, 556);
-            this.previewProgressBar.Name = "previewProgressBar";
-            this.previewProgressBar.Size = new System.Drawing.Size(471, 23);
-            this.previewProgressBar.TabIndex = 18;
-            // 
             // rowLabel
             // 
             this.rowLabel.AutoSize = true;
@@ -281,7 +260,7 @@
             this.reportButton.Text = "Report";
             this.reportButton.UseVisualStyleBackColor = true;
             // 
-            // Form1
+            // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -292,7 +271,6 @@
             this.Controls.Add(this.tableInfoLabel);
             this.Controls.Add(this.searchButton);
             this.Controls.Add(this.rowLabel);
-            this.Controls.Add(this.previewProgressBar);
             this.Controls.Add(this.codeTablesListBox);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
@@ -301,10 +279,9 @@
             this.Controls.Add(this.IndexButton);
             this.Controls.Add(this.nextButton);
             this.Controls.Add(this.prevButton);
-            this.Controls.Add(this.previewButton);
             this.Controls.Add(this.dataValues);
             this.Controls.Add(this.mainTablesListBox);
-            this.Name = "Form1";
+            this.Name = "Form2";
             this.Text = "ASTA - Athena";
             ((System.ComponentModel.ISupportInitialize)(this.dataValues)).EndInit();
             this.ResumeLayout(false);
@@ -317,7 +294,6 @@
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
         private System.Windows.Forms.ListBox mainTablesListBox;
         private System.Windows.Forms.DataGridView dataValues;
-        private System.Windows.Forms.Button previewButton;
         private System.Windows.Forms.Button prevButton;
         private System.Windows.Forms.Button nextButton;
         private System.Windows.Forms.Button IndexButton;
@@ -326,7 +302,6 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.ListBox codeTablesListBox;
-        private System.Windows.Forms.ProgressBar previewProgressBar;
         private System.Windows.Forms.Label rowLabel;
         private System.Windows.Forms.Button searchButton;
         private System.Windows.Forms.Label tableInfoLabel;

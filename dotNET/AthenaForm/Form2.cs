@@ -85,20 +85,9 @@ namespace Rigsarkiv.Athena
             tableErrorsLabel.Text = "";
             dataValues.Rows.Clear();            
             _codeTable = _mainTable.CodeList[codeTablesListBox.SelectedIndex];
-            tableInfoLabel.Text = string.Format(CodeTableLabel, _codeTable.Name);
-            if (_codeTable.Errors.HasValue)
-            {
-                UpdateDataRow(_codeTable);
-                nextButton.Enabled = prevButton.Enabled = searchButton.Enabled = true;
-                previewProgressBar.Value = previewProgressBar.Maximum;
-                previewButton.Enabled = false;                
-            }
-            else
-            {
-                nextButton.Enabled = prevButton.Enabled = searchButton.Enabled = false;
-                previewProgressBar.Value = 0;
-                previewButton.Enabled = true;
-            }
+            tableInfoLabel.Text = string.Format(CodeTableLabel, _codeTable.Name);            
+            UpdateDataRow(_codeTable);
+            nextButton.Enabled = prevButton.Enabled = searchButton.Enabled = true;            
         }
 
         private void mainTablesListBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -109,47 +98,16 @@ namespace Rigsarkiv.Athena
             tableErrorsLabel.Text = "";
             nextButton.Enabled = prevButton.Enabled = searchButton.Enabled = false;
             dataValues.Rows.Clear();
-            previewProgressBar.Value = 0;
-            _codeTable = null;
+           _codeTable = null;
             codeTablesListBox.Items.Clear();
             _mainTable = _tables[mainTablesListBox.SelectedIndex];
             if(_mainTable.CodeList != null && _mainTable.CodeList.Count > 0)
             {
                 codeTablesListBox.Items.AddRange(_mainTable.CodeList.Select(t => t.Name).ToArray());
             }
-            tableInfoLabel.Text = string.Format(MainTableLabel, _mainTable.Name);
-            if (_mainTable.Errors.HasValue)
-            {
-                UpdateDataRow(_mainTable);
-                nextButton.Enabled = prevButton.Enabled = searchButton.Enabled = true;
-                previewProgressBar.Value = previewProgressBar.Maximum;
-                previewButton.Enabled = false;
-            }
-            else
-            {
-                nextButton.Enabled = prevButton.Enabled = searchButton.Enabled = false;
-                previewProgressBar.Value = 0;
-                previewButton.Enabled = true;
-            }
-        }
-
-        private void previewButton_Click(object sender, EventArgs e)
-        {
-            previewProgressBar.ResumeLayout();
-            previewProgressBar.Minimum = 0;
-            previewProgressBar.Step = 1;
-            dataValues.Rows.Clear();
-            var table = (_codeTable != null) ? _codeTable : _mainTable;
-            if (!table.Errors.HasValue) { table.Errors = 0; }
-            previewProgressBar.Maximum = table.Rows;
-
-            for (int i = 1; i <= table.Rows; i++)
-            {
-                previewProgressBar.PerformStep();
-                _converter.GetRow(table, i, true);
-            }
-            nextButton.Enabled = searchButton.Enabled = true;
-            UpdateDataRow(table);
+            tableInfoLabel.Text = string.Format(MainTableLabel, _mainTable.Name);            
+            UpdateDataRow(_mainTable);
+            nextButton.Enabled = prevButton.Enabled = searchButton.Enabled = true;           
         }
 
         private void nextButton_Click(object sender, EventArgs e)
@@ -206,6 +164,7 @@ namespace Rigsarkiv.Athena
                 {
                     dataValues[2, i].Value = row.SrcValues[column.Id];
                     if (row.ErrorsColumns.Contains(column.Id)) { dataValues[2, i].Style.BackColor = Color.Red; }
+                    if(row.SrcValues[column.Id] != row.DestValues[column.Id]) { dataValues[2, i].Style.BackColor = Color.Green; }
                 }
                 dataValues[3, i].Value = column.Type;
                 if (column.Modified) { dataValues[3, i].Style.BackColor = Color.Green; }
@@ -213,6 +172,7 @@ namespace Rigsarkiv.Athena
                 {
                     dataValues[4, i].Value = row.DestValues[column.Id];
                     if (row.ErrorsColumns.Contains(column.Id)) { dataValues[4, i].Style.BackColor = Color.Red; }
+                    if (row.SrcValues[column.Id] != row.DestValues[column.Id]) { dataValues[4, i].Style.BackColor = Color.Green; }
                 }
             }
             tableErrorsLabel.Text = string.Format(TableErrorsLabel, table.Errors.HasValue ? table.Errors.Value : 0);
