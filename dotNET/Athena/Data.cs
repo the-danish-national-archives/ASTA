@@ -19,7 +19,8 @@ namespace Rigsarkiv.Athena
     {
         const char Separator = ';';
         const string SpecialNumericPattern = "^\\.[a-zA-Z]$";
-        private Regex _specialNumeric = null;
+        const string DoubleApostrophePattern = "^\"([\\w\\W\\s]*)\"$";
+        private Dictionary<string, Regex> _regExps = null;
         private bool _updateDocuments = false;
 
         /// <summary>
@@ -34,7 +35,7 @@ namespace Rigsarkiv.Athena
         {
             _logSection = "Data";
             _tables = tables;
-           _specialNumeric = new Regex(SpecialNumericPattern, RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            _regExps = new Dictionary<string, Regex>();
         }
 
         /// <summary>
@@ -77,36 +78,60 @@ namespace Rigsarkiv.Athena
             Row result = null;
             var xmlPath = string.Format(TablePath, _destFolderPath, string.Format("{0}\\{0}.xml", table.Folder));
             var csvPath = string.Format("{0}\\Data\\{1}\\{1}.csv", _srcPath.Substring(0, _srcPath.LastIndexOf(".")), table.SrcFolder);
-            if (File.Exists(xmlPath) && File.Exists(csvPath))
+            if (File.Exists(xmlPath))
             {
                 XNamespace tableNS = string.Format(TableXmlNs, table.Folder);
                 XElement rowNode = StreamElement(xmlPath, index);
-                List<string> rowLine = StreamLine(csvPath, index);
-                if (rowNode != null && rowLine != null)
+                List<string> rowLine = File.Exists(csvPath) ? StreamLine(csvPath, index) : null;
+                if (rowLine == null && !table.Errors.HasValue)
+                {
+                    table.Errors = 0;
+                    table.ErrorsRows = new List<int>();
+                }
+                if (rowNode != null)
                 {
                     var counter = 0;
+                    var hasError = false;
                     result = new Row() { DestValues = new Dictionary<string, string>(), SrcValues = new Dictionary<string, string>(), ErrorsColumns = new List<string>() };
                     table.Columns.ForEach(c =>
                     {
-                        var hasError = false;
-                        var value = rowLine[counter];
-                        if (string.IsNullOrEmpty(value.Trim()) && c.Nullable) { value = string.Empty; }
-                        var newValue = rowNode.Element(tableNS + c.Id).Value;                        
-                        result.SrcValues.Add(c.Id, value);
-                        result.DestValues.Add(c.Id, newValue);                        
-                        if (hasError)
-                        {
-                            result.ErrorsColumns.Add(c.Id);
-                        }
+                        UpdateRow(table, result, tableNS, rowNode, rowLine, c, index, counter, hasError);
                         counter++;
                     });
+                    if (rowLine == null && hasError)
+                    {
+                        table.Errors++;
+                        table.ErrorsRows.Add(index);
+                    }
                 }
             }
             else
             {
-                _logManager.Add(new LogEntity() { Level = LogLevel.Error, Section = _logSection, Message = string.Format("None Exists files: {0}", xmlPath) });
+                _logManager.Add(new LogEntity() { Level = LogLevel.Error, Section = _logSection, Message = string.Format("None Exist file: {0}", xmlPath) });
             }
             return result;
+        }
+
+        private void UpdateRow (Table table,Row row, XNamespace tableNS,XElement rowNode, List<string> rowLine, Column column,int index, int counter,bool hasError)
+        {
+            string value = null;
+            string newValue = null;
+            if (rowLine != null)
+            {
+                value = rowLine[counter];
+                if (string.IsNullOrEmpty(value.Trim()) && column.Nullable) { value = string.Empty; }
+                if (table.ErrorsRows.Contains(index)) { GetConvertedValue(column, value, out hasError); }
+                newValue = rowNode.Element(tableNS + column.Id).Value;
+            }
+            else
+            {
+                value = rowNode.Element(tableNS + column.Id).Value;
+                if (string.IsNullOrEmpty(value.Trim()) && column.Nullable) { value = string.Empty; }
+                newValue = GetConvertedValue(column, value, out hasError);                
+            }
+            row.SrcValues.Add(column.Id, value);
+            row.DestValues.Add(column.Id, newValue);
+            if (hasError) { row.ErrorsColumns.Add(column.Id); }
         }
 
         private bool AddFile(Table table)
@@ -122,16 +147,18 @@ namespace Rigsarkiv.Athena
                 StartWriter(table.Folder);
                 path = string.Format("{0}\\Data\\{1}\\{1}.csv", _srcPath.Substring(0, _srcPath.LastIndexOf(".")), table.SrcFolder);
                 _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Loop file: {0} ", path) });
-                if (!table.Errors.HasValue) { table.Errors = 0; }
+                if (!table.Errors.HasValue)
+                {
+                    table.Errors = 0;
+                    table.ErrorsRows = new List<int>();
+                }
                 using (var reader = new StreamReader(path))
                 {                    
                     while (!reader.EndOfStream)
                     {
                         if (counter == 1) { reader.ReadLine(); }
-                        if (counter > 1) { AddRow(table, tableNode, researchIndexNode, reader.ReadLine()); }
-                        if ((counter % 500) == 0) {
-                            _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("{0} rows added", counter) });
-                        }
+                        if (counter > 1) { AddRow(table, tableNode, researchIndexNode, reader.ReadLine(), counter); }
+                        if ((counter % 500) == 0) { _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("{0} rows added", counter) }); }
                         counter++;
                     }
                     _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("{0} rows added", counter - 1) });
@@ -146,9 +173,10 @@ namespace Rigsarkiv.Athena
             return result;
         }
 
-        private void AddRow(Table table, XElement tableNode, XElement researchIndexNode, string line)
+        private void AddRow(Table table, XElement tableNode, XElement researchIndexNode, string line, int index)
         {
             _writer.WriteStartElement("row");
+            var rowError = false;
             var row = line.Split(Separator).ToList();
             if(line.IndexOf("\"") > -1) { row = ParseRow(line); }
             for(int i = 0; i < table.Columns.Count; i++)
@@ -164,21 +192,27 @@ namespace Rigsarkiv.Athena
                 {
                     var hasError = false;
                     HandleSpecialNumeric(column, tableNode, researchIndexNode, value);
-                    convertedValue = GetConvertedValue(column.Type, value, out hasError);
+                    convertedValue = GetConvertedValue(column, value, out hasError);
                     if (hasError)
                     {
-                        table.Errors++;
+                        rowError = true;
+                        table.Errors++;                        
                         _logManager.Add(new LogEntity() { Level = LogLevel.Warning, Section = _logSection, Message = string.Format("Convert column {0} of type {1} with value {2} has error", column.Name, column.Type, value) });
                     }
                 }
                 _writer.WriteElementString(column.Id, convertedValue);
             }
+            if (rowError) { table.ErrorsRows.Add(index); }
             _writer.WriteEndElement();
         }
 
         private void HandleSpecialNumeric(Column column, XElement tableNode, XElement researchIndexNode, string value)
         {
-            if((column.Type == "INTEGER" || column.Type == "DECIMAL") && _specialNumeric.IsMatch(value))
+            if(!_regExps.ContainsKey(SpecialNumericPattern))
+            {
+                _regExps.Add(SpecialNumericPattern, new Regex(SpecialNumericPattern, RegexOptions.Compiled | RegexOptions.IgnoreCase));
+            }
+            if((column.Type == "INTEGER" || column.Type == "DECIMAL") && _regExps[SpecialNumericPattern].IsMatch(value))
             {
                 _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Handle Special Numeric value {0} at column {1}", value, column.Name) });
                 column.Type = string.Format(VarCharPrefix, GetColumnLength(column.Type, column.RegExp));
@@ -268,35 +302,137 @@ namespace Rigsarkiv.Athena
                 rdr.Close();
             }
             return result;
+        }        
+
+        private string GetConvertedValue(Column column, string value, out bool hasError)
+        {
+            string result = null;
+            switch (column.Type)
+            {
+                case "INTEGER": result = GetIntegerValue(column, value, out hasError);break;
+                case "DECIMAL": result = GetDecimalValue(column, value, out hasError); break;
+                case "DATE": result = GetDateValue(column, value, out hasError); break;
+                case "TIME": result = GetTimeValue(column, value, out hasError); break;
+                case "TIMESTAMP": result = GetTimeStampValue(column, value, out hasError); break;
+                default: result = GetStringValue(column, value, out hasError); break;                    
+            }
+            return result;
         }
 
-        private string GetConvertedValue(string type,string value, out bool hasError)
+        private string GetTimeStampValue(Column column, string value, out bool hasError)
         {
-            switch (type)
+            hasError = false;
+            var result = value;
+            if (!_regExps.ContainsKey(column.RegExp))
             {
-                case "INTEGER":
-                    {
-                        int result = -1;
-                        hasError = !int.TryParse(value, out result);
-                        return result.ToString();
-                    }; break;
-                case "DECIMAL":
-                    {
-                        float result = -1;
-                        hasError = !float.TryParse(value.Replace(",","."),NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out result);
-                        NumberFormatInfo nfi = new NumberFormatInfo();
-                        nfi.NumberDecimalSeparator = ".";
-                        return result.ToString(nfi);
-                    }; break;
-                /*case "DATE": result = "DATE"; break;
-                case "TIME": result = "TIME"; break;
-                case "TIMESTAMP": result = "TIMESTAMP"; break;*/
-                default:
-                    {
-                        hasError = false;
-                        return value;
-                    }; break;
+                _regExps.Add(column.RegExp, new Regex(column.RegExp, RegexOptions.Compiled | RegexOptions.IgnoreCase));
             }
+            hasError = !_regExps[column.RegExp].IsMatch(result);
+            if (!hasError)
+            {
+                var groups = _regExps[column.RegExp].Match(result).Groups;
+                if (column.RegExp == "^([0-9]{2,2})-([a-zA-Z]{3,3})-([0-9]{4,4})\\s([0-9]{2,2}):([0-9]{2,2}):([0-9]{2,2})$")
+                {
+                    result = string.Format("{0}-{1}-{2}T{3}:{4}:{5}", groups[3].Value, GetMonth(groups[2].Value), groups[1].Value, groups[4].Value, groups[5].Value, groups[5].Value);
+                }
+                else
+                {
+                    result = string.Format("{0}-{1}-{2}T{3}:{4}:{5}", groups[1].Value, groups[2].Value, groups[3].Value, groups[4].Value, groups[5].Value, groups[5].Value);
+                }
+                
+            }
+            return result;
+        }
+
+        private string GetMonth(string monthValue)
+        {
+            string result = null;
+            switch (monthValue)
+            {
+                case "JAN": result = "01"; break;
+                case "FEB": result = "02"; break;
+                case "MAR": result = "03"; break;
+                case "APR": result = "04"; break;
+                case "MAY": result = "05"; break;
+                case "JUN": result = "06"; break;
+                case "JUL": result = "07"; break;
+                case "AUG": result = "08"; break;
+                case "SEP": result = "09"; break;
+                case "OCT": result = "10"; break;
+                case "NOV": result = "11"; break;
+                case "DEC": result = "12"; break;
+            }
+            return result;
+        }
+
+        private string GetTimeValue(Column column, string value, out bool hasError)
+        {
+            hasError = false;
+            var result = value;
+            if (!_regExps.ContainsKey(column.RegExp))
+            {
+                _regExps.Add(column.RegExp, new Regex(column.RegExp, RegexOptions.Compiled | RegexOptions.IgnoreCase));
+            }
+            hasError = !_regExps[column.RegExp].IsMatch(result);
+            if (!hasError)
+            {
+                var groups = _regExps[column.RegExp].Match(result).Groups;
+                result = string.Format("{0}:{1}:{2}", groups[1].Value, groups[2].Value, groups[3].Value);
+            }
+            return result;
+        }
+
+        private string GetDateValue(Column column, string value, out bool hasError)
+        {
+            hasError = false;
+            var result = value;
+            if (!_regExps.ContainsKey(column.RegExp))
+            {
+                _regExps.Add(column.RegExp, new Regex(column.RegExp, RegexOptions.Compiled | RegexOptions.IgnoreCase));
+            }
+            hasError = !_regExps[column.RegExp].IsMatch(result);
+            if (!hasError)
+            {
+                var groups = _regExps[column.RegExp].Match(result).Groups;
+                result = string.Format("{0}-{1}-{2}", groups[1].Value, groups[2].Value, groups[3].Value);
+            }
+            return result;
+        }
+
+        private string GetStringValue(Column column, string value, out bool hasError)
+        {
+            hasError = false;
+            var result = value;
+            if (result.IndexOf("\"") > -1)
+            {
+                if (!_regExps.ContainsKey(DoubleApostrophePattern))
+                {
+                    _regExps.Add(DoubleApostrophePattern, new Regex(DoubleApostrophePattern, RegexOptions.Compiled | RegexOptions.IgnoreCase));
+                }
+                hasError = !_regExps[DoubleApostrophePattern].IsMatch(result);
+                if (!hasError)
+                {
+                    result = _regExps[DoubleApostrophePattern].Match(result).Groups[1].Value;
+                    result = result.Replace("\"\"", "\"");
+                }
+            }
+            return result;
+        }
+
+        private string GetIntegerValue(Column column, string value, out bool hasError)
+        {
+            int result = -1;
+            hasError = !int.TryParse(value, out result);
+            return result.ToString();
+        }
+
+        private string GetDecimalValue(Column column, string value, out bool hasError)
+        {
+            float result = -1;
+            hasError = !float.TryParse(value.Replace(",", "."), NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out result);
+            NumberFormatInfo nfi = new NumberFormatInfo();
+            nfi.NumberDecimalSeparator = ".";
+            return result.ToString(nfi);
         }
     }
 }

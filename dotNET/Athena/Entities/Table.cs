@@ -14,5 +14,6 @@ namespace Rigsarkiv.Athena.Entities
         public List<Table> CodeList { get; set; }
         public List<Column> Columns { get; set; }
         public int? Errors { get; set; }
+        public List<int> ErrorsRows { get; set; }
     }
 }
