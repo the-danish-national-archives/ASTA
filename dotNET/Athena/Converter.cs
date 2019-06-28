@@ -28,7 +28,7 @@ namespace Rigsarkiv.Athena
         protected const string VarCharPrefix = "VARCHAR({0})";
         protected const string C1 = "c1";
         protected const string C2 = "c2";
-        protected string SpecialNumericPattern = "^\\.[a-zA-Z]$";
+        protected string SpecialNumericPattern = "^(\\.[a-z])|([A-Z])$";
         protected string DoubleApostrophePattern = "^\"([\\w\\W\\s]*)\"$";
         protected Dictionary<string, Regex> _regExps = null;
         protected Assembly _assembly = null;
