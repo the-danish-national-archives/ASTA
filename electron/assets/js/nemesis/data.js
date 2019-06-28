@@ -13,11 +13,13 @@ function (n) {
         const chardet = require('chardet');
         const csv = require('fast-csv');
         const { spawn } = require('child_process');
-        const codeListPattern = /^\.[a-zA-Z]$/;
+
+        const codeListPattern = /^(\.[a-z])|([A-Z])$/;
         const doubleApostrophePattern1 = /^"([\w\W\s]*)"$/;
         const doubleApostrophePattern2 = /(")/g;
         const doubleApostrophePattern3 = /(["]{2,2})/g
         const errorsMax = 40;
+        const warningMax = 10;
         
         //private data memebers
         var settings = { 
@@ -31,6 +33,11 @@ function (n) {
             logEndWithErrorSpn:null,
             selectDirBtn: null,
             validateBtn: null,
+            confirmationSpn: null,
+            validateRowsText: null,
+            checkEncodingText: null,
+            convertDisabledText: null,
+            convertEnabledText: null,
             deliveryPackagePath: null,
             outputText: {},
             ConvertBtn: null,
@@ -47,6 +54,8 @@ function (n) {
             data: [],
             errors: 0,
             tableErrors: 0,
+            tableRows: 0,
+            tableWarnings: 0,
             totalErrors: 0,
             separator: ';',
             convertStop: false,
@@ -119,18 +128,20 @@ function (n) {
 
         //Handle warn logging
         var LogWarn = function(postfixId) {
-            var id = "{0}{1}".format(settings.outputPrefix,postfixId);
-            var text = null;
-            if (arguments.length > 1) {                
-                if(arguments.length === 2) { text = ViewElement(id,arguments[1],null,null); }
-                if(arguments.length === 3) { text = ViewElement(id,arguments[1],arguments[2],null); }
-                if(arguments.length === 4) { text = ViewElement(id,arguments[1],arguments[2],arguments[3]); }
-                if(arguments.length === 5) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4]); }
-                if(arguments.length === 6) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5]); }
-                if(arguments.length === 7) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5],arguments[6]); }
-            }
-
-            settings.logCallback().warn(settings.logType,GetFolderName(),text);
+            if(settings.tableWarnings <= warningMax) {
+                var id = "{0}{1}".format(settings.outputPrefix,postfixId);
+                var text = null;
+                if (arguments.length > 1) {                
+                    if(arguments.length === 2) { text = ViewElement(id,arguments[1],null,null); }
+                    if(arguments.length === 3) { text = ViewElement(id,arguments[1],arguments[2],null); }
+                    if(arguments.length === 4) { text = ViewElement(id,arguments[1],arguments[2],arguments[3]); }
+                    if(arguments.length === 5) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4]); }
+                    if(arguments.length === 6) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5]); }
+                    if(arguments.length === 7) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5],arguments[6]); }
+                }
+                settings.logCallback().warn(settings.logType,GetFolderName(),text);
+            }                
+            settings.tableWarnings += 1;
             return true;
         }
         
@@ -541,6 +552,8 @@ function (n) {
             .validate(function(data){
                 var result = true;
                 settings.rowIndex++;
+                settings.confirmationSpn.innerHTML = settings.validateRowsText.format(settings.rowIndex,settings.tableRows,settings.fileName);
+                //console.log("validate row: {0}".format(settings.rowIndex));
                 if(settings.rowIndex === 1 && !ValidateHeader(data)) { 
                     settings.table.errorStop = true;
                     result = false; 
@@ -569,10 +582,21 @@ function (n) {
             .on("end", function(){
                 console.log("{0} data output: ".format(settings.fileName));
                 console.log(settings.data);
+                settings.confirmationSpn.innerHTML = "";
                 if(settings.convertStop) { settings.table.errorStop = true; }
                 settings.table.rows = settings.rowIndex;
                 ProcessDataSet();
             });
+        }
+
+        //Validate data file encoding
+        var ValidateEncoding = function() {
+            var dataFilePath = settings.dataFiles[settings.runIndex];
+            var charsetMatch = chardet.detectFileSync(dataFilePath);
+            if(charsetMatch !== "UTF-8") {
+                result = LogWarn("-CheckData-FileEncoding-Error",settings.fileName);
+            }
+            settings.confirmationSpn.innerHTML = "";
         }
 
         //Process all data files
@@ -581,14 +605,26 @@ function (n) {
             if(settings.runIndex < settings.dataFiles.length) {
                 var dataFilePath = settings.dataFiles[settings.runIndex];
                 settings.fileName = GetFileName(dataFilePath);
+                settings.confirmationSpn.innerHTML = settings.checkEncodingText.format(settings.fileName);
+                setTimeout(ValidateEncoding, 1);
                 settings.metadataFileName =  "{0}.txt".format(settings.fileName.substring(0,settings.fileName.indexOf(".")));
                 settings.table = GetTableData();
                 settings.rowIndex = 0;
                 settings.data = [];
-                settings.tableErrors = 0; 
+                settings.tableErrors = 0;
+                settings.tableWarnings = 0; 
                 settings.convertStop = false;
                 console.log(`validate: ${dataFilePath}`);
-                ValidateDataSet();
+                settings.tableRows = 0;                
+                 fs.createReadStream(dataFilePath)
+                .on('data', function(chunk) {
+                  for (i=0; i < chunk.length; ++i)
+                    if (chunk[i] == 10) settings.tableRows++;
+                })
+                .on('end', function() {
+                    console.log(`total rows: ${settings.tableRows}`);                    
+                    ValidateDataSet();
+                });                
             }
             else {
                 CommitLog();
@@ -602,17 +638,11 @@ function (n) {
             fs.readdirSync(destPath).forEach(folder => {
                 var dataFilePath = (destPath.indexOf("\\") > -1) ? "{0}\\{1}\\{1}.csv".format(destPath,folder) : "{0}/{1}/{1}.csv".format(destPath,folder);                 
                 if(fs.existsSync(dataFilePath)) {
-                    console.log("validate data file: {0}".format(dataFilePath));
-                    var charsetMatch = chardet.detectFileSync(dataFilePath);
-                    settings.fileName = GetFileName(dataFilePath);
+                    console.log("validate data file: {0}".format(dataFilePath));                    
+                    settings.fileName = GetFileName(dataFilePath);                                       
                     settings.metadataFileName =  "{0}.txt".format(settings.fileName.substring(0,settings.fileName.indexOf(".")));
                     settings.table = GetTableData();
-                    if(charsetMatch !== "UTF-8") {
-                        result = LogError("-CheckData-FileEncoding-Error",settings.fileName);
-                    } 
-                    else {
-                        if(settings.table != null && !settings.table.errorStop) { settings.dataFiles.push(dataFilePath); }                                                              
-                    } 
+                    if(settings.table != null && !settings.table.errorStop) { settings.dataFiles.push(dataFilePath); }                                                              
                 }
                 else {
                     console.log("None exist Data file path: {0}".format(dataFilePath));
@@ -631,16 +661,20 @@ function (n) {
                 } else {
                     settings.logCallback().section(settings.logType,folderName,settings.logEndWithErrorSpn.innerHTML);
                 }
+                var enableConvert = true;
+                settings.metadata.forEach(table => {
+                    if(table.errorStop) { enableConvert = false; }
+                });
+                if(enableConvert) {
+                    settings.confirmationSpn.innerHTML = settings.convertEnabledText;
+                }
+                else {
+                    settings.confirmationSpn.innerHTML = settings.convertDisabledText;
+                }
                 settings.logResult = settings.logCallback().commit(settings.deliveryPackagePath);
-                if(settings.rightsCallback().isAdmin && settings.dataFiles.length > 0) { 
-                    var enableConvert = true;
-                    settings.metadata.forEach(table => {
-                        if(table.errorStop) { enableConvert = false; }
-                    });
-                    if(enableConvert) {
-                        fs.writeFileSync(settings.metadataFilePostfix.format(settings.deliveryPackagePath), JSON.stringify(settings.metadata)); 
+                if(settings.rightsCallback().isAdmin && enableConvert) { 
+                    fs.writeFileSync(settings.metadataFilePostfix.format(settings.deliveryPackagePath), JSON.stringify(settings.metadata)); 
                         settings.ConvertBtn.hidden = false; 
-                    }
                 }
                 settings.selectDirBtn.disabled = false;
                 settings.validateBtn.disabled = false;
@@ -693,7 +727,7 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Nemesis.Data = {
-            initialize: function (rightsCallback,logCallback,outputErrorId,logStartId,logEndNoErrorId,logEndWithErrorId,outputPrefix,selectDirectoryId,validateId,convertId) {            
+            initialize: function (rightsCallback,logCallback,outputErrorId,logStartId,logEndNoErrorId,logEndWithErrorId,outputPrefix,selectDirectoryId,validateId,confirmationId,validateRowsId,checkEncodingId,convertDisabledId,convertEnabledId,convertId) {            
                 settings.rightsCallback = rightsCallback;
                 settings.logCallback = logCallback;
                 settings.outputErrorSpn = document.getElementById(outputErrorId);
@@ -705,6 +739,12 @@ function (n) {
                 settings.ConvertBtn = document.getElementById(convertId);
                 settings.selectDirBtn = document.getElementById(selectDirectoryId);
                 settings.validateBtn = document.getElementById(validateId);
+                settings.confirmationSpn  = document.getElementById(confirmationId);
+                settings.validateRowsText = document.getElementById(validateRowsId).innerHTML;
+                settings.checkEncodingText = document.getElementById(checkEncodingId).innerHTML;
+                settings.convertDisabledText = document.getElementById(convertDisabledId).innerHTML;
+                settings.convertEnabledText = document.getElementById(convertEnabledId).innerHTML;
+                settings.confirmationSpn.innerHTML = "";
                 AddEvents();
             },
             callback: function () {

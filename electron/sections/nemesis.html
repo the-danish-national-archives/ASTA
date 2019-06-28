@@ -9,23 +9,28 @@
                     </div>
                 </div>
                 <section>
-                    <hr class="button-divider">
+                   <!--<hr class="button-divider">-->
                     <div class="formularContainer">
-                        <h4>Test en afleveringspakke</h4>
+                            <h2 class="boldfaced">Test en afleveringspakke</h2>
                         <div class="box">
                             <div class="nemesisControls">                               
                                 <span>Vælg afleveringspakke til test:</span>
                                 <br>
                                 <input type="text" id="nemesis-path" readonly="true" placeholder="Vælg sti med browse knappen">
                                 <button id="nemesis-select-directory">Browse</button>
-                                <br/><br/>                                
-                                <button id="nemesis-validateBtn">Test mappe</button>                                
+                                <br/>                                
+                                <button id="nemesis-validateBtn">Start test</button>
                                 <span id="nemesis-output-Error" hidden="true"><br />Error: {0}</span>
                                 <span id="nemesis-output-Ok" hidden="true"><br/><strong>Bekræftelse!</strong> Log fil [{0}] er nu skabt og placeret i mappen [</span>
                                 <a id="nemesis-select-logFile" hidden="true"></a>
-                                <span id="nemesis-output-Supplement" hidden="true">]</span> 
+                                <span id="nemesis-output-Supplement" hidden="true">]</span>                                
+                                <span id="nemesis-output-Confirmation"></span>
                                 <br/>
-                                <button id="nemesis-Athen-StartBtn" hidden="true">Start Athena</button>                               
+                                <button id="nemesis-Athen-StartBtn" hidden="true">Start Athena</button>
+                                <span id="nemesis-output-ValidateRows" hidden="true"><br/><br/>{0} af {1} rækker i {2} er valideret.</span>
+                                <span id="nemesis-output-CheckEncoding" hidden="true"><br/><br/>Vent mens check {0} encoding</span>                                
+                                <span id="nemesis-output-ConvertEnabled" hidden="true"><br/><p class="ok">Afleveringspakken er testet færdig.</p></span>  
+                                <span id="nemesis-output-ConvertDisabled" hidden="true"><br/><p class="error">Grundet alvorlige fejl eller mangler i afleveringspakken er testen afbrudt og afleveringspakken er ikke testet færdig.</p></span>
                                 <span id="nemesis-output-structure-logStart" hidden="true">Mappestruktur test startet<br/></span>
                                 <span id="nemesis-output-structure-logEndNoError" hidden="true">Mappestruktur test afsluttet uden fejl<br/></span>
                                 <span id="nemesis-output-structure-logEndWithError" hidden="true">Mappestruktur test afsluttet<br/></span>
@@ -37,13 +42,13 @@
                                 <span id="nemesis-output-data-logEndWithError" hidden="true">Datafil test afsluttet<br/></span>
                                 <br>
                                 <div id="nemesis-batch-test-panel">
-                                    <h4>Batch test</h4>
+                                    <h2 class="boldfaced">Batchkørsel af flere tests</h2>
                                     <span>Vælg mappe indeholdende flere afleveringspakker:</span>
                                     <br>
                                     <input type="text" id="nemesis-batch-path" readonly="true" placeholder="Vælg sti med browse knappen">
                                     <button id="nemesis-select-batch-directory">Browse</button>
-                                    <br/><br/> 
-                                    <button id="nemesis-batch-validateBtn">Batch test</button>
+                                    <br/>
+                                    <button id="nemesis-batch-validateBtn">Start batchtest</button>
                                     <span id="nemesis-batch-Ok" hidden="true"><br /><strong>Bekræftelse!</strong> Log fil [{0}] er nu skabt og placeret i mappen [</span>
                                     <a id="nemesis-batch-select-logFile" hidden="true"></a>
                                     <span id="nemesis-batch-Supplement" hidden="true">]</span>
@@ -75,7 +80,7 @@
                                 <span id="nemesis-processing-CheckData-FileRow-ColumnsDecimalType-Error" hidden="true"><i class="fas fa-times error"><div id="15711" hidden="true"></div></i>Dataformatnotationen <i>{4}</i> (numerisk decimal) angivet for variablen <i>{3}</i> i metadatafilen <i>{1}</i> stemmer ikke overens med indholdet af variablen for værdien <b><i>{5}</i></b> i rækkenummer <i>{2}</i> i datafilen <i>{0}</i><br/></span>                                
                                 <span id="nemesis-processing-CheckData-FileRow-ColumnsIntType-Error" hidden="true"><i class="fas fa-times error"><div id="15710" hidden="true"></div></i>Dataformatnotationen <i>{4}</i> (numerisk heltal) angivet for variablen <i>{3}</i> i metadatafilen <i>{1}</i> stemmer ikke overens med indholdet af variablen for værdien <b><i>{5}</i></b> i rækkenummer <i>{2}</i> i datafilen <i>{0}</i><br/></span>                                
                                 <span id="nemesis-processing-CheckData-FileRow-ColumnsStringType-Error" hidden="true"><i class="fas fa-times error"><div id="15722" hidden="true"></div></i>Dataformatnotationen <i>{4}</i> (tekst) angivet for variablen <i>{3}</i> i metadatafilen <i>{1}</i> er over længde med indholdet af variablen for værdien <i>{5}</i> i rækkenummer <i>{2}</i> i datafilen <i>{0}</i><br/></span>                                
-                                <span id="nemesis-processing-CheckData-FileRow-ColumnsOptions-Error" hidden="true"><i class="fas fa-times error"><div id="1574X" hidden="true"></div></i>I række nummer {2} i datafilen {0} variablen {3} er angivet med værdi {4} som ikke eksteret i relateret KODELISTE i metadatafilen {1}.<br/></span>                                
+                                <span id="nemesis-processing-CheckData-FileRow-ColumnsOptions-Error" hidden="true"><i class="fas fa-exclamation-triangle warning"><div id="1574X" hidden="true"></div></i>I række nummer {2} i datafilen {0} variablen {3} er angivet med værdi {4} som ikke eksteret i relateret KODELISTE i metadatafilen {1}.<br/></span>                                
                                 <span id="nemesis-processing-CheckData-FileHeaders-ColumnsOrder-Error" hidden="true"><i class="fas fa-times error"><div id="15510" hidden="true"></div></i>Variabelnavnet <i>{2}</i> angivet i første linje i datafilen <i>{0}</i> er ikke angivet i overensstemmelse med rækkefølgen af variabelnavne angivet i metadatafilen <i>{1}</i><br/></span>                                
                                 <span id="nemesis-processing-CheckData-FileHeaders-MatchColumn-Error" hidden="true"><i class="fas fa-times error"><div id="15511" hidden="true"></div></i>Variabelnavnet <i>{2}</i> angivet i første linje i datafilen <i>{0}</i> er ikke angivet under etiketten VARIABEL i metadatafilen <i>{1}</i><br/></span>                                
                                 <span id="nemesis-processing-CheckData-FileHeaders-MatchAll-Error" hidden="true"><i class="fas fa-times error"><div id="15509" hidden="true"></div></i>Første række i datafilen <i>{0}</i> indeholder ingen af de variabelnavne, som er angivet i metadatafilen <i>{1}</i> under etiketten VARIABEL<br/></span>                                                                
@@ -201,9 +206,9 @@
             Rigsarkiv.Rights.initialize("nemesis-output-Error");
             Rigsarkiv.Log.initialize("nemesis-output-Error","nemesis-output-Ok","nemesis-select-logFile","nemesis-output-Supplement", "nemesis-validate-Spinner","lds-ring");
             Rigsarkiv.Nemesis.Batch.initialize(Rigsarkiv.Rights.callback,Rigsarkiv.Nemesis.Structure.callback,"nemesis-output-Error","nemesis-select-batch-directory","nemesis-batch-path","nemesis-batch-validateBtn","nemesis-validate-Spinner","nemesis-batch-Ok","nemesis-batch-select-logFile","nemesis-batch-Supplement","nemesis-batch-test-panel","lds-ring");
-            Rigsarkiv.Nemesis.Structure.initialize(Rigsarkiv.Log.callback,Rigsarkiv.Nemesis.MetaData.callback,"nemesis-output-Error","nemesis-select-directory","nemesis-path","nemesis-validateBtn","nemesis-output-structure-logStart","nemesis-output-structure-logEndNoError","nemesis-output-structure-logEndWithError","nemesis-processing", "nemesis-test-id");
+            Rigsarkiv.Nemesis.Structure.initialize(Rigsarkiv.Log.callback,Rigsarkiv.Nemesis.MetaData.callback,"nemesis-output-Error","nemesis-select-directory","nemesis-path","nemesis-validateBtn","nemesis-output-structure-logStart","nemesis-output-structure-logEndNoError","nemesis-output-structure-logEndWithError","nemesis-processing", "nemesis-test-id","nemesis-output-Confirmation","nemesis-output-ConvertDisabled");
             Rigsarkiv.Nemesis.MetaData.initialize(Rigsarkiv.Log.callback,Rigsarkiv.Nemesis.Data.callback,"nemesis-output-Error","nemesis-output-metadata-logStart","nemesis-output-metadata-logEndNoError","nemesis-output-metadata-logEndWithError","nemesis-processing");
-            Rigsarkiv.Nemesis.Data.initialize(Rigsarkiv.Rights.callback,Rigsarkiv.Log.callback,"nemesis-output-Error","nemesis-output-data-logStart","nemesis-output-data-logEndNoError","nemesis-output-data-logEndWithError","nemesis-processing","nemesis-select-directory","nemesis-validateBtn","nemesis-Athen-StartBtn");             
-          </script>
+            Rigsarkiv.Nemesis.Data.initialize(Rigsarkiv.Rights.callback,Rigsarkiv.Log.callback,"nemesis-output-Error","nemesis-output-data-logStart","nemesis-output-data-logEndNoError","nemesis-output-data-logEndWithError","nemesis-processing","nemesis-select-directory","nemesis-validateBtn","nemesis-output-Confirmation","nemesis-output-ValidateRows","nemesis-output-CheckEncoding","nemesis-output-ConvertDisabled","nemesis-output-ConvertEnabled","nemesis-Athen-StartBtn");             
+        </script>
     </section>
 </template>

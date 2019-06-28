@@ -184,13 +184,13 @@ function (n) {
         var GetUserCode = function (line) {
             var name = null;
             var codes = null;
-            var index = line.reduceWhiteSpace().indexOf(" "); 
+            var index = line.trim().reduceWhiteSpace().indexOf(" "); 
             if(index < 0) {
                 name = line;
             } 
             else {
-                name = line.substring(0,index);
-                var codesTemp = line.substring(index + 1);
+                name = line.trim().reduceWhiteSpace().substring(0,index);
+                var codesTemp = line.trim().reduceWhiteSpace().substring(index + 1);
                 codes = [];
                 codesTemp.reduceWhiteSpace().split(" ").forEach(code => {                    
                     codes.push(code);
@@ -354,7 +354,7 @@ function (n) {
         var GetVariableDescription = function (line,startIndex) {
             var name = null;
             var description = null;
-            var index = line.trim().reduceWhiteSpace().indexOf(" "); 
+            var index = line.trim().reduceWhiteSpace().indexOf(" ");
             if(index < 0) {
                 name = line;
             } 
@@ -389,7 +389,7 @@ function (n) {
             table.variables.forEach(variable => variableDescriptions.push(variable.name));
             var i = startIndex;
             do {
-                if(lines[i].reduceWhiteSpace().indexOf("' '") > -1) {
+                if(lines[i].trim().reduceWhiteSpace().indexOf("' '") > -1) {
                 
                 }          
                 var info = GetVariableDescription(lines[i],startIndex);                
@@ -772,8 +772,8 @@ function (n) {
                     }
                 }
             });
-            variable.regExps.push("^(\\+|\\-){0,1}[0-9]{1," + intLength + "}\\.[0-9]{1," + decimalLength + "}$");
-            variable.regExps.push("^(\\+|\\-){0,1}[0-9]{1," + intLength + "}\\,[0-9]{1," + decimalLength + "}$");
+            variable.regExps.push("^(\\+|\\-){0,1}[0-9]{0," + intLength + "}\\.[0-9]{1," + decimalLength + "}$");
+            variable.regExps.push("^(\\+|\\-){0,1}[0-9]{0," + intLength + "}\\,[0-9]{1," + decimalLength + "}$");
             variable.regExps.push("^(\\+|\\-){0,1}[0-9]{1," + intLength + "}$");
             return result;
         }
@@ -879,10 +879,12 @@ function (n) {
                 }
                 else {
                     result = LogError("-CheckMetadata-FileEmpty-Error",settings.fileName);
+                    settings.errorStop = true;
                 }
             }
             else {
                 result = LogError("-CheckMetadata-FileEmpty-Error",settings.fileName);
+                settings.errorStop = true;
             }
             return result;
         }
@@ -932,14 +934,12 @@ function (n) {
                     var folders = metadataFilePath.getFolders();
                     settings.fileName = folders[folders.length - 1];
                     if(charsetMatch !== "UTF-8") {
-                        result = LogError("-CheckMetadata-FileEncoding-Error",settings.fileName);
-                    } 
-                    else {
-                        settings.data.push({ "fileName":settings.fileName,"errorStop":false, "system":"", "name":"", "description":"", "rows":0, "variables":[] })
-                        if(!ValidateMetadata(metadataFilePath)) { result = false; }
-                        GetTableData(settings.fileName).errorStop = settings.errorStop;
-                        settings.errorStop = false;
-                    } 
+                        result = LogWarn("-CheckMetadata-FileEncoding-Error",settings.fileName);
+                    }                    
+                    settings.data.push({ "fileName":settings.fileName,"errorStop":false, "system":"", "name":"", "variables":[] })
+                    if(!ValidateMetadata(metadataFilePath)) { result = false; }
+                    GetTableData(settings.fileName).errorStop = settings.errorStop;
+                    settings.errorStop = false;
                 }
                 else {
                     console.log("None exist Metadata file path: {0}".format(metadataFilePath));

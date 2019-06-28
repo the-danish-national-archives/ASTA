@@ -63,6 +63,7 @@ textarea {
     padding-left:0px;
     font-family: SourceSansPro;
     margin-bottom: 5px;
+    padding-left: 5px;
     width: 30%;
 }
 
@@ -150,7 +151,7 @@ h2.subHeader {
 
 .bottomBorderTd {
     border: none;
-    border-bottom: 2px solid grey;
+    border-bottom: 1px solid #b2b2b2;
     padding: 6px;
 }
 
@@ -194,7 +195,7 @@ td .path {
 table {
     border-collapse: collapse;
     margin-bottom: 6px;
-    Margin-top:6px;
+    margin-top:6px;
 }
 
 /* Table END */
@@ -231,6 +232,7 @@ h3 {
 
 h4 {
     color: #6db1a7;
+    margin-bottom: 4px;
 }
 
 .header-warning {
@@ -331,7 +333,7 @@ a.selected:hover {
 /* Nemesis layout */
 
 .verticalDivider {
-    border-left: 2px solid #000;
+    border-left: 1px solid #b2b2b2;
     height: 90%;
     min-height: 400px;
 }
@@ -345,7 +347,7 @@ a.selected:hover {
     width: 45%;
     border: 1px solid #000;    
     overflow-y: auto;
-    box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.4);
+    /*box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.4);*/
     box-sizing: border-box;
     padding: 0px 10px;
 }
