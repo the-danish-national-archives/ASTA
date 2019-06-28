@@ -875,10 +875,12 @@ function (n) {
                 }
                 else {
                     result = LogError("-CheckMetadata-FileEmpty-Error",settings.fileName);
+                    settings.errorStop = true;
                 }
             }
             else {
                 result = LogError("-CheckMetadata-FileEmpty-Error",settings.fileName);
+                settings.errorStop = true;
             }
             return result;
         }
@@ -928,14 +930,12 @@ function (n) {
                     var folders = metadataFilePath.getFolders();
                     settings.fileName = folders[folders.length - 1];
                     if(charsetMatch !== "UTF-8") {
-                        result = LogError("-CheckMetadata-FileEncoding-Error",settings.fileName);
-                    } 
-                    else {
-                        settings.data.push({ "fileName":settings.fileName,"errorStop":false, "system":"", "name":"", "variables":[] })
-                        if(!ValidateMetadata(metadataFilePath)) { result = false; }
-                        GetTableData(settings.fileName).errorStop = settings.errorStop;
-                        settings.errorStop = false;
-                    } 
+                        result = LogWarn("-CheckMetadata-FileEncoding-Error",settings.fileName);
+                    }                    
+                    settings.data.push({ "fileName":settings.fileName,"errorStop":false, "system":"", "name":"", "variables":[] })
+                    if(!ValidateMetadata(metadataFilePath)) { result = false; }
+                    GetTableData(settings.fileName).errorStop = settings.errorStop;
+                    settings.errorStop = false;
                 }
                 else {
                     console.log("None exist Metadata file path: {0}".format(metadataFilePath));
