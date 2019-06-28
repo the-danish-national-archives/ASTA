@@ -647,18 +647,16 @@ function (n) {
                     settings.logCallback().section(settings.logType,folderName,settings.logEndNoErrorSpn.innerHTML);
                 } else {
                     settings.logCallback().section(settings.logType,folderName,settings.logEndWithErrorSpn.innerHTML);
-                }                
-                if(settings.dataFiles.length > 0) {
-                    var enableConvert = true;
-                    settings.metadata.forEach(table => {
-                        if(table.errorStop) { enableConvert = false; }
-                    });
-                    if(enableConvert) {
-                        settings.confirmationSpn.innerHTML = settings.convertEnabledText;
-                    }
-                    else {
-                        settings.confirmationSpn.innerHTML = settings.convertDisabledText;
-                    }
+                }
+                var enableConvert = true;
+                settings.metadata.forEach(table => {
+                    if(table.errorStop) { enableConvert = false; }
+                });
+                if(enableConvert) {
+                    settings.confirmationSpn.innerHTML = settings.convertEnabledText;
+                }
+                else {
+                    settings.confirmationSpn.innerHTML = settings.convertDisabledText;
                 }
                 settings.logResult = settings.logCallback().commit(settings.deliveryPackagePath);
                 settings.selectDirBtn.disabled = false;
