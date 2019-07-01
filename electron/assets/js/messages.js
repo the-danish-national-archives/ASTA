@@ -21,7 +21,7 @@ function (n) {
                     });
                 }
                 else {
-                    console.log(`none exist elment with id: ${elementId}`);
+                    console.logInfo(`none exist elment with id: ${elementId}`,"Rigsarkiv.Messages.initialize");
                 }                
             });
         }

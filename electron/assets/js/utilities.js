@@ -3,6 +3,7 @@ Implments custum javascript helper functions where it used by other modules
 */
 
 const { ipcRenderer } = require('electron');
+const log = require('electron-log');
 
 if (!String.prototype.format) {
     String.prototype.format = function() {
@@ -49,8 +50,9 @@ if (!String.prototype.format) {
   }
 }
 
-Error.prototype.Handle = function(errorSpn,text) {
-  console.log(`Error: ${this}`); 
+Error.prototype.Handle = function(errorSpn,text,stack) {
+  var stackText = "{0} \n {1}".format(this.message,stack);
+  log.error(stackText);
   if (this.code === "ENOENT") {
     this.message = 'Der er opstået en fejl i dannelsen af afleveringspakken. Genstart venligst programmet.';
     ipcRenderer.send('open-error-dialog','Program Fejl',this.message);
@@ -59,4 +61,9 @@ Error.prototype.Handle = function(errorSpn,text) {
     errorSpn.hidden = false;
     errorSpn.innerHTML = text.format(this.message);
   }
+}
+
+console.logInfo = function(message,stack) {
+  var text = "{0} \n {1}".format(message,stack);
+  log.info(text);
 }

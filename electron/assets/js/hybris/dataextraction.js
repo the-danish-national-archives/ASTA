@@ -118,7 +118,7 @@ function (n) {
             srcFilePath += (srcFilePath.indexOf("\\") > -1) ? "\\{0}".format(GetScriptFileName()) : "/{0}".format(GetScriptFileName());
             fs.readFile(srcFilePath, (err, data) => {
                 if (err) {
-                    err.Handle(settings.outputStatisticsErrorSpn,settings.outputStatisticsErrorText);
+                    err.Handle(settings.outputStatisticsErrorSpn,settings.outputStatisticsErrorText,"Rigsarkiv.Hybris.DataExtraction.UpdateScript");
                 }
                 else {
                     var folderPath = GetFolderPath();
@@ -132,10 +132,10 @@ function (n) {
                         if(settings.scriptType !== "Stata") { folderPath = (folderPath.indexOf("\\") > -1) ? "{0}\\".format(folderPath) : "{0}/".format(folderPath); }
                     }
                     var updatedData = data.toString().format(folderPath,datafolderPath,fileName.substring(0,fileName.indexOf(".")));
-                    console.log(`Update script file ${filePath}`);
+                    console.logInfo(`Update script file ${filePath}`,"Rigsarkiv.Hybris.DataExtraction.UpdateScript");
                     fs.writeFile(filePath, updatedData, (err) => {
                         if (err) {
-                            err.Handle(settings.outputStatisticsErrorSpn,settings.outputStatisticsErrorText);
+                            err.Handle(settings.outputStatisticsErrorSpn,settings.outputStatisticsErrorText,"Rigsarkiv.Hybris.DataExtraction.UpdateScript");
                         }
                         else {
                             var scriptFileName = GetScriptFileName();
@@ -172,15 +172,15 @@ function (n) {
             }  
             var destFilePath = GetFolderPath();
             destFilePath += (destFilePath.indexOf("\\") > -1) ? "\\{0}".format(scriptFileName) : "/{0}".format(scriptFileName);
-            console.log(`copy script file ${settings.scriptFileName} to ${destFilePath}`);
+            console.logInfo(`copy script file ${settings.scriptFileName} to ${destFilePath}`,"Rigsarkiv.Hybris.DataExtraction.CopyScript");
             fs.copyFile(scriptFilePath, destFilePath, (err) => {
                 if (err) {
-                    err.Handle(settings.outputStatisticsErrorSpn,settings.outputStatisticsErrorText);
+                    err.Handle(settings.outputStatisticsErrorSpn,settings.outputStatisticsErrorText,"Rigsarkiv.Hybris.DataExtraction.CopyScript");
                 }
                 else {
                     var scriptFileName = GetScriptFileName();
                     var destFilePath = GetFolderPath();
-                    console.log(scriptFileName + ' was copied to ' + destFilePath);                
+                    console.logInfo(scriptFileName + ' was copied to ' + destFilePath,"Rigsarkiv.Hybris.DataExtraction.CopyScript");                
                     UpdateScript();                
                 }            
             });       
@@ -191,7 +191,7 @@ function (n) {
             var folderPath = GetFolderPath();
             fs.readdir(folderPath, (err, files) => {
                 if (err) {
-                    err.Handle(settings.outputStatisticsErrorSpn,settings.outputStatisticsErrorText);
+                    err.Handle(settings.outputStatisticsErrorSpn,settings.outputStatisticsErrorText,"Rigsarkiv.Hybris.DataExtraction.EnsureScript");
                 }
                 else {
                     var fileName = GetFileName();
@@ -232,7 +232,7 @@ function (n) {
             settings.pathStatisticsFileTxt.value = "";
             fs.rmdir(settings.dataFolderPath, (err) => {
                 if (err) {
-                    err.Handle(settings.outputStatisticsErrorSpn,settings.outputStatisticsErrorText);
+                    err.Handle(settings.outputStatisticsErrorSpn,settings.outputStatisticsErrorText,"Rigsarkiv.Hybris.DataExtraction.ResetData");
                 }
                 else {
                     settings.dataFolderPath = null;
@@ -252,7 +252,7 @@ function (n) {
             fs.readdir(settings.dataFolderPath, (err, files) => {
                 if (err) {
                     settings.dataFolderPath = null;
-                    err.Handle(settings.outputStatisticsErrorSpn,settings.outputStatisticsErrorText);
+                    err.Handle(settings.outputStatisticsErrorSpn,settings.outputStatisticsErrorText,"Rigsarkiv.Hybris.DataExtraction.EnsureData");
                 }
                 else {
                     var tablecounter = 0;
@@ -268,10 +268,10 @@ function (n) {
                     fs.mkdir(settings.dataFolderPath, { recursive: true }, (err) => {
                         if (err) {
                             settings.dataFolderPath = null;
-                            err.Handle(settings.outputStatisticsErrorSpn,settings.outputStatisticsErrorText);
+                            err.Handle(settings.outputStatisticsErrorSpn,settings.outputStatisticsErrorText,"Rigsarkiv.Hybris.DataExtraction.EnsureData");
                         }
                         else {
-                            console.log(`ensure package data path: ${settings.dataFolderPath}`);
+                            console.logInfo(`ensure package data path: ${settings.dataFolderPath}`,"Rigsarkiv.Hybris.DataExtraction.EnsureData");
                             EnsureScript();
                         }
                     });
@@ -286,7 +286,7 @@ function (n) {
             var size = fs.statSync(filePath).size
             if(size <= MaxFileSize) {
                 var charsetMatch = chardet.detectFileSync(filePath);
-                console.log("File {0} encode: {1}".format(fileName,charsetMatch));
+                console.logInfo("File {0} encode: {1}".format(fileName,charsetMatch),"Rigsarkiv.Hybris.DataExtraction.ValidateFile");
                 if(charsetMatch !== "UTF-8") {
                     return false;
                 }
@@ -323,7 +323,7 @@ function (n) {
             fs.readdir(settings.dataFolderPath, (err, files) => {
                 if (err) {
                     settings.spinner.className = "";
-                    err.Handle(settings.outputStatisticsErrorSpn,settings.outputStatisticsErrorText);
+                    err.Handle(settings.outputStatisticsErrorSpn,settings.outputStatisticsErrorText,"Rigsarkiv.Hybris.DataExtraction.EnsureExport");
                 }
                 else {
                     settings.okScriptBtn.disabled = true;
@@ -395,7 +395,7 @@ function (n) {
             })
             ipcRenderer.on('dataextraction-selected-statistics-file', (event, path) => {
                 settings.selectedStatisticsFilePath = path; 
-                console.log(`selected path: ${path}`); 
+                console.logInfo(`selected path: ${path}`,"Rigsarkiv.Hybris.DataExtraction.AddEvents"); 
                 settings.pathStatisticsFileTxt.value = settings.selectedStatisticsFilePath;            
             })
             ipcRenderer.on('confirm-dialog-selection-dataextraction-catalogexists', (event, index) => {

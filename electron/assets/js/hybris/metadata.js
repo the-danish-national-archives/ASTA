@@ -115,7 +115,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 var dataFolderPath = settings.extractionCallback().dataFolderPath;
                 fs.readdir(dataFolderPath, (err, files) => {
                     if (err) {
-                        err.Handle(settings.outputErrorSpn,settings.outputErrorText);
+                        err.Handle(settings.outputErrorSpn,settings.outputErrorText,"Rigsarkiv.Hybris.MetaData.Cleanup");
                     }
                     else {
                         var hasError = false;
@@ -124,7 +124,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                         var dataFolderPath = callback.dataFolderPath;
                         files.forEach(file => {
                             if(file != settings.dataFileName.format(fileName) && file != settings.metadataFileName.format(fileName)) {
-                                console.log("delete file : " + file);
+                                console.logInfo("delete file : " + file,"Rigsarkiv.Hybris.MetaData.Cleanup");
                                 try {
                                     var srcFilePath = dataFolderPath;
                                     srcFilePath += (srcFilePath.indexOf("\\") > -1) ? "\\{0}".format(file) : "/{0}".format(file);
@@ -132,7 +132,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                                 }
                                 catch(err) {
                                     hasError = true;
-                                    err.Handle(settings.outputErrorSpn,settings.outputErrorText);
+                                    err.Handle(settings.outputErrorSpn,settings.outputErrorText,"Rigsarkiv.Hybris.MetaData.Cleanup");
                                 }                            
                             }
                         });
@@ -164,17 +164,17 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 destFileName = settings.dataFileName.format(destFileName);
                 var dataFolderPath = settings.extractionCallback().dataFolderPath;
 
-                console.log("rename {0} file to: {1}".format(srcFileName,destFileName));                
+                console.logInfo("rename {0} file to: {1}".format(srcFileName,destFileName),"Rigsarkiv.Hybris.MetaData.RenameFile");                
                 var srcFilePath = dataFolderPath;
                 srcFilePath += (srcFilePath.indexOf("\\") > -1) ? "\\{0}".format(srcFileName) : "/{0}".format(srcFileName);
                 var destFilePath = dataFolderPath;
                 destFilePath += (destFilePath.indexOf("\\") > -1) ? "\\{0}".format(destFileName) : "/{0}".format(destFileName);
                 fs.rename(srcFilePath,destFilePath, (err) => {
                     if (err) {
-                        err.Handle(settings.outputErrorSpn,settings.outputErrorText);
+                        err.Handle(settings.outputErrorSpn,settings.outputErrorText,"Rigsarkiv.Hybris.MetaData.RenameFile");
                     }
                     else {
-                        console.log('Rename complete!');
+                        console.logInfo("Rename complete!","Rigsarkiv.Hybris.MetaData.RenameFile");
                         Cleanup();
                     }
                 }); 
@@ -200,7 +200,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 srcFilePath += (srcFilePath.indexOf("\\") > -1) ? "\\{0}".format(metadataFileName) : "/{0}".format(metadataFileName);
                 fs.readFile(srcFilePath, (err, data) => {
                     if (err) {
-                        err.Handle(settings.outputErrorSpn,settings.outputErrorText);
+                        err.Handle(settings.outputErrorSpn,settings.outputErrorText,"Rigsarkiv.Hybris.MetaData.UpdateFile");
                     }
                     else {
                         var callback = settings.extractionCallback();
@@ -214,7 +214,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                         srcFilePath += (srcFilePath.indexOf("\\") > -1) ? "\\{0}".format(metadataFileName) : "/{0}".format(metadataFileName);
                         fs.writeFile(srcFilePath, updatedData, (err) => {
                             if (err) {
-                                err.Handle(settings.outputErrorSpn,settings.outputErrorText);
+                                err.Handle(settings.outputErrorSpn,settings.outputErrorText,"Rigsarkiv.Hybris.MetaData.UpdateFile");
                             }
                             else {
                                 RenameFile();
@@ -242,15 +242,15 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                     }
                 }
 
-                console.log(`copy ${settings.metadataTemplateFileName} file to: ${dataFolderPath}`);
+                console.logInfo(`copy ${settings.metadataTemplateFileName} file to: ${dataFolderPath}`,"Rigsarkiv.Hybris.MetaData.EnsureFile");
                 var destFilePath = dataFolderPath;
                 destFilePath += (destFilePath.indexOf("\\") > -1) ? "\\{0}".format(metadataFileName) : "/{0}".format(metadataFileName);
                 fs.copyFile(metadataFilePath,destFilePath, (err) => {
                     if (err) {
-                        err.Handle(settings.outputErrorSpn,settings.outputErrorText);
+                        err.Handle(settings.outputErrorSpn,settings.outputErrorText,"Rigsarkiv.Hybris.MetaData.EnsureFile");
                     }
                     else {
-                        console.log("{0} was copied to {1}".format(GetMetaDataFileName(),settings.extractionCallback().dataFolderPath));
+                        console.logInfo("{0} was copied to {1}".format(GetMetaDataFileName(),settings.extractionCallback().dataFolderPath),"Rigsarkiv.Hybris.MetaData.EnsureFile");
                         UpdateFile();
                     }
                 });
@@ -261,11 +261,11 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 var dataFolderPath = settings.extractionCallback().dataFolderPath;
                 fs.readdir(dataFolderPath, (err, files) => {
                     if (err) {
-                        err.Handle(settings.outputErrorSpn,settings.outputErrorText);
+                        err.Handle(settings.outputErrorSpn,settings.outputErrorText,"Rigsarkiv.Hybris.MetaData.EnsureData");
                     }
                     else {
                         var dataFolderPath = settings.extractionCallback().dataFolderPath;
-                        console.log(`get texts contents: ${dataFolderPath}`);
+                        console.logInfo(`get texts contents: ${dataFolderPath}`,"Rigsarkiv.Hybris.MetaData.EnsureData");
                         files.forEach(file => {
                             var filePath = dataFolderPath;
                             filePath += (filePath.indexOf("\\") > -1) ? "\\{0}".format(file) : "/{0}".format(file);
