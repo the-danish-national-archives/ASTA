@@ -531,6 +531,33 @@ function (n) {
             return result;
         }
 
+        //Process Row
+        var ProcessRow = function(data) {
+            var result = true;
+            var newData = data;
+            result = (settings.table.variables.length === newData.length);
+            if(!result) {
+                var row = data.join(settings.separator);
+                if(row.indexOf("\"") > -1) { //Reparsing of row if it contains double apstrof
+                    newData = ParseRow(row);
+                    result = (settings.table.variables.length === newData.length); 
+                }  
+                if(settings.table.variables.length === (newData.length + 1)) { 
+                    newData.push(""); 
+                    result = true;
+                }                                      
+            }
+            if(!result) { //less or more separators
+                result = LogError("-CheckData-FileRows-MatchLength-Error",settings.fileName,settings.rowIndex);
+                settings.convertStop = true;
+            }
+            else {
+                result = ValidateRow(newData); 
+            }
+            if(result && settings.data.length <= 100) { settings.data.push(newData); } 
+            return result;
+        }
+
         // Validate CSV header row
         var ValidateDataSet = function () {
             var dataFilePath = settings.dataFiles[settings.runIndex];
@@ -541,30 +568,14 @@ function (n) {
                 var result = true;
                 settings.rowIndex++;
                 settings.confirmationSpn.innerHTML = settings.validateRowsText.format(settings.rowIndex,settings.tableRows,settings.fileName);
-                //console.log("validate row: {0}".format(settings.rowIndex));
+                console.log("validate row: {0}".format(settings.rowIndex));
                 if(settings.rowIndex === 1 && !ValidateHeader(data)) { 
                     settings.table.errorStop = true;
                     result = false; 
                 }
                 if(!settings.table.errorStop && settings.rowIndex > 1 && settings.tableErrors <= errorsMax) {
-                    var newData = data;
-                    result = (settings.table.variables.length === newData.length);
-                    if(!result) {
-                        var row = data.join(settings.separator);
-                        if(row.indexOf("\"") > -1) { //Reparsing of row if it contains double apstrof
-                            newData = ParseRow(row);
-                            result = (settings.table.variables.length === newData.length); 
-                        }
-                    }
-                    if(!result) { //less or more separators
-                        result = LogError("-CheckData-FileRows-MatchLength-Error",settings.fileName,settings.rowIndex);
-                        settings.convertStop = true;
-                    }
-                    else {
-                       result = ValidateRow(newData); 
-                    }
-                    if(result && settings.data.length <= 100) { settings.data.push(newData); } 
-                    return result;
+                    
+                    return ProcessRow(data);
                 }
             })
             .on("end", function(){
