@@ -118,7 +118,7 @@ function (n) {
                 if(arguments.length === 6) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5]); }
                 if(arguments.length === 7) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5],arguments[6]); }
             }
-
+            console.logInfo(text,"Rigsarkiv.Nemesis.Structure.LogError");
             settings.logCallback().error(settings.logType,GetFolderName(),text);
             settings.errors += 1;
             return false;
@@ -136,7 +136,7 @@ function (n) {
                 if(arguments.length === 6) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5]); }
                 if(arguments.length === 7) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5],arguments[6]); }
             }
-
+            console.logInfo(text,"Rigsarkiv.Nemesis.Structure.LogWarn");
             settings.logCallback().warn(settings.logType,GetFolderName(),text);
             return true;
         }
@@ -153,7 +153,7 @@ function (n) {
                 if(arguments.length === 6) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5]); }
                 if(arguments.length === 7) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5],arguments[6]); }
             }
-
+            console.logInfo(text,"Rigsarkiv.Nemesis.Structure.LogInfo");
             settings.logCallback().info(settings.logType,GetFolderName(),text);
             return true;
         }
@@ -539,7 +539,7 @@ function (n) {
             }
             catch(err) 
             {
-                err.Handle(settings.outputErrorSpn,settings.outputErrorText);
+                err.Handle(settings.outputErrorSpn,settings.outputErrorText,"Rigsarkiv.Nemesis.Structure.Validate");
             }
             return null;
         }
@@ -558,7 +558,7 @@ function (n) {
             })
             ipcRenderer.on('validation-selected-directory', (event, path) => {
                 settings.selectedPath = path; 
-                console.log(`selected path: ${path}`); 
+                console.logInfo(`selected path: ${path}`,"Rigsarkiv.Nemesis.Structure.AddEvents"); 
                 settings.pathDirTxt.value = settings.selectedPath;
             })            
         }

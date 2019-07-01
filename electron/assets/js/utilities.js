@@ -4,6 +4,7 @@ Implments custum javascript helper functions where it used by other modules
 
 const { ipcRenderer } = require('electron');
 const log = require('electron-log');
+log.transports.file.maxSize = 10485760;
 
 if (!String.prototype.format) {
     String.prototype.format = function() {
