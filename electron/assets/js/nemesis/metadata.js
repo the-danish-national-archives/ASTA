@@ -509,7 +509,7 @@ function (n) {
                         }                       
                     }
                     else {
-                        result = LogError("-CheckMetadata-FileVariables-RowDouble-Error",settings.fileName,(i + 1));
+                        result = LogError("-CheckMetadata-FileVariables-RowDouble-Error",settings.fileName,variableName,(i + 1));
                         settings.errorStop = true;
                     }
                     if(expressions.length > 3) {

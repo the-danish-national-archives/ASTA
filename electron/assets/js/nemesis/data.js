@@ -569,7 +569,7 @@ function (n) {
                 var result = true;
                 settings.rowIndex++;
                 settings.confirmationSpn.innerHTML = settings.validateRowsText.format(settings.rowIndex,settings.tableRows,settings.fileName);
-                console.logInfo("validate row: {0}".format(settings.rowIndex),"Rigsarkiv.Nemesis.Data.ValidateDataSet");
+                console.log("validate row: {0}".format(settings.rowIndex));
                 if(settings.rowIndex === 1 && !ValidateHeader(data)) { 
                     settings.table.errorStop = true;
                     result = false; 
