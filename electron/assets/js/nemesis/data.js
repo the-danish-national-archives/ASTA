@@ -665,7 +665,7 @@ function (n) {
                     if(table.errorStop) { enableConvert = false; }
                 });
                 if(enableConvert) {
-                    settings.confirmationSpn.innerHTML = settings.convertEnabledText;
+                    settings.confirmationSpn.innerHTML = settings.convertEnabledText.format(settings.totalErrors);
                 }
                 else {
                     settings.confirmationSpn.innerHTML = settings.convertDisabledText;

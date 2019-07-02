@@ -531,7 +531,7 @@ function (n) {
                     return settings.metadataCallback().validate(settings.deliveryPackagePath,settings.outputText,settings.errors); 
                 } 
                 else {
-                    settings.confirmationSpn.innerHTML = settings.convertDisabledText;
+                    settings.confirmationSpn.innerHTML = settings.convertDisabledText.format(settings.errors);
                     settings.selectDirBtn.disabled = false;
                     settings.validateBtn.disabled = false;
                     return settings.logCallback().commit(settings.deliveryPackagePath);
