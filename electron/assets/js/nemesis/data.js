@@ -632,7 +632,6 @@ function (n) {
 
         //loop Data folder's table & data files
         var ValidateData = function () {
-            var result = true;
             var destPath = (settings.deliveryPackagePath.indexOf("\\") > -1) ? "{0}\\{1}".format(settings.deliveryPackagePath,settings.dataPathPostfix) : "{0}/{1}".format(settings.deliveryPackagePath,settings.dataPathPostfix); 
             fs.readdirSync(destPath).forEach(folder => {
                 var dataFilePath = (destPath.indexOf("\\") > -1) ? "{0}\\{1}\\{1}.csv".format(destPath,folder) : "{0}/{1}/{1}.csv".format(destPath,folder);                 
@@ -648,22 +647,22 @@ function (n) {
                 }                              
             });
             if(settings.dataFiles.length > 0) { ProcessDataSet(); }            
-            if(result) { LogInfo("-CheckData-Ok",null); }            
-            return result; 
         }
 
         //commit end all validation by check every 500 msec 
         var CommitLog = function () {            
                 var folderName = GetFolderName();
                 if(settings.errors === 0) {
+                    LogInfo("-CheckData-Ok",null);
                     settings.logCallback().section(settings.logType,folderName,settings.logEndNoErrorSpn.innerHTML);
                 } else {
+                    LogInfo("-CheckData-Warning",null);
                     settings.logCallback().section(settings.logType,folderName,settings.logEndWithErrorSpn.innerHTML);
                 }
                 var enableConvert = true;
                 settings.metadata.forEach(table => {
                     if(table.errorStop) { enableConvert = false; }
-                });
+                });                
                 if(enableConvert) {
                     settings.confirmationSpn.innerHTML = settings.convertEnabledText.format(settings.totalErrors);
                 }

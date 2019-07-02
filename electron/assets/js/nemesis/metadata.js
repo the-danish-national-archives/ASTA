@@ -942,7 +942,7 @@ function (n) {
                 }                              
             });
             if(!ValidateTablesReference()) { result = false; }
-            if(result) { LogInfo("-CheckMetadata-Ok",null); }
+            LogInfo(result ? "-CheckMetadata-Ok" : "-CheckMetadata-Warning",null);
             return result; 
         }
 
