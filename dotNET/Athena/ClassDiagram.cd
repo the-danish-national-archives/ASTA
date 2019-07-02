@@ -1,0 +1,192 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Rigsarkiv.Athena.Entities.Table">
+    <Position X="13.5" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAUAAAAAAAAQAAAABAEAAAAAACAhABAA=</HashCode>
+      <FileName>Entities\Table.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Rigsarkiv.Athena.Entities.Row">
+    <Position X="7.25" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAQAAAAAAACAAAAAAAgAAA=</HashCode>
+      <FileName>Entities\Row.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Rigsarkiv.Athena.Entities.Column">
+    <Position X="13.5" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAEAAAAAAAAAJAAAAQAAAAAAAAAAQAAAAAAABA=</HashCode>
+      <FileName>Entities\Column.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Rigsarkiv.Athena.Converter">
+    <Position X="8.5" Y="0.75" Width="1.5" />
+    <Members>
+      <Field Name="_assembly" Hidden="true" />
+      <Field Name="_destFolder" Hidden="true" />
+      <Field Name="_destFolderPath" Hidden="true" />
+      <Field Name="_destPath" Hidden="true" />
+      <Field Name="_logSection" Hidden="true" />
+      <Field Name="_regExps" Hidden="true" />
+      <Field Name="_researchIndexXDocument" Hidden="true" />
+      <Field Name="_srcFolder" Hidden="true" />
+      <Field Name="_srcPath" Hidden="true" />
+      <Field Name="_tableIndexXDocument" Hidden="true" />
+      <Field Name="_tableIndexXNS" Hidden="true" />
+      <Field Name="_tables" Hidden="true" />
+      <Field Name="_writer" Hidden="true" />
+      <Method Name="AddMissingColumnNode" Hidden="true" />
+      <Field Name="C1" Hidden="true" />
+      <Field Name="C2" Hidden="true" />
+      <Method Name="Converter" Hidden="true" />
+      <Field Name="DoubleApostrophePattern" Hidden="true" />
+      <Method Name="EndWriter" Hidden="true" />
+      <Method Name="GetColumnLength" Hidden="true" />
+      <Method Name="GetConvertedValue" Hidden="true" />
+      <Method Name="GetDateValue" Hidden="true" />
+      <Method Name="GetDecimalValue" Hidden="true" />
+      <Method Name="GetIntegerValue" Hidden="true" />
+      <Method Name="GetMonth" Hidden="true" />
+      <Method Name="GetStringValue" Hidden="true" />
+      <Method Name="GetTimeStampValue" Hidden="true" />
+      <Method Name="GetTimeValue" Hidden="true" />
+      <Method Name="HandleSpecialNumeric" Hidden="true" />
+      <Method Name="HasSpecialNumeric" Hidden="true" />
+      <Field Name="IndicesPath" Hidden="true" />
+      <Field Name="ResearchIndex" Hidden="true" />
+      <Property Name="ResearchIndexXDocument" Hidden="true" />
+      <Field Name="ResourcePrefix" Hidden="true" />
+      <Method Name="Run" Hidden="true" />
+      <Field Name="SpecialNumericPattern" Hidden="true" />
+      <Method Name="StartWriter" Hidden="true" />
+      <Field Name="TableIndex" Hidden="true" />
+      <Property Name="TableIndexXDocument" Hidden="true" />
+      <Field Name="TableIndexXmlNs" Hidden="true" />
+      <Field Name="TablePath" Hidden="true" />
+      <Field Name="TableSchemaLocation" Hidden="true" />
+      <Field Name="TableXmlNs" Hidden="true" />
+      <Field Name="TableXsiNs" Hidden="true" />
+      <Field Name="VarCharPrefix" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>QEEBECCKNCQQAAhADACAUIAAAh4CAMAAEAADgITgDYI=</HashCode>
+      <FileName>Converter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Rigsarkiv.Athena.Structure">
+    <Position X="11.25" Y="3" Width="1.5" />
+    <Members>
+      <Method Name="CopyFolder" Hidden="true" />
+      <Method Name="CopyFolders" Hidden="true" />
+      <Method Name="CopySchemas" Hidden="true" />
+      <Method Name="EnsureRootFolder" Hidden="true" />
+      <Method Name="EnsureSchemas" Hidden="true" />
+      <Method Name="EnsureTables" Hidden="true" />
+      <Method Name="Structure" Hidden="true" />
+    </Members>
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>ABAAACAAAkAAIAAAAAAAAAgCAAAAAQAAAAAAgAAAAgI=</HashCode>
+      <FileName>Structure.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Rigsarkiv.Athena.MetaData">
+    <Position X="9.25" Y="3" Width="1.5" />
+    <Members>
+      <Method Name="AddColumnNode" Hidden="true" />
+      <Method Name="AddKeys" Hidden="true" />
+      <Method Name="AddReferencedTable" Hidden="true" />
+      <Method Name="AddTableNode" Hidden="true" />
+      <Method Name="CreateNode" Hidden="true" />
+      <Method Name="EnsureTables" Hidden="true" />
+      <Method Name="GetMappedType" Hidden="true" />
+      <Method Name="LoadJson" Hidden="true" />
+      <Method Name="MetaData" Hidden="true" />
+      <Method Name="ParseOptions" Hidden="true" />
+    </Members>
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>EQBAAAAAIEAgAAAQAAEgQQIBgRAAAAAAAQQAAAAAAAI=</HashCode>
+      <FileName>MetaData.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Rigsarkiv.Athena.Data">
+    <Position X="7.25" Y="3" Width="1.5" />
+    <Members>
+      <Method Name="AddFile" Hidden="true" />
+      <Method Name="AddRow" Hidden="true" />
+      <Method Name="Data" Hidden="true" />
+      <Method Name="ParseColumn" Hidden="true" />
+      <Method Name="ParseRow" Hidden="true" />
+      <Method Name="StreamElement" Hidden="true" />
+      <Method Name="StreamLine" Hidden="true" />
+      <Method Name="UpdateRow" Hidden="true" />
+    </Members>
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAEAAAAAIAAAAAACACAAAAEhAAEAAIAAACAAI=</HashCode>
+      <FileName>Data.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Rigsarkiv.Athena.Index">
+    <Position X="5.25" Y="3" Width="1.5" />
+    <Members>
+      <Method Name="CalculateHash" Hidden="true" />
+      <Method Name="Index" Hidden="true" />
+      <Method Name="IndexFiles" Hidden="true" />
+    </Members>
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAABBAAAEAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAI=</HashCode>
+      <FileName>Index.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Rigsarkiv.Athena.Logging.LogEntity">
+    <Position X="1.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAIIAAAAA=</HashCode>
+      <FileName>Logging\LogEntity.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Level" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Rigsarkiv.Athena.Logging.LogEventArgs">
+    <Position X="1.25" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Logging\LogEventArgs.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="LogEntity" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Rigsarkiv.Athena.Logging.LogManager">
+    <Position X="3.25" Y="0.75" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAIAACAAAAIAAAAAAAQAAAAAAAAAAIIAAA=</HashCode>
+      <FileName>Logging\LogManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="Rigsarkiv.Athena.Logging.LogLevel">
+    <Position X="1.25" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAQAAAAAAABAAAAAAAAAAAAAAAEAAAAA=</HashCode>
+      <FileName>Logging\LogLevel.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
