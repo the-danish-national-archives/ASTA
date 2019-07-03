@@ -38,9 +38,13 @@ namespace Rigsarkiv.Athena
         public override bool Run()
         {
             var result = false;
-            _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Start Indexing files at {0}", _destFolderPath) });
+            var message = string.Format("Start Indexing files at {0}", _destFolderPath);
+            _log.Info(message);
+            _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = message });
             if(IndexFiles()) { result = true; }
-            _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = (result ? "End Indexing files" : "End Indexing files with errors") });
+            message = result ? "End Indexing files" : "End Indexing files with errors";
+            _log.Info(message);
+            _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = message });
             return result;
         }
 
@@ -69,6 +73,7 @@ namespace Rigsarkiv.Athena
             catch (Exception ex)
             {
                 result = false;
+                _log.Error("IndexFiles Failed", ex);
                 _logManager.Add(new LogEntity() { Level = LogLevel.Error, Section = _logSection, Message = string.Format("IndexFiles Failed: {0}", ex.Message) });
             }
             return result;

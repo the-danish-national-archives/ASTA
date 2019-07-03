@@ -53,12 +53,16 @@ namespace Rigsarkiv.Athena
         public override bool Run()
         {
             var result = false;
-            _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Start Converting Metadata {0} -> {1}", _srcFolder, _destFolder) });
-            if(LoadJson() && EnsureTables())
+            var message = string.Format("Start Converting Metadata {0} -> {1}", _srcFolder, _destFolder);
+            _log.Info(message);
+            _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = message });
+            if (LoadJson() && EnsureTables())
             {                
                 result = true;
             }
-            _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = (result ? "End Converting Metadata" : "End Converting Metadata with errors") });
+            message = result ? "End Converting Metadata" : "End Converting Metadata with errors";
+            _log.Info(message);
+            _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = message });
             return result;
         }
 
@@ -80,6 +84,7 @@ namespace Rigsarkiv.Athena
             catch (Exception ex)
             {
                 result = false;
+                _log.Error("EnsureTableIndex Failed", ex);
                 _logManager.Add(new LogEntity() { Level = LogLevel.Error, Section = _logSection, Message = string.Format("EnsureTableIndex Failed: {0}", ex.Message) });
             }
             return result;
@@ -274,6 +279,7 @@ namespace Rigsarkiv.Athena
             catch (Exception ex)
             {
                 result = false;
+                _log.Error("LoadJson Failed", ex);
                 _logManager.Add(new LogEntity() { Level = LogLevel.Error, Section = _logSection, Message = string.Format("LoadJson Failed: {0}", ex.Message) });
             }
             return result;

@@ -40,25 +40,22 @@ namespace Rigsarkiv.Athena
         public override bool Run()
         {
             var result = false;
-            _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Start Converting Data {0} -> {1}", _srcFolder, _destFolder) });
+            var message = string.Format("Start Converting Data {0} -> {1}", _srcFolder, _destFolder);
+            _log.Info(message);
+            _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = message });
             if (_tables != null && _tables.Count > 0)
-            {
-                _tables.ForEach(t => {
-                    if(!AddFile(t)) { result = false; }
-                });
-                if(_updateDocuments)
-                {
-                    var path = string.Format(IndicesPath, _destFolderPath);
-                    _tableIndexXDocument.Save(string.Format("{0}\\{1}", path, TableIndex));
-                    _researchIndexXDocument.Save(string.Format("{0}\\{1}", path, ResearchIndex));
-                }
-                result = true;
+            {               
+                result = EnsureData();
             }
             else
             {
-                _logManager.Add(new LogEntity() { Level = LogLevel.Error, Section = _logSection, Message = "Tables metadata Property is empty" });
+                message = "Tables metadata Property is empty";
+                _log.Info(message);
+                _logManager.Add(new LogEntity() { Level = LogLevel.Error, Section = _logSection, Message = message });
             }
-            _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = (result ? "End Converting Data" : "End Converting Data with errors") });
+            message = result ? "End Converting Data" : "End Converting Data with errors";
+            _log.Info(message);
+            _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = message });
             return result;
         }
 
@@ -105,8 +102,8 @@ namespace Rigsarkiv.Athena
             }
             return result;
         }
-
-        public void UpdateRow(Table table,Row row,Column column, string value, string newValue, int index)
+        
+        private void UpdateRow(Table table,Row row,Column column, string value, string newValue, int index)
         {
             var hasError = false;
             if (string.IsNullOrEmpty(value.Trim()) && column.Nullable) { value = string.Empty; }
@@ -114,7 +111,30 @@ namespace Rigsarkiv.Athena
             row.SrcValues.Add(column.Id, value);
             row.DestValues.Add(column.Id, newValue);
             if (hasError) { row.ErrorsColumns.Add(column.Id); }
+        }
 
+        private bool EnsureData()
+        {
+            var result = true;
+            try
+            {
+                _tables.ForEach(t => {
+                    if (!AddFile(t)) { result = false; }
+                });
+                if (result && _updateDocuments)
+                {
+                    var path = string.Format(IndicesPath, _destFolderPath);
+                    _tableIndexXDocument.Save(string.Format("{0}\\{1}", path, TableIndex));
+                    _researchIndexXDocument.Save(string.Format("{0}\\{1}", path, ResearchIndex));
+                }
+            }
+            catch (Exception ex)
+            {
+                result = false;
+                _log.Error("EnsureData Failed", ex);
+                _logManager.Add(new LogEntity() { Level = LogLevel.Error, Section = _logSection, Message = string.Format("EnsureData Failed: {0}", ex.Message) });
+            }
+            return result;
         }
 
         private bool AddFile(Table table)
@@ -151,6 +171,7 @@ namespace Rigsarkiv.Athena
             catch (Exception ex)
             {
                 result = false;
+                _log.Error("AddFile Failed", ex);
                 _logManager.Add(new LogEntity() { Level = LogLevel.Error, Section = _logSection, Message = string.Format("AddFile Failed: {0}", ex.Message) });
             }
             return result;

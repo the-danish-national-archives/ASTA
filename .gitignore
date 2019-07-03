@@ -34,3 +34,4 @@ RELEASES
 electron/assets/scripts/Athena.exe
 electron/assets/scripts/Athena.exe.config
 /dotNET/AthenaForm/Athena.pdb
+/dotNET/packages

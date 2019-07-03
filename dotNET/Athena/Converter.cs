@@ -1,4 +1,5 @@
-﻿using Rigsarkiv.Athena.Entities;
+﻿using log4net;
+using Rigsarkiv.Athena.Entities;
 using Rigsarkiv.Athena.Logging;
 using System.Collections.Generic;
 using System.Globalization;
@@ -16,6 +17,7 @@ namespace Rigsarkiv.Athena
     /// </summary>
     public class Converter
     {
+        protected static readonly ILog _log = log4net.LogManager.GetLogger(typeof(Converter));
         protected const string IndicesPath = "{0}\\Indices";
         protected const string ResourcePrefix = "Rigsarkiv.Athena.Resources.{0}";
         protected const string TableIndex = "tableIndex.xml";
@@ -32,7 +34,7 @@ namespace Rigsarkiv.Athena
         protected string DoubleApostrophePattern = "^\"([\\w\\W\\s]*)\"$";
         protected Dictionary<string, Regex> _regExps = null;
         protected Assembly _assembly = null;
-        protected LogManager _logManager = null;
+        protected Logging.LogManager _logManager = null;
         protected XDocument _tableIndexXDocument = null;
         protected XDocument _researchIndexXDocument = null;
         protected XNamespace _tableIndexXNS = TableIndexXmlNs;
@@ -52,7 +54,7 @@ namespace Rigsarkiv.Athena
         /// <param name="srcPath"></param>
         /// <param name="destPath"></param>
         /// <param name="destFolder"></param>
-        public Converter(LogManager logManager, string srcPath, string destPath, string destFolder)
+        public Converter(Logging.LogManager logManager, string srcPath, string destPath, string destFolder)
         {
             _assembly = Assembly.GetExecutingAssembly();
             _logManager = logManager;

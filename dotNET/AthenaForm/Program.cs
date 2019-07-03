@@ -1,4 +1,5 @@
-﻿using System;
+﻿using log4net;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,7 @@ namespace Rigsarkiv.Athena
     //https://stackoverflow.com/questions/5282999/reading-csv-file-and-storing-values-into-an-array
     static class Program
     {
+        private static readonly ILog _log = log4net.LogManager.GetLogger(typeof(Program));
         private static string _srcPath = null;
         private static string _destPath = null;
         /// <summary>
@@ -19,6 +21,7 @@ namespace Rigsarkiv.Athena
         [STAThread]
         static void Main(string[] args)
         {
+            _log.Info("Run");
             if (args != null && args.Length > 0)
             {
                 _srcPath = args[0];

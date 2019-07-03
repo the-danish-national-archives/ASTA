@@ -1,4 +1,5 @@
-﻿using Rigsarkiv.Athena;
+﻿using log4net;
+using Rigsarkiv.Athena;
 using Rigsarkiv.Athena.Logging;
 using System;
 
@@ -6,13 +7,15 @@ namespace Rigsarkiv.AthenaConsole
 {
     class Program
     {
-        private static LogManager _logManager = null;
+        protected static readonly ILog _log = log4net.LogManager.GetLogger(typeof(Program));
+        private static Athena.Logging.LogManager _logManager = null;
         private static Athena.Converter _converter = null;
         static void Main(string[] args)
         {
+            _log.Info("Start");
             if (args != null && args.Length > 2)
             {
-                _logManager = new LogManager();
+                _logManager = new Athena.Logging.LogManager();
                 _logManager.LogAdded += OnLogAdded;
                 var srcPath = args[0];
                 var destPath = args[1];
@@ -43,6 +46,7 @@ namespace Rigsarkiv.AthenaConsole
                     }
                 }
             }
+            _log.Info("End");
         }
 
         private static void OnLogAdded(object sender, LogEventArgs e)

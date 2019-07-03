@@ -33,9 +33,16 @@ namespace Rigsarkiv.Athena
         public override bool Run()
         {
             var result = false;
-            _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Start Converting structure {0} -> {1}", _srcFolder, _destFolder) });
-            if (EnsureRootFolder() && CopyFolders() && EnsureSchemas() && EnsureTables() && CopySchemas()) { result = true; }
-            _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = (result ? "End Converting structure" : "End Converting structure with errors") });
+            var message = string.Format("Start Converting structure {0} -> {1}", _srcFolder, _destFolder);
+            _log.Info(message);
+            _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = message });
+            if (EnsureRootFolder() && CopyFolders() && EnsureSchemas() && EnsureTables() && CopySchemas())
+            {
+                result = true;
+            }
+            message = result ? "End Converting structure" : "End Converting structure with errors";
+            _log.Info(message);
+            _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = message });
             return result;
         }
 
@@ -55,6 +62,7 @@ namespace Rigsarkiv.Athena
             catch (IOException ex)
             {
                 result = false;
+                _log.Error("EnsureRootFolder Failed", ex);
                 _logManager.Add(new LogEntity() { Level = LogLevel.Error, Section = _logSection, Message = string.Format("EnsureRootFolder Failed: {0}", ex.Message) });
             }
             return result;
@@ -72,6 +80,7 @@ namespace Rigsarkiv.Athena
             catch (IOException ex)
             {
                 result = false;
+                _log.Error("EnsureTables Failed", ex);
                 _logManager.Add(new LogEntity() { Level = LogLevel.Error, Section = _logSection, Message = string.Format("EnsureTables Failed: {0}", ex.Message) });
             }
             return result;
@@ -91,6 +100,7 @@ namespace Rigsarkiv.Athena
             catch (IOException ex)
             {
                 result = false;
+                _log.Error("EnsureSchemas Failed", ex);
                 _logManager.Add(new LogEntity() { Level = LogLevel.Error, Section = _logSection, Message = string.Format("EnsureSchemas Failed: {0}", ex.Message) });
             }
             return result;
@@ -121,6 +131,7 @@ namespace Rigsarkiv.Athena
             catch (IOException ex)
             {
                 result = false;
+                _log.Error("CopySchemas Failed", ex);
                 _logManager.Add(new LogEntity() { Level = LogLevel.Error, Section = _logSection, Message = string.Format("CopySchemas Failed: {0}", ex.Message) });
             }
             return result;
@@ -163,6 +174,7 @@ namespace Rigsarkiv.Athena
             catch (IOException ex)
             {
                 result = false;
+                _log.Error("CopyFolder Failed", ex);
                 _logManager.Add(new LogEntity() { Level = LogLevel.Error, Section = _logSection, Message = string.Format("CopyFolder Failed: {0}", ex.Message) });
             }
             return result;

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using log4net;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -12,6 +13,7 @@ namespace Rigsarkiv.Athena.Logging
     /// </summary>
     public class LogManager
     {
+        protected static readonly ILog _log = log4net.LogManager.GetLogger(typeof(LogManager));
         const string ResourceLogFile = "Rigsarkiv.Athena.Resources.log.html";
         const string Span = "<span id=\"{0}_{1}\" name=\"{2}\" class=\"{3}\">{4}</span><br/>{5}";
         private List<LogEntity> _entities = null;
@@ -50,6 +52,7 @@ namespace Rigsarkiv.Athena.Logging
             var result = true;
             try
             {
+                _log.Info("Flush log");
                 string data = GetLogTemplate();
                 var name = path.Substring(path.LastIndexOf("\\") + 1);
                 name = name.Substring(0, name.LastIndexOf("."));
@@ -65,6 +68,7 @@ namespace Rigsarkiv.Athena.Logging
             catch (Exception ex)
             {
                 result = false;
+                _log.Error("Failed to Flush log", ex);
             }
             return result;
         }
