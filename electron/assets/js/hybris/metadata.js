@@ -11,6 +11,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
             const fs = require('fs');
             const path = require('path');
             const os = require('os');
+            const chardet = require('chardet');
 
             const startNumberPattern = /^([0-9])([a-zA-ZæøåÆØÅ0-9_]*)$/;
             const validFileNamePattern = /^([a-zA-ZæøåÆØÅ])([a-zA-ZæøåÆØÅ0-9_]*)$/;
@@ -256,6 +257,18 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 });
             }
 
+            //remove UTF8 boom charactors
+            var GetFileContent = function(filePath) {
+                var charsetMatch = chardet.detectFileSync(filePath);
+                var fileContent = fs.readFileSync(filePath);
+                if(charsetMatch !== "UTF-8") {
+                    return fileContent.toString();
+                }
+                else {
+                    return fileContent.toString("utf8",3);
+                }
+            }
+
             //build metadata file content
             var EnsureData = function() {
                 var dataFolderPath = settings.extractionCallback().dataFolderPath;
@@ -270,16 +283,16 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                             var filePath = dataFolderPath;
                             filePath += (filePath.indexOf("\\") > -1) ? "\\{0}".format(file) : "/{0}".format(file);
                             if(file.lastIndexOf("_VARIABEL.txt") > -1) {
-                                settings.contents[0] = fs.readFileSync(filePath).toString();
+                                settings.contents[0] = GetFileContent(filePath);
                             }
                             if(file.lastIndexOf("_VARIABELBESKRIVELSE.txt") > -1) {
-                                settings.contents[1] = fs.readFileSync(filePath).toString();
+                                settings.contents[1] = GetFileContent(filePath);
                             }
                             if(file.lastIndexOf("_KODELISTE.txt") > -1) {
-                                settings.contents[2] = fs.readFileSync(filePath).toString();
+                                settings.contents[2] = GetFileContent(filePath);
                             }
                             if(file.lastIndexOf("_BRUGERKODE.txt") > -1) {
-                                settings.contents[3] = fs.readFileSync(filePath).toString();
+                                settings.contents[3] = GetFileContent(filePath);
                             }
                         });
                         EnsureFile();
