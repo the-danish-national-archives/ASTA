@@ -306,12 +306,12 @@ function (n) {
                     if(element.format(filePrefix) == file) 
                     { 
                         counter = counter + 1;
-                        if(!ValidateFile(file)) { unvalidFiles.push(localPath + file); } 
+                        //if(!ValidateFile(file)) { unvalidFiles.push(localPath + file); } 
                     }
                 });
-                settings.outputOptionalPostfixFiles.forEach(element => {
+                /*settings.outputOptionalPostfixFiles.forEach(element => {
                     if(element.format(filePrefix) == file && !ValidateFile(file)) { unvalidFiles.push(localPath + file); }
-                });
+                });*/
             });
             return { "counter":counter, "unvalidFiles":unvalidFiles};
         }

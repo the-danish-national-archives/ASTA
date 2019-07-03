@@ -562,7 +562,7 @@ function (n) {
         // Validate CSV header row
         var ValidateDataSet = function () {
             var dataFilePath = settings.dataFiles[settings.runIndex];
-            fs.createReadStream(dataFilePath)
+            fs.createReadStream(dataFilePath, { encoding:"utf8" })
             .pipe(csv({ delimiter: settings.separator, quote:null }))
             .on("data", function(data){  })
             .validate(function(data){
@@ -604,8 +604,8 @@ function (n) {
             if(settings.runIndex < settings.dataFiles.length) {
                 var dataFilePath = settings.dataFiles[settings.runIndex];
                 settings.fileName = GetFileName(dataFilePath);
-                settings.confirmationSpn.innerHTML = settings.checkEncodingText.format(settings.fileName);
-                setTimeout(ValidateEncoding, 1);
+                //settings.confirmationSpn.innerHTML = settings.checkEncodingText.format(settings.fileName);
+                //setTimeout(ValidateEncoding, 1);
                 settings.metadataFileName =  "{0}.txt".format(settings.fileName.substring(0,settings.fileName.indexOf(".")));
                 settings.table = GetTableData();
                 settings.rowIndex = 0;

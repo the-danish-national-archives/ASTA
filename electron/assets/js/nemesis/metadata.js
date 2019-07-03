@@ -926,12 +926,12 @@ function (n) {
                 var metadataFilePath = (destPath.indexOf("\\") > -1) ? "{0}\\{1}\\{1}.txt".format(destPath,folder) : "{0}/{1}/{1}.txt".format(destPath,folder);                 
                 if(fs.existsSync(metadataFilePath)) {
                     console.logInfo("validate metadata file: {0}".format(metadataFilePath),"Rigsarkiv.Nemesis.MetaData.ValidateData");
-                    var charsetMatch = chardet.detectFileSync(metadataFilePath);
+                    //var charsetMatch = chardet.detectFileSync(metadataFilePath);
                     var folders = metadataFilePath.getFolders();
                     settings.fileName = folders[folders.length - 1];
-                    if(charsetMatch !== "UTF-8") {
+                    /*if(charsetMatch !== "UTF-8") {
                         result = LogWarn("-CheckMetadata-FileEncoding-Error",settings.fileName);
-                    }                    
+                    }*/                 
                     settings.data.push({ "fileName":settings.fileName,"errorStop":false, "system":"", "name":"", "variables":[] })
                     if(!ValidateMetadata(metadataFilePath)) { result = false; }
                     GetTableData(settings.fileName).errorStop = settings.errorStop;
