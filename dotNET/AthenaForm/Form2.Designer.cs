@@ -283,6 +283,7 @@
             this.Controls.Add(this.mainTablesListBox);
             this.Name = "Form2";
             this.Text = "ASTA - Athena";
+            this.Shown += new System.EventHandler(this.Form2_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.dataValues)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

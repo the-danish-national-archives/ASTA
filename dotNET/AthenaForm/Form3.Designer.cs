@@ -61,6 +61,7 @@
             this.Controls.Add(this.logButton);
             this.Name = "Form3";
             this.Text = "ASTA - Athena";
+            this.Shown += new System.EventHandler(this.Form3_Shown);
             this.ResumeLayout(false);
             this.PerformLayout();
 

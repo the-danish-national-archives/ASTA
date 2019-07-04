@@ -2,6 +2,7 @@
 using Rigsarkiv.Athena.Extensions;
 using Rigsarkiv.Athena.Logging;
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -22,7 +23,6 @@ namespace Rigsarkiv.AthenaForm
         /// <param name="destPath"></param>
         public Form1(string srcPath, string destPath)
         {
-            _log.Info("Run");
             InitializeComponent();
             sipTextBox.Text = srcPath;
             aipTextBox.Text = destPath;
@@ -146,8 +146,21 @@ namespace Rigsarkiv.AthenaForm
             var path = string.Format("{0}\\{1}.html", aipTextBox.Text, aipNameTextBox.Text);
             if (_logManager.Flush(path))
             {
-                System.Diagnostics.Process.Start(path);
+                try
+                {
+                    Process.Start(path);
+                }
+                catch (Exception ex)
+                {
+                    _log.Error(string.Format("Start Process {0} Failed", path), ex);
+                }
+
             }
+        }
+
+        private void Form1_Shown(object sender, EventArgs e)
+        {
+            _log.Info("Run");
         }
     }
 }

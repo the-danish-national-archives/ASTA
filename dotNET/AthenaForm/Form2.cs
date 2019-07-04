@@ -40,7 +40,6 @@ namespace Rigsarkiv.AthenaForm
         /// <param name="outputRichTextBox"></param>
         public Form2(string srcPath, string destPath,string destFolder, LogManager logManager, List<Table> tables, RichTextBox outputRichTextBox)
         {
-            _log.Info("Run");
             InitializeComponent();            
             _logManager = logManager;
             _srcPath = srcPath;
@@ -187,6 +186,11 @@ namespace Rigsarkiv.AthenaForm
             Form3 form = new Form3(_srcPath, _destPath, _destFolder, _logManager, _converter.Tables, _outputRichTextBox);
             form.Show();
             this.Hide();           
+        }
+
+        private void Form2_Shown(object sender, EventArgs e)
+        {
+            _log.Info("Run");
         }
     }
 }

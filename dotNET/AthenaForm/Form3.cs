@@ -1,7 +1,9 @@
 ﻿using Rigsarkiv.Athena;
 using Rigsarkiv.Athena.Entities;
 using Rigsarkiv.Athena.Logging;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -10,7 +12,7 @@ namespace Rigsarkiv.AthenaForm
 {
     public partial class Form3 : Form
     {
-        private static readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(Form2));
+        private static readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(Form3));
         private LogManager _logManager = null;
         private string _srcPath = null;
         private string _destPath = null;
@@ -29,7 +31,6 @@ namespace Rigsarkiv.AthenaForm
         /// <param name="tables"></param>
         public Form3(string srcPath, string destPath, string destFolder, LogManager logManager, List<Table> tables, RichTextBox outputRichTextBox)
         {
-            _log.Info("Run");
             InitializeComponent();
             _logManager = logManager;
             _srcPath = srcPath;
@@ -56,8 +57,21 @@ namespace Rigsarkiv.AthenaForm
             var path = string.Format("{0}\\{1}.html", _destPath, _destFolder);
             if (_logManager.Flush(path))
             {
-                System.Diagnostics.Process.Start(path);
+                try
+                {
+                    Process.Start(path);
+                }
+                catch (Exception ex)
+                {
+                    _log.Error(string.Format("Start Process {0} Failed", path), ex);
+                }
+                
             }
+        }
+
+        private void Form3_Shown(object sender, EventArgs e)
+        {
+            _log.Info("Run");
         }
     }
 }

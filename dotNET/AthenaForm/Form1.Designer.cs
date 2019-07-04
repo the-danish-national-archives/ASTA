@@ -169,7 +169,7 @@
             this.logButton.UseVisualStyleBackColor = true;
             this.logButton.Click += new System.EventHandler(this.logButton_Click);
             // 
-            // Form2
+            // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -186,8 +186,9 @@
             this.Controls.Add(this.sipButton);
             this.Controls.Add(this.sipTextBox);
             this.Controls.Add(this.label1);
-            this.Name = "Form2";
+            this.Name = "Form1";
             this.Text = "ASTA - Athena";
+            this.Shown += new System.EventHandler(this.Form1_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.sipPathRequired)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.aipNameRequired)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.aipPathRequired)).EndInit();
