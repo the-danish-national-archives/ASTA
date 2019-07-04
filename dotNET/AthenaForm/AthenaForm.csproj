@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{301AE7CD-C0FE-401B-87AF-1C9C9DB6CFD5}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>Rigsarkiv.Athena</RootNamespace>
+    <RootNamespace>Rigsarkiv.AthenaForm</RootNamespace>
     <AssemblyName>AthenaForm</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

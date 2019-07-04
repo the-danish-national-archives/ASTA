@@ -1,18 +1,14 @@
 ﻿using log4net;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Rigsarkiv.Athena
+namespace Rigsarkiv.AthenaForm
 {
     //test
     //https://stackoverflow.com/questions/5282999/reading-csv-file-and-storing-values-into-an-array
     static class Program
     {
-        private static readonly ILog _log = log4net.LogManager.GetLogger(typeof(Program));
+        private static readonly ILog _log = LogManager.GetLogger(typeof(Program));
         private static string _srcPath = null;
         private static string _destPath = null;
         /// <summary>

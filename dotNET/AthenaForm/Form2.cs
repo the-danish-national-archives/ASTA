@@ -6,11 +6,13 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using Rigsarkiv.Athena.Entities;
+using Rigsarkiv.Athena;
 
-namespace Rigsarkiv.Athena
+namespace Rigsarkiv.AthenaForm
 {
     public partial class Form2 : Form
     {
+        private static readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(Form2));
         const string RowsLabel = "Række {0} ud af {1}";
         const string TableErrorsLabel = "Fejl i alt {0}";
         const string RowErrorsLabel = "Fejl: {0}";
@@ -38,6 +40,7 @@ namespace Rigsarkiv.Athena
         /// <param name="outputRichTextBox"></param>
         public Form2(string srcPath, string destPath,string destFolder, LogManager logManager, List<Table> tables, RichTextBox outputRichTextBox)
         {
+            _log.Info("Run");
             InitializeComponent();            
             _logManager = logManager;
             _srcPath = srcPath;

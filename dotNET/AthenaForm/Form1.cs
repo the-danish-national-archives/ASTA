@@ -1,13 +1,15 @@
-﻿using Rigsarkiv.Athena.Extensions;
+﻿using Rigsarkiv.Athena;
+using Rigsarkiv.Athena.Extensions;
 using Rigsarkiv.Athena.Logging;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace Rigsarkiv.Athena
+namespace Rigsarkiv.AthenaForm
 {
     public partial class Form1 : Form
     {
+        private static readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(Form1));
         const string DestFolderName = "AVID.SA.{0}.1";
         private LogManager _logManager = null;
         private Converter _converter = null;
@@ -20,6 +22,7 @@ namespace Rigsarkiv.Athena
         /// <param name="destPath"></param>
         public Form1(string srcPath, string destPath)
         {
+            _log.Info("Run");
             InitializeComponent();
             sipTextBox.Text = srcPath;
             aipTextBox.Text = destPath;

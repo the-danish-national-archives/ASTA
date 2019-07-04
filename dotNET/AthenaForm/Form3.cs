@@ -1,14 +1,16 @@
-﻿using Rigsarkiv.Athena.Entities;
+﻿using Rigsarkiv.Athena;
+using Rigsarkiv.Athena.Entities;
 using Rigsarkiv.Athena.Logging;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Rigsarkiv.Athena
+namespace Rigsarkiv.AthenaForm
 {
     public partial class Form3 : Form
     {
+        private static readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(Form2));
         private LogManager _logManager = null;
         private string _srcPath = null;
         private string _destPath = null;
@@ -27,6 +29,7 @@ namespace Rigsarkiv.Athena
         /// <param name="tables"></param>
         public Form3(string srcPath, string destPath, string destFolder, LogManager logManager, List<Table> tables, RichTextBox outputRichTextBox)
         {
+            _log.Info("Run");
             InitializeComponent();
             _logManager = logManager;
             _srcPath = srcPath;

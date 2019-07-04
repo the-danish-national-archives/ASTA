@@ -1,4 +1,4 @@
-﻿namespace Rigsarkiv.Athena
+﻿namespace Rigsarkiv.AthenaForm
 {
     partial class Form3
     {
