@@ -88,10 +88,10 @@ function (n) {
             settings.deliveryPackagePath += (settings.deliveryPackagePath.indexOf("\\") > -1) ? "\\{0}".format(folderName) : "/{0}".format(folderName);
             fs.exists(settings.deliveryPackagePath, (exists) => {
                 if(!exists) {
-                    console.log("Create structure: " + settings.deliveryPackagePath);
+                    console.logInfo("Create structure: " + settings.deliveryPackagePath, "Rigsarkiv.Hybris.Structure.EnsureStructure");
                     fs.mkdir(settings.deliveryPackagePath, { recursive: true }, (err) => {
                         if (err) {
-                            err.Handle(settings.outputErrorSpn,settings.outputErrorText);
+                            err.Handle(settings.outputErrorSpn,settings.outputErrorText,"Rigsarkiv.Hybris.Structure.EnsureStructure");
                         }
                         else {
                             settings.foldersCounter += 1;
@@ -99,7 +99,7 @@ function (n) {
                                 var subFolderName = (settings.deliveryPackagePath.indexOf("\\") > -1) ? "\\{0}".format(element) : "/{0}".format(element);
                                 fs.mkdir(settings.deliveryPackagePath + subFolderName, { recursive: true }, (err) => {
                                     if (err) {
-                                        err.Handle(settings.outputErrorSpn,settings.outputErrorText);   
+                                        err.Handle(settings.outputErrorSpn,settings.outputErrorText, "Rigsarkiv.Hybris.Structure.EnsureStructure");   
                                         settings.deliveryPackagePath = null;                         
                                     }
                                     else {
@@ -139,7 +139,7 @@ function (n) {
             });
             ipcRenderer.on('structure-selected-directory', (event, path) => {
                 settings.selectedPath = path; 
-                console.log(`selected path: ${path}`); 
+                console.logInfo(`selected path: ${path}`,"Rigsarkiv.Hybris.Structure.AddEvents"); 
                 settings.pathDirTxt.value = settings.selectedPath;
             });
             settings.selectDeliveryPackage.addEventListener('click', (event) => {

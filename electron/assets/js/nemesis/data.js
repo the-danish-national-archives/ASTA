@@ -118,7 +118,7 @@ function (n) {
                 if(arguments.length === 6) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5]); }
                 if(arguments.length === 7) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5],arguments[6]); }
             }
-
+            console.logInfo(text,"Rigsarkiv.Nemesis.MetaData.LogError");
             settings.logCallback().error(settings.logType,GetFolderName(),text);
             settings.errors += 1;
             settings.totalErrors += 1;
@@ -139,6 +139,7 @@ function (n) {
                     if(arguments.length === 6) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5]); }
                     if(arguments.length === 7) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5],arguments[6]); }
                 }
+                console.logInfo(text,"Rigsarkiv.Nemesis.MetaData.LogWarn");
                 settings.logCallback().warn(settings.logType,GetFolderName(),text);
             }                
             settings.tableWarnings += 1;
@@ -157,7 +158,7 @@ function (n) {
                 if(arguments.length === 6) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5]); }
                 if(arguments.length === 7) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5],arguments[6]); }
             }
-
+            console.logInfo(text,"Rigsarkiv.Nemesis.MetaData.LogInfo");
             settings.logCallback().info(settings.logType,GetFolderName(),text);
             return true;
         }
@@ -449,7 +450,7 @@ function (n) {
         //Validate row at CSV file
         var ValidateRow = function(dataRow) {
             var result = true;
-            //console.log(dataRow);
+            //console.logInfo(dataRow);
             for(var i = 0;i < dataRow.length;i++) {
                 var patternMatch = false;
                 var variable = settings.table.variables[i];
@@ -477,7 +478,7 @@ function (n) {
 
         // Validate CSV header row
         var ValidateHeader = function (data) {
-            console.log(`CSV headers: ${data.length}`);
+            console.logInfo(`CSV headers: ${data.length}`,"Rigsarkiv.Nemesis.Data.ValidateHeader");
             var result = true;
             var variables = [];
             if(data.length === 1) { result = LogError("-CheckData-FileSeprator-Error",settings.fileName); }
@@ -543,40 +544,51 @@ function (n) {
             return result;
         }
 
+        //Process Row
+        var ProcessRow = function(data) {
+            var result = true;
+            var newData = data;
+            result = (settings.table.variables.length === newData.length);
+            if(!result) {
+                var row = data.join(settings.separator);
+                if(row.indexOf("\"") > -1) { //Reparsing of row if it contains double apstrof
+                    newData = ParseRow(row);
+                    result = (settings.table.variables.length === newData.length); 
+                }  
+                if(settings.table.variables.length === (newData.length + 1)) { 
+                    newData.push(""); 
+                    result = true;
+                }                                      
+            }
+            if(!result) { //less or more separators
+                result = LogError("-CheckData-FileRows-MatchLength-Error",settings.fileName,settings.rowIndex);
+                settings.convertStop = true;
+            }
+            else {
+                result = ValidateRow(newData); 
+            }
+            if(result && settings.data.length <= 100) { settings.data.push(newData); } 
+            return result;
+        }
+
         // Validate CSV header row
         var ValidateDataSet = function () {
             var dataFilePath = settings.dataFiles[settings.runIndex];
-            fs.createReadStream(dataFilePath)
+            fs.createReadStream(dataFilePath, { encoding:"utf8" })
             .pipe(csv({ delimiter: settings.separator, quote:null }))
             .on("data", function(data){  })
             .validate(function(data){
                 var result = true;
                 settings.rowIndex++;
                 settings.confirmationSpn.innerHTML = settings.validateRowsText.format(settings.rowIndex,settings.tableRows,settings.fileName);
-                //console.log("validate row: {0}".format(settings.rowIndex));
+                console.log("validate row: {0}".format(settings.rowIndex));
                 if(settings.rowIndex === 1 && !ValidateHeader(data)) { 
                     settings.table.errorStop = true;
                     result = false; 
                 }
                 if(!settings.table.errorStop && settings.rowIndex > 1 && settings.tableErrors <= errorsMax) {
-                    var newData = data;
-                    result = (settings.table.variables.length === newData.length);
-                    if(!result) {
-                        var row = data.join(settings.separator);
-                        if(row.indexOf("\"") > -1) { //Reparsing of row if it contains double apstrof
-                            newData = ParseRow(row);
-                            result = (settings.table.variables.length === newData.length); 
-                        }
-                    }
-                    if(!result) { //less or more separators
-                        result = LogError("-CheckData-FileRows-MatchLength-Error",settings.fileName,settings.rowIndex);
-                        settings.convertStop = true;
-                    }
-                    else {
-                       result = ValidateRow(newData); 
-                    }
-                    if(result && settings.data.length <= 100) { settings.data.push(newData); } 
-                    return result;
+                    
+                    return ProcessRow(data);
                 }
             })
             .on("end", function(){
@@ -605,8 +617,8 @@ function (n) {
             if(settings.runIndex < settings.dataFiles.length) {
                 var dataFilePath = settings.dataFiles[settings.runIndex];
                 settings.fileName = GetFileName(dataFilePath);
-                settings.confirmationSpn.innerHTML = settings.checkEncodingText.format(settings.fileName);
-                setTimeout(ValidateEncoding, 1);
+                //settings.confirmationSpn.innerHTML = settings.checkEncodingText.format(settings.fileName);
+                //setTimeout(ValidateEncoding, 1);
                 settings.metadataFileName =  "{0}.txt".format(settings.fileName.substring(0,settings.fileName.indexOf(".")));
                 settings.table = GetTableData();
                 settings.rowIndex = 0;
@@ -614,7 +626,7 @@ function (n) {
                 settings.tableErrors = 0;
                 settings.tableWarnings = 0; 
                 settings.convertStop = false;
-                console.log(`validate: ${dataFilePath}`);
+                console.logInfo(`validate: ${dataFilePath}`,"Rigsarkiv.Nemesis.Data.ProcessDataSet");
                 settings.tableRows = 0;                
                  fs.createReadStream(dataFilePath)
                 .on('data', function(chunk) {
@@ -622,7 +634,7 @@ function (n) {
                     if (chunk[i] == 10) settings.tableRows++;
                 })
                 .on('end', function() {
-                    console.log(`total rows: ${settings.tableRows}`);                    
+                    console.logInfo(`total rows: ${settings.tableRows}`,"Rigsarkiv.Nemesis.Data.ProcessDataSet");                    
                     ValidateDataSet();
                 });                
             }
@@ -633,40 +645,39 @@ function (n) {
 
         //loop Data folder's table & data files
         var ValidateData = function () {
-            var result = true;
             var destPath = (settings.deliveryPackagePath.indexOf("\\") > -1) ? "{0}\\{1}".format(settings.deliveryPackagePath,settings.dataPathPostfix) : "{0}/{1}".format(settings.deliveryPackagePath,settings.dataPathPostfix); 
             fs.readdirSync(destPath).forEach(folder => {
                 var dataFilePath = (destPath.indexOf("\\") > -1) ? "{0}\\{1}\\{1}.csv".format(destPath,folder) : "{0}/{1}/{1}.csv".format(destPath,folder);                 
                 if(fs.existsSync(dataFilePath)) {
-                    console.log("validate data file: {0}".format(dataFilePath));                    
+                    console.logInfo("validate data file: {0}".format(dataFilePath),"Rigsarkiv.Nemesis.Data.ValidateData");                    
                     settings.fileName = GetFileName(dataFilePath);                                       
                     settings.metadataFileName =  "{0}.txt".format(settings.fileName.substring(0,settings.fileName.indexOf(".")));
                     settings.table = GetTableData();
                     if(settings.table != null && !settings.table.errorStop) { settings.dataFiles.push(dataFilePath); }                                                              
                 }
                 else {
-                    console.log("None exist Data file path: {0}".format(dataFilePath));
+                    console.logInfo("None exist Data file path: {0}".format(dataFilePath),"Rigsarkiv.Nemesis.Data.ValidateData");
                 }                              
             });
             if(settings.dataFiles.length > 0) { ProcessDataSet(); }            
-            if(result) { LogInfo("-CheckData-Ok",null); }            
-            return result; 
         }
 
         //commit end all validation 
         var CommitLog = function () {            
                 var folderName = GetFolderName();
                 if(settings.errors === 0) {
+                    LogInfo("-CheckData-Ok",null);
                     settings.logCallback().section(settings.logType,folderName,settings.logEndNoErrorSpn.innerHTML);
                 } else {
+                    LogInfo("-CheckData-Warning",null);
                     settings.logCallback().section(settings.logType,folderName,settings.logEndWithErrorSpn.innerHTML);
                 }
                 var enableConvert = true;
                 settings.metadata.forEach(table => {
                     if(table.errorStop) { enableConvert = false; }
-                });
+                });                
                 if(enableConvert) {
-                    settings.confirmationSpn.innerHTML = settings.convertEnabledText;
+                    settings.confirmationSpn.innerHTML = settings.convertEnabledText.format(settings.totalErrors);
                 }
                 else {
                     settings.confirmationSpn.innerHTML = settings.convertDisabledText;
@@ -678,14 +689,14 @@ function (n) {
                 }
                 settings.selectDirBtn.disabled = false;
                 settings.validateBtn.disabled = false;
-                console.log(`total errors: ${settings.totalErrors}`);
+                console.logInfo(`total errors: ${settings.totalErrors}`,"Rigsarkiv.Nemesis.Data.Validate");
                 console.log("metadata output: ");
                 console.log(settings.metadata);
         }
 
         //start flow validation
         var Validate = function () {
-            console.log(`data selected path: ${settings.deliveryPackagePath}`); 
+            console.logInfo(`data selected path: ${settings.deliveryPackagePath}`,"Rigsarkiv.Nemesis.Data.Validate"); 
             try 
             {                
                 settings.logCallback().section(settings.logType,GetFolderName(),settings.logStartSpn.innerHTML);            
@@ -697,7 +708,11 @@ function (n) {
             }
             catch(err) 
             {
-                err.Handle(settings.outputErrorSpn,settings.outputErrorText);
+                if(settings.fileName != null) {
+                    console.logInfo(`Failed file: ${settings.fileName}`,"Rigsarkiv.Nemesis.Data.Validate");
+                    console.logInfo(`Failed row: ${settings.rowIndex}`,"Rigsarkiv.Nemesis.Data.Validate");
+                }
+                err.Handle(settings.outputErrorSpn,settings.outputErrorText,"Rigsarkiv.Nemesis.Data.Validate");
             }
             return settings.logResult;
         }
@@ -720,7 +735,7 @@ function (n) {
                 }   
                 var converter = spawn(converterFilePath, [settings.metadataFilePostfix.format(settings.deliveryPackagePath) ]);
                 converter.stdout.on('data', (data) => console.log(`stdout: ${data}`));                  
-                converter.stderr.on('data', (data) => (new Error(data).Handle(settings.outputErrorSpn,settings.outputErrorText)));
+                converter.stderr.on('data', (data) => (new Error(data).Handle(settings.outputErrorSpn,settings.outputErrorText,"Rigsarkiv.Nemesis.Data.AddEvents")));
                 converter.on('close', (code) => console.log(`converter process exited with code ${code}`));
             });
         }

@@ -52,7 +52,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                         });
                     }
                     else {
-                        console.log(`none exist elment with id: ${elementId}`);
+                        console.logInfo(`none exist elment with id: ${elementId}`,"Rigsarkiv.Links.initialize");
                     }  
                 });
             }

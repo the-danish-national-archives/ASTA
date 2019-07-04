@@ -110,7 +110,7 @@ function (n) {
                 if(arguments.length === 6) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5]); }
                 if(arguments.length === 7) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5],arguments[6]); }
             }
-
+            console.logInfo(text,"Rigsarkiv.Nemesis.MetaData.LogError");
             settings.logCallback().error(settings.logType,GetFolderName(),text);
             settings.errors += 1;
             settings.totalErrors += 1;
@@ -129,7 +129,7 @@ function (n) {
                 if(arguments.length === 6) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5]); }
                 if(arguments.length === 7) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5],arguments[6]); }
             }
-
+            console.logInfo(text,"Rigsarkiv.Nemesis.MetaData.LogWarn");
             settings.logCallback().warn(settings.logType,GetFolderName(),text);
             return true;
         }
@@ -146,7 +146,7 @@ function (n) {
                 if(arguments.length === 6) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5]); }
                 if(arguments.length === 7) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5],arguments[6]); }
             }
-
+            console.logInfo(text,"Rigsarkiv.Nemesis.MetaData.LogInfo");
             settings.logCallback().info(settings.logType,GetFolderName(),text);
             return true;
         }
@@ -509,7 +509,7 @@ function (n) {
                         }                       
                     }
                     else {
-                        result = LogError("-CheckMetadata-FileVariables-RowDouble-Error",settings.fileName,(i + 1));
+                        result = LogError("-CheckMetadata-FileVariables-RowDouble-Error",settings.fileName,variableName,(i + 1));
                         settings.errorStop = true;
                     }
                     if(expressions.length > 3) {
@@ -929,30 +929,30 @@ function (n) {
             fs.readdirSync(destPath).forEach(folder => {
                 var metadataFilePath = (destPath.indexOf("\\") > -1) ? "{0}\\{1}\\{1}.txt".format(destPath,folder) : "{0}/{1}/{1}.txt".format(destPath,folder);                 
                 if(fs.existsSync(metadataFilePath)) {
-                    console.log("validate metadata file: {0}".format(metadataFilePath));
-                    var charsetMatch = chardet.detectFileSync(metadataFilePath);
+                    console.logInfo("validate metadata file: {0}".format(metadataFilePath),"Rigsarkiv.Nemesis.MetaData.ValidateData");
+                    //var charsetMatch = chardet.detectFileSync(metadataFilePath);
                     var folders = metadataFilePath.getFolders();
                     settings.fileName = folders[folders.length - 1];
-                    if(charsetMatch !== "UTF-8") {
+                    /*if(charsetMatch !== "UTF-8") {
                         result = LogWarn("-CheckMetadata-FileEncoding-Error",settings.fileName);
-                    }                    
+                    }*/                 
                     settings.data.push({ "fileName":settings.fileName,"errorStop":false, "system":"", "name":"", "variables":[] })
                     if(!ValidateMetadata(metadataFilePath)) { result = false; }
                     GetTableData(settings.fileName).errorStop = settings.errorStop;
                     settings.errorStop = false;
                 }
                 else {
-                    console.log("None exist Metadata file path: {0}".format(metadataFilePath));
+                    console.logInfo("None exist Metadata file path: {0}".format(metadataFilePath),"Rigsarkiv.Nemesis.MetaData.ValidateData");
                 }                              
             });
             if(!ValidateTablesReference()) { result = false; }
-            if(result) { LogInfo("-CheckMetadata-Ok",null); }
+            LogInfo(result ? "-CheckMetadata-Ok" : "-CheckMetadata-Warning",null);
             return result; 
         }
 
         //start flow validation
         var Validate = function () {
-            console.log(`metadata selected path: ${settings.deliveryPackagePath}`); 
+            console.logInfo(`metadata selected path: ${settings.deliveryPackagePath}`,"Rigsarkiv.Nemesis.MetaData.Validate"); 
             try 
             {
                 var folderName = GetFolderName();
@@ -967,13 +967,13 @@ function (n) {
             }
             catch(err) 
             {
-                err.Handle(settings.outputErrorSpn,settings.outputErrorText);
+                err.Handle(settings.outputErrorSpn,settings.outputErrorText,"Rigsarkiv.Nemesis.MetaData.Validate");
             }
             return null;
         }
 
         var AddEvents = function (){
-            console.log('events ');
+            //console.logInfo("events","Rigsarkiv.Nemesis.MetaData.AddEvents");
         }
 
         //Model interfaces functions

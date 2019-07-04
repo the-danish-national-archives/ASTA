@@ -36,7 +36,7 @@ function (n) {
                 rightsFilePath = "{0}/{1}".format(rootPath,settings.rightsFileName);
             }
         }        
-        console.log(`read ${settings.rightsFileName} file from: ${rightsFilePath}`);
+        console.logInfo(`read ${settings.rightsFileName} file from: ${rightsFilePath}`,"Rigsarkiv.Rights.EnsureData");
         if(fs.existsSync(rightsFilePath)) {
             settings.rights = JSON.parse(fs.readFileSync(rightsFilePath));
         }         
@@ -48,7 +48,7 @@ function (n) {
             settings.outputErrorSpn = document.getElementById(outputErrorId);
             settings.outputErrorText = settings.outputErrorSpn.innerHTML; 
             //var encoded = base64encode(settings.adminRight);
-            //console.log(`${encoded}`);
+            //console.logInfo(`${encoded}`,"Rigsarkiv.Rights.initialize");
             try
             {
                 EnsureData();
@@ -58,7 +58,7 @@ function (n) {
             }
             catch(err) 
             {
-                err.Handle(settings.outputErrorSpn,settings.outputErrorText); 
+                err.Handle(settings.outputErrorSpn,settings.outputErrorText,"Rigsarkiv.Rights.initialize"); 
             }            
         },
         callback: function () {

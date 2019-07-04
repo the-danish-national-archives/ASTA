@@ -33,7 +33,7 @@ function (n) {
                 versionFilePath = "{0}/{1}".format(rootPath,settings.versionFileName);
             }
         }        
-        console.log(`read ${settings.versionFileName} file from: ${versionFilePath}`);
+        console.logInfo(`read ${settings.versionFileName} file from: ${versionFilePath}`,"Rigsarkiv.Version.EnsureData");
         settings.footerInfo = JSON.parse(fs.readFileSync(versionFilePath));
    }
 
@@ -51,7 +51,7 @@ function (n) {
             }
             catch(err) 
             {
-                err.Handle(settings.outputErrorSpn,settings.outputErrorText); 
+                err.Handle(settings.outputErrorSpn,settings.outputErrorText,"Rigsarkiv.Version.initialize"); 
             } 
         }
     }

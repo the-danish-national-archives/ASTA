@@ -118,7 +118,7 @@ function (n) {
                 if(arguments.length === 6) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5]); }
                 if(arguments.length === 7) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5],arguments[6]); }
             }
-
+            console.logInfo(text,"Rigsarkiv.Nemesis.Structure.LogError");
             settings.logCallback().error(settings.logType,GetFolderName(),text);
             settings.errors += 1;
             return false;
@@ -136,7 +136,7 @@ function (n) {
                 if(arguments.length === 6) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5]); }
                 if(arguments.length === 7) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5],arguments[6]); }
             }
-
+            console.logInfo(text,"Rigsarkiv.Nemesis.Structure.LogWarn");
             settings.logCallback().warn(settings.logType,GetFolderName(),text);
             return true;
         }
@@ -153,7 +153,7 @@ function (n) {
                 if(arguments.length === 6) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5]); }
                 if(arguments.length === 7) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5],arguments[6]); }
             }
-
+            console.logInfo(text,"Rigsarkiv.Nemesis.Structure.LogInfo");
             settings.logCallback().info(settings.logType,GetFolderName(),text);
             return true;
         }
@@ -215,9 +215,6 @@ function (n) {
                 });
             }
             if(result && !ValidateContextDocumentationIndex(destPath)) { result = false; }
-            if(result) {                
-                LogInfo("-CheckFolderIndices-Ok",null);
-            }
             return result;
         }
 
@@ -321,7 +318,6 @@ function (n) {
                 settings.errorStop = true;
                 result = LogError("-CheckFolderDataEmpty-Error",null);
             }
-            if(result) { LogInfo("-CheckFolderData-Ok",null); }
             return result;
         }
 
@@ -461,34 +457,40 @@ function (n) {
             else {
                 result = LogError("-CheckFolderContextDocumentationEmpty-Error",null);
             }
-            if(result) { LogInfo("-CheckFolderContextDocumentation-Ok",null); }
             return result;
         }
 
         // loop sub folders Structure
         var ValidateStructure = function () {
             var result = true;
+            var checkfolders = true;
             var subFolders = fs.readdirSync(settings.deliveryPackagePath);
             settings.defaultSubFolders.forEach(folder => {
                 if(!subFolders.includes(folder)) {
                    result = LogError("-CheckFolders-Error",folder);
+                   checkfolders = false; 
                    if(folder === settings.defaultSubFolders[1]) { settings.errorStop = true; }
                 }
                 else {
-                    if(folder === settings.defaultSubFolders[0]) { ValidateContextDocumentation(); }
-                    if(folder === settings.defaultSubFolders[1]) { ValidateData(); }
-                    if(folder === settings.defaultSubFolders[2]) { ValidateIndices(); }
+                    if(folder === settings.defaultSubFolders[0]) { 
+                        if(!ValidateContextDocumentation()) { result = false; } 
+                    }
+                    if(folder === settings.defaultSubFolders[1]) { 
+                        if(!ValidateData()) { result = false; } 
+                    }
+                    if(folder === settings.defaultSubFolders[2]) { 
+                        if(!ValidateIndices()) { result = false; }
+                    }
                 }
             });
-            if(result && subFolders.length > 3) {
+            if(checkfolders && subFolders.length > 3) {
                 subFolders.forEach(folder => {
-                    if(result && folder !== settings.defaultSubFolders[0] && folder !== settings.defaultSubFolders[1] && folder !== settings.defaultSubFolders[2]) {
+                    if(checkfolders && folder !== settings.defaultSubFolders[0] && folder !== settings.defaultSubFolders[1] && folder !== settings.defaultSubFolders[2]) {
                         result = LogError("-CheckFoldersCount-Error",folder);
                     }
                 });
-            }
-            
-            if(result) { LogInfo("-CheckFolders-Ok",null); }
+            }            
+            LogInfo(result ? "-CheckFolders-Ok" : "-CheckFolders-Warning",null);
             return result;
         }
 
@@ -502,10 +504,7 @@ function (n) {
             else {
                 if(folderName === settings.defaultFolder) {
                     LogWarn("-CheckId-Warning",null)
-                }
-                else {
-                    LogInfo("-CheckId-Ok",null)
-                }            
+                }          
             }
             return result;    
         }
@@ -539,7 +538,7 @@ function (n) {
             }
             catch(err) 
             {
-                err.Handle(settings.outputErrorSpn,settings.outputErrorText);
+                err.Handle(settings.outputErrorSpn,settings.outputErrorText,"Rigsarkiv.Nemesis.Structure.Validate");
             }
             return null;
         }
@@ -558,7 +557,7 @@ function (n) {
             })
             ipcRenderer.on('validation-selected-directory', (event, path) => {
                 settings.selectedPath = path; 
-                console.log(`selected path: ${path}`); 
+                console.logInfo(`selected path: ${path}`,"Rigsarkiv.Nemesis.Structure.AddEvents"); 
                 settings.pathDirTxt.value = settings.selectedPath;
             })            
         }

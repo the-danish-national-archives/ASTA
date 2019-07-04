@@ -104,7 +104,7 @@ function (n) {
                     var fileName = folders[folders.length - 1];
                     var fileExt = fileName.substring(fileName.indexOf(".") + 1);
                     var path = (settings.documentsPath.indexOf("\\") > -1) ? "{0}\\{1}\\1.{2}".format(settings.documentsPath,upload.id,fileExt) : "{0}/{1}/1.{2}".format(settings.documentsPath,upload.id,fileExt);
-                    console.log(`copy file: ${fileName} to ${path}`);
+                    console.logInfo(`copy file: ${fileName} to ${path}`,"Rigsarkiv.Hybris.ContextDocuments.EnsureDocuments");
                     fs.copyFileSync(upload.path, path);
                 }
             });
@@ -115,14 +115,14 @@ function (n) {
             var destPath = settings.structureCallback().deliveryPackagePath;
             settings.documentsPath = (destPath.indexOf("\\") > -1) ? "{0}\\{1}\\{2}".format(destPath,settings.contextDocumentationFolder,settings.docCollectionFolderName) : "{0}/{1}/{2}".format(destPath,settings.contextDocumentationFolder,settings.docCollectionFolderName);
             if(!fs.existsSync(settings.documentsPath)) {
-                console.log(`Create documents Path: ${settings.filePath}`);
+                console.logInfo(`Create documents Path: ${settings.filePath}`,"Rigsarkiv.Hybris.ContextDocuments.EnsureStructure");
                 fs.mkdirSync(settings.documentsPath, { recursive: true });
             }
             var path = null;
             settings.documents.forEach(upload => {
                 path = (settings.documentsPath.indexOf("\\") > -1) ? "{0}\\{1}".format(settings.documentsPath,upload.id) : "{0}/{1}".format(settings.documentsPath,upload.id);
                 if(!fs.existsSync(path)) {                        
-                    console.log(`create document path: ${path}`);
+                    console.logInfo(`create document path: ${path}`,"Rigsarkiv.Hybris.ContextDocuments.EnsureStructure");
                     fs.mkdirSync(path, { recursive: true });
                 }
             });
@@ -153,7 +153,7 @@ function (n) {
                     filePath = "{0}/{1}".format(rootPath,settings.templateFileName);
                 }
             }        
-            console.log(`copy ${settings.templateFileName} file to: ${settings.filePath}`);
+            console.logInfo(`copy ${settings.templateFileName} file to: ${settings.filePath}`,"Rigsarkiv.Hybris.ContextDocuments.CopyFile");
             fs.copyFileSync(filePath, settings.filePath);
             EnsureData();        
         }
@@ -205,7 +205,7 @@ function (n) {
                 shell.openItem(settings.filePath);
             });
             ipcRenderer.on('contextdocuments-selected-file', (event, path, id) => {
-                console.log(`selected document ${id} with path: ${path}`);
+                console.logInfo(`selected document ${id} with path: ${path}`,"Rigsarkiv.Hybris.ContextDocuments.AddEvents");
                 var upload = GetDocument(id);
                 upload.path = path[0]; 
                 document.getElementById("hybris-contextdocuments-document-{0}".format(upload.id)).value = upload.path;          
@@ -245,7 +245,7 @@ function (n) {
                             RenderDocuments(data);
                         }
                         catch(err) {
-                            err.Handle(settings.outputErrorSpn,settings.outputErrorText);
+                            err.Handle(settings.outputErrorSpn,settings.outputErrorText,"Rigsarkiv.Hybris.ContextDocuments.callback.load");
                         } 
                     }
                 }

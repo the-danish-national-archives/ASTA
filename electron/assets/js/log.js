@@ -53,7 +53,7 @@ function (n) {
         settings.logs = [];
         settings.errorsCounter = 0;
         settings.logsDate = null;                        
-        console.log("Log is updated at: {0}".format(settings.filePath));
+        console.logInfo("Log is updated at: {0}".format(settings.filePath),"Rigsarkiv.Log.EnsureData");
         var folders = settings.filePath.getFolders();
         var folderName = folders[folders.length - 1];
         settings.selectLogfile.innerHTML = settings.filePath;
@@ -78,7 +78,7 @@ function (n) {
                 logFilePath = "{0}/{1}".format(rootPath,settings.templateFileName);
             }
         }        
-        console.log(`copy ${settings.templateFileName} file to: ${settings.filePath}`);
+        console.logInfo(`copy ${settings.templateFileName} file to: ${settings.filePath}`,"Rigsarkiv.Log.CopyFile");
         fs.copyFileSync(logFilePath, settings.filePath);
         EnsureData();        
     }
@@ -113,7 +113,7 @@ function (n) {
                 error: function(logType,folderName,text) 
                 { 
                     if(settings.logsDate == null) { settings.logsDate = new Date(); }
-                    console.log(`error ${text}`);
+                    console.logInfo(`error ${text}`,"Rigsarkiv.Log.callback.error");
                     settings.logs.push(settings.errorElement.format(logType,(new Date()).getFromFormat("yyyyMMddhhmmss"),folderName,text));
                     settings.errorsCounter += 1;
                     if(settings.spinnerEnable) { settings.spinner.className = settings.spinnerClass; }
@@ -121,21 +121,21 @@ function (n) {
                 warn: function(logType,folderName,text) 
                 { 
                     if(settings.logsDate == null) { settings.logsDate = new Date(); }
-                    console.log(`warn ${text}`);
+                    console.logInfo(`warn ${text}`,"Rigsarkiv.Log.callback.warn");
                     settings.logs.push(settings.warnElement.format(logType,(new Date()).getFromFormat("yyyyMMddhhmmss"),folderName,text));
                     if(settings.spinnerEnable) { settings.spinner.className = settings.spinnerClass; }
                 },
                 info: function(logType,folderName,text) 
                 { 
                     if(settings.logsDate == null) { settings.logsDate = new Date(); }
-                    console.log(`info ${text}`);
+                    console.logInfo(`info ${text}`,"Rigsarkiv.Log.callback.info");
                     settings.logs.push(settings.infoElement.format(logType,(new Date()).getFromFormat("yyyyMMddhhmmss"),folderName,text));
                     if(settings.spinnerEnable) { settings.spinner.className = settings.spinnerClass; }
                 },
                 section: function(logType,folderName,text) 
                 { 
                     if(settings.logsDate == null) { settings.logsDate = new Date(); }
-                    console.log(`info ${text}`);
+                    console.logInfo(`section ${text}`,"Rigsarkiv.Log.callback.section");
                     settings.logs.push(settings.sectionElement.format(logType,(new Date()).getFromFormat("yyyyMMddhhmmss"),folderName,text));
                     if(settings.spinnerEnable) { settings.spinner.className = settings.spinnerClass; }
                 },
@@ -146,7 +146,7 @@ function (n) {
                     {
                         settings.filePath = settings.filePostfix.format(selectedFolderPath);
                         if(fs.existsSync(settings.filePath)) {                        
-                            console.log(`Delete exists log: ${settings.filePath}`);
+                            console.logInfo(`Delete exists log: ${settings.filePath}`,"Rigsarkiv.Log.callback.commit");
                             fs.unlinkSync(settings.filePath);
                         }
                         var errorsCounter = settings.errorsCounter;
@@ -159,7 +159,7 @@ function (n) {
                     }
                     catch(err) 
                     {
-                        err.Handle(settings.outputErrorSpn,settings.outputErrorText);
+                        err.Handle(settings.outputErrorSpn,settings.outputErrorText,"Rigsarkiv.Log.callback.commit");
                     }
                 } 
             };

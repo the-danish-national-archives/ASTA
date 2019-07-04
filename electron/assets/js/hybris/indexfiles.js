@@ -57,21 +57,21 @@ function (n) {
             settings.IndecesPath = settings.structureCallback().deliveryPackagePath;
             settings.IndecesPath += (settings.IndecesPath.indexOf("\\") > -1) ? "\\{0}".format(settings.IndecesPostfix) : "/{0}".format(settings.IndecesPostfix);
             var fileName = GetFileName(settings.selectedArchiveIndexFilePath);
-            console.log("copy file " + fileName + " to  " + settings.IndecesPath);
+            console.logInfo("copy file " + fileName + " to  " + settings.IndecesPath,"Rigsarkiv.Hybris.IndexFiles.EnsureFiles");
             var destFilePath = settings.IndecesPath;
             destFilePath += (destFilePath.indexOf("\\") > -1) ? "\\{0}".format(fileName) : "/{0}".format(fileName);
             fs.copyFile(settings.selectedArchiveIndexFilePath[0],destFilePath, (err) => {
                 if (err) {
-                    err.Handle(settings.outputErrorSpn,settings.outputErrorText);
+                    err.Handle(settings.outputErrorSpn,settings.outputErrorText,"Rigsarkiv.Hybris.IndexFiles.EnsureFiles");
                 }
                 else {                   
                     var fileName = GetFileName(settings.selectedContextDocumentationIndexFilePath);
-                    console.log("copy file " + fileName + " to  " + settings.IndecesPath);
+                    console.logInfo("copy file " + fileName + " to  " + settings.IndecesPath,"Rigsarkiv.Hybris.IndexFiles.EnsureFiles");
                     var destFilePath = settings.IndecesPath;
                     destFilePath += (destFilePath.indexOf("\\") > -1) ? "\\{0}".format(fileName) : "/{0}".format(fileName);
                     fs.copyFile(settings.selectedContextDocumentationIndexFilePath[0], "{0}/{1}".format(settings.IndecesPath,fileName), (err) => {
                         if (err) {
-                            err.Handle(settings.outputErrorSpn,settings.outputErrorText);
+                            err.Handle(settings.outputErrorSpn,settings.outputErrorText,"Rigsarkiv.Hybris.IndexFiles.EnsureFiles");
                         }
                         else {
                             settings.outputOkSpn.hidden = false;
@@ -96,7 +96,7 @@ function (n) {
             })
             ipcRenderer.on('indexfiles-selected-archiveindex-file', (event, path) => {
                 settings.selectedArchiveIndexFilePath = path; 
-                console.log(`selected ArchiveIndex path: ${path}`); 
+                console.logInfo(`selected ArchiveIndex path: ${path}`,"Rigsarkiv.Hybris.IndexFiles.AddEvents"); 
                 settings.pathArchiveIndexFileTxt.value = settings.selectedArchiveIndexFilePath;            
             })
             settings.selectContextDocumentationIndexFileBtn.addEventListener('click', (event) => {
@@ -104,7 +104,7 @@ function (n) {
             })
             ipcRenderer.on('indexfiles-selected-contextdocumentationindex-file', (event, path) => {
                 settings.selectedContextDocumentationIndexFilePath = path; 
-                console.log(`selected ContextDocumentationIndex path: ${path}`); 
+                console.logInfo(`selected ContextDocumentationIndex path: ${path}`,"Rigsarkiv.Hybris.IndexFiles.AddEvents"); 
                 settings.pathContextDocumentationIndexFileTxt.value = settings.selectedContextDocumentationIndexFilePath;            
             })
             settings.okBtn.addEventListener('click', function (event) {
