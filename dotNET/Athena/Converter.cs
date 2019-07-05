@@ -18,6 +18,7 @@ namespace Rigsarkiv.Athena
     public class Converter
     {
         protected static readonly ILog _log = log4net.LogManager.GetLogger(typeof(Converter));
+        protected const int MaxErrorsRows = 10;
         protected const string IndicesPath = "{0}\\Indices";
         protected const string ResourcePrefix = "Rigsarkiv.Athena.Resources.{0}";
         protected const string TableIndex = "tableIndex.xml";
@@ -266,25 +267,27 @@ namespace Rigsarkiv.Athena
         /// <param name="column"></param>
         /// <param name="value"></param>
         /// <param name="hasError"></param>
+        /// <param name="isDifferent"></param>
         /// <returns></returns>
-        protected string GetConvertedValue(Column column, string value, out bool hasError)
+        protected string GetConvertedValue(Column column, string value, out bool hasError, out bool isDifferent)
         {
             string result = null;
             switch (column.Type)
             {
-                case "INTEGER": result = GetIntegerValue(column, value, out hasError); break;
-                case "DECIMAL": result = GetDecimalValue(column, value, out hasError); break;
-                case "DATE": result = GetDateValue(column, value, out hasError); break;
-                case "TIME": result = GetTimeValue(column, value, out hasError); break;
-                case "TIMESTAMP": result = GetTimeStampValue(column, value, out hasError); break;
-                default: result = GetStringValue(column, value, out hasError); break;
+                case "INTEGER": result = GetIntegerValue(column, value, out hasError, out isDifferent); break;
+                case "DECIMAL": result = GetDecimalValue(column, value, out hasError, out isDifferent); break;
+                case "DATE": result = GetDateValue(column, value, out hasError, out isDifferent); break;
+                case "TIME": result = GetTimeValue(column, value, out hasError, out isDifferent); break;
+                case "TIMESTAMP": result = GetTimeStampValue(column, value, out hasError, out isDifferent); break;
+                default: result = GetStringValue(column, value, out hasError, out isDifferent); break;
             }
             return result;
         }
 
-        private string GetTimeStampValue(Column column, string value, out bool hasError)
+        private string GetTimeStampValue(Column column, string value, out bool hasError, out bool isDifferent)
         {
             hasError = false;
+            isDifferent = false;
             var result = value;
             if (!_regExps.ContainsKey(column.RegExp))
             {
@@ -302,7 +305,7 @@ namespace Rigsarkiv.Athena
                 {
                     result = string.Format("{0}-{1}-{2}T{3}:{4}:{5}", groups[1].Value, groups[2].Value, groups[3].Value, groups[4].Value, groups[5].Value, groups[5].Value);
                 }
-
+                isDifferent = true;
             }
             return result;
         }
@@ -328,9 +331,10 @@ namespace Rigsarkiv.Athena
             return result;
         }
 
-        private string GetTimeValue(Column column, string value, out bool hasError)
+        private string GetTimeValue(Column column, string value, out bool hasError, out bool isDifferent)
         {
             hasError = false;
+            isDifferent = false;
             var result = value;
             if (!_regExps.ContainsKey(column.RegExp))
             {
@@ -341,13 +345,15 @@ namespace Rigsarkiv.Athena
             {
                 var groups = _regExps[column.RegExp].Match(result).Groups;
                 result = string.Format("{0}:{1}:{2}", groups[1].Value, groups[2].Value, groups[3].Value);
+                isDifferent = true;
             }
             return result;
         }
 
-        private string GetDateValue(Column column, string value, out bool hasError)
+        private string GetDateValue(Column column, string value, out bool hasError, out bool isDifferent)
         {
             hasError = false;
+            isDifferent = false;
             var result = value;
             if (!_regExps.ContainsKey(column.RegExp))
             {
@@ -358,13 +364,15 @@ namespace Rigsarkiv.Athena
             {
                 var groups = _regExps[column.RegExp].Match(result).Groups;
                 result = string.Format("{0}-{1}-{2}", groups[1].Value, groups[2].Value, groups[3].Value);
+                isDifferent = true;
             }
             return result;
         }
 
-        private string GetStringValue(Column column, string value, out bool hasError)
+        private string GetStringValue(Column column, string value, out bool hasError, out bool isDifferent)
         {
             hasError = false;
+            isDifferent = false;
             var result = value;
             if (result.IndexOf("\"") > -1)
             {
@@ -377,24 +385,37 @@ namespace Rigsarkiv.Athena
                 {
                     result = _regExps[DoubleApostrophePattern].Match(result).Groups[1].Value;
                     result = result.Replace("\"\"", "\"");
+                    isDifferent = true;
                 }
             }
             return result;
         }
 
-        private string GetIntegerValue(Column column, string value, out bool hasError)
+        private string GetIntegerValue(Column column, string value, out bool hasError, out bool isDifferent)
         {
+            isDifferent = false;
             int result = -1;
             hasError = !int.TryParse(value, out result);
+            if (!hasError && result.ToString() != value)
+            {
+                hasError = true;
+            }
             return result.ToString();
         }
 
-        private string GetDecimalValue(Column column, string value, out bool hasError)
+        private string GetDecimalValue(Column column, string value, out bool hasError, out bool isDifferent)
         {
+            isDifferent = false;
             float result = -1;
-            hasError = !float.TryParse(value.Replace(",", "."), NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out result);
+            var newValue = value.Replace(",", ".");
+            isDifferent = value != newValue;
+            hasError = !float.TryParse(newValue, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out result);
             NumberFormatInfo nfi = new NumberFormatInfo();
             nfi.NumberDecimalSeparator = ".";
+            if(!hasError)
+            {
+                hasError = result.ToString(nfi) != newValue;
+            }
             return result.ToString(nfi);
         }
 

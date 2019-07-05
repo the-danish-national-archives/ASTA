@@ -106,8 +106,9 @@ namespace Rigsarkiv.Athena
         private void UpdateRow(Table table,Row row,Column column, string value, string newValue, int index)
         {
             var hasError = false;
+            var isDifferent = false;
             if (string.IsNullOrEmpty(value.Trim()) && column.Nullable) { value = string.Empty; }
-            if (table.ErrorsRows.Contains(index)) { GetConvertedValue(column, value, out hasError); }
+            if (column.ErrorsRows.Contains(index)) { GetConvertedValue(column, value, out hasError, out isDifferent); }
             row.SrcValues.Add(column.Id, value);
             row.DestValues.Add(column.Id, newValue);
             if (hasError) { row.ErrorsColumns.Add(column.Id); }
@@ -150,11 +151,6 @@ namespace Rigsarkiv.Athena
                 StartWriter(table.Folder);
                 path = string.Format("{0}\\Data\\{1}\\{1}.csv", _srcPath.Substring(0, _srcPath.LastIndexOf(".")), table.SrcFolder);
                 _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Loop file: {0} ", path) });
-                if (!table.Errors.HasValue)
-                {
-                    table.Errors = 0;
-                    table.ErrorsRows = new List<int>();
-                }
                 using (var reader = new StreamReader(path))
                 {                    
                     while (!reader.EndOfStream)
@@ -167,6 +163,7 @@ namespace Rigsarkiv.Athena
                     _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("{0} rows added", counter - 1) });
                 }                
                 EndWriter();
+                _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Table {0} has {1} total Differences", table.Folder, table.Columns.Sum(c => c.Differences)) });
             }
             catch (Exception ex)
             {
@@ -195,22 +192,24 @@ namespace Rigsarkiv.Athena
                 else
                 {
                     var hasError = false;
+                    var isDifferent = false;
                     if (HasSpecialNumeric(column, value))
                     {
                         HandleSpecialNumeric(column, tableNode, researchIndexNode, value, true);
                         _updateDocuments = true;
                     }
-                    convertedValue = GetConvertedValue(column, value, out hasError);
+                    convertedValue = GetConvertedValue(column, value, out hasError,out isDifferent);
+                    if (isDifferent) { column.Differences++; }
                     if (hasError)
                     {
                         rowError = true;
-                        table.Errors++;                        
+                        if (MaxErrorsRows > column.ErrorsRows.Count) { column.ErrorsRows.Add(index - 2); }
                         _logManager.Add(new LogEntity() { Level = LogLevel.Warning, Section = _logSection, Message = string.Format("Convert column {0} of type {1} with value {2} has error", column.Name, column.Type, value) });
                     }
                 }
                 _writer.WriteElementString(column.Id, convertedValue);
             }
-            if (rowError) { table.ErrorsRows.Add(index); }
+            if (rowError) { table.Errors++; }
             _writer.WriteEndElement();
         }
         
