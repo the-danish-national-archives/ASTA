@@ -176,6 +176,8 @@ namespace Rigsarkiv.AthenaForm
                     if (row.SrcValues[column.Id] != row.DestValues[column.Id]) { dataValues[4, i].Style.BackColor = Color.Green; }
                     if (row.ErrorsColumns.Contains(column.Id)) { dataValues[4, i].Style.BackColor = Color.Red; }                    
                 }
+                dataValues[5, i].Value = column.Differences;
+                dataValues[6, i].Value = column.ErrorsRows.Count > 0 ? column.ErrorsRows.Count : 0;
             }
             tableErrorsLabel.Text = string.Format(TableErrorsLabel, table.Errors);
             if (row != null) { rowErrorsLabel.Text = string.Format(RowErrorsLabel, row.ErrorsColumns.Count); }
@@ -191,6 +193,11 @@ namespace Rigsarkiv.AthenaForm
         private void Form2_Shown(object sender, EventArgs e)
         {
             _log.Info("Run");
+        }
+
+        private void dataValues_SelectionChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

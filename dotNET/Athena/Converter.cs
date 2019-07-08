@@ -305,7 +305,7 @@ namespace Rigsarkiv.Athena
                 {
                     result = string.Format("{0}-{1}-{2}T{3}:{4}:{5}", groups[1].Value, groups[2].Value, groups[3].Value, groups[4].Value, groups[5].Value, groups[5].Value);
                 }
-                isDifferent = true;
+                isDifferent = result != value;
             }
             return result;
         }
@@ -345,7 +345,7 @@ namespace Rigsarkiv.Athena
             {
                 var groups = _regExps[column.RegExp].Match(result).Groups;
                 result = string.Format("{0}:{1}:{2}", groups[1].Value, groups[2].Value, groups[3].Value);
-                isDifferent = true;
+                isDifferent = result != value;
             }
             return result;
         }
@@ -364,7 +364,7 @@ namespace Rigsarkiv.Athena
             {
                 var groups = _regExps[column.RegExp].Match(result).Groups;
                 result = string.Format("{0}-{1}-{2}", groups[1].Value, groups[2].Value, groups[3].Value);
-                isDifferent = true;
+                isDifferent = result != value;
             }
             return result;
         }

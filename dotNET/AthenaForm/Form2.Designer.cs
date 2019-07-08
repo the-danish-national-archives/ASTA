@@ -37,6 +37,8 @@
             this.variableValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.columnType = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.columnValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Differences = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Errors = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.prevButton = new System.Windows.Forms.Button();
             this.nextButton = new System.Windows.Forms.Button();
             this.IndexButton = new System.Windows.Forms.Button();
@@ -80,13 +82,16 @@
             this.variableType,
             this.variableValue,
             this.columnType,
-            this.columnValue});
+            this.columnValue,
+            this.Differences,
+            this.Errors});
             this.dataValues.Location = new System.Drawing.Point(520, 97);
             this.dataValues.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.dataValues.Name = "dataValues";
             this.dataValues.RowTemplate.ReadOnly = true;
-            this.dataValues.Size = new System.Drawing.Size(745, 384);
+            this.dataValues.Size = new System.Drawing.Size(976, 384);
             this.dataValues.TabIndex = 5;
+            this.dataValues.SelectionChanged += new System.EventHandler(this.dataValues_SelectionChanged);
             // 
             // variableName
             // 
@@ -120,6 +125,20 @@
             this.columnValue.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.columnValue.HeaderText = "Værdi";
             this.columnValue.Name = "columnValue";
+            // 
+            // Differences
+            // 
+            this.Differences.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Differences.HeaderText = "Forskelle";
+            this.Differences.Name = "Differences";
+            this.Differences.ReadOnly = true;
+            // 
+            // Errors
+            // 
+            this.Errors.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Errors.HeaderText = "Fejl";
+            this.Errors.Name = "Errors";
+            this.Errors.ReadOnly = true;
             // 
             // prevButton
             // 
@@ -264,7 +283,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1297, 605);
+            this.ClientSize = new System.Drawing.Size(1509, 605);
             this.Controls.Add(this.reportButton);
             this.Controls.Add(this.tableErrorsLabel);
             this.Controls.Add(this.rowErrorsLabel);
@@ -306,14 +325,16 @@
         private System.Windows.Forms.Label rowLabel;
         private System.Windows.Forms.Button searchButton;
         private System.Windows.Forms.Label tableInfoLabel;
+        private System.Windows.Forms.Label rowErrorsLabel;
+        private System.Windows.Forms.Label tableErrorsLabel;
+        private System.Windows.Forms.Button reportButton;
         private System.Windows.Forms.DataGridViewTextBoxColumn variableName;
         private System.Windows.Forms.DataGridViewTextBoxColumn variableType;
         private System.Windows.Forms.DataGridViewTextBoxColumn variableValue;
         private System.Windows.Forms.DataGridViewTextBoxColumn columnType;
         private System.Windows.Forms.DataGridViewTextBoxColumn columnValue;
-        private System.Windows.Forms.Label rowErrorsLabel;
-        private System.Windows.Forms.Label tableErrorsLabel;
-        private System.Windows.Forms.Button reportButton;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Differences;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Errors;
     }
 }
 

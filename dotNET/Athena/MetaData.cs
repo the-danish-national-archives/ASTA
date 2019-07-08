@@ -131,7 +131,7 @@ namespace Rigsarkiv.Athena
             var columnId = string.Format(ColumnIDPrefix, index);
             var columnTypeOriginal = variableInfo["format"].ToString();
             var appliedRegExp = ((object[])variableInfo["regExps"])[(int)variableInfo["appliedRegExp"]].ToString();
-            var column = new Column() { Name = columnName, Id = columnId, Type = columnType, TypeOriginal = columnTypeOriginal, Nullable = (bool)variableInfo["nullable"], RegExp = appliedRegExp, Differences = 0, ErrorsRows = new List<int>() };
+            var column = new Column() { Name = columnName, Id = columnId, Type = columnType, TypeOriginal = columnTypeOriginal, Nullable = (bool)variableInfo["nullable"], RegExp = appliedRegExp, Differences = 0, ErrorsRows = new Dictionary<int, int>() };
             var columnNode = new XElement(_tableIndexXNS + "column",
                  new XElement(_tableIndexXNS + "name", columnName),
                  new XElement(_tableIndexXNS + "columnID", columnId),
@@ -186,7 +186,7 @@ namespace Rigsarkiv.Athena
 
             var options = (object[])variableInfo["options"];
             var codeList = new Table() { Name = refTableName, Folder = folder, Rows = options.Length, Errors = 0, Options= new List<string>() };
-            codeList.Columns = new List<Column>() { (new Column() { Name = Code, Id = C1, Type = column.Type, TypeOriginal = "", Differences = 0, ErrorsRows = new List<int>() }), (new Column() { Name = CodeValue, Id = C2, Type = "", TypeOriginal = "", Differences = 0, ErrorsRows = new List<int>() }) };
+            codeList.Columns = new List<Column>() { (new Column() { Name = Code, Id = C1, Type = column.Type, TypeOriginal = "", Differences = 0, ErrorsRows = new Dictionary<int, int>() }), (new Column() { Name = CodeValue, Id = C2, Type = "", TypeOriginal = "", Differences = 0, ErrorsRows = new Dictionary<int, int>() }) };
             var optionsType = ParseOptions(options, researchIndexNode, codeList, folder, column);
             var columnNode1 = new XElement(_tableIndexXNS + "column", new XElement(_tableIndexXNS + "name", Code),new XElement(_tableIndexXNS + "columnID", C1),new XElement(_tableIndexXNS + "type", column.Type),new XElement(_tableIndexXNS + "typeOriginal"),new XElement(_tableIndexXNS + "nullable", "false"), new XElement(_tableIndexXNS + "description", "Kode"));
             var columnNode2 = new XElement(_tableIndexXNS + "column", new XElement(_tableIndexXNS + "name", CodeValue), new XElement(_tableIndexXNS + "columnID", C2), new XElement(_tableIndexXNS + "type", optionsType), new XElement(_tableIndexXNS + "typeOriginal"), new XElement(_tableIndexXNS + "nullable", "false"), new XElement(_tableIndexXNS + "description", "Kodeværdi"));
@@ -230,7 +230,11 @@ namespace Rigsarkiv.Athena
                 if(isDifferent) { codeListColumn.Differences++; }
                 if (hasError)
                 {
-                    if (MaxErrorsRows > codeListColumn.ErrorsRows.Count) { codeListColumn.ErrorsRows.Add(index); }
+                    if (MaxErrorsRows > codeListColumn.ErrorsRows.Count)
+                    {
+                        if (!codeListColumn.ErrorsRows.ContainsKey(index)) { codeListColumn.ErrorsRows.Add(index, 0); }
+                        codeListColumn.ErrorsRows[index]++;
+                    }
                     codeList.Errors++;
                     _logManager.Add(new LogEntity() { Level = LogLevel.Warning, Section = _logSection, Message = string.Format("Convert column {0} of type {1} with value {2} has error", codeListColumn.Name, codeListColumn.Type, value) });
                 }

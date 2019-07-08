@@ -1,0 +1,67 @@
+2019-07-08 10:13:38,152 INFO Rigsarkiv.AthenaConsole.Program - Start
+2019-07-08 10:13:38,165 INFO Rigsarkiv.Athena.Converter - Start Converting structure FD.15002_2datasæt_fejlfri_SPSS -> AVID.SA.15002_2datasæt_fejlfri_SPSS.1
+2019-07-08 10:13:40,981 INFO Rigsarkiv.Athena.Converter - End Converting structure
+2019-07-08 10:13:41,185 INFO Rigsarkiv.Athena.Converter - Start Converting Metadata FD.15002_2datasæt_fejlfri_SPSS -> AVID.SA.15002_2datasæt_fejlfri_SPSS.1
+2019-07-08 10:13:49,009 INFO Rigsarkiv.Athena.Converter - End Converting Metadata
+2019-07-08 10:13:49,214 INFO Rigsarkiv.Athena.Converter - Start Converting Data FD.15002_2datasæt_fejlfri_SPSS -> AVID.SA.15002_2datasæt_fejlfri_SPSS.1
+2019-07-08 10:13:55,923 INFO Rigsarkiv.Athena.Converter - End Converting Data
+2019-07-08 10:13:56,129 INFO Rigsarkiv.Athena.Converter - Start Indexing files at C:\VSO\Rigsarkivet\test\AVID.SA.15002_2datasæt_fejlfri_SPSS.1
+2019-07-08 10:14:01,382 INFO Rigsarkiv.Athena.Converter - End Indexing files
+2019-07-08 10:14:01,588 INFO Rigsarkiv.Athena.Logging.LogManager - Flush log
+2019-07-08 10:14:01,607 INFO Rigsarkiv.AthenaConsole.Program - End
+2019-07-08 10:14:17,726 INFO Rigsarkiv.AthenaForm.Program - Run
+2019-07-08 10:14:18,510 INFO Rigsarkiv.AthenaForm.Form1 - Run
+2019-07-08 10:15:08,112 INFO Rigsarkiv.Athena.Converter - Start Converting structure FD.15002_2datasæt_fejlfri_SPSS -> AVID.SA.15002_2datasæt_fejlfri_SPSS.1
+2019-07-08 10:15:08,271 INFO Rigsarkiv.Athena.Converter - End Converting structure
+2019-07-08 10:15:08,275 INFO Rigsarkiv.Athena.Converter - Start Converting Metadata FD.15002_2datasæt_fejlfri_SPSS -> AVID.SA.15002_2datasæt_fejlfri_SPSS.1
+2019-07-08 10:15:08,513 INFO Rigsarkiv.Athena.Converter - End Converting Metadata
+2019-07-08 10:15:08,517 INFO Rigsarkiv.Athena.Converter - Start Converting Data FD.15002_2datasæt_fejlfri_SPSS -> AVID.SA.15002_2datasæt_fejlfri_SPSS.1
+2019-07-08 10:15:08,659 INFO Rigsarkiv.Athena.Converter - End Converting Data
+2019-07-08 10:15:11,486 INFO Rigsarkiv.AthenaForm.Form2 - Run
+2019-07-08 10:26:42,226 INFO Rigsarkiv.AthenaForm.Program - Run
+2019-07-08 10:26:43,048 INFO Rigsarkiv.AthenaForm.Form1 - Run
+2019-07-08 10:27:29,658 INFO Rigsarkiv.Athena.Converter - Start Converting structure FD.15002_2datasæt_fejlfri_SPSS -> AVID.SA.15002_2datasæt_fejlfri_SPSS.1
+2019-07-08 10:27:29,817 INFO Rigsarkiv.Athena.Converter - End Converting structure
+2019-07-08 10:27:29,821 INFO Rigsarkiv.Athena.Converter - Start Converting Metadata FD.15002_2datasæt_fejlfri_SPSS -> AVID.SA.15002_2datasæt_fejlfri_SPSS.1
+2019-07-08 10:27:30,048 INFO Rigsarkiv.Athena.Converter - End Converting Metadata
+2019-07-08 10:27:30,051 INFO Rigsarkiv.Athena.Converter - Start Converting Data FD.15002_2datasæt_fejlfri_SPSS -> AVID.SA.15002_2datasæt_fejlfri_SPSS.1
+2019-07-08 10:27:30,190 INFO Rigsarkiv.Athena.Converter - End Converting Data
+2019-07-08 10:27:33,524 INFO Rigsarkiv.AthenaForm.Form2 - Run
+2019-07-08 10:38:03,618 INFO Rigsarkiv.AthenaForm.Program - Run
+2019-07-08 10:38:03,932 INFO Rigsarkiv.AthenaForm.Form1 - Run
+2019-07-08 10:38:48,214 INFO Rigsarkiv.Athena.Converter - Start Converting structure FD.15002_2datasæt_fejlfri_SPSS -> AVID.SA.15002_2datasæt_fejlfri_SPSS.1
+2019-07-08 10:38:48,368 INFO Rigsarkiv.Athena.Converter - End Converting structure
+2019-07-08 10:38:48,373 INFO Rigsarkiv.Athena.Converter - Start Converting Metadata FD.15002_2datasæt_fejlfri_SPSS -> AVID.SA.15002_2datasæt_fejlfri_SPSS.1
+2019-07-08 10:38:48,625 INFO Rigsarkiv.Athena.Converter - End Converting Metadata
+2019-07-08 10:38:48,628 INFO Rigsarkiv.Athena.Converter - Start Converting Data FD.15002_2datasæt_fejlfri_SPSS -> AVID.SA.15002_2datasæt_fejlfri_SPSS.1
+2019-07-08 10:39:16,555 INFO Rigsarkiv.Athena.Converter - End Converting Data
+2019-07-08 10:39:20,111 INFO Rigsarkiv.AthenaForm.Form2 - Run
+2019-07-08 10:44:40,147 INFO Rigsarkiv.AthenaForm.Program - Run
+2019-07-08 10:44:40,441 INFO Rigsarkiv.AthenaForm.Form1 - Run
+2019-07-08 10:45:22,846 INFO Rigsarkiv.Athena.Converter - Start Converting structure FD.15002_2datasæt_fejlfri_SPSS -> AVID.SA.15002_2datasæt_fejlfri_SPSS.1
+2019-07-08 10:45:23,008 INFO Rigsarkiv.Athena.Converter - End Converting structure
+2019-07-08 10:45:23,014 INFO Rigsarkiv.Athena.Converter - Start Converting Metadata FD.15002_2datasæt_fejlfri_SPSS -> AVID.SA.15002_2datasæt_fejlfri_SPSS.1
+2019-07-08 10:45:23,254 INFO Rigsarkiv.Athena.Converter - End Converting Metadata
+2019-07-08 10:45:23,257 INFO Rigsarkiv.Athena.Converter - Start Converting Data FD.15002_2datasæt_fejlfri_SPSS -> AVID.SA.15002_2datasæt_fejlfri_SPSS.1
+2019-07-08 10:45:23,415 INFO Rigsarkiv.Athena.Converter - End Converting Data
+2019-07-08 10:45:25,498 INFO Rigsarkiv.AthenaForm.Form2 - Run
+2019-07-08 10:51:27,468 INFO Rigsarkiv.AthenaForm.Program - Run
+2019-07-08 10:51:28,334 INFO Rigsarkiv.AthenaForm.Form1 - Run
+2019-07-08 10:52:20,024 INFO Rigsarkiv.Athena.Converter - Start Converting structure FD.15002_2datasæt_fejlfri_SPSS -> AVID.SA.15002_2datasæt_fejlfri_SPSS.1
+2019-07-08 10:52:20,225 INFO Rigsarkiv.Athena.Converter - End Converting structure
+2019-07-08 10:52:20,230 INFO Rigsarkiv.Athena.Converter - Start Converting Metadata FD.15002_2datasæt_fejlfri_SPSS -> AVID.SA.15002_2datasæt_fejlfri_SPSS.1
+2019-07-08 10:52:20,451 INFO Rigsarkiv.Athena.Converter - End Converting Metadata
+2019-07-08 10:52:20,456 INFO Rigsarkiv.Athena.Converter - Start Converting Data FD.15002_2datasæt_fejlfri_SPSS -> AVID.SA.15002_2datasæt_fejlfri_SPSS.1
+2019-07-08 10:52:20,599 INFO Rigsarkiv.Athena.Converter - End Converting Data
+2019-07-08 10:52:27,671 INFO Rigsarkiv.AthenaForm.Form2 - Run
+2019-07-08 10:58:25,391 INFO Rigsarkiv.AthenaForm.Program - Run
+2019-07-08 10:58:26,087 INFO Rigsarkiv.AthenaForm.Form1 - Run
+2019-07-08 11:00:18,624 INFO Rigsarkiv.AthenaForm.Program - Run
+2019-07-08 11:00:18,912 INFO Rigsarkiv.AthenaForm.Form1 - Run
+2019-07-08 11:00:23,295 INFO Rigsarkiv.Athena.Converter - Start Converting structure FD.15002_2datasæt_fejlfri_SPSS -> AVID.SA.15002_2datasæt_fejlfri_SPSS.1
+2019-07-08 11:00:23,446 INFO Rigsarkiv.Athena.Converter - End Converting structure
+2019-07-08 11:00:23,450 INFO Rigsarkiv.Athena.Converter - Start Converting Metadata FD.15002_2datasæt_fejlfri_SPSS -> AVID.SA.15002_2datasæt_fejlfri_SPSS.1
+2019-07-08 11:00:23,675 INFO Rigsarkiv.Athena.Converter - End Converting Metadata
+2019-07-08 11:00:23,678 INFO Rigsarkiv.Athena.Converter - Start Converting Data FD.15002_2datasæt_fejlfri_SPSS -> AVID.SA.15002_2datasæt_fejlfri_SPSS.1
+2019-07-08 11:00:23,793 INFO Rigsarkiv.Athena.Converter - End Converting Data
+2019-07-08 11:00:25,203 INFO Rigsarkiv.AthenaForm.Form2 - Run
