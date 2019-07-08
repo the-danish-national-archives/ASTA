@@ -106,6 +106,7 @@
             this.dataValues.RowTemplate.ReadOnly = true;
             this.dataValues.Size = new System.Drawing.Size(976, 384);
             this.dataValues.TabIndex = 5;
+            this.dataValues.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataValues_CellClick);
             this.dataValues.SelectionChanged += new System.EventHandler(this.dataValues_SelectionChanged);
             // 
             // variableName

@@ -209,24 +209,6 @@ namespace Rigsarkiv.AthenaForm
 
         private void dataValues_SelectionChanged(object sender, EventArgs e)
         {
-            if(dataValues.SelectedRows != null)
-            {
-                var table = (_codeTable != null) ? _codeTable : _mainTable;
-                if (dataValues.SelectedRows.Count == 1)
-                {
-                    _selectedColumn = dataValues.SelectedRows[0].Index;
-                    nextErrorButton.Enabled = true;
-                }
-                if (dataValues.SelectedRows.Count > 1)
-                {
-                    _selectedColumn = -1;
-                    nextErrorButton.Enabled = false;
-                }
-                if(_selectedColumn > -1)
-                {
-                    nextErrorButton.Enabled = table.Columns[_selectedColumn].ErrorsRows.Count > 0;
-                }
-            }
         }
 
         private void nextErrorButton_Click(object sender, EventArgs e)
@@ -241,6 +223,25 @@ namespace Rigsarkiv.AthenaForm
                 UpdateDataRow(table);
                 prevButton.Enabled = (_rowIndex > 1);
                 nextButton.Enabled = (table.Rows > _rowIndex);
+            }
+        }
+
+        private void dataValues_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if(e.ColumnIndex == -1)
+            {
+                var table = (_codeTable != null) ? _codeTable : _mainTable;
+                if(e.RowIndex == _selectedColumn)
+                {
+                    dataValues.Rows[_selectedColumn].Selected = false;
+                    _selectedColumn = -1;
+                    nextErrorButton.Enabled = false;
+                }
+                else
+                {
+                    _selectedColumn = e.RowIndex;
+                    nextErrorButton.Enabled = table.Columns[_selectedColumn].ErrorsRows.Count > 0;
+                }
             }
         }
     }
