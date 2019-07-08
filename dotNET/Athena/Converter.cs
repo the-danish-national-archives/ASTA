@@ -388,6 +388,8 @@ namespace Rigsarkiv.Athena
                     isDifferent = true;
                 }
             }
+            result = result.Trim();
+            if (!isDifferent) { isDifferent = result != value; }
             return result;
         }
 
