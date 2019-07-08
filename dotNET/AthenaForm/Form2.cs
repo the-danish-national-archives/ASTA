@@ -173,19 +173,19 @@ namespace Rigsarkiv.AthenaForm
                 var column = table.Columns[i];
                 dataValues[0, i].Value = column.Name;
                 dataValues[1, i].Value = column.TypeOriginal;
-                if(column.Modified) { dataValues[1, i].Style.BackColor = Color.Green; }
+                if(column.Modified) { dataValues[1, i].Style.BackColor = Color.LightGreen; }
                 if (row != null && row.SrcValues.ContainsKey(column.Id))
                 {
                     dataValues[2, i].Value = row.SrcValues[column.Id];
-                    if (row.SrcValues[column.Id] != row.DestValues[column.Id]) { dataValues[2, i].Style.BackColor = Color.Green; }
+                    if (row.SrcValues[column.Id] != row.DestValues[column.Id]) { dataValues[2, i].Style.BackColor = Color.LightGreen; }
                     if (row.ErrorsColumns.Contains(column.Id)) { dataValues[2, i].Style.BackColor = Color.Red; }                    
                 }
                 dataValues[3, i].Value = column.Type;
-                if (column.Modified) { dataValues[3, i].Style.BackColor = Color.Green; }
+                if (column.Modified) { dataValues[3, i].Style.BackColor = Color.LightGreen; }
                 if (row != null && row.SrcValues.ContainsKey(column.Id))
                 {
                     dataValues[4, i].Value = row.DestValues[column.Id];
-                    if (row.SrcValues[column.Id] != row.DestValues[column.Id]) { dataValues[4, i].Style.BackColor = Color.Green; }
+                    if (row.SrcValues[column.Id] != row.DestValues[column.Id]) { dataValues[4, i].Style.BackColor = Color.LightGreen; }
                     if (row.ErrorsColumns.Contains(column.Id)) { dataValues[4, i].Style.BackColor = Color.Red; }                    
                 }
                 dataValues[5, i].Value = column.Differences;
