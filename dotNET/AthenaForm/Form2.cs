@@ -14,8 +14,8 @@ namespace Rigsarkiv.AthenaForm
     {
         private static readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(Form2));
         const string RowsLabel = "Række {0} ud af {1}";
-        const string TableErrorsLabel = "Fejl i alt {0}";
-        const string RowErrorsLabel = "Fejl: {0}";
+        const string TableErrorsLabel = "Fejl i tabel {0}";
+        const string RowErrorsLabel = "Fejl i række: {0}";
         const string CodeTableLabel = "Kodetabel: {0}";
         const string MainTableLabel = "Hovedtabel: {0}";
         private LogManager _logManager = null;

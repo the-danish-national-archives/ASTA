@@ -157,7 +157,7 @@
             // 
             // prevButton
             // 
-            this.prevButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.prevButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.prevButton.Enabled = false;
             this.prevButton.Location = new System.Drawing.Point(726, 52);
             this.prevButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
@@ -170,7 +170,7 @@
             // 
             // nextButton
             // 
-            this.nextButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.nextButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.nextButton.Enabled = false;
             this.nextButton.Location = new System.Drawing.Point(805, 52);
             this.nextButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
@@ -195,7 +195,7 @@
             // 
             // searchTextBox
             // 
-            this.searchTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.searchTextBox.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.searchTextBox.Location = new System.Drawing.Point(1142, 52);
             this.searchTextBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.searchTextBox.Name = "searchTextBox";
@@ -244,6 +244,7 @@
             // 
             // rowLabel
             // 
+            this.rowLabel.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.rowLabel.AutoSize = true;
             this.rowLabel.Location = new System.Drawing.Point(520, 66);
             this.rowLabel.Name = "rowLabel";
@@ -253,7 +254,7 @@
             // 
             // searchButton
             // 
-            this.searchButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.searchButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.searchButton.Enabled = false;
             this.searchButton.Location = new System.Drawing.Point(1298, 52);
             this.searchButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
@@ -276,7 +277,7 @@
             // 
             // rowErrorsLabel
             // 
-            this.rowErrorsLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.rowErrorsLabel.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.rowErrorsLabel.AutoSize = true;
             this.rowErrorsLabel.Location = new System.Drawing.Point(1368, 67);
             this.rowErrorsLabel.Name = "rowErrorsLabel";
@@ -306,7 +307,7 @@
             // 
             // nextErrorButton
             // 
-            this.nextErrorButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.nextErrorButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.nextErrorButton.Enabled = false;
             this.nextErrorButton.Location = new System.Drawing.Point(964, 54);
             this.nextErrorButton.Name = "nextErrorButton";
