@@ -108,7 +108,7 @@ namespace Rigsarkiv.Athena
             var hasError = false;
             var isDifferent = false;
             if (string.IsNullOrEmpty(value.Trim()) && column.Nullable) { value = string.Empty; }
-            if (column.ErrorsRows.ContainsKey(index)) { GetConvertedValue(column, value, out hasError, out isDifferent); }
+            if (column.ErrorsRows.Contains(index)) { GetConvertedValue(column, value, out hasError, out isDifferent); }
             row.SrcValues.Add(column.Id, value);
             row.DestValues.Add(column.Id, newValue);
             if (hasError) { row.ErrorsColumns.Add(column.Id); }
@@ -203,11 +203,7 @@ namespace Rigsarkiv.Athena
                     if (hasError)
                     {
                         rowError = true;
-                        if (MaxErrorsRows > column.ErrorsRows.Count)
-                        {
-                            if (!column.ErrorsRows.ContainsKey(index - 2)) { column.ErrorsRows.Add(index - 2, 0); }
-                            column.ErrorsRows[index - 2]++;
-                        }
+                        if (MaxErrorsRows > column.ErrorsRows.Count) { column.ErrorsRows.Add(index - 2); }
                         _logManager.Add(new LogEntity() { Level = LogLevel.Warning, Section = _logSection, Message = string.Format("Convert column {0} of type {1} with value {2} has error", column.Name, column.Type, value) });
                     }
                 }

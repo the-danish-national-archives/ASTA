@@ -83,6 +83,7 @@ namespace Rigsarkiv.AthenaForm
         private void codeTablesListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             _selectedColumn = -1;
+            nextErrorButton.Enabled = false;
             _rowIndex = 1;
             rowLabel.Text = "";
             rowErrorsLabel.Text = "";
@@ -97,6 +98,7 @@ namespace Rigsarkiv.AthenaForm
         private void mainTablesListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             _selectedColumn = -1;
+            nextErrorButton.Enabled = false;
             _rowIndex = 1;
             rowLabel.Text = "";
             rowErrorsLabel.Text = "";
@@ -123,6 +125,7 @@ namespace Rigsarkiv.AthenaForm
             {
                 UpdateDataRow(table);
             }
+            searchTextBox.Text = _rowIndex.ToString();
             nextButton.Enabled = (table.Rows > _rowIndex);
             prevButton.Enabled = true;
         }
@@ -135,6 +138,7 @@ namespace Rigsarkiv.AthenaForm
             {
                UpdateDataRow(table);
             }
+            searchTextBox.Text = _rowIndex.ToString();
             prevButton.Enabled = (_rowIndex > 1);            
             nextButton.Enabled = true;
         }
@@ -207,8 +211,36 @@ namespace Rigsarkiv.AthenaForm
         {
             if(dataValues.SelectedRows != null)
             {
-                if (dataValues.SelectedRows.Count == 1) { _selectedColumn = dataValues.SelectedRows[0].Index; }
-                if (dataValues.SelectedRows.Count > 1) { _selectedColumn = -1; }
+                var table = (_codeTable != null) ? _codeTable : _mainTable;
+                if (dataValues.SelectedRows.Count == 1)
+                {
+                    _selectedColumn = dataValues.SelectedRows[0].Index;
+                    nextErrorButton.Enabled = true;
+                }
+                if (dataValues.SelectedRows.Count > 1)
+                {
+                    _selectedColumn = -1;
+                    nextErrorButton.Enabled = false;
+                }
+                if(_selectedColumn > -1)
+                {
+                    nextErrorButton.Enabled = table.Columns[_selectedColumn].ErrorsRows.Count > 0;
+                }
+            }
+        }
+
+        private void nextErrorButton_Click(object sender, EventArgs e)
+        {
+            var table = (_codeTable != null) ? _codeTable : _mainTable;
+            var errorRows = table.Columns[_selectedColumn].ErrorsRows;
+            var nextIndex = errorRows.FirstOrDefault(index => (_rowIndex - 1) < index);            
+            if(nextIndex > -1)
+            {
+                _rowIndex = nextIndex + 1;
+                searchTextBox.Text = _rowIndex.ToString();
+                UpdateDataRow(table);
+                prevButton.Enabled = (_rowIndex > 1);
+                nextButton.Enabled = (table.Rows > _rowIndex);
             }
         }
     }

@@ -54,6 +54,7 @@
             this.rowErrorsLabel = new System.Windows.Forms.Label();
             this.tableErrorsLabel = new System.Windows.Forms.Label();
             this.reportButton = new System.Windows.Forms.Button();
+            this.nextErrorButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataValues)).BeginInit();
             this.SuspendLayout();
             // 
@@ -63,6 +64,8 @@
             // 
             // mainTablesListBox
             // 
+            this.mainTablesListBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.mainTablesListBox.FormattingEnabled = true;
             this.mainTablesListBox.ItemHeight = 20;
             this.mainTablesListBox.Location = new System.Drawing.Point(16, 97);
@@ -76,6 +79,9 @@
             // 
             this.dataValues.AllowUserToAddRows = false;
             this.dataValues.AllowUserToDeleteRows = false;
+            this.dataValues.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.dataValues.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataValues.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataValues.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -90,7 +96,7 @@
             dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
             dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Info;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
             dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.ControlText;
             dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dataValues.DefaultCellStyle = dataGridViewCellStyle1;
@@ -151,6 +157,7 @@
             // 
             // prevButton
             // 
+            this.prevButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.prevButton.Enabled = false;
             this.prevButton.Location = new System.Drawing.Point(726, 52);
             this.prevButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
@@ -163,6 +170,7 @@
             // 
             // nextButton
             // 
+            this.nextButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.nextButton.Enabled = false;
             this.nextButton.Location = new System.Drawing.Point(805, 52);
             this.nextButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
@@ -175,6 +183,7 @@
             // 
             // IndexButton
             // 
+            this.IndexButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.IndexButton.Location = new System.Drawing.Point(881, 493);
             this.IndexButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.IndexButton.Name = "IndexButton";
@@ -186,7 +195,8 @@
             // 
             // searchTextBox
             // 
-            this.searchTextBox.Location = new System.Drawing.Point(923, 52);
+            this.searchTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.searchTextBox.Location = new System.Drawing.Point(1142, 52);
             this.searchTextBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.searchTextBox.Name = "searchTextBox";
             this.searchTextBox.Size = new System.Drawing.Size(148, 26);
@@ -222,6 +232,8 @@
             // 
             // codeTablesListBox
             // 
+            this.codeTablesListBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.codeTablesListBox.FormattingEnabled = true;
             this.codeTablesListBox.ItemHeight = 20;
             this.codeTablesListBox.Location = new System.Drawing.Point(269, 97);
@@ -241,8 +253,9 @@
             // 
             // searchButton
             // 
+            this.searchButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.searchButton.Enabled = false;
-            this.searchButton.Location = new System.Drawing.Point(1079, 52);
+            this.searchButton.Location = new System.Drawing.Point(1298, 52);
             this.searchButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.searchButton.Name = "searchButton";
             this.searchButton.Size = new System.Drawing.Size(53, 35);
@@ -263,8 +276,9 @@
             // 
             // rowErrorsLabel
             // 
+            this.rowErrorsLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.rowErrorsLabel.AutoSize = true;
-            this.rowErrorsLabel.Location = new System.Drawing.Point(1149, 67);
+            this.rowErrorsLabel.Location = new System.Drawing.Point(1368, 67);
             this.rowErrorsLabel.Name = "rowErrorsLabel";
             this.rowErrorsLabel.Size = new System.Drawing.Size(116, 20);
             this.rowErrorsLabel.TabIndex = 22;
@@ -272,6 +286,7 @@
             // 
             // tableErrorsLabel
             // 
+            this.tableErrorsLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.tableErrorsLabel.AutoSize = true;
             this.tableErrorsLabel.Location = new System.Drawing.Point(1139, 492);
             this.tableErrorsLabel.Name = "tableErrorsLabel";
@@ -281,6 +296,7 @@
             // 
             // reportButton
             // 
+            this.reportButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.reportButton.Location = new System.Drawing.Point(774, 492);
             this.reportButton.Name = "reportButton";
             this.reportButton.Size = new System.Drawing.Size(84, 36);
@@ -288,11 +304,24 @@
             this.reportButton.Text = "Report";
             this.reportButton.UseVisualStyleBackColor = true;
             // 
+            // nextErrorButton
+            // 
+            this.nextErrorButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.nextErrorButton.Enabled = false;
+            this.nextErrorButton.Location = new System.Drawing.Point(964, 54);
+            this.nextErrorButton.Name = "nextErrorButton";
+            this.nextErrorButton.Size = new System.Drawing.Size(99, 31);
+            this.nextErrorButton.TabIndex = 25;
+            this.nextErrorButton.Text = "Næste fejl";
+            this.nextErrorButton.UseVisualStyleBackColor = true;
+            this.nextErrorButton.Click += new System.EventHandler(this.nextErrorButton_Click);
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1509, 605);
+            this.Controls.Add(this.nextErrorButton);
             this.Controls.Add(this.reportButton);
             this.Controls.Add(this.tableErrorsLabel);
             this.Controls.Add(this.rowErrorsLabel);
@@ -344,6 +373,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn columnValue;
         private System.Windows.Forms.DataGridViewTextBoxColumn Differences;
         private System.Windows.Forms.DataGridViewTextBoxColumn Errors;
+        private System.Windows.Forms.Button nextErrorButton;
     }
 }
 
