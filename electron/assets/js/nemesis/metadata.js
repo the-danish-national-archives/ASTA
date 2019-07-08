@@ -645,9 +645,7 @@ function (n) {
                     if(!ValidateTitle(lines[index].trim()))  { 
                         result = false; 
                     }
-                    else {
-                        table.name = lines[index].trim(); 
-                    } 
+                    table.name = lines[index].trim(); 
                 }
                 if(label === settings.metadataLabels[2]) 
                 { 
