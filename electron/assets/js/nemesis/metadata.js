@@ -645,9 +645,7 @@ function (n) {
                     if(!ValidateTitle(lines[index].trim()))  { 
                         result = false; 
                     }
-                    else {
-                        table.name = lines[index].trim(); 
-                    } 
+                    table.name = lines[index].trim();
                 }
                 if(lines[index + 1].trim() !== "") {
                     result = LogError("-CheckMetadata-FileLabel-ValueMax-Error",settings.fileName,label);
