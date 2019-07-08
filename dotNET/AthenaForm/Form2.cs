@@ -28,6 +28,7 @@ namespace Rigsarkiv.AthenaForm
         private Table _codeTable = null;
         private RichTextBox _outputRichTextBox = null;
         private int _rowIndex = 1;
+        private int _selectedColumn = -1;
 
         /// <summary>
         /// 
@@ -80,7 +81,8 @@ namespace Rigsarkiv.AthenaForm
         }
 
         private void codeTablesListBox_SelectedIndexChanged(object sender, EventArgs e)
-        {            
+        {
+            _selectedColumn = -1;
             _rowIndex = 1;
             rowLabel.Text = "";
             rowErrorsLabel.Text = "";
@@ -94,6 +96,7 @@ namespace Rigsarkiv.AthenaForm
 
         private void mainTablesListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
+            _selectedColumn = -1;
             _rowIndex = 1;
             rowLabel.Text = "";
             rowErrorsLabel.Text = "";
@@ -158,6 +161,11 @@ namespace Rigsarkiv.AthenaForm
             dataValues.Rows.Add(table.Columns.Count);
             for (int i = 0; i < table.Columns.Count; i++)
             {
+                if (_selectedColumn == i)
+                {
+                    dataValues.Rows[i].Selected = true;
+                    dataValues.FirstDisplayedScrollingRowIndex = _selectedColumn;
+                }
                 var column = table.Columns[i];
                 dataValues[0, i].Value = column.Name;
                 dataValues[1, i].Value = column.TypeOriginal;
@@ -197,7 +205,11 @@ namespace Rigsarkiv.AthenaForm
 
         private void dataValues_SelectionChanged(object sender, EventArgs e)
         {
-
+            if(dataValues.SelectedRows != null)
+            {
+                if (dataValues.SelectedRows.Count == 1) { _selectedColumn = dataValues.SelectedRows[0].Index; }
+                if (dataValues.SelectedRows.Count > 1) { _selectedColumn = -1; }
+            }
         }
     }
 }
