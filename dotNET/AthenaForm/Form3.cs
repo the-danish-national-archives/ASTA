@@ -40,6 +40,7 @@ namespace Rigsarkiv.AthenaForm
             _outputRichTextBox.Location = new Point(2, 108);
             this.Controls.Add(_outputRichTextBox);
             var result = Convert();
+            Text = string.Format(Text, destFolder);
         }
 
         private async Task Convert()

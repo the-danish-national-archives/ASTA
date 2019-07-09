@@ -60,7 +60,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.logButton);
             this.Name = "Form3";
-            this.Text = "ASTA - Konverteringslog";
+            this.Text = "ASTA - {0}";
             this.Shown += new System.EventHandler(this.Form3_Shown);
             this.ResumeLayout(false);
             this.PerformLayout();
