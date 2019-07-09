@@ -500,7 +500,7 @@ function (n) {
                             var codeListKey = GetCodeListKey(expressions);
                             if(codeListKey == null) { result = false; }                            
                             var isKey = (settings.fileKeys.includes(variableName)) ? true : false;
-                            var variable = { "name":variableName, "format":expressions[1], "isKey":isKey, "type":"", "description":"", "refData":"", "refVariable":"", "codeListKey":(codeListKey == null ? "" : codeListKey), "options":[], "regExps":[], "appliedRegExp":-1 }
+                            var variable = { "name":variableName, "format":expressions[1], "isKey":isKey, "type":"", "nullable":false, "description":"", "refData":"", "refVariable":"", "codeListKey":(codeListKey == null ? "" : codeListKey), "options":[], "regExps":[], "appliedRegExp":-1 }
                             table.variables.push(variable);
                         } 
                         else { 
@@ -645,7 +645,11 @@ function (n) {
                     if(!ValidateTitle(lines[index].trim()))  { 
                         result = false; 
                     }
-                    table.name = lines[index].trim();
+                    table.name = lines[index].trim(); 
+                }
+                if(label === settings.metadataLabels[2]) 
+                { 
+                    table.description = lines[index].trim(); 
                 }
                 if(lines[index + 1].trim() !== "") {
                     result = LogError("-CheckMetadata-FileLabel-ValueMax-Error",settings.fileName,label);
