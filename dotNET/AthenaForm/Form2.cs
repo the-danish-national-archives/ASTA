@@ -201,6 +201,10 @@ namespace Rigsarkiv.AthenaForm
             }
             else
             {
+                if(_selectedColumn > -1)
+                {
+                    dataValues.Rows[_selectedColumn].DefaultCellStyle.Font = new Font(dataValues.Font, FontStyle.Regular);
+                }                
                 _selectedColumn = e.RowIndex;
                 UpdateErrorButton(table);
             }
