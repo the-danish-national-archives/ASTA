@@ -408,10 +408,10 @@ namespace Rigsarkiv.Athena
         private string GetDecimalValue(Column column, string value, out bool hasError, out bool isDifferent)
         {
             isDifferent = false;
-            float result = -1;
+            decimal result = -1;
             var newValue = value.Replace(",", ".");
             isDifferent = value != newValue;
-            hasError = !float.TryParse(newValue, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out result);
+            hasError = !decimal.TryParse(newValue, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out result);
             NumberFormatInfo nfi = new NumberFormatInfo();
             nfi.NumberDecimalSeparator = ".";
             if(!hasError)

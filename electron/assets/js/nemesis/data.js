@@ -57,6 +57,7 @@ function (n) {
             tableRows: 0,
             tableWarnings: 0,
             totalErrors: 0,
+            appliedRegExp: -1,
             separator: ';',
             convertStop: false,
             scriptPath: "./assets/scripts/{0}",
@@ -231,10 +232,8 @@ function (n) {
                 result = LogError("-CheckData-FileRow-ColumnsDecimalValue-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);  
             }
             else {
-                var currentRegExp = regExp.toString();
-                if(currentRegExp.indexOf("\\.") === -1 && currentRegExp.indexOf("\\,") === -1) { variable.appliedRegExp = -1; }
-                if(variable.appliedRegExp > -1 && variable.regExps[variable.appliedRegExp] !== currentRegExp.substring(1,currentRegExp.length - 1)) {
-                    result = LogError("-CheckData-FileRow-ColumnsDecimal-InexpedientValue-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
+                 if(variable.appliedRegExp !== settings.appliedRegExp) {
+                    result = LogWarn("-CheckData-FileRow-ColumnsDecimal-InexpedientValue-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
                 }
             }
             return result;
@@ -249,9 +248,8 @@ function (n) {
                 result = LogError("-CheckData-FileRow-ColumnsDateValue-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
             }
             else {
-                var currentRegExp = regExp.toString();
-                if(variable.regExps[variable.appliedRegExp] !== currentRegExp.substring(1,currentRegExp.length - 1)) {
-                    result = LogError("-CheckData-FileRow-ColumnsDate-InexpedientValue-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
+                if(variable.appliedRegExp !== settings.appliedRegExp) {
+                    result = LogWarn("-CheckData-FileRow-ColumnsDate-InexpedientValue-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
                 }
             }
             return result;
@@ -298,9 +296,8 @@ function (n) {
                 result = LogError("-CheckData-FileRow-ColumnsDateTimeValue-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
             }
             else {
-                var currentRegExp = regExp.toString();
-                if(variable.regExps[variable.appliedRegExp] !== currentRegExp.substring(1,currentRegExp.length - 1)) {
-                    result = LogError("-CheckData-FileRow-ColumnsDateTime-InexpedientValue-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
+                if(variable.appliedRegExp !== settings.appliedRegExp) {
+                    result = LogWarn("-CheckData-FileRow-ColumnsDateTime-InexpedientValue-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
                 }
             }
             return result;
@@ -459,6 +456,7 @@ function (n) {
                         var patt = new RegExp(variable.regExps[j]);
                         var dataValue = (variable.type != "String") ? dataRow[i] : ApostropheNormalizer(dataRow[i]);
                         if(patt.test(dataValue)) {
+                            settings.appliedRegExp = j;
                             if(variable.appliedRegExp === -1) { variable.appliedRegExp = j; }
                             if(!ValidateValue(dataRow[i], patt, variable)) { result = false; }
                             patternMatch = true;                            
