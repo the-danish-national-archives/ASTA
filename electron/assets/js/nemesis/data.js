@@ -8,8 +8,11 @@ function (n) {
     function (n) {
         const {ipcRenderer} = require('electron');
         const fs = require('fs');
+        const path = require('path');
+        const os = require('os');
         const chardet = require('chardet');
         const csv = require('fast-csv');
+        const { spawn } = require('child_process');
 
         const codeListPattern = /^(\.[a-z])|([A-Z])$/;
         const doubleApostrophePattern1 = /^"([\w\W\s]*)"$/;
@@ -23,6 +26,7 @@ function (n) {
             outputErrorSpn: null,
             outputErrorText: null,
             outputPrefix: null,
+            rightsCallback: null,
             logCallback: null,
             logStartSpn: null,
             logEndNoErrorSpn: null,
@@ -36,6 +40,7 @@ function (n) {
             convertEnabledText: null,
             deliveryPackagePath: null,
             outputText: {},
+            ConvertBtn: null,
             logType: "data",
             fileName: null,
             metadataFileName: null,
@@ -52,8 +57,13 @@ function (n) {
             tableRows: 0,
             tableWarnings: 0,
             totalErrors: 0,
+            appliedRegExp: -1,
             separator: ';',
-            convertStop: false
+            convertStop: false,
+            scriptPath: "./assets/scripts/{0}",
+            resourceWinPath: "resources\\{0}",
+            converterFileName: "AthenaForm.exe",
+            metadataFilePostfix: "{0}.json"
         }
 
         // View Element by id & return texts
@@ -222,10 +232,8 @@ function (n) {
                 result = LogError("-CheckData-FileRow-ColumnsDecimalValue-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);  
             }
             else {
-                var currentRegExp = regExp.toString();
-                if(currentRegExp.indexOf("\\.") === -1 && currentRegExp.indexOf("\\,") === -1) { variable.appliedRegExp = -1; }
-                if(variable.appliedRegExp > -1 && variable.regExps[variable.appliedRegExp] !== currentRegExp.substring(1,currentRegExp.length - 1)) {
-                    result = LogError("-CheckData-FileRow-ColumnsDecimal-InexpedientValue-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
+                 if(variable.appliedRegExp !== settings.appliedRegExp) {
+                    result = LogWarn("-CheckData-FileRow-ColumnsDecimal-InexpedientValue-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
                 }
             }
             return result;
@@ -240,9 +248,8 @@ function (n) {
                 result = LogError("-CheckData-FileRow-ColumnsDateValue-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
             }
             else {
-                var currentRegExp = regExp.toString();
-                if(variable.regExps[variable.appliedRegExp] !== currentRegExp.substring(1,currentRegExp.length - 1)) {
-                    result = LogError("-CheckData-FileRow-ColumnsDate-InexpedientValue-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
+                if(variable.appliedRegExp !== settings.appliedRegExp) {
+                    result = LogWarn("-CheckData-FileRow-ColumnsDate-InexpedientValue-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
                 }
             }
             return result;
@@ -289,9 +296,8 @@ function (n) {
                 result = LogError("-CheckData-FileRow-ColumnsDateTimeValue-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
             }
             else {
-                var currentRegExp = regExp.toString();
-                if(variable.regExps[variable.appliedRegExp] !== currentRegExp.substring(1,currentRegExp.length - 1)) {
-                    result = LogError("-CheckData-FileRow-ColumnsDateTime-InexpedientValue-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
+                if(variable.appliedRegExp !== settings.appliedRegExp) {
+                    result = LogWarn("-CheckData-FileRow-ColumnsDateTime-InexpedientValue-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
                 }
             }
             return result;
@@ -450,6 +456,7 @@ function (n) {
                         var patt = new RegExp(variable.regExps[j]);
                         var dataValue = (variable.type != "String") ? dataRow[i] : ApostropheNormalizer(dataRow[i]);
                         if(patt.test(dataValue)) {
+                            settings.appliedRegExp = j;
                             if(variable.appliedRegExp === -1) { variable.appliedRegExp = j; }
                             if(!ValidateValue(dataRow[i], patt, variable)) { result = false; }
                             patternMatch = true;                            
@@ -458,6 +465,9 @@ function (n) {
                     if(!patternMatch) {
                         if(!ValidateFormat(dataRow[i],variable))  { result = false; }
                     }
+                }
+                else {
+                    if(dataRow[i].trim() === "") { variable.nullable = true; } 
                 } 
             }
             if(!result) { settings.convertStop = true; }
@@ -584,6 +594,7 @@ function (n) {
                 console.log(settings.data);
                 settings.confirmationSpn.innerHTML = "";
                 if(settings.convertStop) { settings.table.errorStop = true; }
+                settings.table.rows = settings.rowIndex;
                 ProcessDataSet();
             });
         }
@@ -649,7 +660,7 @@ function (n) {
             if(settings.dataFiles.length > 0) { ProcessDataSet(); }            
         }
 
-        //commit end all validation by check every 500 msec 
+        //commit end all validation 
         var CommitLog = function () {            
                 var folderName = GetFolderName();
                 if(settings.errors === 0) {
@@ -670,6 +681,7 @@ function (n) {
                     settings.confirmationSpn.innerHTML = settings.convertDisabledText;
                 }
                 settings.logResult = settings.logCallback().commit(settings.deliveryPackagePath);
+                
                 settings.selectDirBtn.disabled = false;
                 settings.validateBtn.disabled = false;
                 console.logInfo(`total errors: ${settings.totalErrors}`,"Rigsarkiv.Nemesis.Data.Validate");
@@ -700,13 +712,13 @@ function (n) {
             return settings.logResult;
         }
 
-        var AddEvents = function (){
-            //console.logInfo("events","Rigsarkiv.Nemesis.Data.AddEvents");
+        //add Event Listener to HTML elmenets
+        var AddEvents = function () {            
         }
 
         //Model interfaces functions
         Rigsarkiv.Nemesis.Data = {
-            initialize: function (logCallback,outputErrorId,logStartId,logEndNoErrorId,logEndWithErrorId,outputPrefix,selectDirectoryId,validateId,confirmationId,validateRowsId,checkEncodingId,convertDisabledId,convertEnabledId) {            
+            initialize: function (logCallback,outputErrorId,logStartId,logEndNoErrorId,logEndWithErrorId,outputPrefix,selectDirectoryId,validateId,confirmationId,validateRowsId,checkEncodingId,convertDisabledId,convertEnabledId,convertId) {            
                 settings.logCallback = logCallback;
                 settings.outputErrorSpn = document.getElementById(outputErrorId);
                 settings.outputErrorText = settings.outputErrorSpn.innerHTML;
