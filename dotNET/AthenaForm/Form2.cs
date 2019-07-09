@@ -54,6 +54,7 @@ namespace Rigsarkiv.AthenaForm
             tableInfoLabel.Text = "";
             rowErrorsLabel.Text = "";
             tableErrorsLabel.Text = "";
+            Text = string.Format(Text, destFolder);
         }
 
         public void tablesBox_Click(object sender, EventArgs e)
