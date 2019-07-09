@@ -114,7 +114,7 @@ namespace Rigsarkiv.AthenaForm
             }
             tableInfoLabel.Text = string.Format(MainTableLabel, _mainTable.Name);            
             UpdateDataRow(_mainTable);
-            nextButton.Enabled = prevButton.Enabled = searchButton.Enabled = true;           
+            nextButton.Enabled = prevButton.Enabled = searchButton.Enabled = true;            
         }
 
         private void nextButton_Click(object sender, EventArgs e)
@@ -156,20 +156,63 @@ namespace Rigsarkiv.AthenaForm
                 }
             }
         }
-        
+        private void IndexButton_Click(object sender, EventArgs e)
+        {
+            Form3 form = new Form3(_srcPath, _destPath, _destFolder, _logManager, _converter.Tables, _outputRichTextBox);
+            form.Show();
+            this.Hide();
+        }
+
+        private void Form2_Shown(object sender, EventArgs e)
+        {
+            _log.Info("Run");
+        }
+
+        private void dataValues_SelectionChanged(object sender, EventArgs e)
+        {
+                       
+        }
+
+        private void nextErrorButton_Click(object sender, EventArgs e)
+        {
+            var table = (_codeTable != null) ? _codeTable : _mainTable;
+            var errorRows = table.Columns[_selectedColumn].ErrorsRows;
+            if (errorRows.Any(index => (_rowIndex - 1) < index))
+            {
+                var nextIndex = errorRows.FirstOrDefault(index => (_rowIndex - 1) < index);
+                _rowIndex = nextIndex + 1;
+                searchTextBox.Text = _rowIndex.ToString();
+                UpdateDataRow(table);
+                prevButton.Enabled = (_rowIndex > 1);
+                nextButton.Enabled = (table.Rows > _rowIndex);
+            }
+        }
+
+        private void dataValues_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            var table = (_codeTable != null) ? _codeTable : _mainTable;
+            if (e.RowIndex == _selectedColumn)
+            {
+                dataValues.Rows[_selectedColumn].DefaultCellStyle.Font = new Font(dataValues.Font, FontStyle.Regular);
+                dataValues.ClearSelection();
+                _selectedColumn = -1;
+                nextErrorButton.Enabled = false;                
+            }
+            else
+            {
+                _selectedColumn = e.RowIndex;
+                UpdateErrorButton(table);
+            }
+        }
+
         private void UpdateDataRow(Table table)
         {
             rowLabel.Text = string.Format(RowsLabel, _rowIndex, table.Rows);
-            dataValues.Rows.Clear();
+            dataValues.Rows.Clear();            
             var row = _converter.GetRow(table, _rowIndex);
             dataValues.Rows.Add(table.Columns.Count);
             for (int i = 0; i < table.Columns.Count; i++)
-            {
-                if (_selectedColumn == i)
-                {
-                    dataValues.Rows[i].Selected = true;
-                    dataValues.FirstDisplayedScrollingRowIndex = _selectedColumn;
-                }
+            {                
                 var column = table.Columns[i];
                 dataValues[0, i].Value = column.Name;
                 dataValues[1, i].Value = column.TypeOriginal;
@@ -193,56 +236,20 @@ namespace Rigsarkiv.AthenaForm
             }
             tableErrorsLabel.Text = string.Format(TableErrorsLabel, table.Errors);
             if (row != null) { rowErrorsLabel.Text = string.Format(RowErrorsLabel, row.ErrorsColumns.Count); }
-        }
-
-        private void IndexButton_Click(object sender, EventArgs e)
-        {
-            Form3 form = new Form3(_srcPath, _destPath, _destFolder, _logManager, _converter.Tables, _outputRichTextBox);
-            form.Show();
-            this.Hide();           
-        }
-
-        private void Form2_Shown(object sender, EventArgs e)
-        {
-            _log.Info("Run");
-        }
-
-        private void dataValues_SelectionChanged(object sender, EventArgs e)
-        {
-        }
-
-        private void nextErrorButton_Click(object sender, EventArgs e)
-        {
-            var table = (_codeTable != null) ? _codeTable : _mainTable;
-            var errorRows = table.Columns[_selectedColumn].ErrorsRows;
-            var nextIndex = errorRows.FirstOrDefault(index => (_rowIndex - 1) < index);            
-            if(nextIndex > -1)
+            dataValues.ClearSelection();
+            if (_selectedColumn > -1)
             {
-                _rowIndex = nextIndex + 1;
-                searchTextBox.Text = _rowIndex.ToString();
-                UpdateDataRow(table);
-                prevButton.Enabled = (_rowIndex > 1);
-                nextButton.Enabled = (table.Rows > _rowIndex);
+                dataValues.Rows[_selectedColumn].Cells[0].Selected = true;
+                dataValues.FirstDisplayedScrollingRowIndex = _selectedColumn;
+                UpdateErrorButton(table);
             }
         }
 
-        private void dataValues_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void UpdateErrorButton(Table table)
         {
-            if(e.ColumnIndex == -1)
-            {
-                var table = (_codeTable != null) ? _codeTable : _mainTable;
-                if(e.RowIndex == _selectedColumn)
-                {
-                    dataValues.Rows[_selectedColumn].Selected = false;
-                    _selectedColumn = -1;
-                    nextErrorButton.Enabled = false;
-                }
-                else
-                {
-                    _selectedColumn = e.RowIndex;
-                    nextErrorButton.Enabled = table.Columns[_selectedColumn].ErrorsRows.Count > 0;
-                }
-            }
+           var errorRows = table.Columns[_selectedColumn].ErrorsRows;
+           nextErrorButton.Enabled = errorRows.Any(index => (_rowIndex - 1) < index);
+           dataValues.Rows[_selectedColumn].DefaultCellStyle.Font = new Font(dataValues.Font, FontStyle.Bold);
         }
     }
 }
