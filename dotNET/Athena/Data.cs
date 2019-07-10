@@ -203,8 +203,11 @@ namespace Rigsarkiv.Athena
                     if (hasError)
                     {
                         rowError = true;
-                        if (MaxErrorsRows > column.ErrorsRows.Count) { column.ErrorsRows.Add(index - 2); }
-                        _logManager.Add(new LogEntity() { Level = LogLevel.Warning, Section = _logSection, Message = string.Format("Convert column {0} of type {1} with value {2} has error", column.Name, column.Type, value) });
+                        if (MaxErrorsRows > column.ErrorsRows.Count)
+                        {
+                            column.ErrorsRows.Add(index - 2);
+                            _logManager.Add(new LogEntity() { Level = LogLevel.Warning, Section = _logSection, Message = string.Format("Convert column {0} of type {1} with value {2} has error", column.Name, column.Type, value) });
+                        }
                     }
                 }
                 _writer.WriteElementString(column.Id, convertedValue);

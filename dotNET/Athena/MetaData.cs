@@ -130,7 +130,7 @@ namespace Rigsarkiv.Athena
             var columnType = GetMappedType(variableInfo);
             var columnId = string.Format(ColumnIDPrefix, index);
             var columnTypeOriginal = variableInfo["format"].ToString();
-            var appliedRegExp = ((object[])variableInfo["regExps"])[(int)variableInfo["appliedRegExp"]].ToString();
+            var appliedRegExp = GetRegExp(variableInfo);
             var column = new Column() { Name = columnName, Id = columnId, Type = columnType, TypeOriginal = columnTypeOriginal, Nullable = (bool)variableInfo["nullable"], RegExp = appliedRegExp, Differences = 0, ErrorsRows = new List<int>() };
             var columnNode = new XElement(_tableIndexXNS + "column",
                  new XElement(_tableIndexXNS + "name", columnName),
@@ -172,7 +172,10 @@ namespace Rigsarkiv.Athena
                     new XElement(_tableIndexXNS + "name", foreignKeyName),
                     new XElement(_tableIndexXNS + "referencedTable", refTableName),
                     new XElement(_tableIndexXNS + "reference", new XElement(_tableIndexXNS + "column", variableInfo["name"].ToString()), new XElement(_tableIndexXNS + "referenced", "Kode"))));
-                AddReferencedTable(variableInfo, tableNode, researchIndexNode, table, column, refTableName, index);
+                if(!table.CodeList.Any(t => t.Name == refTableName))
+                {
+                    AddReferencedTable(variableInfo, tableNode, researchIndexNode, table, column, refTableName, index);
+                }
             }
         }
         
@@ -230,9 +233,12 @@ namespace Rigsarkiv.Athena
                 if(isDifferent) { codeListColumn.Differences++; }
                 if (hasError)
                 {
-                    if (MaxErrorsRows > codeListColumn.ErrorsRows.Count) { codeListColumn.ErrorsRows.Add(index); }
+                    if (MaxErrorsRows > codeListColumn.ErrorsRows.Count)
+                    {
+                        codeListColumn.ErrorsRows.Add(index);
+                        _logManager.Add(new LogEntity() { Level = LogLevel.Warning, Section = _logSection, Message = string.Format("Convert column {0} of type {1} with value {2} has error", codeListColumn.Name, codeListColumn.Type, value) });
+                    }
                     codeList.Errors++;
-                    _logManager.Add(new LogEntity() { Level = LogLevel.Warning, Section = _logSection, Message = string.Format("Convert column {0} of type {1} with value {2} has error", codeListColumn.Name, codeListColumn.Type, value) });
                 }
                 index++;
             }
@@ -253,13 +259,23 @@ namespace Rigsarkiv.Athena
                 case "DateTime": result = "TIMESTAMP"; break;
                 case "String":
                     {
-                        var index = (int)variableInfo["appliedRegExp"];
-                        var regExSplit = ((object[])variableInfo["regExps"])[index].ToString();
+                        var regExSplit = GetRegExp(variableInfo);
                         result = string.Format(VarCharPrefix, GetColumnLength(VarCharPrefix, regExSplit));
                     };
                     break;
             }
             return result;
+        }
+
+        private string GetRegExp(Dictionary<string, object> variableInfo)
+        {
+            var index = (int)variableInfo["appliedRegExp"];
+            if (index == -1)
+            {
+                index = 0;
+                _logManager.Add(new LogEntity() { Level = LogLevel.Warning, Section = _logSection, Message = string.Format("Variable: {0} has empty/null column data", variableInfo["name"].ToString()) });
+            }
+            return ((object[])variableInfo["regExps"])[index].ToString();
         }
 
         private XmlNode CreateNode(XmlDocument xmlDocument,XmlNode parentNode,string xml)
