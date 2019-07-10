@@ -294,7 +294,7 @@ function (n) {
             if(subFolders != null && subFolders.length > 0) {
                 settings.errorStop = true;
                 var validTablesName = true;
-                subFolders.forEach(folder => {
+                subFolders.filter(junk.not).forEach(folder => {
                     if(!dataTablePattern.test(folder)) {
                         result = LogError("-CheckFolderData-TableFolders-Error",folder);
                         validTablesName = false;
@@ -307,12 +307,12 @@ function (n) {
                             result = false; 
                         }
                         else {
-                            if(subFiles.length > 2) { result = LogError("-CheckFolderData-TableFolderFilesCount-Error",folder); }
+                            if(subFiles.filter(junk.not).length > 2) { result = LogError("-CheckFolderData-TableFolderFilesCount-Error",folder); }
                         }
-                        if(!ValidateTableFiles(folder,subFiles)) { result = false; }                            
+                        if(!ValidateTableFiles(folder,subFiles.filter(junk.not))) { result = false; }                            
                     }
                 });
-                if(validTablesName && !ValidateTablesOrder(subFolders)) { result = false; }
+                if(validTablesName && !ValidateTablesOrder(subFolders.filter(junk.not))) { result = false; }
             }
             else {
                 settings.errorStop = true;
@@ -484,7 +484,7 @@ function (n) {
                 }
             });
             if(checkfolders && subFolders.length > 3) {
-                subFolders.forEach(folder => {
+                subFolders.filter(junk.not).forEach(folder => {
                     if(checkfolders && folder !== settings.defaultSubFolders[0] && folder !== settings.defaultSubFolders[1] && folder !== settings.defaultSubFolders[2]) {
                         result = LogError("-CheckFoldersCount-Error",folder);
                     }
