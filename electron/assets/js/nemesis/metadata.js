@@ -8,6 +8,7 @@ function (n) {
     function (n) {
         const {ipcRenderer} = require('electron');
         const fs = require('fs');
+        const os = require('os');
         const chardet = require('chardet');
 
         const startNumberPattern = /^([0-9])([a-zA-ZæøåÆØÅ0-9_]*)$/;
@@ -863,7 +864,10 @@ function (n) {
             if(data != null) {
                 data = data.toString();
                 if(data != null && data !== "") {
-                    var lines = data.split("\r\n");
+                    var splitChar = "\r";
+                    if(os.platform() == "win32") { splitChar = "\r\n"; }
+                    if(os.platform() == "darwin") { splitChar = "\n"; }
+                    var lines = data.split(splitChar);
                     lines[0] = lines[0].trim();
                     if(!ValidateLabels(lines)) 
                     { 

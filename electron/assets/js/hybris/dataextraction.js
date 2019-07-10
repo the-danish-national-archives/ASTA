@@ -112,6 +112,14 @@ function (n) {
             return "{0}.{1}".format(fileNameNoExt,scriptExt);        
         }
 
+        //map slash vs backslash
+        var GetSlash = function() {
+            var result = "/";
+            if(os.platform() == "win32") { result = "\\"; }
+            if(os.platform() == "darwin") { result = "/"; }
+            return result;
+        }
+
         //Update script file with new data table path & file name
         var UpdateScript = function() {
             var srcFilePath = GetFolderPath();
@@ -131,7 +139,7 @@ function (n) {
                         datafolderPath = (datafolderPath.indexOf("\\") > -1) ? "{0}\\".format(datafolderPath) : "{0}/".format(datafolderPath);
                         if(settings.scriptType !== "Stata") { folderPath = (folderPath.indexOf("\\") > -1) ? "{0}\\".format(folderPath) : "{0}/".format(folderPath); }
                     }
-                    var updatedData = data.toString().format(folderPath,datafolderPath,fileName.substring(0,fileName.indexOf(".")));
+                    var updatedData = data.toString().format(folderPath,datafolderPath,fileName.substring(0,fileName.indexOf(".")),GetSlash());
                     console.logInfo(`Update script file ${filePath}`,"Rigsarkiv.Hybris.DataExtraction.UpdateScript");
                     fs.writeFile(filePath, updatedData, (err) => {
                         if (err) {
