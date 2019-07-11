@@ -259,13 +259,12 @@ window.Rigsarkiv = window.Rigsarkiv || {},
 
             //remove UTF8 boom charactors
             var GetFileContent = function(filePath) {
-                var charsetMatch = chardet.detectFileSync(filePath);
                 var fileContent = fs.readFileSync(filePath);
-                if(charsetMatch !== "UTF-8") {
-                    return fileContent.toString();
+                if(fileContent.byteLength >= 3 && (fileContent[0] & 0xff) == 0xef && (fileContent[1] & 0xff) == 0xbb && (fileContent[2] & 0xff) == 0xbf) {
+                    return fileContent.toString("utf8",3);
                 }
                 else {
-                    return fileContent.toString("utf8",3);
+                    return fileContent.toString();
                 }
             }
 
