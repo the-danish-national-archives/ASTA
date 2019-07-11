@@ -559,6 +559,8 @@ function (n) {
                 settings.selectedPath = path; 
                 console.logInfo(`selected path: ${path}`,"Rigsarkiv.Nemesis.Structure.AddEvents"); 
                 settings.pathDirTxt.value = settings.selectedPath;
+                settings.logCallback().reset();
+                settings.confirmationSpn.innerHTML = "";
             })            
         }
 
