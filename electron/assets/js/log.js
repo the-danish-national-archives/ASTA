@@ -105,7 +105,11 @@ function (n) {
             AddEvents();               
         },
         callback: function () {
-            return { 
+            return {
+                reset: function() 
+                { 
+                    Reset();
+                }, 
                 spinnerEnable: function(enable)
                 {
                     settings.spinnerEnable = enable;

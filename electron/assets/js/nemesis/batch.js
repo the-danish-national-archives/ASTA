@@ -148,7 +148,6 @@ function (n) {
             settings.validateBtn.disabled = true;
             settings.logsDate = new Date();            
             settings.spinner.className = settings.spinnerClass;
-            Reset();
             var destPath = settings.selectedPath[0];
             fs.readdirSync(destPath).forEach(folder => {
                 var deliveryPackagePath = (destPath.indexOf("\\") > -1) ? "{0}\\{1}".format(destPath,folder) : "{0}/{1}".format(destPath,folder);
@@ -187,6 +186,7 @@ function (n) {
                 settings.selectedPath = path; 
                 console.log(`selected path: ${path}`,"Rigsarkiv.Nemesis.Batch.AddEvents"); 
                 settings.pathDirTxt.value = settings.selectedPath;
+                Reset();
             })
             settings.selectLogfile.addEventListener('click', (event) => {
                 shell.openItem(settings.filePath);
