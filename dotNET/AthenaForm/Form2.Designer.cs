@@ -53,8 +53,9 @@
             this.tableInfoLabel = new System.Windows.Forms.Label();
             this.rowErrorsLabel = new System.Windows.Forms.Label();
             this.tableErrorsLabel = new System.Windows.Forms.Label();
-            this.reportButton = new System.Windows.Forms.Button();
             this.nextErrorButton = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.valueRichTextBox = new System.Windows.Forms.RichTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataValues)).BeginInit();
             this.SuspendLayout();
             // 
@@ -71,7 +72,7 @@
             this.mainTablesListBox.Location = new System.Drawing.Point(16, 97);
             this.mainTablesListBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.mainTablesListBox.Name = "mainTablesListBox";
-            this.mainTablesListBox.Size = new System.Drawing.Size(223, 384);
+            this.mainTablesListBox.Size = new System.Drawing.Size(223, 344);
             this.mainTablesListBox.TabIndex = 3;
             this.mainTablesListBox.SelectedIndexChanged += new System.EventHandler(this.mainTablesListBox_SelectedIndexChanged);
             // 
@@ -106,7 +107,7 @@
             this.dataValues.RowHeadersVisible = false;
             this.dataValues.RowTemplate.ReadOnly = true;
             this.dataValues.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.dataValues.Size = new System.Drawing.Size(976, 384);
+            this.dataValues.Size = new System.Drawing.Size(976, 449);
             this.dataValues.TabIndex = 5;
             this.dataValues.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataValues_CellClick);
             this.dataValues.SelectionChanged += new System.EventHandler(this.dataValues_SelectionChanged);
@@ -201,7 +202,7 @@
             // IndexButton
             // 
             this.IndexButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.IndexButton.Location = new System.Drawing.Point(881, 493);
+            this.IndexButton.Location = new System.Drawing.Point(520, 556);
             this.IndexButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.IndexButton.Name = "IndexButton";
             this.IndexButton.Size = new System.Drawing.Size(158, 35);
@@ -255,7 +256,7 @@
             this.codeTablesListBox.ItemHeight = 20;
             this.codeTablesListBox.Location = new System.Drawing.Point(269, 97);
             this.codeTablesListBox.Name = "codeTablesListBox";
-            this.codeTablesListBox.Size = new System.Drawing.Size(218, 384);
+            this.codeTablesListBox.Size = new System.Drawing.Size(218, 344);
             this.codeTablesListBox.TabIndex = 17;
             this.codeTablesListBox.SelectedIndexChanged += new System.EventHandler(this.codeTablesListBox_SelectedIndexChanged);
             // 
@@ -306,21 +307,11 @@
             // 
             this.tableErrorsLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.tableErrorsLabel.AutoSize = true;
-            this.tableErrorsLabel.Location = new System.Drawing.Point(1139, 492);
+            this.tableErrorsLabel.Location = new System.Drawing.Point(1368, 563);
             this.tableErrorsLabel.Name = "tableErrorsLabel";
             this.tableErrorsLabel.Size = new System.Drawing.Size(126, 20);
             this.tableErrorsLabel.TabIndex = 23;
             this.tableErrorsLabel.Text = "tableErrorsLabel";
-            // 
-            // reportButton
-            // 
-            this.reportButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.reportButton.Location = new System.Drawing.Point(774, 492);
-            this.reportButton.Name = "reportButton";
-            this.reportButton.Size = new System.Drawing.Size(84, 36);
-            this.reportButton.TabIndex = 24;
-            this.reportButton.Text = "Report";
-            this.reportButton.UseVisualStyleBackColor = true;
             // 
             // nextErrorButton
             // 
@@ -334,13 +325,35 @@
             this.nextErrorButton.UseVisualStyleBackColor = true;
             this.nextErrorButton.Click += new System.EventHandler(this.nextErrorButton_Click);
             // 
+            // label2
+            // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(12, 456);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(52, 20);
+            this.label2.TabIndex = 26;
+            this.label2.Text = "Værdi";
+            // 
+            // valueRichTextBox
+            // 
+            this.valueRichTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.valueRichTextBox.Location = new System.Drawing.Point(12, 479);
+            this.valueRichTextBox.Name = "valueRichTextBox";
+            this.valueRichTextBox.Size = new System.Drawing.Size(475, 112);
+            this.valueRichTextBox.TabIndex = 27;
+            this.valueRichTextBox.Text = "";
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1509, 605);
+            this.Controls.Add(this.valueRichTextBox);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.nextErrorButton);
-            this.Controls.Add(this.reportButton);
             this.Controls.Add(this.tableErrorsLabel);
             this.Controls.Add(this.rowErrorsLabel);
             this.Controls.Add(this.tableInfoLabel);
@@ -383,7 +396,6 @@
         private System.Windows.Forms.Label tableInfoLabel;
         private System.Windows.Forms.Label rowErrorsLabel;
         private System.Windows.Forms.Label tableErrorsLabel;
-        private System.Windows.Forms.Button reportButton;
         private System.Windows.Forms.Button nextErrorButton;
         private System.Windows.Forms.DataGridViewTextBoxColumn variableName;
         private System.Windows.Forms.DataGridViewTextBoxColumn variableType;
@@ -392,6 +404,8 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn columnValue;
         private System.Windows.Forms.DataGridViewTextBoxColumn Differences;
         private System.Windows.Forms.DataGridViewTextBoxColumn Errors;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.RichTextBox valueRichTextBox;
     }
 }
 

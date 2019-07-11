@@ -83,6 +83,7 @@ namespace Rigsarkiv.AthenaForm
 
         private void codeTablesListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if(codeTablesListBox.SelectedIndex == -1) { return; }
             _selectedColumn = -1;
             nextErrorButton.Enabled = false;
             _rowIndex = 1;
@@ -192,26 +193,35 @@ namespace Rigsarkiv.AthenaForm
         private void dataValues_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             var table = (_codeTable != null) ? _codeTable : _mainTable;
-            if (e.RowIndex == _selectedColumn)
+            if(e.ColumnIndex == 0)
             {
-                dataValues.Rows[_selectedColumn].DefaultCellStyle.Font = new Font(dataValues.Font, FontStyle.Regular);
-                dataValues.ClearSelection();
-                _selectedColumn = -1;
-                nextErrorButton.Enabled = false;                
-            }
-            else
-            {
-                if(_selectedColumn > -1)
+                if (e.RowIndex == _selectedColumn)
                 {
                     dataValues.Rows[_selectedColumn].DefaultCellStyle.Font = new Font(dataValues.Font, FontStyle.Regular);
-                }                
-                _selectedColumn = e.RowIndex;
-                UpdateErrorButton(table);
+                    dataValues.ClearSelection();
+                    _selectedColumn = -1;
+                    nextErrorButton.Enabled = false;
+                }
+                else
+                {
+                    if (_selectedColumn > -1)
+                    {
+                        dataValues.Rows[_selectedColumn].DefaultCellStyle.Font = new Font(dataValues.Font, FontStyle.Regular);
+                    }
+                    _selectedColumn = e.RowIndex;                    
+                    UpdateErrorButton(table);
+                }
+            }
+            valueRichTextBox.Text = string.Empty;
+            if (e.ColumnIndex == 2 || e.ColumnIndex == 4)
+            {
+                valueRichTextBox.Text = dataValues[e.ColumnIndex, e.RowIndex].Value.ToString();
             }
         }
 
         private void UpdateDataRow(Table table)
         {
+            valueRichTextBox.Text = string.Empty;
             rowLabel.Text = string.Format(RowsLabel, _rowIndex, table.Rows);
             dataValues.Rows.Clear();            
             var row = _converter.GetRow(table, _rowIndex);
