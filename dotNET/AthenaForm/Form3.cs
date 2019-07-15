@@ -40,7 +40,7 @@ namespace Rigsarkiv.AthenaForm
             _destFolder = destFolder;
             _report = report;
             _outputRichTextBox = outputRichTextBox;
-            _outputRichTextBox.Location = new Point(2, 360);
+            _outputRichTextBox.Location = new Point(2, 380);
             this.Controls.Add(_outputRichTextBox);
             var result = Convert();
             Text = string.Format(Text, destFolder);  
@@ -63,12 +63,30 @@ namespace Rigsarkiv.AthenaForm
             AddRow(tablesDataGridView, 0, TablesCounter, _report.Tables.Count, _report.TablesCounter);
             AddRow(tablesDataGridView, 1, codeListsCounter, _report.Tables.Select(t => t.CodeList.Count).Sum(), _report.CodeListsCounter);
             
-            var index = 0;
+            var rowIndex = 0;
+            var columnIndex = 0;
             rowsDataGridView.ClearSelection();
             _report.Tables.ForEach(mainTable => {
-                AddRow(rowsDataGridView, index++, string.Format("{0} ({1})", mainTable.Folder, mainTable.Name), mainTable.Rows, mainTable.RowsCounter);
+                AddRow(rowsDataGridView, rowIndex++, string.Format("{0} ({1})", mainTable.Folder, mainTable.Name), mainTable.Rows, mainTable.RowsCounter);
+                if(mainTable.Errors > 0)
+                {
+                    mainTable.Columns.ForEach(c =>  {
+                        if(c.Errors > 0) {
+                            AddColumn(columnsDataGridView, columnIndex++, string.Format("{0} ({1})", mainTable.Folder, mainTable.Name), c.Name,c.Type,c.Errors);
+                        }
+                    });
+                }
                 mainTable.CodeList.ForEach(table => {
-                    AddRow(rowsDataGridView, index++, string.Format("{0} ({1})", table.Folder, table.Name), table.Rows, table.RowsCounter);
+                    AddRow(rowsDataGridView, rowIndex++, string.Format("{0} ({1})", table.Folder, table.Name), table.Rows, table.RowsCounter);
+                    if (table.Errors > 0)
+                    {
+                        table.Columns.ForEach(c => {
+                            if (c.Errors > 0)
+                            {
+                                AddColumn(columnsDataGridView, columnIndex++, string.Format("{0} ({1})", mainTable.Folder, mainTable.Name), c.Name, c.Type, c.Errors);
+                            }
+                        });
+                    }
                 });
             });
         }
@@ -82,6 +100,19 @@ namespace Rigsarkiv.AthenaForm
             if (before != after) {
                 view[1, index].Style.BackColor = Color.Red;
                 view[2, index].Style.BackColor = Color.Red;
+            }
+        }
+
+        private void AddColumn(DataGridView view, int index, string title, string variable,string dataType, int errors)
+        {
+            view.Rows.Add(1);
+            view[0, index].Value = title;
+            view[1, index].Value = variable;
+            view[2, index].Value = dataType;
+            view[3, index].Value = errors;
+            if (errors > 0)
+            {
+                view[3, index].Style.BackColor = Color.Red;
             }
         }
 
@@ -105,6 +136,11 @@ namespace Rigsarkiv.AthenaForm
         private void Form3_Shown(object sender, EventArgs e)
         {
             _log.Info("Run");
+        }
+
+        private void reportButton_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

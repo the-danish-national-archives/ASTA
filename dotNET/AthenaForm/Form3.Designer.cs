@@ -41,13 +41,20 @@
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.label3 = new System.Windows.Forms.Label();
+            this.columnsDataGridView = new System.Windows.Forms.DataGridView();
+            this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Variable = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.DataType = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Errors = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.tablesDataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.rowsDataGridView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.columnsDataGridView)).BeginInit();
             this.SuspendLayout();
             // 
             // logButton
             // 
-            this.logButton.Location = new System.Drawing.Point(23, 333);
+            this.logButton.Location = new System.Drawing.Point(22, 356);
             this.logButton.Margin = new System.Windows.Forms.Padding(2);
             this.logButton.Name = "logButton";
             this.logButton.Size = new System.Drawing.Size(50, 21);
@@ -120,17 +127,18 @@
             // 
             // reportButton
             // 
-            this.reportButton.Location = new System.Drawing.Point(106, 333);
+            this.reportButton.Location = new System.Drawing.Point(86, 354);
             this.reportButton.Name = "reportButton";
             this.reportButton.Size = new System.Drawing.Size(75, 23);
             this.reportButton.TabIndex = 17;
             this.reportButton.Text = "Test repport";
             this.reportButton.UseVisualStyleBackColor = true;
+            this.reportButton.Click += new System.EventHandler(this.reportButton_Click);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(345, 138);
+            this.label2.Location = new System.Drawing.Point(345, 125);
             this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(68, 13);
@@ -146,7 +154,7 @@
             this.dataGridViewTextBoxColumn1,
             this.dataGridViewTextBoxColumn2,
             this.dataGridViewTextBoxColumn3});
-            this.rowsDataGridView.Location = new System.Drawing.Point(348, 154);
+            this.rowsDataGridView.Location = new System.Drawing.Point(348, 141);
             this.rowsDataGridView.Name = "rowsDataGridView";
             this.rowsDataGridView.ReadOnly = true;
             this.rowsDataGridView.RowHeadersVisible = false;
@@ -178,11 +186,73 @@
             this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
             this.dataGridViewTextBoxColumn3.ReadOnly = true;
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(164, 251);
+            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(139, 13);
+            this.label3.TabIndex = 21;
+            this.label3.Text = "Optælling af konverteringfejl";
+            // 
+            // columnsDataGridView
+            // 
+            this.columnsDataGridView.AllowUserToAddRows = false;
+            this.columnsDataGridView.AllowUserToDeleteRows = false;
+            this.columnsDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.columnsDataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridViewTextBoxColumn4,
+            this.Variable,
+            this.DataType,
+            this.Errors});
+            this.columnsDataGridView.Location = new System.Drawing.Point(167, 267);
+            this.columnsDataGridView.Name = "columnsDataGridView";
+            this.columnsDataGridView.ReadOnly = true;
+            this.columnsDataGridView.RowHeadersVisible = false;
+            this.columnsDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
+            this.columnsDataGridView.Size = new System.Drawing.Size(492, 110);
+            this.columnsDataGridView.TabIndex = 20;
+            // 
+            // dataGridViewTextBoxColumn4
+            // 
+            this.dataGridViewTextBoxColumn4.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dataGridViewTextBoxColumn4.FillWeight = 40F;
+            this.dataGridViewTextBoxColumn4.HeaderText = "Tabel";
+            this.dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
+            this.dataGridViewTextBoxColumn4.ReadOnly = true;
+            // 
+            // Variable
+            // 
+            this.Variable.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Variable.FillWeight = 30F;
+            this.Variable.HeaderText = "Variabel";
+            this.Variable.Name = "Variable";
+            this.Variable.ReadOnly = true;
+            // 
+            // DataType
+            // 
+            this.DataType.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.DataType.FillWeight = 15F;
+            this.DataType.HeaderText = "Datatype";
+            this.DataType.Name = "DataType";
+            this.DataType.ReadOnly = true;
+            // 
+            // Errors
+            // 
+            this.Errors.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Errors.FillWeight = 15F;
+            this.Errors.HeaderText = "Antal fejl";
+            this.Errors.Name = "Errors";
+            this.Errors.ReadOnly = true;
+            // 
             // Form3
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(671, 567);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.columnsDataGridView);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.rowsDataGridView);
             this.Controls.Add(this.reportButton);
@@ -196,6 +266,7 @@
             this.Shown += new System.EventHandler(this.Form3_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.tablesDataGridView)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.rowsDataGridView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.columnsDataGridView)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -216,5 +287,11 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.DataGridView columnsDataGridView;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Variable;
+        private System.Windows.Forms.DataGridViewTextBoxColumn DataType;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Errors;
     }
 }

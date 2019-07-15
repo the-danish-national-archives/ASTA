@@ -234,6 +234,7 @@ namespace Rigsarkiv.Athena
                     if (hasError)
                     {
                         rowError = true;
+                        column.Errors++;
                         if (MaxErrorsRows > column.ErrorsRows.Count)
                         {
                             column.ErrorsRows.Add(index - 2);
