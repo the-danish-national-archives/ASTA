@@ -34,7 +34,15 @@
             this.TextColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.BeforeColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.AfterColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.label4 = new System.Windows.Forms.Label();
+            this.reportButton = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.rowsDataGridView = new System.Windows.Forms.DataGridView();
+            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.tablesDataGridView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.rowsDataGridView)).BeginInit();
             this.SuspendLayout();
             // 
             // logButton
@@ -68,12 +76,12 @@
             this.TextColumn,
             this.BeforeColumn1,
             this.AfterColumn});
-            this.tablesDataGridView.Location = new System.Drawing.Point(419, 55);
+            this.tablesDataGridView.Location = new System.Drawing.Point(348, 55);
             this.tablesDataGridView.Name = "tablesDataGridView";
             this.tablesDataGridView.ReadOnly = true;
             this.tablesDataGridView.RowHeadersVisible = false;
             this.tablesDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.tablesDataGridView.Size = new System.Drawing.Size(240, 63);
+            this.tablesDataGridView.Size = new System.Drawing.Size(311, 66);
             this.tablesDataGridView.TabIndex = 15;
             // 
             // TextColumn
@@ -100,11 +108,85 @@
             this.AfterColumn.Name = "AfterColumn";
             this.AfterColumn.ReadOnly = true;
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(345, 39);
+            this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(68, 13);
+            this.label4.TabIndex = 16;
+            this.label4.Text = "Antal tabeller";
+            // 
+            // reportButton
+            // 
+            this.reportButton.Location = new System.Drawing.Point(106, 333);
+            this.reportButton.Name = "reportButton";
+            this.reportButton.Size = new System.Drawing.Size(75, 23);
+            this.reportButton.TabIndex = 17;
+            this.reportButton.Text = "Test repport";
+            this.reportButton.UseVisualStyleBackColor = true;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(345, 138);
+            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(68, 13);
+            this.label2.TabIndex = 19;
+            this.label2.Text = "Antal rækker";
+            // 
+            // rowsDataGridView
+            // 
+            this.rowsDataGridView.AllowUserToAddRows = false;
+            this.rowsDataGridView.AllowUserToDeleteRows = false;
+            this.rowsDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.rowsDataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridViewTextBoxColumn1,
+            this.dataGridViewTextBoxColumn2,
+            this.dataGridViewTextBoxColumn3});
+            this.rowsDataGridView.Location = new System.Drawing.Point(348, 154);
+            this.rowsDataGridView.Name = "rowsDataGridView";
+            this.rowsDataGridView.ReadOnly = true;
+            this.rowsDataGridView.RowHeadersVisible = false;
+            this.rowsDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
+            this.rowsDataGridView.Size = new System.Drawing.Size(311, 102);
+            this.rowsDataGridView.TabIndex = 18;
+            // 
+            // dataGridViewTextBoxColumn1
+            // 
+            this.dataGridViewTextBoxColumn1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dataGridViewTextBoxColumn1.FillWeight = 60F;
+            this.dataGridViewTextBoxColumn1.HeaderText = "Tabel";
+            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
+            this.dataGridViewTextBoxColumn1.ReadOnly = true;
+            // 
+            // dataGridViewTextBoxColumn2
+            // 
+            this.dataGridViewTextBoxColumn2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dataGridViewTextBoxColumn2.FillWeight = 20F;
+            this.dataGridViewTextBoxColumn2.HeaderText = "Før";
+            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
+            this.dataGridViewTextBoxColumn2.ReadOnly = true;
+            // 
+            // dataGridViewTextBoxColumn3
+            // 
+            this.dataGridViewTextBoxColumn3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dataGridViewTextBoxColumn3.FillWeight = 20F;
+            this.dataGridViewTextBoxColumn3.HeaderText = "Efter";
+            this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
+            this.dataGridViewTextBoxColumn3.ReadOnly = true;
+            // 
             // Form3
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(671, 567);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.rowsDataGridView);
+            this.Controls.Add(this.reportButton);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.tablesDataGridView);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.logButton);
@@ -113,6 +195,7 @@
             this.Text = "ASTA - {0}";
             this.Shown += new System.EventHandler(this.Form3_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.tablesDataGridView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.rowsDataGridView)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -126,5 +209,12 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn TextColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn BeforeColumn1;
         private System.Windows.Forms.DataGridViewTextBoxColumn AfterColumn;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Button reportButton;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.DataGridView rowsDataGridView;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
     }
 }

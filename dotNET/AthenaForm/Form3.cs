@@ -60,13 +60,29 @@ namespace Rigsarkiv.AthenaForm
         private void Render()
         {
             tablesDataGridView.ClearSelection();
-            tablesDataGridView.Rows.Add(2);
-            tablesDataGridView[0, 0].Value = TablesCounter;
-            tablesDataGridView[1, 0].Value = _report.Tables.Count;
-            tablesDataGridView[2, 0].Value = _report.TablesCounter;
-            tablesDataGridView[0, 1].Value = codeListsCounter;
-            tablesDataGridView[1, 1].Value = _report.Tables.Select(t => t.CodeList.Count).Sum();
-            tablesDataGridView[2, 1].Value = _report.CodeListsCounter;
+            AddRow(tablesDataGridView, 0, TablesCounter, _report.Tables.Count, _report.TablesCounter);
+            AddRow(tablesDataGridView, 1, codeListsCounter, _report.Tables.Select(t => t.CodeList.Count).Sum(), _report.CodeListsCounter);
+            
+            var index = 0;
+            rowsDataGridView.ClearSelection();
+            _report.Tables.ForEach(mainTable => {
+                AddRow(rowsDataGridView, index++, string.Format("{0} ({1})", mainTable.Folder, mainTable.Name), mainTable.Rows, mainTable.RowsCounter);
+                mainTable.CodeList.ForEach(table => {
+                    AddRow(rowsDataGridView, index++, string.Format("{0} ({1})", table.Folder, table.Name), table.Rows, table.RowsCounter);
+                });
+            });
+        }
+
+        private void AddRow(DataGridView view,int index,string title,int before, int after)
+        {
+            view.Rows.Add(1);
+            view[0, index].Value = title;
+            view[1, index].Value = before;
+            view[2, index].Value = after;
+            if (before != after) {
+                view[1, index].Style.BackColor = Color.Red;
+                view[2, index].Style.BackColor = Color.Red;
+            }
         }
 
         private void logButton_Click(object sender, System.EventArgs e)
