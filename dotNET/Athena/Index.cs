@@ -43,11 +43,46 @@ namespace Rigsarkiv.Athena
             var message = string.Format("Start Indexing files at {0}", _destFolderPath);
             _log.Info(message);
             _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = message });
-            if(IndexFiles()) { result = true; }
+            if(EnsureReport() && IndexFiles()) { result = true; }
             message = result ? "End Indexing files" : "End Indexing files with errors";
             _log.Info(message);
             _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = message });
             return result;
+        }
+
+        private bool EnsureReport()
+        {
+            var result = (_report.Tables != null && _report.Tables.Count > 0);
+            if(result)
+            {
+                _report.Tables.ForEach(mainTable => {
+                    UpdateReport(mainTable);
+                    mainTable.CodeList.ForEach(table => {
+                        UpdateReport(table);
+                    });
+                 });
+            }
+            else
+            {
+                var message = "Tables metadata Property is empty";
+                _log.Info(message);
+                _logManager.Add(new LogEntity() { Level = LogLevel.Error, Section = _logSection, Message = message });
+            }
+            return result;
+        }
+
+        private void UpdateReport(Table table)
+        {
+            table.Columns.Where(c => c.Errors > 0).ToList().ForEach(c => {
+                c.ErrorsRows.ForEach(i => {
+                    var index = i.ToString();
+                    if (!table.ErrorsRows.ContainsKey(index))
+                    {
+                        _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Update report table {0} with error row index: {1}", table.Name, index) });
+                        table.ErrorsRows.Add(index, GetRow(table, i + 1));
+                    }
+                });
+            });
         }
 
         private bool IndexFiles()

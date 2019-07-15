@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Web.Script.Serialization;
 
 namespace Rigsarkiv.AthenaForm
 {
@@ -53,7 +54,8 @@ namespace Rigsarkiv.AthenaForm
             _converter = new Index(_logManager, _srcPath, _destPath, _destFolder,_report);
             if(_converter.Run())
             {
-                logButton.Enabled = true;                
+                logButton.Enabled = true;
+                reportButton.Enabled = true;
             }
         }
 
@@ -140,7 +142,8 @@ namespace Rigsarkiv.AthenaForm
 
         private void reportButton_Click(object sender, EventArgs e)
         {
-
+            var json = new JavaScriptSerializer().Serialize(_report);
+            
         }
     }
 }

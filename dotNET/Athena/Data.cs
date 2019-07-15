@@ -16,7 +16,6 @@ namespace Rigsarkiv.Athena
     /// </summary>
     public class Data : Converter
     {
-        const char Separator = ';';
         private bool _updateDocuments = false;
 
         /// <summary>
@@ -59,62 +58,7 @@ namespace Rigsarkiv.Athena
             _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = message });
             return result;
         }
-
-        /// <summary>
-        /// Get spcified indexed Row 
-        /// </summary>
-        /// <param name="table"></param>
-        /// <param name="index"></param>
-        /// <returns></returns>
-        public Row GetRow(Table table,int index)
-        {
-            Row result = null;
-            var xmlPath = string.Format(TablePath, _destFolderPath, string.Format("{0}\\{0}.xml", table.Folder));
-            var csvPath = string.Format("{0}\\Data\\{1}\\{1}.csv", _srcPath.Substring(0, _srcPath.LastIndexOf(".")), table.SrcFolder);
-            if (File.Exists(xmlPath))
-            {
-                XNamespace tableNS = string.Format(TableXmlNs, table.Folder);
-                XElement rowNode = StreamElement(xmlPath, index);
-                List<string> rowLine = File.Exists(csvPath) ? StreamLine(csvPath, index) : null;
-                if (rowNode != null)
-                {
-                    var counter = 0;
-                     result = new Row() { DestValues = new Dictionary<string, string>(), SrcValues = new Dictionary<string, string>(), ErrorsColumns = new List<string>() };
-                    if (rowLine != null)
-                    {
-                        table.Columns.ForEach(column =>
-                        {
-                            UpdateRow(table, result, column, rowLine[counter], rowNode.Element(tableNS + column.Id).Value, index - 1);
-                            counter++;
-                        });
-                    }
-                    else
-                    {
-                        var column = table.Columns[0];
-                        UpdateRow(table, result, column, table.Options[index - 1], rowNode.Element(tableNS + column.Id).Value, index - 1);
-                        column = table.Columns[1];
-                        UpdateRow(table, result, column, rowNode.Element(tableNS + column.Id).Value, rowNode.Element(tableNS + column.Id).Value, index - 1);
-                    }
-                }
-            }
-            else
-            {
-                _logManager.Add(new LogEntity() { Level = LogLevel.Error, Section = _logSection, Message = string.Format("None Exist file: {0}", xmlPath) });
-            }
-            return result;
-        }
         
-        private void UpdateRow(Table table,Row row,Column column, string value, string newValue, int index)
-        {
-            var hasError = false;
-            var isDifferent = false;
-            if (string.IsNullOrEmpty(value.Trim()) && column.Nullable) { value = string.Empty; }
-            if (column.ErrorsRows.Contains(index)) { GetConvertedValue(column, value, out hasError, out isDifferent); }
-            row.SrcValues.Add(column.Id, value);
-            row.DestValues.Add(column.Id, newValue);
-            if (hasError) { row.ErrorsColumns.Add(column.Id); }
-        }
-
         private bool UpdateReport()
         {
             var result = true;
@@ -248,82 +192,5 @@ namespace Rigsarkiv.Athena
             table.RowsCounter++;
             _writer.WriteEndElement();
         }
-        
-        private List<string> ParseRow(string line)
-        {
-            var result = new List<string>();
-            var offset = 0;
-            var column = ParseColumn(line, offset);
-            result.Add(column);
-            offset += (column.Length + 1);
-            while (offset < (line.Length - 1))
-            {
-                column = ParseColumn(line, offset);
-                result.Add(column);
-                offset += (column.Length + 1);
-            }
-            return result;
-        }
-
-        private string ParseColumn(string line, int offset)
-        {
-            var startIndex = line.IndexOf("\"", offset);
-            var endIndex = -1;
-            if (startIndex == offset)
-            {
-                endIndex = line.IndexOf("\";", offset);
-                if (endIndex == -1)
-                {
-                    endIndex = line.IndexOf(";", offset);
-                }
-                if (endIndex > -1) { endIndex++; }
-            }
-            else
-            {
-                startIndex = offset;
-                endIndex = line.IndexOf(";", offset);
-            }
-
-            return (endIndex > -1) ? line.Substring(startIndex, endIndex - startIndex) : line.Substring(startIndex);
-        }
-
-        private List<string> StreamLine(string fileName, int index)
-        {
-            List<string> result = null;
-            var counter = 0;
-            using (var reader = new StreamReader(fileName))
-            {
-                while (!reader.EndOfStream && counter <= index)
-                {
-                    var line = reader.ReadLine();
-                    if (counter == index) {
-                        result = line.Split(Separator).ToList();
-                        if (line.IndexOf("\"") > -1) { result = ParseRow(line); }
-                    }
-                    counter++;
-                }
-            }
-            return result;
-        }
-
-        private XElement StreamElement(string fileName, int index)
-        {
-            XElement result = null;
-            int counter = 0;
-            using (var rdr = XmlReader.Create(fileName))
-            {
-                rdr.MoveToContent();
-                while (rdr.Read() && counter < index)
-                {
-                    if ((rdr.NodeType == XmlNodeType.Element) && (rdr.Name == "row"))
-                    {
-                        result = XNode.ReadFrom(rdr) as XElement;
-                        counter++;
-                    }
-                }
-                rdr.Close();
-            }
-            return result;
-        }        
     }
 }
