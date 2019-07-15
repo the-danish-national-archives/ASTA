@@ -19,6 +19,7 @@ namespace Rigsarkiv.Athena
     {
         protected static readonly ILog _log = log4net.LogManager.GetLogger(typeof(Converter));
         protected const int MaxErrorsRows = 10;
+        protected const string TablesPath = "{0}\\Tables";
         protected const string IndicesPath = "{0}\\Indices";
         protected const string ResourcePrefix = "Rigsarkiv.Athena.Resources.{0}";
         protected const string TableIndex = "tableIndex.xml";
@@ -40,7 +41,7 @@ namespace Rigsarkiv.Athena
         protected XDocument _researchIndexXDocument = null;
         protected XNamespace _tableIndexXNS = TableIndexXmlNs;
         protected XmlWriter _writer = null;
-        protected List<Table> _tables = null;
+        protected Report _report = null;
         protected string _srcPath = null;
         protected string _destPath = null;
         protected string _destFolder = null;
@@ -59,7 +60,7 @@ namespace Rigsarkiv.Athena
         {
             _assembly = Assembly.GetExecutingAssembly();
             _logManager = logManager;
-            _tables = new List<Table>();
+            _report = new Report() { TablesCounter = 0, CodeListsCounter = 0, Tables = new List<Table>() };
             _regExps = new Dictionary<string, Regex>();
             _srcPath = srcPath;
             _destPath = destPath;
@@ -79,10 +80,11 @@ namespace Rigsarkiv.Athena
         }
 
         /// <summary>
-        /// Tables metadata
+        /// Report
         /// </summary>
-        public List<Table> Tables {
-            get { return _tables; }            
+        public Report Report
+        {
+            get { return _report; }
         }
 
         /// <summary>
@@ -243,7 +245,7 @@ namespace Rigsarkiv.Athena
             var codeListNode = tableNode.Parent.Elements().Where(e => e.Element(_tableIndexXNS + "name").Value == codeListTableName).FirstOrDefault();
             columnNode = codeListNode.Element(_tableIndexXNS + "columns").Elements().Where(e => e.Element(_tableIndexXNS + "columnID").Value == C1).FirstOrDefault();
             columnNode.Element(_tableIndexXNS + "type").Value = column.Type;
-            _tables.ForEach(table => {
+            _report.Tables.ForEach(table => {
                 if (table.CodeList != null)
                 {
                     var refTable = table.CodeList.Where(subTable => subTable.Name == codeListTableName).FirstOrDefault();

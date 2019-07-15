@@ -23,7 +23,7 @@ namespace Rigsarkiv.AthenaForm
         private string _destPath = null;
         private string _destFolder = null;
         private Data _converter = null;
-        private List<Table> _tables = null;
+        private Report _report = null;
         private Table _mainTable = null;
         private Table _codeTable = null;
         private RichTextBox _outputRichTextBox = null;
@@ -39,17 +39,17 @@ namespace Rigsarkiv.AthenaForm
         /// <param name="logManager"></param>
         /// <param name="tables"></param>
         /// <param name="outputRichTextBox"></param>
-        public Form2(string srcPath, string destPath,string destFolder, LogManager logManager, List<Table> tables, RichTextBox outputRichTextBox)
+        public Form2(string srcPath, string destPath,string destFolder, LogManager logManager, Report report, RichTextBox outputRichTextBox)
         {
             InitializeComponent();            
             _logManager = logManager;
             _srcPath = srcPath;
             _destPath = destPath;
             _destFolder = destFolder;
-             _converter = new Data(logManager, srcPath, destPath, destFolder, tables);
-            _tables = tables;
+             _converter = new Data(logManager, srcPath, destPath, destFolder, report);
+            _report = report;
             _outputRichTextBox = outputRichTextBox;
-            mainTablesListBox.Items.AddRange(_tables.Select(t => t.Name).ToArray());
+            mainTablesListBox.Items.AddRange(_report.Tables.Select(t => t.Name).ToArray());
             rowLabel.Text = "";
             tableInfoLabel.Text = "";
             rowErrorsLabel.Text = "";
@@ -109,7 +109,7 @@ namespace Rigsarkiv.AthenaForm
             dataValues.Rows.Clear();
            _codeTable = null;
             codeTablesListBox.Items.Clear();
-            _mainTable = _tables[mainTablesListBox.SelectedIndex];
+            _mainTable = _report.Tables[mainTablesListBox.SelectedIndex];
             if(_mainTable.CodeList != null && _mainTable.CodeList.Count > 0)
             {
                 codeTablesListBox.Items.AddRange(_mainTable.CodeList.Select(t => t.Name).ToArray());
@@ -160,7 +160,7 @@ namespace Rigsarkiv.AthenaForm
         }
         private void IndexButton_Click(object sender, EventArgs e)
         {
-            Form3 form = new Form3(_srcPath, _destPath, _destFolder, _logManager, _converter.Tables, _outputRichTextBox);
+            Form3 form = new Form3(_srcPath, _destPath, _destFolder, _logManager, _converter.Report, _outputRichTextBox);
             form.Show();
             this.Hide();
         }

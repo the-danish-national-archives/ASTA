@@ -13,7 +13,6 @@ namespace Rigsarkiv.Athena
         const string SchemasPath = "{0}\\Schemas";
         const string SchemasLocalSharedPath = "{0}\\Schemas\\localShared";
         const string SchemasStandardPath = "{0}\\Schemas\\standard";
-        const string TablesPath = "{0}\\Tables";
         
         /// <summary>
         /// Constructore

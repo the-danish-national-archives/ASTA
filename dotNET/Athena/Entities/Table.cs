@@ -11,6 +11,7 @@ namespace Rigsarkiv.Athena.Entities
         public string Folder { get; set; }
         public string Name { get; set; }
         public int Rows { get; set; }
+        public int RowsCounter { get; set; }
         public List<Table> CodeList { get; set; }
         public List<Column> Columns { get; set; }
         public int Errors { get; set; }        

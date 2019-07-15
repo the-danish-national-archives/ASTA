@@ -1,4 +1,5 @@
-﻿using Rigsarkiv.Athena.Logging;
+﻿using Rigsarkiv.Athena.Entities;
+using Rigsarkiv.Athena.Logging;
 using System;
 using System.IO;
 using System.Linq;
@@ -22,9 +23,10 @@ namespace Rigsarkiv.Athena
         /// <param name="srcPath"></param>
         /// <param name="destPath"></param>
         /// <param name="destFolder"></param>
-        public Index(LogManager logManager, string srcPath, string destPath, string destFolder) : base(logManager, srcPath, destPath, destFolder)
+        public Index(LogManager logManager, string srcPath, string destPath, string destFolder,Report report) : base(logManager, srcPath, destPath, destFolder)
         {
             _logSection = "Index";
+            _report = report;
             using (Stream stream = _assembly.GetManifestResourceStream(string.Format(ResourcePrefix, FileIndex)))
             {
                 _fileIndexXDocument = XDocument.Load(stream);

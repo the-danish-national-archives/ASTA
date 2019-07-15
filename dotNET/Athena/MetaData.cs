@@ -115,8 +115,8 @@ namespace Rigsarkiv.Athena
             _tableIndexXDocument.Element(_tableIndexXNS + "siardDiark").Element(_tableIndexXNS + "tables").Add(tableNode);
             var srcFolder = tableInfo["fileName"].ToString();
             srcFolder = srcFolder.Substring(0, srcFolder.LastIndexOf("."));
-            var table = new Table() { SrcFolder = srcFolder, Name = tableName, Folder = folder, Rows = int.Parse(rows) - 1, Columns = new List<Column>() };
-            _tables.Add(table);
+            var table = new Table() { SrcFolder = srcFolder, Name = tableName, Folder = folder, Rows = int.Parse(rows) - 1, RowsCounter = 0, Columns = new List<Column>() };
+            _report.Tables.Add(table);
             foreach (var variable in (object[])tableInfo["variables"])
             {
                 var variableInfo = (Dictionary<string, object>)variable;
@@ -188,7 +188,7 @@ namespace Rigsarkiv.Athena
             Directory.CreateDirectory(string.Format(TablePath, _destFolderPath, folder));
 
             var options = (object[])variableInfo["options"];
-            var codeList = new Table() { Name = refTableName, Folder = folder, Rows = options.Length, Errors = 0, Options= new List<string>() };
+            var codeList = new Table() { Name = refTableName, Folder = folder, Rows = options.Length, Errors = 0, RowsCounter = 0, Options= new List<string>() };
             codeList.Columns = new List<Column>() { (new Column() { Name = Code, Id = C1, Type = column.Type, TypeOriginal = "", Differences = 0, ErrorsRows = new List<int>() }), (new Column() { Name = CodeValue, Id = C2, Type = "", TypeOriginal = "", Differences = 0, ErrorsRows = new List<int>() }) };
             var optionsType = ParseOptions(options, researchIndexNode, codeList, folder, column);
             var columnNode1 = new XElement(_tableIndexXNS + "column", new XElement(_tableIndexXNS + "name", Code),new XElement(_tableIndexXNS + "columnID", C1),new XElement(_tableIndexXNS + "type", column.Type),new XElement(_tableIndexXNS + "typeOriginal"),new XElement(_tableIndexXNS + "nullable", "false"), new XElement(_tableIndexXNS + "description", "Kode"));
@@ -211,7 +211,6 @@ namespace Rigsarkiv.Athena
         private string ParseOptions(object[] options, XElement researchIndexNode, Table codeList, string folder, Column column)
         {
             var result = 0;
-            var index = 0;
             var codeListColumn = codeList.Columns[0];
             var path = string.Format(TablePath, _destFolderPath, string.Format("{0}\\{0}.xml", folder));
             _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add file: {0} ", path) });
@@ -235,14 +234,14 @@ namespace Rigsarkiv.Athena
                 {
                     if (MaxErrorsRows > codeListColumn.ErrorsRows.Count)
                     {
-                        codeListColumn.ErrorsRows.Add(index);
+                        codeListColumn.ErrorsRows.Add(codeList.Errors);
                         _logManager.Add(new LogEntity() { Level = LogLevel.Warning, Section = _logSection, Message = string.Format("Convert column {0} of type {1} with value {2} has error", codeListColumn.Name, codeListColumn.Type, value) });
                     }
                     codeList.Errors++;
                 }
-                index++;
+                codeList.RowsCounter++;
             }
-            EndWriter();
+            EndWriter();            
             _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Column {0} of table {1} has {2} Differences", codeListColumn.Name, codeList.Folder, codeListColumn.Differences) });
             return string.Format(VarCharPrefix, result);
         }        

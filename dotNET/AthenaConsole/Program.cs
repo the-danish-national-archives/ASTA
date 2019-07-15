@@ -28,10 +28,10 @@ namespace Rigsarkiv.AthenaConsole
                     {
                         var tableIndexXDocument = _converter.TableIndexXDocument;
                         var researchIndexXDocument = _converter.ResearchIndexXDocument;
-                        _converter = new Data(_logManager, srcPath, destPath, destFolder, _converter.Tables) { TableIndexXDocument = tableIndexXDocument, ResearchIndexXDocument = researchIndexXDocument };
+                        _converter = new Data(_logManager, srcPath, destPath, destFolder, _converter.Report) { TableIndexXDocument = tableIndexXDocument, ResearchIndexXDocument = researchIndexXDocument };
                         if (_converter.Run())
                         {
-                            _converter = new Index(_logManager, srcPath, destPath, destFolder);
+                            _converter = new Index(_logManager, srcPath, destPath, destFolder, _converter.Report);
                             if (_converter.Run())
                             {
                                 var path = string.Format("{0}\\{1}.html", destPath, destFolder);

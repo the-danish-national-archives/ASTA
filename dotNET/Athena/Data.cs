@@ -26,11 +26,11 @@ namespace Rigsarkiv.Athena
         /// <param name="srcPath"></param>
         /// <param name="destPath"></param>
         /// <param name="destFolder"></param>
-        /// <param name="tables"></param>
-        public Data(LogManager logManager, string srcPath, string destPath, string destFolder, List<Table> tables) : base(logManager, srcPath, destPath, destFolder)
+        /// <param name="report"></param>
+        public Data(LogManager logManager, string srcPath, string destPath, string destFolder, Report report) : base(logManager, srcPath, destPath, destFolder)
         {
             _logSection = "Data";
-            _tables = tables;            
+            _report = report;            
         }
 
         /// <summary>
@@ -43,9 +43,10 @@ namespace Rigsarkiv.Athena
             var message = string.Format("Start Converting Data {0} -> {1}", _srcFolder, _destFolder);
             _log.Info(message);
             _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = message });
-            if (_tables != null && _tables.Count > 0)
+            if (_report.Tables != null && _report.Tables.Count > 0)
             {               
                 result = EnsureData();
+                if(result) { result = UpdateReport(); }
             }
             else
             {
@@ -114,12 +115,42 @@ namespace Rigsarkiv.Athena
             if (hasError) { row.ErrorsColumns.Add(column.Id); }
         }
 
+        private bool UpdateReport()
+        {
+            var result = true;
+            try
+            {
+                var path = string.Format(TablesPath, _destFolderPath);
+                _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Count Tables : {0}", path) });
+                var files = Directory.GetFiles(path, "*.xml", SearchOption.AllDirectories);
+                if (files != null && files.Length > 0)
+                {
+                    files.ToList().ForEach(filePath => {
+                        var fileName = filePath.Substring(filePath.LastIndexOf("\\") + 1);
+                        fileName = fileName.Substring(0, fileName.LastIndexOf("."));
+                        _report.Tables.ForEach(mainTable =>
+                        {
+                            if (mainTable.Folder == fileName) { _report.TablesCounter++; }
+                            if (mainTable.CodeList.Any(t => t.Folder == fileName)) { _report.CodeListsCounter++; }
+                        });
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                result = false;
+                _log.Error("UpdateReport Failed", ex);
+                _logManager.Add(new LogEntity() { Level = LogLevel.Error, Section = _logSection, Message = string.Format("UpdateReport Failed: {0}", ex.Message) });
+            }
+            return result;
+        }
+
         private bool EnsureData()
         {
             var result = true;
             try
             {
-                _tables.ForEach(t => {
+                _report.Tables.ForEach(t => {
                     if (!AddFile(t)) { result = false; }
                 });
                 if (result && _updateDocuments)
@@ -213,6 +244,7 @@ namespace Rigsarkiv.Athena
                 _writer.WriteElementString(column.Id, convertedValue);
             }
             if (rowError) { table.Errors++; }
+            table.RowsCounter++;
             _writer.WriteEndElement();
         }
         

@@ -79,10 +79,10 @@ namespace Rigsarkiv.AthenaForm
                 {
                     var tableIndexXDocument = _converter.TableIndexXDocument;
                     var researchIndexXDocument = _converter.ResearchIndexXDocument;
-                    _converter = new Data(_logManager, srcPath, destPath, destFolder, _converter.Tables) { TableIndexXDocument = tableIndexXDocument, ResearchIndexXDocument = researchIndexXDocument }  ;
+                    _converter = new Data(_logManager, srcPath, destPath, destFolder, _converter.Report) { TableIndexXDocument = tableIndexXDocument, ResearchIndexXDocument = researchIndexXDocument }  ;
                     if (_converter.Run())
                     {
-                        _form = new Form2(srcPath, destPath, destFolder, _logManager, _converter.Tables,outputRichTextBox);
+                        _form = new Form2(srcPath, destPath, destFolder, _logManager, _converter.Report,outputRichTextBox);
                         nextForm.Enabled = true;
                     }                    
                 }
