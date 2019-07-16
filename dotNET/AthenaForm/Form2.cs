@@ -94,7 +94,8 @@ namespace Rigsarkiv.AthenaForm
             _codeTable = _mainTable.CodeList[codeTablesListBox.SelectedIndex];
             tableInfoLabel.Text = string.Format(CodeTableLabel, _codeTable.Name);            
             UpdateDataRow(_codeTable);
-            nextButton.Enabled = prevButton.Enabled = searchButton.Enabled = true;            
+            nextButton.Enabled = prevButton.Enabled = searchButton.Enabled = true;
+            searchTextBox.Text = _rowIndex.ToString();
         }
 
         private void mainTablesListBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -116,7 +117,8 @@ namespace Rigsarkiv.AthenaForm
             }
             tableInfoLabel.Text = string.Format(MainTableLabel, _mainTable.Name);            
             UpdateDataRow(_mainTable);
-            nextButton.Enabled = prevButton.Enabled = searchButton.Enabled = true;            
+            nextButton.Enabled = prevButton.Enabled = searchButton.Enabled = true;
+            searchTextBox.Text = _rowIndex.ToString();
         }
 
         private void nextButton_Click(object sender, EventArgs e)

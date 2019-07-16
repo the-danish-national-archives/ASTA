@@ -95,7 +95,7 @@
                 var index = column.ErrorsRows[i];
                 var srcValue = table.ErrorsRows[index].SrcValues[column.Id];
                 var destValue = table.ErrorsRows[index].DestValues[column.Id];
-                errorsTable.insertAdjacentHTML("beforeend", errorHtml.format(table.Folder, table.Name, index, column.Name, srcValue, destValue));
+                errorsTable.insertAdjacentHTML("beforeend", errorHtml.format(table.Folder, table.Name, (index + 1), column.Name, srcValue, destValue));
             }}
         }}
         function UpdateColumn(table, column) {{
