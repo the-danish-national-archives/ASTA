@@ -14,6 +14,10 @@
             .Info {{
                 color: black;
             }}
+        table, th, td {{
+                border: 1px solid black;
+                border-spacing: 0px;
+            }}
     </style>
     <script type="text/javascript">
         var report = {2}
@@ -29,9 +33,39 @@
         <p>Report startet</p>
         <div class="results" id="testContent">
             <!--Start Log Data-->
-            
+            <p>Antal tabeller</p>
+            <table>
+                <tr><th></th><th>Før</th><th>Efter</th></tr>
+                <tr><td>Antal tabeller</td><td id="tablesBefore">0</td><td id="tablesAfter">0</td></tr>
+                <tr><td>Antal kodetabeller</td><td id="codeListsBefore">0</td><td id="codeListsAfter">0</td></tr>
+            </table>
+            <br />
+            <p>Antal rækker</p>
+            <table>
+                <tr><th>Tabel</th><th>Før</th><th>Efter</th></tr>
+            </table>
             <!--End Log Data-->
         </div>
     </div>
+    <script type="text/javascript">
+        (function () {{
+                UpdateRow("tablesBefore", "tablesAfter", report.Tables.length, report.TablesCounter);
+                var codeLists = 0;
+                for (var i = 0; i < report.Tables.length; i++) {{
+                    codeLists += report.Tables[i].CodeList.length;
+                }}
+                UpdateRow("codeListsBefore", "codeListsAfter", codeLists, report.CodeListsCounter);
+         }})();
+        function UpdateRow(beforeId, afterId, beforeValue, afterValue) {{
+            var before = document.getElementById(beforeId);
+            var after = document.getElementById(afterId);
+            before.innerText = beforeValue;
+            after.innerText = afterValue;
+            if (beforeValue !== afterValue) {{
+                before.className = "Error";
+                after.className = "Error";
+            }}
+        }}        
+    </script>
 </body>
 </html>

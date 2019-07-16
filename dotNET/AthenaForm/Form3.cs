@@ -121,7 +121,7 @@ namespace Rigsarkiv.AthenaForm
         private void logButton_Click(object sender, System.EventArgs e)
         {
             var path = string.Format("{0}\\{1}_log.html", _destPath, _destFolder);
-            if (_logManager.Flush(path))
+            if (_logManager.Flush(path, _destFolder))
             {
                 OpenFile(path);
             }
@@ -135,7 +135,7 @@ namespace Rigsarkiv.AthenaForm
         private void reportButton_Click(object sender, EventArgs e)
         {
             var path = string.Format("{0}\\{1}_report.html", _destPath, _destFolder);
-            if (_converter.Flush(path))
+            if (_converter.Flush(path, _destFolder))
             {
                 OpenFile(path);
             }

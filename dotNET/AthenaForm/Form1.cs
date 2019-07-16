@@ -144,7 +144,7 @@ namespace Rigsarkiv.AthenaForm
         private void logButton_Click(object sender, EventArgs e)
         {
             var path = string.Format("{0}\\{1}_log.html", aipTextBox.Text, aipNameTextBox.Text);
-            if (_logManager.Flush(path))
+            if (_logManager.Flush(path, aipNameTextBox.Text))
             {
                 try
                 {

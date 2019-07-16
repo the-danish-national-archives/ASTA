@@ -47,15 +47,14 @@ namespace Rigsarkiv.Athena.Logging
         /// flush and save log file
         /// </summary>
         /// <param name="path"></param>
-        public bool Flush(string path)
+        /// <param name="name"></param>
+        public bool Flush(string path, string name)
         {
             var result = true;
             try
             {
                 _log.Info("Flush log");
                 string data = GetLogTemplate();
-                var name = path.Substring(path.LastIndexOf("\\") + 1);
-                name = name.Substring(0, name.LastIndexOf("."));
                 var content = new StringBuilder();
                 var counter = 0;
                 _entities.ForEach(e =>
