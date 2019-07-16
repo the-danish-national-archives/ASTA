@@ -20,7 +20,7 @@ namespace Rigsarkiv.AthenaForm
         private string _srcPath = null;
         private string _destPath = null;
         private string _destFolder = null;
-        private Converter _converter = null;
+        private Index _converter = null;
         private Report _report = null;
         private RichTextBox _outputRichTextBox = null;
 
@@ -120,18 +120,10 @@ namespace Rigsarkiv.AthenaForm
 
         private void logButton_Click(object sender, System.EventArgs e)
         {
-            var path = string.Format("{0}\\{1}.html", _destPath, _destFolder);
+            var path = string.Format("{0}\\{1}_log.html", _destPath, _destFolder);
             if (_logManager.Flush(path))
             {
-                try
-                {
-                    Process.Start(path);
-                }
-                catch (Exception ex)
-                {
-                    _log.Error(string.Format("Start Process {0} Failed", path), ex);
-                }
-                
+                OpenFile(path);
             }
         }
 
@@ -142,8 +134,26 @@ namespace Rigsarkiv.AthenaForm
 
         private void reportButton_Click(object sender, EventArgs e)
         {
-            var json = new JavaScriptSerializer().Serialize(_report);
-            
+            var path = string.Format("{0}\\{1}_report.html", _destPath, _destFolder);
+            if (_converter.Flush(path))
+            {
+                OpenFile(path);
+            }
+        }
+
+        private bool OpenFile(string path)
+        {
+            var result = true;
+            try
+            {
+                Process.Start(path);
+            }
+            catch (Exception ex)
+            {
+                result = false;
+                _log.Error(string.Format("Start Process {0} Failed", path), ex);
+            }
+            return result;
         }
     }
 }

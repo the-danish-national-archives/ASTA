@@ -34,11 +34,18 @@ namespace Rigsarkiv.AthenaConsole
                             _converter = new Index(_logManager, srcPath, destPath, destFolder, _converter.Report);
                             if (_converter.Run())
                             {
-                                var path = string.Format("{0}\\{1}.html", destPath, destFolder);
+                                var path = string.Format("{0}\\{1}_log.html", destPath, destFolder);
                                 if (_logManager.Flush(path))
                                 {
                                     Console.ForegroundColor = ConsoleColor.Green;
                                     Console.WriteLine("Log file at: {0}", path);
+                                    Console.ResetColor();
+                                }
+                                path = string.Format("{0}\\{1}_report.html", destPath, destFolder);
+                                if (((Index)_converter).Flush(path))
+                                {
+                                    Console.ForegroundColor = ConsoleColor.Green;
+                                    Console.WriteLine("Report file at: {0}", path);
                                     Console.ResetColor();
                                 }
                             }                            

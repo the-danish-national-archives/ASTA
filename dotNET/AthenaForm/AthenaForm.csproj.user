@@ -3,4 +3,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <StartArguments>"C:\VSO\Rigsarkivet\test\FD.15002_2datasæt_fejlfri_SPSS.json" "C:\VSO\Rigsarkivet\test"</StartArguments>
   </PropertyGroup>
+  <PropertyGroup>
+    <ProjectView>ProjectFiles</ProjectView>
+  </PropertyGroup>
 </Project>
