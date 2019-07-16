@@ -32,7 +32,6 @@
         <h3>Afleveringspakke ID: {1}</h3>
         <p>Report startet</p>
         <div class="results" id="testContent">
-            <!--Start Log Data-->
             <p>Antal tabeller</p>
             <table>
                 <tr><th></th><th>Før</th><th>Efter</th></tr>
@@ -41,21 +40,42 @@
             </table>
             <br />
             <p>Antal rækker</p>
-            <table>
+            <table id="rowsTable">
                 <tr><th>Tabel</th><th>Før</th><th>Efter</th></tr>
             </table>
-            <!--End Log Data-->
         </div>
     </div>
     <script type="text/javascript">
+        if (!String.prototype.format) {{
+            String.prototype.format = function () {{
+                var args = arguments;
+                return this.replace(/{{(\d+)}}/g, function (match, number) {{
+                    return typeof args[number] != 'undefined'
+                        ? args[number]
+                        : match
+                        ;
+                }});
+            }};
+        }}
+        var rowsTable = document.getElementById("rowsTable");
+        var rowHtml = "<tr><td>{{0}} ({{1}})</td><td{{4}}>{{2}}</td><td{{4}}>{{3}}</td></tr>";
+
         (function () {{
-                UpdateRow("tablesBefore", "tablesAfter", report.Tables.length, report.TablesCounter);
-                var codeLists = 0;
-                for (var i = 0; i < report.Tables.length; i++) {{
-                    codeLists += report.Tables[i].CodeList.length;
+            UpdateRow("tablesBefore", "tablesAfter", report.Tables.length, report.TablesCounter);
+            var codeLists = 0;
+            for (var i = 0; i < report.Tables.length; i++) {{
+                UpdateTableInfo(report.Tables[i]);
+                codeLists += report.Tables[i].CodeList.length;
+                for (var j = 0; j < report.Tables[i].CodeList.length; j++) {{
+                    UpdateTableInfo(report.Tables[i].CodeList[j]);
                 }}
-                UpdateRow("codeListsBefore", "codeListsAfter", codeLists, report.CodeListsCounter);
+            }}
+            UpdateRow("codeListsBefore", "codeListsAfter", codeLists, report.CodeListsCounter);
          }})();
+        function UpdateTableInfo(table) {{
+                var className = (table.Rows !== table.RowsCounter) ? " class=\"Error\"" : "";
+                rowsTable.insertAdjacentHTML("beforeend", rowHtml.format(table.Folder, table.Name, table.Rows, table.RowsCounter, className));
+        }}
         function UpdateRow(beforeId, afterId, beforeValue, afterValue) {{
             var before = document.getElementById(beforeId);
             var after = document.getElementById(afterId);
