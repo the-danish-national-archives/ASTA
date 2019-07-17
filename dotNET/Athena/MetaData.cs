@@ -188,7 +188,7 @@ namespace Rigsarkiv.Athena
             Directory.CreateDirectory(string.Format(TablePath, _destFolderPath, folder));
 
             var options = (object[])variableInfo["options"];
-            var codeList = new Table() { Name = refTableName, Folder = folder, Rows = options.Length, Errors = 0, RowsCounter = 0, Options= new List<string>(), ErrorsRows = new Dictionary<string, Row>() };
+            var codeList = new Table() { Name = refTableName, Folder = folder, Rows = options.Length, Errors = 0, RowsCounter = 0, Options= new Dictionary<string, string>(), ErrorsRows = new Dictionary<string, Row>() };
             codeList.Columns = new List<Column>() { (new Column() { Name = Code, Id = C1, Type = column.Type, TypeOriginal = "", Differences = 0, Errors = 0, ErrorsRows = new List<int>() }), (new Column() { Name = CodeValue, Id = C2, Type = "", TypeOriginal = "", Differences = 0, Errors = 0, ErrorsRows = new List<int>() }) };
             var optionsType = ParseOptions(options, researchIndexNode, codeList, folder, column);
             var columnNode1 = new XElement(_tableIndexXNS + "column", new XElement(_tableIndexXNS + "name", Code),new XElement(_tableIndexXNS + "columnID", C1),new XElement(_tableIndexXNS + "type", column.Type),new XElement(_tableIndexXNS + "typeOriginal"),new XElement(_tableIndexXNS + "nullable", "false"), new XElement(_tableIndexXNS + "description", "Kode"));
@@ -203,9 +203,10 @@ namespace Rigsarkiv.Athena
             tableNode.Parent.Add(refTableNode);
             codeList.Columns[1].Type = optionsType;
             table.CodeList.Add(codeList);
-            codeList.Options.ForEach(value => {
-                if (HasSpecialNumeric(column, value)) { HandleSpecialNumeric(column, tableNode, researchIndexNode, value, false); }
-            });
+            foreach(var pair in codeList.Options)
+            {
+                if (HasSpecialNumeric(column, pair.Key)) { HandleSpecialNumeric(column, tableNode, researchIndexNode, pair.Key, false); }
+            }
         }
         
         private string ParseOptions(object[] options, XElement researchIndexNode, Table codeList, string folder, Column column)
@@ -213,37 +214,16 @@ namespace Rigsarkiv.Athena
             var result = 0;
             var codeListColumn = codeList.Columns[0];
             var path = string.Format(TablePath, _destFolderPath, string.Format("{0}\\{0}.xml", folder));
-            _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add file: {0} ", path) });
-            StartWriter(folder);
+            _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Read codeList {0} options", codeList.Name) });
             foreach (var option in options)
             {
-                var hasError = false;
-                var isDifferent = false;
                 var code = (Dictionary<string, object>)option;
                 var value = code["name"].ToString();
-                var length = code["description"].ToString().Length;
-                codeList.Options.Add(value);
-                if (length > result) { result = length; }
-                if((bool)code["isMissing"]) { AddMissingColumnNode(value, researchIndexNode, column.Id); }
-                _writer.WriteStartElement("row");                
-                _writer.WriteElementString("c1", GetConvertedValue(codeListColumn, value, out hasError, out isDifferent));
-                _writer.WriteElementString("c2", code["description"].ToString());
-                _writer.WriteEndElement();
-                if(isDifferent) { codeListColumn.Differences++; }
-                if (hasError)
-                {
-                    codeListColumn.Errors++;
-                    if (MaxErrorsRows > codeListColumn.ErrorsRows.Count)
-                    {
-                        codeListColumn.ErrorsRows.Add(codeList.Errors);
-                        _logManager.Add(new LogEntity() { Level = LogLevel.Warning, Section = _logSection, Message = string.Format("Convert column {0} of type {1} with value {2} has error", codeListColumn.Name, codeListColumn.Type, value) });
-                    }
-                    codeList.Errors++;
-                }
-                codeList.RowsCounter++;
-            }
-            EndWriter();            
-            _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Column {0} of table {1} has {2} Differences", codeListColumn.Name, codeList.Folder, codeListColumn.Differences) });
+                var description = code["description"].ToString();
+                codeList.Options.Add(value, description);
+                if (description.Length > result) { result = description.Length; }
+                if((bool)code["isMissing"]) { AddMissingColumnNode(value, researchIndexNode, column.Id); }                
+            }         
             return string.Format(VarCharPrefix, result);
         }        
 

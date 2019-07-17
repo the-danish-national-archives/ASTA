@@ -138,7 +138,7 @@ namespace Rigsarkiv.Athena
                     else
                     {
                         var column = table.Columns[0];
-                        UpdateRow(table, result, column, table.Options[index - 1], rowNode.Element(tableNS + column.Id).Value, index - 1);
+                        UpdateRow(table, result, column, table.Options.ElementAt(index - 1).Key, rowNode.Element(tableNS + column.Id).Value, index - 1);
                         column = table.Columns[1];
                         UpdateRow(table, result, column, rowNode.Element(tableNS + column.Id).Value, rowNode.Element(tableNS + column.Id).Value, index - 1);
                     }

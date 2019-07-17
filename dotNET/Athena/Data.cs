@@ -96,6 +96,10 @@ namespace Rigsarkiv.Athena
             {
                 _report.Tables.ForEach(t => {
                     if (!AddFile(t)) { result = false; }
+                    t.CodeList.ForEach(cl =>
+                    {
+                        if (!AddCodes(cl)) { result = false; }
+                    });
                 });
                 if (result && _updateDocuments)
                 {
@@ -109,6 +113,48 @@ namespace Rigsarkiv.Athena
                 result = false;
                 _log.Error("EnsureData Failed", ex);
                 _logManager.Add(new LogEntity() { Level = LogLevel.Error, Section = _logSection, Message = string.Format("EnsureData Failed: {0}", ex.Message) });
+            }
+            return result;
+        }
+
+        private bool AddCodes(Table codeList)
+        {
+            var result = true;
+            try
+            {
+                var codeListColumn = codeList.Columns[0];
+                var path = string.Format(TablePath, _destFolderPath, string.Format("{0}\\{0}.xml", codeList.Folder));
+                _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add file: {0} ", path) });
+                StartWriter(codeList.Folder);
+                foreach (var pair in codeList.Options)
+                {
+                    var hasError = false;
+                    var isDifferent = false;
+                    _writer.WriteStartElement("row");
+                    _writer.WriteElementString("c1", GetConvertedValue(codeListColumn, pair.Key, out hasError, out isDifferent));
+                    _writer.WriteElementString("c2", pair.Value);
+                    _writer.WriteEndElement();
+                    if (isDifferent) { codeListColumn.Differences++; }
+                    if (hasError)
+                    {
+                        codeListColumn.Errors++;
+                        if (MaxErrorsRows > codeListColumn.ErrorsRows.Count)
+                        {
+                            codeListColumn.ErrorsRows.Add(codeList.Errors);
+                            _logManager.Add(new LogEntity() { Level = LogLevel.Warning, Section = _logSection, Message = string.Format("Convert column {0} of type {1} with value {2} has error", codeListColumn.Name, codeListColumn.Type, pair.Value) });
+                        }
+                        codeList.Errors++;
+                    }
+                    codeList.RowsCounter++;
+                }
+                EndWriter();
+                _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Column {0} of table {1} has {2} Differences", codeListColumn.Name, codeList.Folder, codeListColumn.Differences) });
+            }
+            catch (Exception ex)
+            {
+                result = false;
+                _log.Error("AddCodes Failed", ex);
+                _logManager.Add(new LogEntity() { Level = LogLevel.Error, Section = _logSection, Message = string.Format("AddCodes Failed: {0}", ex.Message) });
             }
             return result;
         }
