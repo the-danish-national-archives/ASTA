@@ -357,7 +357,11 @@ namespace Rigsarkiv.Athena
                 endIndex = line.IndexOf("\";", offset);
                 if (endIndex == -1)
                 {
-                    endIndex = line.IndexOf(";", offset);
+                    endIndex = line.IndexOf("\"", offset + 1);
+                    if (endIndex == -1)
+                    {
+                        endIndex = line.IndexOf(";", offset);
+                    }
                 }
                 if (endIndex > -1) { endIndex++; }
             }
