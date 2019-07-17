@@ -169,7 +169,7 @@ namespace Rigsarkiv.Athena
                     break;
                 case "DECIMAL":
                     {
-                        startIndex = regExp.IndexOf("{1,") + 3;
+                        startIndex = regExp.IndexOf("[0-9]{0,") + 8;
                         endIndex = regExp.IndexOf("}", startIndex);
                         result = int.Parse(regExp.Substring(startIndex, endIndex - startIndex));
                         result++;
@@ -440,11 +440,11 @@ namespace Rigsarkiv.Athena
                 var groups = _regExps[column.RegExp].Match(result).Groups;
                 if (column.RegExp == "^([0-9]{2,2})-([a-zA-Z]{3,3})-([0-9]{4,4})\\s([0-9]{2,2}):([0-9]{2,2}):([0-9]{2,2})$")
                 {
-                    result = string.Format("{0}-{1}-{2}T{3}:{4}:{5}", groups[3].Value, GetMonth(groups[2].Value), groups[1].Value, groups[4].Value, groups[5].Value, groups[5].Value);
+                    result = string.Format("{0}-{1}-{2}T{3}:{4}:{5}", groups[3].Value, GetMonth(groups[2].Value), groups[1].Value, groups[4].Value, groups[5].Value, groups[6].Value);
                 }
                 else
                 {
-                    result = string.Format("{0}-{1}-{2}T{3}:{4}:{5}", groups[1].Value, groups[2].Value, groups[3].Value, groups[4].Value, groups[5].Value, groups[5].Value);
+                    result = string.Format("{0}-{1}-{2}T{3}:{4}:{5}", groups[1].Value, groups[2].Value, groups[3].Value, groups[4].Value, groups[5].Value, groups[6].Value);
                 }
                 isDifferent = result != value;
             }
@@ -485,7 +485,7 @@ namespace Rigsarkiv.Athena
             if (!hasError)
             {
                 var groups = _regExps[column.RegExp].Match(result).Groups;
-                result = string.Format("{0}:{1}:{2}", groups[1].Value, groups[2].Value, groups[3].Value);
+                result = string.Format("{0}:{1}:{2}", groups[1].Value.Length == 1 ? string.Format("0{0}", groups[1].Value) : groups[1].Value, groups[2].Value, groups[3].Value);
                 isDifferent = result != value;
             }
             return result;

@@ -255,6 +255,10 @@ namespace Rigsarkiv.Athena
                 index = 0;
                 _logManager.Add(new LogEntity() { Level = LogLevel.Warning, Section = _logSection, Message = string.Format("Variable: {0} has empty/null column data", variableInfo["name"].ToString()) });
             }
+            if(variableInfo["type"].ToString() == "Decimal" && index == 2)
+            {
+                index = 0;
+            }
             return ((object[])variableInfo["regExps"])[index].ToString();
         }
 
