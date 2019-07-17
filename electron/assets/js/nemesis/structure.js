@@ -561,12 +561,13 @@ function (n) {
                 settings.pathDirTxt.value = settings.selectedPath;
                 settings.logCallback().reset();
                 settings.confirmationSpn.innerHTML = "";
+                settings.ConvertBtn.hidden = true;
             })            
         }
 
         //Model interfaces functions
         Rigsarkiv.Nemesis.Structure = {        
-            initialize: function (logCallback,metadataCallback,outputErrorId,selectDirectoryId,pathDirectoryId,validateId,logStartId,logEndNoErrorId,logEndWithErrorId,outputPrefix,testId,confirmationId,convertDisabledId) {            
+            initialize: function (logCallback,metadataCallback,outputErrorId,selectDirectoryId,pathDirectoryId,validateId,logStartId,logEndNoErrorId,logEndWithErrorId,outputPrefix,testId,confirmationId,convertDisabledId,convertId) {            
                 settings.logCallback = logCallback;
                 settings.metadataCallback = metadataCallback;
                 settings.outputErrorSpn = document.getElementById(outputErrorId);
@@ -581,6 +582,7 @@ function (n) {
                 settings.testId = document.getElementById(testId);
                 settings.confirmationSpn = document.getElementById(confirmationId);
                 settings.convertDisabledText = document.getElementById(convertDisabledId).innerHTML;
+                settings.ConvertBtn = document.getElementById(convertId);
                 $("span[id^='" + settings.outputPrefix + "']").each(function() {
                     settings.outputText[this.id] = $(this).html();
                     $(this).html("");

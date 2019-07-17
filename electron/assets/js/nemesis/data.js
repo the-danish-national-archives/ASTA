@@ -515,7 +515,10 @@ function (n) {
             if(startIndex === offset) {
                 endIndex = data.indexOf("\";",offset);
                 if(endIndex === -1) {
-                    endIndex = data.indexOf(";",offset);
+                    endIndex = data.indexOf("\"",offset + 1);
+                    if(endIndex === -1) {
+                        endIndex = data.indexOf(";",offset);
+                    }
                 }
                 if(endIndex > -1) { endIndex++; }
             }
