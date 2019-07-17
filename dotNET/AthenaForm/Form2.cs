@@ -85,7 +85,7 @@ namespace Rigsarkiv.AthenaForm
         {
             if(codeTablesListBox.SelectedIndex == -1) { return; }
             _selectedColumn = -1;
-            nextErrorButton.Enabled = false;
+            nextErrorButton.Enabled = prevErrorButton.Enabled = false;
             _rowIndex = 1;
             rowLabel.Text = "";
             rowErrorsLabel.Text = "";
@@ -101,7 +101,7 @@ namespace Rigsarkiv.AthenaForm
         private void mainTablesListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             _selectedColumn = -1;
-            nextErrorButton.Enabled = false;
+            nextErrorButton.Enabled = prevErrorButton.Enabled = false;
             _rowIndex = 1;
             rowLabel.Text = "";
             rowErrorsLabel.Text = "";
@@ -192,6 +192,22 @@ namespace Rigsarkiv.AthenaForm
             }
         }
 
+
+        private void prevErrorButton_Click(object sender, EventArgs e)
+        {
+            var table = (_codeTable != null) ? _codeTable : _mainTable;
+            var errorRows = table.Columns[_selectedColumn].ErrorsRows;            
+            if (errorRows.Any(index => (_rowIndex - 1) > index))
+            {
+                var nextIndex = errorRows.LastOrDefault(index => (_rowIndex - 1) > index);
+                _rowIndex = nextIndex + 1;
+                searchTextBox.Text = _rowIndex.ToString();
+                UpdateDataRow(table);
+                prevButton.Enabled = (_rowIndex > 1);
+                nextButton.Enabled = (table.Rows > _rowIndex);
+            }
+        }
+
         private void dataValues_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             var table = (_codeTable != null) ? _codeTable : _mainTable;
@@ -203,6 +219,7 @@ namespace Rigsarkiv.AthenaForm
                     dataValues.ClearSelection();
                     _selectedColumn = -1;
                     nextErrorButton.Enabled = false;
+                    prevErrorButton.Enabled = false;
                 }
                 else
                 {
@@ -249,7 +266,9 @@ namespace Rigsarkiv.AthenaForm
                     if (row.ErrorsColumns.Contains(column.Id)) { dataValues[4, i].Style.BackColor = Color.Red; }                    
                 }
                 dataValues[5, i].Value = column.Differences;
+                //if(column.Differences > 0) { dataValues[5, i].Style.BackColor = Color.LightGreen; }
                 dataValues[6, i].Value = column.ErrorsRows.Count > 0 ? column.ErrorsRows.Count : 0;
+                if(column.ErrorsRows.Count > 0) { dataValues[6, i].Style.BackColor = Color.Red; }
             }
             tableErrorsLabel.Text = string.Format(TableErrorsLabel, table.Errors);
             if (row != null) { rowErrorsLabel.Text = string.Format(RowErrorsLabel, row.ErrorsColumns.Count); }
@@ -266,6 +285,7 @@ namespace Rigsarkiv.AthenaForm
         {
            var errorRows = table.Columns[_selectedColumn].ErrorsRows;
            nextErrorButton.Enabled = errorRows.Any(index => (_rowIndex - 1) < index);
+           prevErrorButton.Enabled = errorRows.Any(index => (_rowIndex - 1) > index);
            dataValues.Rows[_selectedColumn].DefaultCellStyle.Font = new Font(dataValues.Font, FontStyle.Bold);
         }
     }

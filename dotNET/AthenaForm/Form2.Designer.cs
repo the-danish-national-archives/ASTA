@@ -56,6 +56,7 @@
             this.nextErrorButton = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.valueRichTextBox = new System.Windows.Forms.RichTextBox();
+            this.prevErrorButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataValues)).BeginInit();
             this.SuspendLayout();
             // 
@@ -125,7 +126,7 @@
             this.variableType.Name = "variableType";
             this.variableType.ReadOnly = true;
             this.variableType.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.variableType.Width = 96;
+            this.variableType.Width = 86;
             // 
             // variableValue
             // 
@@ -142,7 +143,7 @@
             this.columnType.Name = "columnType";
             this.columnType.ReadOnly = true;
             this.columnType.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.columnType.Width = 86;
+            this.columnType.Width = 77;
             // 
             // columnValue
             // 
@@ -174,7 +175,7 @@
             // 
             this.prevButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.prevButton.Enabled = false;
-            this.prevButton.Location = new System.Drawing.Point(484, 34);
+            this.prevButton.Location = new System.Drawing.Point(462, 33);
             this.prevButton.Name = "prevButton";
             this.prevButton.Size = new System.Drawing.Size(47, 23);
             this.prevButton.TabIndex = 8;
@@ -186,9 +187,9 @@
             // 
             this.nextButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.nextButton.Enabled = false;
-            this.nextButton.Location = new System.Drawing.Point(537, 34);
+            this.nextButton.Location = new System.Drawing.Point(515, 33);
             this.nextButton.Name = "nextButton";
-            this.nextButton.Size = new System.Drawing.Size(47, 22);
+            this.nextButton.Size = new System.Drawing.Size(47, 24);
             this.nextButton.TabIndex = 9;
             this.nextButton.Text = "Næste";
             this.nextButton.UseVisualStyleBackColor = true;
@@ -250,7 +251,7 @@
             | System.Windows.Forms.AnchorStyles.Left)));
             this.codeTablesListBox.FormattingEnabled = true;
             this.codeTablesListBox.Location = new System.Drawing.Point(179, 63);
-            this.codeTablesListBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.codeTablesListBox.Margin = new System.Windows.Forms.Padding(2);
             this.codeTablesListBox.Name = "codeTablesListBox";
             this.codeTablesListBox.Size = new System.Drawing.Size(147, 225);
             this.codeTablesListBox.TabIndex = 17;
@@ -316,10 +317,10 @@
             // 
             this.nextErrorButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.nextErrorButton.Enabled = false;
-            this.nextErrorButton.Location = new System.Drawing.Point(643, 35);
-            this.nextErrorButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.nextErrorButton.Location = new System.Drawing.Point(656, 34);
+            this.nextErrorButton.Margin = new System.Windows.Forms.Padding(2);
             this.nextErrorButton.Name = "nextErrorButton";
-            this.nextErrorButton.Size = new System.Drawing.Size(66, 20);
+            this.nextErrorButton.Size = new System.Drawing.Size(66, 23);
             this.nextErrorButton.TabIndex = 25;
             this.nextErrorButton.Text = "Næste fejl";
             this.nextErrorButton.UseVisualStyleBackColor = true;
@@ -342,17 +343,31 @@
             this.valueRichTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.valueRichTextBox.Location = new System.Drawing.Point(8, 311);
-            this.valueRichTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.valueRichTextBox.Margin = new System.Windows.Forms.Padding(2);
             this.valueRichTextBox.Name = "valueRichTextBox";
             this.valueRichTextBox.Size = new System.Drawing.Size(318, 74);
             this.valueRichTextBox.TabIndex = 27;
             this.valueRichTextBox.Text = "";
+            // 
+            // prevErrorButton
+            // 
+            this.prevErrorButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.prevErrorButton.Enabled = false;
+            this.prevErrorButton.Location = new System.Drawing.Point(586, 34);
+            this.prevErrorButton.Margin = new System.Windows.Forms.Padding(2);
+            this.prevErrorButton.Name = "prevErrorButton";
+            this.prevErrorButton.Size = new System.Drawing.Size(66, 23);
+            this.prevErrorButton.TabIndex = 28;
+            this.prevErrorButton.Text = "Forrige fejl";
+            this.prevErrorButton.UseVisualStyleBackColor = true;
+            this.prevErrorButton.Click += new System.EventHandler(this.prevErrorButton_Click);
             // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1006, 393);
+            this.Controls.Add(this.prevErrorButton);
             this.Controls.Add(this.valueRichTextBox);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.nextErrorButton);
@@ -371,7 +386,7 @@
             this.Controls.Add(this.prevButton);
             this.Controls.Add(this.dataValues);
             this.Controls.Add(this.mainTablesListBox);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Form2";
             this.Text = "ASTA - {0} - Kontrol af konvertering";
             this.Shown += new System.EventHandler(this.Form2_Shown);
@@ -409,6 +424,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Errors;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.RichTextBox valueRichTextBox;
+        private System.Windows.Forms.Button prevErrorButton;
     }
 }
 
