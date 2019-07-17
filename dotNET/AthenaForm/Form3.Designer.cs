@@ -263,7 +263,7 @@
             this.Controls.Add(this.logButton);
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Form3";
-            this.Text = "ASTA - {0}";
+            this.Text = "ASTA - {0} - Kontrol af konvertering";
             this.Shown += new System.EventHandler(this.Form3_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.tablesDataGridView)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.rowsDataGridView)).EndInit();

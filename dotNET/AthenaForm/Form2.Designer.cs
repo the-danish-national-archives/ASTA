@@ -68,11 +68,9 @@
             this.mainTablesListBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.mainTablesListBox.FormattingEnabled = true;
-            this.mainTablesListBox.ItemHeight = 20;
-            this.mainTablesListBox.Location = new System.Drawing.Point(16, 97);
-            this.mainTablesListBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.mainTablesListBox.Location = new System.Drawing.Point(11, 63);
             this.mainTablesListBox.Name = "mainTablesListBox";
-            this.mainTablesListBox.Size = new System.Drawing.Size(223, 344);
+            this.mainTablesListBox.Size = new System.Drawing.Size(150, 225);
             this.mainTablesListBox.TabIndex = 3;
             this.mainTablesListBox.SelectedIndexChanged += new System.EventHandler(this.mainTablesListBox_SelectedIndexChanged);
             // 
@@ -101,13 +99,12 @@
             dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.ControlText;
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dataValues.DefaultCellStyle = dataGridViewCellStyle2;
-            this.dataValues.Location = new System.Drawing.Point(520, 97);
-            this.dataValues.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.dataValues.Location = new System.Drawing.Point(347, 63);
             this.dataValues.Name = "dataValues";
             this.dataValues.RowHeadersVisible = false;
             this.dataValues.RowTemplate.ReadOnly = true;
             this.dataValues.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.dataValues.Size = new System.Drawing.Size(976, 449);
+            this.dataValues.Size = new System.Drawing.Size(651, 292);
             this.dataValues.TabIndex = 5;
             this.dataValues.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataValues_CellClick);
             this.dataValues.SelectionChanged += new System.EventHandler(this.dataValues_SelectionChanged);
@@ -119,7 +116,7 @@
             this.variableName.Name = "variableName";
             this.variableName.ReadOnly = true;
             this.variableName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.variableName.Width = 107;
+            this.variableName.Width = 75;
             // 
             // variableType
             // 
@@ -128,7 +125,7 @@
             this.variableType.Name = "variableType";
             this.variableType.ReadOnly = true;
             this.variableType.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.variableType.Width = 127;
+            this.variableType.Width = 96;
             // 
             // variableValue
             // 
@@ -145,7 +142,7 @@
             this.columnType.Name = "columnType";
             this.columnType.ReadOnly = true;
             this.columnType.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.columnType.Width = 113;
+            this.columnType.Width = 86;
             // 
             // columnValue
             // 
@@ -177,10 +174,9 @@
             // 
             this.prevButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.prevButton.Enabled = false;
-            this.prevButton.Location = new System.Drawing.Point(726, 52);
-            this.prevButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.prevButton.Location = new System.Drawing.Point(484, 34);
             this.prevButton.Name = "prevButton";
-            this.prevButton.Size = new System.Drawing.Size(71, 35);
+            this.prevButton.Size = new System.Drawing.Size(47, 23);
             this.prevButton.TabIndex = 8;
             this.prevButton.Text = "Forrige";
             this.prevButton.UseVisualStyleBackColor = true;
@@ -190,10 +186,9 @@
             // 
             this.nextButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.nextButton.Enabled = false;
-            this.nextButton.Location = new System.Drawing.Point(805, 52);
-            this.nextButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.nextButton.Location = new System.Drawing.Point(537, 34);
             this.nextButton.Name = "nextButton";
-            this.nextButton.Size = new System.Drawing.Size(71, 34);
+            this.nextButton.Size = new System.Drawing.Size(47, 22);
             this.nextButton.TabIndex = 9;
             this.nextButton.Text = "Næste";
             this.nextButton.UseVisualStyleBackColor = true;
@@ -202,10 +197,9 @@
             // IndexButton
             // 
             this.IndexButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.IndexButton.Location = new System.Drawing.Point(520, 556);
-            this.IndexButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.IndexButton.Location = new System.Drawing.Point(347, 361);
             this.IndexButton.Name = "IndexButton";
-            this.IndexButton.Size = new System.Drawing.Size(158, 35);
+            this.IndexButton.Size = new System.Drawing.Size(105, 23);
             this.IndexButton.TabIndex = 10;
             this.IndexButton.Text = "Afslut konvertering";
             this.IndexButton.UseVisualStyleBackColor = true;
@@ -214,37 +208,39 @@
             // searchTextBox
             // 
             this.searchTextBox.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.searchTextBox.Location = new System.Drawing.Point(1142, 52);
-            this.searchTextBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.searchTextBox.Location = new System.Drawing.Point(761, 34);
             this.searchTextBox.Name = "searchTextBox";
-            this.searchTextBox.Size = new System.Drawing.Size(148, 26);
+            this.searchTextBox.Size = new System.Drawing.Size(100, 20);
             this.searchTextBox.TabIndex = 11;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(179, 24);
+            this.label1.Location = new System.Drawing.Point(119, 16);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(135, 29);
+            this.label1.Size = new System.Drawing.Size(92, 20);
             this.label1.TabIndex = 13;
             this.label1.Text = "TABELLER";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(66, 66);
+            this.label4.Location = new System.Drawing.Point(44, 43);
+            this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(107, 20);
+            this.label4.Size = new System.Drawing.Size(73, 13);
             this.label4.TabIndex = 15;
             this.label4.Text = "Hovedtabeller";
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(323, 66);
+            this.label5.Location = new System.Drawing.Point(215, 43);
+            this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(98, 20);
+            this.label5.Size = new System.Drawing.Size(66, 13);
             this.label5.TabIndex = 16;
             this.label5.Text = "Kodetabeller";
             // 
@@ -253,10 +249,10 @@
             this.codeTablesListBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.codeTablesListBox.FormattingEnabled = true;
-            this.codeTablesListBox.ItemHeight = 20;
-            this.codeTablesListBox.Location = new System.Drawing.Point(269, 97);
+            this.codeTablesListBox.Location = new System.Drawing.Point(179, 63);
+            this.codeTablesListBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.codeTablesListBox.Name = "codeTablesListBox";
-            this.codeTablesListBox.Size = new System.Drawing.Size(218, 344);
+            this.codeTablesListBox.Size = new System.Drawing.Size(147, 225);
             this.codeTablesListBox.TabIndex = 17;
             this.codeTablesListBox.SelectedIndexChanged += new System.EventHandler(this.codeTablesListBox_SelectedIndexChanged);
             // 
@@ -264,9 +260,10 @@
             // 
             this.rowLabel.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.rowLabel.AutoSize = true;
-            this.rowLabel.Location = new System.Drawing.Point(520, 66);
+            this.rowLabel.Location = new System.Drawing.Point(347, 43);
+            this.rowLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.rowLabel.Name = "rowLabel";
-            this.rowLabel.Size = new System.Drawing.Size(73, 20);
+            this.rowLabel.Size = new System.Drawing.Size(50, 13);
             this.rowLabel.TabIndex = 19;
             this.rowLabel.Text = "rowLabel";
             // 
@@ -274,10 +271,9 @@
             // 
             this.searchButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.searchButton.Enabled = false;
-            this.searchButton.Location = new System.Drawing.Point(1298, 52);
-            this.searchButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.searchButton.Location = new System.Drawing.Point(865, 34);
             this.searchButton.Name = "searchButton";
-            this.searchButton.Size = new System.Drawing.Size(53, 35);
+            this.searchButton.Size = new System.Drawing.Size(35, 23);
             this.searchButton.TabIndex = 20;
             this.searchButton.Text = "Søg";
             this.searchButton.UseVisualStyleBackColor = true;
@@ -287,9 +283,10 @@
             // 
             this.tableInfoLabel.AutoSize = true;
             this.tableInfoLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tableInfoLabel.Location = new System.Drawing.Point(519, 9);
+            this.tableInfoLabel.Location = new System.Drawing.Point(346, 6);
+            this.tableInfoLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.tableInfoLabel.Name = "tableInfoLabel";
-            this.tableInfoLabel.Size = new System.Drawing.Size(165, 29);
+            this.tableInfoLabel.Size = new System.Drawing.Size(111, 20);
             this.tableInfoLabel.TabIndex = 21;
             this.tableInfoLabel.Text = "tableInfoLabel";
             // 
@@ -297,9 +294,10 @@
             // 
             this.rowErrorsLabel.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.rowErrorsLabel.AutoSize = true;
-            this.rowErrorsLabel.Location = new System.Drawing.Point(1368, 67);
+            this.rowErrorsLabel.Location = new System.Drawing.Point(912, 44);
+            this.rowErrorsLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.rowErrorsLabel.Name = "rowErrorsLabel";
-            this.rowErrorsLabel.Size = new System.Drawing.Size(116, 20);
+            this.rowErrorsLabel.Size = new System.Drawing.Size(77, 13);
             this.rowErrorsLabel.TabIndex = 22;
             this.rowErrorsLabel.Text = "rowErrorsLabel";
             // 
@@ -307,9 +305,10 @@
             // 
             this.tableErrorsLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.tableErrorsLabel.AutoSize = true;
-            this.tableErrorsLabel.Location = new System.Drawing.Point(1368, 563);
+            this.tableErrorsLabel.Location = new System.Drawing.Point(912, 366);
+            this.tableErrorsLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.tableErrorsLabel.Name = "tableErrorsLabel";
-            this.tableErrorsLabel.Size = new System.Drawing.Size(126, 20);
+            this.tableErrorsLabel.Size = new System.Drawing.Size(83, 13);
             this.tableErrorsLabel.TabIndex = 23;
             this.tableErrorsLabel.Text = "tableErrorsLabel";
             // 
@@ -317,9 +316,10 @@
             // 
             this.nextErrorButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.nextErrorButton.Enabled = false;
-            this.nextErrorButton.Location = new System.Drawing.Point(964, 54);
+            this.nextErrorButton.Location = new System.Drawing.Point(643, 35);
+            this.nextErrorButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.nextErrorButton.Name = "nextErrorButton";
-            this.nextErrorButton.Size = new System.Drawing.Size(99, 31);
+            this.nextErrorButton.Size = new System.Drawing.Size(66, 20);
             this.nextErrorButton.TabIndex = 25;
             this.nextErrorButton.Text = "Næste fejl";
             this.nextErrorButton.UseVisualStyleBackColor = true;
@@ -330,9 +330,10 @@
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 456);
+            this.label2.Location = new System.Drawing.Point(8, 296);
+            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(52, 20);
+            this.label2.Size = new System.Drawing.Size(35, 13);
             this.label2.TabIndex = 26;
             this.label2.Text = "Værdi";
             // 
@@ -340,17 +341,18 @@
             // 
             this.valueRichTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.valueRichTextBox.Location = new System.Drawing.Point(12, 479);
+            this.valueRichTextBox.Location = new System.Drawing.Point(8, 311);
+            this.valueRichTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.valueRichTextBox.Name = "valueRichTextBox";
-            this.valueRichTextBox.Size = new System.Drawing.Size(475, 112);
+            this.valueRichTextBox.Size = new System.Drawing.Size(318, 74);
             this.valueRichTextBox.TabIndex = 27;
             this.valueRichTextBox.Text = "";
             // 
             // Form2
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1509, 605);
+            this.ClientSize = new System.Drawing.Size(1006, 393);
             this.Controls.Add(this.valueRichTextBox);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.nextErrorButton);
@@ -369,8 +371,9 @@
             this.Controls.Add(this.prevButton);
             this.Controls.Add(this.dataValues);
             this.Controls.Add(this.mainTablesListBox);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "Form2";
-            this.Text = "ASTA - {0}";
+            this.Text = "ASTA - {0} - Kontrol af konvertering";
             this.Shown += new System.EventHandler(this.Form2_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.dataValues)).EndInit();
             this.ResumeLayout(false);
