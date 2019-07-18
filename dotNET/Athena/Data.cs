@@ -1,11 +1,8 @@
 ﻿using Rigsarkiv.Athena.Entities;
 using Rigsarkiv.Athena.Logging;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
-using System.Xml;
 using System.Xml.Linq;
 
 namespace Rigsarkiv.Athena
@@ -16,6 +13,7 @@ namespace Rigsarkiv.Athena
     /// </summary>
     public class Data : Converter
     {
+        const int RowsChunk = 500;
         private bool _updateDocuments = false;
 
         /// <summary>
@@ -141,7 +139,7 @@ namespace Rigsarkiv.Athena
                         if (MaxErrorsRows > codeListColumn.ErrorsRows.Count)
                         {
                             codeListColumn.ErrorsRows.Add(codeList.Errors);
-                            _logManager.Add(new LogEntity() { Level = LogLevel.Warning, Section = _logSection, Message = string.Format("Convert column {0} of type {1} with value {2} has error", codeListColumn.Name, codeListColumn.Type, pair.Value) });
+                            _logManager.Add(new LogEntity() { Level = LogLevel.Warning, Section = _logSection, Message = string.Format("Convert column {0} of type {1} with value {2} has error", codeListColumn.Name, codeListColumn.Type, pair.Key) });
                         }
                         codeList.Errors++;
                     }
@@ -179,7 +177,7 @@ namespace Rigsarkiv.Athena
                         counter++;
                         if (counter == 1) { reader.ReadLine(); }
                         if (counter > 1) { AddRow(table, tableNode, researchIndexNode, reader.ReadLine(), counter); }
-                        if ((counter % 500) == 0) { _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("{0} rows added", counter) }); }
+                        if ((counter % RowsChunk) == 0) { _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("{0} of {1} rows added", counter,table.Rows) }); }
                     }
                     _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("{0} rows added", counter - 1) });
                 }                

@@ -64,7 +64,8 @@ namespace Rigsarkiv.AthenaForm
         private void convertButton_Click(object sender, EventArgs e)
         {
             if (!ValidateInputs()) { return; }
-            outputRichTextBox.Clear();
+            Cursor.Current = Cursors.WaitCursor;
+             outputRichTextBox.Clear();
             _logManager = new LogManager();
             _logManager.LogAdded += OnLogAdded;
             var srcPath = sipTextBox.Text;
@@ -87,6 +88,7 @@ namespace Rigsarkiv.AthenaForm
                     }                    
                 }
             }
+            Cursor.Current = Cursors.Default;
             logButton.Enabled = true;
         }
 
@@ -143,6 +145,7 @@ namespace Rigsarkiv.AthenaForm
 
         private void logButton_Click(object sender, EventArgs e)
         {
+            Cursor.Current = Cursors.WaitCursor;
             var path = string.Format("{0}\\{1}_log.html", aipTextBox.Text, aipNameTextBox.Text);
             if (_logManager.Flush(path, aipNameTextBox.Text))
             {
@@ -154,8 +157,8 @@ namespace Rigsarkiv.AthenaForm
                 {
                     _log.Error(string.Format("Start Process {0} Failed", path), ex);
                 }
-
             }
+            Cursor.Current = Cursors.Default;
         }
 
         private void Form1_Shown(object sender, EventArgs e)

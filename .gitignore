@@ -36,3 +36,6 @@ electron/assets/scripts/Athena.exe.config
 /dotNET/AthenaForm/Athena.pdb
 /dotNET/packages
 /electron/assets/scripts/athena.log
+/dotNET/AthenaConsole/obj/Release
+/dotNET/AthenaForm/obj/Release
+/dotNET/AthenaWPF/obj/Release

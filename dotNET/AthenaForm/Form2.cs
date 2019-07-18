@@ -123,6 +123,7 @@ namespace Rigsarkiv.AthenaForm
 
         private void nextButton_Click(object sender, EventArgs e)
         {
+            Cursor.Current = Cursors.WaitCursor;
             _rowIndex++;
             var table = (_codeTable != null) ? _codeTable : _mainTable;
             if (table.Rows >= _rowIndex)
@@ -132,10 +133,12 @@ namespace Rigsarkiv.AthenaForm
             searchTextBox.Text = _rowIndex.ToString();
             nextButton.Enabled = (table.Rows > _rowIndex);
             prevButton.Enabled = true;
+            Cursor.Current = Cursors.Default;
         }
 
         private void prevButton_Click(object sender, EventArgs e)
         {
+            Cursor.Current = Cursors.WaitCursor;
             _rowIndex--;
             var table = (_codeTable != null) ? _codeTable : _mainTable;
             if (_rowIndex >= 1 && _rowIndex <= table.Rows)
@@ -145,12 +148,14 @@ namespace Rigsarkiv.AthenaForm
             searchTextBox.Text = _rowIndex.ToString();
             prevButton.Enabled = (_rowIndex > 1);            
             nextButton.Enabled = true;
+            Cursor.Current = Cursors.Default;
         }
 
         private void searchButton_Click(object sender, EventArgs e)
         {
             if(int.TryParse(searchTextBox.Text,out _rowIndex))
             {
+                Cursor.Current = Cursors.WaitCursor;
                 var table = (_codeTable != null) ? _codeTable : _mainTable;
                 if (_rowIndex > 0 && _rowIndex <= table.Rows)
                 {
@@ -158,6 +163,7 @@ namespace Rigsarkiv.AthenaForm
                     prevButton.Enabled = (_rowIndex > 1);
                     nextButton.Enabled = (table.Rows > _rowIndex);
                 }
+                Cursor.Current = Cursors.Default;
             }
         }
         private void IndexButton_Click(object sender, EventArgs e)
@@ -179,6 +185,7 @@ namespace Rigsarkiv.AthenaForm
 
         private void nextErrorButton_Click(object sender, EventArgs e)
         {
+            Cursor.Current = Cursors.WaitCursor;
             var table = (_codeTable != null) ? _codeTable : _mainTable;
             var errorRows = table.Columns[_selectedColumn].ErrorsRows;
             if (errorRows.Any(index => (_rowIndex - 1) < index))
@@ -190,11 +197,13 @@ namespace Rigsarkiv.AthenaForm
                 prevButton.Enabled = (_rowIndex > 1);
                 nextButton.Enabled = (table.Rows > _rowIndex);
             }
+            Cursor.Current = Cursors.Default;
         }
 
 
         private void prevErrorButton_Click(object sender, EventArgs e)
         {
+            Cursor.Current = Cursors.WaitCursor;
             var table = (_codeTable != null) ? _codeTable : _mainTable;
             var errorRows = table.Columns[_selectedColumn].ErrorsRows;            
             if (errorRows.Any(index => (_rowIndex - 1) > index))
@@ -206,6 +215,7 @@ namespace Rigsarkiv.AthenaForm
                 prevButton.Enabled = (_rowIndex > 1);
                 nextButton.Enabled = (table.Rows > _rowIndex);
             }
+            Cursor.Current = Cursors.Default;
         }
 
         private void dataValues_CellClick(object sender, DataGridViewCellEventArgs e)

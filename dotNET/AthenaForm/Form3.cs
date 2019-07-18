@@ -120,11 +120,13 @@ namespace Rigsarkiv.AthenaForm
 
         private void logButton_Click(object sender, System.EventArgs e)
         {
+            Cursor.Current = Cursors.WaitCursor;
             var path = string.Format("{0}\\{1}_log.html", _destPath, _destFolder);
             if (_logManager.Flush(path, _destFolder))
             {
                 OpenFile(path);
             }
+            Cursor.Current = Cursors.Default;
         }
 
         private void Form3_Shown(object sender, EventArgs e)
@@ -134,11 +136,13 @@ namespace Rigsarkiv.AthenaForm
 
         private void reportButton_Click(object sender, EventArgs e)
         {
+            Cursor.Current = Cursors.WaitCursor;
             var path = string.Format("{0}\\{1}_report.html", _destPath, _destFolder);
             if (_converter.Flush(path, _destFolder))
             {
                 OpenFile(path);
             }
+            Cursor.Current = Cursors.Default;
         }
 
         private bool OpenFile(string path)
