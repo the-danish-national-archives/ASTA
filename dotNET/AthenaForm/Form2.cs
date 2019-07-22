@@ -99,7 +99,8 @@ namespace Rigsarkiv.AthenaForm
         }
 
         private void mainTablesListBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
+        {            
+            if(mainTablesListBox.SelectedIndex == -1) { return; }
             _selectedColumn = -1;
             nextErrorButton.Enabled = prevErrorButton.Enabled = false;
             _rowIndex = 1;
