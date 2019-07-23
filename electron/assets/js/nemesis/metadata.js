@@ -512,6 +512,7 @@ function (n) {
                     }
                     if(expressions.length > 3) {
                         result = LogError("-CheckMetadata-FileVariables-RowMax-Error",settings.fileName,(i + 1));
+                        settings.errorStop = true;
                     }
                 }
                 else {
