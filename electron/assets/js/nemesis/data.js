@@ -37,6 +37,7 @@ function (n) {
             validateRowsText: null,
             checkEncodingText: null,
             convertDisabledText: null,
+            convertWarningEnabledText: null,
             convertEnabledText: null,
             deliveryPackagePath: null,
             outputText: {},
@@ -675,7 +676,7 @@ function (n) {
                     if(table.errorStop) { enableConvert = false; }
                 });                
                 if(enableConvert) {
-                    settings.confirmationSpn.innerHTML = settings.convertEnabledText.format(settings.totalErrors);
+                    settings.confirmationSpn.innerHTML = settings.totalErrors > 0 ? settings.convertWarningEnabledText : settings.convertEnabledText;
                 }
                 else {
                     settings.confirmationSpn.innerHTML = settings.convertDisabledText;
@@ -740,7 +741,7 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Nemesis.Data = {
-            initialize: function (rightsCallback,logCallback,outputErrorId,logStartId,logEndNoErrorId,logEndWithErrorId,outputPrefix,selectDirectoryId,validateId,confirmationId,validateRowsId,checkEncodingId,convertDisabledId,convertEnabledId,convertId) {            
+            initialize: function (rightsCallback,logCallback,outputErrorId,logStartId,logEndNoErrorId,logEndWithErrorId,outputPrefix,selectDirectoryId,validateId,confirmationId,validateRowsId,checkEncodingId,convertDisabledId,convertEnabledId,convertWarningEnabledId,convertId) {            
                 settings.rightsCallback = rightsCallback;
                 settings.logCallback = logCallback;
                 settings.outputErrorSpn = document.getElementById(outputErrorId);
@@ -757,6 +758,7 @@ function (n) {
                 settings.checkEncodingText = document.getElementById(checkEncodingId).innerHTML;
                 settings.convertDisabledText = document.getElementById(convertDisabledId).innerHTML;
                 settings.convertEnabledText = document.getElementById(convertEnabledId).innerHTML;
+                settings.convertWarningEnabledText = document.getElementById(convertWarningEnabledId).innerHTML;
                 settings.confirmationSpn.innerHTML = "";
                 AddEvents();
             },
