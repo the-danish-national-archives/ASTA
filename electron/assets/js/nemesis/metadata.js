@@ -111,7 +111,6 @@ function (n) {
                 if(arguments.length === 6) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5]); }
                 if(arguments.length === 7) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5],arguments[6]); }
             }
-            console.logInfo(text,"Rigsarkiv.Nemesis.MetaData.LogError");
             settings.logCallback().error(settings.logType,GetFolderName(),text);
             settings.errors += 1;
             settings.totalErrors += 1;
@@ -130,7 +129,6 @@ function (n) {
                 if(arguments.length === 6) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5]); }
                 if(arguments.length === 7) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5],arguments[6]); }
             }
-            console.logInfo(text,"Rigsarkiv.Nemesis.MetaData.LogWarn");
             settings.logCallback().warn(settings.logType,GetFolderName(),text);
             return true;
         }
@@ -147,7 +145,6 @@ function (n) {
                 if(arguments.length === 6) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5]); }
                 if(arguments.length === 7) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5],arguments[6]); }
             }
-            console.logInfo(text,"Rigsarkiv.Nemesis.MetaData.LogInfo");
             settings.logCallback().info(settings.logType,GetFolderName(),text);
             return true;
         }

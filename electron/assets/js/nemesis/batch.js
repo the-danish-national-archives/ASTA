@@ -53,7 +53,7 @@ function (n) {
 
         // collect logs data
         var EnsureLogsData = function(filePath,folderName) {
-            console.log(`log path: ${filePath}`,"Rigsarkiv.Nemesis.Batch.EnsureLogsData");
+            console.logInfo(`log path: ${filePath}`,"Rigsarkiv.Nemesis.Batch.EnsureLogsData");
             var data = fs.readFileSync(filePath).toString();
             var startIndex = data.indexOf(settings.startLogData);
             data = data.substr(startIndex + settings.startLogData.length);
@@ -69,9 +69,9 @@ function (n) {
             var folderName = folders[folders.length - 1];
             folderName = folderName.substring(0,folderName.indexOf(".html"));
             var updatedData = data.toString().format(settings.logsDate.getFromFormat("dd-MM-yyyy hh:mm:ss"),settings.logs.join("\r\n"),settings.errorsCounter, folderName);
-            console.log('filepath: ' + settings.filePath + ' selected path:' + settings.selectedPath[0],"Rigsarkiv.Nemesis.Batch.EnsureData");
+            console.logInfo('filepath: ' + settings.filePath + ' selected path:' + settings.selectedPath[0],"Rigsarkiv.Nemesis.Batch.EnsureData");
             fs.writeFileSync(settings.filePath, updatedData);
-            console.log("Log is updated at: {0}".format(settings.filePath),"Rigsarkiv.Nemesis.Batch.EnsureData");
+            console.logInfo("Log is updated at: {0}".format(settings.filePath),"Rigsarkiv.Nemesis.Batch.EnsureData");
             settings.logs = [];
             settings.errorsCounter = 0;
             settings.logsDate = null;
@@ -100,7 +100,7 @@ function (n) {
                     logFilePath = "{0}/{1}".format(rootPath,settings.templateFileName);
                 }
             }        
-            console.log(`copy ${settings.templateFileName} file to: ${settings.filePath}`,"Rigsarkiv.Nemesis.Batch.CopyFile");
+            console.logInfo(`copy ${settings.templateFileName} file to: ${settings.filePath}`,"Rigsarkiv.Nemesis.Batch.CopyFile");
             fs.copyFileSync(logFilePath, settings.filePath);
         }
         
@@ -108,7 +108,7 @@ function (n) {
         var EnsureLogFile = function() {
             var deliveryPackagePath = settings.deliveryPackages[settings.runIndex]; 
             var logFilePath = settings.filePostfix.format(deliveryPackagePath);
-            console.log(`Ensure log path: ${logFilePath}`,"Rigsarkiv.Nemesis.Batch.EnsureLogFile");
+            console.logInfo(`Ensure log path: ${logFilePath}`,"Rigsarkiv.Nemesis.Batch.EnsureLogFile");
             if(fs.existsSync(logFilePath)) { 
                 var folders = deliveryPackagePath.getFolders();
                 EnsureLogsData(logFilePath,folders[folders.length - 1]);
@@ -134,10 +134,10 @@ function (n) {
             var deliveryPackagePath = settings.deliveryPackages[settings.runIndex];
             var logFilePath = settings.filePostfix.format(deliveryPackagePath);
             if(fs.existsSync(logFilePath)) {                        
-                console.log(`Delete exists log: ${logFilePath}`,"Rigsarkiv.Nemesis.Batch.Validate");
+                console.logInfo(`Delete exists log: ${logFilePath}`,"Rigsarkiv.Nemesis.Batch.Validate");
                 fs.unlinkSync(logFilePath);
             }
-            console.log(`validate path: ${deliveryPackagePath}`,"Rigsarkiv.Nemesis.Batch.Validate");             
+            console.logInfo(`validate path: ${deliveryPackagePath}`,"Rigsarkiv.Nemesis.Batch.Validate");             
             settings.structureCallback().validate(deliveryPackagePath);
             EnsureLogFile();            
         }
@@ -159,7 +159,7 @@ function (n) {
             var batchFileName = settings.batchFilePostfix.format(folders[folders.length - 1]);
             settings.filePath = (destPath.indexOf("\\") > -1) ? "{0}\\{1}".format(destPath, batchFileName) : "{0}/{1}".format(destPath, batchFileName);
             if(fs.existsSync(settings.filePath)) {                        
-                console.log(`Delete exists log: ${settings.filePath}`,"Rigsarkiv.Nemesis.Batch.Run");
+                console.logInfo(`Delete exists log: ${settings.filePath}`,"Rigsarkiv.Nemesis.Batch.Run");
                 fs.unlinkSync(settings.filePath);
             }
             if(settings.deliveryPackages.length > 0) {
@@ -184,7 +184,7 @@ function (n) {
             })
             ipcRenderer.on('batch-selected-directory', (event, path) => {
                 settings.selectedPath = path; 
-                console.log(`selected path: ${path}`,"Rigsarkiv.Nemesis.Batch.AddEvents"); 
+                console.logInfo(`selected path: ${path}`,"Rigsarkiv.Nemesis.Batch.AddEvents"); 
                 settings.pathDirTxt.value = settings.selectedPath;
                 Reset();
             })
