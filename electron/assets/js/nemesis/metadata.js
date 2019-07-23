@@ -591,6 +591,7 @@ function (n) {
                         }
                         else {
                             result = false; 
+                            settings.errorStop = true;
                         }
                     }
                     else {
