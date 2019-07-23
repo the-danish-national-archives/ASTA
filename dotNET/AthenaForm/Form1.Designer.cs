@@ -187,7 +187,7 @@
             this.Controls.Add(this.sipTextBox);
             this.Controls.Add(this.label1);
             this.Name = "Form1";
-            this.Text = "ASTA - Kontrol af konvertering";
+            this.Text = "ASTA - Konverter til arkiveringsversion (AV)";
             this.Shown += new System.EventHandler(this.Form1_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.sipPathRequired)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.aipNameRequired)).EndInit();

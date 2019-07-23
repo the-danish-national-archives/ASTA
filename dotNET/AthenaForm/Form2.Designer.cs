@@ -33,6 +33,13 @@
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.mainTablesListBox = new System.Windows.Forms.ListBox();
             this.dataValues = new System.Windows.Forms.DataGridView();
+            this.variableName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.variableType = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.variableValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.columnType = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.columnValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Differences = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Errors = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.prevButton = new System.Windows.Forms.Button();
             this.nextButton = new System.Windows.Forms.Button();
             this.IndexButton = new System.Windows.Forms.Button();
@@ -50,13 +57,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.valueRichTextBox = new System.Windows.Forms.RichTextBox();
             this.prevErrorButton = new System.Windows.Forms.Button();
-            this.variableName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.variableType = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.variableValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.columnType = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.columnValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Differences = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Errors = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataValues)).BeginInit();
             this.SuspendLayout();
             // 
@@ -112,6 +112,67 @@
             this.dataValues.TabIndex = 5;
             this.dataValues.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataValues_CellClick);
             this.dataValues.SelectionChanged += new System.EventHandler(this.dataValues_SelectionChanged);
+            // 
+            // variableName
+            // 
+            this.variableName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.variableName.HeaderText = "Variabelnavn";
+            this.variableName.Name = "variableName";
+            this.variableName.ReadOnly = true;
+            this.variableName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.variableName.Width = 107;
+            // 
+            // variableType
+            // 
+            this.variableType.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.variableType.HeaderText = "Datatype SIP";
+            this.variableType.Name = "variableType";
+            this.variableType.ReadOnly = true;
+            this.variableType.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.variableType.Width = 99;
+            // 
+            // variableValue
+            // 
+            this.variableValue.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.variableValue.HeaderText = "Værdi";
+            this.variableValue.Name = "variableValue";
+            this.variableValue.ReadOnly = true;
+            this.variableValue.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // columnType
+            // 
+            this.columnType.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.columnType.HeaderText = "Datatype AIP";
+            this.columnType.Name = "columnType";
+            this.columnType.ReadOnly = true;
+            this.columnType.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.columnType.Width = 99;
+            // 
+            // columnValue
+            // 
+            this.columnValue.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.columnValue.HeaderText = "Værdi";
+            this.columnValue.Name = "columnValue";
+            this.columnValue.ReadOnly = true;
+            this.columnValue.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Differences
+            // 
+            this.Differences.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Differences.FillWeight = 35F;
+            this.Differences.HeaderText = "Forskelle";
+            this.Differences.Name = "Differences";
+            this.Differences.ReadOnly = true;
+            this.Differences.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Errors
+            // 
+            this.Errors.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Errors.FillWeight = 35F;
+            this.Errors.HeaderText = "Fejl";
+            this.Errors.Name = "Errors";
+            this.Errors.ReadOnly = true;
+            this.Errors.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // prevButton
             // 
@@ -298,67 +359,6 @@
             this.prevErrorButton.UseVisualStyleBackColor = true;
             this.prevErrorButton.Click += new System.EventHandler(this.prevErrorButton_Click);
             // 
-            // variableName
-            // 
-            this.variableName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.variableName.HeaderText = "Variabelnavn";
-            this.variableName.Name = "variableName";
-            this.variableName.ReadOnly = true;
-            this.variableName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.variableName.Width = 107;
-            // 
-            // variableType
-            // 
-            this.variableType.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.variableType.HeaderText = "Datatype SIP";
-            this.variableType.Name = "variableType";
-            this.variableType.ReadOnly = true;
-            this.variableType.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.variableType.Width = 110;
-            // 
-            // variableValue
-            // 
-            this.variableValue.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.variableValue.HeaderText = "Værdi";
-            this.variableValue.Name = "variableValue";
-            this.variableValue.ReadOnly = true;
-            this.variableValue.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // columnType
-            // 
-            this.columnType.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.columnType.HeaderText = "Datatype AIP";
-            this.columnType.Name = "columnType";
-            this.columnType.ReadOnly = true;
-            this.columnType.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.columnType.Width = 110;
-            // 
-            // columnValue
-            // 
-            this.columnValue.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.columnValue.HeaderText = "Værdi";
-            this.columnValue.Name = "columnValue";
-            this.columnValue.ReadOnly = true;
-            this.columnValue.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Differences
-            // 
-            this.Differences.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Differences.FillWeight = 35F;
-            this.Differences.HeaderText = "Forskelle";
-            this.Differences.Name = "Differences";
-            this.Differences.ReadOnly = true;
-            this.Differences.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Errors
-            // 
-            this.Errors.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Errors.FillWeight = 35F;
-            this.Errors.HeaderText = "Fejl";
-            this.Errors.Name = "Errors";
-            this.Errors.ReadOnly = true;
-            this.Errors.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -384,7 +384,7 @@
             this.Controls.Add(this.dataValues);
             this.Controls.Add(this.mainTablesListBox);
             this.Name = "Form2";
-            this.Text = "ASTA - {0} - Kontrol af konvertering";
+            this.Text = "ASTA - {0} - Konverter til arkiveringsversion (AV)";
             this.Shown += new System.EventHandler(this.Form2_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.dataValues)).EndInit();
             this.ResumeLayout(false);
