@@ -343,6 +343,7 @@ function (n) {
             table.variables.forEach(variable => {
                 if(variable.codeListKey !== "" && !validKeys.includes(variable.codeListKey)) {
                     result = LogError("-CheckMetadata-FileVariable-CodeListRequired-Error",settings.fileName,variable.name,variable.codeListKey);    
+                    settings.errorStop = true;
                 }
             });  
             return result;
