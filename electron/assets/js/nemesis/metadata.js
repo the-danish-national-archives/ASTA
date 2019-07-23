@@ -654,6 +654,7 @@ function (n) {
                 }
                 if(lines[index + 1].trim() !== "") {
                     result = LogError("-CheckMetadata-FileLabel-ValueMax-Error",settings.fileName,label);
+                    settings.errorStop = true;
                 }
             }   
             return result;
