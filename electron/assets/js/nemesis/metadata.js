@@ -544,6 +544,9 @@ function (n) {
                 if(result) {
                     settings.fileKeys.push(key);
                 }
+                else {
+                    settings.errorStop = true;
+                }
             });
             if(lines[startIndex + 1].trim() !== "") {
                 result = LogError("-CheckMetadata-FileLabel-ValueMax-Error",settings.fileName,label);
@@ -641,9 +644,12 @@ function (n) {
                 }
                 if(label === settings.metadataLabels[1]) { 
                     if(!ValidateTitle(lines[index].trim()))  { 
-                        result = false; 
+                        result = false;
+                        settings.errorStop = true; 
                     }
-                    table.name = lines[index].trim(); 
+                    else {
+                        table.name = lines[index].trim();
+                    }  
                 }
                 if(label === settings.metadataLabels[2]) 
                 { 
@@ -651,6 +657,7 @@ function (n) {
                 }
                 if(lines[index + 1].trim() !== "") {
                     result = LogError("-CheckMetadata-FileLabel-ValueMax-Error",settings.fileName,label);
+                    settings.errorStop = true;
                 }
             }   
             return result;
