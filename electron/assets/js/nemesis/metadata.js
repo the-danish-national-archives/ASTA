@@ -512,6 +512,7 @@ function (n) {
                     }
                     if(expressions.length > 3) {
                         result = LogError("-CheckMetadata-FileVariables-RowMax-Error",settings.fileName,(i + 1));
+                        settings.errorStop = true;
                     }
                 }
                 else {
@@ -591,6 +592,7 @@ function (n) {
                         }
                         else {
                             result = false; 
+                            settings.errorStop = true;
                         }
                     }
                     else {
@@ -602,9 +604,11 @@ function (n) {
                 }                
                 if(expressions.length > 3) {
                     result = LogError("-CheckMetadata-FileReferences-RowMax-Error",settings.fileName,i + 1);
+                    settings.errorStop = true;
                 } 
                 if(expressions.length < 3) {
                     result = LogError("-CheckMetadata-FileReferences-RowRequiredInfo-Error",settings.fileName,i + 1);
+                    settings.errorStop = true;
                 } 
                 i++;
             }
