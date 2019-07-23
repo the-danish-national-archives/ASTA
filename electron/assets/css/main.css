@@ -395,6 +395,12 @@ a.selected:hover {
     margin-right: 5px;
 }
 
+.warningWithError {
+    color: orange;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
 /* Nemesis output log elements END */
 
 /* Spinner START */

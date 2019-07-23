@@ -27,8 +27,9 @@
                                 <span id="nemesis-output-Confirmation"></span>
                                 <span id="nemesis-output-ValidateRows" hidden="true"><br/><br/>{0} af {1} rækker i {2} er valideret.</span>
                                 <span id="nemesis-output-CheckEncoding" hidden="true"><br/><br/>Vent mens check {0} encoding</span>                                
-                                <span id="nemesis-output-ConvertEnabled" hidden="true"><br/><p class="ok">Afleveringspakken er testet færdig. Der er fundet {0} fejl, som skal rettes.</p></span>  
-                                <span id="nemesis-output-ConvertDisabled" hidden="true"><br/><p class="error">Grundet alvorlige fejl eller mangler i afleveringspakken er testen afbrudt og afleveringspakken er ikke testet færdig.</p></span>
+                                <span id="nemesis-output-ConvertEnabled" hidden="true"><br/><p class="ok">Afleveringspakken er gennemtestet og uden fejl.</p></span>  
+                                <span id="nemesis-output-ConvertWarningEnabled" hidden="true"><br/><p class="warningWithError">Afleveringspakken er fuldt gennemtestet. Fejl i loggen skal rettes før aflevering til arkiv.</p></span>
+                                <span id="nemesis-output-ConvertDisabled" hidden="true"><br/><p class="error">Testen er afbrudt og afleveringspakken er ikke testet færdig. Fejl i loggen skal rettes før testen kan fortsætte.</p></span>
                                 <span id="nemesis-output-structure-logStart" hidden="true">Mappestruktur test startet<br/></span>
                                 <span id="nemesis-output-structure-logEndNoError" hidden="true">Mappestruktur test afsluttet uden fejl<br/></span>
                                 <span id="nemesis-output-structure-logEndWithError" hidden="true">Mappestruktur test afsluttet<br/></span>
@@ -204,7 +205,7 @@
             Rigsarkiv.Nemesis.Batch.initialize(Rigsarkiv.Rights.callback,Rigsarkiv.Nemesis.Structure.callback,"nemesis-output-Error","nemesis-select-batch-directory","nemesis-batch-path","nemesis-batch-validateBtn","nemesis-validate-Spinner","nemesis-batch-Ok","nemesis-batch-select-logFile","nemesis-batch-Supplement","nemesis-batch-test-panel","lds-ring");
             Rigsarkiv.Nemesis.Structure.initialize(Rigsarkiv.Log.callback,Rigsarkiv.Nemesis.MetaData.callback,"nemesis-output-Error","nemesis-select-directory","nemesis-path","nemesis-validateBtn","nemesis-output-structure-logStart","nemesis-output-structure-logEndNoError","nemesis-output-structure-logEndWithError","nemesis-processing", "nemesis-test-id","nemesis-output-Confirmation","nemesis-output-ConvertDisabled");
             Rigsarkiv.Nemesis.MetaData.initialize(Rigsarkiv.Log.callback,Rigsarkiv.Nemesis.Data.callback,"nemesis-output-Error","nemesis-output-metadata-logStart","nemesis-output-metadata-logEndNoError","nemesis-output-metadata-logEndWithError","nemesis-processing");
-            Rigsarkiv.Nemesis.Data.initialize(Rigsarkiv.Log.callback,"nemesis-output-Error","nemesis-output-data-logStart","nemesis-output-data-logEndNoError","nemesis-output-data-logEndWithError","nemesis-processing","nemesis-select-directory","nemesis-validateBtn","nemesis-output-Confirmation","nemesis-output-ValidateRows","nemesis-output-CheckEncoding","nemesis-output-ConvertDisabled","nemesis-output-ConvertEnabled");             
+            Rigsarkiv.Nemesis.Data.initialize(Rigsarkiv.Log.callback,"nemesis-output-Error","nemesis-output-data-logStart","nemesis-output-data-logEndNoError","nemesis-output-data-logEndWithError","nemesis-processing","nemesis-select-directory","nemesis-validateBtn","nemesis-output-Confirmation","nemesis-output-ValidateRows","nemesis-output-CheckEncoding","nemesis-output-ConvertDisabled","nemesis-output-ConvertEnabled","nemesis-output-ConvertWarningEnabled");             
         </script>
     </section>
 </template>
