@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.mainTablesListBox = new System.Windows.Forms.ListBox();
@@ -57,6 +57,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.valueRichTextBox = new System.Windows.Forms.RichTextBox();
             this.prevErrorButton = new System.Windows.Forms.Button();
+            this.titlelabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataValues)).BeginInit();
             this.SuspendLayout();
             // 
@@ -70,10 +71,10 @@
             | System.Windows.Forms.AnchorStyles.Left)));
             this.mainTablesListBox.FormattingEnabled = true;
             this.mainTablesListBox.ItemHeight = 20;
-            this.mainTablesListBox.Location = new System.Drawing.Point(16, 97);
+            this.mainTablesListBox.Location = new System.Drawing.Point(16, 121);
             this.mainTablesListBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.mainTablesListBox.Name = "mainTablesListBox";
-            this.mainTablesListBox.Size = new System.Drawing.Size(223, 344);
+            this.mainTablesListBox.Size = new System.Drawing.Size(223, 404);
             this.mainTablesListBox.TabIndex = 3;
             this.mainTablesListBox.SelectedIndexChanged += new System.EventHandler(this.mainTablesListBox_SelectedIndexChanged);
             // 
@@ -94,21 +95,21 @@
             this.columnValue,
             this.Differences,
             this.Errors});
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataValues.DefaultCellStyle = dataGridViewCellStyle1;
-            this.dataValues.Location = new System.Drawing.Point(520, 97);
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataValues.DefaultCellStyle = dataGridViewCellStyle2;
+            this.dataValues.Location = new System.Drawing.Point(520, 121);
             this.dataValues.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.dataValues.Name = "dataValues";
             this.dataValues.RowHeadersVisible = false;
             this.dataValues.RowTemplate.ReadOnly = true;
             this.dataValues.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.dataValues.Size = new System.Drawing.Size(976, 449);
+            this.dataValues.Size = new System.Drawing.Size(976, 498);
             this.dataValues.TabIndex = 5;
             this.dataValues.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataValues_CellClick);
             this.dataValues.SelectionChanged += new System.EventHandler(this.dataValues_SelectionChanged);
@@ -129,7 +130,7 @@
             this.variableType.Name = "variableType";
             this.variableType.ReadOnly = true;
             this.variableType.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.variableType.Width = 99;
+            this.variableType.Width = 110;
             // 
             // variableValue
             // 
@@ -178,7 +179,7 @@
             // 
             this.prevButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.prevButton.Enabled = false;
-            this.prevButton.Location = new System.Drawing.Point(693, 51);
+            this.prevButton.Location = new System.Drawing.Point(694, 76);
             this.prevButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.prevButton.Name = "prevButton";
             this.prevButton.Size = new System.Drawing.Size(70, 35);
@@ -191,7 +192,7 @@
             // 
             this.nextButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.nextButton.Enabled = false;
-            this.nextButton.Location = new System.Drawing.Point(772, 51);
+            this.nextButton.Location = new System.Drawing.Point(772, 74);
             this.nextButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.nextButton.Name = "nextButton";
             this.nextButton.Size = new System.Drawing.Size(70, 37);
@@ -203,7 +204,7 @@
             // IndexButton
             // 
             this.IndexButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.IndexButton.Location = new System.Drawing.Point(520, 555);
+            this.IndexButton.Location = new System.Drawing.Point(520, 628);
             this.IndexButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.IndexButton.Name = "IndexButton";
             this.IndexButton.Size = new System.Drawing.Size(158, 35);
@@ -215,7 +216,7 @@
             // searchTextBox
             // 
             this.searchTextBox.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.searchTextBox.Location = new System.Drawing.Point(1142, 52);
+            this.searchTextBox.Location = new System.Drawing.Point(1142, 76);
             this.searchTextBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.searchTextBox.Name = "searchTextBox";
             this.searchTextBox.Size = new System.Drawing.Size(148, 26);
@@ -225,7 +226,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(178, 25);
+            this.label1.Location = new System.Drawing.Point(169, 51);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(135, 29);
             this.label1.TabIndex = 13;
@@ -234,7 +235,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(66, 66);
+            this.label4.Location = new System.Drawing.Point(60, 96);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(107, 20);
             this.label4.TabIndex = 15;
@@ -243,7 +244,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(322, 66);
+            this.label5.Location = new System.Drawing.Point(318, 96);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(98, 20);
             this.label5.TabIndex = 16;
@@ -255,9 +256,9 @@
             | System.Windows.Forms.AnchorStyles.Left)));
             this.codeTablesListBox.FormattingEnabled = true;
             this.codeTablesListBox.ItemHeight = 20;
-            this.codeTablesListBox.Location = new System.Drawing.Point(268, 97);
+            this.codeTablesListBox.Location = new System.Drawing.Point(269, 121);
             this.codeTablesListBox.Name = "codeTablesListBox";
-            this.codeTablesListBox.Size = new System.Drawing.Size(218, 344);
+            this.codeTablesListBox.Size = new System.Drawing.Size(218, 404);
             this.codeTablesListBox.TabIndex = 17;
             this.codeTablesListBox.SelectedIndexChanged += new System.EventHandler(this.codeTablesListBox_SelectedIndexChanged);
             // 
@@ -265,7 +266,7 @@
             // 
             this.rowLabel.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.rowLabel.AutoSize = true;
-            this.rowLabel.Location = new System.Drawing.Point(520, 66);
+            this.rowLabel.Location = new System.Drawing.Point(516, 96);
             this.rowLabel.Name = "rowLabel";
             this.rowLabel.Size = new System.Drawing.Size(73, 20);
             this.rowLabel.TabIndex = 19;
@@ -275,7 +276,7 @@
             // 
             this.searchButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.searchButton.Enabled = false;
-            this.searchButton.Location = new System.Drawing.Point(1298, 52);
+            this.searchButton.Location = new System.Drawing.Point(1298, 75);
             this.searchButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.searchButton.Name = "searchButton";
             this.searchButton.Size = new System.Drawing.Size(52, 35);
@@ -288,7 +289,7 @@
             // 
             this.tableInfoLabel.AutoSize = true;
             this.tableInfoLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tableInfoLabel.Location = new System.Drawing.Point(519, 9);
+            this.tableInfoLabel.Location = new System.Drawing.Point(515, 36);
             this.tableInfoLabel.Name = "tableInfoLabel";
             this.tableInfoLabel.Size = new System.Drawing.Size(165, 29);
             this.tableInfoLabel.TabIndex = 21;
@@ -298,7 +299,7 @@
             // 
             this.rowErrorsLabel.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.rowErrorsLabel.AutoSize = true;
-            this.rowErrorsLabel.Location = new System.Drawing.Point(1368, 68);
+            this.rowErrorsLabel.Location = new System.Drawing.Point(1368, 89);
             this.rowErrorsLabel.Name = "rowErrorsLabel";
             this.rowErrorsLabel.Size = new System.Drawing.Size(116, 20);
             this.rowErrorsLabel.TabIndex = 22;
@@ -308,7 +309,7 @@
             // 
             this.tableErrorsLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.tableErrorsLabel.AutoSize = true;
-            this.tableErrorsLabel.Location = new System.Drawing.Point(1368, 563);
+            this.tableErrorsLabel.Location = new System.Drawing.Point(1370, 628);
             this.tableErrorsLabel.Name = "tableErrorsLabel";
             this.tableErrorsLabel.Size = new System.Drawing.Size(126, 20);
             this.tableErrorsLabel.TabIndex = 23;
@@ -318,7 +319,7 @@
             // 
             this.nextErrorButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.nextErrorButton.Enabled = false;
-            this.nextErrorButton.Location = new System.Drawing.Point(984, 52);
+            this.nextErrorButton.Location = new System.Drawing.Point(984, 74);
             this.nextErrorButton.Name = "nextErrorButton";
             this.nextErrorButton.Size = new System.Drawing.Size(99, 35);
             this.nextErrorButton.TabIndex = 25;
@@ -331,7 +332,7 @@
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 455);
+            this.label2.Location = new System.Drawing.Point(12, 528);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(52, 20);
             this.label2.TabIndex = 26;
@@ -341,7 +342,7 @@
             // 
             this.valueRichTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.valueRichTextBox.Location = new System.Drawing.Point(12, 478);
+            this.valueRichTextBox.Location = new System.Drawing.Point(12, 551);
             this.valueRichTextBox.Name = "valueRichTextBox";
             this.valueRichTextBox.Size = new System.Drawing.Size(475, 112);
             this.valueRichTextBox.TabIndex = 27;
@@ -351,7 +352,7 @@
             // 
             this.prevErrorButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.prevErrorButton.Enabled = false;
-            this.prevErrorButton.Location = new System.Drawing.Point(879, 52);
+            this.prevErrorButton.Location = new System.Drawing.Point(879, 75);
             this.prevErrorButton.Name = "prevErrorButton";
             this.prevErrorButton.Size = new System.Drawing.Size(99, 35);
             this.prevErrorButton.TabIndex = 28;
@@ -359,11 +360,22 @@
             this.prevErrorButton.UseVisualStyleBackColor = true;
             this.prevErrorButton.Click += new System.EventHandler(this.prevErrorButton_Click);
             // 
+            // titlelabel
+            // 
+            this.titlelabel.AutoSize = true;
+            this.titlelabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.titlelabel.Location = new System.Drawing.Point(11, 9);
+            this.titlelabel.Name = "titlelabel";
+            this.titlelabel.Size = new System.Drawing.Size(305, 29);
+            this.titlelabel.TabIndex = 29;
+            this.titlelabel.Text = "{0} - Kontrol af konvertering";
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1509, 605);
+            this.ClientSize = new System.Drawing.Size(1509, 678);
+            this.Controls.Add(this.titlelabel);
             this.Controls.Add(this.prevErrorButton);
             this.Controls.Add(this.valueRichTextBox);
             this.Controls.Add(this.label2);
@@ -384,7 +396,7 @@
             this.Controls.Add(this.dataValues);
             this.Controls.Add(this.mainTablesListBox);
             this.Name = "Form2";
-            this.Text = "ASTA - {0} - Konverter til arkiveringsversion (AV)";
+            this.Text = "ASTA";
             this.Shown += new System.EventHandler(this.Form2_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.dataValues)).EndInit();
             this.ResumeLayout(false);
@@ -421,6 +433,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn columnValue;
         private System.Windows.Forms.DataGridViewTextBoxColumn Differences;
         private System.Windows.Forms.DataGridViewTextBoxColumn Errors;
+        private System.Windows.Forms.Label titlelabel;
     }
 }
 

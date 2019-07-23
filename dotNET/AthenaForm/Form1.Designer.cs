@@ -44,6 +44,7 @@
             this.aipPathRequired = new System.Windows.Forms.ErrorProvider(this.components);
             this.nextForm = new System.Windows.Forms.Button();
             this.logButton = new System.Windows.Forms.Button();
+            this.label4 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.sipPathRequired)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.aipNameRequired)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.aipPathRequired)).BeginInit();
@@ -54,20 +55,20 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(35, 55);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(92, 20);
+            this.label1.Size = new System.Drawing.Size(143, 20);
             this.label1.TabIndex = 0;
-            this.label1.Text = "SIP Mappe:";
+            this.label1.Text = "Vælg .json fil (SIP):";
             // 
             // sipTextBox
             // 
-            this.sipTextBox.Location = new System.Drawing.Point(146, 52);
+            this.sipTextBox.Location = new System.Drawing.Point(39, 78);
             this.sipTextBox.Name = "sipTextBox";
-            this.sipTextBox.Size = new System.Drawing.Size(738, 26);
+            this.sipTextBox.Size = new System.Drawing.Size(831, 26);
             this.sipTextBox.TabIndex = 1;
             // 
             // sipButton
             // 
-            this.sipButton.Location = new System.Drawing.Point(941, 49);
+            this.sipButton.Location = new System.Drawing.Point(932, 72);
             this.sipButton.Name = "sipButton";
             this.sipButton.Size = new System.Drawing.Size(96, 32);
             this.sipButton.TabIndex = 2;
@@ -80,15 +81,15 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(38, 125);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(79, 20);
+            this.label2.Size = new System.Drawing.Size(95, 20);
             this.label2.TabIndex = 3;
-            this.label2.Text = "AIP Navn:";
+            this.label2.Text = "Angiv AVID:";
             // 
             // aipNameTextBox
             // 
-            this.aipNameTextBox.Location = new System.Drawing.Point(146, 122);
+            this.aipNameTextBox.Location = new System.Drawing.Point(39, 148);
             this.aipNameTextBox.Name = "aipNameTextBox";
-            this.aipNameTextBox.Size = new System.Drawing.Size(738, 26);
+            this.aipNameTextBox.Size = new System.Drawing.Size(831, 26);
             this.aipNameTextBox.TabIndex = 4;
             // 
             // label3
@@ -96,20 +97,20 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(35, 198);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(92, 20);
+            this.label3.Size = new System.Drawing.Size(289, 20);
             this.label3.TabIndex = 5;
-            this.label3.Text = "AIP Mappe:";
+            this.label3.Text = "Vælg AV destination (drev eller mappe):";
             // 
             // aipTextBox
             // 
-            this.aipTextBox.Location = new System.Drawing.Point(146, 198);
+            this.aipTextBox.Location = new System.Drawing.Point(39, 221);
             this.aipTextBox.Name = "aipTextBox";
-            this.aipTextBox.Size = new System.Drawing.Size(738, 26);
+            this.aipTextBox.Size = new System.Drawing.Size(831, 26);
             this.aipTextBox.TabIndex = 6;
             // 
             // aipButton
             // 
-            this.aipButton.Location = new System.Drawing.Point(941, 198);
+            this.aipButton.Location = new System.Drawing.Point(935, 215);
             this.aipButton.Name = "aipButton";
             this.aipButton.Size = new System.Drawing.Size(93, 32);
             this.aipButton.TabIndex = 7;
@@ -119,19 +120,19 @@
             // 
             // convertButton
             // 
-            this.convertButton.Location = new System.Drawing.Point(830, 272);
+            this.convertButton.Location = new System.Drawing.Point(782, 272);
             this.convertButton.Name = "convertButton";
-            this.convertButton.Size = new System.Drawing.Size(93, 32);
+            this.convertButton.Size = new System.Drawing.Size(136, 32);
             this.convertButton.TabIndex = 8;
-            this.convertButton.Text = "Convert";
+            this.convertButton.Text = "Konverter til AV";
             this.convertButton.UseVisualStyleBackColor = true;
             this.convertButton.Click += new System.EventHandler(this.convertButton_Click);
             // 
             // outputRichTextBox
             // 
-            this.outputRichTextBox.Location = new System.Drawing.Point(42, 328);
+            this.outputRichTextBox.Location = new System.Drawing.Point(39, 328);
             this.outputRichTextBox.Name = "outputRichTextBox";
-            this.outputRichTextBox.Size = new System.Drawing.Size(992, 269);
+            this.outputRichTextBox.Size = new System.Drawing.Size(995, 269);
             this.outputRichTextBox.TabIndex = 9;
             this.outputRichTextBox.Text = "";
             // 
@@ -150,7 +151,7 @@
             // nextForm
             // 
             this.nextForm.Enabled = false;
-            this.nextForm.Location = new System.Drawing.Point(941, 272);
+            this.nextForm.Location = new System.Drawing.Point(935, 272);
             this.nextForm.Name = "nextForm";
             this.nextForm.Size = new System.Drawing.Size(93, 32);
             this.nextForm.TabIndex = 10;
@@ -161,7 +162,7 @@
             // logButton
             // 
             this.logButton.Enabled = false;
-            this.logButton.Location = new System.Drawing.Point(52, 272);
+            this.logButton.Location = new System.Drawing.Point(39, 272);
             this.logButton.Name = "logButton";
             this.logButton.Size = new System.Drawing.Size(75, 32);
             this.logButton.TabIndex = 11;
@@ -169,11 +170,22 @@
             this.logButton.UseVisualStyleBackColor = true;
             this.logButton.Click += new System.EventHandler(this.logButton_Click);
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(34, 9);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(394, 29);
+            this.label4.TabIndex = 15;
+            this.label4.Text = "Konverter til arkiveringsversion (AV)";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1040, 626);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.logButton);
             this.Controls.Add(this.nextForm);
             this.Controls.Add(this.outputRichTextBox);
@@ -187,7 +199,7 @@
             this.Controls.Add(this.sipTextBox);
             this.Controls.Add(this.label1);
             this.Name = "Form1";
-            this.Text = "ASTA - Konverter til arkiveringsversion (AV)";
+            this.Text = "ASTA";
             this.Shown += new System.EventHandler(this.Form1_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.sipPathRequired)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.aipNameRequired)).EndInit();
@@ -214,5 +226,6 @@
         private System.Windows.Forms.ErrorProvider aipPathRequired;
         private System.Windows.Forms.Button nextForm;
         private System.Windows.Forms.Button logButton;
+        private System.Windows.Forms.Label label4;
     }
 }

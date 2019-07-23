@@ -44,7 +44,7 @@ namespace Rigsarkiv.AthenaForm
             _outputRichTextBox.Location = new Point(2, 380);
             this.Controls.Add(_outputRichTextBox);
             var result = Convert();
-            Text = string.Format(Text, destFolder);  
+            titlelabel.Text = string.Format(titlelabel.Text, destFolder);
             Render();
         }
 

@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.logButton = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
+            this.titlelabel = new System.Windows.Forms.Label();
             this.tablesDataGridView = new System.Windows.Forms.DataGridView();
             this.TextColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.BeforeColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -62,15 +62,15 @@
             this.logButton.UseVisualStyleBackColor = true;
             this.logButton.Click += new System.EventHandler(this.logButton_Click);
             // 
-            // label1
+            // titlelabel
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(28, 29);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(256, 29);
-            this.label1.TabIndex = 14;
-            this.label1.Text = "Status for Konvertering";
+            this.titlelabel.AutoSize = true;
+            this.titlelabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.titlelabel.Location = new System.Drawing.Point(28, 29);
+            this.titlelabel.Name = "titlelabel";
+            this.titlelabel.Size = new System.Drawing.Size(307, 29);
+            this.titlelabel.TabIndex = 14;
+            this.titlelabel.Text = "{0} - Status for Konvertering";
             // 
             // tablesDataGridView
             // 
@@ -258,10 +258,10 @@
             this.Controls.Add(this.reportButton);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.tablesDataGridView);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.titlelabel);
             this.Controls.Add(this.logButton);
             this.Name = "Form3";
-            this.Text = "ASTA - {0} - Konverter til arkiveringsversion (AV)";
+            this.Text = "ASTA";
             this.Shown += new System.EventHandler(this.Form3_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.tablesDataGridView)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.rowsDataGridView)).EndInit();
@@ -274,7 +274,7 @@
         #endregion
 
         private System.Windows.Forms.Button logButton;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label titlelabel;
         private System.Windows.Forms.DataGridView tablesDataGridView;
         private System.Windows.Forms.DataGridViewTextBoxColumn TextColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn BeforeColumn1;
