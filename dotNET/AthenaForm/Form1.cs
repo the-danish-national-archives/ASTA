@@ -26,9 +26,7 @@ namespace Rigsarkiv.AthenaForm
             InitializeComponent();
             sipTextBox.Text = srcPath;
             aipTextBox.Text = destPath;
-            var folderName = srcPath.Substring(srcPath.LastIndexOf("\\") + 1);
-            folderName = folderName.Substring(0, folderName.LastIndexOf("."));
-            aipNameTextBox.Text = string.Format(DestFolderName, folderName.Substring(3));
+            UpdateFolderName(srcPath);
         }
 
         private void sipButton_Click(object sender, EventArgs e)
@@ -45,6 +43,7 @@ namespace Rigsarkiv.AthenaForm
             if (result == DialogResult.OK)
             {
                 sipTextBox.Text = openFileDlg.FileName;
+                UpdateFolderName(sipTextBox.Text);
             }
         }
 
@@ -102,6 +101,13 @@ namespace Rigsarkiv.AthenaForm
                 case LogLevel.Warning: outputRichTextBox.AppendText(message, Color.Orange); break;
             }
             //System.Threading.Thread.Sleep(200);
+        }
+
+        private void UpdateFolderName(string srcPath)
+        {
+            var folderName = srcPath.Substring(srcPath.LastIndexOf("\\") + 1);
+            folderName = folderName.Substring(0, folderName.LastIndexOf("."));
+            aipNameTextBox.Text = string.Format(DestFolderName, folderName.Substring(3));
         }
 
         private bool ValidateInputs()
