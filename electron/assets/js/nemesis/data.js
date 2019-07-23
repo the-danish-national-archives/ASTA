@@ -741,7 +741,7 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Nemesis.Data = {
-            initialize: function (rightsCallback,logCallback,outputErrorId,logStartId,logEndNoErrorId,logEndWithErrorId,outputPrefix,selectDirectoryId,validateId,confirmationId,validateRowsId,checkEncodingId,convertDisabledId,convertEnabledId,convertWarningEnabledId,convertId) {            
+            initialize: function (rightsCallback,logCallback,outputErrorId,logStartId,logEndNoErrorId,logEndWithErrorId,outputPrefix,selectDirectoryId,validateId,confirmationId,validateRowsId,checkEncodingId,convertDisabledId,convertEnabledId,convertWarningEnabledId,convertId) { 
                 settings.rightsCallback = rightsCallback;
                 settings.logCallback = logCallback;
                 settings.outputErrorSpn = document.getElementById(outputErrorId);
