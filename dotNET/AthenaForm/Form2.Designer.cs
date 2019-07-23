@@ -28,18 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.mainTablesListBox = new System.Windows.Forms.ListBox();
             this.dataValues = new System.Windows.Forms.DataGridView();
-            this.variableName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.variableType = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.variableValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.columnType = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.columnValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Differences = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Errors = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.prevButton = new System.Windows.Forms.Button();
             this.nextButton = new System.Windows.Forms.Button();
             this.IndexButton = new System.Windows.Forms.Button();
@@ -57,6 +50,13 @@
             this.label2 = new System.Windows.Forms.Label();
             this.valueRichTextBox = new System.Windows.Forms.RichTextBox();
             this.prevErrorButton = new System.Windows.Forms.Button();
+            this.variableName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.variableType = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.variableValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.columnType = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.columnValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Differences = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Errors = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataValues)).BeginInit();
             this.SuspendLayout();
             // 
@@ -69,9 +69,11 @@
             this.mainTablesListBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.mainTablesListBox.FormattingEnabled = true;
-            this.mainTablesListBox.Location = new System.Drawing.Point(11, 63);
+            this.mainTablesListBox.ItemHeight = 20;
+            this.mainTablesListBox.Location = new System.Drawing.Point(16, 97);
+            this.mainTablesListBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.mainTablesListBox.Name = "mainTablesListBox";
-            this.mainTablesListBox.Size = new System.Drawing.Size(150, 225);
+            this.mainTablesListBox.Size = new System.Drawing.Size(223, 344);
             this.mainTablesListBox.TabIndex = 3;
             this.mainTablesListBox.SelectedIndexChanged += new System.EventHandler(this.mainTablesListBox_SelectedIndexChanged);
             // 
@@ -92,23 +94,209 @@
             this.columnValue,
             this.Differences,
             this.Errors});
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataValues.DefaultCellStyle = dataGridViewCellStyle2;
-            this.dataValues.Location = new System.Drawing.Point(347, 63);
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataValues.DefaultCellStyle = dataGridViewCellStyle1;
+            this.dataValues.Location = new System.Drawing.Point(520, 97);
+            this.dataValues.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.dataValues.Name = "dataValues";
             this.dataValues.RowHeadersVisible = false;
             this.dataValues.RowTemplate.ReadOnly = true;
             this.dataValues.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.dataValues.Size = new System.Drawing.Size(651, 292);
+            this.dataValues.Size = new System.Drawing.Size(976, 449);
             this.dataValues.TabIndex = 5;
             this.dataValues.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataValues_CellClick);
             this.dataValues.SelectionChanged += new System.EventHandler(this.dataValues_SelectionChanged);
+            // 
+            // prevButton
+            // 
+            this.prevButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.prevButton.Enabled = false;
+            this.prevButton.Location = new System.Drawing.Point(693, 51);
+            this.prevButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.prevButton.Name = "prevButton";
+            this.prevButton.Size = new System.Drawing.Size(70, 35);
+            this.prevButton.TabIndex = 8;
+            this.prevButton.Text = "Forrige";
+            this.prevButton.UseVisualStyleBackColor = true;
+            this.prevButton.Click += new System.EventHandler(this.prevButton_Click);
+            // 
+            // nextButton
+            // 
+            this.nextButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.nextButton.Enabled = false;
+            this.nextButton.Location = new System.Drawing.Point(772, 51);
+            this.nextButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.nextButton.Name = "nextButton";
+            this.nextButton.Size = new System.Drawing.Size(70, 37);
+            this.nextButton.TabIndex = 9;
+            this.nextButton.Text = "Næste";
+            this.nextButton.UseVisualStyleBackColor = true;
+            this.nextButton.Click += new System.EventHandler(this.nextButton_Click);
+            // 
+            // IndexButton
+            // 
+            this.IndexButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.IndexButton.Location = new System.Drawing.Point(520, 555);
+            this.IndexButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.IndexButton.Name = "IndexButton";
+            this.IndexButton.Size = new System.Drawing.Size(158, 35);
+            this.IndexButton.TabIndex = 10;
+            this.IndexButton.Text = "Afslut konvertering";
+            this.IndexButton.UseVisualStyleBackColor = true;
+            this.IndexButton.Click += new System.EventHandler(this.IndexButton_Click);
+            // 
+            // searchTextBox
+            // 
+            this.searchTextBox.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.searchTextBox.Location = new System.Drawing.Point(1142, 52);
+            this.searchTextBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.searchTextBox.Name = "searchTextBox";
+            this.searchTextBox.Size = new System.Drawing.Size(148, 26);
+            this.searchTextBox.TabIndex = 11;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(178, 25);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(135, 29);
+            this.label1.TabIndex = 13;
+            this.label1.Text = "TABELLER";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(66, 66);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(107, 20);
+            this.label4.TabIndex = 15;
+            this.label4.Text = "Hovedtabeller";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(322, 66);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(98, 20);
+            this.label5.TabIndex = 16;
+            this.label5.Text = "Kodetabeller";
+            // 
+            // codeTablesListBox
+            // 
+            this.codeTablesListBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.codeTablesListBox.FormattingEnabled = true;
+            this.codeTablesListBox.ItemHeight = 20;
+            this.codeTablesListBox.Location = new System.Drawing.Point(268, 97);
+            this.codeTablesListBox.Name = "codeTablesListBox";
+            this.codeTablesListBox.Size = new System.Drawing.Size(218, 344);
+            this.codeTablesListBox.TabIndex = 17;
+            this.codeTablesListBox.SelectedIndexChanged += new System.EventHandler(this.codeTablesListBox_SelectedIndexChanged);
+            // 
+            // rowLabel
+            // 
+            this.rowLabel.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.rowLabel.AutoSize = true;
+            this.rowLabel.Location = new System.Drawing.Point(520, 66);
+            this.rowLabel.Name = "rowLabel";
+            this.rowLabel.Size = new System.Drawing.Size(73, 20);
+            this.rowLabel.TabIndex = 19;
+            this.rowLabel.Text = "rowLabel";
+            // 
+            // searchButton
+            // 
+            this.searchButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.searchButton.Enabled = false;
+            this.searchButton.Location = new System.Drawing.Point(1298, 52);
+            this.searchButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.searchButton.Name = "searchButton";
+            this.searchButton.Size = new System.Drawing.Size(52, 35);
+            this.searchButton.TabIndex = 20;
+            this.searchButton.Text = "Søg";
+            this.searchButton.UseVisualStyleBackColor = true;
+            this.searchButton.Click += new System.EventHandler(this.searchButton_Click);
+            // 
+            // tableInfoLabel
+            // 
+            this.tableInfoLabel.AutoSize = true;
+            this.tableInfoLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tableInfoLabel.Location = new System.Drawing.Point(519, 9);
+            this.tableInfoLabel.Name = "tableInfoLabel";
+            this.tableInfoLabel.Size = new System.Drawing.Size(165, 29);
+            this.tableInfoLabel.TabIndex = 21;
+            this.tableInfoLabel.Text = "tableInfoLabel";
+            // 
+            // rowErrorsLabel
+            // 
+            this.rowErrorsLabel.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.rowErrorsLabel.AutoSize = true;
+            this.rowErrorsLabel.Location = new System.Drawing.Point(1368, 68);
+            this.rowErrorsLabel.Name = "rowErrorsLabel";
+            this.rowErrorsLabel.Size = new System.Drawing.Size(116, 20);
+            this.rowErrorsLabel.TabIndex = 22;
+            this.rowErrorsLabel.Text = "rowErrorsLabel";
+            // 
+            // tableErrorsLabel
+            // 
+            this.tableErrorsLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.tableErrorsLabel.AutoSize = true;
+            this.tableErrorsLabel.Location = new System.Drawing.Point(1368, 563);
+            this.tableErrorsLabel.Name = "tableErrorsLabel";
+            this.tableErrorsLabel.Size = new System.Drawing.Size(126, 20);
+            this.tableErrorsLabel.TabIndex = 23;
+            this.tableErrorsLabel.Text = "tableErrorsLabel";
+            // 
+            // nextErrorButton
+            // 
+            this.nextErrorButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.nextErrorButton.Enabled = false;
+            this.nextErrorButton.Location = new System.Drawing.Point(984, 52);
+            this.nextErrorButton.Name = "nextErrorButton";
+            this.nextErrorButton.Size = new System.Drawing.Size(99, 35);
+            this.nextErrorButton.TabIndex = 25;
+            this.nextErrorButton.Text = "Næste fejl";
+            this.nextErrorButton.UseVisualStyleBackColor = true;
+            this.nextErrorButton.Click += new System.EventHandler(this.nextErrorButton_Click);
+            // 
+            // label2
+            // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(12, 455);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(52, 20);
+            this.label2.TabIndex = 26;
+            this.label2.Text = "Værdi";
+            // 
+            // valueRichTextBox
+            // 
+            this.valueRichTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.valueRichTextBox.Location = new System.Drawing.Point(12, 478);
+            this.valueRichTextBox.Name = "valueRichTextBox";
+            this.valueRichTextBox.Size = new System.Drawing.Size(475, 112);
+            this.valueRichTextBox.TabIndex = 27;
+            this.valueRichTextBox.Text = "";
+            // 
+            // prevErrorButton
+            // 
+            this.prevErrorButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.prevErrorButton.Enabled = false;
+            this.prevErrorButton.Location = new System.Drawing.Point(879, 52);
+            this.prevErrorButton.Name = "prevErrorButton";
+            this.prevErrorButton.Size = new System.Drawing.Size(99, 35);
+            this.prevErrorButton.TabIndex = 28;
+            this.prevErrorButton.Text = "Forrige fejl";
+            this.prevErrorButton.UseVisualStyleBackColor = true;
+            this.prevErrorButton.Click += new System.EventHandler(this.prevErrorButton_Click);
             // 
             // variableName
             // 
@@ -117,16 +305,16 @@
             this.variableName.Name = "variableName";
             this.variableName.ReadOnly = true;
             this.variableName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.variableName.Width = 75;
+            this.variableName.Width = 107;
             // 
             // variableType
             // 
             this.variableType.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.variableType.HeaderText = "Datatype (orginal)";
+            this.variableType.HeaderText = "Datatype SIP";
             this.variableType.Name = "variableType";
             this.variableType.ReadOnly = true;
             this.variableType.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.variableType.Width = 86;
+            this.variableType.Width = 110;
             // 
             // variableValue
             // 
@@ -139,11 +327,11 @@
             // columnType
             // 
             this.columnType.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.columnType.HeaderText = "Datatype (SQL)";
+            this.columnType.HeaderText = "Datatype AIP";
             this.columnType.Name = "columnType";
             this.columnType.ReadOnly = true;
             this.columnType.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.columnType.Width = 77;
+            this.columnType.Width = 110;
             // 
             // columnValue
             // 
@@ -171,202 +359,11 @@
             this.Errors.ReadOnly = true;
             this.Errors.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
-            // prevButton
-            // 
-            this.prevButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.prevButton.Enabled = false;
-            this.prevButton.Location = new System.Drawing.Point(462, 33);
-            this.prevButton.Name = "prevButton";
-            this.prevButton.Size = new System.Drawing.Size(47, 23);
-            this.prevButton.TabIndex = 8;
-            this.prevButton.Text = "Forrige";
-            this.prevButton.UseVisualStyleBackColor = true;
-            this.prevButton.Click += new System.EventHandler(this.prevButton_Click);
-            // 
-            // nextButton
-            // 
-            this.nextButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.nextButton.Enabled = false;
-            this.nextButton.Location = new System.Drawing.Point(515, 33);
-            this.nextButton.Name = "nextButton";
-            this.nextButton.Size = new System.Drawing.Size(47, 24);
-            this.nextButton.TabIndex = 9;
-            this.nextButton.Text = "Næste";
-            this.nextButton.UseVisualStyleBackColor = true;
-            this.nextButton.Click += new System.EventHandler(this.nextButton_Click);
-            // 
-            // IndexButton
-            // 
-            this.IndexButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.IndexButton.Location = new System.Drawing.Point(347, 361);
-            this.IndexButton.Name = "IndexButton";
-            this.IndexButton.Size = new System.Drawing.Size(105, 23);
-            this.IndexButton.TabIndex = 10;
-            this.IndexButton.Text = "Afslut konvertering";
-            this.IndexButton.UseVisualStyleBackColor = true;
-            this.IndexButton.Click += new System.EventHandler(this.IndexButton_Click);
-            // 
-            // searchTextBox
-            // 
-            this.searchTextBox.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.searchTextBox.Location = new System.Drawing.Point(761, 34);
-            this.searchTextBox.Name = "searchTextBox";
-            this.searchTextBox.Size = new System.Drawing.Size(100, 20);
-            this.searchTextBox.TabIndex = 11;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(119, 16);
-            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(92, 20);
-            this.label1.TabIndex = 13;
-            this.label1.Text = "TABELLER";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(44, 43);
-            this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(73, 13);
-            this.label4.TabIndex = 15;
-            this.label4.Text = "Hovedtabeller";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(215, 43);
-            this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(66, 13);
-            this.label5.TabIndex = 16;
-            this.label5.Text = "Kodetabeller";
-            // 
-            // codeTablesListBox
-            // 
-            this.codeTablesListBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.codeTablesListBox.FormattingEnabled = true;
-            this.codeTablesListBox.Location = new System.Drawing.Point(179, 63);
-            this.codeTablesListBox.Margin = new System.Windows.Forms.Padding(2);
-            this.codeTablesListBox.Name = "codeTablesListBox";
-            this.codeTablesListBox.Size = new System.Drawing.Size(147, 225);
-            this.codeTablesListBox.TabIndex = 17;
-            this.codeTablesListBox.SelectedIndexChanged += new System.EventHandler(this.codeTablesListBox_SelectedIndexChanged);
-            // 
-            // rowLabel
-            // 
-            this.rowLabel.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.rowLabel.AutoSize = true;
-            this.rowLabel.Location = new System.Drawing.Point(347, 43);
-            this.rowLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.rowLabel.Name = "rowLabel";
-            this.rowLabel.Size = new System.Drawing.Size(50, 13);
-            this.rowLabel.TabIndex = 19;
-            this.rowLabel.Text = "rowLabel";
-            // 
-            // searchButton
-            // 
-            this.searchButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.searchButton.Enabled = false;
-            this.searchButton.Location = new System.Drawing.Point(865, 34);
-            this.searchButton.Name = "searchButton";
-            this.searchButton.Size = new System.Drawing.Size(35, 23);
-            this.searchButton.TabIndex = 20;
-            this.searchButton.Text = "Søg";
-            this.searchButton.UseVisualStyleBackColor = true;
-            this.searchButton.Click += new System.EventHandler(this.searchButton_Click);
-            // 
-            // tableInfoLabel
-            // 
-            this.tableInfoLabel.AutoSize = true;
-            this.tableInfoLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tableInfoLabel.Location = new System.Drawing.Point(346, 6);
-            this.tableInfoLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.tableInfoLabel.Name = "tableInfoLabel";
-            this.tableInfoLabel.Size = new System.Drawing.Size(111, 20);
-            this.tableInfoLabel.TabIndex = 21;
-            this.tableInfoLabel.Text = "tableInfoLabel";
-            // 
-            // rowErrorsLabel
-            // 
-            this.rowErrorsLabel.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.rowErrorsLabel.AutoSize = true;
-            this.rowErrorsLabel.Location = new System.Drawing.Point(912, 44);
-            this.rowErrorsLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.rowErrorsLabel.Name = "rowErrorsLabel";
-            this.rowErrorsLabel.Size = new System.Drawing.Size(77, 13);
-            this.rowErrorsLabel.TabIndex = 22;
-            this.rowErrorsLabel.Text = "rowErrorsLabel";
-            // 
-            // tableErrorsLabel
-            // 
-            this.tableErrorsLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.tableErrorsLabel.AutoSize = true;
-            this.tableErrorsLabel.Location = new System.Drawing.Point(912, 366);
-            this.tableErrorsLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.tableErrorsLabel.Name = "tableErrorsLabel";
-            this.tableErrorsLabel.Size = new System.Drawing.Size(83, 13);
-            this.tableErrorsLabel.TabIndex = 23;
-            this.tableErrorsLabel.Text = "tableErrorsLabel";
-            // 
-            // nextErrorButton
-            // 
-            this.nextErrorButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.nextErrorButton.Enabled = false;
-            this.nextErrorButton.Location = new System.Drawing.Point(656, 34);
-            this.nextErrorButton.Margin = new System.Windows.Forms.Padding(2);
-            this.nextErrorButton.Name = "nextErrorButton";
-            this.nextErrorButton.Size = new System.Drawing.Size(66, 23);
-            this.nextErrorButton.TabIndex = 25;
-            this.nextErrorButton.Text = "Næste fejl";
-            this.nextErrorButton.UseVisualStyleBackColor = true;
-            this.nextErrorButton.Click += new System.EventHandler(this.nextErrorButton_Click);
-            // 
-            // label2
-            // 
-            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(8, 296);
-            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(35, 13);
-            this.label2.TabIndex = 26;
-            this.label2.Text = "Værdi";
-            // 
-            // valueRichTextBox
-            // 
-            this.valueRichTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.valueRichTextBox.Location = new System.Drawing.Point(8, 311);
-            this.valueRichTextBox.Margin = new System.Windows.Forms.Padding(2);
-            this.valueRichTextBox.Name = "valueRichTextBox";
-            this.valueRichTextBox.Size = new System.Drawing.Size(318, 74);
-            this.valueRichTextBox.TabIndex = 27;
-            this.valueRichTextBox.Text = "";
-            // 
-            // prevErrorButton
-            // 
-            this.prevErrorButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.prevErrorButton.Enabled = false;
-            this.prevErrorButton.Location = new System.Drawing.Point(586, 34);
-            this.prevErrorButton.Margin = new System.Windows.Forms.Padding(2);
-            this.prevErrorButton.Name = "prevErrorButton";
-            this.prevErrorButton.Size = new System.Drawing.Size(66, 23);
-            this.prevErrorButton.TabIndex = 28;
-            this.prevErrorButton.Text = "Forrige fejl";
-            this.prevErrorButton.UseVisualStyleBackColor = true;
-            this.prevErrorButton.Click += new System.EventHandler(this.prevErrorButton_Click);
-            // 
             // Form2
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1006, 393);
+            this.ClientSize = new System.Drawing.Size(1509, 605);
             this.Controls.Add(this.prevErrorButton);
             this.Controls.Add(this.valueRichTextBox);
             this.Controls.Add(this.label2);
@@ -386,7 +383,6 @@
             this.Controls.Add(this.prevButton);
             this.Controls.Add(this.dataValues);
             this.Controls.Add(this.mainTablesListBox);
-            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Form2";
             this.Text = "ASTA - {0} - Kontrol af konvertering";
             this.Shown += new System.EventHandler(this.Form2_Shown);
@@ -415,6 +411,9 @@
         private System.Windows.Forms.Label rowErrorsLabel;
         private System.Windows.Forms.Label tableErrorsLabel;
         private System.Windows.Forms.Button nextErrorButton;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.RichTextBox valueRichTextBox;
+        private System.Windows.Forms.Button prevErrorButton;
         private System.Windows.Forms.DataGridViewTextBoxColumn variableName;
         private System.Windows.Forms.DataGridViewTextBoxColumn variableType;
         private System.Windows.Forms.DataGridViewTextBoxColumn variableValue;
@@ -422,9 +421,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn columnValue;
         private System.Windows.Forms.DataGridViewTextBoxColumn Differences;
         private System.Windows.Forms.DataGridViewTextBoxColumn Errors;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.RichTextBox valueRichTextBox;
-        private System.Windows.Forms.Button prevErrorButton;
     }
 }
 
