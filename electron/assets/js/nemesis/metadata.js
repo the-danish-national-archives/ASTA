@@ -326,6 +326,7 @@ function (n) {
                                 if(!codeListKeys.includes(codeName)) {
                                         result = LogError("-CheckMetadata-FileCodeList-KeyRequired-Error",settings.fileName,codeName);
                                         codeName = null;
+                                        settings.errorStop = true;
                                 }
                             }
                         }
