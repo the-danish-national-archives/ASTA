@@ -37,7 +37,12 @@ function (n) {
             dataCallback: null,
             logStartSpn: null,
             logEndNoErrorSpn: null,
-            logEndWithErrorSpn:null,
+            logEndWithErrorSpn: null,
+            logEndWithErrorStopSpn: null,
+            convertDisabledText: null,
+            selectDirBtn: null,
+            validateBtn: null,
+            confirmationSpn: null,
             deliveryPackagePath: null,
             outputText: {},
             logType: "metadata",
@@ -968,7 +973,6 @@ function (n) {
                 }                              
             });
             if(!ValidateTablesReference()) { result = false; }
-            LogInfo(result ? "-CheckMetadata-Ok" : "-CheckMetadata-Warning",null);
             return result; 
         }
 
@@ -980,12 +984,26 @@ function (n) {
                 var folderName = GetFolderName();
                 settings.logCallback().section(settings.logType,folderName,settings.logStartSpn.innerHTML);            
                 ValidateData();
+                var enableData = false;
+                settings.data.forEach(table => {
+                    if(!table.errorStop) { enableData = true; }
+                });
                 if(settings.errors === 0) {
+                    LogInfo("-CheckMetadata-Ok",null);
                     settings.logCallback().section(settings.logType,folderName,settings.logEndNoErrorSpn.innerHTML);
                 } else {
-                    settings.logCallback().section(settings.logType,folderName,settings.logEndWithErrorSpn.innerHTML);
+                    LogInfo(enableData ? "-CheckMetadata-Warning" : "-CheckMetadata-ErrorStop",null);
+                    settings.logCallback().section(settings.logType,folderName,enableData ? settings.logEndWithErrorSpn.innerHTML : settings.logEndWithErrorStopSpn.innerHTML);
                 } 
-                return settings.dataCallback().validate(settings.deliveryPackagePath,settings.outputText,settings.data,settings.totalErrors);               
+                if(enableData) {
+                    return settings.dataCallback().validate(settings.deliveryPackagePath,settings.outputText,settings.data,settings.totalErrors);
+                }
+                else {
+                    settings.confirmationSpn.innerHTML = settings.convertDisabledText;
+                    settings.selectDirBtn.disabled = false;
+                    settings.validateBtn.disabled = false;
+                    return settings.logCallback().commit(settings.deliveryPackagePath);
+                }               
             }
             catch(err) 
             {
@@ -1000,7 +1018,7 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Nemesis.MetaData = {        
-            initialize: function (logCallback,dataCallback,outputErrorId,logStartId,logEndNoErrorId,logEndWithErrorId,outputPrefix) {            
+            initialize: function (logCallback,dataCallback,outputErrorId,logStartId,logEndNoErrorId,logEndWithErrorId,logEndWithErrorStopId,outputPrefix,selectDirectoryId,validateId,confirmationId,convertDisabledId) {            
                 settings.logCallback = logCallback;
                 settings.dataCallback = dataCallback;
                 settings.outputErrorSpn = document.getElementById(outputErrorId);
@@ -1008,6 +1026,11 @@ function (n) {
                 settings.logStartSpn = document.getElementById(logStartId);
                 settings.logEndNoErrorSpn = document.getElementById(logEndNoErrorId);  
                 settings.logEndWithErrorSpn = document.getElementById(logEndWithErrorId);
+                settings.logEndWithErrorStopSpn = document.getElementById(logEndWithErrorStopId);
+                settings.selectDirBtn = document.getElementById(selectDirectoryId);
+                settings.validateBtn = document.getElementById(validateId);
+                settings.confirmationSpn = document.getElementById(confirmationId);
+                settings.convertDisabledText = document.getElementById(convertDisabledId).innerHTML;
                 settings.outputPrefix = outputPrefix;
                 AddEvents();
             },
