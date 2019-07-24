@@ -331,6 +331,7 @@ function (n) {
                         }
                         else {
                             result = LogError("-CheckMetadata-FileCodeList-Name-Error",settings.fileName,expressions[0],(i + 1));
+                            settings.errorStop = true;
                         }
                     }
                 }
