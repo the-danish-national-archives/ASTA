@@ -368,7 +368,7 @@ function (n) {
                     if(description.reduceWhiteSpace() === "" || description === "<none>" || description === "n.a." || description === " ") {
                         LogError("-CheckMetadata-FileVariable-DescriptionEmpty-Error",settings.fileName,name);
                     }
-                    if(matches.length > 1) {
+                    if(matches.length > 1 || (description.reduceWhiteSpace().length > 0 && name.length > 0 && line.trim().reduceWhiteSpace().length > (description.reduceWhiteSpace().length + 3 + name.length))) {
                         LogError("-CheckMetadata-FileVariable-DescriptionMax-Error",settings.fileName,startIndex); 
                         description = "";
                         settings.errorStop = true;
@@ -390,10 +390,7 @@ function (n) {
             var variableDescriptions = [];
             table.variables.forEach(variable => variableDescriptions.push(variable.name));
             var i = startIndex;
-            do {
-                if(lines[i].trim().reduceWhiteSpace().indexOf("' '") > -1) {
-                
-                }          
+            do {                          
                 var info = GetVariableDescription(lines[i],startIndex);                
                 var exitsCounter = 0;
                 if(variableDescriptions.includes(info.name)) {
