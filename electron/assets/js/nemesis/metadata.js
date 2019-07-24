@@ -274,6 +274,7 @@ function (n) {
             var result = true;
             if(!codePattern.test(lines[i].trim().reduceWhiteSpace())) { 
                 result = LogError("-CheckMetadata-FileCodeList-CodeValidation-Error",settings.fileName,codeName,(i + 1));
+                settings.errorStop = true;
             }
             else {
                 var text = lines[i].trim().reduceWhiteSpace();
@@ -293,6 +294,39 @@ function (n) {
             return result;
         }
 
+        //Validate Code
+        var ValidateCode = function (line,index,codeListKeys,validKeys,codeName) {
+            var result = true;
+            if(line.indexOf("'") > -1)
+            {
+                result = LogError("-CheckMetadata-FileCodeList-CodeValidation-Error",settings.fileName,codeName,(index + 1));
+            }
+            else 
+            {
+                var expressions = line.split(" ");
+                if(expressions.length === 1) {
+                    codeName = expressions[0];
+                    validKeys.push(codeName);
+                    if(!ValidateCodeName(codeName)) 
+                    { 
+                        result = false; 
+                        codeName = null;
+                    }
+                    else {
+                        if(!codeListKeys.includes(codeName)) {
+                            result = LogError("-CheckMetadata-FileCodeList-KeyRequired-Error",settings.fileName,codeName);
+                            codeName = null;
+                        }
+                    }
+                }
+                else {
+                    result = LogError("-CheckMetadata-FileCodeList-Name-Error",settings.fileName,expressions[0],(index + 1));
+                }
+            }
+            if(!result) { settings.errorStop = true; }
+            return { "result":result, "codeName":codeName}
+        }
+
         //Validate KODELISTE
         var ValidateCodeList = function (lines,startIndex) {
             var result = true;
@@ -304,36 +338,12 @@ function (n) {
             });
             var codeName = null;
             var i = startIndex;                        
-            do {                
+            do { 
                 if(!codePattern.test(lines[i].trim().reduceWhiteSpace())) {
-                    if(lines[i].trim().reduceWhiteSpace().indexOf("'") > -1)
-                    {
-                        result = LogError("-CheckMetadata-FileCodeList-CodeValidation-Error",settings.fileName,codeName,(i + 1));
-                    }
-                    else 
-                    {
-                        var expressions = lines[i].trim().reduceWhiteSpace().split(" ");
-                        if(expressions.length === 1) {
-                            codeName = expressions[0];
-                            validKeys.push(codeName);
-                            if(!ValidateCodeName(codeName)) 
-                            { 
-                                settings.errorStop = true;
-                                result = false; 
-                                codeName = null;
-                            }
-                            else {
-                                if(!codeListKeys.includes(codeName)) {
-                                        result = LogError("-CheckMetadata-FileCodeList-KeyRequired-Error",settings.fileName,codeName);
-                                        codeName = null;
-                                        settings.errorStop = true;
-                                }
-                            }
-                        }
-                        else {
-                            result = LogError("-CheckMetadata-FileCodeList-Name-Error",settings.fileName,expressions[0],(i + 1));
-                            settings.errorStop = true;
-                        }
+                    var codeResult = ValidateCode(lines[i].trim().reduceWhiteSpace(),i,codeListKeys,validKeys,codeName);
+                    codeName = codeResult.codeName;
+                    if(!codeResult.result) {
+                        result = false;                        
                     }
                 }
                 else {
