@@ -371,11 +371,13 @@ function (n) {
                     if(matches.length > 1) {
                         LogError("-CheckMetadata-FileVariable-DescriptionMax-Error",settings.fileName,startIndex); 
                         description = "";
+                        settings.errorStop = true;
                     }
                 }
                 else {
                     LogError("-CheckMetadata-FileVariable-DescriptionFormat-Error",settings.fileName,name);
                     description = "";
+                    settings.errorStop = true;
                 }
             }
             return { "name":name, "description":description}
