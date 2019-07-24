@@ -30,6 +30,7 @@ function (n) {
             logStartSpn: null,
             logEndNoErrorSpn: null,
             logEndWithErrorSpn:null,
+            logEndWithErrorStopSpn:null,
             deliveryPackagePath: null,
             testId: null,
             confirmationSpn: null,
@@ -486,8 +487,7 @@ function (n) {
                         result = LogError("-CheckFoldersCount-Error",folder);
                     }
                 });
-            }            
-            LogInfo(result ? "-CheckFolders-Ok" : "-CheckFolders-Warning",null);
+            }
             return result;
         }
 
@@ -519,9 +519,11 @@ function (n) {
                 ValidateName();
                 ValidateStructure();
                  if(settings.errors === 0) {
+                    LogInfo("-CheckFolders-Ok",null);
                     settings.logCallback().section(settings.logType,folderName,settings.logEndNoErrorSpn.innerHTML);
                 } else {
-                    settings.logCallback().section(settings.logType,folderName,settings.logEndWithErrorSpn.innerHTML);                    
+                    LogInfo(!settings.errorStop ? "-CheckFolders-Warning" : "-CheckFolders-ErrorStop",null);
+                    settings.logCallback().section(settings.logType,folderName,!settings.errorStop ? settings.logEndWithErrorSpn.innerHTML : settings.logEndWithErrorStopSpn.innerHTML);                    
                 }
                 if(!settings.errorStop) { 
                     return settings.metadataCallback().validate(settings.deliveryPackagePath,settings.outputText,settings.errors); 
@@ -564,7 +566,7 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Nemesis.Structure = {        
-            initialize: function (logCallback,metadataCallback,outputErrorId,selectDirectoryId,pathDirectoryId,validateId,logStartId,logEndNoErrorId,logEndWithErrorId,outputPrefix,testId,confirmationId,convertDisabledId,convertId) {            
+            initialize: function (logCallback,metadataCallback,outputErrorId,selectDirectoryId,pathDirectoryId,validateId,logStartId,logEndNoErrorId,logEndWithErrorId,logEndWithErrorStopId,outputPrefix,testId,confirmationId,convertDisabledId,convertId) {            
                 settings.logCallback = logCallback;
                 settings.metadataCallback = metadataCallback;
                 settings.outputErrorSpn = document.getElementById(outputErrorId);
@@ -575,6 +577,7 @@ function (n) {
                 settings.logStartSpn = document.getElementById(logStartId);
                 settings.logEndNoErrorSpn = document.getElementById(logEndNoErrorId);  
                 settings.logEndWithErrorSpn = document.getElementById(logEndWithErrorId);
+                settings.logEndWithErrorStopSpn = document.getElementById(logEndWithErrorStopId);
                 settings.outputPrefix = outputPrefix;
                 settings.testId = document.getElementById(testId);
                 settings.confirmationSpn = document.getElementById(confirmationId);

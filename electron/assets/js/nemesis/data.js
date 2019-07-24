@@ -30,7 +30,8 @@ function (n) {
             logCallback: null,
             logStartSpn: null,
             logEndNoErrorSpn: null,
-            logEndWithErrorSpn:null,
+            logEndWithErrorSpn: null,
+            logEndWithErrorStopSpn: null,
             selectDirBtn: null,
             validateBtn: null,
             confirmationSpn: null,
@@ -664,17 +665,19 @@ function (n) {
         //commit end all validation 
         var CommitLog = function () {            
                 var folderName = GetFolderName();
+                var enableData = false;
+                var enableConvert = true;
+                settings.metadata.forEach(table => {
+                    if(table.errorStop) { enableConvert = false; }
+                    else { enableData = true; }
+                });
                 if(settings.errors === 0) {
                     LogInfo("-CheckData-Ok",null);
                     settings.logCallback().section(settings.logType,folderName,settings.logEndNoErrorSpn.innerHTML);
                 } else {
-                    LogInfo("-CheckData-Warning",null);
-                    settings.logCallback().section(settings.logType,folderName,settings.logEndWithErrorSpn.innerHTML);
-                }
-                var enableConvert = true;
-                settings.metadata.forEach(table => {
-                    if(table.errorStop) { enableConvert = false; }
-                });                
+                    LogInfo(enableData ? "-CheckData-Warning" : "-CheckData-ErrorStop",null);
+                    settings.logCallback().section(settings.logType,folderName,enableData ? settings.logEndWithErrorSpn.innerHTML : settings.logEndWithErrorStopSpn.innerHTML);
+                }                                
                 if(enableConvert) {
                     settings.confirmationSpn.innerHTML = settings.totalErrors > 0 ? settings.convertWarningEnabledText : settings.convertEnabledText;
                 }
@@ -741,7 +744,7 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Nemesis.Data = {
-            initialize: function (rightsCallback,logCallback,outputErrorId,logStartId,logEndNoErrorId,logEndWithErrorId,outputPrefix,selectDirectoryId,validateId,confirmationId,validateRowsId,checkEncodingId,convertDisabledId,convertEnabledId,convertWarningEnabledId,convertId) { 
+            initialize: function (rightsCallback,logCallback,outputErrorId,logStartId,logEndNoErrorId,logEndWithErrorId,logEndWithErrorStopId,outputPrefix,selectDirectoryId,validateId,confirmationId,validateRowsId,checkEncodingId,convertDisabledId,convertEnabledId,convertWarningEnabledId,convertId) { 
                 settings.rightsCallback = rightsCallback;
                 settings.logCallback = logCallback;
                 settings.outputErrorSpn = document.getElementById(outputErrorId);
@@ -749,6 +752,7 @@ function (n) {
                 settings.logStartSpn = document.getElementById(logStartId);
                 settings.logEndNoErrorSpn = document.getElementById(logEndNoErrorId);  
                 settings.logEndWithErrorSpn = document.getElementById(logEndWithErrorId);
+                settings.logEndWithErrorStopSpn = document.getElementById(logEndWithErrorStopId);
                 settings.outputPrefix = outputPrefix;
                 settings.ConvertBtn = document.getElementById(convertId);
                 settings.selectDirBtn = document.getElementById(selectDirectoryId);
