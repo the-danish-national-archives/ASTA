@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web.Script.Serialization;
 using System.Xml;
 using System.Xml.Linq;
@@ -22,9 +23,11 @@ namespace Rigsarkiv.Athena
         const string ReferencedTable = "{0}_{1}";
         const string ReferencedTableDescription = "Kodeliste til tabel {0}";
         const string Code = "Kode";
-        const string CodeValue = "Kodeværdi";        
+        const string CodeValue = "Kodeværdi";
+        const string EnclosedReservedWordPattern = "^(\")(ABSOLUTE|ACTION|ADD|ADMIN|AFTER|AGGREGATE|ALIAS|ALL|ALLOCATE|ALTER|AND|ANY|ARE|ARRAY|AS|ASC|ASSERTION|AT|AUTHORIZATION|BEFORE|BEGIN|BINARY|BIT|BLOB|BOOLEAN|BOTH|BREADTH|BY|CALL|CASCADE|CASCADED|CASE|CAST|CATALOG|CHAR|CHARACTER|CHECK|CLASS|CLOB|CLOSE|COLLATE|COLLATION|COLUMN|COMMIT|COMPLETION|CONNECT|CONNECTION|CONSTRAINT|CONSTRAINTS ||CONSTRUCTOR|CONTINUE|CORRESPONDING|CREATE|CROSS|CUBE|CURRENT|CURRENT_DATE|CURRENT_PATH|CURRENT_ROLE|CURRENT_TIME|CURRENT_TIMESTAMP|CURRENT_USER|CURSOR|CYCLE|DATA|DATE|DAY|DEALLOCATE|DEC|DECIMAL|DECLARE|DEFAULT|DEFERRABLE|DEFERRED|DELETE|DEPTH|DEREF|DESC|DESCRIBE|DESCRIPTOR|DESTROY|DESTRUCTOR|DETERMINISTIC|DICTIONARY|DIAGNOSTICS|DISCONNECT|DISTINCT|DOMAIN|DOUBLE|DROP|DYNAMIC|EACH|ELSE|END|END-EXEC|EQUALS|ESCAPE|EVERY|EXCEPT|EXCEPTION|EXEC|EXECUTE|EXTERNAL|FALSE|FETCH|FIRST|FLOAT|FOR|FOREIGN|FOUND|FROM|FREE|FULL|FUNCTION|GENERAL|GET|GLOBAL|GO|GOTO|GRANT|GROUP|GROUPING|HAVING|HOST|HOUR|IDENTITY|IGNORE|IMMEDIATE|IN|INDICATOR|INITIALIZE|INITIALLY|INNER|INOUT|INPUT|INSERT|INT|INTEGER|INTERSECT|INTERVAL|INTO|IS|ISOLATION|ITERATE|JOIN|KEY|LANGUAGE|LARGE|LAST|LATERAL|LEADING|LEFT|LESS|LEVEL|LIKE|LIMIT|LOCAL|LOCALTIME|LOCALTIMESTAMP|LOCATOR|MAP|MATCH|MINUTE|MODIFIES|MODIFY|MODULE|MONTH|NAMES|NATIONAL|NATURAL|NCHAR|NCLOB|NEW|NEXT|NO|NONE|NOT|NULL|NUMERIC|OBJECT|OF|OFF|OLD|ON|ONLY|OPEN|OPERATION|OPTION|OR|ORDER|ORDINALITY|OUT|OUTER|OUTPUT|PAD|PARAMETER|PARAMETERS|PARTIAL|PATH|POSTFIX|PRECISION|PREFIX|PREORDER|PREPARE|PRESERVE|PRIMARY|PRIOR|PRIVILEGES|PROCEDURE|PUBLIC|READ|READS|REAL|RECURSIVE|REF|REFERENCES|REFERENCING|RELATIVE|RESTRICT|RESULT|RETURN|RETURNS|REVOKE|RIGHT|ROLE|ROLLBACK|ROLLUP|ROUTINE|ROW|ROWS|SAVEPOINT|SCHEMA|SCROLL|SCOPE|SEARCH|SECOND|SECTION|SELECT|SEQUENCE|SESSION|SESSION_USER|SET|SETS|SIZE|SMALLINT|SOME|SPACE|SPECIFIC|SPECIFICTYPE|SQL|SQLEXCEPTION|SQLSTATE|SQLWARNING|START|STATE|STATEMENT|STATIC|STRUCTURE|SYSTEM_USER|TABLE|TEMPORARY|TERMINATE|THAN|THEN|TIME|TIMESTAMP|TIMEZONE_HOUR|TIMEZONE_MINUTE|TO|TRAILING|TRANSACTION|TRANSLATION|TREAT|TRIGGER|TRUE|UNDER|UNION|UNIQUE|UNKNOWN|UNNEST|UPDATE|USAGE|USER|USING|VALUE|VALUES|VARCHAR|VARIABLE|VARYING|VIEW|WHEN|WHENEVER|WHERE|WITH|WITHOUT|WORK|WRITE|YEAR|ZONE)(\")$";
         private dynamic _metadata = null;        
-        private int _tablesCounter = 0;        
+        private int _tablesCounter = 0;
+        private Regex _enclosedReservedWord = null;
 
         /// <summary>
         /// Constructore
@@ -43,7 +46,8 @@ namespace Rigsarkiv.Athena
             using (Stream stream = _assembly.GetManifestResourceStream(string.Format(ResourcePrefix, ResearchIndex)))
             {
                 _researchIndexXDocument = XDocument.Load(stream);
-            }           
+            }
+            _enclosedReservedWord = new Regex(EnclosedReservedWordPattern, RegexOptions.Compiled | RegexOptions.IgnoreCase);
         }
 
         /// <summary>
@@ -88,7 +92,7 @@ namespace Rigsarkiv.Athena
                 _logManager.Add(new LogEntity() { Level = LogLevel.Error, Section = _logSection, Message = string.Format("EnsureTableIndex Failed: {0}", ex.Message) });
             }
             return result;
-        }
+        }        
 
         private void AddTableNode(Dictionary<string, object> tableInfo)
         {
@@ -109,7 +113,7 @@ namespace Rigsarkiv.Athena
                 new XElement(_tableIndexXNS + "folder", folder),
                 new XElement(_tableIndexXNS + "description", tableInfo["description"].ToString()),
                 new XElement(_tableIndexXNS + "columns"),
-                new XElement(_tableIndexXNS + "primaryKey", new XElement(_tableIndexXNS + "name", string.Format(PrimaryKeyPrefix, tableName))),
+                new XElement(_tableIndexXNS + "primaryKey", new XElement(_tableIndexXNS + "name", string.Format(PrimaryKeyPrefix, NormalizeName(tableName)))),
                 new XElement(_tableIndexXNS + "foreignKeys"),
                 new XElement(_tableIndexXNS + "rows", rows));
             _tableIndexXDocument.Element(_tableIndexXNS + "siardDiark").Element(_tableIndexXNS + "tables").Add(tableNode);
@@ -143,7 +147,7 @@ namespace Rigsarkiv.Athena
             table.Columns.Add(column);
             if (!string.IsNullOrEmpty(variableInfo["refData"].ToString()) && !string.IsNullOrEmpty(variableInfo["refVariable"].ToString()))
             {
-                var foreignKeyName = string.Format(ForeignKeyPrefix, table.Name, columnName, index);
+                var foreignKeyName = string.Format(ForeignKeyPrefix, NormalizeName(table.Name), NormalizeName(columnName), index);
                 _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add foreign key: {0} ", foreignKeyName) });
 
                 tableNode.Element(_tableIndexXNS + "foreignKeys").Add(new XElement(_tableIndexXNS + "foreignKey",
@@ -164,8 +168,8 @@ namespace Rigsarkiv.Athena
             if (variableInfo["codeListKey"] != null && !string.IsNullOrEmpty(variableInfo["codeListKey"].ToString()))
             {
                 var codeListKey = variableInfo["codeListKey"].ToString();
-                var refTableName = string.Format(ReferencedTable, table.Name, codeListKey);
-                var foreignKeyName = string.Format(ForeignKeyPrefix, table.Name, codeListKey, index);
+                var refTableName = string.Format(ReferencedTable, NormalizeName(table.Name), NormalizeName(codeListKey));
+                var foreignKeyName = string.Format(ForeignKeyPrefix, NormalizeName(table.Name), NormalizeName(codeListKey), index);
                 _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add foreign key: {0} ", foreignKeyName) });
                 if(table.CodeList == null) { table.CodeList = new List<Table>(); }
                 tableNode.Element(_tableIndexXNS + "foreignKeys").Add(new XElement(_tableIndexXNS + "foreignKey",
@@ -267,6 +271,17 @@ namespace Rigsarkiv.Athena
             var fragment = xmlDocument.CreateDocumentFragment();
             fragment.InnerXml = xml;
             return parentNode.AppendChild(fragment);
+        }
+
+        private string NormalizeName(string tableName)
+        {
+            var result = tableName;
+            if (_enclosedReservedWord.IsMatch(tableName))
+            {
+                var groups = _enclosedReservedWord.Match(tableName).Groups;
+                result = groups[2].Value;
+            }
+            return result;
         }
 
         private bool LoadJson()
