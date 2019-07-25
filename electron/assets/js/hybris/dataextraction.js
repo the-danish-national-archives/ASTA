@@ -64,6 +64,7 @@ function (n) {
             headerLinkInformation2: null,
             okConfirm: null,
             cancelConfirm: null,
+            outputStatisticsSASPopup: null,
             okScriptDataPath: null,   
             scriptPath: "./assets/scripts/{0}",
             resourceWinPath: "resources\\{0}",
@@ -85,6 +86,7 @@ function (n) {
             settings.outputScriptOkSpn.hidden = true;
             settings.nextBtn.hidden = true;
             settings.outputStructureOkSpn.hidden = true;
+            settings.outputStatisticsSASPopup.hidden = true;
             settings.headerLinkTrin2.innerHTML = "";
             settings.headerLinkTrin3.innerHTML = "";
             settings.headerLinkInformation2.innerHTML = "";
@@ -228,6 +230,9 @@ function (n) {
                     }
                     if(!sasCatalogExists && fileExt === "sas7bdat") {
                         ipcRenderer.send('open-confirm-dialog','dataextraction-catalogexists',settings.outputStatisticsSASWarningTitle.innerHTML,settings.outputStatisticsSASWarningText.innerHTML,settings.okConfirm.innerHTML,settings.cancelConfirm.innerHTML);
+                        settings.selectStatisticsFileBtn.disabled = true;
+                        settings.okStatisticsBtn.disabled = true;
+                        settings.outputStatisticsSASPopup.hidden = false;
                         return;
                     }
                     CopyScript();     
@@ -407,6 +412,9 @@ function (n) {
                 settings.pathStatisticsFileTxt.value = settings.selectedStatisticsFilePath;            
             })
             ipcRenderer.on('confirm-dialog-selection-dataextraction-catalogexists', (event, index) => {
+                settings.selectStatisticsFileBtn.disabled = false;
+                settings.okStatisticsBtn.disabled = false;
+                settings.outputStatisticsSASPopup.hidden = true;
                 if(index === 0) {
                     CopyScript();
                 } 
@@ -422,7 +430,7 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Hybris.DataExtraction = {        
-            initialize: function (structureCallback,selectStatisticsFileId,pathStatisticsFileId,okStatisticsId,outputStatisticsErrorId,outputStatisticsOkCopyScriptId,outputStatisticsSASWarningPrefixId,scriptPanel1Id,scriptPanel2Id,okScriptBtnId,okScriptDataPathId,outputStatisticsOkCopyScriptInfoId,outputStatisticsRequiredPathId,outputScriptRequiredFilesWarningPrefixId,outputScriptOkId,outputScriptEncodingFileErrorPrefixId,nextId,metdataTabId,outputScriptCloseApplicationWarningPrefixId,outputStructureOkId,selectStructureDeliveryPackageId,metadataFileName,spinnerId,outputScriptPath,outputHeaderLinkTrin2,outputHeaderLinkTrin3,outputHeaderLinkInformation2,outputOkConfirmId,outputCancelConfirmId) {
+            initialize: function (structureCallback,selectStatisticsFileId,pathStatisticsFileId,okStatisticsId,outputStatisticsErrorId,outputStatisticsOkCopyScriptId,outputStatisticsSASWarningPrefixId,scriptPanel1Id,scriptPanel2Id,okScriptBtnId,okScriptDataPathId,outputStatisticsOkCopyScriptInfoId,outputStatisticsRequiredPathId,outputScriptRequiredFilesWarningPrefixId,outputScriptOkId,outputScriptEncodingFileErrorPrefixId,nextId,metdataTabId,outputScriptCloseApplicationWarningPrefixId,outputStructureOkId,selectStructureDeliveryPackageId,metadataFileName,spinnerId,outputScriptPath,outputHeaderLinkTrin2,outputHeaderLinkTrin3,outputHeaderLinkInformation2,outputOkConfirmId,outputCancelConfirmId,outputStatisticsSASPopupId) {
                 settings.structureCallback = structureCallback;
                 settings.selectStatisticsFileBtn = document.getElementById(selectStatisticsFileId);
                 settings.pathStatisticsFileTxt = document.getElementById(pathStatisticsFileId);
@@ -463,6 +471,7 @@ function (n) {
                 settings.headerLinkInformation2 = document.getElementById(outputHeaderLinkInformation2);
                 settings.okConfirm = document.getElementById(outputOkConfirmId);
                 settings.cancelConfirm = document.getElementById(outputCancelConfirmId);
+                settings.outputStatisticsSASPopup = document.getElementById(outputStatisticsSASPopupId);
                 AddEvents();
             },
             callback: function () {

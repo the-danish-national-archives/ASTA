@@ -17,7 +17,6 @@ function (n) {
         //private data memebers
         var settings = {
             structureCallback: null,
-            okBtn: null,
             printBtn: null,
             outputErrorSpn: null,
             outputErrorText: null,
@@ -36,6 +35,7 @@ function (n) {
             outputNextConfirmText: null,
             documents: [],
             logs: [],
+            hasSelected: false,
             documentsPath: null,
             filePath: null,
             filePostfix: "{0}_ASTA_contextdocuments.html",
@@ -52,6 +52,7 @@ function (n) {
             $("#{0} tr:not(:first-child)".format(settings.uploadsTbl.id)).remove();
             settings.documents = [];
             settings.documentsPath = null;
+            settings.hasSelected = false;
         }
 
         //get JSON upload document by id
@@ -162,7 +163,6 @@ function (n) {
         var UpdateSpinner = function(spinnerClass) {
             var disabled = (spinnerClass === "") ? false : true;
             settings.spinner.className = spinnerClass;
-            settings.okBtn.disabled = disabled;
             settings.printBtn.disabled = disabled;
             settings.nextBtn.disabled = disabled;
             $("button[id^='hybris-contextdocuments-selectFile-']").each(function() {
@@ -173,10 +173,17 @@ function (n) {
         //add Event Listener to HTML elmenets
         var AddEvents = function () {
             settings.nextBtn.addEventListener('click', function (event) {
-                if(settings.documentsPath == null) {
+                if(!settings.hasSelected) {
                     ipcRenderer.send('open-confirm-dialog','contextdocuments',settings.outputNextConfirmTitle.innerHTML,settings.outputNextConfirmText.innerHTML,settings.okConfirm.innerHTML,settings.cancelConfirm.innerHTML);
                 }
                 else {
+                    if(settings.documents.length > 0) {                    
+                        UpdateSpinner(settings.spinnerClass);
+                        EnsureStructure();
+                        EnsureDocuments();
+                        UpdateSpinner("");                    
+                        //ipcRenderer.send('open-information-dialog',settings.outputOkInformationTitle.innerHTML,settings.outputOkInformationText.innerHTML);
+                    }
                     settings.selectDeliveryPackage.innerHTML = "[{0}]".format(settings.structureCallback().deliveryPackagePath);
                     settings.overviewTab.click();
                 }
@@ -186,15 +193,6 @@ function (n) {
                     settings.selectDeliveryPackage.innerHTML = "[{0}]".format(settings.structureCallback().deliveryPackagePath);
                     settings.overviewTab.click();
                 }            
-            });
-            settings.okBtn.addEventListener('click', function (event) {
-                if(settings.documents.length > 0) {                    
-                    UpdateSpinner(settings.spinnerClass);
-                    EnsureStructure();
-                    EnsureDocuments();
-                    UpdateSpinner("");                    
-                    ipcRenderer.send('open-information-dialog',settings.outputOkInformationTitle.innerHTML,settings.outputOkInformationText.innerHTML);
-                }
             });
             settings.printBtn.addEventListener('click', function (event) {
                 settings.filePath = settings.filePostfix.format(settings.structureCallback().deliveryPackagePath);
@@ -208,15 +206,15 @@ function (n) {
                 console.logInfo(`selected document ${id} with path: ${path}`,"Rigsarkiv.Hybris.ContextDocuments.AddEvents");
                 var upload = GetDocument(id);
                 upload.path = path[0]; 
-                document.getElementById("hybris-contextdocuments-document-{0}".format(upload.id)).value = upload.path;          
+                document.getElementById("hybris-contextdocuments-document-{0}".format(upload.id)).value = upload.path; 
+                settings.hasSelected = true;         
             })
         }
         
         //Model interfaces functions
         Rigsarkiv.Hybris.ContextDocuments = {
-            initialize: function (structureCallback,outputErrorId,okId,uploadsId,printId,outputEmptyFileId,nextId,overviewTabId,outputOkInformationPrefixId,spinnerId,selectDeliveryPackageId,outputOkConfirmId,outputCancelConfirmId,outputNextConfirmId) {
+            initialize: function (structureCallback,outputErrorId,uploadsId,printId,outputEmptyFileId,nextId,overviewTabId,outputOkInformationPrefixId,spinnerId,selectDeliveryPackageId,outputOkConfirmId,outputCancelConfirmId,outputNextConfirmId) {
                 settings.structureCallback = structureCallback;
-                settings.okBtn = document.getElementById(okId);
                 settings.outputErrorSpn =  document.getElementById(outputErrorId);
                 settings.outputErrorText = settings.outputErrorSpn.innerHTML;
                 settings.uploadsTbl = document.getElementById(uploadsId);

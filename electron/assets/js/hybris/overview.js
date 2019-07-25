@@ -11,8 +11,7 @@ function (n) {
          //private data memebers
          var settings = {
             structureCallback: null,
-            selectDeliveryPackage: null,
-            selectDeliveryPackageLink: null
+            selectDeliveryPackage: null
          }
 
          //add Event Listener to HTML elmenets
@@ -20,19 +19,14 @@ function (n) {
             settings.selectDeliveryPackage.addEventListener('click', (event) => {
                 var folderPath = settings.structureCallback().deliveryPackagePath;
                 ipcRenderer.send('open-item',folderPath);
-            });
-            settings.selectDeliveryPackageLink.addEventListener('click', (event) => {
-                var folderPath = settings.structureCallback().deliveryPackagePath;
-                ipcRenderer.send('open-item',folderPath);
-            });
+            });            
         }
 
         //Model interfaces functions
         Rigsarkiv.Hybris.Overview = {
-            initialize: function (structureCallback,selectDeliveryPackageId,selectDeliveryPackageLinkId) {
+            initialize: function (structureCallback,selectDeliveryPackageId) {
                 settings.structureCallback = structureCallback;
                 settings.selectDeliveryPackage = document.getElementById(selectDeliveryPackageId);
-                settings.selectDeliveryPackageLink = document.getElementById(selectDeliveryPackageLinkId);
                 AddEvents();
             }
         }
