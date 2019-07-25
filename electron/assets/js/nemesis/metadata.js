@@ -279,7 +279,6 @@ function (n) {
             var result = true;
             if(!codePattern.test(lines[i].trim().reduceWhiteSpace())) { 
                 result = LogError("-CheckMetadata-FileCodeList-CodeValidation-Error",settings.fileName,codeName,(i + 1));
-                settings.errorStop = true;
             }
             else {
                 var text = lines[i].trim().reduceWhiteSpace();
@@ -288,7 +287,7 @@ function (n) {
                 var description = text.substring(index + 3);
                 description = description.substring(0,description.length - 1);
                 if(description.reduceWhiteSpace() === "" || description === " ") {
-                    result = LogError("-CheckMetadata-FileCodeList-CodeValidationEmpty-Error",settings.fileName,codeName,options[0].substring(1));  
+                    result = LogError("-CheckMetadata-FileCodeList-CodeValidationEmpty-Error",settings.fileName,codeName,options[0].substring(1));                      
                 }
                 table.variables.forEach(variable => {
                     if(variable.codeListKey === codeName) {
@@ -296,7 +295,8 @@ function (n) {
                     }
                 });
            }
-            return result;
+           if(!result) { settings.errorStop = true; }
+           return result;
         }
 
         //Validate Code
