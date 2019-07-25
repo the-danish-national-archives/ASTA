@@ -418,7 +418,7 @@ function (n) {
                                 variable.description = info.description;  
                             }
                             else {
-                                result = LogError("-CheckMetadata-FileVariable-DescriptionTextRequired-Error",settings.fileName,info.name);   
+                                result = LogError("-CheckMetadata-FileVariable-DescriptionTextRequired-Error",settings.fileName,info.name);
                             }                         
                         }
                     });
@@ -433,7 +433,8 @@ function (n) {
                 variableDescriptions.forEach(variable => {
                     result = LogError("-CheckMetadata-FileVariable-DescriptionExists-Error",settings.fileName,variable);
                 });                
-            }  
+            }
+            if(!result) { settings.errorStop = true; }  
             return result;
         }
 
