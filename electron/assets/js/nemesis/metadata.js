@@ -519,6 +519,7 @@ function (n) {
                             var isKey = (settings.fileKeys.includes(variableName)) ? true : false;
                             var variable = { "name":variableName, "format":expressions[1], "isKey":isKey, "type":"", "nullable":false, "description":"", "refData":"", "refVariable":"", "codeListKey":(codeListKey == null ? "" : codeListKey), "options":[], "regExps":[], "appliedRegExp":-1 }
                             table.variables.push(variable);
+                            if(!ValidateDataFormats(variable)) { result = false; } 
                         } 
                         else { 
                             result = false;
@@ -536,7 +537,7 @@ function (n) {
                 }
                 i++;
             }
-            while (lines[i] !== undefined && lines[i].trim() !== "");           
+            while (lines[i] !== undefined && lines[i].trim() !== ""); 
             if(!ValidateVariablesRelated(variables)) { result = false; }  
             return result;
         }
@@ -866,22 +867,18 @@ function (n) {
         }
 
         //Validate variables Data Formats
-        var ValidateDataFormats = function () {
-            var result = false;
-            var table = GetTableData(settings.fileName);
-            table.variables.forEach(variable => {
-                var isValid = false;                
-                if(!isValid) { isValid = ValidateFormat("String",datatypeString,variable); } 
-                if(!isValid) { isValid = ValidateFormat("Int",datatypeInt,variable); }   
-                if(!isValid) { isValid = ValidateFormat("Decimal",datatypeDecimal,variable); }
-                if(!isValid) { isValid = ValidateFormat("Date",datatypeDate,variable); } 
-                if(!isValid) { isValid = ValidateFormat("Time",datatypeTime,variable); }
-                if(!isValid) { isValid = ValidateFormat("DateTime",datatypeDateTime,variable); }
-                if(!isValid) {
-                    result = LogError("-CheckMetadata-FileVariable-DataFormat-Error",settings.fileName,variable.name,variable.format);
-                    settings.errorStop = true;
-                }
-            });
+        var ValidateDataFormats = function (variable) {
+            var result = true;
+            var isValid = false;                
+            if(!isValid) { isValid = ValidateFormat("String",datatypeString,variable); } 
+            if(!isValid) { isValid = ValidateFormat("Int",datatypeInt,variable); }   
+            if(!isValid) { isValid = ValidateFormat("Decimal",datatypeDecimal,variable); }
+            if(!isValid) { isValid = ValidateFormat("Date",datatypeDate,variable); } 
+            if(!isValid) { isValid = ValidateFormat("Time",datatypeTime,variable); }
+            if(!isValid) { isValid = ValidateFormat("DateTime",datatypeDateTime,variable); }
+            if(!isValid) {
+                result = LogError("-CheckMetadata-FileVariable-DataFormat-Error",settings.fileName,variable.name,variable.format);
+            }
             return result;
         }
 
@@ -903,8 +900,7 @@ function (n) {
                         settings.errorStop = true;
                     }
                     else {
-                        if(!ValidateLabelValues(lines)) { result = false; }
-                        if(!settings.errorStop && ValidateDataFormats()) { result = false; }
+                        if(!ValidateLabelValues(lines)) { result = false; }                        
                     }
                 }
                 else {
