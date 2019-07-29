@@ -60,10 +60,16 @@ window.navigation = window.navigation || {},
         };
 
         n(function () {
+            Rigsarkiv.Rights.initialize("menu-output-Error");
             navigation.menu.init();
             document.getElementById("menu-reload").addEventListener('click', function (event) {
                 getCurrentWindow().reload();
             });
+            styxLink = document.getElementById("styx-menu");
+            $(styxLink).hide();
+            if(Rigsarkiv.Rights.callback().isAdmin) {
+                $(styxLink).show();
+            }
         })
 
     }(jQuery);
