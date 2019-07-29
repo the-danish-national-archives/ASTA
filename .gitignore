@@ -49,3 +49,10 @@ electron/assets/scripts/Athena.exe.config
 /dotNET/StyxConsole/obj/Debug
 /dotNET/StyxForm/bin/Debug
 /dotNET/StyxForm/obj/Debug
+/dotNET/Styx/bin/Release
+/dotNET/Styx/obj/Release
+/dotNET/StyxConsole/obj/Release
+/dotNET/StyxForm/obj/Release
+/electron/assets/scripts/Styx.pdb
+/electron/assets/scripts/StyxConsole.pdb
+/electron/assets/scripts/StyxForm.pdb
