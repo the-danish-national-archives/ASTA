@@ -129,8 +129,8 @@ namespace Rigsarkiv.Athena
                     var hasError = false;
                     var isDifferent = false;
                     _writer.WriteStartElement("row");
-                    _writer.WriteElementString("c1", GetConvertedValue(codeListColumn, pair.Key, out hasError, out isDifferent));
-                    _writer.WriteElementString("c2", pair.Value);
+                    _writer.WriteElementString("c1", GetConvertedValue(codeListColumn, pair[0], out hasError, out isDifferent));
+                    _writer.WriteElementString("c2", pair[1]);
                     _writer.WriteEndElement();
                     if (isDifferent) { codeListColumn.Differences++; }
                     if (hasError)
@@ -139,7 +139,7 @@ namespace Rigsarkiv.Athena
                         if (MaxErrorsRows > codeListColumn.ErrorsRows.Count)
                         {
                             codeListColumn.ErrorsRows.Add(codeList.Errors);
-                            _logManager.Add(new LogEntity() { Level = LogLevel.Warning, Section = _logSection, Message = string.Format("Convert column {0} of type {1} with value {2} has error", codeListColumn.Name, codeListColumn.Type, pair.Key) });
+                            _logManager.Add(new LogEntity() { Level = LogLevel.Warning, Section = _logSection, Message = string.Format("Convert column {0} of type {1} with value {2} has error", codeListColumn.Name, codeListColumn.Type, pair[0]) });
                         }
                         codeList.Errors++;
                     }

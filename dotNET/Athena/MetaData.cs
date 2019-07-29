@@ -192,7 +192,7 @@ namespace Rigsarkiv.Athena
             Directory.CreateDirectory(string.Format(TablePath, _destFolderPath, folder));
 
             var options = (object[])variableInfo["options"];
-            var codeList = new Table() { Name = refTableName, Folder = folder, Rows = options.Length, Errors = 0, RowsCounter = 0, Options= new Dictionary<string, string>(), ErrorsRows = new Dictionary<string, Row>() };
+            var codeList = new Table() { Name = refTableName, Folder = folder, Rows = options.Length, Errors = 0, RowsCounter = 0, Options= new List<string[]>(), ErrorsRows = new Dictionary<string, Row>() };
             codeList.Columns = new List<Column>() { (new Column() { Name = Code, Id = C1, Type = column.Type, TypeOriginal = "", Differences = 0, Errors = 0, ErrorsRows = new List<int>() }), (new Column() { Name = CodeValue, Id = C2, Type = "", TypeOriginal = "", Differences = 0, Errors = 0, ErrorsRows = new List<int>() }) };
             var optionsType = ParseOptions(options, researchIndexNode, codeList, folder, column);
             var columnNode1 = new XElement(_tableIndexXNS + "column", new XElement(_tableIndexXNS + "name", Code),new XElement(_tableIndexXNS + "columnID", C1),new XElement(_tableIndexXNS + "type", column.Type),new XElement(_tableIndexXNS + "typeOriginal"),new XElement(_tableIndexXNS + "nullable", "false"), new XElement(_tableIndexXNS + "description", "Kode"));
@@ -209,7 +209,7 @@ namespace Rigsarkiv.Athena
             table.CodeList.Add(codeList);
             foreach(var pair in codeList.Options)
             {
-                if (HasSpecialNumeric(column, pair.Key)) { HandleSpecialNumeric(column, tableNode, researchIndexNode, pair.Key, false); }
+                if (HasSpecialNumeric(column, pair[0])) { HandleSpecialNumeric(column, tableNode, researchIndexNode, pair[0], false); }
             }
         }
         
@@ -224,7 +224,7 @@ namespace Rigsarkiv.Athena
                 var code = (Dictionary<string, object>)option;
                 var value = code["name"].ToString();
                 var description = code["description"].ToString();
-                codeList.Options.Add(value, description);
+                codeList.Options.Add(new string[2] { value, description });
                 if (description.Length > result) { result = description.Length; }
                 if((bool)code["isMissing"]) { AddMissingColumnNode(value, researchIndexNode, column.Id); }                
             }         

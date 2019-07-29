@@ -15,7 +15,7 @@ namespace Rigsarkiv.Athena.Entities
         public List<Table> CodeList { get; set; }
         public List<Column> Columns { get; set; }
         public int Errors { get; set; }        
-        public Dictionary<string,string> Options { get; set; }
+        public List<string[]> Options { get; set; }
         public Dictionary<string,Row> ErrorsRows { get; set; }
     }
 }
