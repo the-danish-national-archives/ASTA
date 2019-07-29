@@ -126,12 +126,12 @@
             // reportButton
             // 
             this.reportButton.Enabled = false;
-            this.reportButton.Location = new System.Drawing.Point(129, 545);
+            this.reportButton.Location = new System.Drawing.Point(33, 478);
             this.reportButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.reportButton.Name = "reportButton";
-            this.reportButton.Size = new System.Drawing.Size(112, 35);
+            this.reportButton.Size = new System.Drawing.Size(169, 35);
             this.reportButton.TabIndex = 17;
-            this.reportButton.Text = "Test repport";
+            this.reportButton.Text = "Konverteringsrapport";
             this.reportButton.UseVisualStyleBackColor = true;
             this.reportButton.Click += new System.EventHandler(this.reportButton_Click);
             // 
@@ -189,7 +189,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(246, 386);
+            this.label3.Location = new System.Drawing.Point(220, 386);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(206, 20);
             this.label3.TabIndex = 21;
@@ -205,13 +205,13 @@
             this.Variable,
             this.DataType,
             this.Errors});
-            this.columnsDataGridView.Location = new System.Drawing.Point(250, 411);
+            this.columnsDataGridView.Location = new System.Drawing.Point(224, 411);
             this.columnsDataGridView.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.columnsDataGridView.Name = "columnsDataGridView";
             this.columnsDataGridView.ReadOnly = true;
             this.columnsDataGridView.RowHeadersVisible = false;
             this.columnsDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.columnsDataGridView.Size = new System.Drawing.Size(738, 169);
+            this.columnsDataGridView.Size = new System.Drawing.Size(764, 169);
             this.columnsDataGridView.TabIndex = 20;
             // 
             // dataGridViewTextBoxColumn4
