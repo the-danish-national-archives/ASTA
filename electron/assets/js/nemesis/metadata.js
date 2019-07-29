@@ -521,21 +521,17 @@ function (n) {
                         } 
                         else { 
                             result = false;
-                            settings.errorStop = true; 
                         }                       
                     }
                     else {
                         result = LogError("-CheckMetadata-FileVariables-RowDouble-Error",settings.fileName,variableName,(i + 1));
-                        settings.errorStop = true;
                     }
                     if(expressions.length > 3) {
                         result = LogError("-CheckMetadata-FileVariables-RowMax-Error",settings.fileName,(i + 1));
-                        settings.errorStop = true;
                     }
                 }
                 else {
-                    result = LogError("-CheckMetadata-FileVariables-RowRequiredInfo-Error",settings.fileName,(i + 1));
-                    settings.errorStop = true;
+                    result = LogError("-CheckMetadata-FileVariables-RowRequiredInfo-Error",settings.fileName,(i + 1));                    
                 }
                 i++;
             }
@@ -605,12 +601,13 @@ function (n) {
                         tableName = expressions[0];
                         tableKey = expressions[1].substring(1,expressions[1].length - 1);
                         refKey = expressions[2].substring(1,expressions[2].length - 1);
-                        if(ValidateReferenceName(tableName) && ValidateReferenceName(tableKey)) {
-                            settings.fileReferences.push({"table":tableName, "key":tableKey, "refKey":refKey});                        
+                        if(!ValidateReferenceName(tableName)) { result = false;  }
+                        if(!ValidateReferenceName(tableKey)) { result = false;  }
+                        if(result) {
+                            settings.fileReferences.push({"table":tableName, "key":tableKey, "refKey":refKey});
                         }
                         else {
-                            result = false; 
-                            settings.errorStop = true;
+                            settings.errorStop = true; 
                         }
                     }
                     else {
@@ -708,7 +705,11 @@ function (n) {
                         settings.errorStop = true;
                     }
                     else {
-                        if(!ValidateVariables(lines,index)) { result = false; }
+                        if(!ValidateVariables(lines,index)) 
+                        { 
+                            result = false;
+                            settings.errorStop = true; 
+                        }
                     }
                 }
                 if(label === settings.metadataLabels[6] && !settings.errorStop && !ValidateVariablesDescription(lines,index)) { result = false; }
