@@ -333,6 +333,22 @@ function (n) {
             return { "result":result, "codeName":codeName}
         }
 
+        //Validate Unique codelist Options
+        var ValidateUniqueOptions = function (variable) {
+            var result = true;
+            var options = [];
+            variable.options.forEach(option => {
+                var optionName = option.name;
+                if(!options.includes(optionName)) { 
+                    options.push(optionName);
+                }
+                else {
+                    result = LogError("-CheckMetadata-FileVariable-CodeUnique-Error",settings.fileName,variable.codeListKey,optionName);
+                }
+            });
+            return result;
+        }
+
         //Validate KODELISTE
         var ValidateCodeList = function (lines,startIndex) {
             var result = true;
@@ -348,9 +364,7 @@ function (n) {
                 if(!codePattern.test(lines[i].trim().reduceWhiteSpace())) {
                     var codeResult = ValidateCode(lines[i].trim().reduceWhiteSpace(),i,codeListKeys,validKeys,codeName);
                     codeName = codeResult.codeName;
-                    if(!codeResult.result) {
-                        result = false;                        
-                    }
+                    if(!codeResult.result) { result = false; }
                 }
                 else {
                     if(codeName != null && !ValidateCodeListOptions(lines,i,codeName,table)) { result = false; }
@@ -359,10 +373,15 @@ function (n) {
             }
             while (lines[i] !== undefined && lines[i].trim() !== "");
             table.variables.forEach(variable => {
-                if(variable.codeListKey !== "" && !validKeys.includes(variable.codeListKey)) {
-                    result = LogError("-CheckMetadata-FileVariable-CodeListRequired-Error",settings.fileName,variable.name,variable.codeListKey);    
-                    settings.errorStop = true;
-                }
+                if(variable.codeListKey !== "") {
+                    if(!validKeys.includes(variable.codeListKey)) {
+                        result = LogError("-CheckMetadata-FileVariable-CodeListRequired-Error",settings.fileName,variable.name,variable.codeListKey);    
+                        settings.errorStop = true;
+                    }
+                    else {
+                        if(!ValidateUniqueOptions(variable)) { result = false; }
+                    }
+                }                
             });  
             return result;
         }
