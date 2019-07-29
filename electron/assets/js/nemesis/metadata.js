@@ -542,28 +542,35 @@ function (n) {
             return result;
         }
 
+        //validate key
+        var ValidateKey  = function (key) {
+            var result = true;
+            if(startNumberPattern.test(key)) {
+                result = LogError("-CheckMetadata-FileLabel-KeyNumber-Error",settings.fileName,key);
+            }
+            if(result && !validFileNamePattern.test(key) && !enclosedReservedWordPattern.test(key)) {                   
+                result = LogError("-CheckMetadata-FileLabel-KeyValidation-Error",settings.fileName,key); 
+            }
+            if(result && key.length > titleMaxLength) {
+                result = LogError("-CheckMetadata-FileLabel-KeyLength-Error",settings.fileName,key);
+            }
+            if(result && reservedWordPattern.test(key)) {
+                result = LogError("-CheckMetadata-FileLabel-KeyReservedWord-Error",settings.fileName,key);
+            }
+            if(result) {
+                settings.fileKeys.push(key);
+            }
+            else {
+                settings.errorStop = true;
+            }
+            return result;
+        }
+
         //validate keys variables array
         var ValidateKeys  = function (label,lines,startIndex) {
             var result = true;
             lines[startIndex].trim().split(" ").forEach(key => {
-                if(startNumberPattern.test(key)) {
-                    result = LogError("-CheckMetadata-FileLabel-KeyNumber-Error",settings.fileName,key);
-                }
-                if(result && !validFileNamePattern.test(key) && !enclosedReservedWordPattern.test(key)) {                   
-                    result = LogError("-CheckMetadata-FileLabel-KeyValidation-Error",settings.fileName,key); 
-                }
-                if(result && key.length > titleMaxLength) {
-                    result = LogError("-CheckMetadata-FileLabel-KeyLength-Error",settings.fileName,key);
-                }
-                if(result && reservedWordPattern.test(key)) {
-                    result = LogError("-CheckMetadata-FileLabel-KeyReservedWord-Error",settings.fileName,key);
-                }
-                if(result) {
-                    settings.fileKeys.push(key);
-                }
-                else {
-                    settings.errorStop = true;
-                }
+                if(!ValidateKey(key)) { result = false; }
             });
             if(lines[startIndex + 1].trim() !== "") {
                 result = LogError("-CheckMetadata-FileLabel-ValueMax-Error",settings.fileName,label);
