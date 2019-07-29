@@ -326,6 +326,7 @@ function (n) {
                 }
                 else {
                     result = LogError("-CheckMetadata-FileCodeList-Name-Error",settings.fileName,expressions[0],(index + 1));
+                    codeName = expressions[0];
                 }
             }
             if(!result) { settings.errorStop = true; }
@@ -385,7 +386,7 @@ function (n) {
                         LogError("-CheckMetadata-FileVariable-DescriptionEmpty-Error",settings.fileName,name);
                     }
                     if(matches.length > 1 || (description.reduceWhiteSpace().length > 0 && name.length > 0 && line.trim().reduceWhiteSpace().length > (description.reduceWhiteSpace().length + 3 + name.length))) {
-                        LogError("-CheckMetadata-FileVariable-DescriptionMax-Error",settings.fileName,startIndex); 
+                        LogError("-CheckMetadata-FileVariable-DescriptionMax-Error",settings.fileName,startIndex + 1); 
                         description = "";
                         settings.errorStop = true;
                     }
@@ -407,7 +408,7 @@ function (n) {
             table.variables.forEach(variable => variableDescriptions.push(variable.name));
             var i = startIndex;
             do {                          
-                var info = GetVariableDescription(lines[i],startIndex);                
+                var info = GetVariableDescription(lines[i],i);                
                 var exitsCounter = 0;
                 if(variableDescriptions.includes(info.name)) {
                     variableDescriptions.splice(variableDescriptions.indexOf(info.name),1);
@@ -518,29 +519,50 @@ function (n) {
                             var isKey = (settings.fileKeys.includes(variableName)) ? true : false;
                             var variable = { "name":variableName, "format":expressions[1], "isKey":isKey, "type":"", "nullable":false, "description":"", "refData":"", "refVariable":"", "codeListKey":(codeListKey == null ? "" : codeListKey), "options":[], "regExps":[], "appliedRegExp":-1 }
                             table.variables.push(variable);
+                            if(!ValidateDataFormats(variable)) { result = false; } 
                         } 
                         else { 
                             result = false;
-                            settings.errorStop = true; 
                         }                       
                     }
                     else {
                         result = LogError("-CheckMetadata-FileVariables-RowDouble-Error",settings.fileName,variableName,(i + 1));
-                        settings.errorStop = true;
                     }
                     if(expressions.length > 3) {
                         result = LogError("-CheckMetadata-FileVariables-RowMax-Error",settings.fileName,(i + 1));
-                        settings.errorStop = true;
                     }
                 }
                 else {
-                    result = LogError("-CheckMetadata-FileVariables-RowRequiredInfo-Error",settings.fileName,(i + 1));
-                    settings.errorStop = true;
+                    result = LogError("-CheckMetadata-FileVariables-RowRequiredInfo-Error",settings.fileName,(i + 1));                    
                 }
                 i++;
             }
-            while (lines[i] !== undefined && lines[i].trim() !== "");           
+            while (lines[i] !== undefined && lines[i].trim() !== ""); 
             if(!ValidateVariablesRelated(variables)) { result = false; }  
+            return result;
+        }
+
+        //validate key
+        var ValidateKey  = function (key) {
+            var result = true;
+            if(startNumberPattern.test(key)) {
+                result = LogError("-CheckMetadata-FileLabel-KeyNumber-Error",settings.fileName,key);
+            }
+            if(result && !validFileNamePattern.test(key) && !enclosedReservedWordPattern.test(key)) {                   
+                result = LogError("-CheckMetadata-FileLabel-KeyValidation-Error",settings.fileName,key); 
+            }
+            if(result && key.length > titleMaxLength) {
+                result = LogError("-CheckMetadata-FileLabel-KeyLength-Error",settings.fileName,key);
+            }
+            if(result && reservedWordPattern.test(key)) {
+                result = LogError("-CheckMetadata-FileLabel-KeyReservedWord-Error",settings.fileName,key);
+            }
+            if(result) {
+                settings.fileKeys.push(key);
+            }
+            else {
+                settings.errorStop = true;
+            }
             return result;
         }
 
@@ -548,24 +570,7 @@ function (n) {
         var ValidateKeys  = function (label,lines,startIndex) {
             var result = true;
             lines[startIndex].trim().split(" ").forEach(key => {
-                if(startNumberPattern.test(key)) {
-                    result = LogError("-CheckMetadata-FileLabel-KeyNumber-Error",settings.fileName,key);
-                }
-                if(result && !validFileNamePattern.test(key) && !enclosedReservedWordPattern.test(key)) {                   
-                    result = LogError("-CheckMetadata-FileLabel-KeyValidation-Error",settings.fileName,key); 
-                }
-                if(result && key.length > titleMaxLength) {
-                    result = LogError("-CheckMetadata-FileLabel-KeyLength-Error",settings.fileName,key);
-                }
-                if(result && reservedWordPattern.test(key)) {
-                    result = LogError("-CheckMetadata-FileLabel-KeyReservedWord-Error",settings.fileName,key);
-                }
-                if(result) {
-                    settings.fileKeys.push(key);
-                }
-                else {
-                    settings.errorStop = true;
-                }
+                if(!ValidateKey(key)) { result = false; }
             });
             if(lines[startIndex + 1].trim() !== "") {
                 result = LogError("-CheckMetadata-FileLabel-ValueMax-Error",settings.fileName,label);
@@ -605,12 +610,13 @@ function (n) {
                         tableName = expressions[0];
                         tableKey = expressions[1].substring(1,expressions[1].length - 1);
                         refKey = expressions[2].substring(1,expressions[2].length - 1);
-                        if(ValidateReferenceName(tableName) && ValidateReferenceName(tableKey)) {
-                            settings.fileReferences.push({"table":tableName, "key":tableKey, "refKey":refKey});                        
+                        if(!ValidateReferenceName(tableName)) { result = false;  }
+                        if(!ValidateReferenceName(tableKey)) { result = false;  }
+                        if(result) {
+                            settings.fileReferences.push({"table":tableName, "key":tableKey, "refKey":refKey});
                         }
                         else {
-                            result = false; 
-                            settings.errorStop = true;
+                            settings.errorStop = true; 
                         }
                     }
                     else {
@@ -708,7 +714,11 @@ function (n) {
                         settings.errorStop = true;
                     }
                     else {
-                        if(!ValidateVariables(lines,index)) { result = false; }
+                        if(!ValidateVariables(lines,index)) 
+                        { 
+                            result = false;
+                            settings.errorStop = true; 
+                        }
                     }
                 }
                 if(label === settings.metadataLabels[6] && !settings.errorStop && !ValidateVariablesDescription(lines,index)) { result = false; }
@@ -864,22 +874,18 @@ function (n) {
         }
 
         //Validate variables Data Formats
-        var ValidateDataFormats = function () {
-            var result = false;
-            var table = GetTableData(settings.fileName);
-            table.variables.forEach(variable => {
-                var isValid = false;                
-                if(!isValid) { isValid = ValidateFormat("String",datatypeString,variable); } 
-                if(!isValid) { isValid = ValidateFormat("Int",datatypeInt,variable); }   
-                if(!isValid) { isValid = ValidateFormat("Decimal",datatypeDecimal,variable); }
-                if(!isValid) { isValid = ValidateFormat("Date",datatypeDate,variable); } 
-                if(!isValid) { isValid = ValidateFormat("Time",datatypeTime,variable); }
-                if(!isValid) { isValid = ValidateFormat("DateTime",datatypeDateTime,variable); }
-                if(!isValid) {
-                    result = LogError("-CheckMetadata-FileVariable-DataFormat-Error",settings.fileName,variable.name,variable.format);
-                    settings.errorStop = true;
-                }
-            });
+        var ValidateDataFormats = function (variable) {
+            var result = true;
+            var isValid = false;                
+            if(!isValid) { isValid = ValidateFormat("String",datatypeString,variable); } 
+            if(!isValid) { isValid = ValidateFormat("Int",datatypeInt,variable); }   
+            if(!isValid) { isValid = ValidateFormat("Decimal",datatypeDecimal,variable); }
+            if(!isValid) { isValid = ValidateFormat("Date",datatypeDate,variable); } 
+            if(!isValid) { isValid = ValidateFormat("Time",datatypeTime,variable); }
+            if(!isValid) { isValid = ValidateFormat("DateTime",datatypeDateTime,variable); }
+            if(!isValid) {
+                result = LogError("-CheckMetadata-FileVariable-DataFormat-Error",settings.fileName,variable.name,variable.format);
+            }
             return result;
         }
 
@@ -901,8 +907,7 @@ function (n) {
                         settings.errorStop = true;
                     }
                     else {
-                        if(!ValidateLabelValues(lines)) { result = false; }
-                        if(!settings.errorStop && ValidateDataFormats()) { result = false; }
+                        if(!ValidateLabelValues(lines)) { result = false; }                        
                     }
                 }
                 else {
