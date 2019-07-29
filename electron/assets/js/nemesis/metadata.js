@@ -326,6 +326,7 @@ function (n) {
                 }
                 else {
                     result = LogError("-CheckMetadata-FileCodeList-Name-Error",settings.fileName,expressions[0],(index + 1));
+                    codeName = expressions[0];
                 }
             }
             if(!result) { settings.errorStop = true; }
