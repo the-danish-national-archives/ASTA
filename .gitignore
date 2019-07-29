@@ -41,3 +41,7 @@ electron/assets/scripts/Athena.exe.config
 /dotNET/AthenaWPF/obj/Release
 /dotNET/Athena/bin/Release
 /dotNET/AthenaWPF/bin/Release
+/dotNET/Styx/obj/Debug
+/dotNET/.vs/Styx
+/dotNET/Styx/.vs/Styx/v15
+/dotNET/Styx/bin/Debug
