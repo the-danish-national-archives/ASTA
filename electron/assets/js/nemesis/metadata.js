@@ -385,7 +385,7 @@ function (n) {
                         LogError("-CheckMetadata-FileVariable-DescriptionEmpty-Error",settings.fileName,name);
                     }
                     if(matches.length > 1 || (description.reduceWhiteSpace().length > 0 && name.length > 0 && line.trim().reduceWhiteSpace().length > (description.reduceWhiteSpace().length + 3 + name.length))) {
-                        LogError("-CheckMetadata-FileVariable-DescriptionMax-Error",settings.fileName,startIndex); 
+                        LogError("-CheckMetadata-FileVariable-DescriptionMax-Error",settings.fileName,startIndex + 1); 
                         description = "";
                         settings.errorStop = true;
                     }
@@ -407,7 +407,7 @@ function (n) {
             table.variables.forEach(variable => variableDescriptions.push(variable.name));
             var i = startIndex;
             do {                          
-                var info = GetVariableDescription(lines[i],startIndex);                
+                var info = GetVariableDescription(lines[i],i);                
                 var exitsCounter = 0;
                 if(variableDescriptions.includes(info.name)) {
                     variableDescriptions.splice(variableDescriptions.indexOf(info.name),1);
