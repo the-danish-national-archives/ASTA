@@ -1,4 +1,4 @@
-﻿namespace StyxForm
+﻿namespace Rigsarkiv.StyxForm
 {
     partial class Form1
     {

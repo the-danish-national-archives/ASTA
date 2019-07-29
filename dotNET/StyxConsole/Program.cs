@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StyxConsole
+namespace Rigsarkiv.StyxConsole
 {
     class Program
     {

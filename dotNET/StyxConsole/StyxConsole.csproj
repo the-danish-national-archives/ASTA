@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{52DA7C2C-8DA8-4310-A028-CC895AD51436}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>StyxConsole</RootNamespace>
+    <RootNamespace>Rigsarkiv.StyxConsole</RootNamespace>
     <AssemblyName>StyxConsole</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
