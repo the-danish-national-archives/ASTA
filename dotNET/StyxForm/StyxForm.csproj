@@ -81,6 +81,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Asta\Asta.csproj">
+      <Project>{0e4141a7-0ea9-4746-a49e-5c2d7243e537}</Project>
+      <Name>Asta</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Styx\Styx.csproj">
       <Project>{56cbb1f9-9145-44c4-b0eb-d4ce905af968}</Project>
       <Name>Styx</Name>

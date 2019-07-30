@@ -80,7 +80,7 @@ namespace Rigsarkiv.AthenaConsole
                 break;
             }
             Console.ResetColor();
-            System.Threading.Thread.Sleep(200);
+            System.Threading.Thread.Sleep(10);
         }
     }
 }
