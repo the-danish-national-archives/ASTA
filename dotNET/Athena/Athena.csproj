@@ -53,10 +53,6 @@
     <Compile Include="Entities\Row.cs" />
     <Compile Include="Entities\Table.cs" />
     <Compile Include="Index.cs" />
-    <Compile Include="Logging\LogEntity.cs" />
-    <Compile Include="Logging\LogEventArgs.cs" />
-    <Compile Include="Logging\LogLevel.cs" />
-    <Compile Include="Logging\LogManager.cs" />
     <Compile Include="MetaData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Structure.cs" />
@@ -100,6 +96,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\report.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Asta\Asta.csproj">
+      <Project>{0e4141a7-0ea9-4746-a49e-5c2d7243e537}</Project>
+      <Name>Asta</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

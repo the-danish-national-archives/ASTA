@@ -1,5 +1,5 @@
 ﻿using Rigsarkiv.Athena.Entities;
-using Rigsarkiv.Athena.Logging;
+using Rigsarkiv.Asta.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;

@@ -1,4 +1,4 @@
-﻿using Rigsarkiv.Athena.Logging;
+﻿using Rigsarkiv.Asta.Logging;
 using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;

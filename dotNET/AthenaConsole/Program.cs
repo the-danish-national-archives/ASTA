@@ -1,6 +1,6 @@
 ﻿using log4net;
 using Rigsarkiv.Athena;
-using Rigsarkiv.Athena.Logging;
+using Rigsarkiv.Asta.Logging;
 using System;
 
 namespace Rigsarkiv.AthenaConsole
@@ -8,14 +8,14 @@ namespace Rigsarkiv.AthenaConsole
     class Program
     {
         protected static readonly ILog _log = log4net.LogManager.GetLogger(typeof(Program));
-        private static Athena.Logging.LogManager _logManager = null;
+        private static Asta.Logging.LogManager _logManager = null;
         private static Athena.Converter _converter = null;
         static void Main(string[] args)
         {
             _log.Info("Start");
             if (args != null && args.Length > 2)
             {
-                _logManager = new Athena.Logging.LogManager();
+                _logManager = new Asta.Logging.LogManager();
                 _logManager.LogAdded += OnLogAdded;
                 var srcPath = args[0];
                 var destPath = args[1];
@@ -35,7 +35,7 @@ namespace Rigsarkiv.AthenaConsole
                             if (_converter.Run())
                             {
                                 var path = string.Format("{0}\\{1}_log.html", destPath, destFolder);
-                                if (_logManager.Flush(path, destFolder))
+                                if (_logManager.Flush(path, destFolder, _converter.GetLogTemplate()))
                                 {
                                     Console.ForegroundColor = ConsoleColor.Green;
                                     Console.WriteLine("Log file at: {0}", path);

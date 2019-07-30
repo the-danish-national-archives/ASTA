@@ -41,6 +41,7 @@ electron/assets/scripts/Athena.exe.config
 /dotNET/AthenaWPF/obj/Release
 /dotNET/Athena/bin/Release
 /dotNET/AthenaWPF/bin/Release
+<<<<<<< HEAD
 /dotNET/Styx/obj/Debug
 /dotNET/.vs/Styx
 /dotNET/Styx/.vs/Styx/v15
@@ -56,3 +57,8 @@ electron/assets/scripts/Athena.exe.config
 /electron/assets/scripts/Styx.pdb
 /electron/assets/scripts/StyxConsole.pdb
 /electron/assets/scripts/StyxForm.pdb
+=======
+/dotNET/Asta/bin
+/dotNET/Asta/obj
+/electron/assets/scripts/Asta.pdb
+>>>>>>> b112a2ce8c919c8d886bf24f96c9e58ffa39e14c
