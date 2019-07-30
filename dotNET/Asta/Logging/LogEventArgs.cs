@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Rigsarkiv.Athena.Logging
+namespace Rigsarkiv.Asta.Logging
 {
     /// <summary>
     /// Log Event Args

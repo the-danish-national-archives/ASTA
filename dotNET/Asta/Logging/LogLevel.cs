@@ -1,4 +1,4 @@
-﻿namespace Rigsarkiv.Athena.Logging
+﻿namespace Rigsarkiv.Asta.Logging
 {
     /// <summary>
     /// Log Level

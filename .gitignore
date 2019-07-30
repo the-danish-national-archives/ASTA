@@ -41,3 +41,6 @@ electron/assets/scripts/Athena.exe.config
 /dotNET/AthenaWPF/obj/Release
 /dotNET/Athena/bin/Release
 /dotNET/AthenaWPF/bin/Release
+/dotNET/Asta/bin
+/dotNET/Asta/obj
+/electron/assets/scripts/Asta.pdb

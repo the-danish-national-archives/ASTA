@@ -1,6 +1,6 @@
 ﻿using Rigsarkiv.Athena;
 using Rigsarkiv.Athena.Entities;
-using Rigsarkiv.Athena.Logging;
+using Rigsarkiv.Asta.Logging;
 using System;
 using System.Linq;
 using System.Diagnostics;
@@ -122,7 +122,7 @@ namespace Rigsarkiv.AthenaForm
         {
             Cursor.Current = Cursors.WaitCursor;
             var path = string.Format("{0}\\{1}_log.html", _destPath, _destFolder);
-            if (_logManager.Flush(path, _destFolder))
+            if (_logManager.Flush(path, _destFolder, _converter.GetLogTemplate()))
             {
                 OpenFile(path);
             }

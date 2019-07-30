@@ -1,6 +1,6 @@
 ﻿using Rigsarkiv.Athena;
 using Rigsarkiv.Athena.Extensions;
-using Rigsarkiv.Athena.Logging;
+using Rigsarkiv.Asta.Logging;
 using System;
 using System.Diagnostics;
 using System.Drawing;
@@ -153,7 +153,7 @@ namespace Rigsarkiv.AthenaForm
         {
             Cursor.Current = Cursors.WaitCursor;
             var path = string.Format("{0}\\{1}_log.html", aipTextBox.Text, aipNameTextBox.Text);
-            if (_logManager.Flush(path, aipNameTextBox.Text))
+            if (_logManager.Flush(path, aipNameTextBox.Text, _converter.GetLogTemplate()))
             {
                 try
                 {

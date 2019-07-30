@@ -1,6 +1,6 @@
 ﻿using log4net;
+using Rigsarkiv.Asta.Logging;
 using Rigsarkiv.Athena.Entities;
-using Rigsarkiv.Athena.Logging;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -24,6 +24,7 @@ namespace Rigsarkiv.Athena
         protected const string TablesPath = "{0}\\Tables";
         protected const string IndicesPath = "{0}\\Indices";
         protected const string ResourcePrefix = "Rigsarkiv.Athena.Resources.{0}";
+        protected const string ResourceLogFile = "Rigsarkiv.Athena.Resources.log.html";
         protected const string TableIndex = "tableIndex.xml";
         protected const string ResearchIndex = "researchIndex.xml";
         protected const string TableIndexXmlNs = "http://www.sa.dk/xmlns/diark/1.0";
@@ -38,7 +39,7 @@ namespace Rigsarkiv.Athena
         protected string DoubleApostrophePattern = "^\"([\\w\\W\\s]*)\"$";
         protected Dictionary<string, Regex> _regExps = null;
         protected Assembly _assembly = null;
-        protected Logging.LogManager _logManager = null;
+        protected Asta.Logging.LogManager _logManager = null;
         protected XDocument _tableIndexXDocument = null;
         protected XDocument _researchIndexXDocument = null;
         protected XNamespace _tableIndexXNS = TableIndexXmlNs;
@@ -58,7 +59,7 @@ namespace Rigsarkiv.Athena
         /// <param name="srcPath"></param>
         /// <param name="destPath"></param>
         /// <param name="destFolder"></param>
-        public Converter(Logging.LogManager logManager, string srcPath, string destPath, string destFolder)
+        public Converter(Asta.Logging.LogManager logManager, string srcPath, string destPath, string destFolder)
         {
             _assembly = Assembly.GetExecutingAssembly();
             _logManager = logManager;
@@ -147,6 +148,24 @@ namespace Rigsarkiv.Athena
             else
             {
                 _logManager.Add(new LogEntity() { Level = LogLevel.Error, Section = _logSection, Message = string.Format("None Exist file: {0}", xmlPath) });
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Get Log file Template
+        /// </summary>
+        /// <returns></returns>
+        public string GetLogTemplate()
+        {
+            string result = null;
+            var assembly = Assembly.GetExecutingAssembly();
+            using (Stream stream = assembly.GetManifestResourceStream(ResourceLogFile))
+            {
+                using (StreamReader reader = new StreamReader(stream, Encoding.UTF8))
+                {
+                    result = reader.ReadToEnd();
+                }
             }
             return result;
         }

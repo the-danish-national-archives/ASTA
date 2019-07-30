@@ -1,4 +1,4 @@
-﻿using Rigsarkiv.Athena.Logging;
+﻿using Rigsarkiv.Asta.Logging;
 using Rigsarkiv.AthenaWPF;
 using System;
 using System.Collections.Generic;
