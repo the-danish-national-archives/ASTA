@@ -1,6 +1,7 @@
 ﻿using Rigsarkiv.Athena.Logging;
 using System.IO;
 using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace Rigsarkiv.Athena
 {
@@ -13,7 +14,9 @@ namespace Rigsarkiv.Athena
         const string SchemasPath = "{0}\\Schemas";
         const string SchemasLocalSharedPath = "{0}\\Schemas\\localShared";
         const string SchemasStandardPath = "{0}\\Schemas\\standard";
-        
+        const string BlacklistPattern = "^Thumbs\\.db$|^ehthumbs\\.db$|^Desktop\\.ini$|@eaDir$|^\\.DS_Store$|^\\.AppleDouble$|^\\.LSOverride$|^Icon\\r$|^\\._.*|^\\.Spotlight-V100(?:$|\\/)|\\.Trashes|^__MACOSX$|~$|^npm-debug\\.log$|^\\..*\\.swp$";
+        private Regex _blacklist = null;
+
         /// <summary>
         /// Constructore
         /// </summary>
@@ -24,6 +27,7 @@ namespace Rigsarkiv.Athena
         public Structure(LogManager logManager, string srcPath, string destPath, string destFolder) : base(logManager, srcPath, destPath, destFolder)
         {
             _logSection = "Structure";
+            _blacklist = new Regex(BlacklistPattern, RegexOptions.Compiled | RegexOptions.IgnoreCase);
         }
 
         /// <summary>
@@ -163,11 +167,17 @@ namespace Rigsarkiv.Athena
                 Directory.CreateDirectory(destPath);
                 foreach (string dirPath in Directory.GetDirectories(srcPath, "*",SearchOption.AllDirectories))
                 {
-                    Directory.CreateDirectory(dirPath.Replace(srcPath, destPath));
+                    if(!_blacklist.IsMatch(dirPath.Substring(dirPath.LastIndexOf("\\") + 1)))
+                    {
+                        Directory.CreateDirectory(dirPath.Replace(srcPath, destPath));
+                    }                    
                 }
                 foreach (string newPath in Directory.GetFiles(srcPath, "*.*", SearchOption.AllDirectories))
                 {
-                    File.Copy(newPath, newPath.Replace(srcPath, destPath), true);
+                    if (!_blacklist.IsMatch(newPath.Substring(newPath.LastIndexOf("\\") + 1)))
+                    {
+                        File.Copy(newPath, newPath.Replace(srcPath, destPath), true);
+                    }
                 }
             }
             catch (IOException ex)
