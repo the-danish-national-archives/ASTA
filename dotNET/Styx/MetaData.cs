@@ -17,11 +17,13 @@ namespace Rigsarkiv.Styx
         const string TableIndexPath = "{0}\\Indices\\tableIndex.xml";
         const string VariablesPath = "{0}\\Data\\{1}\\{2}_VARIABEL.txt";
         const string DescriptionsPath = "{0}\\Data\\{1}\\{2}_VARIABELBESKRIVELSE.txt";
+        const string CodeListPath = "{0}\\Data\\{1}\\{2}_KODELISTE.txt";
         const string C1 = "c1";
         const string C2 = "c2";
         private XDocument _tableIndexXDocument = null;
         private StringBuilder _variables = null;
         private StringBuilder _descriptions = null;
+        private StringBuilder _codeList = null;
 
         public MetaData(LogManager logManager, string srcPath, string destPath, string destFolder, Report report) : base(logManager, srcPath, destPath, destFolder)
         {
@@ -29,6 +31,7 @@ namespace Rigsarkiv.Styx
             _report = report;
             _variables = new StringBuilder();
             _descriptions = new StringBuilder();
+            _codeList = new StringBuilder();
         }
 
         /// <summary>
@@ -58,6 +61,9 @@ namespace Rigsarkiv.Styx
                 _report.Tables.ForEach(table =>
                 {
                     _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Write {0} files", table.Folder) });
+                    _variables.Clear();
+                    _descriptions.Clear();
+                    _codeList.Clear();
                     EnsureFiles(table);
                 });
             }
@@ -72,21 +78,33 @@ namespace Rigsarkiv.Styx
 
         private void EnsureFiles(Table table)
         {
-            _variables.Clear();
-            _descriptions.Clear();
+            var index = 0;
             table.Columns.ForEach(column =>
             {
-                _variables.AppendLine(string.Format("{0} {1} {2}", column.Name, column.Type, column.CodeList != null ? string.Format("{0}.",column.CodeList.Name) : string.Empty));
+                var codeList = string.Empty;
+                if (column.CodeList != null)
+                {
+                    codeList = string.Format("{0}{1}.", column.TypeOriginal.StartsWith("VARCHAR") ? "$" : string.Empty, column.CodeList.Name);
+                    _codeList.AppendLine(column.CodeList.Name);
+                    _codeList.AppendLine(string.Format("{{{0}}}", index));
+                    index++;
+                }
+                _variables.AppendLine(string.Format("{0} {1} {2}", column.Name, column.Type, codeList));
                 _descriptions.AppendLine(string.Format("{0} '{1}'", column.Name, column.Description));
             });
+            EnsureFile(table, VariablesPath, _variables.ToString());
+            EnsureFile(table, DescriptionsPath, _descriptions.ToString());
+            EnsureFile(table, CodeListPath, _codeList.ToString());
+        }
 
-            var path = string.Format(VariablesPath, _destFolderPath, table.Folder, table.Name);
+        private void EnsureFile(Table table,string filePath,string content)
+        {
+            var path = string.Format(filePath, _destFolderPath, table.Folder, table.Name);
             _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add file: {0}", path) });
-            using (var sw = new StreamWriter(path, true)) { sw.Write(_variables.ToString()); }
-
-            path = string.Format(DescriptionsPath, _destFolderPath, table.Folder, table.Name);
-            _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add file: {0}", path) });
-            using (var sw = new StreamWriter(path, true)) { sw.Write(_descriptions.ToString()); }
+            using (var sw = new StreamWriter(path, true))
+            {
+                sw.Write(content);
+            }
         }
 
         private bool EnsureTables()
