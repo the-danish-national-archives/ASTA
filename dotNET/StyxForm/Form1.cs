@@ -133,7 +133,6 @@ namespace Rigsarkiv.StyxForm
             return result;
         }
 
-
         private void convertButton_Click(object sender, EventArgs e)
         {
             if (!ValidateInputs()) { return; }

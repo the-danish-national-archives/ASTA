@@ -2,6 +2,7 @@
 using System.IO;
 using System.Reflection;
 using System.Text;
+using System.Xml.Linq;
 
 namespace Rigsarkiv.Styx
 {
@@ -9,8 +10,11 @@ namespace Rigsarkiv.Styx
     {
         protected static readonly ILog _log = LogManager.GetLogger(typeof(Converter));
         protected const string ResourceLogFile = "Rigsarkiv.Styx.Resources.log.html";
+        protected const string DataPath = "{0}\\Data";       
+        protected const string TableIndexXmlNs = "http://www.sa.dk/xmlns/diark/1.0";
         protected Assembly _assembly = null;
         protected Asta.Logging.LogManager _logManager = null;
+        protected XNamespace _tableIndexXNS = TableIndexXmlNs;
         protected string _srcPath = null;
         protected string _destPath = null;
         protected string _destFolder = null;

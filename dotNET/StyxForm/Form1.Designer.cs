@@ -79,9 +79,9 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(23, 194);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(293, 20);
+            this.label3.Size = new System.Drawing.Size(294, 20);
             this.label3.TabIndex = 21;
-            this.label3.Text = "Vælg SIP destination (drev eller mappe):";
+            this.label3.Text = "Vælg DIP destination (drev eller mappe):";
             // 
             // sipNameTextBox
             // 
@@ -95,9 +95,9 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(26, 121);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(73, 20);
+            this.label2.Size = new System.Drawing.Size(104, 20);
             this.label2.TabIndex = 19;
-            this.label2.Text = "Angiv ID:";
+            this.label2.Text = "Angiv DIP ID:";
             // 
             // aipTextBox
             // 
@@ -152,7 +152,7 @@
             this.convertButton.Name = "convertButton";
             this.convertButton.Size = new System.Drawing.Size(136, 32);
             this.convertButton.TabIndex = 25;
-            this.convertButton.Text = "Konverter til SIP";
+            this.convertButton.Text = "Konverter til DIP";
             this.convertButton.UseVisualStyleBackColor = true;
             this.convertButton.Click += new System.EventHandler(this.convertButton_Click);
             // 
