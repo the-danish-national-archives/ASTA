@@ -1,4 +1,6 @@
 ﻿using log4net;
+using Rigsarkiv.Styx.Entities;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
@@ -15,6 +17,7 @@ namespace Rigsarkiv.Styx
         protected Assembly _assembly = null;
         protected Asta.Logging.LogManager _logManager = null;
         protected XNamespace _tableIndexXNS = TableIndexXmlNs;
+        protected Report _report = null;
         protected string _srcPath = null;
         protected string _destPath = null;
         protected string _destFolder = null;
@@ -33,6 +36,7 @@ namespace Rigsarkiv.Styx
         {
             _assembly = Assembly.GetExecutingAssembly();
             _logManager = logManager;
+            _report = new Report() { ScriptType = ScriptType.SPSS, Tables = new List<Table>() };
             _srcPath = srcPath;
             _destPath = destPath;
             _destFolder = destFolder;
@@ -48,6 +52,14 @@ namespace Rigsarkiv.Styx
         public virtual bool Run()
         {
             return true;
+        }
+
+        /// <summary>
+        /// Report
+        /// </summary>
+        public Report Report
+        {
+            get { return _report; }
         }
 
         /// <summary>

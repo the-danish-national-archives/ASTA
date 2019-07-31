@@ -89,6 +89,7 @@ namespace Rigsarkiv.Styx
                     _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Ensure Table: {0}", folderPath) });
                     Directory.CreateDirectory(folderPath);
                     var srcFolder = table.Element(_tableIndexXNS + "tableID").Value;
+                    _report.Tables.Add(new Entities.Table() { Folder = folder, SrcFolder = srcFolder });                    
                 }
             }
             catch (IOException ex)
