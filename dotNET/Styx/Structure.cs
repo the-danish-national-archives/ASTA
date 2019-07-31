@@ -81,15 +81,15 @@ namespace Rigsarkiv.Styx
                 _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Ensure Tables: {0}", path) });
                 Directory.CreateDirectory(path);
                 _researchIndexXDocument = XDocument.Load(string.Format(ResearchIndexPath, _srcPath));
-                foreach(var table in _researchIndexXDocument.Element(_tableIndexXNS + "researchIndex").Element(_tableIndexXNS + "mainTables").Elements())
+                foreach(var tableNode in _researchIndexXDocument.Element(_tableIndexXNS + "researchIndex").Element(_tableIndexXNS + "mainTables").Elements())
                 {
                     _tablesCounter++;
                     var folder = string.Format(TableFolderPrefix, _tablesCounter);
                     var folderPath = string.Format("{0}\\{1}", path,folder);
                     _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Ensure Table: {0}", folderPath) });
                     Directory.CreateDirectory(folderPath);
-                    var srcFolder = table.Element(_tableIndexXNS + "tableID").Value;
-                    _report.Tables.Add(new Entities.Table() { Folder = folder, SrcFolder = srcFolder });                    
+                    var srcFolder = tableNode.Element(_tableIndexXNS + "tableID").Value;
+                    _report.Tables.Add(new Entities.Table() { Folder = folder, SrcFolder = srcFolder, Columns = new List<Entities.Column>() });                    
                 }
             }
             catch (IOException ex)

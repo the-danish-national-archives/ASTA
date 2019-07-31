@@ -9,6 +9,7 @@ namespace Rigsarkiv.Styx.Entities
     {
         public string SrcFolder { get; set; }
         public string Folder { get; set; }
-        public List<Table> CodeList { get; set; }
+        public string Name { get; set; }
+        public List<Column> Columns { get; set; }
     }
 }
