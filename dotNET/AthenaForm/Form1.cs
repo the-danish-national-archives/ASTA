@@ -5,6 +5,7 @@ using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Text.RegularExpressions;
 
 namespace Rigsarkiv.AthenaForm
 {
@@ -12,8 +13,10 @@ namespace Rigsarkiv.AthenaForm
     {
         private static readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(Form1));
         const string DestFolderName = "AVID.SA.{0}.1";
+        const string SrcPackagePattern = "^(FD.[1-9]{1}[0-9]{4,})$";
         private LogManager _logManager = null;
         private Converter _converter = null;
+        private Regex _srcPackage = null;
         private Form2 _form;
 
         /// <summary>
@@ -24,6 +27,7 @@ namespace Rigsarkiv.AthenaForm
         public Form1(string srcPath, string destPath)
         {
             InitializeComponent();
+            _srcPackage = new Regex(SrcPackagePattern, RegexOptions.Compiled | RegexOptions.IgnoreCase);
             sipTextBox.Text = srcPath;
             aipTextBox.Text = destPath;
             UpdateFolderName(srcPath);
@@ -105,9 +109,13 @@ namespace Rigsarkiv.AthenaForm
 
         private void UpdateFolderName(string srcPath)
         {
+            aipNameTextBox.Text = string.Empty;
             var folderName = srcPath.Substring(srcPath.LastIndexOf("\\") + 1);
-            folderName = folderName.Substring(0, folderName.LastIndexOf("."));
-            aipNameTextBox.Text = string.Format(DestFolderName, folderName.Substring(3));
+            if(folderName.LastIndexOf(".") > -1) { folderName = folderName.Substring(0, folderName.LastIndexOf(".")); }
+            if (_srcPackage.IsMatch(folderName))
+            {                
+                aipNameTextBox.Text = string.Format(DestFolderName, folderName.Substring(3));
+            }
         }
 
         private bool ValidateInputs()
