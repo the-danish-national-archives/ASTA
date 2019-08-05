@@ -20,8 +20,8 @@ function (n) {
         const codeListPattern = /^\${0,1}([\w\W\s^\.]*)\.$/;
         const descriptionMultiPattern = /'([^']*)'/g;
         const datatypeString = [/^(string)$/,/^(\%([0-9]+)s)$/,/^(\$([0-9]+)\.)$/,/^(a([0-9]+))$/];
-        const datatypeInt = [/^(int)$/,/^((\%([0-9]+)\.0f)|(\%([0-9]+)\.0g))$/,/^(f([0-9]+)\.)$/,/^(f([0-9]+))$/];
-        const datatypeDecimal = [/^(decimal)$/,/^((\%([0-9]+)\.([0-9]+f))|(\%([0-9]+)\.([0-9]+)g))$/,/^(f([0-9]+)\.([0-9]+))$/,/^(f([0-9]+)\.([0-9]+))$/];
+        const datatypeInt = [/^(int)$/,/^(\%([0-9]+)\.0f)$/,/^(f([0-9]+)\.)$/,/^(f([0-9]+))$/];
+        const datatypeDecimal = [/^(decimal)$/,/^(\%([0-9]+)\.([0-9]+f))$/,/^(f([0-9]+)\.([0-9]+))$/,/^(f([0-9]+)\.([0-9]+))$/];
         const datatypeDate = [/^(date)$/,/^(\%tdCCYY-NN-DD)$/,/^((yymmdd\.)|(yymmdd10\.))$/,/^(sdate10)$/];
         const datatypeTime = [/^(time)$/,/^(\%tcHH:MM:SS)$/,/^((time\.)|(time8\.))$/,/^(time8)$/];
         const datatypeDateTime = [/^(datetime)$/,/^(\%tcCCYY-NN-DD\!THH:MM:SS)$/,/^((e8601dt\.)|(e8601dt19\.))$/,/^(datetime20)$/];
@@ -741,8 +741,12 @@ function (n) {
                     }
                 }
                 if(label === settings.metadataLabels[6] && !settings.errorStop && !ValidateVariablesDescription(lines,index)) { result = false; }
-                if(label === settings.metadataLabels[7] && lines[index].trim() !== "" && !settings.errorStop) {
-                    if(!ValidateCodeList(lines,index)) { result = false; }
+                if(label === settings.metadataLabels[7] && !settings.errorStop) {
+                    if(lines[index].trim() === "") {
+                        result = LogWarn("-CheckMetadata-FileCodeList-Empty-Warning",null);
+                    } else {
+                        if(!ValidateCodeList(lines,index)) { result = false; }
+                    }                    
                 }
                 if(label === settings.metadataLabels[8] && lines[index] !== undefined && lines[index].trim() !== "" && !settings.errorStop) {
                     if(!ValidateUserCodes(lines,index)) { result = false; }
@@ -964,7 +968,7 @@ function (n) {
                                     if(refVariable.name === variable.refVariable) { exist = true; }
                                 });
                                 if(!exist) {
-                                    result = LogError("-CheckMetadata-FileReferences-RowVariableReference-Error",table.fileName,variable.refData,variable.refVariable);    
+                                    result = LogError("-CheckMetadata-FileReferences-RowVariableReference-Error",table.fileName,variable.refData,variable.refVariable,dataTableFiles[index]);    
                                 }
                             }                            
                         }
