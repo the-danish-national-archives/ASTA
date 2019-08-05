@@ -303,11 +303,14 @@ function (n) {
         }
 
         //strip text double Apostrophe
-        var ApostropheNormalizer = function(dataValue) {
+        var ApostropheNormalizer = function(dataValue,variable) {
             var result = dataValue;
             if(result.indexOf("\"") > -1 && doubleApostrophePattern1.test(result)) {
                 result = result.match(doubleApostrophePattern1)[1];
                 result = result.replace(/""/g, "\"");
+            }
+            if(variable != null && result.length > 0 && (result[0] === " " || result[result.length - 1] === " ")) {
+                result = LogWarn("-CheckData-FileRow-ColumnsString-ValueBlankCharacters-Warning",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name);
             }
             return result;
         }
@@ -352,7 +355,7 @@ function (n) {
                 case 'String':
                     {
                         result = ValidateString(dataValue, regExp, variable);
-                        if(result) { result = ValidateOptions(ApostropheNormalizer(dataValue),variable); }
+                        if(result) { result = ValidateOptions(ApostropheNormalizer(dataValue,null),variable); }
                     };break;
                 case 'Int':
                     {
@@ -453,7 +456,7 @@ function (n) {
                 if(dataRow[i] !== undefined && dataRow[i].trim() !== "") {                    
                     for(var j = 0;j < variable.regExps.length;j++) {
                         var patt = new RegExp(variable.regExps[j]);
-                        var dataValue = (variable.type != "String") ? dataRow[i] : ApostropheNormalizer(dataRow[i]);
+                        var dataValue = (variable.type != "String") ? dataRow[i] : ApostropheNormalizer(dataRow[i],variable);
                         if(patt.test(dataValue)) {
                             settings.appliedRegExp = j;
                             if(variable.appliedRegExp === -1) { variable.appliedRegExp = j; }
