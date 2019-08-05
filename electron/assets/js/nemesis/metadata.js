@@ -741,8 +741,12 @@ function (n) {
                     }
                 }
                 if(label === settings.metadataLabels[6] && !settings.errorStop && !ValidateVariablesDescription(lines,index)) { result = false; }
-                if(label === settings.metadataLabels[7] && lines[index].trim() !== "" && !settings.errorStop) {
-                    if(!ValidateCodeList(lines,index)) { result = false; }
+                if(label === settings.metadataLabels[7] && !settings.errorStop) {
+                    if(lines[index].trim() === "") {
+                        result = LogWarn("-CheckMetadata-FileCodeList-Empty-Warning",null);
+                    } else {
+                        if(!ValidateCodeList(lines,index)) { result = false; }
+                    }                    
                 }
                 if(label === settings.metadataLabels[8] && lines[index] !== undefined && lines[index].trim() !== "" && !settings.errorStop) {
                     if(!ValidateUserCodes(lines,index)) { result = false; }
