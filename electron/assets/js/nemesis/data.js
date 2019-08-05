@@ -232,7 +232,7 @@ function (n) {
             }
             else {
                  if(variable.appliedRegExp !== settings.appliedRegExp && variable.appliedRegExp < 2 && settings.appliedRegExp < 2) {
-                    result = LogWarn("-CheckData-FileRow-ColumnsDecimal-InexpedientValue-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
+                    result = LogError("-CheckData-FileRow-ColumnsDecimal-InexpedientValue-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
                 }
             }
             return result;
