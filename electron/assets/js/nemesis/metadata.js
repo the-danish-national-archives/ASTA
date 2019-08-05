@@ -964,7 +964,7 @@ function (n) {
                                     if(refVariable.name === variable.refVariable) { exist = true; }
                                 });
                                 if(!exist) {
-                                    result = LogError("-CheckMetadata-FileReferences-RowVariableReference-Error",table.fileName,variable.refData,variable.refVariable);    
+                                    result = LogError("-CheckMetadata-FileReferences-RowVariableReference-Error",table.fileName,variable.refData,variable.refVariable,dataTableFiles[index]);    
                                 }
                             }                            
                         }
