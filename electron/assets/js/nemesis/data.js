@@ -417,7 +417,7 @@ function (n) {
                         {
                             result = ValidateOptions(dataValue,variable);
                             if(result && (variable.options == null || (variable.options != null && variable.options.length === 0))) {
-                                result = LogError("-CheckData-FileRow-ColumnsIntType-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, variable.format,dataValue);
+                                result = LogWarn("-CheckData-FileRow-ColumnsOptions-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
                             }
                         }
                     };break;
@@ -430,7 +430,7 @@ function (n) {
                         {
                             result = ValidateOptions(dataValue,variable);
                             if(result && (variable.options == null || (variable.options != null && variable.options.length === 0))) {
-                                result = LogError("-CheckData-FileRow-ColumnsDecimalType-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, variable.format,dataValue);
+                                result = LogWarn("-CheckData-FileRow-ColumnsOptions-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
                             }
                         }
                     };break;
