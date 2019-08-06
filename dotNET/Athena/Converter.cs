@@ -574,7 +574,7 @@ namespace Rigsarkiv.Athena
             decimal result = -1;
             var newValue = value.Replace(",", ".");
             isDifferent = value != newValue;
-            hasError = !decimal.TryParse(newValue, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out result);
+            hasError = !decimal.TryParse(newValue, NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out result);
             NumberFormatInfo nfi = new NumberFormatInfo();
             nfi.NumberDecimalSeparator = ".";
             if(!hasError)
