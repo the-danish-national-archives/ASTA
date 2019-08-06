@@ -231,13 +231,19 @@ function (n) {
         var ValidateDecimal = function (dataValue, regExp, variable) {
             var result = true;
             var matches = dataValue.match(regExp);
-            if(isNaN(parseFloat(matches[0]))){
+            var parsedValue = parseFloat(matches[0].replace(",","."));
+            if(isNaN(parsedValue)){
                 result = LogError("-CheckData-FileRow-ColumnsDecimalValue-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);  
             }
             else {
-                 if(variable.appliedRegExp !== settings.appliedRegExp && variable.appliedRegExp < 2 && settings.appliedRegExp < 2) {
-                    result = LogError("-CheckData-FileRow-ColumnsDecimal-InexpedientValue-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
+                if(parsedValue > 79228162514264337593543950335.79228162514264337593543950335 || parsedValue < -79228162514264337593543950335.79228162514264337593543950335) {
+                    result = LogError("-CheckData-FileRow-ColumnsDecimal-ValueRange-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
                 }
+                else {
+                    if(variable.appliedRegExp !== settings.appliedRegExp && variable.appliedRegExp < 2 && settings.appliedRegExp < 2) {
+                        result = LogError("-CheckData-FileRow-ColumnsDecimal-InexpedientValue-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
+                    }
+                }                
             }
             return result;
         }
