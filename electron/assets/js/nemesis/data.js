@@ -15,6 +15,7 @@ function (n) {
         const { spawn } = require('child_process');
 
         const codeListPattern = /^(\.[a-z])$|^([A-Z])$/;
+        const emptyPattern = /^(\.)$|^(NaN)$|^(NA)$|^(n\.a\.)$|^(<none>)$|^(NULL)$/;
         const doubleApostrophePattern1 = /^"([\w\W\s]*)"$/;
         const doubleApostrophePattern2 = /(")/g;
         const doubleApostrophePattern3 = /(["]{2,2})/g
@@ -356,6 +357,7 @@ function (n) {
                     {
                         result = ValidateString(dataValue, regExp, variable);
                         if(result) { result = ValidateOptions(ApostropheNormalizer(dataValue,null),variable); }
+                        if(result && emptyPattern.test(dataValue)) { LogError("-CheckData-FileRow-ColumnsStringEmpty-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name,dataValue.replace("<","&lt;").replace(">","&gt;")); }
                     };break;
                 case 'Int':
                     {
