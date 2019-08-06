@@ -202,24 +202,27 @@ function (n) {
         var ValidateInt = function (dataValue, regExp, variable) {
             var result = true;
             var matches = dataValue.match(regExp);
-            if(isNaN(parseInt(matches[0]))){
+            var parsedValue = parseInt(matches[0]);
+            if(isNaN(parsedValue)){
                 result = LogError("-CheckData-FileRow-ColumnsIntValue-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);  
             }
             else {
-                if (matches[0].length > 1) {
-                    // Check if the first char in the value is either + or -
-                    if (matches[0].charAt(0) === '-' || matches[0].charAt(0) === '+') {
-                        // Check if the first number in the value is 0
-                        if (matches[1] === '0') {
-                            result = LogWarn("-CheckData-FileRow-ColumnsIntValue-Warning", settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, variable.format);
-                        }
-                    } else {
-                        // Check if the first number in the value is 0
-                        if (matches[0].charAt(0) === '0') {
-                            result = LogWarn("-CheckData-FileRow-ColumnsIntValue-Warning", settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, variable.format);
+                if(parsedValue > 2147483647 || parsedValue < -2147483648) {
+                    result = LogError("-CheckData-FileRow-ColumnsInt-ValueRange-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
+                }
+                else {
+                    if (matches[0].length > 1) {
+                        if (matches[0].charAt(0) === '-' || matches[0].charAt(0) === '+') {
+                            if (matches[1] === '0') {
+                                result = LogWarn("-CheckData-FileRow-ColumnsIntValue-Warning", settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, variable.format);
+                            }
+                        } else {
+                            if (matches[0].charAt(0) === '0') {
+                                result = LogWarn("-CheckData-FileRow-ColumnsIntValue-Warning", settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, variable.format);
+                            }
                         }
                     }
-                }
+                }                
             }
             return result;
         }
