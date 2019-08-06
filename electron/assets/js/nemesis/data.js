@@ -130,7 +130,7 @@ function (n) {
 
         //Handle warn logging
         var LogWarn = function(postfixId) {
-            if(settings.tableWarnings <= warningMax) {
+            if(settings.tableWarnings < warningMax) {
                 var id = "{0}{1}".format(settings.outputPrefix,postfixId);
                 var text = null;
                 if (arguments.length > 1) {                
