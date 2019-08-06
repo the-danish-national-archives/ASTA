@@ -589,7 +589,7 @@ function (n) {
                     settings.table.errorStop = true;
                     result = false; 
                 }
-                if(!settings.table.errorStop && settings.rowIndex > 1 && settings.tableErrors <= errorsMax) {
+                if(!settings.table.errorStop && settings.rowIndex > 1 && settings.tableErrors < errorsMax) {
                     
                     return ProcessRow(data);
                 }
