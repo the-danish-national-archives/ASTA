@@ -14,7 +14,7 @@ function (n) {
         const csv = require('fast-csv');
         const { spawn } = require('child_process');
 
-        const codeListPattern = /^(\.[a-z])|([A-Z])$/;
+        const codeListPattern = /^(\.[a-z])$|^([A-Z])$/;
         const doubleApostrophePattern1 = /^"([\w\W\s]*)"$/;
         const doubleApostrophePattern2 = /(")/g;
         const doubleApostrophePattern3 = /(["]{2,2})/g
