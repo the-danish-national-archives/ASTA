@@ -14,7 +14,8 @@ function (n) {
         const csv = require('fast-csv');
         const { spawn } = require('child_process');
 
-        const codeListPattern = /^(\.[a-z])|([A-Z])$/;
+        const codeListPattern = /^(\.[a-z])$|^([A-Z])$/;
+        const emptyPattern = /^(\.)$|^(NaN)$|^(NA)$|^(n\.a\.)$|^(<none>)$|^(NULL)$/;
         const doubleApostrophePattern1 = /^"([\w\W\s]*)"$/;
         const doubleApostrophePattern2 = /(")/g;
         const doubleApostrophePattern3 = /(["]{2,2})/g
@@ -130,7 +131,7 @@ function (n) {
 
         //Handle warn logging
         var LogWarn = function(postfixId) {
-            if(settings.tableWarnings <= warningMax) {
+            if(settings.tableWarnings < warningMax) {
                 var id = "{0}{1}".format(settings.outputPrefix,postfixId);
                 var text = null;
                 if (arguments.length > 1) {                
@@ -356,6 +357,7 @@ function (n) {
                     {
                         result = ValidateString(dataValue, regExp, variable);
                         if(result) { result = ValidateOptions(ApostropheNormalizer(dataValue,null),variable); }
+                        if(result && emptyPattern.test(dataValue)) { LogError("-CheckData-FileRow-ColumnsStringEmpty-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name,dataValue.replace("<","&lt;").replace(">","&gt;")); }
                     };break;
                 case 'Int':
                     {
@@ -415,7 +417,7 @@ function (n) {
                         {
                             result = ValidateOptions(dataValue,variable);
                             if(result && (variable.options == null || (variable.options != null && variable.options.length === 0))) {
-                                result = LogError("-CheckData-FileRow-ColumnsIntType-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, variable.format,dataValue);
+                                result = LogWarn("-CheckData-FileRow-ColumnsOptions-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
                             }
                         }
                     };break;
@@ -428,7 +430,7 @@ function (n) {
                         {
                             result = ValidateOptions(dataValue,variable);
                             if(result && (variable.options == null || (variable.options != null && variable.options.length === 0))) {
-                                result = LogError("-CheckData-FileRow-ColumnsDecimalType-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, variable.format,dataValue);
+                                result = LogWarn("-CheckData-FileRow-ColumnsOptions-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
                             }
                         }
                     };break;
@@ -589,7 +591,7 @@ function (n) {
                     settings.table.errorStop = true;
                     result = false; 
                 }
-                if(!settings.table.errorStop && settings.rowIndex > 1 && settings.tableErrors <= errorsMax) {
+                if(!settings.table.errorStop && settings.rowIndex > 1 && settings.tableErrors < errorsMax) {
                     
                     return ProcessRow(data);
                 }
