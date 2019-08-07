@@ -62,6 +62,7 @@ function (n) {
             totalErrors: 0,
             appliedRegExp: -1,
             separator: ';',
+            errorStop: false,
             convertStop: false,
             scriptPath: "./assets/scripts/{0}",
             resourceWinPath: "resources\\{0}",
@@ -348,7 +349,7 @@ function (n) {
                     }
                 }
                 if(!result) {
-                    settings.convertStop = true;
+                    settings.errorStop = true;
                     result = LogError("-CheckData-FileRow-ColumnsString-ValueApostrophe-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name,dataValue);
                 }
             }
@@ -483,7 +484,7 @@ function (n) {
                     if(dataRow[i].trim() === "") { variable.nullable = true; } 
                 } 
             }
-            if(!result) { settings.convertStop = true; }
+            if(!result) { settings.errorStop = true; }
             return result;
         }
 
@@ -576,7 +577,7 @@ function (n) {
             }
             if(!result) { //less or more separators
                 result = LogError("-CheckData-FileRows-MatchLength-Error",settings.fileName,settings.rowIndex);
-                settings.convertStop = true;
+                settings.errorStop = true;
             }
             else {
                 result = ValidateRow(newData); 
@@ -609,7 +610,7 @@ function (n) {
                 console.log("{0} data output: ".format(settings.fileName));
                 console.log(settings.data);
                 settings.confirmationSpn.innerHTML = "";
-                if(settings.convertStop) { settings.table.errorStop = true; }
+                if(settings.errorStop) { settings.table.errorStop = true; }
                 settings.table.rows = settings.rowIndex;
                 ProcessDataSet();
             });
@@ -639,7 +640,7 @@ function (n) {
                 settings.data = [];
                 settings.tableErrors = 0;
                 settings.tableWarnings = 0; 
-                settings.convertStop = false;
+                settings.errorStop = false;
                 console.logInfo(`validate: ${dataFilePath}`,"Rigsarkiv.Nemesis.Data.ProcessDataSet");
                 settings.tableRows = 0;                
                  fs.createReadStream(dataFilePath)
@@ -680,7 +681,7 @@ function (n) {
         var CommitLog = function () {            
                 var folderName = GetFolderName();
                 var enableData = false;
-                var enableConvert = true;
+                var enableConvert = !settings.convertStop;
                 settings.metadata.forEach(table => {
                     if(table.errorStop) { enableConvert = false; }
                     else { enableData = true; }
@@ -782,11 +783,12 @@ function (n) {
             },
             callback: function () {
                 return { 
-                    validate: function(path,outputText,metadata,errors) 
+                    validate: function(path,outputText,metadata,errors,convertStop) 
                     { 
                         settings.deliveryPackagePath = path;
                         settings.outputText = outputText;
-                        settings.metadata = metadata;;                        
+                        settings.metadata = metadata;
+                        settings.convertStop = convertStop;                        
                         settings.runIndex = -1;
                         settings.dataFiles = [];
                         settings.ConvertBtn.hidden = true;

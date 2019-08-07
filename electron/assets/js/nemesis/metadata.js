@@ -52,6 +52,7 @@ function (n) {
             errors: 0,
             totalErrors: 0,
             errorStop: false,
+            convertStop: false,
             dataPathPostfix: "Data",
             metadataLabels: ["SYSTEMNAVN","DATAFILNAVN","DATAFILBESKRIVELSE","NØGLEVARIABEL","REFERENCE","VARIABEL","VARIABELBESKRIVELSE","KODELISTE","BRUGERKODE"],
             data: []
@@ -1025,7 +1026,7 @@ function (n) {
                     settings.logCallback().section(settings.logType,folderName,enableData ? settings.logEndWithErrorSpn.innerHTML : settings.logEndWithErrorStopSpn.innerHTML);
                 } 
                 if(enableData) {
-                    return settings.dataCallback().validate(settings.deliveryPackagePath,settings.outputText,settings.data,settings.totalErrors);
+                    return settings.dataCallback().validate(settings.deliveryPackagePath,settings.outputText,settings.data,settings.totalErrors,settings.convertStop);
                 }
                 else {
                     settings.confirmationSpn.innerHTML = settings.convertDisabledText;
@@ -1065,11 +1066,12 @@ function (n) {
             },
             callback: function () {
                 return { 
-                    validate: function(path,outputText,errors) 
+                    validate: function(path,outputText,errors,convertStop) 
                     { 
                         settings.deliveryPackagePath = path;
                         settings.outputText = outputText;
                         settings.data = [];
+                        settings.convertStop = convertStop;
                         settings.errorStop = false;
                         settings.errors = 0;
                         settings.totalErrors = errors;
