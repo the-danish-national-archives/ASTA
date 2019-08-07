@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using System.Xml;
 using System.Xml.Linq;
 
 namespace Rigsarkiv.Styx
@@ -14,6 +15,13 @@ namespace Rigsarkiv.Styx
         protected const string ResourceLogFile = "Rigsarkiv.Styx.Resources.log.html";
         protected const string DataPath = "{0}\\Data";       
         protected const string TableIndexXmlNs = "http://www.sa.dk/xmlns/diark/1.0";
+        protected const string TableXmlNs = "http://www.sa.dk/xmlns/siard/1.0/schema0/{0}.xsd";
+        protected const string TableSchemaLocation = "http://www.sa.dk/xmlns/siard/1.0/schema0/{0}.xsd {0}.xsd";
+        protected const string TableXsiNs = "http://www.w3.org/2001/XMLSchema-instance";
+        protected const string CodeListPath = "{0}\\Data\\{1}\\{2}_KODELISTE.txt";
+        protected const string C1 = "c1";
+        protected const string C2 = "c2";
+        protected delegate void OperationOnRow(XElement row);
         protected Assembly _assembly = null;
         protected Asta.Logging.LogManager _logManager = null;
         protected XNamespace _tableIndexXNS = TableIndexXmlNs;
@@ -77,6 +85,22 @@ namespace Rigsarkiv.Styx
                 }
             }
             return result;
+        }        
+
+        protected void StreamElement(OperationOnRow operation, string filePath)
+        {
+            using (var rdr = XmlReader.Create(filePath))
+            {
+                rdr.MoveToContent();
+                while (rdr.Read())
+                {
+                    if ((rdr.NodeType == XmlNodeType.Element) && (rdr.Name == "row"))
+                    {
+                        operation(XNode.ReadFrom(rdr) as XElement);
+                    }
+                }
+                rdr.Close();
+            }
         }
     }
 }

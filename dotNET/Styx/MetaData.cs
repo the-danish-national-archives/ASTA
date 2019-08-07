@@ -16,10 +16,7 @@ namespace Rigsarkiv.Styx
     {
         const string TableIndexPath = "{0}\\Indices\\tableIndex.xml";
         const string VariablesPath = "{0}\\Data\\{1}\\{2}_VARIABEL.txt";
-        const string DescriptionsPath = "{0}\\Data\\{1}\\{2}_VARIABELBESKRIVELSE.txt";
-        const string CodeListPath = "{0}\\Data\\{1}\\{2}_KODELISTE.txt";
-        const string C1 = "c1";
-        const string C2 = "c2";
+        const string DescriptionsPath = "{0}\\Data\\{1}\\{2}_VARIABELBESKRIVELSE.txt";        
         private XDocument _tableIndexXDocument = null;
         private StringBuilder _variables = null;
         private StringBuilder _descriptions = null;

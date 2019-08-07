@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Converter.cs" />
+    <Compile Include="Data.cs" />
     <Compile Include="Entities\Column.cs" />
     <Compile Include="Entities\Report.cs" />
     <Compile Include="Entities\ScriptType.cs" />

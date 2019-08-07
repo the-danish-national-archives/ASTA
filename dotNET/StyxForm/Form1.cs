@@ -149,6 +149,11 @@ namespace Rigsarkiv.StyxForm
                 _converter = new MetaData(_logManager, srcPath, destPath, destFolder, _converter.Report);
                 if (_converter.Run())
                 {
+                    _converter = new Data(_logManager, srcPath, destPath, destFolder, _converter.Report);
+                    if (_converter.Run())
+                    {
+
+                    }
                 }
             }
             Cursor.Current = Cursors.Default;
