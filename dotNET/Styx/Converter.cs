@@ -19,6 +19,7 @@ namespace Rigsarkiv.Styx
         protected const string TableSchemaLocation = "http://www.sa.dk/xmlns/siard/1.0/schema0/{0}.xsd {0}.xsd";
         protected const string TableXsiNs = "http://www.w3.org/2001/XMLSchema-instance";
         protected const string CodeListPath = "{0}\\Data\\{1}\\{2}_KODELISTE.txt";
+        protected const string TableDataPath = "{0}\\Data\\{1}\\{2}.csv";
         protected const string C1 = "c1";
         protected const string C2 = "c2";
         protected delegate void OperationOnRow(XElement row);

@@ -88,7 +88,7 @@ namespace Rigsarkiv.Styx
                     var folderPath = string.Format("{0}\\{1}", path,folder);
                     _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Ensure Table: {0}", folderPath) });
                     Directory.CreateDirectory(folderPath);
-                    var srcFolder = tableNode.Element(_tableIndexXNS + "tableID").Value;
+                    var srcFolder = tableNode.Element(_tableIndexXNS + "tableID").Value;                    
                     _report.Tables.Add(new Entities.Table() { Folder = folder, SrcFolder = srcFolder, Columns = new List<Entities.Column>() });                    
                 }
             }

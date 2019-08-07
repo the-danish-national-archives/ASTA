@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Xml;
 using System.Xml.Linq;
 
 namespace Rigsarkiv.Styx
@@ -15,6 +14,9 @@ namespace Rigsarkiv.Styx
     /// </summary>
     public class Data : Converter
     {
+        const int RowsChunk = 500;
+        const string VarCharPrefix = "VARCHAR";
+        const string Separator = ";";
         const string TablePath = "{0}\\Tables\\{1}\\{1}.xml";
         const string CodeFormat = "'{0}' '{1}'"; 
         private List<string> _codeLists = null;        
@@ -43,7 +45,7 @@ namespace Rigsarkiv.Styx
             var message = string.Format("Start Converting Data {0} -> {1}", _srcFolder, _destFolder);
             _log.Info(message);
             _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = message });
-            if(EnsureCodeLists())
+            if(EnsureCodeLists() && EnsureTables())
             {
                 result = true;
             }
@@ -51,6 +53,56 @@ namespace Rigsarkiv.Styx
             _log.Info(message);
             _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = message });
             return result;
+        }
+
+        private bool EnsureTables()
+        {
+            var result = true;
+            string path = null;
+            try
+            {
+                 _report.Tables.ForEach(table =>
+                {
+                    var counter = 0;
+                    XNamespace tableNS = string.Format(TableXmlNs, table.SrcFolder);
+                    path = string.Format(TableDataPath, _destFolderPath, table.Folder, table.Name);
+                    _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add file: {0}", path) });
+                    using (TextWriter sw = new StreamWriter(path))
+                    {
+                        _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Write {0} data header", table.Folder) });
+                        sw.WriteLine(string.Join(Separator, table.Columns.Select(c => c.Name).ToArray()));
+                        counter++;
+                        path = string.Format(TablePath, _srcPath, table.SrcFolder);
+                        StreamElement(delegate (XElement row) {
+                            sw.WriteLine(GetRow(table, row, tableNS));
+                            counter++;
+                            if ((counter % RowsChunk) == 0) { _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("{0} of {1} rows added", counter, table.Rows) }); }
+                        }, path);
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                result = false;
+                _log.Error("EnsureTables Failed", ex);
+                _logManager.Add(new LogEntity() { Level = LogLevel.Error, Section = _logSection, Message = string.Format("EnsureTables Failed: {0}", ex.Message) });
+            }
+            return result;
+        }
+
+        private string GetRow(Table table, XElement row, XNamespace tableNS)
+        {
+            var result = string.Empty;
+            var contents = new List<string>();
+            table.Columns.ForEach(column => {
+                var content = row.Element(tableNS + column.Id).Value;
+                if(column.TypeOriginal.StartsWith(VarCharPrefix) && content.IndexOf("\"") > -1 )
+                {
+                    content = string.Format("\"{0}\"", content.Replace("\"","\"\""));
+                }
+                contents.Add(content);
+            });            
+            return string.Join(Separator, contents.ToArray());
         }
 
         private bool EnsureCodeLists()
@@ -62,7 +114,10 @@ namespace Rigsarkiv.Styx
                 {
                     _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Write {0} code lists", table.Folder) });
                     _codeLists.Clear();
-                    if (table.Columns.Any(c => c.CodeList != null)) { EnsureCodeList(table); }
+                    if (table.Columns.Any(c => c.CodeList != null))
+                    {
+                        EnsureCodeList(table);
+                    }
                 });
             }
             catch (Exception ex)

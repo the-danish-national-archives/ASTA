@@ -11,5 +11,6 @@ namespace Rigsarkiv.Styx.Entities
         public string Folder { get; set; }
         public string Name { get; set; }
         public List<Column> Columns { get; set; }
+        public int Rows { get; set; }
     }
 }

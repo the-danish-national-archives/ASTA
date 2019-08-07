@@ -116,6 +116,7 @@ namespace Rigsarkiv.Styx
                     _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Build {0} metadata", table.Folder) });
                     var tableNode = _tableIndexXDocument.Element(_tableIndexXNS + "siardDiark").Element(_tableIndexXNS + "tables").Elements().Where(e => e.Element(_tableIndexXNS + "folder").Value == table.SrcFolder).FirstOrDefault();
                     table.Name = tableNode.Element(_tableIndexXNS + "name").Value;
+                    table.Rows = int.Parse(tableNode.Element(_tableIndexXNS + "rows").Value);
                     EnsureTable(tableNode, table);
                 });
             }
@@ -163,6 +164,7 @@ namespace Rigsarkiv.Styx
 
             var tableNode = _tableIndexXDocument.Element(_tableIndexXNS + "siardDiark").Element(_tableIndexXNS + "tables").Elements().Where(e => e.Element(_tableIndexXNS + "name").Value == referencedTable).FirstOrDefault();
             result.SrcFolder = tableNode.Element(_tableIndexXNS + "folder").Value;
+            result.Rows = int.Parse(tableNode.Element(_tableIndexXNS + "rows").Value);
             result.Columns.Add(new Column() { Name = column.Name, Id = C1, Type = column.Type });
             result.Columns.Add(new Column() { Name = column.Name, Id = C2, Type = column.Type });
 
