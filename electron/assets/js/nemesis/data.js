@@ -259,7 +259,7 @@ function (n) {
             }
             else {
                 if(variable.appliedRegExp !== settings.appliedRegExp) {
-                    result = LogWarn("-CheckData-FileRow-ColumnsDate-InexpedientValue-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
+                    result = LogError("-CheckData-FileRow-ColumnsDate-InexpedientValue-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
                 }
             }
             return result;
@@ -307,7 +307,7 @@ function (n) {
             }
             else {
                 if(variable.appliedRegExp !== settings.appliedRegExp) {
-                    result = LogWarn("-CheckData-FileRow-ColumnsDateTime-InexpedientValue-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
+                    result = LogError("-CheckData-FileRow-ColumnsDateTime-InexpedientValue-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
                 }
             }
             return result;
