@@ -14,7 +14,8 @@ function (n) {
         const csv = require('fast-csv');
         const { spawn } = require('child_process');
 
-        const codeListPattern = /^(\.[a-z])|([A-Z])$/;
+        const codeListPattern = /^(\.[a-z])$|^([A-Z])$/;
+        const emptyPattern = /^(\.)$|^(NaN)$|^(NA)$|^(n\.a\.)$|^(<none>)$|^(NULL)$/;
         const doubleApostrophePattern1 = /^"([\w\W\s]*)"$/;
         const doubleApostrophePattern2 = /(")/g;
         const doubleApostrophePattern3 = /(["]{2,2})/g
@@ -61,6 +62,7 @@ function (n) {
             totalErrors: 0,
             appliedRegExp: -1,
             separator: ';',
+            errorStop: false,
             convertStop: false,
             scriptPath: "./assets/scripts/{0}",
             resourceWinPath: "resources\\{0}",
@@ -130,7 +132,7 @@ function (n) {
 
         //Handle warn logging
         var LogWarn = function(postfixId) {
-            if(settings.tableWarnings <= warningMax) {
+            if(settings.tableWarnings < warningMax) {
                 var id = "{0}{1}".format(settings.outputPrefix,postfixId);
                 var text = null;
                 if (arguments.length > 1) {                
@@ -201,24 +203,27 @@ function (n) {
         var ValidateInt = function (dataValue, regExp, variable) {
             var result = true;
             var matches = dataValue.match(regExp);
-            if(isNaN(parseInt(matches[0]))){
+            var parsedValue = parseInt(matches[0]);
+            if(isNaN(parsedValue)){
                 result = LogError("-CheckData-FileRow-ColumnsIntValue-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);  
             }
             else {
-                if (matches[0].length > 1) {
-                    // Check if the first char in the value is either + or -
-                    if (matches[0].charAt(0) === '-' || matches[0].charAt(0) === '+') {
-                        // Check if the first number in the value is 0
-                        if (matches[1] === '0') {
-                            result = LogWarn("-CheckData-FileRow-ColumnsIntValue-Warning", settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, variable.format);
-                        }
-                    } else {
-                        // Check if the first number in the value is 0
-                        if (matches[0].charAt(0) === '0') {
-                            result = LogWarn("-CheckData-FileRow-ColumnsIntValue-Warning", settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, variable.format);
+                if(parsedValue > 2147483647 || parsedValue < -2147483648) {
+                    result = LogError("-CheckData-FileRow-ColumnsInt-ValueRange-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
+                }
+                else {
+                    if (matches[0].length > 1) {
+                        if (matches[0].charAt(0) === '-' || matches[0].charAt(0) === '+') {
+                            if (matches[1] === '0') {
+                                result = LogWarn("-CheckData-FileRow-ColumnsIntValue-Warning", settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, variable.format);
+                            }
+                        } else {
+                            if (matches[0].charAt(0) === '0') {
+                                result = LogWarn("-CheckData-FileRow-ColumnsIntValue-Warning", settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, variable.format);
+                            }
                         }
                     }
-                }
+                }                
             }
             return result;
         }
@@ -227,13 +232,19 @@ function (n) {
         var ValidateDecimal = function (dataValue, regExp, variable) {
             var result = true;
             var matches = dataValue.match(regExp);
-            if(isNaN(parseFloat(matches[0]))){
+            var parsedValue = parseFloat(matches[0].replace(",","."));
+            if(isNaN(parsedValue)){
                 result = LogError("-CheckData-FileRow-ColumnsDecimalValue-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);  
             }
             else {
-                 if(variable.appliedRegExp !== settings.appliedRegExp && variable.appliedRegExp < 2 && settings.appliedRegExp < 2) {
-                    result = LogWarn("-CheckData-FileRow-ColumnsDecimal-InexpedientValue-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
+                if(parsedValue > 79228162514264337593543950335.79228162514264337593543950335 || parsedValue < -79228162514264337593543950335.79228162514264337593543950335) {
+                    result = LogError("-CheckData-FileRow-ColumnsDecimal-ValueRange-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
                 }
+                else {
+                    if(variable.appliedRegExp !== settings.appliedRegExp && variable.appliedRegExp < 2 && settings.appliedRegExp < 2) {
+                        result = LogError("-CheckData-FileRow-ColumnsDecimal-InexpedientValue-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
+                    }
+                }                
             }
             return result;
         }
@@ -248,7 +259,7 @@ function (n) {
             }
             else {
                 if(variable.appliedRegExp !== settings.appliedRegExp) {
-                    result = LogWarn("-CheckData-FileRow-ColumnsDate-InexpedientValue-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
+                    result = LogError("-CheckData-FileRow-ColumnsDate-InexpedientValue-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
                 }
             }
             return result;
@@ -296,18 +307,21 @@ function (n) {
             }
             else {
                 if(variable.appliedRegExp !== settings.appliedRegExp) {
-                    result = LogWarn("-CheckData-FileRow-ColumnsDateTime-InexpedientValue-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
+                    result = LogError("-CheckData-FileRow-ColumnsDateTime-InexpedientValue-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
                 }
             }
             return result;
         }
 
         //strip text double Apostrophe
-        var ApostropheNormalizer = function(dataValue) {
+        var ApostropheNormalizer = function(dataValue,variable) {
             var result = dataValue;
             if(result.indexOf("\"") > -1 && doubleApostrophePattern1.test(result)) {
                 result = result.match(doubleApostrophePattern1)[1];
                 result = result.replace(/""/g, "\"");
+            }
+            if(variable != null && result.length > 0 && (result[0] === " " || result[result.length - 1] === " ")) {
+                result = LogWarn("-CheckData-FileRow-ColumnsString-ValueBlankCharacters-Warning",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name);
             }
             return result;
         }
@@ -335,7 +349,7 @@ function (n) {
                     }
                 }
                 if(!result) {
-                    settings.convertStop = true;
+                    settings.errorStop = true;
                     result = LogError("-CheckData-FileRow-ColumnsString-ValueApostrophe-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name,dataValue);
                 }
             }
@@ -352,7 +366,8 @@ function (n) {
                 case 'String':
                     {
                         result = ValidateString(dataValue, regExp, variable);
-                        if(result) { result = ValidateOptions(ApostropheNormalizer(dataValue),variable); }
+                        if(result) { result = ValidateOptions(ApostropheNormalizer(dataValue,null),variable); }
+                        if(result && emptyPattern.test(dataValue)) { LogError("-CheckData-FileRow-ColumnsStringEmpty-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name,dataValue.replace("<","&lt;").replace(">","&gt;")); }
                     };break;
                 case 'Int':
                     {
@@ -412,7 +427,7 @@ function (n) {
                         {
                             result = ValidateOptions(dataValue,variable);
                             if(result && (variable.options == null || (variable.options != null && variable.options.length === 0))) {
-                                result = LogError("-CheckData-FileRow-ColumnsIntType-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, variable.format,dataValue);
+                                result = LogWarn("-CheckData-FileRow-ColumnsOptions-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
                             }
                         }
                     };break;
@@ -425,7 +440,7 @@ function (n) {
                         {
                             result = ValidateOptions(dataValue,variable);
                             if(result && (variable.options == null || (variable.options != null && variable.options.length === 0))) {
-                                result = LogError("-CheckData-FileRow-ColumnsDecimalType-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, variable.format,dataValue);
+                                result = LogWarn("-CheckData-FileRow-ColumnsOptions-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
                             }
                         }
                     };break;
@@ -453,7 +468,7 @@ function (n) {
                 if(dataRow[i] !== undefined && dataRow[i].trim() !== "") {                    
                     for(var j = 0;j < variable.regExps.length;j++) {
                         var patt = new RegExp(variable.regExps[j]);
-                        var dataValue = (variable.type != "String") ? dataRow[i] : ApostropheNormalizer(dataRow[i]);
+                        var dataValue = (variable.type != "String") ? dataRow[i] : ApostropheNormalizer(dataRow[i],variable);
                         if(patt.test(dataValue)) {
                             settings.appliedRegExp = j;
                             if(variable.appliedRegExp === -1) { variable.appliedRegExp = j; }
@@ -469,7 +484,7 @@ function (n) {
                     if(dataRow[i].trim() === "") { variable.nullable = true; } 
                 } 
             }
-            if(!result) { settings.convertStop = true; }
+            if(!result) { settings.errorStop = true; }
             return result;
         }
 
@@ -562,7 +577,7 @@ function (n) {
             }
             if(!result) { //less or more separators
                 result = LogError("-CheckData-FileRows-MatchLength-Error",settings.fileName,settings.rowIndex);
-                settings.convertStop = true;
+                settings.errorStop = true;
             }
             else {
                 result = ValidateRow(newData); 
@@ -586,7 +601,7 @@ function (n) {
                     settings.table.errorStop = true;
                     result = false; 
                 }
-                if(!settings.table.errorStop && settings.rowIndex > 1 && settings.tableErrors <= errorsMax) {
+                if(!settings.table.errorStop && settings.rowIndex > 1 && settings.tableErrors < errorsMax) {
                     
                     return ProcessRow(data);
                 }
@@ -595,7 +610,7 @@ function (n) {
                 console.log("{0} data output: ".format(settings.fileName));
                 console.log(settings.data);
                 settings.confirmationSpn.innerHTML = "";
-                if(settings.convertStop) { settings.table.errorStop = true; }
+                if(settings.errorStop) { settings.table.errorStop = true; }
                 settings.table.rows = settings.rowIndex;
                 ProcessDataSet();
             });
@@ -625,7 +640,7 @@ function (n) {
                 settings.data = [];
                 settings.tableErrors = 0;
                 settings.tableWarnings = 0; 
-                settings.convertStop = false;
+                settings.errorStop = false;
                 console.logInfo(`validate: ${dataFilePath}`,"Rigsarkiv.Nemesis.Data.ProcessDataSet");
                 settings.tableRows = 0;                
                  fs.createReadStream(dataFilePath)
@@ -666,7 +681,7 @@ function (n) {
         var CommitLog = function () {            
                 var folderName = GetFolderName();
                 var enableData = false;
-                var enableConvert = true;
+                var enableConvert = !settings.convertStop;
                 settings.metadata.forEach(table => {
                     if(table.errorStop) { enableConvert = false; }
                     else { enableData = true; }
@@ -768,11 +783,12 @@ function (n) {
             },
             callback: function () {
                 return { 
-                    validate: function(path,outputText,metadata,errors) 
+                    validate: function(path,outputText,metadata,errors,convertStop) 
                     { 
                         settings.deliveryPackagePath = path;
                         settings.outputText = outputText;
-                        settings.metadata = metadata;;                        
+                        settings.metadata = metadata;
+                        settings.convertStop = convertStop;                        
                         settings.runIndex = -1;
                         settings.dataFiles = [];
                         settings.ConvertBtn.hidden = true;

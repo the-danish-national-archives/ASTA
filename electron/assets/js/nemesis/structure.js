@@ -46,6 +46,7 @@ function (n) {
             logType: "structure",
             errors: 0,
             errorStop: false,
+            convertStop: false,
             documents: []            
         }
 
@@ -53,6 +54,7 @@ function (n) {
         var Reset = function () {
             settings.errors = 0;
             settings.errorStop = false;
+            settings.convertStop = false;
             settings.documents = [];
             $("span[id^='" + settings.outputPrefix + "']").hide();
              $("span[id^='" + settings.outputPrefix + "']").each(function() {
@@ -305,7 +307,10 @@ function (n) {
                             result = false; 
                         }
                         else {
-                            if(subFiles.filter(junk.not).length > 2) { result = LogError("-CheckFolderData-TableFolderFilesCount-Error",folder); }
+                            if(subFiles.filter(junk.not).length > 2) { 
+                                result = LogError("-CheckFolderData-TableFolderFilesCount-Error",folder);
+                                settings.convertStop = true; 
+                            }
                         }
                         if(!ValidateTableFiles(folder,subFiles.filter(junk.not))) { result = false; }                            
                     }
@@ -467,6 +472,7 @@ function (n) {
                 if(!subFolders.includes(folder)) {
                    result = LogError("-CheckFolders-Error",folder);
                    checkfolders = false; 
+                   settings.convertStop = true;
                    if(folder === settings.defaultSubFolders[1]) { settings.errorStop = true; }
                 }
                 else {
@@ -526,7 +532,7 @@ function (n) {
                     settings.logCallback().section(settings.logType,folderName,!settings.errorStop ? settings.logEndWithErrorSpn.innerHTML : settings.logEndWithErrorStopSpn.innerHTML);                    
                 }
                 if(!settings.errorStop) { 
-                    return settings.metadataCallback().validate(settings.deliveryPackagePath,settings.outputText,settings.errors); 
+                    return settings.metadataCallback().validate(settings.deliveryPackagePath,settings.outputText,settings.errors,settings.convertStop); 
                 } 
                 else {
                     settings.confirmationSpn.innerHTML = settings.convertDisabledText;

@@ -15,7 +15,11 @@ namespace Rigsarkiv.Athena
         const string SchemasLocalSharedPath = "{0}\\Schemas\\localShared";
         const string SchemasStandardPath = "{0}\\Schemas\\standard";
         const string BlacklistPattern = "^Thumbs\\.db$|^ehthumbs\\.db$|^Desktop\\.ini$|@eaDir$|^\\.DS_Store$|^\\.AppleDouble$|^\\.LSOverride$|^Icon\\r$|^\\._.*|^\\.Spotlight-V100(?:$|\\/)|\\.Trashes|^__MACOSX$|~$|^npm-debug\\.log$|^\\..*\\.swp$";
-        private Regex _blacklist = null;
+        const string IndicesPattern = "^contextDocumentationIndex.xml$|^archiveIndex.xml$";
+        const string ContextDocumentationPattern = "^docCollection[1-9]{1}[0-9]{0,}$|^[1-9]{1}[0-9]{0,}$|^[1-9]{1}[0-9]{0,}.(tif|mpg|mp3|jpg|jp2)$";
+        private Regex _blacklistRegex = null;
+        private Regex _indicesRegex = null;
+        private Regex _contextDocumentationRegex = null;
 
         /// <summary>
         /// Constructore
@@ -27,7 +31,9 @@ namespace Rigsarkiv.Athena
         public Structure(LogManager logManager, string srcPath, string destPath, string destFolder) : base(logManager, srcPath, destPath, destFolder)
         {
             _logSection = "Structure";
-            _blacklist = new Regex(BlacklistPattern, RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            _blacklistRegex = new Regex(BlacklistPattern, RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            _indicesRegex = new Regex(IndicesPattern, RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            _contextDocumentationRegex = new Regex(ContextDocumentationPattern, RegexOptions.Compiled | RegexOptions.IgnoreCase);
         }
 
         /// <summary>
@@ -147,18 +153,18 @@ namespace Rigsarkiv.Athena
 
             var srcPath = string.Format(ContextDocumentationPath, srcRootPath);
             var destPath = string.Format(ContextDocumentationPath, _destFolderPath);            
-            result = CopyFolder(srcPath, destPath);
+            result = CopyFolder(srcPath, destPath, _contextDocumentationRegex);
 
             if(result)
             {
                 srcPath = string.Format(IndicesPath, srcRootPath);
                 destPath = string.Format(IndicesPath, _destFolderPath);
-                result = CopyFolder(srcPath, destPath);
+                result = CopyFolder(srcPath, destPath, _indicesRegex);
             }
             return result;
         }
 
-        private bool CopyFolder(string srcPath,string destPath)
+        private bool CopyFolder(string srcPath,string destPath,Regex filter)
         {
             var result = true;
             try
@@ -167,14 +173,16 @@ namespace Rigsarkiv.Athena
                 Directory.CreateDirectory(destPath);
                 foreach (string dirPath in Directory.GetDirectories(srcPath, "*",SearchOption.AllDirectories))
                 {
-                    if(!_blacklist.IsMatch(dirPath.Substring(dirPath.LastIndexOf("\\") + 1)))
+                    var folderName = dirPath.Substring(dirPath.LastIndexOf("\\") + 1);
+                    if (!_blacklistRegex.IsMatch(folderName) && filter.IsMatch(folderName))
                     {
                         Directory.CreateDirectory(dirPath.Replace(srcPath, destPath));
                     }                    
                 }
                 foreach (string newPath in Directory.GetFiles(srcPath, "*.*", SearchOption.AllDirectories))
                 {
-                    if (!_blacklist.IsMatch(newPath.Substring(newPath.LastIndexOf("\\") + 1)))
+                    var fileName = newPath.Substring(newPath.LastIndexOf("\\") + 1);
+                    if (!_blacklistRegex.IsMatch(fileName) && filter.IsMatch(fileName))
                     {
                         File.Copy(newPath, newPath.Replace(srcPath, destPath), true);
                     }

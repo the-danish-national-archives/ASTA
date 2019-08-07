@@ -209,7 +209,7 @@ namespace Rigsarkiv.Athena
             table.CodeList.Add(codeList);
             foreach(var pair in codeList.Options)
             {
-                if (HasSpecialNumeric(column, pair[0])) { HandleSpecialNumeric(column, tableNode, researchIndexNode, pair[0], false); }
+                if (HasSpecialNumeric(column, pair[0])) { HandleSpecialNumeric(column, tableNode, researchIndexNode, pair[0], true); }
             }
         }
         
