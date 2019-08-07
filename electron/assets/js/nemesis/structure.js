@@ -307,7 +307,10 @@ function (n) {
                             result = false; 
                         }
                         else {
-                            if(subFiles.filter(junk.not).length > 2) { result = LogError("-CheckFolderData-TableFolderFilesCount-Error",folder); }
+                            if(subFiles.filter(junk.not).length > 2) { 
+                                result = LogError("-CheckFolderData-TableFolderFilesCount-Error",folder);
+                                settings.convertStop = true; 
+                            }
                         }
                         if(!ValidateTableFiles(folder,subFiles.filter(junk.not))) { result = false; }                            
                     }
