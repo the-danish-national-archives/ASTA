@@ -95,10 +95,12 @@ namespace Rigsarkiv.Styx
             var result = string.Empty;
             var contents = new List<string>();
             table.Columns.ForEach(column => {
+                var hasError = false;
+                var isDifferent = false;
                 var content = row.Element(tableNS + column.Id).Value;
-                if(column.TypeOriginal.StartsWith(VarCharPrefix) && content.IndexOf("\"") > -1 )
+                if (!string.IsNullOrEmpty(content))
                 {
-                    content = string.Format("\"{0}\"", content.Replace("\"","\"\""));
+                    content = GetConvertedValue(column, content, out hasError, out isDifferent);
                 }
                 contents.Add(content);
             });            

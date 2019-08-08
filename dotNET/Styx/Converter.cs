@@ -4,8 +4,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Linq;
+using System.Linq;
 
 namespace Rigsarkiv.Styx
 {
@@ -22,9 +24,12 @@ namespace Rigsarkiv.Styx
         protected const string TableDataPath = "{0}\\Data\\{1}\\{2}.csv";
         protected const string C1 = "c1";
         protected const string C2 = "c2";
+        protected const string DataTypeIntPattern = "^(int)$|^(\\%([0-9]+)\\.0f)$|^(f([0-9]+)\\.)$|^(f([0-9]+))$";
+        protected const string DataTypeDecimalPattern = "^(decimal)$|^(\\%([0-9]+)\\.([0-9]+)f)$|^(f([0-9]+)\\.([0-9]+))$|^(f([0-9]+)\\.([0-9]+))$";
         protected delegate void OperationOnRow(XElement row);
         protected Assembly _assembly = null;
         protected Asta.Logging.LogManager _logManager = null;
+        protected Dictionary<string, Regex> _regExps = null;
         protected XNamespace _tableIndexXNS = TableIndexXmlNs;
         protected Report _report = null;
         protected string _srcPath = null;
@@ -45,6 +50,7 @@ namespace Rigsarkiv.Styx
         {
             _assembly = Assembly.GetExecutingAssembly();
             _logManager = logManager;
+            _regExps = new Dictionary<string, Regex>();
             _report = new Report() { ScriptType = ScriptType.SPSS, Tables = new List<Table>() };
             _srcPath = srcPath;
             _destPath = destPath;
@@ -86,8 +92,111 @@ namespace Rigsarkiv.Styx
                 }
             }
             return result;
-        }        
+        }
 
+        /// <summary>
+        /// Get Converted column Value
+        /// </summary>
+        /// <param name="column"></param>
+        /// <param name="value"></param>
+        /// <param name="hasError"></param>
+        /// <param name="isDifferent"></param>
+        /// <returns></returns>
+        protected string GetConvertedValue(Column column, string value, out bool hasError, out bool isDifferent)
+        {
+            string result = null;
+            switch (column.TypeOriginal)
+            {
+                case "INTEGER": result = GetIntegerValue(column, value, out hasError, out isDifferent); break;
+                case "DECIMAL": result = GetDecimalValue(column, value, out hasError, out isDifferent); break;
+                /*case "DATE": result = GetDateValue(column, value, out hasError, out isDifferent); break;
+                case "TIME": result = GetTimeValue(column, value, out hasError, out isDifferent); break;
+                case "TIMESTAMP": result = GetTimeStampValue(column, value, out hasError, out isDifferent); break;*/
+                default: result = GetStringValue(column, value, out hasError, out isDifferent); break;
+            }
+            return result;
+        }
+
+        private string GetDecimalValue(Column column, string value, out bool hasError, out bool isDifferent)
+        {
+            isDifferent = false;
+            var result = value;
+            if (!_regExps.ContainsKey(DataTypeDecimalPattern))
+            {
+                _regExps.Add(DataTypeDecimalPattern, new Regex(DataTypeDecimalPattern, RegexOptions.Compiled | RegexOptions.IgnoreCase));
+            }
+            hasError = !_regExps[DataTypeDecimalPattern].IsMatch(column.Type);
+            if (!hasError)
+            {
+                var intLength = 0;
+                var decLength = 0;
+                foreach (Group group in _regExps[DataTypeDecimalPattern].Match(column.Type).Groups)
+                {
+                    if (intLength == 0)
+                    {
+                        int.TryParse(group.Value, out intLength);
+                    }
+                    else
+                    {
+                        if (decLength == 0) { int.TryParse(group.Value, out decLength); }
+                    }
+                }                    
+                if (intLength > 0 && decLength > 0)
+                {
+                    hasError = result.Length > (intLength + decLength + 2);
+                    if (hasError) { result = result.Substring(0, intLength + decLength + 2); }
+                }
+            }
+            isDifferent = result != value;
+            return result;
+        }
+
+        private string GetIntegerValue(Column column, string value, out bool hasError, out bool isDifferent)
+        {
+            isDifferent = false;
+            var result = value;
+            if (!_regExps.ContainsKey(DataTypeIntPattern))
+            {
+                _regExps.Add(DataTypeIntPattern, new Regex(DataTypeIntPattern, RegexOptions.Compiled | RegexOptions.IgnoreCase));
+            }
+            hasError = !_regExps[DataTypeIntPattern].IsMatch(column.Type);
+            if (!hasError)
+            {
+                var length = 0;
+                foreach(Group group in _regExps[DataTypeIntPattern].Match(column.Type).Groups)
+                {
+                    if(int.TryParse(group.Value,out length)) { break; }
+                }
+                if(length > 0)
+                {
+                    hasError = result.Length > (length + 1);
+                    if (hasError) { result = result.Substring(0, length + 1); }
+                }
+            }
+            isDifferent = result != value;
+            return result;
+        }
+
+        private string GetStringValue(Column column, string value, out bool hasError, out bool isDifferent)
+        {
+            hasError = false;
+            isDifferent = false;
+            var result = value;
+            if (result.IndexOf("\"") > -1)
+            {
+                 result = string.Format("\"{0}\"", result.Replace("\"", "\"\""));
+                 isDifferent = true;
+            }
+            result = result.Trim();
+            if (!isDifferent) { isDifferent = result != value; }
+            return result;
+        }
+
+        /// <summary>
+        /// Stream xml rows by delegates
+        /// </summary>
+        /// <param name="operation"></param>
+        /// <param name="filePath"></param>
         protected void StreamElement(OperationOnRow operation, string filePath)
         {
             using (var rdr = XmlReader.Create(filePath))
