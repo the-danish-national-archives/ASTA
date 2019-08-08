@@ -26,6 +26,8 @@ namespace Rigsarkiv.Styx
         protected const string C2 = "c2";
         protected const string DataTypeIntPattern = "^(int)$|^(\\%([0-9]+)\\.0f)$|^(f([0-9]+)\\.)$|^(f([0-9]+))$";
         protected const string DataTypeDecimalPattern = "^(decimal)$|^(\\%([0-9]+)\\.([0-9]+)f)$|^(f([0-9]+)\\.([0-9]+))$|^(f([0-9]+)\\.([0-9]+))$";
+        protected const string DataTypeDatePattern = "^([0-9]{4,4})-([0-9]{2,2})-([0-9]{2,2})$";
+        protected const string DataTypeDateTimePattern = "^([0-9]{4,4})-([0-9]{2,2})-([0-9]{2,2})T([0-9]{2,2}):([0-9]{2,2}):([0-9]{2,2})$";
         protected delegate void OperationOnRow(XElement row);
         protected Assembly _assembly = null;
         protected Asta.Logging.LogManager _logManager = null;
@@ -109,12 +111,33 @@ namespace Rigsarkiv.Styx
             {
                 case "INTEGER": result = GetIntegerValue(column, value, out hasError, out isDifferent); break;
                 case "DECIMAL": result = GetDecimalValue(column, value, out hasError, out isDifferent); break;
-                /*case "DATE": result = GetDateValue(column, value, out hasError, out isDifferent); break;
+                case "DATE": result = GetDateValue(column, value, out hasError, out isDifferent); break;
                 case "TIME": result = GetTimeValue(column, value, out hasError, out isDifferent); break;
-                case "TIMESTAMP": result = GetTimeStampValue(column, value, out hasError, out isDifferent); break;*/
+                case "TIMESTAMP": result = GetTimeStampValue(column, value, out hasError, out isDifferent); break;
                 default: result = GetStringValue(column, value, out hasError, out isDifferent); break;
             }
             return result;
+        }
+
+        private string GetTimeStampValue(Column column, string value, out bool hasError, out bool isDifferent)
+        {
+            hasError = false;
+            isDifferent = false;
+            return value;
+        }
+
+        private string GetDateValue(Column column, string value, out bool hasError, out bool isDifferent)
+        {
+            hasError = false;
+            isDifferent = false;
+            return value;
+        }
+
+        private string GetTimeValue(Column column, string value, out bool hasError, out bool isDifferent)
+        {
+            hasError = false;
+            isDifferent = false;
+            return value;
         }
 
         private string GetDecimalValue(Column column, string value, out bool hasError, out bool isDifferent)
