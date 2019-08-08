@@ -7,6 +7,7 @@
     {
         SPSS,
         SAS,
-        Stata
+        Stata,
+        Xml
     }
 }

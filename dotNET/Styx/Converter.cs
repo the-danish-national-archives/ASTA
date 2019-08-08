@@ -24,11 +24,10 @@ namespace Rigsarkiv.Styx
         protected const string TableDataPath = "{0}\\Data\\{1}\\{2}.csv";
         protected const string C1 = "c1";
         protected const string C2 = "c2";
+        protected const string VarCharPrefix = "VARCHAR(";
         protected const string DataTypeIntPattern = "^(int)$|^(\\%([0-9]+)\\.0f)$|^(f([0-9]+)\\.)$|^(f([0-9]+))$";
         protected const string DataTypeDecimalPattern = "^(decimal)$|^(\\%([0-9]+)\\.([0-9]+)f)$|^(f([0-9]+)\\.([0-9]+))$|^(f([0-9]+)\\.([0-9]+))$";
-        protected const string DataTypeDatePattern = "^([0-9]{4,4})-([0-9]{2,2})-([0-9]{2,2})$";
-        protected const string DataTypeDateTimePattern = "^([0-9]{4,4})-([0-9]{2,2})-([0-9]{2,2})T([0-9]{2,2}):([0-9]{2,2}):([0-9]{2,2})$";
-        protected delegate void OperationOnRow(XElement row);
+         protected delegate void OperationOnRow(XElement row);
         protected Assembly _assembly = null;
         protected Asta.Logging.LogManager _logManager = null;
         protected Dictionary<string, Regex> _regExps = null;
@@ -119,6 +118,103 @@ namespace Rigsarkiv.Styx
             return result;
         }
 
+        protected string GetColumnType(Column column)
+        {
+            var result = column.TypeOriginal;
+            switch (column.TypeOriginal)
+            {
+                case "INTEGER": result = GetIntegerType(column); break;
+                case "DECIMAL": result = GetDecimalType(column); break;
+                case "DATE": result = GetDateType(column); break;
+                case "TIME": result = GetTimeType(column); break;
+                case "TIMESTAMP": result = GetTimeStampType(column); break;
+                default: result = GetStringType(column); break;
+            }
+            return result;
+        }
+
+        private string GetTimeStampType(Column column)
+        {
+            var result = column.TypeOriginal;
+            switch (_report.ScriptType)
+            {
+                case ScriptType.SPSS: result = "datetime20"; break;
+                case ScriptType.SAS: result = "e8601dt."; break;
+                case ScriptType.Stata: result = "%tcCCYY-NN-DD!THH:MM:SS"; break;
+                case ScriptType.Xml: result = "datetime"; break;
+            }
+            return result;
+        }
+
+        private string GetDateType(Column column)
+        {
+            var result = column.TypeOriginal;
+            switch (_report.ScriptType)
+            {
+                case ScriptType.SPSS: result = "sdate10"; break;
+                case ScriptType.SAS: result = "yymmdd."; break;
+                case ScriptType.Stata: result = "%tdCCYY-NN-DD"; break;
+                case ScriptType.Xml: result = "date"; break;
+            }
+            return result;
+        }
+
+        private string GetTimeType(Column column)
+        {
+            var result = column.TypeOriginal;
+            switch (_report.ScriptType)
+            {
+                case ScriptType.SPSS: result = "time8"; break;
+                case ScriptType.SAS: result = "time."; break;
+                case ScriptType.Stata: result = "%tcHH:MM:SS"; break;
+                case ScriptType.Xml: result = "time"; break;
+            }
+            return result;
+        }
+
+        private string GetDecimalType(Column column)
+        {
+            var result = column.TypeOriginal;
+            var lengths = GetDecimalLength(column);
+            switch (_report.ScriptType)
+            {
+                case ScriptType.SPSS: result = string.Format("f{0}.{1}", lengths[0], lengths[1]); break;
+                case ScriptType.SAS: result = string.Format("{0}.{1}", lengths[0], lengths[1]); break;
+                case ScriptType.Stata: result = string.Format("%{0}.{1}f", lengths[0], lengths[1]); break;
+                case ScriptType.Xml: result = "decimal"; break;
+            }
+            return result;
+        }
+
+        private string GetIntegerType(Column column)
+        {
+            var result = column.TypeOriginal;
+            var length = GetIntegerLength(column);
+            switch (_report.ScriptType)
+            {
+                case ScriptType.SPSS: result = string.Format("f{0}", length); break;
+                case ScriptType.SAS: result = string.Format("{0}.", length); break;
+                case ScriptType.Stata: result = string.Format("%{0}.0f", length); break;
+                case ScriptType.Xml: result = "int"; break;
+            }
+            return result;
+        }
+
+        private string GetStringType(Column column)
+        {
+            var result = column.TypeOriginal;
+            var length = result.Substring(VarCharPrefix.Length);
+            length = length.Substring(0, length.Length - 1);
+            switch (_report.ScriptType)
+            {
+                case ScriptType.SPSS: result = string.Format("a{0}", length); break;
+                case ScriptType.SAS: result = string.Format("${0}.", length); break;
+                case ScriptType.Stata: result = string.Format("%{0}s", length); break;
+                case ScriptType.Xml: result = "string"; break;
+            }
+            return result;
+        }
+
         private string GetTimeStampValue(Column column, string value, out bool hasError, out bool isDifferent)
         {
             hasError = false;
@@ -144,59 +240,73 @@ namespace Rigsarkiv.Styx
         {
             isDifferent = false;
             var result = value;
-            if (!_regExps.ContainsKey(DataTypeDecimalPattern))
-            {
-                _regExps.Add(DataTypeDecimalPattern, new Regex(DataTypeDecimalPattern, RegexOptions.Compiled | RegexOptions.IgnoreCase));
-            }
-            hasError = !_regExps[DataTypeDecimalPattern].IsMatch(column.Type);
+            var lengths = GetDecimalLength(column);
+            hasError = (lengths[0] == 0 && lengths[1] == 0);
             if (!hasError)
-            {
-                var intLength = 0;
-                var decLength = 0;
-                foreach (Group group in _regExps[DataTypeDecimalPattern].Match(column.Type).Groups)
+            {                                  
+                if (lengths[0] > 0 && lengths[1] > 0)
                 {
-                    if (intLength == 0)
-                    {
-                        int.TryParse(group.Value, out intLength);
-                    }
-                    else
-                    {
-                        if (decLength == 0) { int.TryParse(group.Value, out decLength); }
-                    }
-                }                    
-                if (intLength > 0 && decLength > 0)
-                {
-                    hasError = result.Length > (intLength + decLength + 2);
-                    if (hasError) { result = result.Substring(0, intLength + decLength + 2); }
+                    hasError = result.Length > (lengths[0] + lengths[1] + 2);
+                    if (hasError) { result = result.Substring(0, lengths[0] + lengths[1] + 2); }
                 }
             }
             isDifferent = result != value;
             return result;
         }
 
+        private int[] GetDecimalLength(Column column)
+        {
+            var result = new int[2] { 0, 0 };
+            if (!_regExps.ContainsKey(DataTypeDecimalPattern))
+            {
+                _regExps.Add(DataTypeDecimalPattern, new Regex(DataTypeDecimalPattern, RegexOptions.Compiled | RegexOptions.IgnoreCase));
+            }
+            if(_regExps[DataTypeDecimalPattern].IsMatch(column.Type))
+            {
+               foreach (Group group in _regExps[DataTypeDecimalPattern].Match(column.Type).Groups)
+                {
+                    if (result[0] == 0)
+                    {
+                        int.TryParse(group.Value, out result[0]);
+                    }
+                    else
+                    {
+                        if (result[1] == 0) { int.TryParse(group.Value, out result[1]); }
+                    }
+                }
+            }
+            return result;
+        }
+
         private string GetIntegerValue(Column column, string value, out bool hasError, out bool isDifferent)
         {
             isDifferent = false;
-            var result = value;
+            var result = value;           
+            var length = GetIntegerLength(column);
+            hasError = length == 0;
+            if (!hasError)
+            {               
+                hasError = result.Length > (length + 1);
+                if (hasError) { result = result.Substring(0, length + 1); }
+            }
+            isDifferent = result != value;
+            return result;
+        }
+
+        private int GetIntegerLength(Column column)
+        {
+            var result = 0;
             if (!_regExps.ContainsKey(DataTypeIntPattern))
             {
                 _regExps.Add(DataTypeIntPattern, new Regex(DataTypeIntPattern, RegexOptions.Compiled | RegexOptions.IgnoreCase));
             }
-            hasError = !_regExps[DataTypeIntPattern].IsMatch(column.Type);
-            if (!hasError)
+            if(_regExps[DataTypeIntPattern].IsMatch(column.Type))
             {
-                var length = 0;
-                foreach(Group group in _regExps[DataTypeIntPattern].Match(column.Type).Groups)
+                foreach (Group group in _regExps[DataTypeIntPattern].Match(column.Type).Groups)
                 {
-                    if(int.TryParse(group.Value,out length)) { break; }
-                }
-                if(length > 0)
-                {
-                    hasError = result.Length > (length + 1);
-                    if (hasError) { result = result.Substring(0, length + 1); }
+                    if (int.TryParse(group.Value, out result)) { break; }
                 }
             }
-            isDifferent = result != value;
             return result;
         }
 

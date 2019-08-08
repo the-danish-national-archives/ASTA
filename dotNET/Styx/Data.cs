@@ -15,7 +15,6 @@ namespace Rigsarkiv.Styx
     public class Data : Converter
     {
         const int RowsChunk = 500;
-        const string VarCharPrefix = "VARCHAR";
         const string Separator = ";";
         const string TablePath = "{0}\\Tables\\{1}\\{1}.xml";
         const string CodeFormat = "'{0}' '{1}'"; 

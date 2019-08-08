@@ -86,7 +86,7 @@ namespace Rigsarkiv.Styx
                     _codeList.AppendLine(string.Format("{{{0}}}", index));
                     index++;
                 }
-                _variables.AppendLine(string.Format("{0} {1} {2}", column.Name, column.Type, codeList));
+                _variables.AppendLine(string.Format("{0} {1} {2}", column.Name, GetColumnType(column), codeList));
                 _descriptions.AppendLine(string.Format("{0} '{1}'", column.Name, column.Description));
             });
             EnsureFile(table, VariablesPath, _variables.ToString());
