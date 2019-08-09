@@ -126,7 +126,7 @@ namespace Rigsarkiv.Styx
         {
             var path = string.Format(filePath, _destFolderPath, table.Folder, table.Name);
             _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add file: {0}", path) });
-            using (var sw = new StreamWriter(path, true))
+            using (var sw = new StreamWriter(path, true, Encoding.UTF8))
             {
                 sw.Write(content);
             }

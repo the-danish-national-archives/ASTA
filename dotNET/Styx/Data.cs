@@ -148,7 +148,7 @@ namespace Rigsarkiv.Styx
             });
             path = string.Format(CodeListPath, _destFolderPath, table.Folder, table.Name);
             var content = File.ReadAllText(path);
-            using (var sw = new StreamWriter(path, false))
+            using (var sw = new StreamWriter(path, false, Encoding.UTF8))
             {
                 sw.Write(string.Format(content, _codeLists.ToArray()));
             }
