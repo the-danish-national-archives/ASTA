@@ -152,7 +152,8 @@ namespace Rigsarkiv.StyxForm
             _converter = new Structure(_logManager, srcPath, destPath, destFolder, scriptType);
             if (_converter.Run())
             {
-                _converter = new MetaData(_logManager, srcPath, destPath, destFolder, _converter.Report);
+                var researchIndexXDocument = _converter.ResearchIndexXDocument;
+                _converter = new MetaData(_logManager, srcPath, destPath, destFolder, _converter.Report) { ResearchIndexXDocument = researchIndexXDocument };
                 if (_converter.Run())
                 {
                     _converter = new Data(_logManager, srcPath, destPath, destFolder, _converter.Report);

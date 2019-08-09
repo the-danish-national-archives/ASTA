@@ -16,11 +16,13 @@ namespace Rigsarkiv.Styx
     {
         const string TableIndexPath = "{0}\\Indices\\tableIndex.xml";
         const string VariablesPath = "{0}\\Data\\{1}\\{2}_VARIABEL.txt";
+        const string UserCodesPath = "{0}\\Data\\{1}\\{2}_BRUGERKODE.txt";
         const string DescriptionsPath = "{0}\\Data\\{1}\\{2}_VARIABELBESKRIVELSE.txt";        
         private XDocument _tableIndexXDocument = null;
         private StringBuilder _variables = null;
         private StringBuilder _descriptions = null;
         private StringBuilder _codeList = null;
+        private StringBuilder _usercodes = null;
 
         public MetaData(LogManager logManager, string srcPath, string destPath, string destFolder, Report report) : base(logManager, srcPath, destPath, destFolder)
         {
@@ -29,6 +31,7 @@ namespace Rigsarkiv.Styx
             _variables = new StringBuilder();
             _descriptions = new StringBuilder();
             _codeList = new StringBuilder();
+            _usercodes = new StringBuilder();
         }
 
         /// <summary>
@@ -61,7 +64,9 @@ namespace Rigsarkiv.Styx
                     _variables.Clear();
                     _descriptions.Clear();
                     _codeList.Clear();
+                    _usercodes.Clear();
                     EnsureFiles(table);
+                    if(_report.ScriptType == ScriptType.SPSS) { EnsureUserCodesFile(table); }
                 });
             }
             catch (Exception ex)
@@ -71,6 +76,29 @@ namespace Rigsarkiv.Styx
                 _logManager.Add(new LogEntity() { Level = LogLevel.Error, Section = _logSection, Message = string.Format("EnsureFiles Failed: {0}", ex.Message) });
             }
             return result;
+        }
+
+        private void EnsureUserCodesFile(Table table)
+        {
+            if(_researchIndexXDocument == null) { throw new Exception("ResearchIndexXDocument property not setet"); }
+            var tableNode = _researchIndexXDocument.Element(_tableIndexXNS + "researchIndex").Element(_tableIndexXNS + "mainTables").Elements().Where(e => e.Element(_tableIndexXNS + "tableID").Value == table.SrcFolder).FirstOrDefault();
+            foreach (var columnNode in tableNode.Element(_tableIndexXNS + "columns").Elements())
+            {
+                var name = table.Columns.FirstOrDefault(c => c.Id == columnNode.Element(_tableIndexXNS + "columnID").Value).Name;
+                var values = new List<string>();
+                foreach (var valueNode in columnNode.Element(_tableIndexXNS + "missingValues").Elements())
+                {
+                    values.Add(string.Format("'{0}'", valueNode.Value));
+                }
+                if(values.Count > 0)
+                {
+                    _usercodes.AppendLine(string.Format("{0} {1}", name, string.Join(" ", values.ToArray())));
+                }                
+            }
+            if(_usercodes.Length > 0)
+            {
+                EnsureFile(table, UserCodesPath, _usercodes.ToString());
+            }
         }
 
         private void EnsureFiles(Table table)

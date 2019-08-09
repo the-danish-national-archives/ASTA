@@ -33,6 +33,7 @@ namespace Rigsarkiv.Styx
         protected Dictionary<string, Regex> _regExps = null;
         protected XNamespace _tableIndexXNS = TableIndexXmlNs;
         protected Report _report = null;
+        protected XDocument _researchIndexXDocument = null;
         protected string _srcPath = null;
         protected string _destPath = null;
         protected string _destFolder = null;
@@ -76,6 +77,15 @@ namespace Rigsarkiv.Styx
         public Report Report
         {
             get { return _report; }
+        }
+
+        /// <summary>
+        /// Research Index XDocument
+        /// </summary>
+        public XDocument ResearchIndexXDocument
+        {
+            get { return _researchIndexXDocument; }
+            set { _researchIndexXDocument = value; }
         }
 
         /// <summary>

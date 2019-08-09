@@ -12,8 +12,7 @@ namespace Rigsarkiv.Styx
     public class Structure : Converter
     {
         const string ResearchIndexPath = "{0}\\Indices\\researchIndex.xml";
-        const string TableFolderPrefix = "table{0}";
-        protected XDocument _researchIndexXDocument = null;
+        const string TableFolderPrefix = "table{0}";        
         private int _tablesCounter = 0;
 
         /// <summary>
