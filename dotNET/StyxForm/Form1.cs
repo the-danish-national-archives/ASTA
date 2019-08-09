@@ -1,9 +1,11 @@
 ﻿using Rigsarkiv.Asta.Logging;
 using Rigsarkiv.Styx;
+using Rigsarkiv.Styx.Entities;
 using Rigsarkiv.StyxForm.Extensions;
 using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Rigsarkiv.StyxForm
@@ -23,6 +25,9 @@ namespace Rigsarkiv.StyxForm
         public Form1(string srcPath, string destPath)
         {
             InitializeComponent();
+            var scripts = Enum.GetValues(typeof(ScriptType)).Cast<ScriptType>();
+            scriptTypeComboBox.Items.AddRange(scripts.Select(s => s.ToString()).ToArray());
+            scriptTypeComboBox.SelectedIndex = 0;
             sipTextBox.Text = destPath;
             aipTextBox.Text = srcPath;
             UpdateFolderName(aipTextBox.Text);
@@ -143,7 +148,8 @@ namespace Rigsarkiv.StyxForm
             var srcPath = aipTextBox.Text;
             var destPath = sipTextBox.Text;
             var destFolder = sipNameTextBox.Text;
-            _converter = new Structure(_logManager, srcPath, destPath, destFolder);
+            var scriptType = (ScriptType)Enum.Parse(typeof(ScriptType), scriptTypeComboBox.SelectedItem.ToString(), true);
+            _converter = new Structure(_logManager, srcPath, destPath, destFolder, scriptType);
             if (_converter.Run())
             {
                 _converter = new MetaData(_logManager, srcPath, destPath, destFolder, _converter.Report);

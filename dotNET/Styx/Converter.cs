@@ -52,7 +52,7 @@ namespace Rigsarkiv.Styx
             _assembly = Assembly.GetExecutingAssembly();
             _logManager = logManager;
             _regExps = new Dictionary<string, Regex>();
-            _report = new Report() { ScriptType = ScriptType.SPSS, Tables = new List<Table>() };
+            _report = new Report() { Tables = new List<Table>() };
             _srcPath = srcPath;
             _destPath = destPath;
             _destFolder = destFolder;

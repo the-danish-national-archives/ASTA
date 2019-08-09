@@ -2,6 +2,7 @@
 using System.IO;
 using System.Xml.Linq;
 using Rigsarkiv.Asta.Logging;
+using Rigsarkiv.Styx.Entities;
 
 namespace Rigsarkiv.Styx
 {
@@ -22,9 +23,10 @@ namespace Rigsarkiv.Styx
         /// <param name="srcPath"></param>
         /// <param name="destPath"></param>
         /// <param name="destFolder"></param>
-        public Structure(LogManager logManager, string srcPath, string destPath, string destFolder) : base(logManager, srcPath, destPath, destFolder)
+        public Structure(LogManager logManager, string srcPath, string destPath, string destFolder, ScriptType scriptType) : base(logManager, srcPath, destPath, destFolder)
         {
             _logSection = "Structure";
+            _report.ScriptType = scriptType;
         }
 
         /// <summary>

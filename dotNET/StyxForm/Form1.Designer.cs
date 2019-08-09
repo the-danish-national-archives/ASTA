@@ -44,6 +44,8 @@
             this.aipPathRequired = new System.Windows.Forms.ErrorProvider(this.components);
             this.sipPathRequired = new System.Windows.Forms.ErrorProvider(this.components);
             this.sipNameRequired = new System.Windows.Forms.ErrorProvider(this.components);
+            this.label5 = new System.Windows.Forms.Label();
+            this.scriptTypeComboBox = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.aipPathRequired)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sipPathRequired)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sipNameRequired)).BeginInit();
@@ -51,7 +53,7 @@
             // 
             // outputRichTextBox
             // 
-            this.outputRichTextBox.Location = new System.Drawing.Point(27, 314);
+            this.outputRichTextBox.Location = new System.Drawing.Point(30, 365);
             this.outputRichTextBox.Name = "outputRichTextBox";
             this.outputRichTextBox.Size = new System.Drawing.Size(964, 227);
             this.outputRichTextBox.TabIndex = 0;
@@ -138,7 +140,7 @@
             // logButton
             // 
             this.logButton.Enabled = false;
-            this.logButton.Location = new System.Drawing.Point(30, 264);
+            this.logButton.Location = new System.Drawing.Point(30, 318);
             this.logButton.Name = "logButton";
             this.logButton.Size = new System.Drawing.Size(75, 32);
             this.logButton.TabIndex = 26;
@@ -148,7 +150,7 @@
             // 
             // convertButton
             // 
-            this.convertButton.Location = new System.Drawing.Point(855, 264);
+            this.convertButton.Location = new System.Drawing.Point(855, 318);
             this.convertButton.Name = "convertButton";
             this.convertButton.Size = new System.Drawing.Size(136, 32);
             this.convertButton.TabIndex = 25;
@@ -168,11 +170,30 @@
             // 
             this.sipNameRequired.ContainerControl = this;
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(26, 268);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(104, 20);
+            this.label5.TabIndex = 27;
+            this.label5.Text = "Statistik type:";
+            // 
+            // scriptTypeComboBox
+            // 
+            this.scriptTypeComboBox.FormattingEnabled = true;
+            this.scriptTypeComboBox.Location = new System.Drawing.Point(145, 265);
+            this.scriptTypeComboBox.Name = "scriptTypeComboBox";
+            this.scriptTypeComboBox.Size = new System.Drawing.Size(121, 28);
+            this.scriptTypeComboBox.TabIndex = 28;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1005, 542);
+            this.ClientSize = new System.Drawing.Size(1005, 604);
+            this.Controls.Add(this.scriptTypeComboBox);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.logButton);
             this.Controls.Add(this.convertButton);
             this.Controls.Add(this.sipButton);
@@ -213,6 +234,8 @@
         private System.Windows.Forms.ErrorProvider aipPathRequired;
         private System.Windows.Forms.ErrorProvider sipPathRequired;
         private System.Windows.Forms.ErrorProvider sipNameRequired;
+        private System.Windows.Forms.ComboBox scriptTypeComboBox;
+        private System.Windows.Forms.Label label5;
     }
 }
 

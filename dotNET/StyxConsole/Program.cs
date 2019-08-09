@@ -1,6 +1,7 @@
 ﻿using log4net;
 using Rigsarkiv.Asta.Logging;
 using Rigsarkiv.Styx;
+using Rigsarkiv.Styx.Entities;
 using System;
 
 namespace Rigsarkiv.StyxConsole
@@ -20,7 +21,7 @@ namespace Rigsarkiv.StyxConsole
                 var srcPath = args[0];
                 var destPath = args[1];
                 var destFolder = args[2];
-                _converter = new Structure(_logManager, srcPath, destPath, destFolder);
+                _converter = new Structure(_logManager, srcPath, destPath, destFolder, ScriptType.SPSS);
                 if (_converter.Run())
                 {
                     _converter = new MetaData(_logManager, srcPath, destPath, destFolder, _converter.Report);
