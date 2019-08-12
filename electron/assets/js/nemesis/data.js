@@ -132,14 +132,10 @@ function (n) {
 
         //Handle warn logging
         var LogWarn = function(postfixId) {
-<<<<<<< HEAD
-            if(settings.tableWarnings < warningMax) {
-=======
             if(!settings.tableWarnings.hasOwnProperty(postfixId)) {
                 settings.tableWarnings[postfixId] = 0;
             }
             if(settings.tableWarnings[postfixId] < warningMax) {
->>>>>>> d97f10d6fe5767cd72ad9bcee834ad778446182f
                 var id = "{0}{1}".format(settings.outputPrefix,postfixId);
                 var text = null;
                 if (arguments.length > 1) {                
