@@ -23,6 +23,8 @@ namespace Rigsarkiv.AthenaForm
         private Index _converter = null;
         private Report _report = null;
         private RichTextBox _outputRichTextBox = null;
+        private string _logPath = null;
+        private string _reportPath = null;
 
         /// <summary>
         /// 
@@ -40,6 +42,8 @@ namespace Rigsarkiv.AthenaForm
             _destPath = destPath;
             _destFolder = destFolder;
             _report = report;
+            _logPath = string.Format("{0}\\{1}_log.html", _destPath, _destFolder);
+            _reportPath = string.Format("{0}\\{1}_report.html", _destPath, _destFolder);
             _outputRichTextBox = outputRichTextBox;
             _outputRichTextBox.Location = new Point(2, 380);
             this.Controls.Add(_outputRichTextBox);
@@ -54,8 +58,10 @@ namespace Rigsarkiv.AthenaForm
             _converter = new Index(_logManager, _srcPath, _destPath, _destFolder,_report);
             if(_converter.Run())
             {
-                logButton.Enabled = true;
-                reportButton.Enabled = true;
+                _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = "Form", Message = "Flush report" });
+                reportButton.Enabled = _converter.Flush(_reportPath, _destFolder);
+                _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = "Form", Message = "Flush log" });
+                logButton.Enabled = _logManager.Flush(_logPath, _destFolder, _converter.GetLogTemplate());               
             }
         }
 
@@ -121,11 +127,7 @@ namespace Rigsarkiv.AthenaForm
         private void logButton_Click(object sender, System.EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
-            var path = string.Format("{0}\\{1}_log.html", _destPath, _destFolder);
-            if (_logManager.Flush(path, _destFolder, _converter.GetLogTemplate()))
-            {
-                OpenFile(path);
-            }
+            OpenFile(_logPath);
             Cursor.Current = Cursors.Default;
         }
 
@@ -137,11 +139,7 @@ namespace Rigsarkiv.AthenaForm
         private void reportButton_Click(object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
-            var path = string.Format("{0}\\{1}_report.html", _destPath, _destFolder);
-            if (_converter.Flush(path, _destFolder))
-            {
-                OpenFile(path);
-            }
+            OpenFile(_reportPath);
             Cursor.Current = Cursors.Default;
         }
 

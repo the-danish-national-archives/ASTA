@@ -58,7 +58,7 @@ function (n) {
             errors: 0,
             tableErrors: 0,
             tableRows: 0,
-            tableWarnings: 0,
+            tableWarnings: {},
             totalErrors: 0,
             appliedRegExp: -1,
             separator: ';',
@@ -132,7 +132,14 @@ function (n) {
 
         //Handle warn logging
         var LogWarn = function(postfixId) {
+<<<<<<< HEAD
             if(settings.tableWarnings < warningMax) {
+=======
+            if(!settings.tableWarnings.hasOwnProperty(postfixId)) {
+                settings.tableWarnings[postfixId] = 0;
+            }
+            if(settings.tableWarnings[postfixId] < warningMax) {
+>>>>>>> d97f10d6fe5767cd72ad9bcee834ad778446182f
                 var id = "{0}{1}".format(settings.outputPrefix,postfixId);
                 var text = null;
                 if (arguments.length > 1) {                
@@ -145,7 +152,7 @@ function (n) {
                 }
                 settings.logCallback().warn(settings.logType,GetFolderName(),text);
             }                
-            settings.tableWarnings += 1;
+            settings.tableWarnings[postfixId] += 1;
             return true;
         }
         
@@ -639,7 +646,11 @@ function (n) {
                 settings.rowIndex = 0;
                 settings.data = [];
                 settings.tableErrors = 0;
+<<<<<<< HEAD
                 settings.tableWarnings = 0; 
+=======
+                settings.tableWarnings = {}; 
+>>>>>>> d97f10d6fe5767cd72ad9bcee834ad778446182f
                 settings.errorStop = false;
                 console.logInfo(`validate: ${dataFilePath}`,"Rigsarkiv.Nemesis.Data.ProcessDataSet");
                 settings.tableRows = 0;                

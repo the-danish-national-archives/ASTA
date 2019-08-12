@@ -305,22 +305,25 @@ namespace Rigsarkiv.Athena
             columnNode.Element(_tableIndexXNS + "type").Value = column.Type;
 
             var foreignKeyNode = tableNode.Element(_tableIndexXNS + "foreignKeys").Elements().Where(e => e.Element(_tableIndexXNS + "reference").Element(_tableIndexXNS + "column").Value == column.Name).FirstOrDefault();
-            var codeListTableName = foreignKeyNode.Element(_tableIndexXNS + "referencedTable").Value;
-            var codeListNode = tableNode.Parent.Elements().Where(e => e.Element(_tableIndexXNS + "name").Value == codeListTableName).FirstOrDefault();
-            columnNode = codeListNode.Element(_tableIndexXNS + "columns").Elements().Where(e => e.Element(_tableIndexXNS + "columnID").Value == C1).FirstOrDefault();
-            columnNode.Element(_tableIndexXNS + "type").Value = column.Type;
-            _report.Tables.ForEach(table => {
-                if (table.CodeList != null)
-                {
-                    var refTable = table.CodeList.Where(subTable => subTable.Name == codeListTableName).FirstOrDefault();
-                    if (refTable != null)
+            if(foreignKeyNode != null)
+            {
+                var codeListTableName = foreignKeyNode.Element(_tableIndexXNS + "referencedTable").Value;
+                var codeListNode = tableNode.Parent.Elements().Where(e => e.Element(_tableIndexXNS + "name").Value == codeListTableName).FirstOrDefault();
+                columnNode = codeListNode.Element(_tableIndexXNS + "columns").Elements().Where(e => e.Element(_tableIndexXNS + "columnID").Value == C1).FirstOrDefault();
+                columnNode.Element(_tableIndexXNS + "type").Value = column.Type;
+                _report.Tables.ForEach(table => {
+                    if (table.CodeList != null)
                     {
-                        refTable.Columns[0].TypeOriginal = refTable.Columns[0].Type;
-                        refTable.Columns[0].Type = column.Type;
-                        refTable.Columns[0].Modified = true;
+                        var refTable = table.CodeList.Where(subTable => subTable.Name == codeListTableName).FirstOrDefault();
+                        if (refTable != null)
+                        {
+                            refTable.Columns[0].TypeOriginal = refTable.Columns[0].Type;
+                            refTable.Columns[0].Type = column.Type;
+                            refTable.Columns[0].Modified = true;
+                        }
                     }
-                }
-            });
+                });
+            }
 
             researchIndexNode.Element(_tableIndexXNS + "specialNumeric").Value = true.ToString().ToLower();
             if (addMissing) { AddMissingColumnNode(value, researchIndexNode, column.Id); }          
@@ -570,7 +573,7 @@ namespace Rigsarkiv.Athena
             decimal result = -1;
             var newValue = value.Replace(",", ".");
             isDifferent = value != newValue;
-            hasError = !decimal.TryParse(newValue, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out result);
+            hasError = !decimal.TryParse(newValue, NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out result);
             NumberFormatInfo nfi = new NumberFormatInfo();
             nfi.NumberDecimalSeparator = ".";
             if(!hasError)
