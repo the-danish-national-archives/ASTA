@@ -642,11 +642,7 @@ function (n) {
                 settings.rowIndex = 0;
                 settings.data = [];
                 settings.tableErrors = 0;
-<<<<<<< HEAD
-                settings.tableWarnings = 0; 
-=======
                 settings.tableWarnings = {}; 
->>>>>>> d97f10d6fe5767cd72ad9bcee834ad778446182f
                 settings.errorStop = false;
                 console.logInfo(`validate: ${dataFilePath}`,"Rigsarkiv.Nemesis.Data.ProcessDataSet");
                 settings.tableRows = 0;                
