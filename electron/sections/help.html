@@ -3,207 +3,29 @@
         <header class="section-header">
             <div class="section-wrapper">
                 <div class="header">
-                    <h1 class="title">Vejledning</h1>
+                    <h1 class="title">Hjælp</h1>
                     <h1 class="title right">ASTA</h1>
                 </div>
                 <section>
                     <!--<hr class="button-divider">-->
                     <div class="formularContainer">
-                        <h2 class="boldfaced">Quick-guide til produktion og test af en afleveringspakke</h2>
-                        <table>
-                            <tr>
-                                <td class="bottomBorderTd">
-                                    <div class="tdContent">
-                                        <div class="tdLeftContent">
-                                                <h4>Sådan kvalitetssikrer du statistikfilen før du laver udtræk</h4>
-                                                    <span> Funktionen "Skab afleveringspakke" i ASTA udtrækker blot de data- og metadata der
-                                                            findes i statistikfilen.
-                                                            </br>Det er derfor vigtigt at du sikrer dig, at kvaliteten af data- og
-                                                            metadata i statistikfilen lever op til arkivets krav, før du laver
-                                                            udtræk med ASTA.
-                                                            </br>
-                                                            </br>Krav til data- og metadatakvalitet er listet herunder. Du kan også
-                                                            finde quickguiden her: <a id="hybris-help-link1"
-                                                                href="#Quickguide.pdf">Quickguide.pdf</a>:
-                                                        <ul>
-                                                            <li>Tegnsættet for statistikfilerne skal være indkodet som UTF-8. Se vejledning om UTF-8.</li>
-                                                            <li>Der må ikke være linjeskift i indhold i variable.</li>
-                                                            <li>Variabelnavne [Variable name] skal være angivet for alle variable.</li>
-                                                            <li>Variabelnavne skal være unikke inden for statistikfilen.</li>
-                                                            <li>Variabelnavne må aldrig begynde med et tal, men må godt være en blanding
-                                                                af bogstaver og tal.</li>
-                                                            <li>Variabelnavne må max være 128 tegn lange.</li>
-                                                            <li>Variabelbeskrivelser [Variable labels] skal være angivet for alle
-                                                                variable.</li>
-                                                            <li>Datatyper for variable i statistikfilen skal overholde de tilladte
-                                                                datatyper i en afleveringspakke. Hvis dette ikke er tilfældet, skal du
-                                                                selv konvertere datatyperne til tilladte formater før udtræk laves med
-                                                                ASTA</li>
-                                                            <li>Hvis der kun er angivet kodeforklaringer [value labels] for nogle af
-                                                                koderne [values] der fremgår af en skala, skal dette beskrives i
-                                                                variabelbeskrivelsen for variablen.</li>
-                                                            <li>Specialkoder for manglende værdier må kun antage værdier A-Z eller .a-.z.</li>
-                                                            <li>Der må konsekvent kun anvendes enten specialkoder (.a-.z eller A-Z)
-                                                                eller brugerdefinerede koder for manglende værdier.</li>
-                                                            <li>Specialkoder og brugerdefinerede koder for manglende værdier må kun
-                                                                anvendes for numeriske og kategoriske variable med datatyperne numerisk
-                                                                heltal og decimal.</li>
-                                                            <li>Hvis brugerdefinerede koder for manglende værdier er anvendt for
-                                                                variable med datatypen dato eller tidstempel skal dette beskrives i et
-                                                                kontekstdokument i afleveringspakken.</li>
-                                                            <li>Brugerdefinerede koder for manglende værdier i en variabel skal altid fremgå af
-                                                                kodelisten [Value labels] for denne variabel</li>
-                                                            <li>Der skal være fuld overensstemmelse mellem datatype og længde for de
-                                                                variable, der indgår i en reference mellem flere statistikfiler i
-                                                                afleveringspakken.</li>
-                                                            <li>Alle koderværdier i data [Value] skal være beskrevet med en
-                                                                kodeforklaring [Value labels]</li>
-                                                            <li>Kodelister [Value labels] må kun være tilknyttet numeriske og
-                                                                kategoriske variable med datatyperne numerisk heltal, decimal og tekst.</li>
-                                                            <li>Koder [Values] skal være unikke inden for samme kodeliste [Value labels
-                                                                knyttet til en variabel]</li>
-                                                        </ul>
-                                                        </br>Læs <a id="hybris-help-link2"
-                                                                href="#Bilag9Kravtilafleveringspakke.pdf">Bilag 9_Krav til
-                                                                afleveringspakke.pdf</a> igennem, for en mere detaljeret beskrivelse af hvad en 
-                                                                afleveringspakke er og hvilke krav der stilles til data- og
-                                                            metadatafilen.
-                                                        </br>Her findes hele <a id="hybris-help-link3"
-                                                            href="#Bekendtgoerelse1007plusinklbilag9.pdf">Bekendtgørelse 1007+ inkl
-                                                            bilag 9.pdf</a>.
-                                                        <br/>
-                                                        <br/>
-                                                    </span>
-                                        </div>
-                                        <div class="tdRightContent">
-                                            <ul>
-                                                <li><a id="hybris-help-link6" href="#Quickguide.pdf">Quickguide.pdf</a></li>
-                                                <li><a id="hybris-help-link7"
-                                                    href="#Bilag9Kravtilafleveringspakke.pdf">Bilag 9_Krav til
-                                                    afleveringspakke.pdf</a></li>
-                                                <li><a id="hybris-help-link8"
-                                                    href="#Bekendtgoerelse1007plusinklbilag9.pdf">Bekendtgørelse 1007+ inkl
-                                                    bilag 9.pdf</a></li>
-                                                <li><a id="hybris-help-link4" href="#SkabarchiveIndexvejledning.pdf">Skab archiveIndex vejledning.pdf</a></li>
-                                                <li><a id="hybris-help-link5" href="#SkabcontextDocumentationIndexvejledning.pdf">Skab contextDocumentationIndex vejledning.pdf</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="bottomBorderTd">
-                                    <div class="tdContent">
-                                        <div class="tdLeftContent">
-                                            <h4>Dette skal du have klar før du skaber en afleveringspakke med ASTA</h4>
-                                            <span>
-                                                Du bør have nedenstående filer og informationer klar, før du skaber en afleveringspakke med ASTA:
-                                                <ul>
-                                                    <li>Fremfind de statistikfiler der skal afleveres til arkivet. OBS: Hvis personfølsomme oplysninger er adskilt fra statistikfilen i en nøglefil, skal både statistikfilen og nøglefilen indgå i afleveringspakken.</li>
-                                                    <li>Fremfind løbenummer for afleveringspakken. Løbenummere er udleveret af arkivet og fremgår af afleveringsbestemmelsen.</li>
-                                                    <li>Udfyld indexfilerne archiveIndex.xml og contextDocumentationIndex.xml. Arkivet har udviklet indtastningsværktøjer til udfyldning af indexfilerne. Se vejledningerne <a id="hybris-help-link10" href="#SkabarchiveIndexvejledning.pdf">Skab archiveIndex vejledning.pdf</a> og <a id="hybris-help-link11" href="#SkabcontextDocumentationIndexvejledning.pdf">Skab contextDocumentationIndex vejledning.pdf</a>. Arkivet skal godkende de udfyldte indexfiler, før du placerer dem i afleveringspakken.</li>
-                                                    <li>Fremfinde de kontekstdokumenter, der skal indgå i afleveringspakken. Disse fremgår af afleveringsbestemmelsen.</li>
-                                                    <li>Konverter kontekstdokumenterne til bevaringsformat, fx .tif (dokumenter og billeder), .mp3 (lydfiler) og .mpg (video). Se vejledning om "TIFF-konvertering".</li>
-                                                    <li>Afklar om der findes unikke variable i statistikfilene som skal angives som nøglevariable under udtræk med ASTA.</li>
-                                                    <li>Afklar om der skal dannes referencer mellem flere statistikfiler i afleveringspakken samt over hvilke variable disse referencer skal dannes.</li>
-                                                </ul>
-                                            </span>
-                                        </div>
-                                        <div class="tdRightContent">
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="bottomBorderTd">
-                                    <div class="tdContent">
-                                        <div class="tdLeftContent">
-                                            <h4>Disse dele af afleveringspakken kan du skabe med ASTA</h4>
-                                            <span>
-                                                Anvend funktionen "Skab afleveringspakke" til at gøre følgende:<ul>
-                                                    <li>Navngive afleveringspakken med korrekt løbenummer.</li>
-                                                    <li>Danne en tom mappestruktur til afleveringspakken med struktur og navngivning af mapper, der overholder krav i bilag 9.</li>
-                                                    <li>Lave udtræk af data og metadata fra dine originale statistikfiler til data- og metadatafiler, der overholder de strukturelle krav til disse filer i  bilag 9.</li>
-                                                    <li>Uploade archiveIndex.xml og contextDocumentationIndex.xml til afleveringspakken. Læs <a id="hybris-help-link9" href="#SkabarchiveIndexvejledning.pdf">Skab archiveIndex_vejledning.pdf</a> og <a id="hybris-help-link12" href="#SkabcontextDocumentationIndexvejledning.pdf"> Skab contextDocumentationIndex_vejledning.pdf</a> for vejledning i udfyldning af disse indexfiler.</li>
-                                                    <li>Uploade kontekstdokumenter til afleveringspakken.</li>
-                                                </ul>
-                                            </span>
-                                        </div>
-                                        <div class="tdRightContent">
-                                            <ul>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="bottomBorderTd">
-                                    <div class="tdContent">
-                                        <div class="tdLeftContent">
-                                            <h4>Disse dele af afleveringspakken skal du selv lave</h4>
-                                            <span>
-                                                I ASTA kan du ikke følgende:
-                                                <ul>
-                                                    <li>Udfylde indexfilerne</li>
-                                                    <li>Konvertere kontekstdokumenterne til bevaringsformat, fx .tif eller .mp3</li>
-                                                </ul>
-                                            </span>
-                                        </div>
-                                        <div class="tdRightContent">
-
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="bottomBorderTd">
-                                    <div class="tdContent">
-                                        <div class="tdRightContent">
-                                            <h4>Sådan tester du en afleveringspakke</h4>
-                                            <span>
-                                                Anvend funktionen "Test afleveringspakke":<ul>
-                                                    <li>Vælg den afleveringspakke, du vil teste. Klik på knappen <i>Start test.</i></li>
-                                                    <li>Læs fejlbeskeder fra testen i fejlloggen</li>
-                                                    <li>Nærstuder de krav i bilag 9 som fejlene omhandler, for at forstå hvordan fejlene rettes.</li>
-                                                    <li>Ret fejlene og test afleveringspakken påny</li>
-                                                </ul>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="bottomBorderTd">
-                                    <div class="tdContent">
-                                        <div class="tdLeftContent">
-                                            <h4>Sådan retter du fejl i en eksisterende afleveringspakke</h4>
-                                            <span>
-                                                <ul>
-                                                    <li>Små fejl i metadatafilen kan rettes manuelt i en teksteditor.</li>
-                                                    <li>Komplekse eller mange repeterende fejl i metadatafilen bør rettes direkte i statistikfilen, hvorefter der laves et nyt udtræk med ASTA.</li>
-                                                    <li>Fejl i datafilen rettes direkte i statistikfilen, hvorefter der laves et nyt udtræk med ASTA.</li>
-                                                    <li>Fejl i indexfilerne kan rettes i sarkivets indtastningsværktøjer til disse. Værktøjerne validerer om filerne overholder krav til indexfiler. Ændringer i indexfilerne skal godkendes af arkivet.</li>
-                                                    <li>Fejl i kontekstdokumenter rettes ved at erstatte det eksisterende kontekstdokument med et tilrettet. Tilføjes nye kontekstdokumenter til afleveringspakken som ikke fremgår af afleveringsbestemmelsen, skal afleveringsbestemmelsen opdateres med disse dokumenter og godkendes af arkivet.</li>
-                                                </ul>  
-                                            </span>
-                                        </div>
-                                        <div class="tdRightContent">
-
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        </table>
-                        <span id="hybris-output-help-Error" hidden="true"><br />Error: {0}</span>
+                        <h2 class="boldfaced">System log filer </h2>
+                        <span> Log fil [asta.log] er placeret i mappen [</span>
+                        <a id="help-log-select-logFolder"></a>
+                        <span>]</span>
+                        <br/>                   
+                        <span id="help-output-Error" hidden="true"><br />Error: {0}</span>
                     </div>
                 </section>
             </div>
         </header>
         <script type="text/javascript">
             require('./assets/js/utilities');
-            require('./assets/js/links');
+            require('./assets/js/rights');
+            require('./assets/js/help');
 
-            Rigsarkiv.Links.initialize("hybris-output-help-Error", ["hybris-help-link1","hybris-help-link2","hybris-help-link3","hybris-help-link4","hybris-help-link5","hybris-help-link6","hybris-help-link7","hybris-help-link8","hybris-help-link9","hybris-help-link10","hybris-help-link11","hybris-help-link12"]);
+            Rigsarkiv.Rights.initialize("help-output-Error");
+            Rigsarkiv.Help.initialize(Rigsarkiv.Rights.callback,"help-output-Error","help-log-select-logFolder");
         </script>
     </section>
 </template>
