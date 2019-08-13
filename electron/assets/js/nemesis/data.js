@@ -754,9 +754,9 @@ function (n) {
                     }
                 }   
                 var converter = spawn(converterFilePath, [settings.metadataFilePostfix.format(settings.deliveryPackagePath) ]);
-                converter.stdout.on('data', (data) => console.log(`stdout: ${data}`));                  
+                converter.stdout.on('data', (data) => console.logInfo(`stdout: ${data}`,"Rigsarkiv.Nemesis.Data.AddEvents"));                  
                 converter.stderr.on('data', (data) => (new Error(data).Handle(settings.outputErrorSpn,settings.outputErrorText,"Rigsarkiv.Nemesis.Data.AddEvents")));
-                converter.on('close', (code) => console.log(`converter process exited with code ${code}`));
+                converter.on('close', (code) => console.logInfo(`converter process exited with code ${code}`,"Rigsarkiv.Nemesis.Data.AddEvents"));
             });
         }
 

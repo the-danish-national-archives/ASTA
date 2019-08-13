@@ -73,7 +73,7 @@ namespace Rigsarkiv.Athena
                         _report.Tables.ForEach(mainTable =>
                         {
                             if (mainTable.Folder == fileName) { _report.TablesCounter++; }
-                            if (mainTable.CodeList.Any(t => t.Folder == fileName)) { _report.CodeListsCounter++; }
+                            if (mainTable.CodeList != null && mainTable.CodeList.Any(t => t.Folder == fileName)) { _report.CodeListsCounter++; }
                         });
                     });
                 }
@@ -94,10 +94,12 @@ namespace Rigsarkiv.Athena
             {
                 _report.Tables.ForEach(t => {
                     if (!AddFile(t)) { result = false; }
-                    t.CodeList.ForEach(cl =>
-                    {
-                        if (!AddCodes(cl)) { result = false; }
-                    });
+                    if(t.CodeList != null) {
+                        t.CodeList.ForEach(cl =>
+                        {
+                            if (!AddCodes(cl)) { result = false; }
+                        });
+                    }                   
                 });
                 if (result && _updateDocuments)
                 {

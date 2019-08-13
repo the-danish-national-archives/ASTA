@@ -61,14 +61,17 @@
             // 
             // sipTextBox
             // 
+            this.sipTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.sipTextBox.Location = new System.Drawing.Point(39, 78);
             this.sipTextBox.Name = "sipTextBox";
-            this.sipTextBox.Size = new System.Drawing.Size(831, 26);
+            this.sipTextBox.Size = new System.Drawing.Size(895, 26);
             this.sipTextBox.TabIndex = 1;
             // 
             // sipButton
             // 
-            this.sipButton.Location = new System.Drawing.Point(932, 72);
+            this.sipButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.sipButton.Location = new System.Drawing.Point(948, 75);
             this.sipButton.Name = "sipButton";
             this.sipButton.Size = new System.Drawing.Size(96, 32);
             this.sipButton.TabIndex = 2;
@@ -87,9 +90,11 @@
             // 
             // aipNameTextBox
             // 
+            this.aipNameTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.aipNameTextBox.Location = new System.Drawing.Point(39, 148);
             this.aipNameTextBox.Name = "aipNameTextBox";
-            this.aipNameTextBox.Size = new System.Drawing.Size(831, 26);
+            this.aipNameTextBox.Size = new System.Drawing.Size(895, 26);
             this.aipNameTextBox.TabIndex = 4;
             // 
             // label3
@@ -103,14 +108,17 @@
             // 
             // aipTextBox
             // 
+            this.aipTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.aipTextBox.Location = new System.Drawing.Point(39, 221);
             this.aipTextBox.Name = "aipTextBox";
-            this.aipTextBox.Size = new System.Drawing.Size(831, 26);
+            this.aipTextBox.Size = new System.Drawing.Size(895, 26);
             this.aipTextBox.TabIndex = 6;
             // 
             // aipButton
             // 
-            this.aipButton.Location = new System.Drawing.Point(935, 215);
+            this.aipButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.aipButton.Location = new System.Drawing.Point(951, 218);
             this.aipButton.Name = "aipButton";
             this.aipButton.Size = new System.Drawing.Size(93, 32);
             this.aipButton.TabIndex = 7;
@@ -120,7 +128,8 @@
             // 
             // convertButton
             // 
-            this.convertButton.Location = new System.Drawing.Point(782, 272);
+            this.convertButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.convertButton.Location = new System.Drawing.Point(798, 284);
             this.convertButton.Name = "convertButton";
             this.convertButton.Size = new System.Drawing.Size(136, 32);
             this.convertButton.TabIndex = 8;
@@ -130,9 +139,12 @@
             // 
             // outputRichTextBox
             // 
+            this.outputRichTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.outputRichTextBox.Location = new System.Drawing.Point(39, 328);
             this.outputRichTextBox.Name = "outputRichTextBox";
-            this.outputRichTextBox.Size = new System.Drawing.Size(995, 269);
+            this.outputRichTextBox.Size = new System.Drawing.Size(1011, 269);
             this.outputRichTextBox.TabIndex = 9;
             this.outputRichTextBox.Text = "";
             // 
@@ -150,8 +162,9 @@
             // 
             // nextForm
             // 
+            this.nextForm.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.nextForm.Enabled = false;
-            this.nextForm.Location = new System.Drawing.Point(935, 272);
+            this.nextForm.Location = new System.Drawing.Point(951, 284);
             this.nextForm.Name = "nextForm";
             this.nextForm.Size = new System.Drawing.Size(93, 32);
             this.nextForm.TabIndex = 10;
@@ -162,11 +175,11 @@
             // logButton
             // 
             this.logButton.Enabled = false;
-            this.logButton.Location = new System.Drawing.Point(39, 272);
+            this.logButton.Location = new System.Drawing.Point(39, 284);
             this.logButton.Name = "logButton";
             this.logButton.Size = new System.Drawing.Size(75, 32);
             this.logButton.TabIndex = 11;
-            this.logButton.Text = "Log";
+            this.logButton.Text = "Vis Log";
             this.logButton.UseVisualStyleBackColor = true;
             this.logButton.Click += new System.EventHandler(this.logButton_Click);
             // 
@@ -184,7 +197,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1040, 626);
+            this.ClientSize = new System.Drawing.Size(1080, 628);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.logButton);
             this.Controls.Add(this.nextForm);
@@ -198,6 +211,7 @@
             this.Controls.Add(this.sipButton);
             this.Controls.Add(this.sipTextBox);
             this.Controls.Add(this.label1);
+            this.MinimumSize = new System.Drawing.Size(1000, 600);
             this.Name = "Form1";
             this.Text = "ASTA";
             this.Shown += new System.EventHandler(this.Form1_Shown);

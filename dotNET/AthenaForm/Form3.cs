@@ -45,7 +45,9 @@ namespace Rigsarkiv.AthenaForm
             _logPath = string.Format("{0}\\{1}_log.html", _destPath, _destFolder);
             _reportPath = string.Format("{0}\\{1}_report.html", _destPath, _destFolder);
             _outputRichTextBox = outputRichTextBox;
-            _outputRichTextBox.Location = new Point(2, 380);
+            _outputRichTextBox.Location = new Point(8, 435);
+            _outputRichTextBox.Size = new Size(510,169);
+            _outputRichTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Bottom;
             this.Controls.Add(_outputRichTextBox);
             var result = Convert();
             titlelabel.Text = string.Format(titlelabel.Text, destFolder);
@@ -69,7 +71,12 @@ namespace Rigsarkiv.AthenaForm
         {
             tablesDataGridView.ClearSelection();
             AddRow(tablesDataGridView, 0, TablesCounter, _report.Tables.Count, _report.TablesCounter);
-            AddRow(tablesDataGridView, 1, codeListsCounter, _report.Tables.Select(t => t.CodeList.Count).Sum(), _report.CodeListsCounter);
+            var counter = 0;
+            _report.Tables.ForEach(t =>
+            {
+                if(t.CodeList != null) { counter += t.CodeList.Count; }
+            });
+            AddRow(tablesDataGridView, 1, codeListsCounter, counter, _report.CodeListsCounter);
             
             var rowIndex = 0;
             var columnIndex = 0;
@@ -84,18 +91,21 @@ namespace Rigsarkiv.AthenaForm
                         }
                     });
                 }
-                mainTable.CodeList.ForEach(table => {
-                    AddRow(rowsDataGridView, rowIndex++, string.Format("{0} ({1})", table.Folder, table.Name), table.Rows, table.RowsCounter);
-                    if (table.Errors > 0)
-                    {
-                        table.Columns.ForEach(c => {
-                            if (c.Errors > 0)
-                            {
-                                AddColumn(columnsDataGridView, columnIndex++, string.Format("{0} ({1})", mainTable.Folder, mainTable.Name), c.Name, c.Type, c.Errors);
-                            }
-                        });
-                    }
-                });
+                if(mainTable.CodeList != null)
+                {
+                    mainTable.CodeList.ForEach(table => {
+                        AddRow(rowsDataGridView, rowIndex++, string.Format("{0} ({1})", table.Folder, table.Name), table.Rows, table.RowsCounter);
+                        if (table.Errors > 0)
+                        {
+                            table.Columns.ForEach(c => {
+                                if (c.Errors > 0)
+                                {
+                                    AddColumn(columnsDataGridView, columnIndex++, string.Format("{0} ({1})", mainTable.Folder, mainTable.Name), c.Name, c.Type, c.Errors);
+                                }
+                            });
+                        }
+                    });
+                }                
             });
         }
 
@@ -156,6 +166,16 @@ namespace Rigsarkiv.AthenaForm
                 _log.Error(string.Format("Start Process {0} Failed", path), ex);
             }
             return result;
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void rowsDataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }
