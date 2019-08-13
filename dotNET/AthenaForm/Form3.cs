@@ -69,7 +69,12 @@ namespace Rigsarkiv.AthenaForm
         {
             tablesDataGridView.ClearSelection();
             AddRow(tablesDataGridView, 0, TablesCounter, _report.Tables.Count, _report.TablesCounter);
-            AddRow(tablesDataGridView, 1, codeListsCounter, _report.Tables.Select(t => t.CodeList.Count).Sum(), _report.CodeListsCounter);
+            var counter = 0;
+            _report.Tables.ForEach(t =>
+            {
+                if(t.CodeList != null) { counter += t.CodeList.Count; }
+            });
+            AddRow(tablesDataGridView, 1, codeListsCounter, counter, _report.CodeListsCounter);
             
             var rowIndex = 0;
             var columnIndex = 0;
@@ -84,18 +89,21 @@ namespace Rigsarkiv.AthenaForm
                         }
                     });
                 }
-                mainTable.CodeList.ForEach(table => {
-                    AddRow(rowsDataGridView, rowIndex++, string.Format("{0} ({1})", table.Folder, table.Name), table.Rows, table.RowsCounter);
-                    if (table.Errors > 0)
-                    {
-                        table.Columns.ForEach(c => {
-                            if (c.Errors > 0)
-                            {
-                                AddColumn(columnsDataGridView, columnIndex++, string.Format("{0} ({1})", mainTable.Folder, mainTable.Name), c.Name, c.Type, c.Errors);
-                            }
-                        });
-                    }
-                });
+                if(mainTable.CodeList != null)
+                {
+                    mainTable.CodeList.ForEach(table => {
+                        AddRow(rowsDataGridView, rowIndex++, string.Format("{0} ({1})", table.Folder, table.Name), table.Rows, table.RowsCounter);
+                        if (table.Errors > 0)
+                        {
+                            table.Columns.ForEach(c => {
+                                if (c.Errors > 0)
+                                {
+                                    AddColumn(columnsDataGridView, columnIndex++, string.Format("{0} ({1})", mainTable.Folder, mainTable.Name), c.Name, c.Type, c.Errors);
+                                }
+                            });
+                        }
+                    });
+                }                
             });
         }
 

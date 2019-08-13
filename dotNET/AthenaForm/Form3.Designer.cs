@@ -54,6 +54,7 @@
             // 
             // logButton
             // 
+            this.logButton.Enabled = false;
             this.logButton.Location = new System.Drawing.Point(33, 548);
             this.logButton.Name = "logButton";
             this.logButton.Size = new System.Drawing.Size(75, 32);

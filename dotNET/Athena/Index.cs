@@ -84,9 +84,12 @@ namespace Rigsarkiv.Athena
             {
                 _report.Tables.ForEach(mainTable => {
                     UpdateReport(mainTable);
-                    mainTable.CodeList.ForEach(table => {
-                        UpdateReport(table);
-                    });
+                    if(mainTable.CodeList != null)
+                    {
+                        mainTable.CodeList.ForEach(table => {
+                            UpdateReport(table);
+                        });
+                    }                    
                  });
             }
             else
