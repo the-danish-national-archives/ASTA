@@ -90,9 +90,9 @@ window.navigation = window.navigation || {},
                     }
                 }   
                 var converter = spawn(converterFilePath);
-                converter.stdout.on('data', (data) => console.log(`stdout: ${data}`));                  
-                converter.stderr.on('data', (data) => (new Error(data).Handle(outputErrorSpn,outputErrorText,"Rigsarkiv.Nemesis.Data.AddEvents")));
-                converter.on('close', (code) => console.log(`converter process exited with code ${code}`));
+                converter.stdout.on('data', (data) => console.logInfo(`stdout: ${data}`,"Rigsarkiv.Menu.AddEvents"));                  
+                converter.stderr.on('data', (data) => (new Error(data).Handle(outputErrorSpn,outputErrorText,"Rigsarkiv.Menu.AddEvents")));
+                converter.on('close', (code) => console.logInfo(`converter process exited with code ${code}`,"Rigsarkiv.Menu.AddEvents"));
             });
             $(styxLink).hide();
             if(Rigsarkiv.Rights.callback().isAdmin) {
