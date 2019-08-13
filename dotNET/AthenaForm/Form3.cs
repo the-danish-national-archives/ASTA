@@ -45,7 +45,9 @@ namespace Rigsarkiv.AthenaForm
             _logPath = string.Format("{0}\\{1}_log.html", _destPath, _destFolder);
             _reportPath = string.Format("{0}\\{1}_report.html", _destPath, _destFolder);
             _outputRichTextBox = outputRichTextBox;
-            _outputRichTextBox.Location = new Point(2, 380);
+            _outputRichTextBox.Location = new Point(13, 435);
+            _outputRichTextBox.Size = new Size(500,169);
+            _outputRichTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Bottom;
             this.Controls.Add(_outputRichTextBox);
             var result = Convert();
             titlelabel.Text = string.Format(titlelabel.Text, destFolder);
@@ -164,6 +166,16 @@ namespace Rigsarkiv.AthenaForm
                 _log.Error(string.Format("Start Process {0} Failed", path), ex);
             }
             return result;
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void rowsDataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }
