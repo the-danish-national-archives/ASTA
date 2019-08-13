@@ -7,18 +7,15 @@
                     <h1 class="title right">ASTA</h1>
                 </div>
                 <section>
-                    <!--<hr class="button-divider">-->
-                    <div class="formularContainer">
+                   <div class="formularContainer">
                         <h2 class="boldfaced">System log filer </h2>
                         <span>Log fil [asta.log] er placeret i mappen [</span>
                         <a id="help-log-select-logFolder"></a>
                         <span>]</span>
                         <br/>                   
                         <div id="help-admin-panel">
-                            <span>Log filer [athena.log] og [styx.log] er placeret i mappen [</span>
-                            <a id="help-athenalog-select-logFolder"></a>
-                            <span>]</span>
-                        </div>
+                            <span>Log filer [athena.log] og [styx.log] er også placeret i mappen overpå</span>
+                         </div>
                         <span id="help-output-Error" hidden="true"><br />Error: {0}</span>
                     </div>
                 </section>
@@ -30,7 +27,7 @@
             require('./assets/js/help');
 
             Rigsarkiv.Rights.initialize("help-output-Error");
-            Rigsarkiv.Help.initialize(Rigsarkiv.Rights.callback,"help-output-Error","help-log-select-logFolder","help-admin-panel","help-athenalog-select-logFolder");
+            Rigsarkiv.Help.initialize(Rigsarkiv.Rights.callback,"help-output-Error","help-log-select-logFolder","help-admin-panel");
         </script>
     </section>
 </template>
