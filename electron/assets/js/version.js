@@ -10,6 +10,8 @@ function (n) {
 
     //private data members
     var settings = {
+        outputErrorSpn: null,
+        outputErrorText: null,
         footerParagraph: null,
         footerText: null,
         versionFileName: "version.json",
