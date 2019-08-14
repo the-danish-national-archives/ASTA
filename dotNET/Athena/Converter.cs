@@ -170,6 +170,15 @@ namespace Rigsarkiv.Athena
             return result;
         }
 
+        protected Regex GetRegex(string pattern)
+        {
+            if (!_regExps.ContainsKey(pattern))
+            {
+                _regExps.Add(pattern, new Regex(pattern, RegexOptions.Compiled | RegexOptions.IgnoreCase));
+            }
+            return _regExps[pattern];
+        }
+
         protected int GetColumnLength(string type,string regExp)
         {
             var result = 0;
@@ -277,11 +286,8 @@ namespace Rigsarkiv.Athena
         /// <returns></returns>
         protected bool HasSpecialNumeric(Column column, string value)
         {
-            if (!_regExps.ContainsKey(SpecialNumericPattern))
-            {
-                _regExps.Add(SpecialNumericPattern, new Regex(SpecialNumericPattern, RegexOptions.Compiled | RegexOptions.IgnoreCase));
-            }
-            if ((column.Type == "INTEGER" || column.Type == "DECIMAL") && _regExps[SpecialNumericPattern].IsMatch(value))
+            var regex = GetRegex(SpecialNumericPattern);            
+            if ((column.Type == "INTEGER" || column.Type == "DECIMAL") && regex.IsMatch(value))
             {
                 return true;
             }
@@ -452,14 +458,11 @@ namespace Rigsarkiv.Athena
             hasError = false;
             isDifferent = false;
             var result = value;
-            if (!_regExps.ContainsKey(column.RegExp))
-            {
-                _regExps.Add(column.RegExp, new Regex(column.RegExp, RegexOptions.Compiled | RegexOptions.IgnoreCase));
-            }
-            hasError = !_regExps[column.RegExp].IsMatch(result);
+            var regex = GetRegex(column.RegExp);            
+            hasError = !regex.IsMatch(result);
             if (!hasError)
             {
-                var groups = _regExps[column.RegExp].Match(result).Groups;
+                var groups = regex.Match(result).Groups;
                 if (column.RegExp == "^([0-9]{2,2})-([a-zA-Z]{3,3})-([0-9]{4,4})\\s([0-9]{2,2}):([0-9]{2,2}):([0-9]{2,2})$")
                 {
                     result = string.Format("{0}-{1}-{2}T{3}:{4}:{5}", groups[3].Value, GetMonth(groups[2].Value), groups[1].Value, groups[4].Value, groups[5].Value, groups[6].Value);
@@ -499,14 +502,11 @@ namespace Rigsarkiv.Athena
             hasError = false;
             isDifferent = false;
             var result = value;
-            if (!_regExps.ContainsKey(column.RegExp))
-            {
-                _regExps.Add(column.RegExp, new Regex(column.RegExp, RegexOptions.Compiled | RegexOptions.IgnoreCase));
-            }
-            hasError = !_regExps[column.RegExp].IsMatch(result);
+            var regex = GetRegex(column.RegExp);
+            hasError = !regex.IsMatch(result);
             if (!hasError)
             {
-                var groups = _regExps[column.RegExp].Match(result).Groups;
+                var groups = regex.Match(result).Groups;
                 result = string.Format("{0}:{1}:{2}", groups[1].Value.Length == 1 ? string.Format("0{0}", groups[1].Value) : groups[1].Value, groups[2].Value, groups[3].Value);
                 isDifferent = result != value;
             }
@@ -518,14 +518,11 @@ namespace Rigsarkiv.Athena
             hasError = false;
             isDifferent = false;
             var result = value;
-            if (!_regExps.ContainsKey(column.RegExp))
-            {
-                _regExps.Add(column.RegExp, new Regex(column.RegExp, RegexOptions.Compiled | RegexOptions.IgnoreCase));
-            }
-            hasError = !_regExps[column.RegExp].IsMatch(result);
+            var regex = GetRegex(column.RegExp);
+            hasError = !regex.IsMatch(result);
             if (!hasError)
             {
-                var groups = _regExps[column.RegExp].Match(result).Groups;
+                var groups = regex.Match(result).Groups;
                 result = string.Format("{0}-{1}-{2}", groups[1].Value, groups[2].Value, groups[3].Value);
                 isDifferent = result != value;
             }
@@ -539,14 +536,11 @@ namespace Rigsarkiv.Athena
             var result = value;
             if (result.IndexOf("\"") > -1)
             {
-                if (!_regExps.ContainsKey(DoubleApostrophePattern))
-                {
-                    _regExps.Add(DoubleApostrophePattern, new Regex(DoubleApostrophePattern, RegexOptions.Compiled | RegexOptions.IgnoreCase));
-                }
-                hasError = !_regExps[DoubleApostrophePattern].IsMatch(result);
+                var regex = GetRegex(DoubleApostrophePattern);                
+                hasError = !regex.IsMatch(result);
                 if (!hasError)
                 {
-                    result = _regExps[DoubleApostrophePattern].Match(result).Groups[1].Value;
+                    result = regex.Match(result).Groups[1].Value;
                     result = result.Replace("\"\"", "\"");
                     isDifferent = true;
                 }
