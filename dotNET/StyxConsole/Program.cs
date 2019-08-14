@@ -24,8 +24,9 @@ namespace Rigsarkiv.StyxConsole
                 _converter = new Structure(_logManager, srcPath, destPath, destFolder, ScriptType.SPSS);
                 if (_converter.Run())
                 {
+                    var tableIndexXDocument = _converter.TableIndexXDocument;
                     var researchIndexXDocument = _converter.ResearchIndexXDocument;
-                    _converter = new MetaData(_logManager, srcPath, destPath, destFolder, _converter.Report) { ResearchIndexXDocument = researchIndexXDocument };
+                    _converter = new MetaData(_logManager, srcPath, destPath, destFolder, _converter.Report) { TableIndexXDocument = tableIndexXDocument, ResearchIndexXDocument = researchIndexXDocument };
                     if (_converter.Run())
                     {
                         _converter = new Data(_logManager, srcPath, destPath, destFolder, _converter.Report);

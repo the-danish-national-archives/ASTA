@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xml.Linq;
 using Rigsarkiv.Asta.Logging;
 using Rigsarkiv.Styx.Entities;
@@ -11,8 +12,9 @@ namespace Rigsarkiv.Styx
     /// </summary>
     public class Structure : Converter
     {
+        const string TableIndexPath = "{0}\\Indices\\tableIndex.xml";        
         const string ResearchIndexPath = "{0}\\Indices\\researchIndex.xml";
-        const string TableFolderPrefix = "table{0}";        
+        const string TableFolderPrefix = "{0}_{1}";        
         private int _tablesCounter = 0;
 
         /// <summary>
@@ -78,15 +80,19 @@ namespace Rigsarkiv.Styx
                 _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Ensure Tables: {0}", path) });
                 Directory.CreateDirectory(path);
                 _researchIndexXDocument = XDocument.Load(string.Format(ResearchIndexPath, _srcPath));
-                foreach(var tableNode in _researchIndexXDocument.Element(_tableIndexXNS + "researchIndex").Element(_tableIndexXNS + "mainTables").Elements())
+                _tableIndexXDocument = XDocument.Load(string.Format(TableIndexPath, _srcPath));
+                foreach (var tableNode in _researchIndexXDocument.Element(_tableIndexXNS + "researchIndex").Element(_tableIndexXNS + "mainTables").Elements())
                 {
                     _tablesCounter++;
-                    var folder = string.Format(TableFolderPrefix, _tablesCounter);
+                    var srcFolder = tableNode.Element(_tableIndexXNS + "tableID").Value;
+                    var tableIndexNode = _tableIndexXDocument.Element(_tableIndexXNS + "siardDiark").Element(_tableIndexXNS + "tables").Elements().Where(e => e.Element(_tableIndexXNS + "folder").Value == srcFolder).FirstOrDefault();
+                    var tableName = tableIndexNode.Element(_tableIndexXNS + "name").Value;
+                    var tableRows = int.Parse(tableIndexNode.Element(_tableIndexXNS + "rows").Value);
+                    var folder = string.Format(TableFolderPrefix, _report.ScriptType.ToString().ToLower(), tableName);
                     var folderPath = string.Format("{0}\\{1}", path,folder);
                     _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Ensure Table: {0}", folderPath) });
-                    Directory.CreateDirectory(folderPath);
-                    var srcFolder = tableNode.Element(_tableIndexXNS + "tableID").Value;                    
-                    _report.Tables.Add(new Entities.Table() { Folder = folder, SrcFolder = srcFolder, Columns = new List<Entities.Column>() });                    
+                    Directory.CreateDirectory(folderPath);                                        
+                    _report.Tables.Add(new Table() { Folder = folder, SrcFolder = srcFolder, Name = tableName, Rows = tableRows, Columns = new List<Column>() });                    
                 }
             }
             catch (IOException ex)

@@ -6,6 +6,7 @@ using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace Rigsarkiv.StyxForm
@@ -13,9 +14,11 @@ namespace Rigsarkiv.StyxForm
     public partial class Form1 : Form
     {
         private static readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(Form1));
-        const string DestFolderName = "FD.{0}";
+        const string DestFolderName = "DIP.{0}";
+        const string SrcFolderNamePattern = "^AVID.SA.([0-9]+).[0-9]$";
         private LogManager _logManager = null;
         private Converter _converter = null;
+        private Regex _srcFolderNameRegex = null;
 
         /// <summary>
         /// Constructors
@@ -25,6 +28,7 @@ namespace Rigsarkiv.StyxForm
         public Form1(string srcPath, string destPath)
         {
             InitializeComponent();
+            _srcFolderNameRegex = new Regex(SrcFolderNamePattern, RegexOptions.Compiled | RegexOptions.IgnoreCase);
             var scripts = Enum.GetValues(typeof(ScriptType)).Cast<ScriptType>();
             scriptTypeComboBox.Items.AddRange(scripts.Select(s => s.ToString()).ToArray());
             scriptTypeComboBox.SelectedIndex = 0;
@@ -35,11 +39,14 @@ namespace Rigsarkiv.StyxForm
 
         private void UpdateFolderName(string srcPath)
         {
-            var index = srcPath.LastIndexOf("\\AVID.SA.");
+            var index = srcPath.LastIndexOf("\\");
             if(index > -1)
             {
-                var folderName = srcPath.Substring(index + 9);
-                sipNameTextBox.Text = string.Format(DestFolderName, folderName);
+                var folderName = srcPath.Substring(index + 1);
+                if(_srcFolderNameRegex.IsMatch(folderName))
+                {
+                    sipNameTextBox.Text = string.Format(DestFolderName, _srcFolderNameRegex.Match(folderName).Groups[1].Value);
+                }                
             }           
         }
 
@@ -152,8 +159,9 @@ namespace Rigsarkiv.StyxForm
             _converter = new Structure(_logManager, srcPath, destPath, destFolder, scriptType);
             if (_converter.Run())
             {
+                var tableIndexXDocument = _converter.TableIndexXDocument;
                 var researchIndexXDocument = _converter.ResearchIndexXDocument;
-                _converter = new MetaData(_logManager, srcPath, destPath, destFolder, _converter.Report) { ResearchIndexXDocument = researchIndexXDocument };
+                _converter = new MetaData(_logManager, srcPath, destPath, destFolder, _converter.Report) { TableIndexXDocument = tableIndexXDocument, ResearchIndexXDocument = researchIndexXDocument };
                 if (_converter.Run())
                 {
                     _converter = new Data(_logManager, srcPath, destPath, destFolder, _converter.Report);

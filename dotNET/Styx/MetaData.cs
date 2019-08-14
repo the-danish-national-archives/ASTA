@@ -14,11 +14,9 @@ namespace Rigsarkiv.Styx
     /// </summary>
     public class MetaData : Converter
     {
-        const string TableIndexPath = "{0}\\Indices\\tableIndex.xml";
-        const string VariablesPath = "{0}\\Data\\{1}\\{2}_VARIABEL.txt";
-        const string UserCodesPath = "{0}\\Data\\{1}\\{2}_BRUGERKODE.txt";
-        const string DescriptionsPath = "{0}\\Data\\{1}\\{2}_VARIABELBESKRIVELSE.txt";        
-        private XDocument _tableIndexXDocument = null;
+        const string VariablesPath = "{0}\\Data\\{1}_{2}\\{1}_{2}_VARIABEL.txt";
+        const string UserCodesPath = "{0}\\Data\\{1}_{2}\\{1}_{2}_BRUGERKODE.txt";
+        const string DescriptionsPath = "{0}\\Data\\{1}_{2}\\{1}_{2}_VARIABELBESKRIVELSE.txt";
         private StringBuilder _variables = null;
         private StringBuilder _descriptions = null;
         private StringBuilder _codeList = null;
@@ -124,7 +122,7 @@ namespace Rigsarkiv.Styx
 
         private void EnsureFile(Table table,string filePath,string content)
         {
-            var path = string.Format(filePath, _destFolderPath, table.Folder, table.Name);
+            var path = string.Format(filePath, _destFolderPath, _report.ScriptType.ToString().ToLower(), table.Name);
             _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add file: {0}", path) });
             using (var sw = new StreamWriter(path, true, Encoding.UTF8))
             {
@@ -137,15 +135,26 @@ namespace Rigsarkiv.Styx
             var result = true;
             try
             {
-                _tableIndexXDocument = XDocument.Load(string.Format(TableIndexPath, _srcPath));
                 var path = string.Format(DataPath, _destFolderPath);
                 _report.Tables.ForEach(table =>
                 {
                     _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Build {0} metadata", table.Folder) });
                     var tableNode = _tableIndexXDocument.Element(_tableIndexXNS + "siardDiark").Element(_tableIndexXNS + "tables").Elements().Where(e => e.Element(_tableIndexXNS + "folder").Value == table.SrcFolder).FirstOrDefault();
-                    table.Name = tableNode.Element(_tableIndexXNS + "name").Value;
-                    table.Rows = int.Parse(tableNode.Element(_tableIndexXNS + "rows").Value);
-                    EnsureTable(tableNode, table);
+                    foreach (var columnNode in tableNode.Element(_tableIndexXNS + "columns").Elements())
+                    {
+                        var column = new Column();
+                        column.Id = columnNode.Element(_tableIndexXNS + "columnID").Value;
+                        column.Name = columnNode.Element(_tableIndexXNS + "name").Value;
+                        column.Description = columnNode.Element(_tableIndexXNS + "description").Value;
+                        column.Type = columnNode.Element(_tableIndexXNS + "typeOriginal").Value;
+                        column.TypeOriginal = columnNode.Element(_tableIndexXNS + "type").Value;
+                        if (tableNode.Element(_tableIndexXNS + "foreignKeys").Elements().Any(e => e.Element(_tableIndexXNS + "reference").Element(_tableIndexXNS + "column").Value == column.Name))
+                        {
+                            var foreignKeyNode = tableNode.Element(_tableIndexXNS + "foreignKeys").Elements().Where(e => e.Element(_tableIndexXNS + "reference").Element(_tableIndexXNS + "column").Value == column.Name).FirstOrDefault();
+                            column.CodeList = GetCodeList(foreignKeyNode, table, column);
+                        }
+                        table.Columns.Add(column);
+                    }
                 });
             }
             catch (Exception ex)
@@ -155,25 +164,6 @@ namespace Rigsarkiv.Styx
                 _logManager.Add(new LogEntity() { Level = LogLevel.Error, Section = _logSection, Message = string.Format("EnsureTables Failed: {0}", ex.Message) });
             }
             return result;
-        }
-
-        private void EnsureTable(XElement tableNode, Table table)
-        {
-            foreach (var columnNode in tableNode.Element(_tableIndexXNS + "columns").Elements())
-            {
-                var column = new Column();
-                column.Id = columnNode.Element(_tableIndexXNS + "columnID").Value;
-                column.Name = columnNode.Element(_tableIndexXNS + "name").Value;
-                column.Description = columnNode.Element(_tableIndexXNS + "description").Value;
-                column.Type = columnNode.Element(_tableIndexXNS + "typeOriginal").Value;
-                column.TypeOriginal = columnNode.Element(_tableIndexXNS + "type").Value;
-                if (tableNode.Element(_tableIndexXNS + "foreignKeys").Elements().Any(e => e.Element(_tableIndexXNS + "reference").Element(_tableIndexXNS + "column").Value == column.Name))
-                {
-                    var foreignKeyNode = tableNode.Element(_tableIndexXNS + "foreignKeys").Elements().Where(e => e.Element(_tableIndexXNS + "reference").Element(_tableIndexXNS + "column").Value == column.Name).FirstOrDefault();
-                    column.CodeList = GetCodeList(foreignKeyNode, table, column);
-                }
-                table.Columns.Add(column);
-            }
         }
 
         private Table GetCodeList(XElement foreignKeyNode, Table table, Column column)

@@ -20,8 +20,8 @@ namespace Rigsarkiv.Styx
         protected const string TableXmlNs = "http://www.sa.dk/xmlns/siard/1.0/schema0/{0}.xsd";
         protected const string TableSchemaLocation = "http://www.sa.dk/xmlns/siard/1.0/schema0/{0}.xsd {0}.xsd";
         protected const string TableXsiNs = "http://www.w3.org/2001/XMLSchema-instance";
-        protected const string CodeListPath = "{0}\\Data\\{1}\\{2}_KODELISTE.txt";
-        protected const string TableDataPath = "{0}\\Data\\{1}\\{2}.csv";
+        protected const string CodeListPath = "{0}\\Data\\{1}_{2}\\{1}_{2}_KODELISTE.txt";
+        protected const string TableDataPath = "{0}\\Data\\{1}_{2}\\{1}_{2}.csv";
         protected const string C1 = "c1";
         protected const string C2 = "c2";
         protected const string VarCharPrefix = "VARCHAR(";
@@ -34,6 +34,7 @@ namespace Rigsarkiv.Styx
         protected XNamespace _tableIndexXNS = TableIndexXmlNs;
         protected Report _report = null;
         protected XDocument _researchIndexXDocument = null;
+        protected XDocument _tableIndexXDocument = null;
         protected string _srcPath = null;
         protected string _destPath = null;
         protected string _destFolder = null;
@@ -80,6 +81,15 @@ namespace Rigsarkiv.Styx
         }
 
         /// <summary>
+        /// Table Index XDocument
+        /// </summary>
+        public XDocument TableIndexXDocument
+        {
+            get { return _tableIndexXDocument; }
+            set { _tableIndexXDocument = value; }
+        }
+
+        /// <summary>
         /// Research Index XDocument
         /// </summary>
         public XDocument ResearchIndexXDocument
@@ -103,6 +113,15 @@ namespace Rigsarkiv.Styx
                 }
             }
             return result;
+        }
+
+        protected Regex GetRegex(string pattern)
+        {
+            if (!_regExps.ContainsKey(pattern))
+            {
+                _regExps.Add(pattern, new Regex(pattern, RegexOptions.Compiled | RegexOptions.IgnoreCase));
+            }
+            return _regExps[pattern];
         }
 
         /// <summary>
@@ -267,13 +286,11 @@ namespace Rigsarkiv.Styx
         private int[] GetDecimalLength(Column column)
         {
             var result = new int[2] { 0, 0 };
-            if (!_regExps.ContainsKey(DataTypeDecimalPattern))
+            var regex = GetRegex(DataTypeDecimalPattern);            
+            if(regex.IsMatch(column.Type))
             {
-                _regExps.Add(DataTypeDecimalPattern, new Regex(DataTypeDecimalPattern, RegexOptions.Compiled | RegexOptions.IgnoreCase));
-            }
-            if(_regExps[DataTypeDecimalPattern].IsMatch(column.Type))
-            {
-               foreach (Group group in _regExps[DataTypeDecimalPattern].Match(column.Type).Groups)
+               var groups = regex.Match(column.Type).Groups;
+               foreach (Group group in groups)
                 {
                     if (result[0] == 0)
                     {
@@ -306,13 +323,11 @@ namespace Rigsarkiv.Styx
         private int GetIntegerLength(Column column)
         {
             var result = 0;
-            if (!_regExps.ContainsKey(DataTypeIntPattern))
+            var regex = GetRegex(DataTypeIntPattern);
+            if(regex.IsMatch(column.Type))
             {
-                _regExps.Add(DataTypeIntPattern, new Regex(DataTypeIntPattern, RegexOptions.Compiled | RegexOptions.IgnoreCase));
-            }
-            if(_regExps[DataTypeIntPattern].IsMatch(column.Type))
-            {
-                foreach (Group group in _regExps[DataTypeIntPattern].Match(column.Type).Groups)
+                var groups = regex.Match(column.Type).Groups;
+                foreach (Group group in groups)
                 {
                     if (int.TryParse(group.Value, out result)) { break; }
                 }

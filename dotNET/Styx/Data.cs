@@ -64,7 +64,7 @@ namespace Rigsarkiv.Styx
                 {
                     var counter = 0;
                     XNamespace tableNS = string.Format(TableXmlNs, table.SrcFolder);
-                    path = string.Format(TableDataPath, _destFolderPath, table.Folder, table.Name);
+                    path = string.Format(TableDataPath, _destFolderPath, _report.ScriptType.ToString().ToLower(), table.Name);
                     _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add file: {0}", path) });
                     using (TextWriter sw = new StreamWriter(path))
                     {
@@ -146,7 +146,7 @@ namespace Rigsarkiv.Styx
                 _codeLists.Add(codeListContent.Substring(0, codeListContent.Length - 2));
                 codeList.Clear();
             });
-            path = string.Format(CodeListPath, _destFolderPath, table.Folder, table.Name);
+            path = string.Format(CodeListPath, _destFolderPath, _report.ScriptType.ToString().ToLower(), table.Name);
             var content = File.ReadAllText(path);
             using (var sw = new StreamWriter(path, false, Encoding.UTF8))
             {
