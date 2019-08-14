@@ -148,6 +148,7 @@ namespace Rigsarkiv.Styx
                         column.Description = columnNode.Element(_tableIndexXNS + "description").Value;
                         column.Type = columnNode.Element(_tableIndexXNS + "typeOriginal").Value;
                         column.TypeOriginal = columnNode.Element(_tableIndexXNS + "type").Value;
+                        EnsureType(column);
                         if (tableNode.Element(_tableIndexXNS + "foreignKeys").Elements().Any(e => e.Element(_tableIndexXNS + "reference").Element(_tableIndexXNS + "column").Value == column.Name))
                         {
                             var foreignKeyNode = tableNode.Element(_tableIndexXNS + "foreignKeys").Elements().Where(e => e.Element(_tableIndexXNS + "reference").Element(_tableIndexXNS + "column").Value == column.Name).FirstOrDefault();
@@ -164,6 +165,25 @@ namespace Rigsarkiv.Styx
                 _logManager.Add(new LogEntity() { Level = LogLevel.Error, Section = _logSection, Message = string.Format("EnsureTables Failed: {0}", ex.Message) });
             }
             return result;
+        }
+
+        private void EnsureType(Column column)
+        {
+            if(column.TypeOriginal.StartsWith(VarCharPrefix))
+            {
+                var regex = GetRegex(DataTypeIntPattern);
+                if (regex.IsMatch(column.Type))
+                {
+                    column.TypeOriginal = "INTEGER";
+                    column.Modified = true;
+                }
+                regex = GetRegex(DataTypeDecimalPattern);
+                if (regex.IsMatch(column.Type))
+                {
+                    column.TypeOriginal = "DECIMAL";
+                    column.Modified = true;
+                }
+            }
         }
 
         private Table GetCodeList(XElement foreignKeyNode, Table table, Column column)

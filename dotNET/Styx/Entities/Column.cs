@@ -10,6 +10,7 @@
         public string Name { get; set; }
         public string Type { get; set; }
         public string TypeOriginal { get; set; }
+        public bool Modified { get; set; }
         public Table CodeList { get; set; }
     }
 }

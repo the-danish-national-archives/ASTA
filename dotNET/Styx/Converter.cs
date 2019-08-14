@@ -208,7 +208,7 @@ namespace Rigsarkiv.Styx
             switch (_report.ScriptType)
             {
                 case ScriptType.SPSS: result = string.Format("f{0}.{1}", lengths[0], lengths[1]); break;
-                case ScriptType.SAS: result = string.Format("{0}.{1}", lengths[0], lengths[1]); break;
+                case ScriptType.SAS: result = string.Format("f{0}.{1}", lengths[0], lengths[1]); break;
                 case ScriptType.Stata: result = string.Format("%{0}.{1}f", lengths[0], lengths[1]); break;
                 case ScriptType.Xml: result = "decimal"; break;
             }
@@ -222,7 +222,7 @@ namespace Rigsarkiv.Styx
             switch (_report.ScriptType)
             {
                 case ScriptType.SPSS: result = string.Format("f{0}", length); break;
-                case ScriptType.SAS: result = string.Format("{0}.", length); break;
+                case ScriptType.SAS: result = string.Format("f{0}.", length); break;
                 case ScriptType.Stata: result = string.Format("%{0}.0f", length); break;
                 case ScriptType.Xml: result = "int"; break;
             }
@@ -231,7 +231,7 @@ namespace Rigsarkiv.Styx
 
         private string GetStringType(Column column)
         {
-            var result = column.TypeOriginal;
+            var result = column.TypeOriginal;            
             var length = result.Substring(VarCharPrefix.Length);
             length = length.Substring(0, length.Length - 1);
             switch (_report.ScriptType)
@@ -240,7 +240,7 @@ namespace Rigsarkiv.Styx
                 case ScriptType.SAS: result = string.Format("${0}.", length); break;
                 case ScriptType.Stata: result = string.Format("%{0}s", length); break;
                 case ScriptType.Xml: result = "string"; break;
-            }
+            }           
             return result;
         }
 
