@@ -1,0 +1,36 @@
+H:\342_til_1007_migrering C#\342_til_1007_Vis_og_test\bin\Release\ShellBrowser.dll
+H:\342_til_1007_migrering C#\342_til_1007_Vis_og_test\bin\Release\ShellBrowser.xml
+H:\342_til_1007_migrering C#\342_til_1007_Vis_og_test\obj\Release\342_til_1007_vis_test_konverter.csprojResolveAssemblyReference.cache
+H:\342_til_1007_migrering C#\342_til_1007_Vis_og_test\obj\Release\342_til_1007_vis_test_konverter.csproj.GenerateResource.Cache
+H:\342_til_1007_migrering C#\342_til_1007_Vis_og_test\obj\Release\_342_til_1007_vis_test_konverter.Form1.resources
+H:\342_til_1007_migrering C#\342_til_1007_Vis_og_test\obj\Release\_342_til_1007_vis_test_konverter.Properties.Resources.resources
+H:\342_til_1007_migrering C#\342_til_1007_Vis_og_test\obj\Release\_342_til_1007_vis_test_konverter.VisDataForm.resources
+H:\342_til_1007_migrering C#\342_til_1007_Vis_og_test\bin\Release\342_til_1007_vis_test_konverter.exe.config
+H:\342_til_1007_migrering C#\342_til_1007_Vis_og_test\bin\Release\342_til_1007_vis_test_konverter.exe
+H:\342_til_1007_migrering C#\342_til_1007_Vis_og_test\bin\Release\342_til_1007_vis_test_konverter.pdb
+H:\342_til_1007_migrering C#\342_til_1007_Vis_og_test\obj\Release\342_til_1007_vis_test_konverter.exe
+H:\342_til_1007_migrering C#\342_til_1007_Vis_og_test\obj\Release\342_til_1007_vis_test_konverter.pdb
+I:\342_til_1007_migrering C#\342_til_1007_Vis_og_test\bin\Release\342_til_1007_vis_test_konverter.exe.config
+I:\342_til_1007_migrering C#\342_til_1007_Vis_og_test\obj\Release\342_til_1007_vis_test_konverter.exe
+I:\342_til_1007_migrering C#\342_til_1007_Vis_og_test\obj\Release\342_til_1007_vis_test_konverter.pdb
+I:\342_til_1007_migrering C#\342_til_1007_Vis_og_test\bin\Release\342_til_1007_vis_test_konverter.exe
+I:\342_til_1007_migrering C#\342_til_1007_Vis_og_test\bin\Release\342_til_1007_vis_test_konverter.pdb
+I:\342_til_1007_migrering C#\342_til_1007_Vis_og_test\bin\Release\ShellBrowser.dll
+I:\342_til_1007_migrering C#\342_til_1007_Vis_og_test\bin\Release\ShellBrowser.xml
+I:\342_til_1007_migrering C#\342_til_1007_Vis_og_test\obj\Release\342_til_1007_vis_test_konverter.csprojResolveAssemblyReference.cache
+I:\342_til_1007_migrering C#\342_til_1007_Vis_og_test\obj\Release\_342_til_1007_vis_test_konverter.Form1.resources
+I:\342_til_1007_migrering C#\342_til_1007_Vis_og_test\obj\Release\_342_til_1007_vis_test_konverter.Properties.Resources.resources
+I:\342_til_1007_migrering C#\342_til_1007_Vis_og_test\obj\Release\_342_til_1007_vis_test_konverter.VisDataForm.resources
+I:\342_til_1007_migrering C#\342_til_1007_Vis_og_test\obj\Release\342_til_1007_vis_test_konverter.csproj.GenerateResource.Cache
+F:\342 til 1007 POC fra Rene\342_til_1007_migrering C#\342_til_1007_Vis_og_test\bin\Release\342_til_1007_vis_test_konverter.exe.config
+F:\342 til 1007 POC fra Rene\342_til_1007_migrering C#\342_til_1007_Vis_og_test\obj\Release\342_til_1007_vis_test_konverter.exe
+F:\342 til 1007 POC fra Rene\342_til_1007_migrering C#\342_til_1007_Vis_og_test\obj\Release\342_til_1007_vis_test_konverter.pdb
+F:\342 til 1007 POC fra Rene\342_til_1007_migrering C#\342_til_1007_Vis_og_test\obj\Release\342_til_1007_vis_test_konverter.csprojResolveAssemblyReference.cache
+F:\342 til 1007 POC fra Rene\342_til_1007_migrering C#\342_til_1007_Vis_og_test\obj\Release\_342_til_1007_vis_test_konverter.Form1.resources
+F:\342 til 1007 POC fra Rene\342_til_1007_migrering C#\342_til_1007_Vis_og_test\obj\Release\_342_til_1007_vis_test_konverter.Properties.Resources.resources
+F:\342 til 1007 POC fra Rene\342_til_1007_migrering C#\342_til_1007_Vis_og_test\obj\Release\_342_til_1007_vis_test_konverter.VisDataForm.resources
+F:\342 til 1007 POC fra Rene\342_til_1007_migrering C#\342_til_1007_Vis_og_test\obj\Release\342_til_1007_vis_test_konverter.csproj.GenerateResource.Cache
+F:\342 til 1007 POC fra Rene\342_til_1007_migrering C#\342_til_1007_Vis_og_test\bin\Release\342_til_1007_vis_test_konverter.exe
+F:\342 til 1007 POC fra Rene\342_til_1007_migrering C#\342_til_1007_Vis_og_test\bin\Release\342_til_1007_vis_test_konverter.pdb
+F:\342 til 1007 POC fra Rene\342_til_1007_migrering C#\342_til_1007_Vis_og_test\bin\Release\ShellBrowser.dll
+F:\342 til 1007 POC fra Rene\342_til_1007_migrering C#\342_til_1007_Vis_og_test\bin\Release\ShellBrowser.xml

@@ -1,0 +1,12 @@
+H:\342_til_1007_migrering C#\342_til_1007_Vis_og_test\bin\Debug\342_til_1007_vis_test_konverter.exe.config
+H:\342_til_1007_migrering C#\342_til_1007_Vis_og_test\bin\Debug\342_til_1007_vis_test_konverter.exe
+H:\342_til_1007_migrering C#\342_til_1007_Vis_og_test\bin\Debug\342_til_1007_vis_test_konverter.pdb
+H:\342_til_1007_migrering C#\342_til_1007_Vis_og_test\bin\Debug\ShellBrowser.dll
+H:\342_til_1007_migrering C#\342_til_1007_Vis_og_test\bin\Debug\ShellBrowser.xml
+H:\342_til_1007_migrering C#\342_til_1007_Vis_og_test\obj\Debug\342_til_1007_vis_test_konverter.csprojResolveAssemblyReference.cache
+H:\342_til_1007_migrering C#\342_til_1007_Vis_og_test\obj\Debug\_342_til_1007_vis_test_konverter.Form1.resources
+H:\342_til_1007_migrering C#\342_til_1007_Vis_og_test\obj\Debug\_342_til_1007_vis_test_konverter.Properties.Resources.resources
+H:\342_til_1007_migrering C#\342_til_1007_Vis_og_test\obj\Debug\_342_til_1007_vis_test_konverter.VisDataForm.resources
+H:\342_til_1007_migrering C#\342_til_1007_Vis_og_test\obj\Debug\342_til_1007_vis_test_konverter.csproj.GenerateResource.Cache
+H:\342_til_1007_migrering C#\342_til_1007_Vis_og_test\obj\Debug\342_til_1007_vis_test_konverter.exe
+H:\342_til_1007_migrering C#\342_til_1007_Vis_og_test\obj\Debug\342_til_1007_vis_test_konverter.pdb

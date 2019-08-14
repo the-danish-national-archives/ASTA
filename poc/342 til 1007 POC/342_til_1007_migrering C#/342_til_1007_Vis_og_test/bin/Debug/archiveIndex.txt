@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<archiveIndex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.sa.dk/xmlns/diark/1.0" xsi:schemaLocation="http://www.sa.dk/xmlns/diark/1.0 ../Schemas/standard/archiveIndex.xsd">
+	<archiveInformationPackageID></archiveInformationPackageID>
+	<archivePeriodStart></archivePeriodStart>
+	<archivePeriodEnd></archivePeriodEnd>
+	<archiveInformationPacketType>false</archiveInformationPacketType>
+	<archiveCreatorList></archiveCreatorList>
+	<archiveType>true</archiveType>
+	<systemName></systemName>
+	<systemPurpose></systemPurpose>
+	<systemContent></systemContent>
+	<regionNum>false</regionNum>
+	<komNum>false</komNum>
+	<cprNum>false</cprNum>
+	<cvrNum>false</cvrNum>
+	<matrikNum>false</matrikNum>
+	<bbrNum>false</bbrNum>
+	<whoSygKod>false</whoSygKod>
+        <predecessorName></predecessorName>
+	<form>
+		<formVersion>2.0</formVersion>
+		<classList>
+			<formClass>60.30.05.UD</formClass>
+			<formClassText>Sagsadministration</formClassText>
+			<formClass>10.30.UD</formClass>
+			<formClassText>Forskning</formClassText>
+		</classList>
+	</form>
+	<containsDigitalDocuments></containsDigitalDocuments>
+	<searchRelatedOtherRecords>false</searchRelatedOtherRecords>
+	<systemFileConcept>true</systemFileConcept>
+	<multipleDataCollection>false</multipleDataCollection>
+	<personalDataRestrictedInfo>false</personalDataRestrictedInfo>
+	<otherAccessTypeRestrictions>false</otherAccessTypeRestrictions>
+	<archiveApproval>SA</archiveApproval>
+	<archiveRestrictions></archiveRestrictions>
+</archiveIndex>

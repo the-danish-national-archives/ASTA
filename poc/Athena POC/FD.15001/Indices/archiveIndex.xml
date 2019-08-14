@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<archiveIndex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.sa.dk/xmlns/diark/1.0" xsi:schemaLocation="http://www.sa.dk/xmlns/diark/1.0 ../Schemas/standard/archiveIndex.xsd">
+	<archiveInformationPackageID>AVID.SA.15001</archiveInformationPackageID>
+	<archivePeriodStart>1999-01-03</archivePeriodStart>
+	<archivePeriodEnd>1999-09-09</archivePeriodEnd>
+	<archiveInformationPacketType>false</archiveInformationPacketType>
+	<archiveCreatorList>
+		<creatorName>ForskningsdataEksempelministeriet</creatorName>
+		<creationPeriodStart>1999-01-03</creationPeriodStart>
+		<creationPeriodEnd>1999-09-09</creationPeriodEnd>
+	</archiveCreatorList>
+	<archiveType>true</archiveType>
+	<systemName>Visdom-journalsystem</systemName>
+	<systemPurpose>Skemaundersøgelse fra eksempelministeriet</systemPurpose>
+	<systemContent>Den centrale population er sager og dokumenter. 
+        Centrale variabler er : Sagsidentifikation, sagstitel, dokumentidentifikation, dokumenttitel og sagsbehandleridentifikation.</systemContent>
+	<regionNum>false</regionNum>
+	<komNum>false</komNum>
+	<cprNum>false</cprNum>
+	<cvrNum>false</cvrNum>
+	<matrikNum>false</matrikNum>
+	<bbrNum>false</bbrNum>
+	<whoSygKod>false</whoSygKod>
+	<form>
+		<formVersion>2.0</formVersion>
+		<classList>
+			<formClass>10.30.UD</formClass>
+			<formClassText>Forskning</formClassText>
+		</classList>
+	</form>
+	<containsDigitalDocuments>false</containsDigitalDocuments>
+	<searchRelatedOtherRecords>false</searchRelatedOtherRecords>
+	<systemFileConcept>false</systemFileConcept>
+	<multipleDataCollection>false</multipleDataCollection>
+	<personalDataRestrictedInfo>false</personalDataRestrictedInfo>
+	<otherAccessTypeRestrictions>false</otherAccessTypeRestrictions>
+	<archiveApproval>SA</archiveApproval>
+	<archiveRestrictions>
+            </archiveRestrictions>
+</archiveIndex>

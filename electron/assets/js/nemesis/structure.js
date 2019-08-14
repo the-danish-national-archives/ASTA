@@ -566,6 +566,7 @@ function (n) {
                 settings.pathDirTxt.value = settings.selectedPath;
                 settings.logCallback().reset();
                 settings.confirmationSpn.innerHTML = "";
+                settings.ConvertBtn.hidden = true;
             })            
         }
 
@@ -587,6 +588,7 @@ function (n) {
                 settings.testId = document.getElementById(testId);
                 settings.confirmationSpn = document.getElementById(confirmationId);
                 settings.convertDisabledText = document.getElementById(convertDisabledId).innerHTML;
+                settings.ConvertBtn = document.getElementById(convertId);
                 $("span[id^='" + settings.outputPrefix + "']").each(function() {
                     settings.outputText[this.id] = $(this).html();
                     $(this).html("");

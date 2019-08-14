@@ -703,6 +703,10 @@ function (n) {
                     settings.confirmationSpn.innerHTML = settings.convertDisabledText;
                 }
                 settings.logResult = settings.logCallback().commit(settings.deliveryPackagePath);
+                if(settings.rightsCallback().isAdmin && enableConvert) { 
+                    fs.writeFileSync(settings.metadataFilePostfix.format(settings.deliveryPackagePath), JSON.stringify(settings.metadata)); 
+                        settings.ConvertBtn.hidden = false; 
+                }
                 settings.selectDirBtn.disabled = false;
                 settings.validateBtn.disabled = false;
                 console.logInfo(`total errors: ${settings.totalErrors}`,"Rigsarkiv.Nemesis.Data.Validate");
@@ -734,12 +738,32 @@ function (n) {
         }
 
         //add Event Listener to HTML elmenets
-        var AddEvents = function () {            
+        var AddEvents = function () {
+            settings.ConvertBtn.addEventListener('click', (event) => {
+                var converterFilePath = settings.scriptPath.format(settings.converterFileName);        
+                if(!fs.existsSync(converterFilePath)) {
+                    var rootPath = null;
+                    if(os.platform() == "win32") {
+                        rootPath = path.join('./');
+                        converterFilePath = path.join(rootPath,settings.resourceWinPath.format(settings.converterFileName));
+                    }
+                    if(os.platform() == "darwin") {
+                        var folders =  __dirname.split("/");
+                        rootPath = folders.slice(0,folders.length - 3).join("/");
+                        converterFilePath = "{0}/{1}".format(rootPath,settings.converterFileName);
+                    }
+                }   
+                var converter = spawn(converterFilePath, [settings.metadataFilePostfix.format(settings.deliveryPackagePath) ]);
+                converter.stdout.on('data', (data) => console.logInfo(`stdout: ${data}`,"Rigsarkiv.Nemesis.Data.AddEvents"));                  
+                converter.stderr.on('data', (data) => (new Error(data).Handle(settings.outputErrorSpn,settings.outputErrorText,"Rigsarkiv.Nemesis.Data.AddEvents")));
+                converter.on('close', (code) => console.logInfo(`converter process exited with code ${code}`,"Rigsarkiv.Nemesis.Data.AddEvents"));
+            });
         }
 
         //Model interfaces functions
         Rigsarkiv.Nemesis.Data = {
-            initialize: function (logCallback,outputErrorId,logStartId,logEndNoErrorId,logEndWithErrorId,logEndWithErrorStopId,outputPrefix,selectDirectoryId,validateId,confirmationId,validateRowsId,checkEncodingId,convertDisabledId,convertEnabledId,convertWarningEnabledId,convertId) {            
+            initialize: function (rightsCallback,logCallback,outputErrorId,logStartId,logEndNoErrorId,logEndWithErrorId,logEndWithErrorStopId,outputPrefix,selectDirectoryId,validateId,confirmationId,validateRowsId,checkEncodingId,convertDisabledId,convertEnabledId,convertWarningEnabledId,convertId) { 
+                settings.rightsCallback = rightsCallback;
                 settings.logCallback = logCallback;
                 settings.outputErrorSpn = document.getElementById(outputErrorId);
                 settings.outputErrorText = settings.outputErrorSpn.innerHTML;
@@ -748,6 +772,7 @@ function (n) {
                 settings.logEndWithErrorSpn = document.getElementById(logEndWithErrorId);
                 settings.logEndWithErrorStopSpn = document.getElementById(logEndWithErrorStopId);
                 settings.outputPrefix = outputPrefix;
+                settings.ConvertBtn = document.getElementById(convertId);
                 settings.selectDirBtn = document.getElementById(selectDirectoryId);
                 settings.validateBtn = document.getElementById(validateId);
                 settings.confirmationSpn  = document.getElementById(confirmationId);
@@ -769,6 +794,7 @@ function (n) {
                         settings.convertStop = convertStop;                        
                         settings.runIndex = -1;
                         settings.dataFiles = [];
+                        settings.ConvertBtn.hidden = true;
                         settings.errors = 0;
                         settings.totalErrors = errors;
                         return Validate();

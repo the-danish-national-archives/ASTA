@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<infodokument>
+<titel>Statens Arkivers dokumentering af gennemført format- og strukturkonvertering 2005-08.</titel>
+<dato>18-07-2007</dato>
+<forfatter>Statens Arkivers Format- og Strukturkonverteringsprojekt 2005-08</forfatter>
+<kategori></kategori>
+<dokumenttekst>
+Denne arkiveringsversion er format- og strukturkonverteret under Statens Arkivers Format- og Strukturkonverteringsprojekt år 2005-08.
+I denne periode bevilligede Kulturministeriet penge til at bringe alle ældre elektroniske arkivalier i Statens Arkivers samling op til gældende regelsæt.
+Dette regelsæt kan findes i bekendtgørelse nr. 342 af 11. marts 2004 og i tilhørende vejledning.
+De konverterede elektroniske arkivalier er afleveret i perioder: 
+A) afleveret før indførelsen af regelsættet af 1997/1998 (hovedsagelig i perioden 1975-1997), og 
+B) afleveret i overensstemmelse med regelsættet af 1997/1998 (hovedsagelig perioden 1998-2000).
+ 
+Konverteringen er foretaget i henhold til Format- og Strukturkonverteringsprojektets &quot;Konverteringsprincipper vers. 28&quot;, som kan findes i Statens Arkivers journalsag 2004-363-003.
+For yderligere information se i øvrigt Statens Arkivers journalsag 2004-363-003 og tilhørende undersager.
+Her findes også alle de pågældende regelsæt.
+ 
+I det nedenstående dokumenteres, hvilke ændringer denne arkiveringsversion har gennemgået:
+  --------------------------------------------
+Format- og Strukturkonvertering år 2005-2008
+--------------------------------------------
+ 
+     Konverteringsprogram: KonvOld 1.0.1.8 (Schema 27)
+
+     Konverteringslog for e-arkivalie
+                     AVID: 00000115
+               Systemnavn: Skibsregister ohsa
+     Digital beskrivelse
+            Udarbejdet af: AMEIJ,BD,(DT)
+            Udarbejdet d.: 10-10-2006
+
+---------------------
+Generelle kommentarer
+---------------------
+
+På grund af forskellen i postdefinitioner (felt NUM8DEC2) er tabel 1977 blevet opdelt i 2 tabeller: 1977_96 og 1977_R6.
+
+
+ 
+
+--------------------------------------------
+Generel fejlhåndtering af denne konvertering
+--------------------------------------------
+
+Primær- og fremmednøgler kontrolleres med case sensitive-check
+
+
+----------------
+Konverteringstid
+----------------
+
+     Konverteringen startet  : 18-07-2007 14:02:29
+     Konverteringen afsluttet: 18-07-2007 14:02:51
+     Konverterings varighed  :            00:00:21
+
+
+--------------------------------
+Kontrol af XML-beskrivelsesfilen
+--------------------------------
+     ------------------------------------------------
+     TEST AF DIGITAL BESKRIVELSE - FASE 1: XML Schema
+     ------------------------------------------------
+     Tester om der er anvendt korrekt Schema
+     Tester om der er anvendt korrekt Encoding
+     ---------------------------------------------------------
+     TEST AF DIGITAL BESKRIVELSE - FASE 2: Tabel- og feltnavne
+     ---------------------------------------------------------
+     -------------------------------------------------------
+     TEST AF DIGITAL BESKRIVELSE - FASE 3: Øvrige kontroller
+     -------------------------------------------------------
+     Tester om AVID svarer til filnavnet
+     Tester om alle recordtyper er højst MaxOldRecSize
+     Tester om alle beskrevne filer findes i mappen for oprindeligt arkivalie
+     Tester om der er filer i mappen for oprindeligt arkivalie der ikke er beskrevet
+     Tester om alle felter er indenfor postlængden
+     Tester om alle bytes i alle posttyper indgår i netop 1 ikke-gruppefelt
+     Tester om alle kodeværdier og forklaringer er forskellige indenfor posttyper
+     I fil &quot;1977&quot;, postdef &quot;1977_96&quot; har feltdef 14 &quot;LOLAKODE&quot; en dobbelt kodeforklaring &quot;Transporter i havnen&quot;
+     Tester om alle posttyper i en fastlængde-fil har samme postlængde
+     Tester om alle fremmednøgler har M:1-kardinalitet
+     Tester om alle fremmednøgler har samstemmende feltlistetyper i &quot;fra&quot; og &quot;til&quot; og kun anvender medtagne felter og ikke anvender gruppefelter
+     Tester om alle primærnøgler kun anvender medtagne felter og ikke anvender gruppefelter
+     Tester om alle fremmednøgler peger på primærnøgler
+     Tester og tilføjer kunstig PN for elementet &lt;autopn&gt;
+     I filen &quot;1977&quot; tilføjes en systemgenereret primærnøgle på postdef &quot;1977_96&quot;
+     I filen &quot;1977&quot; tilføjes en systemgenereret primærnøgle på postdef &quot;1977_R6&quot;
+     Tester og tilføjer kunstige PN og FN for hierarkiske postdef
+     I filen &quot;1977&quot; anvendes en allerede tilføjet systemgenereret primærnøgle på postdef &quot;1977_96&quot;
+     I filen &quot;1977&quot; anvendes en allerede tilføjet systemgenereret primærnøgle på postdef &quot;1977_R6&quot;
+     I filen &quot;1977&quot; tilføjes en systemgenereret fremmednøgle fra postdef &quot;1977_R6&quot; pegende til postdef &quot;1977_96&quot;
+     
+     
+ 
+
+     
+
+------------------------
+Behandling af filen 1977
+------------------------
+
+     Postnavn 1977_96
+     ----------------
+ 
+          Kontrol af fejlen: &quot;Primærnøgle er dublet (ikke unik)&quot;
+          ------------------------------------------------------
+
+          Primærnøgle
+          -----------
+          20157 poster kontrolleret, 20157 poster (100%) OK, 0 poster (0%) findes allerede som primærnøgler.
+
+
+     Postnavn 1977_R6
+     ----------------
+ 
+          Kontrol af fejlen: &quot;Primærnøgle er dublet (ikke unik)&quot;
+          ------------------------------------------------------
+
+          Primærnøgle
+          -----------
+          111 poster kontrolleret, 111 poster (100%) OK, 0 poster (0%) findes allerede som primærnøgler.
+
+
+--------------------------------
+Opsummering af fejl i alle filer
+--------------------------------
+
+     Der er ingen fejl i nogen filer
+
+----------------------------------------------------------------------------------------------------
+Tilføjelse af scannet dokumentation + evt. omorganiseringsdokumentation + evt. recoverydokumentation
+----------------------------------------------------------------------------------------------------
+
+     Dokumentet: DOK00001: Statens Arkivers dokumentationsregistrering 1985 - 1994 er tilføjet.
+     Dokumentet: DOK00002: Statens Arkivers afleveringsfortegnelse og filregistreringsskema er tilføjet.
+     Dokumentet: DOK00003: Filbeskrivelser er tilføjet.
+     Dokumentet: DOK00004: Record- og databeskrivelser er tilføjet.
+
+-----------------------------------------------------------------
+Tilføjelse af nye metadata og skabelse af det komplette arkivalie
+-----------------------------------------------------------------
+
+     Udpakket datamængde og GENINFO filer: 3509166
+     Arkverfil skabt
+     Skaberfil skabt
+     Xmlfil skabt
+     TAB filer skabt
+     Arkfiler skabt
+     Arkiveringsversion skabt
+
+----------------------------
+Anvendt tegnsætkonvertering:
+----------------------------
+
+
+     Konvertering af tegn i inddata
+
+     Der konverteres fra EBCDIC_277 til ISO-8859-1 som følger:
+
+        00    01    02    03    04    05    06    07    08    09    0A    0B    0C    0D    0E    0F
+00:   FEJL  FEJL  FEJL  FEJL  FEJL  FEJL  FEJL  FEJL  FEJL  FEJL  FEJL  FEJL  FEJL  FEJL  FEJL  FEJL
+10:   FEJL  FEJL  FEJL  FEJL  FEJL  FEJL  FEJL  FEJL  FEJL  FEJL  FEJL  FEJL  FEJL  FEJL  FEJL  FEJL
+20:   FEJL  FEJL  FEJL  FEJL  FEJL  FEJL  FEJL  FEJL  FEJL  FEJL  FEJL  FEJL  FEJL  FEJL  FEJL  FEJL
+30:   FEJL  FEJL  FEJL  FEJL  FEJL  FEJL  FEJL  FEJL  FEJL  FEJL  FEJL  FEJL  FEJL  FEJL  FEJL  FEJL
+40:     20    20    E2    E4    E0    E1    E3    7D    E7    F1    23    2E    3C    28    2B    21
+50:     26    E9    EA    EB    E8    ED    EE    EF    EC    DF    A4    C5    2A    29    3B    5E
+60:     2D    2F    C2    C4    C0    C1    C3    24    C7    D1    F8    2C    25    5F    3E    3F
+70:     A6    C9    CA    CB    C8    CD    CE    CF    CC    60    3A    C6    D8    27    3D    22
+80:     40    61    62    63    64    65    66    67    68    69    AB    BB    F0    FD    FE    B1
+90:     B0    6A    6B    6C    6D    6E    6F    70    71    72    AA    BA    7B    B8    5B    5D
+A0:     B5    FC    73    74    75    76    77    78    79    7A    A1    BF    D0    DD    DE    AE
+B0:     A2    A3    A5    B7    A9    A7    B6    BC    BD    BE    AC    7C    AF    A8    B4    D7
+C0:     E6    41    42    43    44    45    46    47    48    49    2D    F4    F6    F2    F3    F5
+D0:     E5    4A    4B    4C    4D    4E    4F    50    51    52    B9    FB    7E    F9    FA    FF
+E0:     5C    F7    53    54    55    56    57    58    59    5A    B2    D4    D6    D2    D3    D5
+F0:     30    31    32    33    34    35    36    37    38    39    B3    DB    DC    D9    DA  FEJL
+
+----------------------------
+Anvendte feltkonverteringer:
+----------------------------
+
+     Beskrivelse af feltkonverteringsrutinen DATE_006
+
+          Et 6-cifret datofelt i format DDMMYY konverteres til 
+          datatypen DATE i format YYMMDD.
+          
+     Beskrivelse af feltkonverteringsrutinen NUM_001
+
+          Et heltal med eller uden fortegn overføres uden 
+          konvertering som datatype NUM.
+          
+     Beskrivelse af feltkonverteringsrutinen NUM_009
+
+          Et pakket heltal med eller uden fortegn konverteres til datatypen
+          NUM. Tallet er angivet i format nnnnnx,hvor:
+          nnnnn er et vilkårligt antal cifre,
+          x i HEX-værdi angiver fortegnets værdi: 
+          D negativt tal (-),
+          C positivt tal (+),
+          F tal uden fortegn.
+          (+) erstattes med et blankt tegn.
+          
+     Beskrivelse af feltkonverteringsrutinen REAL_004D02
+
+          Et tal med 2 decimaler, med eller uden fortegn konverteres 
+          til datatypen REAL.
+          Tallet er angivet i format nnnnddx,hvor:
+          nnnn er et vilkårligt antal cifre,
+          dd angiver decimalværdien,
+          x angiver fortegnets værdi:
+          - for negativt tal (-),
+          + for positivt tal (+).
+          
+     Beskrivelse af feltkonverteringsrutinen REAL_007D02
+
+          Et tal med 2 decimaler, med eller uden fortegn, der er angivet i IBM Signed 
+          eller IBM Zoned format konverteres til datatypen REAL.
+          
+     Beskrivelse af feltkonverteringsrutinen STRING_001
+
+          Tekst overføres uden konvertering som datatype STRING.
+           
+     Beskrivelse af feltkonverteringsrutinen STRING_SPACE
+
+          Et felt med kun blanke tegn overføres uden konvertering
+          som datatype STRING.
+          
+
+-------------------------------------
+Konverteringslog for e-arkivalie slut
+-------------------------------------
+
+------------------------------------------------------------------------
+Vejledning til konverteringsprogrammets fejllog (vers. 1.0 - 13-03-2007)
+------------------------------------------------------------------------
+
+Denne vejledning er udarbejdet til brug for forståelse og anvendelse af den fejllog, som dannes af det konverteringsprogram, der anvendes i Format- og Strukturkonverteringsprojektet 2005-2008 (FSK).
+Fejlloggen er opdelt i en række hovedafsnit, som efterfølgende bliver behandlet i den rækkefølge, de optræder i loggen.
+
+-------------------------------------------
+Format- &amp; Strukturkonvertering år 2005-2008
+-------------------------------------------
+Indledningen på fejlloggen indeholder oplysninger om anvendt version af konverteringsprogrammet, identifikation af den konverterede arkiveringsversion (AVID),
+navnet på det system arkiveringsversionen omhandler, initialerne på den medarbejder, der har udarbejdet den digitale beskrivelse, og tidspunktet for påbegyndelse af arbejdet med den digitale beskrivelse.
+
+---------------------
+Generelle kommentarer
+---------------------
+Ved udarbejdelse af den digitale beskrivelse kan der opsamles kommentarer om arkivaliet og konverteringen. Kommentarerne kan bidrage til forståelse for det gennemførte konverteringsarbejde.
+
+--------------
+Fejlhåndtering
+--------------
+De digitale beskrivelser gennemføres ofte på meget forskelligartede og ikke altid helt fejlfri datagrundlag. Derfor kan der være brug for særlige fejlhåndteringsrutiner, når arkivalierne konverteres til arkiveringsversioner, der overholder bekendtgørelse nr. 342 af 11. marts 2004 om arkiveringsversioner af bevaringsværdige data fra elektroniske arkivsystemer.
+I dette hovedafsnit opsummeres hvilke specifikke fejlhåndteringsrutiner, der er anvendt for det konverterede arkivalie. Konverteringsprogrammet fortsætter konverteringsprocessen på trods af, at der forekommer sådanne fejl. Typisk drejer det sig om håndtering af primærnøgle-, fremmednøgle- og kodeværdifejl. I nogle tilfælde suppleres data (&quot;Kodeværdifejl&quot;), og andre gange ignoreres overflødige data (&quot;Ubrugt rest i fil&quot;).
+
+----------------
+Konverteringstid
+----------------
+Her angives start- og sluttid samt det samlede tidsforbrug for konverteringsforløbet.
+
+--------------------------------
+Kontrol af XML-beskrivelsesfilen
+--------------------------------
+Når et arkivalie skal konverteres udarbejdes en digital beskrivelse, hvori arkivaliets formater og strukturer defineres.
+Den digitale beskrivelse lagres i en fil i XML-format. Når filen gemmes, gennemføres en kontrol af den, og resultatet af denne kontrol gengives i dette afsnit.
+Indholdet i afsnittet vil typisk blot være en opsummering af de forskellige test, som gennemføres. Eventuelle fejl i kontrollen af XML-filen vil nemlig medføre, at konverteringen ikke kan gennemføres. Endeligt konverterede arkivalier vil derfor ikke indeholde fejl i dette afsnit.
+Man skal dog være opmærksom på, at afsnittet kan indeholde advarsler, som imidlertid ikke forhindrer konvertering. Det kunne f.eks. være en advarsel om dobbelte kodeforklaringer i en filbeskrivelse.
+Afsnittet kan også indeholde information om, at der automatisk er genereret primærnøgler til en eller flere tabeller i arkivaliet.
+
+-----------------------------
+Behandling af filen &lt;filnavn&gt;
+-----------------------------
+Denne overskrift indvarsler den for konverteringsarbejdet mest benyttede del af fejllogningen.
+&lt;filnavn&gt; erstattes af et specifikt filnavn. Hver datafil, der indgår i det elektroniske arkivalie, vil efterfølgende blive behandlet under sin egen overskrift.
+
+Hver enkelt fil består af én eller flere poster (i langt de fleste arkivalier er der kun én posttype), hvorunder der opsamles væsentlige informationer knyttet til netop denne post (eller tabel).
+Først opsummeres de kommentarer, der i beskrivelsesarbejdet eventuelt måtte være blevet knyttet til netop denne post/tabel (Tabelkommentar). Denne information kan være væsentlig for forståelsen af indholdet af posten/tabellen.
+
+Derefter opsummeres de forskellige fejlkontroller, som har været relevante for netop denne post/tabel. Resultatet af fejlkontrollen opsamles under sin egen overskrift f.eks. &quot;Kontrol af fejlen: Primærnøgle er dublet (ikke unik)&quot;.
+Der er samhørighed imellem de fejlkontroller, som kan forekomme for enhver post/tabel og de fejlhåndteringsrutiner, som er valgt for netop dette konverteringsforløb (se hovedafsnit &quot;Fejlhåndtering&quot;). Dvs. der kan ikke forekomme fejl/fejlkontroller for de enkelte poster/tabeller, som der ikke i forvejen er valgt fejlhåndtering af.
+
+Fejlkontrollen er en opsummering og oplistning af mængden af fejl for den specifikke fejlkontrol.
+
+For fejlkontroller vedrørende primær- og fremmednøglefejl er der gjort brug af procentuelle beregninger. Dette er gjort for, at kontrollere, at fejlmarginerne for primær- og fremmednøgler ikke overskrider de i FSK-projektet fastsatte grænseværdier (5 % for primærnøgler og 30% for fremmednøgler).
+I en række situationer vil man dog acceptere overskridelse af denne disse fejlmarginer. Begrundelsen herfor vil typisk være beskrevet i &quot;Tabelkommentar&quot; og/eller i &quot;Generelle kommentarer&quot;.
+
+For de fleste fejlkontroller gælder det, at der i oplistningen af de enkelte fejl er givet henvisninger til specifikke postnumre (rækker), feltnumre og i nogle tilfælde til selve feltindholdet. Disse informationer er gengivet for at støtte medarbejderen i arbejdet med behandlingen af fejlene.
+
+Der forefindes ca. 15 forskellige fejlkontroller, men de eneste tilladte ved endelig konvertering er følgende:
+Kontrol af fejlen: &quot;Ubrugt rest efter sidste fastlængdepost i filen&quot;
+Kontrol af fejlen: &quot;Primærnøgle er dublet (ikke unik)&quot;
+Kontrol af fejlen: &quot;Fremmednøgle findes ikke som primærnøgle&quot;
+Kontrol af fejlen: &quot;Feltet kan ikke konverteres&quot;
+Kontrol af fejlen: &quot;Kodeværdi er ukendt for dette felt&quot;
+
+--------------------------------
+Opsummering af fejl i alle filer
+--------------------------------
+Her opsummeres fejl opdelt pr. fejlkontrol for alle de datafiler, der indgår i den digitale beskrivelse.
+
+-----------------------------------------------------------------------
+Tilføjelse af scannet dokumentation + evt. omorganiseringsdokumentation
++ evt. recoverydokumentation
+-----------------------------------------------------------------------
+Oplistning af den dokumentation, som knyttes til arkiveringsversionenen.
+
+-----------------------------------------------------------------
+Tilføjelse af nye metadata og skabelse af det komplette arkivalie
+-----------------------------------------------------------------
+Opsummering af processerne i konverteringsforløbet.
+
+---------------------------
+Anvendt tegnsætkonvertering
+---------------------------
+Afsnittet indeholder en tabelopstilling af hvilket tegnsæt der konverteres fra, og hvilket der konverteres til.
+
+---------------------------
+Anvendte feltkonverteringer
+---------------------------
+Beskrivelse om de feltkonverteringsrutiner, der er anvendt i den digitale beskrivelse. Beskrivelserne indeholder henvisninger til datatypen (string, num, date osv.) og til den algoritme, der er anvendt i forbindelse med konverteringen. Det er en oplistning af samtlige de anvendte rutiner, og der er derfor ingen henvisning til specifikke felter, hvor rutinerne er anvendt.
+
+-------------------------------------
+Konverteringslog for e-arkivalie slut
+-------------------------------------
+Indikerer at arkivaliet er færdigkonverteret.
+
+</dokumenttekst>
+</infodokument>
