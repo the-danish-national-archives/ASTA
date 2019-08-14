@@ -46,7 +46,7 @@ namespace Rigsarkiv.AthenaForm
             _reportPath = string.Format("{0}\\{1}_report.html", _destPath, _destFolder);
             _outputRichTextBox = outputRichTextBox;
             _outputRichTextBox.Location = new Point(8, 435);
-            _outputRichTextBox.Size = new Size(510,169);
+            _outputRichTextBox.Size = new Size(510,139);
             _outputRichTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Bottom;
             this.Controls.Add(_outputRichTextBox);
             var result = Convert();
