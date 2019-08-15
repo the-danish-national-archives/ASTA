@@ -20,7 +20,7 @@ function (n) {
         const doubleApostrophePattern2 = /(")/g;
         const doubleApostrophePattern3 = /(["]{2,2})/g
         const errorsMax = 40;
-        const warningMax = 10;
+        const warningMax = 100;
         
         //private data memebers
         var settings = { 
