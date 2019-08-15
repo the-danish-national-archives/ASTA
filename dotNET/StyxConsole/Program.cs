@@ -21,7 +21,9 @@ namespace Rigsarkiv.StyxConsole
                 var srcPath = args[0];
                 var destPath = args[1];
                 var destFolder = args[2];
-                _converter = new Structure(_logManager, srcPath, destPath, destFolder, ScriptType.SPSS);
+                var scriptTypeText = args[3];
+                var scriptType = (ScriptType)Enum.Parse(typeof(ScriptType), scriptTypeText, true);
+                _converter = new Structure(_logManager, srcPath, destPath, destFolder, scriptType);
                 if (_converter.Run())
                 {
                     var tableIndexXDocument = _converter.TableIndexXDocument;
