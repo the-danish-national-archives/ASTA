@@ -77,9 +77,13 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 keyLengthText: null,
                 keyReservedWordTitle: null,
                 keyReservedWordText: null,
+                variablesDropdown: null,
+                varKeyReqTitle: null,
+                varKeyReqText: null,
                 contents: ["","","",""],
+                varKeys: [],
                 references: [],
-                isValidMetadata: true,
+                data: [],
                 metadataFileName: "{0}.txt",
                 dataFileName: "{0}.csv",
                 metadataTemplateFileName: "metadata.txt",
@@ -92,7 +96,6 @@ window.Rigsarkiv = window.Rigsarkiv || {},
             var Reset = function () {
                 settings.informationPanel1.hidden = false;
                 settings.informationPanel2.hidden = true;
-                settings.isValidMetadata = true;
                 settings.outputErrorSpn.hidden = true;
                 settings.nextBtn.hidden = true;
                 settings.contents = ["","","",""];
@@ -111,6 +114,26 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 return folders[folders.length - 1];
             }
 
+            // Cleanup Files
+            var CleanupFiles = function(files,fileName) {
+                var result = false;
+                var dataFolderPath = settings.extractionCallback().dataFolderPath;
+                files.forEach(file => {
+                    if(file != settings.dataFileName.format(fileName) && file != settings.metadataFileName.format(fileName)) {
+                        console.logInfo("delete file : " + file,"Rigsarkiv.Hybris.MetaData.Cleanup");
+                        try {
+                            var srcFilePath = dataFolderPath;
+                            srcFilePath += (srcFilePath.indexOf("\\") > -1) ? "\\{0}".format(file) : "/{0}".format(file);
+                            fs.unlinkSync(srcFilePath);                                
+                        }
+                        catch(err) {
+                            result = true;
+                            err.Handle(settings.outputErrorSpn,settings.outputErrorText,"Rigsarkiv.Hybris.MetaData.CleanupFiles");
+                        }                            
+                    }
+                });
+                return result;
+            }
             //delete other txt files from statistic program
             var Cleanup = function() {
                 var dataFolderPath = settings.extractionCallback().dataFolderPath;
@@ -119,24 +142,10 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                         err.Handle(settings.outputErrorSpn,settings.outputErrorText,"Rigsarkiv.Hybris.MetaData.Cleanup");
                     }
                     else {
-                        var hasError = false;
-                        var fileName = GetDataFolderName();
+                        var fileName = GetDataFolderName();                        
+                        var hasError = CleanupFiles(files,fileName);
                         var callback = settings.extractionCallback();
-                        var dataFolderPath = callback.dataFolderPath;
-                        files.forEach(file => {
-                            if(file != settings.dataFileName.format(fileName) && file != settings.metadataFileName.format(fileName)) {
-                                console.logInfo("delete file : " + file,"Rigsarkiv.Hybris.MetaData.Cleanup");
-                                try {
-                                    var srcFilePath = dataFolderPath;
-                                    srcFilePath += (srcFilePath.indexOf("\\") > -1) ? "\\{0}".format(file) : "/{0}".format(file);
-                                    fs.unlinkSync(srcFilePath);                                
-                                }
-                                catch(err) {
-                                    hasError = true;
-                                    err.Handle(settings.outputErrorSpn,settings.outputErrorText,"Rigsarkiv.Hybris.MetaData.Cleanup");
-                                }                            
-                            }
-                        });
+                        var dataFolderPath = callback.dataFolderPath;                        
                         if(hasError) {
                             ipcRenderer.send('open-error-dialog',settings.outputCloseApplicationErrorTitle.innerHTML,settings.outputCloseApplicationErrorText.innerHTML);
                         }
@@ -150,6 +159,13 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                             folders = dataFolderPath.getFolders();
                             settings.outputNewExtractionSpn.innerHTML = settings.outputNewExtractionText.format(folders[folders.length - 3]);
                             settings.indexFilesDescriptionSpn.innerHTML = settings.indexFilesDescriptionText.format(folders[folders.length - 3]);
+                            var variables = [];
+                            for (var i = 0; i < settings.variablesDropdown.options.length; i++) {
+                                variables.push(settings.variablesDropdown.options[i].value);
+                            }
+                            settings.data.push({ "fileName":fileName,"name":settings.fileName.value, "variables":variables, "keys":settings.varKeys });
+                            console.log("{0} data output: ".format(settings.fileName));
+                            console.log(settings.data);
                         }                                                          
                     }
                 });
@@ -207,7 +223,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                         var callback = settings.extractionCallback();
                         var metadataFileName = GetMetaDataFileName();
                         var scriptType = callback.scriptType;
-                        var keyVar = (settings.keyVar.value != null && settings.keyVar.value !== "") ? "{0}\r\n".format(settings.keyVar.value) : "";
+                        var keyVar = (settings.varKeys.length > 0) ? "{0}\r\n".format(settings.varKeys.join(" ")) : "";
                         var updatedData = data.toString().format(scriptType,settings.fileName.value,settings.fileDescr.value,keyVar,
                             GetReferences(),
                             settings.contents[0],settings.contents[1],settings.contents[2],settings.contents[3]);
@@ -301,32 +317,34 @@ window.Rigsarkiv = window.Rigsarkiv || {},
 
             //validation of input fileds with dialog popups
             var ValidateFields = function() {
+                var result = true;
                 if (settings.fileName.value === "") {
                     ipcRenderer.send('open-error-dialog',settings.fileNameReqTitle.innerHTML,settings.fileNameReqText.innerHTML);
-                    settings.isValidMetadata = false;
+                    result = false;
                 }
-                if(settings.isValidMetadata && settings.fileDescr.value === "") {
+                if(result && settings.fileDescr.value === "") {
                     ipcRenderer.send('open-error-dialog',settings.fileDescrReqTitle.innerHTML,settings.fileDescrReqText.innerHTML);
-                    settings.isValidMetadata = false;
+                    result = false;
                 }
-                if (settings.isValidMetadata && startNumberPattern.test(settings.fileName.value)) {
+                if (result && startNumberPattern.test(settings.fileName.value)) {
                     ipcRenderer.send('open-error-dialog',settings.numberFirstTitle.innerHTML,settings.numberFirstText.innerHTML);
-                    settings.isValidMetadata = false;
+                    result = false;
                 }
-                if (settings.isValidMetadata && !validFileNamePattern.test(settings.fileName.value)) {
+                if (result && !validFileNamePattern.test(settings.fileName.value)) {
                     if(!enclosedReservedWordPattern.test(settings.fileName.value)) {
                         ipcRenderer.send('open-error-dialog',settings.illegalCharTitle.innerHTML,settings.illegalCharText.innerHTML);
-                        settings.isValidMetadata = false;
+                        result = false;
                     }
                 }
-                if (settings.isValidMetadata && settings.fileName.value.length > strLength) {
+                if (result && settings.fileName.value.length > strLength) {
                     ipcRenderer.send('open-error-dialog',settings.fileNameLengthTitle.innerHTML,settings.fileNameLengthText.innerHTML);
-                    settings.isValidMetadata = false;
+                    result = false;
                 }
-                if (settings.isValidMetadata && reservedWordPattern.test(settings.fileName.value)) {
+                if (result && reservedWordPattern.test(settings.fileName.value)) {
                     ipcRenderer.send('open-error-dialog',settings.fileNameReservedWordTitle.innerHTML,settings.fileNameReservedWordText.innerHTML);
-                    settings.isValidMetadata = false;
+                    result = false;
                 }
+                return result;
             }
 
             // Validate refernces inputs
@@ -361,24 +379,26 @@ window.Rigsarkiv = window.Rigsarkiv || {},
 
             // validate keys
             var ValidateKey = function(keyValue) {
-                if (settings.isValidMetadata && startNumberPattern.test(keyValue)) {
+                var result = true;
+                if (result && startNumberPattern.test(keyValue)) {
                     ipcRenderer.send('open-error-dialog',settings.numberFirstKeyTitle.innerHTML,settings.numberFirstKeyText.innerHTML);
-                    settings.isValidMetadata = false;
+                    result = false;
                 }
-                if (settings.isValidMetadata && !validFileNamePattern.test(keyValue)) {
+                if (result && !validFileNamePattern.test(keyValue)) {
                     if(!enclosedReservedWordPattern.test(keyValue)) {
                         ipcRenderer.send('open-error-dialog',settings.illegalCharKeyTitle.innerHTML,settings.illegalCharKeyText.innerHTML);
-                        settings.isValidMetadata = false;
+                        result = false;
                     }
                 }
-                if (settings.isValidMetadata && keyValue.length > strLength) {
+                if (result && keyValue.length > strLength) {
                     ipcRenderer.send('open-error-dialog',settings.keyLengthTitle.innerHTML,settings.keyLengthText.innerHTML);
-                    settings.isValidMetadata = false;
+                    result = false;
                 }
-                if (settings.isValidMetadata && reservedWordPattern.test(keyValue)) {
+                if (result && reservedWordPattern.test(keyValue)) {
                     ipcRenderer.send('open-error-dialog',settings.keyReservedWordTitle.innerHTML,settings.keyReservedWordText.innerHTML);
-                    settings.isValidMetadata = false;
+                    result = false;
                 }
+                return result;
             }
 
             //implments new data table extraction
@@ -386,7 +406,10 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 settings.extractionCallback().reset();
                 Reset();
                 $("#{0} tr:not(:first-child)".format(settings.referencesTbl.id)).remove();
+                $("#{0} tr:not(:first-child)".format(settings.varKeysTbl.id)).remove();
                 settings.referencesTbl.hidden = true;
+                settings.varKeysTbl.hidden = true;
+                settings.varKeys = [];
                 settings.references = [];
                 settings.fileName.value = "";
                 settings.fileDescr.value = "";
@@ -410,11 +433,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 })
                 settings.okBtn.addEventListener('click', function (event) {
                     Reset();
-                    ValidateFields();
-                    if(settings.keyVar.value != null && settings.keyVar.value !== "") {
-                        settings.keyVar.value.split(" ").forEach(keyValue => ValidateKey(keyValue));
-                    }
-                    if(settings.isValidMetadata) { EnsureData(); }
+                    if(ValidateFields()) { EnsureData(); }
                 })
                 settings.addReferenceBtn.addEventListener('click', function (event) {
                     if (settings.foreignFileName.value !== "" && settings.foreignKeyVarName.value !== "" && settings.foreignFileRefVar.value !== "") {
@@ -432,11 +451,25 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                         ipcRenderer.send('open-error-dialog',settings.referenceReqTitle.innerHTML,settings.referenceReqText.innerHTML);
                     }               
                 });
+                settings.addVarKeyBtn.addEventListener('click', function (event) {
+                    var key = settings.keyVar.value;
+                    if(key != null && key !== "") {
+                        if(ValidateKey(key) && !settings.varKeys.includes(key)) {
+                            settings.varKeys.push(key);
+                            settings.varKeysTbl.hidden = false;
+                            $(settings.varKeysTbl).append("<tr><td>{0}</td></tr>".format(key));
+                            settings.keyVar.value = "";
+                        }
+                    }
+                    else {
+                        ipcRenderer.send('open-error-dialog',settings.varKeyReqTitle.innerHTML,settings.varKeyReqText.innerHTML);
+                    }
+                });
             }
 
             //Model interfaces functions
             Rigsarkiv.Hybris.MetaData = {
-                initialize: function (extractionCallback,metadataFileName,metadataFileNameDescription,metadataKeyVariable,metadataForeignFileName,metadataForeignKeyVariableName,metadataReferenceVariable,metdataOkBtn,inputFileNameRequired,inputNumberFirst,inputIllegalChar,outputOkId,okDataPathId,outputErrorId,outputNewExtractionId,newExtractionBtn,extractionTabId,outputNextId,nextBtn,indexFilesTabId,fileNameLengthId,fileNameReservedWordId,fileDescrReqId,informationPanel1Id,informationPanel2Id,indexFilesDescriptionId,outputCloseApplicationErrorPrefixId,referencesId,addReferenceBtn,referenceReqId,resetHideBox,numberFirstReference,illegalCharReference,referenceLength,referenceReservedWord,foreignFileId,foreignVariableId,referenceVariableId,numberFirstKeyId,illegalCharKeyId,keyLengthId,keyReservedWordId) {
+                initialize: function (extractionCallback,metadataFileName,metadataFileNameDescription,metadataKeyVariable,metadataForeignFileName,metadataForeignKeyVariableName,metadataReferenceVariable,metdataOkBtn,inputFileNameRequired,inputNumberFirst,inputIllegalChar,outputOkId,okDataPathId,outputErrorId,outputNewExtractionId,newExtractionBtn,extractionTabId,outputNextId,nextBtn,indexFilesTabId,fileNameLengthId,fileNameReservedWordId,fileDescrReqId,informationPanel1Id,informationPanel2Id,indexFilesDescriptionId,outputCloseApplicationErrorPrefixId,referencesId,addReferenceBtn,referenceReqId,resetHideBox,numberFirstReference,illegalCharReference,referenceLength,referenceReservedWord,foreignFileId,foreignVariableId,referenceVariableId,numberFirstKeyId,illegalCharKeyId,keyLengthId,keyReservedWordId,variablesId,addVarKeyId,varKeysId,varKeyReqId) {
                     settings.extractionCallback = extractionCallback;
                     settings.fileName = document.getElementById(metadataFileName);
                     settings.fileDescr = document.getElementById(metadataFileNameDescription);
@@ -495,6 +528,11 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                     settings.keyLengthText = document.getElementById(keyLengthId + "-Text");
                     settings.keyReservedWordTitle = document.getElementById(keyReservedWordId + "-Title");
                     settings.keyReservedWordText = document.getElementById(keyReservedWordId + "-Text");
+                    settings.variablesDropdown = document.getElementById(variablesId);
+                    settings.addVarKeyBtn = document.getElementById(addVarKeyId);
+                    settings.varKeysTbl = document.getElementById(varKeysId);
+                    settings.varKeyReqTitle = document.getElementById(varKeyReqId + "-Title");
+                    settings.varKeyReqText = document.getElementById(varKeyReqId + "-Text");
                     AddEvents();
                 }
             }
