@@ -24,9 +24,6 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 fileName: null,
                 fileDescr: null,
                 keyVar: null,
-                foreignFileName: null,
-                foreignKeyVarName: null,
-                foreignFileRefVar: null,
                 okBtn: null,
                 outputOkSpn: null,
                 outputOkText: null,
@@ -58,17 +55,6 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 informationPanel2: null,
                 indexFilesDescriptionSpn: null,
                 indexFilesDescriptionText: null,
-                referencesTbl: null,
-                addReferenceBtn: null,
-                referenceReqTitle: null,
-                referenceReqText: null,
-                numberFirstReferenceText: null,
-                illegalCharReferenceText: null,
-                referenceLengthText: null,
-                referenceReservedWordText: null,
-                foreignFileTitle: null,
-                foreignVariableTitle: null,
-                referenceVariableTitle: null,
                 numberFirstKeyTitle: null,
                 numberFirstKeyText: null,
                 illegalCharKeyTitle: null,
@@ -203,19 +189,6 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                         Cleanup();
                     }
                 }); 
-            }
-
-            //Build data references sets
-            var GetReferences = function() {
-                var result = "";
-                var foreignKeyVarName = null;
-                var foreignFileRefVar = null;
-                settings.references.forEach(element => {
-                    foreignKeyVarName = (element[1] != null && element[1] !== "") ? "'{0}'".format(element[1]) : "";
-                    foreignFileRefVar = (element[2] != null && element[2] !== "") ? "'{0}'".format(element[2]) : "";
-                    result += "{0} {1} {2}{3}".format(element[0],foreignKeyVarName,foreignFileRefVar,GetNewLine());
-                });
-                return result;
             }
 
             //update metadata txt file
@@ -353,36 +326,6 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 return result;
             }
 
-            // Validate refernces inputs
-            var ValidateReference = function(referenceType,referenceValue) {
-                var result = true;
-                var referenceTypeTitle = "";
-                switch(referenceType) {
-                    case "foreignFile" : referenceTypeTitle = settings.foreignFileTitle.innerHTML ;break;
-                    case "foreignVariable" : referenceTypeTitle = settings.foreignVariableTitle.innerHTML ;break;
-                    case "referenceVariable" : referenceTypeTitle = settings.referenceVariableTitle.innerHTML ;break;
-                }
-                if (result && startNumberPattern.test(referenceValue)) {
-                    ipcRenderer.send('open-error-dialog',referenceTypeTitle,settings.numberFirstReferenceText.innerHTML.format(referenceTypeTitle));
-                    result = false;
-                }
-                if (result && !validFileNamePattern.test(referenceValue)) {
-                    if(!enclosedReservedWordPattern.test(referenceValue)) {
-                        ipcRenderer.send('open-error-dialog',referenceTypeTitle,settings.illegalCharReferenceText.innerHTML.format(referenceTypeTitle));
-                        result = false;
-                    }
-                }
-                if (result && referenceValue.length > strLength) {
-                    ipcRenderer.send('open-error-dialog',referenceTypeTitle,settings.referenceLengthText.innerHTML.format(referenceTypeTitle));
-                    result = false;
-                }
-                if (result && reservedWordPattern.test(referenceValue)) {
-                    ipcRenderer.send('open-error-dialog',referenceTypeTitle,settings.referenceReservedWordText.innerHTML.format(referenceTypeTitle));
-                    result = false;
-                }
-                return result;
-            }
-
             // validate keys
             var ValidateKey = function(keyValue) {
                 var result = true;
@@ -411,18 +354,13 @@ window.Rigsarkiv = window.Rigsarkiv || {},
             var ResetExtraction = function() {
                 settings.extractionCallback().reset();
                 Reset();
-                $("#{0} tr:not(:first-child)".format(settings.referencesTbl.id)).remove();
                 $("#{0} tr:not(:first-child)".format(settings.varKeysTbl.id)).remove();
-                settings.referencesTbl.hidden = true;
                 settings.varKeysTbl.hidden = true;
                 settings.varKeys = [];
                 settings.references = [];
                 settings.fileName.value = "";
                 settings.fileDescr.value = "";
                 settings.keyVar.value = "";
-                settings.foreignFileName.value = "";
-                settings.foreignKeyVarName.value = "";
-                settings.foreignFileRefVar.value = "";
             }
 
             //add Event Listener to HTML elmenets
@@ -447,22 +385,6 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                     Reset();
                     if(ValidateFields()) { EnsureData(); }
                 })
-                settings.addReferenceBtn.addEventListener('click', function (event) {
-                    if (settings.foreignFileName.value !== "" && settings.foreignKeyVarName.value !== "" && settings.foreignFileRefVar.value !== "") {
-                        if(ValidateReference("foreignFile",settings.foreignFileName.value) && ValidateReference("foreignVariable",settings.foreignKeyVarName.value) && ValidateReference("referenceVariable",settings.foreignFileRefVar.value)) {
-                            var selectedReferences = [settings.foreignFileName.value,settings.foreignKeyVarName.value,settings.foreignFileRefVar.value];
-                            settings.references.push(selectedReferences);
-                            settings.referencesTbl.hidden = false;
-                            $(settings.referencesTbl).append("<tr><td>{0}</td><td>{1}</td><td>{2}</td></tr>".format(selectedReferences[0],selectedReferences[1],selectedReferences[2]));
-                            settings.foreignFileName.value = "";
-                            settings.foreignKeyVarName.value = "";
-                            settings.foreignFileRefVar.value = "";
-                        }
-                    }
-                    else {
-                        ipcRenderer.send('open-error-dialog',settings.referenceReqTitle.innerHTML,settings.referenceReqText.innerHTML);
-                    }               
-                });
                 settings.addVarKeyBtn.addEventListener('click', function (event) {
                     var key = settings.keyVar.value;
                     if(key != null && key !== "") {
@@ -481,14 +403,11 @@ window.Rigsarkiv = window.Rigsarkiv || {},
 
             //Model interfaces functions
             Rigsarkiv.Hybris.MetaData = {
-                initialize: function (extractionCallback,metadataFileName,metadataFileNameDescription,metadataKeyVariable,metadataForeignFileName,metadataForeignKeyVariableName,metadataReferenceVariable,metdataOkBtn,inputFileNameRequired,inputNumberFirst,inputIllegalChar,outputOkId,okDataPathId,outputErrorId,outputNewExtractionId,newExtractionBtn,extractionTabId,outputNextId,nextBtn,referencesTabId,fileNameLengthId,fileNameReservedWordId,fileDescrReqId,informationPanel1Id,informationPanel2Id,indexFilesDescriptionId,outputCloseApplicationErrorPrefixId,referencesId,addReferenceBtn,referenceReqId,resetHideBox,numberFirstReference,illegalCharReference,referenceLength,referenceReservedWord,foreignFileId,foreignVariableId,referenceVariableId,numberFirstKeyId,illegalCharKeyId,keyLengthId,keyReservedWordId,variablesId,addVarKeyId,varKeysId,varKeyReqId,tablesId) {
+                initialize: function (extractionCallback,metadataFileName,metadataFileNameDescription,metadataKeyVariable,metdataOkBtn,inputFileNameRequired,inputNumberFirst,inputIllegalChar,outputOkId,okDataPathId,outputErrorId,outputNewExtractionId,newExtractionBtn,extractionTabId,outputNextId,nextBtn,referencesTabId,fileNameLengthId,fileNameReservedWordId,fileDescrReqId,informationPanel1Id,informationPanel2Id,indexFilesDescriptionId,outputCloseApplicationErrorPrefixId,resetHideBox,numberFirstKeyId,illegalCharKeyId,keyLengthId,keyReservedWordId,variablesId,addVarKeyId,varKeysId,varKeyReqId,tablesId) {
                     settings.extractionCallback = extractionCallback;
                     settings.fileName = document.getElementById(metadataFileName);
                     settings.fileDescr = document.getElementById(metadataFileNameDescription);
                     settings.keyVar = document.getElementById(metadataKeyVariable);
-                    settings.foreignFileName = document.getElementById(metadataForeignFileName);
-                    settings.foreignKeyVarName = document.getElementById(metadataForeignKeyVariableName);
-                    settings.foreignFileRefVar = document.getElementById(metadataReferenceVariable);
                     settings.okBtn = document.getElementById(metdataOkBtn);
                     settings.fileNameReqTitle = document.getElementById(inputFileNameRequired + "-Title");
                     settings.fileNameReqText = document.getElementById(inputFileNameRequired + "-Text");
@@ -520,18 +439,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                     settings.indexFilesDescriptionText = settings.indexFilesDescriptionSpn.innerHTML;
                     settings.outputCloseApplicationErrorTitle = document.getElementById(outputCloseApplicationErrorPrefixId + "-Title");
                     settings.outputCloseApplicationErrorText = document.getElementById(outputCloseApplicationErrorPrefixId + "-Text");
-                    settings.referencesTbl = document.getElementById(referencesId); 
-                    settings.addReferenceBtn = document.getElementById(addReferenceBtn);
-                    settings.referenceReqTitle = document.getElementById(referenceReqId + "-Title");
-                    settings.referenceReqText = document.getElementById(referenceReqId + "-Text");
                     settings.styleBox = document.getElementById(resetHideBox);
-                    settings.numberFirstReferenceText = document.getElementById(numberFirstReference + "-Text");
-                    settings.illegalCharReferenceText = document.getElementById(illegalCharReference + "-Text");
-                    settings.referenceLengthText = document.getElementById(referenceLength + "-Text");
-                    settings.referenceReservedWordText = document.getElementById(referenceReservedWord + "-Text");
-                    settings.foreignFileTitle = document.getElementById(foreignFileId + "-Title");
-                    settings.foreignVariableTitle = document.getElementById(foreignVariableId + "-Title");
-                    settings.referenceVariableTitle = document.getElementById(referenceVariableId + "-Title");
                     settings.numberFirstKeyTitle = document.getElementById(numberFirstKeyId + "-Title");
                     settings.numberFirstKeyText = document.getElementById(numberFirstKeyId + "-Text");
                     settings.illegalCharKeyTitle = document.getElementById(illegalCharKeyId + "-Title");
