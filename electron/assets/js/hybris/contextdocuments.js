@@ -33,6 +33,8 @@ function (n) {
             cancelConfirm: null,
             outputNextConfirmTitle: null,
             outputNextConfirmText: null,
+            validateBtn: null,
+            validateBtnText: null,
             documents: [],
             logs: [],
             hasSelected: false,
@@ -185,12 +187,18 @@ function (n) {
                         //ipcRenderer.send('open-information-dialog',settings.outputOkInformationTitle.innerHTML,settings.outputOkInformationText.innerHTML);
                     }
                     settings.selectDeliveryPackage.innerHTML = "[{0}]".format(settings.structureCallback().deliveryPackagePath);
+                    var folders = settings.structureCallback().deliveryPackagePath.getFolders();
+                    var folderName = folders[folders.length - 1];
+                    settings.validateBtn.value = settings.validateBtnText.format(folderName);
                     settings.overviewTab.click();
                 }
             });
             ipcRenderer.on('confirm-dialog-selection-contextdocuments', (event, index) => {
                 if(index === 0) {
                     settings.selectDeliveryPackage.innerHTML = "[{0}]".format(settings.structureCallback().deliveryPackagePath);
+                    var folders = settings.structureCallback().deliveryPackagePath.getFolders();
+                    var folderName = folders[folders.length - 1]; 
+                    settings.validateBtn.innerText = settings.validateBtnText.format(folderName);
                     settings.overviewTab.click();
                 }            
             });
@@ -213,7 +221,7 @@ function (n) {
         
         //Model interfaces functions
         Rigsarkiv.Hybris.ContextDocuments = {
-            initialize: function (structureCallback,outputErrorId,uploadsId,printId,outputEmptyFileId,nextId,overviewTabId,outputOkInformationPrefixId,spinnerId,selectDeliveryPackageId,outputOkConfirmId,outputCancelConfirmId,outputNextConfirmId) {
+            initialize: function (structureCallback,outputErrorId,uploadsId,printId,outputEmptyFileId,nextId,overviewTabId,outputOkInformationPrefixId,spinnerId,selectDeliveryPackageId,outputOkConfirmId,outputCancelConfirmId,outputNextConfirmId,validateId) {
                 settings.structureCallback = structureCallback;
                 settings.outputErrorSpn =  document.getElementById(outputErrorId);
                 settings.outputErrorText = settings.outputErrorSpn.innerHTML;
@@ -233,6 +241,8 @@ function (n) {
                 settings.cancelConfirm = document.getElementById(outputCancelConfirmId);
                 settings.outputNextConfirmTitle = document.getElementById(outputNextConfirmId + "-Title");
                 settings.outputNextConfirmText = document.getElementById(outputNextConfirmId + "-Text");
+                settings.validateBtn = document.getElementById(validateId);
+                settings.validateBtnText = settings.validateBtn.innerText;
                 AddEvents();
             },
             callback: function () {
