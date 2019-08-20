@@ -41,6 +41,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 foreignVariableTitle: null,
                 referenceVariableTitle: null,
                 referencesTbl: null,
+                indexfilesTab: null,
                 dataPathPostfix: "Data",
                 metadataFileName: "{0}.txt"
             }
@@ -71,9 +72,11 @@ window.Rigsarkiv = window.Rigsarkiv || {},
 
             //Update metadata file references
             var UpdateFile = function(filePath,references) {
+                var result = true;
                 console.logInfo("update metadata file: {0}".format(filePath),"Rigsarkiv.Hybris.References.UpdateFile");
                 fs.readFile(filePath, (err, data) => {
                     if (err) {
+                        result = false;
                         err.Handle(settings.outputErrorSpn,settings.outputErrorText,"Rigsarkiv.Hybris.References.UpdateFile");
                     }
                     else {
@@ -86,6 +89,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                         var updatedData = data.toString().format(text);
                         fs.writeFile(filePath, updatedData, (err) => {
                             if (err) {
+                                result = false;
                                 err.Handle(settings.outputErrorSpn,settings.outputErrorText,"Rigsarkiv.Hybris.References.UpdateFile");
                             }
                             else {
@@ -94,6 +98,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                         });
                     }
                 });
+                return result;
             }
 
             // Validate refernces inputs
@@ -128,13 +133,15 @@ window.Rigsarkiv = window.Rigsarkiv || {},
             //add Event Listener to HTML elmenets
             var AddEvents = function () {
                 settings.okBtn.addEventListener('click', function (event) {
+                    var result = true;
                     var dataFolderPath = settings.metadataCallback().structureCallback.deliveryPackagePath;
                     dataFolderPath = (dataFolderPath.indexOf("\\") > -1) ? "{0}\\{1}".format(dataFolderPath,settings.dataPathPostfix) : "{0}/{1}".format(dataFolderPath,settings.dataPathPostfix);
                     settings.metadataCallback().data.forEach(table => {
                         var fileName = settings.metadataFileName.format(table.fileName);
                         var path = (dataFolderPath.indexOf("\\") > -1) ? "{0}\\{1}\\{2}".format(dataFolderPath,table.fileName,fileName) : "{0}/{1}/{2}".format(dataFolderPath,table.fileName,fileName);
-                        UpdateFile(path,table.references);
+                        if(!UpdateFile(path,table.references)) { result = false; }
                     });
+                    if(result) { settings.indexfilesTab.click(); }
                 });
                 settings.tableBox.addEventListener('change', function (event) {
                     $(settings.refVarsDropdown).empty();
@@ -179,7 +186,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
 
             //Model interfaces functions
             Rigsarkiv.Hybris.References = { 
-                initialize: function (metadataCallback,outputErrorId,okId,tablesId,tableBoxId,refVarsId,foreignTableBoxId,foreignVariablesId,addReferenceBtn,referenceReqId,refVarBoxId,foreignVariableBoxId,numberFirstReference,illegalCharReference,referenceLength,referenceReservedWord,foreignVariableId,referenceVariableId,referencesId) {
+                initialize: function (metadataCallback,outputErrorId,okId,tablesId,tableBoxId,refVarsId,foreignTableBoxId,foreignVariablesId,addReferenceBtn,referenceReqId,refVarBoxId,foreignVariableBoxId,numberFirstReference,illegalCharReference,referenceLength,referenceReservedWord,foreignVariableId,referenceVariableId,referencesId,indexfilesTabId) {
                     settings.metadataCallback = metadataCallback;
                     settings.outputErrorSpn = document.getElementById(outputErrorId);
                     settings.outputErrorText = settings.outputErrorSpn.innerHTML;
@@ -201,6 +208,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                     settings.foreignVariableTitle = document.getElementById(foreignVariableId + "-Title");
                     settings.referenceVariableTitle = document.getElementById(referenceVariableId + "-Title");
                     settings.referencesTbl = document.getElementById(referencesId); 
+                    settings.indexfilesTab = document.getElementById(indexfilesTabId);
                     AddEvents();
                 }
             }
