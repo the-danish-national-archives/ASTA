@@ -197,7 +197,7 @@ function (n) {
                 if(index === 0) {
                     settings.selectDeliveryPackage.innerHTML = "[{0}]".format(settings.structureCallback().deliveryPackagePath);
                     var folders = settings.structureCallback().deliveryPackagePath.getFolders();
-                    var folderName = folders[folders.length - 1];
+                    var folderName = folders[folders.length - 1]; 
                     settings.validateBtn.innerText = settings.validateBtnText.format(folderName);
                     settings.overviewTab.click();
                 }            
