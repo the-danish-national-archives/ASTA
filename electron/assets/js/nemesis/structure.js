@@ -548,12 +548,19 @@ function (n) {
             return null;
         }
 
+        var UpdatePath = function(path) {
+            settings.selectedPath = path; 
+            console.logInfo(`selected path: ${path}`,"Rigsarkiv.Nemesis.Structure.AddEvents"); 
+            settings.pathDirTxt.value = settings.selectedPath;
+            settings.logCallback().reset();
+            settings.confirmationSpn.innerHTML = "";
+        }
+
         //add Event Listener to HTML elmenets
         var AddEvents = function () {            
             settings.validateBtn.addEventListener('click', (event) => {
                 Reset();
-                if(settings.selectedPath == null || settings.pathDirTxt.value === "") { return; }                
-                settings.deliveryPackagePath = settings.selectedPath[0];
+                if(settings.selectedPath == null || settings.pathDirTxt.value === "") { return; } 
                 settings.logCallback().spinnerEnable(true);
                 Validate();                           
             })
@@ -561,12 +568,8 @@ function (n) {
                 ipcRenderer.send('validation-open-file-dialog');
             })
             ipcRenderer.on('validation-selected-directory', (event, path) => {
-                settings.selectedPath = path; 
-                console.logInfo(`selected path: ${path}`,"Rigsarkiv.Nemesis.Structure.AddEvents"); 
-                settings.pathDirTxt.value = settings.selectedPath;
-                settings.logCallback().reset();
-                settings.confirmationSpn.innerHTML = "";
-                settings.ConvertBtn.hidden = true;
+                UpdatePath(path);
+                settings.deliveryPackagePath = settings.selectedPath[0];
             })            
         }
 
@@ -603,6 +606,11 @@ function (n) {
                         settings.deliveryPackagePath = path;
                         Reset();
                         return Validate();
+                    },
+                    update: function(path)
+                    {
+                        UpdatePath(path);
+                        settings.deliveryPackagePath = path;
                     }  
                 };
             }

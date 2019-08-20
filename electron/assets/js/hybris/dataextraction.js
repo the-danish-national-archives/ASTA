@@ -65,7 +65,8 @@ function (n) {
             okConfirm: null,
             cancelConfirm: null,
             outputStatisticsSASPopup: null,
-            okScriptDataPath: null,   
+            okScriptDataPath: null,
+            variablesDropdown: null,   
             scriptPath: "./assets/scripts/{0}",
             resourceWinPath: "resources\\{0}",
             scripts: ["spss_script.sps","sas_uden_katalog_script.sas","sas_med_katalog_script.sas","stata_script.do"],
@@ -74,6 +75,7 @@ function (n) {
             sasCatalogFileExt: "{0}.sas7bcat",
             dataPathPostfix: "Data",
             dataTablePathPostfix: "table{0}",
+            variableFileName: null,
             scriptPathLink: null            
         }
 
@@ -311,7 +313,7 @@ function (n) {
         var GetExportInfo = function(files) {
             var unvalidFiles = [];
             var counter = 0;
-            var localPath = (settings.dataFolderPath.indexOf("\\") > -1) ? "{0}\\".format(settings.dataFolderPath) : "{0}/".format(settings.dataFolderPath);                           
+            //var localPath = (settings.dataFolderPath.indexOf("\\") > -1) ? "{0}\\".format(settings.dataFolderPath) : "{0}/".format(settings.dataFolderPath);                           
             var fileName = GetFileName();
             var filePrefix = fileName.substring(0,fileName.indexOf("."));
             files.forEach(file => {
@@ -319,6 +321,7 @@ function (n) {
                     if(element.format(filePrefix) == file) 
                     { 
                         counter = counter + 1;
+                        if(file.lastIndexOf("_VARIABEL.txt") > -1) { settings.variableFileName = file; }
                         //if(!ValidateFile(file)) { unvalidFiles.push(localPath + file); } 
                     }
                 });
@@ -362,13 +365,55 @@ function (n) {
             });
         }
 
+        //remove UTF8 boom charactors
+        var GetFileContent = function(filePath) {
+            var fileContent = fs.readFileSync(filePath);
+            var data = "";
+            if(fileContent.byteLength >= 3 && (fileContent[0] & 0xff) == 0xef && (fileContent[1] & 0xff) == 0xbb && (fileContent[2] & 0xff) == 0xbf) {
+                data = fileContent.toString("utf8",3);
+            }
+            else {
+                data = fileContent.toString();
+            }
+            var splitChar = "\r";
+            if(os.platform() == "win32") { splitChar = "\r\n"; }
+            if(os.platform() == "darwin") { splitChar = "\n"; }
+            return data.split(splitChar);
+        }
+
         //Redirect to metadata tab
         var Redirect = function() {
             var fileName = GetFileName();
             settings.outputScriptOkSpn.innerHTML = settings.outputScriptOkText.format(fileName);
             settings.outputScriptOkSpn.hidden = false;
             settings.metadataFileName.value = fileName.substring(0,fileName.indexOf("."));
-            settings.metdataTab.click();
+            console.logInfo("initialize variables Dropdown","Rigsarkiv.Hybris.DataExtraction.Redirect"); 
+            try
+            {
+                $(settings.variablesDropdown).empty();
+                var destFilePath = settings.dataFolderPath;
+                destFilePath += (destFilePath.indexOf("\\") > -1) ? "\\{0}".format(settings.variableFileName) : "/{0}".format(settings.variableFileName);
+                var lines = GetFileContent(destFilePath);
+                var i = 0;
+                do {
+                    var expressions = lines[i].trim().reduceWhiteSpace().split(" ");
+                    if(expressions.length >= 2 && expressions[0] !== "") {
+                        var el = document.createElement('option');
+                        var variableName = expressions[0];
+                        el.textContent = variableName;
+                        el.value = variableName;
+                        settings.variablesDropdown.appendChild(el);
+                    }
+                    i++;
+                }
+                while (lines[i] !== undefined && lines[i].trim() !== "");
+                settings.metdataTab.click();
+            }
+            catch(err) 
+            {
+                err.Handle(settings.outputErrorSpn,settings.outputErrorText,"Rigsarkiv.Hybris.DataExtraction.Redirect");
+            }
+            
         }
 
         //add Event Listener to HTML elmenets
@@ -430,7 +475,7 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Hybris.DataExtraction = {        
-            initialize: function (structureCallback,selectStatisticsFileId,pathStatisticsFileId,okStatisticsId,outputStatisticsErrorId,outputStatisticsOkCopyScriptId,outputStatisticsSASWarningPrefixId,scriptPanel1Id,scriptPanel2Id,okScriptBtnId,okScriptDataPathId,outputStatisticsOkCopyScriptInfoId,outputStatisticsRequiredPathId,outputScriptRequiredFilesWarningPrefixId,outputScriptOkId,outputScriptEncodingFileErrorPrefixId,nextId,metdataTabId,outputScriptCloseApplicationWarningPrefixId,outputStructureOkId,selectStructureDeliveryPackageId,metadataFileName,spinnerId,outputScriptPath,outputHeaderLinkTrin2,outputHeaderLinkTrin3,outputHeaderLinkInformation2,outputOkConfirmId,outputCancelConfirmId,outputStatisticsSASPopupId) {
+            initialize: function (structureCallback,selectStatisticsFileId,pathStatisticsFileId,okStatisticsId,outputStatisticsErrorId,outputStatisticsOkCopyScriptId,outputStatisticsSASWarningPrefixId,scriptPanel1Id,scriptPanel2Id,okScriptBtnId,okScriptDataPathId,outputStatisticsOkCopyScriptInfoId,outputStatisticsRequiredPathId,outputScriptRequiredFilesWarningPrefixId,outputScriptOkId,outputScriptEncodingFileErrorPrefixId,nextId,metdataTabId,outputScriptCloseApplicationWarningPrefixId,outputStructureOkId,selectStructureDeliveryPackageId,metadataFileName,spinnerId,outputScriptPath,outputHeaderLinkTrin2,outputHeaderLinkTrin3,outputHeaderLinkInformation2,outputOkConfirmId,outputCancelConfirmId,outputStatisticsSASPopupId,variablesId) {
                 settings.structureCallback = structureCallback;
                 settings.selectStatisticsFileBtn = document.getElementById(selectStatisticsFileId);
                 settings.pathStatisticsFileTxt = document.getElementById(pathStatisticsFileId);
@@ -472,6 +517,7 @@ function (n) {
                 settings.okConfirm = document.getElementById(outputOkConfirmId);
                 settings.cancelConfirm = document.getElementById(outputCancelConfirmId);
                 settings.outputStatisticsSASPopup = document.getElementById(outputStatisticsSASPopupId);
+                settings.variablesDropdown = document.getElementById(variablesId);
                 AddEvents();
             },
             callback: function () {
