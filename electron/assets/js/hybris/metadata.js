@@ -39,7 +39,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 nextBtn: null,
                 outputNextSpn: null,
                 extractionTab: null,
-                indexFilesTab: null,
+                referencesTab: null,
                 fileNameReqTitle: null,
                 fileNameReqText: null,
                 fileDescrReqTitle: null,
@@ -114,6 +114,13 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 return folders[folders.length - 1];
             }
 
+            var GetNewLine = function() {
+                var result = "\r";
+                if(os.platform() == "win32") { result = "\r\n"; }
+                if(os.platform() == "darwin") { result = "\n"; }
+                return result;
+            }
+
             // Cleanup Files
             var CleanupFiles = function(files,fileName) {
                 var result = false;
@@ -134,6 +141,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 });
                 return result;
             }
+
             //delete other txt files from statistic program
             var Cleanup = function() {
                 var dataFolderPath = settings.extractionCallback().dataFolderPath;
@@ -163,7 +171,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                             for (var i = 0; i < settings.variablesDropdown.options.length; i++) {
                                 variables.push(settings.variablesDropdown.options[i].value);
                             }
-                            settings.data.push({ "fileName":fileName,"name":settings.fileName.value, "variables":variables, "keys":settings.varKeys });
+                            settings.data.push({ "fileName":fileName, "name":settings.fileName.value, "variables":variables, "keys":settings.varKeys, "references":[] });
                             console.log("{0} data output: ".format(settings.fileName));
                             console.log(settings.data);
                         }                                                          
@@ -205,7 +213,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 settings.references.forEach(element => {
                     foreignKeyVarName = (element[1] != null && element[1] !== "") ? "'{0}'".format(element[1]) : "";
                     foreignFileRefVar = (element[2] != null && element[2] !== "") ? "'{0}'".format(element[2]) : "";
-                    result += "{0} {1} {2}\r\n".format(element[0],foreignKeyVarName,foreignFileRefVar);
+                    result += "{0} {1} {2}{3}".format(element[0],foreignKeyVarName,foreignFileRefVar,GetNewLine());
                 });
                 return result;
             }
@@ -223,10 +231,8 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                         var callback = settings.extractionCallback();
                         var metadataFileName = GetMetaDataFileName();
                         var scriptType = callback.scriptType;
-                        var keyVar = (settings.varKeys.length > 0) ? "{0}\r\n".format(settings.varKeys.join(" ")) : "";
-                        var updatedData = data.toString().format(scriptType,settings.fileName.value,settings.fileDescr.value,keyVar,
-                            GetReferences(),
-                            settings.contents[0],settings.contents[1],settings.contents[2],settings.contents[3]);
+                        var keyVar = (settings.varKeys.length > 0) ? "{0}{1}".format(settings.varKeys.join(" "),GetNewLine()) : "";
+                        var updatedData = data.toString().format(scriptType,settings.fileName.value,settings.fileDescr.value,keyVar,"{0}",settings.contents[0],settings.contents[1],settings.contents[2],settings.contents[3]);
                         var srcFilePath = callback.dataFolderPath;
                         srcFilePath += (srcFilePath.indexOf("\\") > -1) ? "\\{0}".format(metadataFileName) : "/{0}".format(metadataFileName);
                         fs.writeFile(srcFilePath, updatedData, (err) => {
@@ -422,7 +428,13 @@ window.Rigsarkiv = window.Rigsarkiv || {},
             //add Event Listener to HTML elmenets
             var AddEvents = function () {
                 settings.nextBtn.addEventListener('click', (event) => {
-                    settings.indexFilesTab.click();
+                    settings.data.forEach(table => {
+                        var el = document.createElement('option');
+                        el.textContent = table.fileName;
+                        el.value = table.name;
+                        settings.tablesDropdown.appendChild(el);
+                    });
+                    settings.referencesTab.click();
                 });
                 settings.newExtractionBtn.addEventListener('click', (event) => {
                     ResetExtraction();
@@ -469,7 +481,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
 
             //Model interfaces functions
             Rigsarkiv.Hybris.MetaData = {
-                initialize: function (extractionCallback,metadataFileName,metadataFileNameDescription,metadataKeyVariable,metadataForeignFileName,metadataForeignKeyVariableName,metadataReferenceVariable,metdataOkBtn,inputFileNameRequired,inputNumberFirst,inputIllegalChar,outputOkId,okDataPathId,outputErrorId,outputNewExtractionId,newExtractionBtn,extractionTabId,outputNextId,nextBtn,indexFilesTabId,fileNameLengthId,fileNameReservedWordId,fileDescrReqId,informationPanel1Id,informationPanel2Id,indexFilesDescriptionId,outputCloseApplicationErrorPrefixId,referencesId,addReferenceBtn,referenceReqId,resetHideBox,numberFirstReference,illegalCharReference,referenceLength,referenceReservedWord,foreignFileId,foreignVariableId,referenceVariableId,numberFirstKeyId,illegalCharKeyId,keyLengthId,keyReservedWordId,variablesId,addVarKeyId,varKeysId,varKeyReqId) {
+                initialize: function (extractionCallback,metadataFileName,metadataFileNameDescription,metadataKeyVariable,metadataForeignFileName,metadataForeignKeyVariableName,metadataReferenceVariable,metdataOkBtn,inputFileNameRequired,inputNumberFirst,inputIllegalChar,outputOkId,okDataPathId,outputErrorId,outputNewExtractionId,newExtractionBtn,extractionTabId,outputNextId,nextBtn,referencesTabId,fileNameLengthId,fileNameReservedWordId,fileDescrReqId,informationPanel1Id,informationPanel2Id,indexFilesDescriptionId,outputCloseApplicationErrorPrefixId,referencesId,addReferenceBtn,referenceReqId,resetHideBox,numberFirstReference,illegalCharReference,referenceLength,referenceReservedWord,foreignFileId,foreignVariableId,referenceVariableId,numberFirstKeyId,illegalCharKeyId,keyLengthId,keyReservedWordId,variablesId,addVarKeyId,varKeysId,varKeyReqId,tablesId) {
                     settings.extractionCallback = extractionCallback;
                     settings.fileName = document.getElementById(metadataFileName);
                     settings.fileDescr = document.getElementById(metadataFileNameDescription);
@@ -495,7 +507,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                     settings.extractionTab = document.getElementById(extractionTabId);
                     settings.outputNextSpn = document.getElementById(outputNextId); 
                     settings.nextBtn = document.getElementById(nextBtn);
-                    settings.indexFilesTab = document.getElementById(indexFilesTabId);
+                    settings.referencesTab = document.getElementById(referencesTabId);
                     settings.fileNameLengthTitle = document.getElementById(fileNameLengthId + "-Title");
                     settings.fileNameLengthText = document.getElementById(fileNameLengthId + "-Text");
                     settings.fileNameReservedWordTitle = document.getElementById(fileNameReservedWordId + "-Title");
@@ -533,7 +545,14 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                     settings.varKeysTbl = document.getElementById(varKeysId);
                     settings.varKeyReqTitle = document.getElementById(varKeyReqId + "-Title");
                     settings.varKeyReqText = document.getElementById(varKeyReqId + "-Text");
+                    settings.tablesDropdown = document.getElementById(tablesId);
                     AddEvents();
+                },
+                callback: function () {
+                    return { 
+                        structureCallback: settings.extractionCallback().structureCallback,
+                        data: settings.data
+                    };
                 }
             }
         }(jQuery);
