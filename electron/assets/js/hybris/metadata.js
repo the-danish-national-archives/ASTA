@@ -459,7 +459,12 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 callback: function () {
                     return { 
                         structureCallback: settings.extractionCallback().structureCallback,
-                        data: settings.data
+                        data: settings.data,
+                        reset: function() 
+                        { 
+                            settings.data = [];
+                            Reset();
+                        } 
                     };
                 }
             }
