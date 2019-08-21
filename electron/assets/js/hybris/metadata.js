@@ -66,9 +66,11 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 variablesDropdown: null,
                 varKeyReqTitle: null,
                 varKeyReqText: null,
+                cancelBtn: null,
                 contents: ["","","",""],
                 varKeys: [],
                 references: [],
+                variables: [],
                 data: [],
                 metadataFileName: "{0}.txt",
                 dataFileName: "{0}.csv",
@@ -153,11 +155,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                             folders = dataFolderPath.getFolders();
                             settings.outputNewExtractionSpn.innerHTML = settings.outputNewExtractionText.format(folders[folders.length - 3]);
                             settings.indexFilesDescriptionSpn.innerHTML = settings.indexFilesDescriptionText.format(folders[folders.length - 3]);
-                            var variables = [];
-                            for (var i = 0; i < settings.variablesDropdown.options.length; i++) {
-                                variables.push(settings.variablesDropdown.options[i].value);
-                            }
-                            settings.data.push({ "fileName":fileName, "name":settings.fileName.value, "variables":variables, "keys":settings.varKeys, "references":[] });
+                            settings.data.push({ "fileName":fileName, "name":settings.fileName.value, "variables":settings.variables, "keys":settings.varKeys, "references":[] });
                             console.log("{0} data output: ".format(settings.fileName));
                             console.log(settings.data);
                         }                                                          
@@ -357,7 +355,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 $("#{0} tr:not(:first-child)".format(settings.varKeysTbl.id)).remove();
                 settings.varKeysTbl.hidden = true;
                 settings.varKeys = [];
-                settings.references = [];
+                settings.variables = [];
                 settings.fileName.value = "";
                 settings.fileDescr.value = "";
                 settings.keyVar.value = "";
@@ -385,10 +383,21 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                     Reset();
                     if(ValidateFields()) { EnsureData(); }
                 })
+                settings.cancelBtn.addEventListener('click', function (event) {
+                    $("#{0} tr:not(:first-child)".format(settings.varKeysTbl.id)).remove();
+                    settings.varKeysTbl.hidden = true;
+                    settings.varKeys = [];
+                    settings.keyVar.value = "";    
+                })
                 settings.addVarKeyBtn.addEventListener('click', function (event) {
+                    if(settings.variables.length === 0) {
+                        for (var i = 0; i < settings.variablesDropdown.options.length; i++) {
+                            settings.variables.push(settings.variablesDropdown.options[i].value);
+                        }
+                    }                           
                     var key = settings.keyVar.value;
                     if(key != null && key !== "") {
-                        if(ValidateKey(key) && !settings.varKeys.includes(key)) {
+                        if(ValidateKey(key) && !settings.varKeys.includes(key) && settings.variables.includes(key)) {
                             settings.varKeys.push(key);
                             settings.varKeysTbl.hidden = false;
                             $(settings.varKeysTbl).append("<tr><td>{0}</td></tr>".format(key));
@@ -403,7 +412,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
 
             //Model interfaces functions
             Rigsarkiv.Hybris.MetaData = {
-                initialize: function (extractionCallback,metadataFileName,metadataFileNameDescription,metadataKeyVariable,metdataOkBtn,inputFileNameRequired,inputNumberFirst,inputIllegalChar,outputOkId,okDataPathId,outputErrorId,outputNewExtractionId,newExtractionBtn,extractionTabId,outputNextId,nextBtn,referencesTabId,fileNameLengthId,fileNameReservedWordId,fileDescrReqId,informationPanel1Id,informationPanel2Id,indexFilesDescriptionId,outputCloseApplicationErrorPrefixId,resetHideBox,numberFirstKeyId,illegalCharKeyId,keyLengthId,keyReservedWordId,variablesId,addVarKeyId,varKeysId,varKeyReqId,tablesId) {
+                initialize: function (extractionCallback,metadataFileName,metadataFileNameDescription,metadataKeyVariable,metdataOkBtn,inputFileNameRequired,inputNumberFirst,inputIllegalChar,outputOkId,okDataPathId,outputErrorId,outputNewExtractionId,newExtractionBtn,extractionTabId,outputNextId,nextBtn,referencesTabId,fileNameLengthId,fileNameReservedWordId,fileDescrReqId,informationPanel1Id,informationPanel2Id,indexFilesDescriptionId,outputCloseApplicationErrorPrefixId,resetHideBox,numberFirstKeyId,illegalCharKeyId,keyLengthId,keyReservedWordId,variablesId,addVarKeyId,varKeysId,varKeyReqId,tablesId,cancelId) {
                     settings.extractionCallback = extractionCallback;
                     settings.fileName = document.getElementById(metadataFileName);
                     settings.fileDescr = document.getElementById(metadataFileNameDescription);
@@ -454,6 +463,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                     settings.varKeyReqTitle = document.getElementById(varKeyReqId + "-Title");
                     settings.varKeyReqText = document.getElementById(varKeyReqId + "-Text");
                     settings.tablesDropdown = document.getElementById(tablesId);
+                    settings.cancelBtn = document.getElementById(cancelId);
                     AddEvents();
                 },
                 callback: function () {
