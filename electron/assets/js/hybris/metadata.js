@@ -155,6 +155,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                             folders = dataFolderPath.getFolders();
                             settings.outputNewExtractionSpn.innerHTML = settings.outputNewExtractionText.format(folders[folders.length - 3]);
                             settings.indexFilesDescriptionSpn.innerHTML = settings.indexFilesDescriptionText.format(folders[folders.length - 3]);
+                            EnsureVariables();
                             settings.data.push({ "fileName":fileName, "name":settings.fileName.value, "variables":settings.variables, "keys":settings.varKeys, "references":[] });
                             console.log("{0} data output: ".format(settings.fileName));
                             console.log(settings.data);
@@ -361,6 +362,14 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 settings.keyVar.value = "";
             }
 
+            var EnsureVariables = function() {
+                if(settings.variables.length === 0) {
+                    for (var i = 0; i < settings.variablesDropdown.options.length; i++) {
+                        settings.variables.push(settings.variablesDropdown.options[i].value);
+                    }
+                }
+            }
+
             //add Event Listener to HTML elmenets
             var AddEvents = function () {
                 settings.nextBtn.addEventListener('click', (event) => {
@@ -390,11 +399,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                     settings.keyVar.value = "";    
                 })
                 settings.addVarKeyBtn.addEventListener('click', function (event) {
-                    if(settings.variables.length === 0) {
-                        for (var i = 0; i < settings.variablesDropdown.options.length; i++) {
-                            settings.variables.push(settings.variablesDropdown.options[i].value);
-                        }
-                    }                           
+                    EnsureVariables();                           
                     var key = settings.keyVar.value;
                     if(key != null && key !== "") {
                         if(ValidateKey(key) && !settings.varKeys.includes(key) && settings.variables.includes(key)) {
