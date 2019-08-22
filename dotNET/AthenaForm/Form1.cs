@@ -160,7 +160,7 @@ namespace Rigsarkiv.AthenaForm
         private void logButton_Click(object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
-            var path = string.Format("{0}\\{1}_log.html", aipTextBox.Text, aipNameTextBox.Text);
+            var path = string.Format("{0}\\{1}_ASTA_konverteringslog.html", aipTextBox.Text, aipNameTextBox.Text);
             if (_logManager.Flush(path, aipNameTextBox.Text, _converter.GetLogTemplate()))
             {
                 try
