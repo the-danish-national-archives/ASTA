@@ -86,10 +86,6 @@ namespace Rigsarkiv.AthenaConsole
                 break;
             }
             Console.ResetColor();
-<<<<<<< HEAD
-            System.Threading.Thread.Sleep(10);
-=======
->>>>>>> 07d849ea42a80d3ed0a9382c79dc99933bf6a155
         }
     }
 }
