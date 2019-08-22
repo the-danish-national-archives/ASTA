@@ -4,7 +4,7 @@ const fs = require('fs');
 
 var scriptsPath = path.join('./assets/scripts');
 var releasePath = path.join('./release-builds/windows-installer-admin/athena');
-var files = ["log4net.dll","Asta.dll","Athena.dll","AthenaConsole.exe","AthenaConsole.exe.config"];
+var files = ["log4net.dll","Asta.dll","Athena.dll","AthenaConsole.exe","AthenaConsole.exe.config","Styx.dll","StyxConsole.exe","StyxConsole.exe.config"];
 files.forEach(file => {
   fs.copyFile(path.join(scriptsPath,file), path.join(releasePath,file), (err) => {
     if (err) throw err;
