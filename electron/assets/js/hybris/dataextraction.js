@@ -524,7 +524,7 @@ function (n) {
                 return { 
                     structureCallback: settings.structureCallback(),
                     dataFolderPath: settings.dataFolderPath, 
-                    selectedStatisticsFilePath: settings.selectedStatisticsFilePath[0], 
+                    selectedStatisticsFilePath: settings.selectedStatisticsFilePath != null ? settings.selectedStatisticsFilePath[0] : null, 
                     scriptType: settings.scriptType, 
                     localFolderPath: settings.dataFolderPath, 
                     reset: function() 

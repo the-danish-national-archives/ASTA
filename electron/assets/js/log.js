@@ -24,7 +24,7 @@ function (n) {
         templateFileName: "log.html",
         scriptPath: "./assets/scripts/{0}",
         resourceWinPath: "resources\\{0}",
-        filePostfix: "{0}_ASTA_log.html",
+        filePostfix: "{0}_ASTA_testlog.html",
         errorElement: "<span id=\"{0}_{1}\" name=\"{2}\" class=\"error\">{3}</span>",
         warnElement: "<span id=\"{0}_{1}\" name=\"{2}\" class=\"warning\">{3}</span>",
         infoElement: "<span id=\"{0}_{1}\" name=\"{2}\" class=\"ok\" hidden=\"true\">{3}</span>",

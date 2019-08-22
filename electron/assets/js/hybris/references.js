@@ -42,6 +42,13 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 referenceVariableTitle: null,
                 referencesTbl: null,
                 indexfilesTab: null,
+                addReferenceVariableBtn: null,
+                referenceVariablesTbl: null,
+                addForeignVariableBtn: null,
+                foreignVariablesTbl: null,
+                cancelBtn: null,
+                foreignVariables: [],
+                referenceVariables: [],
                 dataPathPostfix: "Data",
                 metadataFileName: "{0}.txt"
             }
@@ -68,7 +75,18 @@ window.Rigsarkiv = window.Rigsarkiv || {},
             var Reset = function () {
                 $("#{0} tr:not(:first-child)".format(settings.referencesTbl.id)).remove();
                 settings.referencesTbl.hidden = true;
+                Clear();
             }
+
+            // clear 1 reference row
+            var Clear = function() {
+                $("#{0} tr:not(:first-child)".format(settings.referenceVariablesTbl.id)).remove();
+                $("#{0} tr:not(:first-child)".format(settings.foreignVariablesTbl.id)).remove();
+                settings.referenceVariablesTbl.hidden = true;
+                settings.foreignVariablesTbl.hidden = true;
+                settings.referenceVariables = [];
+                settings.foreignVariables = [];
+            } 
 
             //Update metadata file references
             var UpdateFile = function(filePath,references) {
@@ -83,7 +101,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                         var text = "";
                         if(references.length > 0) {
                             references.forEach(reference => {
-                                text += "{0} {1} {2}{3}".format(reference.table,"'{0}'".format(reference.key),"'{0}'".format(reference.refKey),GetNewLine());
+                                text += "{0} {1} {2}{3}".format(reference.table,"'{0}'".format(reference.key.join(" ")),"'{0}'".format(reference.refKey.join(" ")),GetNewLine());
                             });
                         }
                         var updatedData = data.toString().format(text);
@@ -143,6 +161,12 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                     });
                     if(result) { settings.indexfilesTab.click(); }
                 });
+                settings.cancelBtn.addEventListener('click', function (event) {
+                    Reset();
+                    settings.metadataCallback().data.forEach(table => {
+                        table.references = [];
+                    });
+                });
                 settings.tableBox.addEventListener('change', function (event) {
                     $(settings.refVarsDropdown).empty();
                     settings.refVarBox.value = "";
@@ -166,27 +190,40 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                     });                    
                 });
                 settings.addReferenceBtn.addEventListener('click', function (event) {
-                    if (settings.tableBox.value !== "" && settings.foreignTableBox.value !== "" && settings.refVarBox.value !== "" && settings.foreignVariableBox.value !== "") {
-                        if(ValidateReference("foreignVariable",settings.foreignVariableBox.value) && ValidateReference("referenceVariable",settings.refVarBox.value)) {
+                    if (settings.tableBox.value !== "" && settings.foreignTableBox.value !== "" && settings.referenceVariables.length > 0 && settings.foreignVariables.length > 0) {
                             var table = GetTableData(settings.tableBox.value);
-                            table.references.push({"table":settings.foreignTableBox.value, "key":settings.foreignVariableBox.value, "refKey":settings.refVarBox.value});
-                            $(settings.referencesTbl).append("<tr><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td></tr>".format(settings.tableBox.value,settings.refVarBox.value,settings.foreignTableBox.value,settings.foreignVariableBox.value));
+                            table.references.push({"table":settings.foreignTableBox.value, "key":settings.foreignVariables, "refKey":settings.referenceVariables});
+                            $(settings.referencesTbl).append("<tr><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td></tr>".format(settings.tableBox.value,settings.referenceVariables.join(" "),settings.foreignTableBox.value,settings.foreignVariables.join(" ")));
                             settings.referencesTbl.hidden = false;
                             settings.tableBox.value = "";
                             settings.foreignTableBox.value = "";
-                            settings.refVarBox.value = "";
-                            settings.foreignVariableBox.value = "";
-                        }
+                            Clear();
                     }
                     else {
                         ipcRenderer.send('open-error-dialog',settings.referenceReqTitle.innerHTML,settings.referenceReqText.innerHTML);
                     }               
-                });    
+                });
+                settings.addReferenceVariableBtn.addEventListener('click', function (event) { 
+                    if(settings.refVarBox.value !== "" && ValidateReference("referenceVariable",settings.refVarBox.value) && !settings.referenceVariables.includes(settings.refVarBox.value)) {
+                        settings.referenceVariables.push(settings.refVarBox.value);
+                        $(settings.referenceVariablesTbl).append("<tr><td>{0}</td></tr>".format(settings.refVarBox.value));
+                        settings.referenceVariablesTbl.hidden = false;
+                        settings.refVarBox.value = "";
+                    }
+                });
+                settings.addForeignVariableBtn.addEventListener('click', function (event) { 
+                    if(settings.foreignVariableBox.value !== "" && ValidateReference("foreignVariable",settings.foreignVariableBox.value) && !settings.foreignVariables.includes(settings.foreignVariableBox.value)) {
+                        settings.foreignVariables.push(settings.foreignVariableBox.value);
+                        $(settings.foreignVariablesTbl).append("<tr><td>{0}</td></tr>".format(settings.foreignVariableBox.value));
+                        settings.foreignVariablesTbl.hidden = false;
+                        settings.foreignVariableBox.value = "";
+                    }
+                });   
             }
 
             //Model interfaces functions
             Rigsarkiv.Hybris.References = { 
-                initialize: function (metadataCallback,outputErrorId,okId,tablesId,tableBoxId,refVarsId,foreignTableBoxId,foreignVariablesId,addReferenceBtn,referenceReqId,refVarBoxId,foreignVariableBoxId,numberFirstReference,illegalCharReference,referenceLength,referenceReservedWord,foreignVariableId,referenceVariableId,referencesId,indexfilesTabId) {
+                initialize: function (metadataCallback,outputErrorId,okId,tablesId,tableBoxId,refVarsId,foreignTableBoxId,foreignVariablesId,addReferenceId,referenceReqId,refVarBoxId,foreignVariableBoxId,numberFirstReference,illegalCharReference,referenceLength,referenceReservedWord,foreignVariableId,referenceVariableId,referencesId,indexfilesTabId,addReferenceVariableId,referenceVariablesId,addForeignVariableId,foreignVariablesTable,cancelId) {
                     settings.metadataCallback = metadataCallback;
                     settings.outputErrorSpn = document.getElementById(outputErrorId);
                     settings.outputErrorText = settings.outputErrorSpn.innerHTML;
@@ -196,7 +233,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                     settings.refVarsDropdown = document.getElementById(refVarsId);
                     settings.foreignTableBox = document.getElementById(foreignTableBoxId);
                     settings.foreignVariablesDropdown = document.getElementById(foreignVariablesId);
-                    settings.addReferenceBtn = document.getElementById(addReferenceBtn);
+                    settings.addReferenceBtn = document.getElementById(addReferenceId);
                     settings.referenceReqTitle = document.getElementById(referenceReqId + "-Title");
                     settings.referenceReqText = document.getElementById(referenceReqId + "-Text");
                     settings.refVarBox = document.getElementById(refVarBoxId);
@@ -209,6 +246,11 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                     settings.referenceVariableTitle = document.getElementById(referenceVariableId + "-Title");
                     settings.referencesTbl = document.getElementById(referencesId); 
                     settings.indexfilesTab = document.getElementById(indexfilesTabId);
+                    settings.addReferenceVariableBtn = document.getElementById(addReferenceVariableId);
+                    settings.referenceVariablesTbl = document.getElementById(referenceVariablesId);
+                    settings.addForeignVariableBtn = document.getElementById(addForeignVariableId);
+                    settings.foreignVariablesTbl = document.getElementById(foreignVariablesTable);
+                    settings.cancelBtn = document.getElementById(cancelId);
                     AddEvents();
                 }
             }
