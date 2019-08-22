@@ -2,6 +2,7 @@
 using Rigsarkiv.Athena;
 using Rigsarkiv.Asta.Logging;
 using System;
+using System.Diagnostics;
 
 namespace Rigsarkiv.AthenaConsole
 {
@@ -10,6 +11,7 @@ namespace Rigsarkiv.AthenaConsole
         protected static readonly ILog _log = log4net.LogManager.GetLogger(typeof(Program));
         private static Asta.Logging.LogManager _logManager = null;
         private static Athena.Converter _converter = null;
+        private static Stopwatch _stopWatch = new Stopwatch();
         static void Main(string[] args)
         {
             _log.Info("Start");
@@ -20,6 +22,7 @@ namespace Rigsarkiv.AthenaConsole
                 var srcPath = args[0];
                 var destPath = args[1];
                 var destFolder = args[2];
+                _stopWatch.Start();
                 _converter = new Structure(_logManager, srcPath, destPath, destFolder);
                 if(_converter.Run())
                 {
@@ -52,6 +55,9 @@ namespace Rigsarkiv.AthenaConsole
                         }
                     }
                 }
+                _stopWatch.Stop();
+                var ts = _stopWatch.Elapsed;
+                Console.WriteLine(string.Format("RunTime {0:00}:{1:00}:{2:00}.{3:00}", ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds / 10));
             }
             _log.Info("End");
         }
@@ -80,7 +86,6 @@ namespace Rigsarkiv.AthenaConsole
                 break;
             }
             Console.ResetColor();
-            System.Threading.Thread.Sleep(200);
         }
     }
 }
