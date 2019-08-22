@@ -37,7 +37,7 @@ function (n) {
             templateFileName: "batchlog.html",
             scriptPath: "./assets/scripts/{0}",
             resourceWinPath: "resources\\{0}",
-            filePostfix: "{0}_ASTA_log.html",
+            filePostfix: "{0}_ASTA_testlog.html",
             batchFilePostfix: "{0}_ASTA_BatchLog.html",
             startLogData: "<!--Start Log Data-->",
             endLogData: "<!--End Log Data-->",
