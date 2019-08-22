@@ -3,6 +3,7 @@ using Rigsarkiv.Asta.Logging;
 using Rigsarkiv.Styx;
 using Rigsarkiv.Styx.Entities;
 using System;
+using System.Diagnostics;
 
 namespace Rigsarkiv.StyxConsole
 {
@@ -11,6 +12,7 @@ namespace Rigsarkiv.StyxConsole
         protected static readonly ILog _log = log4net.LogManager.GetLogger(typeof(Program));
         private static Asta.Logging.LogManager _logManager = null;
         private static Styx.Converter _converter = null;
+        private static Stopwatch _stopWatch = new Stopwatch();
         static void Main(string[] args)
         {
             _log.Info("Start");
@@ -23,6 +25,7 @@ namespace Rigsarkiv.StyxConsole
                 var destFolder = args[2];
                 var scriptTypeText = args[3];
                 var scriptType = (ScriptType)Enum.Parse(typeof(ScriptType), scriptTypeText, true);
+                _stopWatch.Start();
                 _converter = new Structure(_logManager, srcPath, destPath, destFolder, scriptType);
                 if (_converter.Run())
                 {
@@ -44,6 +47,9 @@ namespace Rigsarkiv.StyxConsole
                         }                        
                     }
                 }
+                _stopWatch.Stop();
+                var ts = _stopWatch.Elapsed;
+                Console.WriteLine(string.Format("RunTime {0:00}:{1:00}:{2:00}.{3:00}", ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds / 10));
             }
             _log.Info("End");
         }
