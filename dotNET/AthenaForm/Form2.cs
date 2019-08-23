@@ -7,6 +7,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Rigsarkiv.Athena.Entities;
 using Rigsarkiv.Athena;
+using System.Reflection;
 
 namespace Rigsarkiv.AthenaForm
 {
@@ -41,7 +42,11 @@ namespace Rigsarkiv.AthenaForm
         /// <param name="outputRichTextBox"></param>
         public Form2(string srcPath, string destPath,string destFolder, LogManager logManager, Report report, RichTextBox outputRichTextBox)
         {
-            InitializeComponent();            
+            InitializeComponent();
+            //Sætter dataGridView til at være doublebuffered
+            typeof(DataGridView).InvokeMember("DoubleBuffered", BindingFlags.NonPublic |
+            BindingFlags.Instance | BindingFlags.SetProperty, null,
+            dataValues, new object[] { true });
             _logManager = logManager;
             _srcPath = srcPath;
             _destPath = destPath;
