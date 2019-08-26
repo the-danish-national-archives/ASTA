@@ -123,11 +123,35 @@ namespace Rigsarkiv.Athena
             _report.Tables.Add(table);
             foreach (var variable in (object[])tableInfo["variables"])
             {
-                var variableInfo = (Dictionary<string, object>)variable;
-                AddColumnNode(variableInfo,tableNode, researchIndexNode, table, index++);
+                 AddColumnNode((Dictionary<string, object>)variable, tableNode, researchIndexNode, table, index++);
+            }
+            if (tableInfo["references"] != null && ((object[])tableInfo["references"]).Length > 0)
+            {
+                foreach (var reference in (object[])tableInfo["references"])
+                {
+                    AddReferenceNode((Dictionary<string, object>)reference, tableNode, table, index++);
+                }
             }
         }
-        
+
+        private void AddReferenceNode(Dictionary<string, object> referenceInfo, XElement tableNode, Table table, int index)
+        {
+            var referencedTable = referenceInfo["refTable"].ToString();
+            var foreignKeyName = string.Format(ForeignKeyPrefix, NormalizeName(table.Name), NormalizeName(referencedTable), index);
+            _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add foreign key: {0} ", foreignKeyName) });
+
+            tableNode.Element(_tableIndexXNS + "foreignKeys").Add(new XElement(_tableIndexXNS + "foreignKey",
+                   new XElement(_tableIndexXNS + "name", foreignKeyName),
+                   new XElement(_tableIndexXNS + "referencedTable", referencedTable)));
+            var foreignKeyNode = tableNode.Element(_tableIndexXNS + "foreignKeys").Elements().Where(e => e.Element(_tableIndexXNS + "name").Value == foreignKeyName).FirstOrDefault();
+            var refVariables = (object[])referenceInfo["refVariables"];
+            var refKeys = (object[])referenceInfo["refKeys"];
+            for (var i = 0; i < refVariables.Length; i++)
+            {
+                foreignKeyNode.Add(new XElement(_tableIndexXNS + "reference", new XElement(_tableIndexXNS + "column", refKeys[i].ToString()), new XElement(_tableIndexXNS + "referenced", refVariables[i].ToString())));
+            }
+        }
+
         private void AddColumnNode(Dictionary<string, object> variableInfo, XElement tableNode, XElement researchIndexNode, Table table, int index)
         {
             var columnName = variableInfo["name"].ToString();
@@ -145,17 +169,7 @@ namespace Rigsarkiv.Athena
                  new XElement(_tableIndexXNS + "nullable", variableInfo["nullable"].ToString().ToLower()),
                  new XElement(_tableIndexXNS + "description", columnDescription));
             tableNode.Element(_tableIndexXNS + "columns").Add(columnNode);
-            table.Columns.Add(column);
-            if (!string.IsNullOrEmpty(variableInfo["refData"].ToString()) && !string.IsNullOrEmpty(variableInfo["refVariable"].ToString()))
-            {
-                var foreignKeyName = string.Format(ForeignKeyPrefix, NormalizeName(table.Name), NormalizeName(columnName), index);
-                _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add foreign key: {0} ", foreignKeyName) });
-
-                tableNode.Element(_tableIndexXNS + "foreignKeys").Add(new XElement(_tableIndexXNS + "foreignKey",
-                    new XElement(_tableIndexXNS + "name", foreignKeyName),
-                    new XElement(_tableIndexXNS + "referencedTable", variableInfo["refData"].ToString()),
-                    new XElement(_tableIndexXNS + "reference", new XElement(_tableIndexXNS + "column", columnName), new XElement(_tableIndexXNS + "referenced", variableInfo["refVariable"].ToString()))));
-            }
+            table.Columns.Add(column);            
             AddKeys(variableInfo, tableNode, researchIndexNode, table, column, index);
         }
         
