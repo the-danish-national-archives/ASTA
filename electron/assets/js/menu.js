@@ -6,6 +6,7 @@
 window.navigation = window.navigation || {},
     function (n) {
         const {getCurrentWindow, globalShortcut} = require('electron').remote;
+        const {ipcRenderer} = require('electron');
         navigation.menu = {
             constants: {
                 sectionTemplate: '.section-template',
@@ -62,8 +63,14 @@ window.navigation = window.navigation || {},
         n(function () {
             navigation.menu.init();
             document.getElementById("menu-reload").addEventListener('click', function (event) {
-                getCurrentWindow().reload();
+                ipcRenderer.send('open-confirm-dialog','menu-reload',"Program genstart","Du er ved at genstarte programmet. Er du sikker?","GENSTART","FORTRYD");
             });
+            ipcRenderer.on('confirm-dialog-selection-menu-reload', (event, index) => {
+                if(index === 0) {
+                    getCurrentWindow().reload();
+                } 
+                if(index === 1) {  }            
+            })
         })
 
     }(jQuery);
