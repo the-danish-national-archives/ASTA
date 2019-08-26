@@ -21,7 +21,7 @@ function (n) {
         const descriptionMultiPattern = /'([^']*)'/g;
         const datatypeString = [/^(string)$/,/^(\%([0-9]+)s)$/,/^(\$([0-9]+)\.)$/,/^(a([0-9]+))$/];
         const datatypeInt = [/^(int)$/,/^(\%([0-9]+)\.0f)$/,/^(f([0-9]+)\.)$/,/^(f([0-9]+))$/];
-        const datatypeDecimal = [/^(decimal)$/,/^(\%([0-9]+)\.([0-9]+)f)$/,/^(f([0-9]+)\.([0-9]+))$/,/^(f([0-9]+)\.([0-9]+))$/];
+        const datatypeDecimal = [/^(decimal)$/,/^(\%([0-9]+)\.([0-9]+)f)$/,/^(\%([0-9]+)\.([0-9]+)g)$/,/^(f([0-9]+)\.([0-9]+))$/,/^(f([0-9]+)\.([0-9]+))$/];
         const datatypeDate = [/^(date)$/,/^(\%tdCCYY-NN-DD)$/,/^((yymmdd\.)|(yymmdd10\.))$/,/^(sdate10)$/];
         const datatypeTime = [/^(time)$/,/^(\%tcHH:MM:SS)$/,/^((time\.)|(time8\.))$/,/^(time8)$/];
         const datatypeDateTime = [/^(datetime)$/,/^(\%tcCCYY-NN-DD\!THH:MM:SS)$/,/^((e8601dt\.)|(e8601dt19\.))$/,/^(datetime20)$/];
@@ -825,6 +825,10 @@ function (n) {
                     }
                 }
             });
+            if(regExp.toString() === "/^(\\%([0-9]+)\\.([0-9]+)g)$/") {
+                intLength = intLength - 1;
+                decimalLength = intLength;
+            }
             variable.regExps.push("^(\\+|\\-){0,1}[0-9]{0," + intLength + "}\\.[0-9]{1," + decimalLength + "}$");
             variable.regExps.push("^(\\+|\\-){0,1}[0-9]{0," + intLength + "}\\,[0-9]{1," + decimalLength + "}$");
             variable.regExps.push("^(\\+|\\-){0,1}[0-9]{1," + intLength + "}$");
