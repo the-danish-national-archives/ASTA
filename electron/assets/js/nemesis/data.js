@@ -19,6 +19,8 @@ function (n) {
         const doubleApostrophePattern1 = /^"([\w\W\s]*)"$/;
         const doubleApostrophePattern2 = /(")/g;
         const doubleApostrophePattern3 = /(["]{2,2})/g
+        const datatypeDecimal = /^(\%([0-9]+)\.([0-9]+)g)$/;
+        
         const errorsMax = 40;
         const warningMax = 100;
         
@@ -240,6 +242,12 @@ function (n) {
                 result = LogError("-CheckData-FileRow-ColumnsDecimalValue-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);  
             }
             else {
+                if(datatypeDecimal.test(variable.format)) {
+                    matches = variable.format.match(datatypeDecimal);
+                    if(parsedValue.toString().length > (parseInt(matches[2]) + 1)) {
+                        result = LogError("-CheckData-FileRow-ColumnsDecimalType-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, variable.format,dataValue);
+                    }
+                }
                 if(parsedValue > 79228162514264337593543950335.79228162514264337593543950335 || parsedValue < -79228162514264337593543950335.79228162514264337593543950335) {
                     result = LogError("-CheckData-FileRow-ColumnsDecimal-ValueRange-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
                 }
