@@ -21,13 +21,14 @@ function (n) {
         const descriptionMultiPattern = /'([^']*)'/g;
         const datatypeString = [/^(string)$/,/^(\%([0-9]+)s)$/,/^(\$([0-9]+)\.)$/,/^(a([0-9]+))$/];
         const datatypeInt = [/^(int)$/,/^(\%([0-9]+)\.0f)$/,/^(f([0-9]+)\.)$/,/^(f([0-9]+))$/];
-        const datatypeDecimal = [/^(decimal)$/,/^(\%([0-9]+)\.([0-9]+)f)$/,/^(f([0-9]+)\.([0-9]+))$/,/^(f([0-9]+)\.([0-9]+))$/];
+        const datatypeDecimal = [/^(decimal)$/,/^(\%([0-9]+)\.([0-9]+)f)$/,/^(\%([0-9]+)\.([0-9]+)g)$/,/^(f([0-9]+)\.([0-9]+))$/,/^(f([0-9]+)\.([0-9]+))$/];
         const datatypeDate = [/^(date)$/,/^(\%tdCCYY-NN-DD)$/,/^((yymmdd\.)|(yymmdd10\.))$/,/^(sdate10)$/];
         const datatypeTime = [/^(time)$/,/^(\%tcHH:MM:SS)$/,/^((time\.)|(time8\.))$/,/^(time8)$/];
         const datatypeDateTime = [/^(datetime)$/,/^(\%tcCCYY-NN-DD\!THH:MM:SS)$/,/^((e8601dt\.)|(e8601dt19\.))$/,/^(datetime20)$/];
         const titleMaxLength = 128;
         const stringMaxLength = 32767;
-            
+        const errorsMax = 40;
+
         //private data memebers
         var settings = { 
             outputErrorSpn: null,
@@ -49,6 +50,7 @@ function (n) {
             fileName: null,
             fileKeys: [],
             fileReferences: [],
+            tableErrors: 0,
             errors: 0,
             totalErrors: 0,
             errorStop: false,
@@ -107,19 +109,22 @@ function (n) {
 
         //handle error logging + HTML output
         var LogError = function(postfixId) {
-            var id = "{0}{1}".format(settings.outputPrefix,postfixId);
-            var text = null;
-            if (arguments.length > 1) {                
-                if(arguments.length === 2) { text = ViewElement(id,arguments[1],null,null); }
-                if(arguments.length === 3) { text = ViewElement(id,arguments[1],arguments[2],null); }
-                if(arguments.length === 4) { text = ViewElement(id,arguments[1],arguments[2],arguments[3]); }
-                if(arguments.length === 5) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4]); }
-                if(arguments.length === 6) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5]); }
-                if(arguments.length === 7) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5],arguments[6]); }
-            }
-            settings.logCallback().error(settings.logType,GetFolderName(),text);
+            if(settings.tableErrors < errorsMax) {
+                var id = "{0}{1}".format(settings.outputPrefix,postfixId);
+                var text = null;
+                if (arguments.length > 1) {                
+                    if(arguments.length === 2) { text = ViewElement(id,arguments[1],null,null); }
+                    if(arguments.length === 3) { text = ViewElement(id,arguments[1],arguments[2],null); }
+                    if(arguments.length === 4) { text = ViewElement(id,arguments[1],arguments[2],arguments[3]); }
+                    if(arguments.length === 5) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4]); }
+                    if(arguments.length === 6) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5]); }
+                    if(arguments.length === 7) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5],arguments[6]); }
+                }
+                settings.logCallback().error(settings.logType,GetFolderName(),text);
+            }            
             settings.errors += 1;
             settings.totalErrors += 1;
+            settings.tableErrors += 1;
             return false;
         }
 
@@ -490,16 +495,15 @@ function (n) {
                 }
             });
             settings.fileReferences.forEach(ref => {
-                if(!variables.includes(ref.refKey)) {
-                    result = LogError("-CheckMetadata-FileReferences-KeyRequired-Error",settings.fileName,ref.refKey);
-                }
-                else {
-                    table.variables.forEach(variable => {
-                        if(variable.name === ref.refKey) {
-                            variable.refData = ref.table;
-                            variable.refVariable = ref.key;
-                        }
-                    }); 
+                var addRef = true;
+                ref.refKeys.forEach(key => {
+                    if(!variables.includes(key)) {
+                        result = LogError("-CheckMetadata-FileReferences-KeyRequired-Error",settings.fileName,key);
+                        addRef = false;
+                    }
+                });                
+                if(addRef) {
+                    table.references.push({"refTable": ref.table, "refVariables":ref.keys, "refKeys":ref.refKeys});
                 }
             });
             return result;
@@ -537,7 +541,7 @@ function (n) {
                             var codeListKey = GetCodeListKey(expressions);
                             if(codeListKey == null) { result = false; }                            
                             var isKey = (settings.fileKeys.includes(variableName)) ? true : false;
-                            var variable = { "name":variableName, "format":expressions[1], "isKey":isKey, "type":"", "nullable":false, "description":"", "refData":"", "refVariable":"", "codeListKey":(codeListKey == null ? "" : codeListKey), "options":[], "regExps":[], "appliedRegExp":-1 }
+                            var variable = { "name":variableName, "format":expressions[1], "isKey":isKey, "type":"", "nullable":false, "description":"", "codeListKey":(codeListKey == null ? "" : codeListKey), "options":[], "regExps":[], "appliedRegExp":-1 }
                             table.variables.push(variable);
                             if(!ValidateDataFormats(variable)) { result = false; } 
                         } 
@@ -620,43 +624,38 @@ function (n) {
         var ValidateReferences = function (lines,startIndex) {
             var result = true;
             var i = startIndex;
-            var tableName = null;
-            var tableKey = null;
-            var refKey = null;
             do {
-                var expressions = lines[i].trim().split(" ");
-                if(expressions.length === 3) {
-                    if(expressions[1].length > 2 && expressions[2].length > 2 && expressions[1][0] === "'" && expressions[1][expressions[1].length - 1] === "'"  && expressions[2][0] === "'" && expressions[2][expressions[2].length - 1] === "'") {
-                        tableName = expressions[0];
-                        tableKey = expressions[1].substring(1,expressions[1].length - 1);
-                        refKey = expressions[2].substring(1,expressions[2].length - 1);
-                        if(!ValidateReferenceName(tableName)) { result = false;  }
-                        if(!ValidateReferenceName(tableKey)) { result = false;  }
-                        if(result) {
-                            settings.fileReferences.push({"table":tableName, "key":tableKey, "refKey":refKey});
-                        }
-                        else {
-                            settings.errorStop = true; 
-                        }
+                var requiredInfo = false;
+                var index = lines[i].trim().reduceWhiteSpace().indexOf(" ");
+                if(index > 0) {                
+                    var tableName = lines[i].trim().reduceWhiteSpace().substring(0,index); 
+                    if(!ValidateReferenceName(tableName)) { result = false; }
+                    var descriptionTemp = lines[i].trim().reduceWhiteSpace().substring(index + 1);
+                    descriptionMultiPattern.lastIndex = 0;
+                    var matches = descriptionTemp.match(descriptionMultiPattern)
+                    if(matches != null) {
+                        if(matches.length > 2) {  result = LogError("-CheckMetadata-FileReferences-RowMax-Error",settings.fileName,i + 1); }
+                        if(matches.length < 2) {  requiredInfo = true; }
+                        if(matches.length === 2) {
+                            var tableKeys = matches[0].substring(1,matches[0].length - 1).split(" ");
+                            tableKeys.forEach(tableKey => {
+                                if(!ValidateReferenceName(tableKey)) { result = false;  }
+                            });
+                            var refKeys = matches[1].substring(1,matches[1].length - 1).split(" ");
+                            if(result) {
+                                settings.fileReferences.push({"table":tableName, "keys":tableKeys, "refKeys":refKeys});
+                            }
+                        }                        
                     }
                     else {
-                        var variable = "";
-                        if(expressions[1].length > 1 && (expressions[1][0] !== "'" || expressions[1][expressions[1].length - 1] !== "'")) { variable = expressions[1];}
-                        if(expressions[2].length > 1 && (expressions[2][0] !== "'" || expressions[2][expressions[2].length - 1] !== "'")) { variable = expressions[2];}
-                        result = LogError("-CheckMetadata-FileReferences-RowValidation-Error",settings.fileName,i + 1,variable);
+                        requiredInfo = true;
                     }
-                }                
-                if(expressions.length > 3) {
-                    result = LogError("-CheckMetadata-FileReferences-RowMax-Error",settings.fileName,i + 1);
-                    settings.errorStop = true;
-                } 
-                if(expressions.length < 3) {
-                    result = LogError("-CheckMetadata-FileReferences-RowRequiredInfo-Error",settings.fileName,i + 1);
-                    settings.errorStop = true;
-                } 
+                }
+                if(requiredInfo) { result = LogError("-CheckMetadata-FileReferences-RowRequiredInfo-Error",settings.fileName,i + 1); }
                 i++;
             }
             while (lines[i] !== undefined && lines[i].trim() !== "");
+            if(!result) { settings.errorStop = true; }
             return result;
         }
 
@@ -831,6 +830,10 @@ function (n) {
                     }
                 }
             });
+            if(regExp.toString() === "/^(\\%([0-9]+)\\.([0-9]+)g)$/") {
+                intLength = intLength - 1;
+                decimalLength = intLength;
+            }
             variable.regExps.push("^(\\+|\\-){0,1}[0-9]{0," + intLength + "}\\.[0-9]{1," + decimalLength + "}$");
             variable.regExps.push("^(\\+|\\-){0,1}[0-9]{0," + intLength + "}\\,[0-9]{1," + decimalLength + "}$");
             variable.regExps.push("^(\\+|\\-){0,1}[0-9]{1," + intLength + "}$");
@@ -956,21 +959,23 @@ function (n) {
                 dataTableFiles.push(table.fileName);
             });
             settings.data.forEach(table => {
-                table.variables.forEach(variable => {
-                    if(variable.refData !== "") {
-                        var index = dataTableNames.indexOf(variable.refData);
+                table.references.forEach(reference => {
+                    if(reference.refTable !== "") {
+                        var index = dataTableNames.indexOf(reference.refTable);
                         if(index < 0) {
-                            result = LogError("-CheckMetadata-FileReferences-RowDataReference-Error",table.fileName,variable.refData);
+                            result = LogError("-CheckMetadata-FileReferences-RowDataReference-Error",table.fileName,reference.refTable);
                         }
                         else {
-                            if(variable.refVariable !== "") {
-                                var exist = false;
-                                GetTableData(dataTableFiles[index]).variables.forEach(refVariable => {
-                                    if(refVariable.name === variable.refVariable) { exist = true; }
+                            if(reference.refVariables.length > 0) {                               
+                                reference.refVariables.forEach(key => {
+                                    var exist = false;
+                                    GetTableData(dataTableFiles[index]).variables.forEach(refVariable => {
+                                        if(refVariable.name === key) { exist = true; }
+                                    });
+                                    if(!exist) {
+                                        result = LogError("-CheckMetadata-FileReferences-RowVariableReference-Error",table.fileName,reference.refTable,key,dataTableFiles[index]);    
+                                    }
                                 });
-                                if(!exist) {
-                                    result = LogError("-CheckMetadata-FileReferences-RowVariableReference-Error",table.fileName,variable.refData,variable.refVariable,dataTableFiles[index]);    
-                                }
                             }                            
                         }
                     }
@@ -986,14 +991,15 @@ function (n) {
             fs.readdirSync(destPath).forEach(folder => {
                 var metadataFilePath = (destPath.indexOf("\\") > -1) ? "{0}\\{1}\\{1}.txt".format(destPath,folder) : "{0}/{1}/{1}.txt".format(destPath,folder);                 
                 if(fs.existsSync(metadataFilePath)) {
-                    console.logInfo("validate metadata file: {0}".format(metadataFilePath),"Rigsarkiv.Nemesis.MetaData.ValidateData");
+                    console.logInfo("validate metadata file: {0}".format(metadataFilePath),"Rigsarkiv.Nemesis.MetaData.ValidateData");  
+                    settings.tableErrors = 0;                  
                     //var charsetMatch = chardet.detectFileSync(metadataFilePath);
                     var folders = metadataFilePath.getFolders();
                     settings.fileName = folders[folders.length - 1];
                     /*if(charsetMatch !== "UTF-8") {
                         result = LogWarn("-CheckMetadata-FileEncoding-Error",settings.fileName);
                     }*/                 
-                    settings.data.push({ "fileName":settings.fileName,"errorStop":false, "system":"", "name":"", "variables":[] })
+                    settings.data.push({ "fileName":settings.fileName,"errorStop":false, "system":"", "name":"", "variables":[], "references":[], "description":"", rows:0 })
                     if(!ValidateMetadata(metadataFilePath)) { result = false; }
                     GetTableData(settings.fileName).errorStop = settings.errorStop;
                     settings.errorStop = false;

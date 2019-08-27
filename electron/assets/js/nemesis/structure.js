@@ -15,6 +15,7 @@ function (n) {
         const dataFilePattern = /^(table[1-9]{1}([0-9]{0,}).csv)$/;
         const metadataFilePattern = /^(table[1-9]{1}([0-9]{0,}).txt)$/;
         const docFolderPattern = /^([1-9]{1}([0-9]{0,11}))$/;
+        const errorsMax = 40;
 
         //private data memebers
         var settings = { 
@@ -111,17 +112,19 @@ function (n) {
 
         //handle error logging + HTML output
         var LogError = function(postfixId) {
-            var id = "{0}{1}".format(settings.outputPrefix,postfixId);
-            var text = null;
-            if (arguments.length > 1) {                
-                if(arguments.length === 2) { text = ViewElement(id,arguments[1],null,null); }
-                if(arguments.length === 3) { text = ViewElement(id,arguments[1],arguments[2],null); }
-                if(arguments.length === 4) { text = ViewElement(id,arguments[1],arguments[2],arguments[3]); }
-                if(arguments.length === 5) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4]); }
-                if(arguments.length === 6) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5]); }
-                if(arguments.length === 7) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5],arguments[6]); }
+            if(settings.errors < errorsMax) {
+                var id = "{0}{1}".format(settings.outputPrefix,postfixId);
+                var text = null;
+                if (arguments.length > 1) {                
+                    if(arguments.length === 2) { text = ViewElement(id,arguments[1],null,null); }
+                    if(arguments.length === 3) { text = ViewElement(id,arguments[1],arguments[2],null); }
+                    if(arguments.length === 4) { text = ViewElement(id,arguments[1],arguments[2],arguments[3]); }
+                    if(arguments.length === 5) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4]); }
+                    if(arguments.length === 6) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5]); }
+                    if(arguments.length === 7) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5],arguments[6]); }
+                }
+                settings.logCallback().error(settings.logType,GetFolderName(),text);
             }
-            settings.logCallback().error(settings.logType,GetFolderName(),text);
             settings.errors += 1;
             return false;
         }
@@ -513,15 +516,10 @@ function (n) {
         }
 
         //start flow validation
-        var Validate = function() {
-            
+        var Validate = function() {            
             try 
             {
-                settings.selectDirBtn.disabled = true;
-                settings.validateBtn.disabled = true;
                 var folderName = GetFolderName();
-                settings.testId.innerText = folderName;
-                settings.logCallback().section(settings.logType,folderName,settings.logStartSpn.innerHTML);            
                 ValidateName();
                 ValidateStructure();
                  if(settings.errors === 0) {
@@ -562,7 +560,12 @@ function (n) {
                 Reset();
                 if(settings.selectedPath == null || settings.pathDirTxt.value === "") { return; } 
                 settings.logCallback().spinnerEnable(true);
-                Validate();                           
+                settings.selectDirBtn.disabled = true;
+                settings.validateBtn.disabled = true;
+                var folderName = GetFolderName();
+                settings.testId.innerText = folderName;
+                settings.logCallback().section(settings.logType,folderName,settings.logStartSpn.innerHTML);
+                setTimeout(Validate, 1000);                          
             })
             settings.selectDirBtn.addEventListener('click', (event) => {
                 ipcRenderer.send('validation-open-file-dialog');
@@ -605,6 +608,11 @@ function (n) {
                         settings.logCallback().spinnerEnable(false);
                         settings.deliveryPackagePath = path;
                         Reset();
+                        settings.selectDirBtn.disabled = true;
+                        settings.validateBtn.disabled = true;
+                        var folderName = GetFolderName();
+                        settings.testId.innerText = folderName;
+                        settings.logCallback().section(settings.logType,folderName,settings.logStartSpn.innerHTML);
                         return Validate();
                     },
                     update: function(path)

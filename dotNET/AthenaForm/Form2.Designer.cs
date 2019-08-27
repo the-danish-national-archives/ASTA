@@ -28,18 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.mainTablesListBox = new System.Windows.Forms.ListBox();
             this.dataValues = new System.Windows.Forms.DataGridView();
-            this.variableName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.variableType = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.variableValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.columnType = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.columnValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Differences = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Errors = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.prevButton = new System.Windows.Forms.Button();
             this.nextButton = new System.Windows.Forms.Button();
             this.IndexButton = new System.Windows.Forms.Button();
@@ -58,6 +51,14 @@
             this.prevErrorButton = new System.Windows.Forms.Button();
             this.titlelabel = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.variableName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Description = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.variableType = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.variableValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.columnType = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.columnValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Differences = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Errors = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataValues)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -91,20 +92,21 @@
             this.dataValues.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataValues.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.variableName,
+            this.Description,
             this.variableType,
             this.variableValue,
             this.columnType,
             this.columnValue,
             this.Differences,
             this.Errors});
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataValues.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataValues.DefaultCellStyle = dataGridViewCellStyle1;
             this.dataValues.Location = new System.Drawing.Point(547, 141);
             this.dataValues.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.dataValues.Name = "dataValues";
@@ -115,67 +117,6 @@
             this.dataValues.TabIndex = 5;
             this.dataValues.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataValues_CellClick);
             this.dataValues.SelectionChanged += new System.EventHandler(this.dataValues_SelectionChanged);
-            // 
-            // variableName
-            // 
-            this.variableName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.variableName.HeaderText = "Variabelnavn";
-            this.variableName.Name = "variableName";
-            this.variableName.ReadOnly = true;
-            this.variableName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.variableName.Width = 107;
-            // 
-            // variableType
-            // 
-            this.variableType.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.variableType.HeaderText = "Datatype SIP";
-            this.variableType.Name = "variableType";
-            this.variableType.ReadOnly = true;
-            this.variableType.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.variableType.Width = 99;
-            // 
-            // variableValue
-            // 
-            this.variableValue.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.variableValue.HeaderText = "Værdi";
-            this.variableValue.Name = "variableValue";
-            this.variableValue.ReadOnly = true;
-            this.variableValue.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // columnType
-            // 
-            this.columnType.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.columnType.HeaderText = "Datatype AIP";
-            this.columnType.Name = "columnType";
-            this.columnType.ReadOnly = true;
-            this.columnType.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.columnType.Width = 99;
-            // 
-            // columnValue
-            // 
-            this.columnValue.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.columnValue.HeaderText = "Værdi";
-            this.columnValue.Name = "columnValue";
-            this.columnValue.ReadOnly = true;
-            this.columnValue.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Differences
-            // 
-            this.Differences.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Differences.FillWeight = 35F;
-            this.Differences.HeaderText = "Forskelle";
-            this.Differences.Name = "Differences";
-            this.Differences.ReadOnly = true;
-            this.Differences.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Errors
-            // 
-            this.Errors.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Errors.FillWeight = 35F;
-            this.Errors.HeaderText = "Fejl";
-            this.Errors.Name = "Errors";
-            this.Errors.ReadOnly = true;
-            this.Errors.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // prevButton
             // 
@@ -367,6 +308,64 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "TABELLER";
             // 
+            // variableName
+            // 
+            this.variableName.HeaderText = "Variabelnavn";
+            this.variableName.Name = "variableName";
+            this.variableName.ReadOnly = true;
+            this.variableName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Description
+            // 
+            this.Description.HeaderText = "Beskrivelse";
+            this.Description.Name = "Description";
+            this.Description.ReadOnly = true;
+            this.Description.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // variableType
+            // 
+            this.variableType.HeaderText = "Datatype SIP";
+            this.variableType.Name = "variableType";
+            this.variableType.ReadOnly = true;
+            this.variableType.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // variableValue
+            // 
+            this.variableValue.HeaderText = "Værdi";
+            this.variableValue.Name = "variableValue";
+            this.variableValue.ReadOnly = true;
+            this.variableValue.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // columnType
+            // 
+            this.columnType.HeaderText = "Datatype AIP";
+            this.columnType.Name = "columnType";
+            this.columnType.ReadOnly = true;
+            this.columnType.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // columnValue
+            // 
+            this.columnValue.HeaderText = "Værdi";
+            this.columnValue.Name = "columnValue";
+            this.columnValue.ReadOnly = true;
+            this.columnValue.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Differences
+            // 
+            this.Differences.FillWeight = 35F;
+            this.Differences.HeaderText = "Forskelle";
+            this.Differences.Name = "Differences";
+            this.Differences.ReadOnly = true;
+            this.Differences.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Errors
+            // 
+            this.Errors.FillWeight = 35F;
+            this.Errors.HeaderText = "Fejl";
+            this.Errors.Name = "Errors";
+            this.Errors.ReadOnly = true;
+            this.Errors.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -420,15 +419,16 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.RichTextBox valueRichTextBox;
         private System.Windows.Forms.Button prevErrorButton;
+        private System.Windows.Forms.Label titlelabel;
+        private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.DataGridViewTextBoxColumn variableName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Description;
         private System.Windows.Forms.DataGridViewTextBoxColumn variableType;
         private System.Windows.Forms.DataGridViewTextBoxColumn variableValue;
         private System.Windows.Forms.DataGridViewTextBoxColumn columnType;
         private System.Windows.Forms.DataGridViewTextBoxColumn columnValue;
         private System.Windows.Forms.DataGridViewTextBoxColumn Differences;
         private System.Windows.Forms.DataGridViewTextBoxColumn Errors;
-        private System.Windows.Forms.Label titlelabel;
-        private System.Windows.Forms.GroupBox groupBox1;
     }
 }
 

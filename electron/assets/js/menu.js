@@ -10,6 +10,8 @@ window.navigation = window.navigation || {},
         const path = require('path');
         const os = require('os');
         const { spawn } = require('child_process');
+        const {ipcRenderer} = require('electron');
+
         navigation.menu = {
             constants: {
                 sectionTemplate: '.section-template',
@@ -72,7 +74,7 @@ window.navigation = window.navigation || {},
             Rigsarkiv.Rights.initialize("menu-output-Error");
             navigation.menu.init();
             document.getElementById("menu-reload").addEventListener('click', function (event) {
-                getCurrentWindow().reload();
+                ipcRenderer.send('open-confirm-dialog','menu-reload',"Program genstart","Du er ved at genstarte programmet. Er du sikker?","GENSTART","FORTRYD");
             });
             styxLink = document.getElementById("styx-menu");
             styxLink.addEventListener('click', function (event) {
@@ -98,6 +100,12 @@ window.navigation = window.navigation || {},
             if(Rigsarkiv.Rights.callback().isAdmin) {
                 $(styxLink).show();
             }
+            ipcRenderer.on('confirm-dialog-selection-menu-reload', (event, index) => {
+                if(index === 0) {
+                    getCurrentWindow().reload();
+                } 
+                if(index === 1) {  }            
+            })
         })
 
     }(jQuery);

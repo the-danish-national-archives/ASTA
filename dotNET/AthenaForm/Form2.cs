@@ -7,6 +7,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Rigsarkiv.Athena.Entities;
 using Rigsarkiv.Athena;
+using System.Reflection;
 
 namespace Rigsarkiv.AthenaForm
 {
@@ -41,7 +42,11 @@ namespace Rigsarkiv.AthenaForm
         /// <param name="outputRichTextBox"></param>
         public Form2(string srcPath, string destPath,string destFolder, LogManager logManager, Report report, RichTextBox outputRichTextBox)
         {
-            InitializeComponent();            
+            InitializeComponent();
+            //Sætter dataGridView til at være doublebuffered
+            typeof(DataGridView).InvokeMember("DoubleBuffered", BindingFlags.NonPublic |
+            BindingFlags.Instance | BindingFlags.SetProperty, null,
+            dataValues, new object[] { true });
             _logManager = logManager;
             _srcPath = srcPath;
             _destPath = destPath;
@@ -243,7 +248,7 @@ namespace Rigsarkiv.AthenaForm
                 }
             }
             valueRichTextBox.Text = string.Empty;
-            if (e.ColumnIndex == 2 || e.ColumnIndex == 4)
+            if (e.ColumnIndex == 1 || e.ColumnIndex == 3 || e.ColumnIndex == 5)
             {
                 valueRichTextBox.Text = dataValues[e.ColumnIndex, e.RowIndex].Value.ToString();
             }
@@ -260,26 +265,26 @@ namespace Rigsarkiv.AthenaForm
             {                
                 var column = table.Columns[i];
                 dataValues[0, i].Value = column.Name;
-                dataValues[1, i].Value = column.TypeOriginal;
-                if(column.Modified) { dataValues[1, i].Style.BackColor = Color.LightGreen; }
+                dataValues[1, i].Value = column.Description;
+                dataValues[2, i].Value = column.TypeOriginal;
+                if(column.Modified) { dataValues[2, i].Style.BackColor = Color.LightGreen; }
                 if (row != null && row.SrcValues.ContainsKey(column.Id))
                 {
-                    dataValues[2, i].Value = row.SrcValues[column.Id];
-                    if (row.SrcValues[column.Id] != row.DestValues[column.Id]) { dataValues[2, i].Style.BackColor = Color.LightGreen; }
-                    if (row.ErrorsColumns.Contains(column.Id)) { dataValues[2, i].Style.BackColor = Color.Red; }                    
+                    dataValues[3, i].Value = row.SrcValues[column.Id];
+                    if (row.SrcValues[column.Id] != row.DestValues[column.Id]) { dataValues[3, i].Style.BackColor = Color.LightGreen; }
+                    if (row.ErrorsColumns.Contains(column.Id)) { dataValues[3, i].Style.BackColor = Color.Red; }                    
                 }
-                dataValues[3, i].Value = column.Type;
-                if (column.Modified) { dataValues[3, i].Style.BackColor = Color.LightGreen; }
+                dataValues[4, i].Value = column.Type;
+                if (column.Modified) { dataValues[4, i].Style.BackColor = Color.LightGreen; }
                 if (row != null && row.SrcValues.ContainsKey(column.Id))
                 {
-                    dataValues[4, i].Value = row.DestValues[column.Id];
-                    if (row.SrcValues[column.Id] != row.DestValues[column.Id]) { dataValues[4, i].Style.BackColor = Color.LightGreen; }
-                    if (row.ErrorsColumns.Contains(column.Id)) { dataValues[4, i].Style.BackColor = Color.Red; }                    
+                    dataValues[5, i].Value = row.DestValues[column.Id];
+                    if (row.SrcValues[column.Id] != row.DestValues[column.Id]) { dataValues[5, i].Style.BackColor = Color.LightGreen; }
+                    if (row.ErrorsColumns.Contains(column.Id)) { dataValues[5, i].Style.BackColor = Color.Red; }                    
                 }
-                dataValues[5, i].Value = column.Differences;
-                //if(column.Differences > 0) { dataValues[5, i].Style.BackColor = Color.LightGreen; }
-                dataValues[6, i].Value = column.ErrorsRows.Count > 0 ? column.ErrorsRows.Count : 0;
-                if(column.ErrorsRows.Count > 0) { dataValues[6, i].Style.BackColor = Color.Red; }
+                dataValues[6, i].Value = column.Differences;
+                dataValues[7, i].Value = column.ErrorsRows.Count > 0 ? column.ErrorsRows.Count : 0;
+                if(column.ErrorsRows.Count > 0) { dataValues[7, i].Style.BackColor = Color.Red; }
             }
             tableErrorsLabel.Text = string.Format(TableErrorsLabel, table.Errors);
             if (row != null) { rowErrorsLabel.Text = string.Format(RowErrorsLabel, row.ErrorsColumns.Count); }

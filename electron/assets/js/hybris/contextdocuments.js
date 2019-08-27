@@ -175,13 +175,17 @@ function (n) {
         //add Event Listener to HTML elmenets
         var AddEvents = function () {
             settings.nextBtn.addEventListener('click', function (event) {
+                if(settings.documents.length > 0) {                    
+                    UpdateSpinner(settings.spinnerClass);
+                    EnsureStructure();
+                    UpdateSpinner("");                    
+                }
                 if(!settings.hasSelected) {
                     ipcRenderer.send('open-confirm-dialog','contextdocuments',settings.outputNextConfirmTitle.innerHTML,settings.outputNextConfirmText.innerHTML,settings.okConfirm.innerHTML,settings.cancelConfirm.innerHTML);
                 }
                 else {
                     if(settings.documents.length > 0) {                    
                         UpdateSpinner(settings.spinnerClass);
-                        EnsureStructure();
                         EnsureDocuments();
                         UpdateSpinner("");                    
                         //ipcRenderer.send('open-information-dialog',settings.outputOkInformationTitle.innerHTML,settings.outputOkInformationText.innerHTML);

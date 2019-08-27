@@ -119,42 +119,57 @@ namespace Rigsarkiv.Athena
             _tableIndexXDocument.Element(_tableIndexXNS + "siardDiark").Element(_tableIndexXNS + "tables").Add(tableNode);
             var srcFolder = tableInfo["fileName"].ToString();
             srcFolder = srcFolder.Substring(0, srcFolder.LastIndexOf("."));
-            var table = new Table() { SrcFolder = srcFolder, Name = tableName, Folder = folder, Rows = int.Parse(rows) - 1, Errors = 0, RowsCounter = 0, Columns = new List<Column>(), ErrorsRows = new Dictionary<string, Row>() };
+            var table = new Table() { SrcFolder = srcFolder, Name = tableName, Folder = folder, Rows = int.Parse(rows), Errors = 0, RowsCounter = 0, Columns = new List<Column>(), ErrorsRows = new Dictionary<string, Row>() };
             _report.Tables.Add(table);
             foreach (var variable in (object[])tableInfo["variables"])
             {
-                var variableInfo = (Dictionary<string, object>)variable;
-                AddColumnNode(variableInfo,tableNode, researchIndexNode, table, index++);
+                 AddColumnNode((Dictionary<string, object>)variable, tableNode, researchIndexNode, table, index++);
+            }
+            if (tableInfo["references"] != null && ((object[])tableInfo["references"]).Length > 0)
+            {
+                foreach (var reference in (object[])tableInfo["references"])
+                {
+                    AddReferenceNode((Dictionary<string, object>)reference, tableNode, table, index++);
+                }
             }
         }
-        
+
+        private void AddReferenceNode(Dictionary<string, object> referenceInfo, XElement tableNode, Table table, int index)
+        {
+            var referencedTable = referenceInfo["refTable"].ToString();
+            var foreignKeyName = string.Format(ForeignKeyPrefix, NormalizeName(table.Name), NormalizeName(referencedTable), index);
+            _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add foreign key: {0} ", foreignKeyName) });
+
+            tableNode.Element(_tableIndexXNS + "foreignKeys").Add(new XElement(_tableIndexXNS + "foreignKey",
+                   new XElement(_tableIndexXNS + "name", foreignKeyName),
+                   new XElement(_tableIndexXNS + "referencedTable", referencedTable)));
+            var foreignKeyNode = tableNode.Element(_tableIndexXNS + "foreignKeys").Elements().Where(e => e.Element(_tableIndexXNS + "name").Value == foreignKeyName).FirstOrDefault();
+            var refVariables = (object[])referenceInfo["refVariables"];
+            var refKeys = (object[])referenceInfo["refKeys"];
+            for (var i = 0; i < refVariables.Length; i++)
+            {
+                foreignKeyNode.Add(new XElement(_tableIndexXNS + "reference", new XElement(_tableIndexXNS + "column", refKeys[i].ToString()), new XElement(_tableIndexXNS + "referenced", refVariables[i].ToString())));
+            }
+        }
+
         private void AddColumnNode(Dictionary<string, object> variableInfo, XElement tableNode, XElement researchIndexNode, Table table, int index)
         {
             var columnName = variableInfo["name"].ToString();
+            var columnDescription = variableInfo["description"].ToString();
             var columnType = GetMappedType(variableInfo);
             var columnId = string.Format(ColumnIDPrefix, index);
             var columnTypeOriginal = variableInfo["format"].ToString();
             var appliedRegExp = GetRegExp(variableInfo);
-            var column = new Column() { Name = columnName, Id = columnId, Type = columnType, TypeOriginal = columnTypeOriginal, Nullable = (bool)variableInfo["nullable"], RegExp = appliedRegExp, Differences = 0, Errors = 0, ErrorsRows = new List<int>() };
+            var column = new Column() { Name = columnName, Id = columnId, Description = columnDescription, Type = columnType, TypeOriginal = columnTypeOriginal, Nullable = (bool)variableInfo["nullable"], RegExp = appliedRegExp, Differences = 0, Errors = 0, ErrorsRows = new List<int>() };
             var columnNode = new XElement(_tableIndexXNS + "column",
                  new XElement(_tableIndexXNS + "name", columnName),
                  new XElement(_tableIndexXNS + "columnID", columnId),
                  new XElement(_tableIndexXNS + "type", columnType),
                  new XElement(_tableIndexXNS + "typeOriginal", columnTypeOriginal),
                  new XElement(_tableIndexXNS + "nullable", variableInfo["nullable"].ToString().ToLower()),
-                 new XElement(_tableIndexXNS + "description", variableInfo["description"].ToString()));
+                 new XElement(_tableIndexXNS + "description", columnDescription));
             tableNode.Element(_tableIndexXNS + "columns").Add(columnNode);
-            table.Columns.Add(column);
-            if (!string.IsNullOrEmpty(variableInfo["refData"].ToString()) && !string.IsNullOrEmpty(variableInfo["refVariable"].ToString()))
-            {
-                var foreignKeyName = string.Format(ForeignKeyPrefix, NormalizeName(table.Name), NormalizeName(columnName), index);
-                _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add foreign key: {0} ", foreignKeyName) });
-
-                tableNode.Element(_tableIndexXNS + "foreignKeys").Add(new XElement(_tableIndexXNS + "foreignKey",
-                    new XElement(_tableIndexXNS + "name", foreignKeyName),
-                    new XElement(_tableIndexXNS + "referencedTable", variableInfo["refData"].ToString()),
-                    new XElement(_tableIndexXNS + "reference", new XElement(_tableIndexXNS + "column", columnName), new XElement(_tableIndexXNS + "referenced", variableInfo["refVariable"].ToString()))));
-            }
+            table.Columns.Add(column);            
             AddKeys(variableInfo, tableNode, researchIndexNode, table, column, index);
         }
         
@@ -193,7 +208,7 @@ namespace Rigsarkiv.Athena
 
             var options = (object[])variableInfo["options"];
             var codeList = new Table() { Name = refTableName, Folder = folder, Rows = options.Length, Errors = 0, RowsCounter = 0, Options= new List<string[]>(), ErrorsRows = new Dictionary<string, Row>() };
-            codeList.Columns = new List<Column>() { (new Column() { Name = Code, Id = C1, Type = column.Type, TypeOriginal = "", Differences = 0, Errors = 0, ErrorsRows = new List<int>() }), (new Column() { Name = CodeValue, Id = C2, Type = "", TypeOriginal = "", Differences = 0, Errors = 0, ErrorsRows = new List<int>() }) };
+            codeList.Columns = new List<Column>() { (new Column() { Name = Code, Id = C1, Description = "Kode", Type = column.Type, TypeOriginal = "", Differences = 0, Errors = 0, ErrorsRows = new List<int>() }), (new Column() { Name = CodeValue, Id = C2, Description = "Kodeværdi", Type = "", TypeOriginal = "", Differences = 0, Errors = 0, ErrorsRows = new List<int>() }) };
             var optionsType = ParseOptions(options, researchIndexNode, codeList, folder, column);
             var columnNode1 = new XElement(_tableIndexXNS + "column", new XElement(_tableIndexXNS + "name", Code),new XElement(_tableIndexXNS + "columnID", C1),new XElement(_tableIndexXNS + "type", column.Type),new XElement(_tableIndexXNS + "typeOriginal"),new XElement(_tableIndexXNS + "nullable", "false"), new XElement(_tableIndexXNS + "description", "Kode"));
             var columnNode2 = new XElement(_tableIndexXNS + "column", new XElement(_tableIndexXNS + "name", CodeValue), new XElement(_tableIndexXNS + "columnID", C2), new XElement(_tableIndexXNS + "type", optionsType), new XElement(_tableIndexXNS + "typeOriginal"), new XElement(_tableIndexXNS + "nullable", "false"), new XElement(_tableIndexXNS + "description", "Kodeværdi"));

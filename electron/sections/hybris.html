@@ -179,13 +179,13 @@
                             <span id="hybris-message-metdata-keyVariable-Title" hidden="true">NØGLEVARIABEL</span>
                             <span id="hybris-message-metdata-keyVariable-Text" hidden="true">Statistikfilens unikke nøglevariabel angivet med navne på den/de variable, som nøglevariablen består af. Flere variabelnavne adskilles med mellemrum.</span>
                             <br/>
-                            <button id="hybris-metdata-addVarKeyBtn" style="margin-left: 43%;">Tilføj nøgle</button>
+                            <button id="hybris-metdata-addVarKeyBtn" style="margin-left: 43%;">Tilføj variabel</button>
                             <br/>
                             <table id="hybris-metdata-varKeys" hidden="true">
                                 <tr><th>Nøglevariabel</th></tr>
                              </table>                            
                             <br/>                            
-                            <button id="hybris-metdata-cancelBtn">Fortryd alt</button> <button id="hybris-metdata-okBtn">Næste</button>
+                            <button id="hybris-metdata-cancelBtn">Fortryd nøglevariabel</button> <button id="hybris-metdata-okBtn">Næste</button>
                             <span id="hybris-output-metdata-Error" hidden="true"><br/>Error: {0}</span>
                             <span id="hybris-output-metdata-fileNameRequired-Title" hidden="true">Datafilnavn</span>
                             <span id="hybris-output-metdata-fileNameRequired-Text" hidden="true">Datafilnavn skal udfyldes</span>                            
@@ -227,15 +227,15 @@
                     </div>
                     <div id="hybris-panel-references" class="formularContainer" hidden="true">
                         <p>
-                            <h2 class="boldfaced">Referencer i afleveringspakken <span id="hybris-output-statistics-header-references" class="trinHeader">{0}</span></h2>
+                            <h2 class="boldfaced">Tilføj referencer i afleveringspakken <span id="hybris-output-statistics-header-references" class="trinHeader">{0}</span></h2>
                         </p>
                         <span>
                             <label class="descriptionLabel" for="hybrisreferencestable">Datafil</label>
                             <input type="text" name="hybrisreferencestable" id="hybris-references-table" list="hybris-references-tables">                                                            
                         </span>
                         <i id="hybris-message-references-referencesTable" class="far fa-question-circle"></i>
-                        <span id="hybris-message-references-referencesTable-Title" hidden="true">Datafil (referencetabel)</span>
-                        <span id="hybris-message-references-referencesTable-Text" hidden="true">xxx.</span>
+                        <span id="hybris-message-references-referencesTable-Title" hidden="true">Datafilen som referencen laves fra</span>
+                        <span id="hybris-message-references-referencesTable-Text" hidden="true">Referencevariablen fra denne datafil skal altid referere en nøglevariabel i fremmeddatafilen.</span>
                         <br/>
                         <span>
                             <label class="descriptionLabel" for="hybrisreferencesrefVar">Referencevariabel</label>
@@ -244,12 +244,12 @@
                         </span>
                         <i id="hybris-message-references-referenceVariable" class="far fa-question-circle"></i>
                         <span id="hybris-message-references-referenceVariable-Title" hidden="true">REFERENCE (referencevariabel)</span>
-                        <span id="hybris-message-references-referenceVariable-Text" hidden="true">Variabelnavn(e) for variable fra den statistikfil der laves udtræk fra (referencevariabel), som refererer til nøglevariablen (fremmedvariablen) i den anden statistikfil i afleveringspakken (fremmeddatafilen).</span>
+                        <span id="hybris-message-references-referenceVariable-Text" hidden="true">Variabelnavn(e) for variable fra den statistikfil som referencen laves fra (referencevariabel), som refererer til nøglevariablen (fremmedvariablen) i den anden statistikfil i afleveringspakken (fremmeddatafilen).</span>
                         <br/>
                         <button id="hybris-references-addReferenceVariableBtn">Tilføj variabel</button>
                         <br/>
                         <table id="hybris-references-referenceVariablesTable" hidden="true">
-                            <tr><th>Variabel</th></tr>
+                            <tr><th>Referencevariabel</th></tr>
                          </table>
                         <br/>
                         <span>
@@ -272,7 +272,7 @@
                         <button id="hybris-references-addForeignVariableBtn">Tilføj variabel</button>
                         <br/>
                         <table id="hybris-references-foreignVariablesTable" hidden="true">
-                            <tr><th>Variabel</th></tr>
+                            <tr><th>Fremmedvariabel</th></tr>
                          </table>
                         <br/>
                         <datalist name="hybrisreferencestables" id="hybris-references-tables"></datalist>
@@ -345,6 +345,7 @@
                         <br/>
                         <span id="hybris-output-contextdocuments-Information2" class="alert-warning"><strong>Information!</strong> Kontekstdokumenter skal konverteres til bevaringsformat før de afleveres til arkiv, fx .tif eller .mp3</span>
                         <br/><br/>
+                        <h2>Dokumentliste</h2>
                         <table id="hybris-contextdocuments-uploads">
                             <tr><th>Mappenummer</th><th>Dokumenttitel</th><th>Vælg dokument</th></tr>
                          </table>

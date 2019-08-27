@@ -135,28 +135,28 @@ function (n) {
                     LogInfo(`error ${text}`,"Rigsarkiv.Log.callback.error");
                     settings.logs.push(settings.errorElement.format(logType,(new Date()).getFromFormat("yyyyMMddhhmmss"),folderName,text));
                     settings.errorsCounter += 1;
-                    if(settings.spinnerEnable) { settings.spinner.className = settings.spinnerClass; }
+                    if(settings.spinnerEnable && settings.spinner.className === "") { settings.spinner.className = settings.spinnerClass; }
                 },
                 warn: function(logType,folderName,text) 
                 { 
                     if(settings.logsDate == null) { settings.logsDate = new Date(); }
                     LogInfo(`warn ${text}`,"Rigsarkiv.Log.callback.warn");
                     settings.logs.push(settings.warnElement.format(logType,(new Date()).getFromFormat("yyyyMMddhhmmss"),folderName,text));
-                    if(settings.spinnerEnable) { settings.spinner.className = settings.spinnerClass; }
+                    if(settings.spinnerEnable && settings.spinner.className === "") { settings.spinner.className = settings.spinnerClass; }
                 },
                 info: function(logType,folderName,text) 
                 { 
                     if(settings.logsDate == null) { settings.logsDate = new Date(); }
                     LogInfo(`info ${text}`,"Rigsarkiv.Log.callback.info");
                     settings.logs.push(settings.infoElement.format(logType,(new Date()).getFromFormat("yyyyMMddhhmmss"),folderName,text));
-                    if(settings.spinnerEnable) { settings.spinner.className = settings.spinnerClass; }
+                    if(settings.spinnerEnable && settings.spinner.className === "") { settings.spinner.className = settings.spinnerClass; }
                 },
                 section: function(logType,folderName,text) 
                 { 
                     if(settings.logsDate == null) { settings.logsDate = new Date(); }
                     LogInfo(`section ${text}`,"Rigsarkiv.Log.callback.section");
                     settings.logs.push(settings.sectionElement.format(logType,(new Date()).getFromFormat("yyyyMMddhhmmss"),folderName,text));
-                    if(settings.spinnerEnable) { settings.spinner.className = settings.spinnerClass; }
+                    if(settings.spinnerEnable && settings.spinner.className === "") { settings.spinner.className = settings.spinnerClass; }
                 },
                 commit: function(selectedFolderPath)
                 {

@@ -232,11 +232,25 @@ namespace Rigsarkiv.Athena
                         }
                     }
                 }
-                _writer.WriteElementString(column.Id, convertedValue);
+                AddColumn(column, convertedValue);
             }
             if (rowError) { table.Errors++; }
             table.RowsCounter++;
             _writer.WriteEndElement();
+        }
+
+        private void AddColumn(Column column, string convertedValue)
+        {
+            if(string.IsNullOrEmpty(convertedValue) && !column.Type.StartsWith(VarCharPrefix.Substring(0,7)))
+            {
+                _writer.WriteStartElement(column.Id);
+                _writer.WriteAttributeString("xsi","nil", null, "true");
+                _writer.WriteEndElement();
+            }
+            else
+            {
+                _writer.WriteElementString(column.Id, convertedValue);
+            }
         }
     }
 }
