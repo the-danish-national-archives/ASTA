@@ -27,7 +27,8 @@ function (n) {
         const datatypeDateTime = [/^(datetime)$/,/^(\%tcCCYY-NN-DD\!THH:MM:SS)$/,/^((e8601dt\.)|(e8601dt19\.))$/,/^(datetime20)$/];
         const titleMaxLength = 128;
         const stringMaxLength = 32767;
-            
+        const errorsMax = 40;
+
         //private data memebers
         var settings = { 
             outputErrorSpn: null,
@@ -49,6 +50,7 @@ function (n) {
             fileName: null,
             fileKeys: [],
             fileReferences: [],
+            tableErrors: 0,
             errors: 0,
             totalErrors: 0,
             errorStop: false,
@@ -107,19 +109,22 @@ function (n) {
 
         //handle error logging + HTML output
         var LogError = function(postfixId) {
-            var id = "{0}{1}".format(settings.outputPrefix,postfixId);
-            var text = null;
-            if (arguments.length > 1) {                
-                if(arguments.length === 2) { text = ViewElement(id,arguments[1],null,null); }
-                if(arguments.length === 3) { text = ViewElement(id,arguments[1],arguments[2],null); }
-                if(arguments.length === 4) { text = ViewElement(id,arguments[1],arguments[2],arguments[3]); }
-                if(arguments.length === 5) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4]); }
-                if(arguments.length === 6) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5]); }
-                if(arguments.length === 7) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5],arguments[6]); }
-            }
-            settings.logCallback().error(settings.logType,GetFolderName(),text);
+            if(settings.tableErrors < errorsMax) {
+                var id = "{0}{1}".format(settings.outputPrefix,postfixId);
+                var text = null;
+                if (arguments.length > 1) {                
+                    if(arguments.length === 2) { text = ViewElement(id,arguments[1],null,null); }
+                    if(arguments.length === 3) { text = ViewElement(id,arguments[1],arguments[2],null); }
+                    if(arguments.length === 4) { text = ViewElement(id,arguments[1],arguments[2],arguments[3]); }
+                    if(arguments.length === 5) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4]); }
+                    if(arguments.length === 6) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5]); }
+                    if(arguments.length === 7) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5],arguments[6]); }
+                }
+                settings.logCallback().error(settings.logType,GetFolderName(),text);
+            }            
             settings.errors += 1;
             settings.totalErrors += 1;
+            settings.tableErrors += 1;
             return false;
         }
 
@@ -986,7 +991,8 @@ function (n) {
             fs.readdirSync(destPath).forEach(folder => {
                 var metadataFilePath = (destPath.indexOf("\\") > -1) ? "{0}\\{1}\\{1}.txt".format(destPath,folder) : "{0}/{1}/{1}.txt".format(destPath,folder);                 
                 if(fs.existsSync(metadataFilePath)) {
-                    console.logInfo("validate metadata file: {0}".format(metadataFilePath),"Rigsarkiv.Nemesis.MetaData.ValidateData");
+                    console.logInfo("validate metadata file: {0}".format(metadataFilePath),"Rigsarkiv.Nemesis.MetaData.ValidateData");  
+                    settings.tableErrors = 0;                  
                     //var charsetMatch = chardet.detectFileSync(metadataFilePath);
                     var folders = metadataFilePath.getFolders();
                     settings.fileName = folders[folders.length - 1];
