@@ -345,7 +345,12 @@ namespace Rigsarkiv.Styx
                  result = string.Format("\"{0}\"", result.Replace("\"", "\"\""));
                  isDifferent = true;
             }
-            result = result.Trim();
+            if (result.IndexOf(";") > -1 && result.IndexOf("\"") == -1)
+            {
+                result = string.Format("\"{0}\"", result);
+                isDifferent = true;
+            }
+                result = result.Trim();
             if (!isDifferent) { isDifferent = result != value; }
             return result;
         }
