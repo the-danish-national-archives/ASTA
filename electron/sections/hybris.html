@@ -154,38 +154,48 @@
                                 <h2 class="boldfaced">TRIN 3: Indtast informationer om statistikfilen <div class="trinHeader"><span id="hybris-output-statistics-header-trin3">{0}</span> - <a id="hybris-output-statistics-headerLink-trin3"></a></div></h2>
                                 <i>* Feltet skal udfyldes</i>
                             </p>
-                            <span>
-                                <label class="descriptionLabel" for="hybrismetdatafileName">Datafilnavn* (uden extension)</label>
-                                <input type="text" name="hybrismetdatafileName" id="hybris-metdata-fileName">
-                            </span>
-                            <i id="hybris-message-metdata-fileName" class="far fa-question-circle"></i>
-                            <span id="hybris-message-metdata-fileName-Title" hidden="true">DATAFILNAVN</span>
-                            <span id="hybris-message-metdata-fileName-Text" hidden="true">Navn på statistikfilen, der laves udtræk fra, som den benævnes i brugssammenhæng.</span>
-                            <br>
-                            <span>
-                                <label class="descriptionLabel" for="hybrismetdatafileDescription">Datafilbeskrivelse*</label>
-                                <textarea maxlength="4096" rows="8" placeholder="En kort beskrivelse af datafilen (4096 tegn)." name="hybrismetdatafileDescription" id="hybris-metdata-fileDescription"></textarea>
-                            </span>
-                            <i id="hybris-message-metdata-fileDescription" class="far fa-question-circle" style="vertical-align: top"></i>
-                            <span id="hybris-message-metdata-fileDescription-Title" hidden="true">DATAFILBESKRIVELSE</span>
-                            <span id="hybris-message-metdata-fileDescription-Text" hidden="true">Beskrivelse af statistikfilens indhold. Fx den fulde titel for statistikfilen/studiet eller en eksisterende projektbeskrivelse, der præcist dækker statistikfilens indhold.</span>
-                            <br>
-                            <span>
-                                <label class="descriptionLabel" for="hybrismetdatakeyVar">Nøglevariabel</label>
-                                <input type="text" name="hybrismetdatakeyVar" id="hybris-metdata-keyVar" list="hybris-metdata-Variables">
-                                <datalist name="hybrismetdataVariables" id="hybris-metdata-Variables"></datalist>                                
-                            </span>
-                            <i id="hybris-message-metdata-keyVariable" class="far fa-question-circle"></i>
-                            <span id="hybris-message-metdata-keyVariable-Title" hidden="true">NØGLEVARIABEL</span>
-                            <span id="hybris-message-metdata-keyVariable-Text" hidden="true">Statistikfilens unikke nøglevariabel angivet med navne på den/de variable, som nøglevariablen består af. Flere variabelnavne adskilles med mellemrum.</span>
-                            <br/>
-                            <button id="hybris-metdata-addVarKeyBtn" style="margin-left: 43%;">Tilføj variabel</button>
-                            <br/>
-                            <table id="hybris-metdata-varKeys" hidden="true">
-                                <tr><th>Nøglevariabel</th></tr>
-                             </table>                            
-                            <br/>                            
-                            <button id="hybris-metdata-cancelBtn">Fortryd nøglevariabel</button> <button id="hybris-metdata-okBtn">Næste</button>
+                            <div id="keyVarContainer">
+                                <span>
+                                    <label class="descriptionLabel" for="hybrismetdatafileName">Datafilnavn* (uden extension)</label>
+                                    <input type="text" name="hybrismetdatafileName" id="hybris-metdata-fileName">
+                                </span>
+                                <i id="hybris-message-metdata-fileName" class="far fa-question-circle"></i>
+                                <span id="hybris-message-metdata-fileName-Title" hidden="true">DATAFILNAVN</span>
+                                <span id="hybris-message-metdata-fileName-Text" hidden="true">Navn på statistikfilen, der laves udtræk fra, som den
+                                    benævnes i brugssammenhæng.</span>
+                                <br>
+                                <span>
+                                    <label class="descriptionLabel" for="hybrismetdatafileDescription">Datafilbeskrivelse*</label>
+                                    <textarea maxlength="4096" rows="8" placeholder="En kort beskrivelse af datafilen (4096 tegn)."
+                                        name="hybrismetdatafileDescription" id="hybris-metdata-fileDescription"></textarea>
+                                </span>
+                                <i id="hybris-message-metdata-fileDescription" class="far fa-question-circle" style="vertical-align: top"></i>
+                                <span id="hybris-message-metdata-fileDescription-Title" hidden="true">DATAFILBESKRIVELSE</span>
+                                <span id="hybris-message-metdata-fileDescription-Text" hidden="true">Beskrivelse af statistikfilens indhold. Fx den
+                                    fulde titel for statistikfilen/studiet eller en eksisterende projektbeskrivelse, der præcist dækker
+                                    statistikfilens indhold.</span>
+                                <br>
+                                <span>
+                                    <label class="descriptionLabel" for="hybrismetdatakeyVar">Nøglevariabel</label>
+                                    <input type="text" name="hybrismetdatakeyVar" id="hybris-metdata-keyVar" list="hybris-metdata-Variables">
+                                    <datalist name="hybrismetdataVariables" id="hybris-metdata-Variables"></datalist>
+                                </span>
+                                <i id="hybris-message-metdata-keyVariable" class="far fa-question-circle"></i>
+                                <span id="hybris-message-metdata-keyVariable-Title" hidden="true">NØGLEVARIABEL</span>
+                                <span id="hybris-message-metdata-keyVariable-Text" hidden="true">Statistikfilens unikke nøglevariabel angivet med
+                                    navne på den/de variable, som nøglevariablen består af. Flere variabelnavne adskilles med mellemrum.</span>
+                                <br />
+                                <button id="hybris-metdata-addVarKeyBtn" style="margin-left: 44%;">Tilføj variabel</button>
+                                <br />
+                                <table id="hybris-metdata-varKeys" hidden="true">
+                                    <tr>
+                                        <th>Nøglevariabel</th>
+                                    </tr>
+                                </table>
+                                <br />
+                                <button id="hybris-metdata-cancelBtn">Fortryd nøglevariabel</button>
+                            </div>
+                            <button id="hybris-metdata-okBtn">Næste</button>
                             <span id="hybris-output-metdata-Error" hidden="true"><br/>Error: {0}</span>
                             <span id="hybris-output-metdata-fileNameRequired-Title" hidden="true">Datafilnavn</span>
                             <span id="hybris-output-metdata-fileNameRequired-Text" hidden="true">Datafilnavn skal udfyldes</span>                            

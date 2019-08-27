@@ -58,13 +58,18 @@ input[type=text] {
     width: 75%;
 }
 
+#keyVarContainer {
+    background-color: #6db1a7;
+}
+
 textarea {
     border: solid 0.5px #b2b2b2;
-    padding-left:0px;
+    padding-right:0px;
     font-family: SourceSansPro;
     margin-bottom: 5px;
     padding-left: 5px;
     width: 30%;
+    float: inline-end;
 }
 
 .path {
@@ -196,6 +201,11 @@ table {
     border-collapse: collapse;
     margin-bottom: 6px;
     margin-top:6px;
+}
+
+/* Specific for the Nøglevariable table */
+#hybris-metdata-varkeys {
+    margin-left: 224px;
 }
 
 /* Table END */
