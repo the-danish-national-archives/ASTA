@@ -622,7 +622,7 @@ function (n) {
                 console.log(settings.data);
                 settings.confirmationSpn.innerHTML = "";
                 if(settings.errorStop) { settings.table.errorStop = true; }
-                settings.table.rows = settings.rowIndex;
+                settings.table.rows = settings.rowIndex - 1;
                 ProcessDataSet();
             });
         }
