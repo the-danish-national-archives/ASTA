@@ -119,7 +119,7 @@ namespace Rigsarkiv.Athena
             _tableIndexXDocument.Element(_tableIndexXNS + "siardDiark").Element(_tableIndexXNS + "tables").Add(tableNode);
             var srcFolder = tableInfo["fileName"].ToString();
             srcFolder = srcFolder.Substring(0, srcFolder.LastIndexOf("."));
-            var table = new Table() { SrcFolder = srcFolder, Name = tableName, Folder = folder, Rows = int.Parse(rows) - 1, Errors = 0, RowsCounter = 0, Columns = new List<Column>(), ErrorsRows = new Dictionary<string, Row>() };
+            var table = new Table() { SrcFolder = srcFolder, Name = tableName, Folder = folder, Rows = int.Parse(rows), Errors = 0, RowsCounter = 0, Columns = new List<Column>(), ErrorsRows = new Dictionary<string, Row>() };
             _report.Tables.Add(table);
             foreach (var variable in (object[])tableInfo["variables"])
             {
