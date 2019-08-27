@@ -993,7 +993,7 @@ function (n) {
                     /*if(charsetMatch !== "UTF-8") {
                         result = LogWarn("-CheckMetadata-FileEncoding-Error",settings.fileName);
                     }*/                 
-                    settings.data.push({ "fileName":settings.fileName,"errorStop":false, "system":"", "name":"", "variables":[], "references":[] })
+                    settings.data.push({ "fileName":settings.fileName,"errorStop":false, "system":"", "name":"", "variables":[], "references":[], "description":"", rows:0 })
                     if(!ValidateMetadata(metadataFilePath)) { result = false; }
                     GetTableData(settings.fileName).errorStop = settings.errorStop;
                     settings.errorStop = false;
