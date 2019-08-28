@@ -108,6 +108,7 @@ i {
     border: solid 0.5px #faebcc; 
     color: #8a6d3b;
     padding: 10px;
+    display: block;
 }
 
 .confirmation {
