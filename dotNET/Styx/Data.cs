@@ -136,33 +136,52 @@ namespace Rigsarkiv.Styx
             }
         }
 
+        private void EnsureTableMissingValues(Table table, XNamespace tableNS)
+        {
+            var counter = 0;
+            _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Ensure Missing Values for table: {0}", table.Name) });
+            var path = string.Format(TablePath, _srcPath, table.SrcFolder);
+            StreamElement(delegate (XElement row) {
+                table.Columns.Where(c => c.MissingValues != null).ToList().ForEach(column => {
+                    var content = row.Element(tableNS + column.Id).Value;
+                    if (!string.IsNullOrEmpty(content))
+                    {
+                        UpdateRange(column, content);
+                    }
+                });
+                counter++;
+                if ((counter % RowsChunk) == 0) { _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("{0} of {1} rows checked", counter, table.Rows) }); }
+            }, path);
+        }
+
+        private void EnsureCodeListMissingValues(Table table)
+        {
+            string path = null;
+            table.Columns.Where(c => c.CodeList != null).ToList().ForEach(column =>
+            {
+                _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Ensure Missing Values for codelist: {0}", column.CodeList.Name) });
+                XNamespace tableNS = string.Format(TableXmlNs, column.CodeList.SrcFolder);
+                path = string.Format(TablePath, _srcPath, column.CodeList.SrcFolder);
+                StreamElement(delegate (XElement row) {
+                    var content = row.Element(tableNS + C1).Value;
+                    UpdateRange(column, content);
+                }, path);
+            });
+        }
+
         private bool EnsureMissingValues()
         {
-            var result = true;
-            string path = null;
+            var result = true;            
             try
             {
                 var regex = GetRegex(SpecialNumericPattern);
                 _report.Tables.ForEach(table =>
                 {
-                    var counter = 0;
-                    XNamespace tableNS = string.Format(TableXmlNs, table.SrcFolder);
-                    path = string.Format(TablePath, _srcPath, table.SrcFolder);
-                    StreamElement(delegate (XElement row) {
-                        table.Columns.Where(c => c.MissingValues != null).ToList().ForEach(column => {
-                            var content = row.Element(tableNS + column.Id).Value;
-                            if (!string.IsNullOrEmpty(content))
-                            {
-                                UpdateRange(column, content);
-                            }
-                        });
-                        counter++;
-                        if ((counter % RowsChunk) == 0) { _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("{0} of {1} rows checked", counter, table.Rows) }); }
-                    }, path);
-                    if (_report.ScriptType == ScriptType.SPSS)
-                    {
+                   EnsureTableMissingValues(table, string.Format(TableXmlNs, table.SrcFolder));
+                   EnsureCodeListMissingValues(table);
 
-                    }
+
+
                 });
             }
             catch (Exception ex)
@@ -208,7 +227,12 @@ namespace Rigsarkiv.Styx
                 XNamespace tableNS = string.Format(TableXmlNs, column.CodeList.SrcFolder);
                 path = string.Format(TablePath, _srcPath, column.CodeList.SrcFolder);
                 StreamElement(delegate (XElement row) {
-                    codeList.AppendLine(string.Format(CodeFormat, row.Element(tableNS + C1).Value, row.Element(tableNS + C2).Value));
+                    var code = row.Element(tableNS + C1).Value;
+                    if (_report.ScriptType == ScriptType.SPSS && column.MissingValues != null && column.MissingValues.ContainsKey(code))
+                    {
+                        code = column.MissingValues[code];
+                    }
+                    codeList.AppendLine(string.Format(CodeFormat, code, row.Element(tableNS + C2).Value));
                 }, path);
                 var codeListContent = codeList.ToString();                
                 _codeLists.Add(codeListContent.Substring(0, codeListContent.Length - 2));

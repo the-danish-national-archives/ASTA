@@ -313,7 +313,11 @@ namespace Rigsarkiv.Styx
             var length = GetIntegerLength(column);
             hasError = length == 0;
             if (!hasError)
-            {               
+            {
+                if (_report.ScriptType == ScriptType.SPSS && column.MissingValues != null && column.MissingValues.ContainsKey(result))
+                {
+                    result = column.MissingValues[result];
+                }
                 hasError = result.Length > (length + 1);
                 if (hasError) { result = result.Substring(0, length + 1); }
             }
