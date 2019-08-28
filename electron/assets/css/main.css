@@ -109,6 +109,7 @@ i {
     color: #8a6d3b;
     padding: 10px;
     display: block;
+    width: fit-content;
 }
 
 .confirmation {
