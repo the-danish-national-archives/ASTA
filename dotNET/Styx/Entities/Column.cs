@@ -1,4 +1,6 @@
-﻿namespace Rigsarkiv.Styx.Entities
+﻿using System.Collections.Generic;
+
+namespace Rigsarkiv.Styx.Entities
 {
     /// <summary>
     /// Column Entity
@@ -11,6 +13,9 @@
         public string Type { get; set; }
         public string TypeOriginal { get; set; }
         public bool Modified { get; set; }
+        public string Highest { get; set; }
+        public string Lowest { get; set; }
+        public Dictionary<string,string> MissingValues { get; set; }
         public Table CodeList { get; set; }
     }
 }

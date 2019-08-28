@@ -78,22 +78,13 @@ namespace Rigsarkiv.Styx
 
         private void EnsureUserCodesFile(Table table)
         {
-            if(_researchIndexXDocument == null) { throw new Exception("ResearchIndexXDocument property not setet"); }
-            var tableNode = _researchIndexXDocument.Element(_tableIndexXNS + "researchIndex").Element(_tableIndexXNS + "mainTables").Elements().Where(e => e.Element(_tableIndexXNS + "tableID").Value == table.SrcFolder).FirstOrDefault();
-            foreach (var columnNode in tableNode.Element(_tableIndexXNS + "columns").Elements())
+            var index = 0;
+            table.Columns.Where(c => c.MissingValues != null).ToList().ForEach(column =>
             {
-                var name = table.Columns.FirstOrDefault(c => c.Id == columnNode.Element(_tableIndexXNS + "columnID").Value).Name;
-                var values = new List<string>();
-                foreach (var valueNode in columnNode.Element(_tableIndexXNS + "missingValues").Elements())
-                {
-                    values.Add(string.Format("'{0}'", valueNode.Value));
-                }
-                if(values.Count > 0)
-                {
-                    _usercodes.AppendLine(string.Format("{0} {1}", name, string.Join(" ", values.ToArray())));
-                }                
-            }
-            if(_usercodes.Length > 0)
+                _usercodes.AppendLine(string.Format("{0} {{{1}}}", column.Name, index));
+                index++;
+            });
+            if (_usercodes.Length > 0)
             {
                 EnsureFile(table, UserCodesPath, _usercodes.ToString());
             }
@@ -135,25 +126,23 @@ namespace Rigsarkiv.Styx
             var result = true;
             try
             {
+                if (_researchIndexXDocument == null) { throw new Exception("ResearchIndexXDocument property not setet"); }
                 var path = string.Format(DataPath, _destFolderPath);
                 _report.Tables.ForEach(table =>
                 {
                     _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Build {0} metadata", table.Folder) });
                     var tableNode = _tableIndexXDocument.Element(_tableIndexXNS + "siardDiark").Element(_tableIndexXNS + "tables").Elements().Where(e => e.Element(_tableIndexXNS + "folder").Value == table.SrcFolder).FirstOrDefault();
+                    var researchNode = _researchIndexXDocument.Element(_tableIndexXNS + "researchIndex").Element(_tableIndexXNS + "mainTables").Elements().Where(e => e.Element(_tableIndexXNS + "tableID").Value == table.SrcFolder).FirstOrDefault();
                     foreach (var columnNode in tableNode.Element(_tableIndexXNS + "columns").Elements())
                     {
-                        var column = new Column();
-                        column.Id = columnNode.Element(_tableIndexXNS + "columnID").Value;
-                        column.Name = columnNode.Element(_tableIndexXNS + "name").Value;
-                        column.Description = columnNode.Element(_tableIndexXNS + "description").Value;
-                        column.Type = columnNode.Element(_tableIndexXNS + "typeOriginal").Value;
-                        column.TypeOriginal = columnNode.Element(_tableIndexXNS + "type").Value;
+                        var column = new Column() { Id = columnNode.Element(_tableIndexXNS + "columnID").Value, Name = columnNode.Element(_tableIndexXNS + "name").Value, Description = columnNode.Element(_tableIndexXNS + "description").Value, Type = columnNode.Element(_tableIndexXNS + "typeOriginal").Value, TypeOriginal = columnNode.Element(_tableIndexXNS + "type").Value };
                         EnsureType(column);
                         if (tableNode.Element(_tableIndexXNS + "foreignKeys").Elements().Any(e => e.Element(_tableIndexXNS + "reference").Element(_tableIndexXNS + "column").Value == column.Name))
                         {
                             var foreignKeyNode = tableNode.Element(_tableIndexXNS + "foreignKeys").Elements().Where(e => e.Element(_tableIndexXNS + "reference").Element(_tableIndexXNS + "column").Value == column.Name).FirstOrDefault();
                             column.CodeList = GetCodeList(foreignKeyNode, table, column);
                         }
+                        column.MissingValues = GetMissingValues(researchNode, table, column);
                         table.Columns.Add(column);
                     }
                 });
@@ -184,6 +173,21 @@ namespace Rigsarkiv.Styx
                     column.Modified = true;
                 }
             }
+        }
+
+        private Dictionary<string, string> GetMissingValues(XElement tableNode, Table table, Column column)
+        {
+            if(!tableNode.Element(_tableIndexXNS + "columns").Elements().Any(e => e.Element(_tableIndexXNS + "columnID").Value == column.Id))
+            {
+                return null;
+            }
+            var result = new Dictionary<string, string>();
+            var columnNode = tableNode.Element(_tableIndexXNS + "columns").Elements().Where(e => e.Element(_tableIndexXNS + "columnID").Value == column.Id).FirstOrDefault();
+            foreach (var valueNode in columnNode.Element(_tableIndexXNS + "missingValues").Elements())
+            {
+                result.Add(valueNode.Value, valueNode.Value);
+            }
+            return result;
         }
 
         private Table GetCodeList(XElement foreignKeyNode, Table table, Column column)

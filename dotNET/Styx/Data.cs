@@ -44,7 +44,7 @@ namespace Rigsarkiv.Styx
             var message = string.Format("Start Converting Data {0} -> {1}", _srcFolder, _destFolder);
             _log.Info(message);
             _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = message });
-            if(EnsureCodeLists() && EnsureTables())
+            if(EnsureMissingValues() && EnsureCodeLists() && EnsureTables())
             {
                 result = true;
             }
@@ -104,6 +104,74 @@ namespace Rigsarkiv.Styx
                 contents.Add(content);
             });            
             return string.Join(Separator, contents.ToArray());
+        }
+
+        private void UpdateRange(Column column,string value)
+        {
+            if (string.IsNullOrEmpty(column.Highest)) { column.Highest = "0"; }
+            if (string.IsNullOrEmpty(column.Lowest)) { column.Lowest = "0"; }
+
+            if (column.TypeOriginal == "INTEGER")
+            {
+                int current = 0;
+                if (int.TryParse(value, out current))
+                {
+                    var tmp = int.Parse(column.Highest);
+                    if (current > tmp) { column.Highest = current.ToString(); }
+                    tmp = int.Parse(column.Lowest);
+                    if (current < tmp) { column.Lowest = current.ToString(); }
+                }                
+            }
+            if (column.TypeOriginal == "DECIMAL")
+            {
+                var newValue = value.Replace(",", ".");
+                decimal current = 0;
+                if (decimal.TryParse(newValue, out current))
+                {
+                    var tmp = decimal.Parse(column.Highest);
+                    if (current > tmp) { column.Highest = current.ToString(); }
+                    tmp = decimal.Parse(column.Lowest);
+                    if (current < tmp) { column.Lowest = current.ToString(); }
+                }
+            }
+        }
+
+        private bool EnsureMissingValues()
+        {
+            var result = true;
+            string path = null;
+            try
+            {
+                var regex = GetRegex(SpecialNumericPattern);
+                _report.Tables.ForEach(table =>
+                {
+                    var counter = 0;
+                    XNamespace tableNS = string.Format(TableXmlNs, table.SrcFolder);
+                    path = string.Format(TablePath, _srcPath, table.SrcFolder);
+                    StreamElement(delegate (XElement row) {
+                        table.Columns.Where(c => c.MissingValues != null).ToList().ForEach(column => {
+                            var content = row.Element(tableNS + column.Id).Value;
+                            if (!string.IsNullOrEmpty(content))
+                            {
+                                UpdateRange(column, content);
+                            }
+                        });
+                        counter++;
+                        if ((counter % RowsChunk) == 0) { _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("{0} of {1} rows checked", counter, table.Rows) }); }
+                    }, path);
+                    if (_report.ScriptType == ScriptType.SPSS)
+                    {
+
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                result = false;
+                _log.Error("EnsureMissingValues Failed", ex);
+                _logManager.Add(new LogEntity() { Level = LogLevel.Error, Section = _logSection, Message = string.Format("EnsureMissingValues Failed: {0}", ex.Message) });
+            }
+            return result;
         }
 
         private bool EnsureCodeLists()
