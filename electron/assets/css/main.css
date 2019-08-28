@@ -46,7 +46,7 @@ input[type=text] {
     padding-left:5px;
     font-family: SourceSansPro;
     margin-bottom: 5px;
-    width: 30%
+    width: 49%
 }
 
 /* Override the size of the input boxes in nemesis as the general layout of that is more packed. */
@@ -59,7 +59,8 @@ input[type=text] {
 }
 
 #keyVarContainer {
-    background-color: #6db1a7;
+    text-align: right;
+    width: 60%;
 }
 
 textarea {
@@ -68,7 +69,7 @@ textarea {
     font-family: SourceSansPro;
     margin-bottom: 5px;
     padding-left: 5px;
-    width: 30%;
+    width: 49%;
     float: inline-end;
 }
 
@@ -204,8 +205,12 @@ table {
 }
 
 /* Specific for the Nøglevariable table */
-#hybris-metdata-varkeys {
-    margin-left: 224px;
+.right-align {
+    margin-left: auto;
+    margin-right: 28px;
+}
+#hybris-metdata-addVarKeyBtn {
+    margin-right: 25px !important;
 }
 
 /* Table END */
@@ -332,10 +337,11 @@ a.selected:hover {
 /* Label elements */
 
 .descriptionLabel {
-    margin-right: 20px;
+    margin-right: 10%;
     width: 200px;
     display: inline-block;
     vertical-align: top;
+    text-align: left;
 }
 
 /* Label elements END */
