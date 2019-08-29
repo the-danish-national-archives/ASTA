@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Xml.Linq;
 
 namespace Rigsarkiv.Styx
@@ -18,7 +19,10 @@ namespace Rigsarkiv.Styx
         const string Separator = ";";
         const string TablePath = "{0}\\Tables\\{1}\\{1}.xml";
         const string CodeFormat = "'{0}' '{1}'"; 
-        private List<string> _codeLists = null;        
+        const string Alphabet = "abcdefghijklmnopqrstuvwxyz";
+        private List<string> _codeLists = null;
+        private List<string> _sasSpecialNumerics = null;
+        private List<string> _stataSpecialNumerics = null;
 
         /// <summary>
         /// Constructore
@@ -32,6 +36,13 @@ namespace Rigsarkiv.Styx
             _logSection = "Data";
             _report = report;
             _codeLists = new List<string>();
+            _sasSpecialNumerics = new List<string>();
+            _stataSpecialNumerics = new List<string>();
+            foreach (char c in Alphabet)
+            {
+                _sasSpecialNumerics.Add(string.Format("{0}", c.ToString().ToUpper()));
+                _stataSpecialNumerics.Add(string.Format(".{0}", c.ToString()));
+            }
         }
 
         /// <summary>
@@ -44,8 +55,7 @@ namespace Rigsarkiv.Styx
             var message = string.Format("Start Converting Data {0} -> {1}", _srcFolder, _destFolder);
             _log.Info(message);
             _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = message });
-            var ensureMissingValues = _report.ScriptType != ScriptType.SPSS || (_report.ScriptType == ScriptType.SPSS && EnsureMissingValues());
-            if(ensureMissingValues && EnsureCodeLists() && EnsureTables())
+           if(EnsureMissingValues() && EnsureCodeLists() && EnsureTables())
             {
                 result = true;
                 if (_report.ScriptType == ScriptType.SPSS) { result = EnsureUserCodes(); }                
@@ -171,43 +181,71 @@ namespace Rigsarkiv.Styx
             });
         }
 
+        private void ConvertMissingValuesToNumbers(Regex regex, Column column)
+        {
+            int length = -1;
+            if (column.TypeOriginal == "INTEGER") { length = GetIntegerLength(column); }
+            if (column.TypeOriginal == "DECIMAL") { length = GetDecimalLength(column)[0]; }
+            if (length > 0)
+            {
+                int newValue = ((int.Parse(Math.Pow(10, length).ToString()) - 1) * -1);
+                column.MissingValues.Where(v => regex.IsMatch(v.Key)).ToList().ForEach(value =>
+                {
+                    if (int.Parse(column.Lowest) > newValue)
+                    {
+                        int tmpValue = 0;
+                        if (!int.TryParse(value.Value, out tmpValue))
+                        {
+                            _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Map column {0} Missing Value {1} to {2}", column.Name, value.Key, newValue) });
+                            column.MissingValues[value.Key] = newValue.ToString();
+                        }
+                        newValue++;
+                    }
+                    else
+                    {
+                        _logManager.Add(new LogEntity() { Level = LogLevel.Warning, Section = _logSection, Message = string.Format("No new numric value code for column: {0}", column.Name) });
+                    }
+                });
+            }
+        }
+
+        private void ConvertMissingValuesToChars(Regex regex, Column column,string[] specialNumerics)
+        {
+            var index = 0;
+            column.MissingValues.Where(v => !regex.IsMatch(v.Value)).ToList().ForEach(value =>
+            {
+                if(specialNumerics.Length > index)
+                {
+                    var newValue = specialNumerics[index];
+                    _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Map column {0} Missing Value {1} to {2}", column.Name, value.Key, newValue) });
+                    column.MissingValues[value.Key] = newValue;
+                }
+                else
+                {
+                    _logManager.Add(new LogEntity() { Level = LogLevel.Warning, Section = _logSection, Message = string.Format("No new Special Numeric value code for column: {0}", column.Name) });
+                }
+                index++;
+            });
+        }
+
         private bool EnsureMissingValues()
         {
-            var result = true;
-            int length = -1;
+            var result = true;            
             try
             {
                 var regex = GetRegex(SpecialNumericPattern);
                 _report.Tables.ForEach(table =>
                 {
-                   EnsureTableMissingValues(table, string.Format(TableXmlNs, table.SrcFolder));
-                   EnsureCodeListMissingValues(table);
+                    if (_report.ScriptType == ScriptType.SPSS)
+                    {
+                        EnsureTableMissingValues(table, string.Format(TableXmlNs, table.SrcFolder));
+                        EnsureCodeListMissingValues(table);
+                    }                   
                     table.Columns.Where(c => c.MissingValues != null).ToList().ForEach(column =>
                     {
-                        if (column.TypeOriginal == "INTEGER") { length = GetIntegerLength(column); }
-                        if (column.TypeOriginal == "DECIMAL") { length = GetDecimalLength(column)[0]; }
-                        if(length > 0)
-                        {
-                            
-                            int newValue = ((int.Parse(Math.Pow(10, length).ToString()) - 1) * -1);                            
-                            column.MissingValues.Where(v => regex.IsMatch(v.Key)).ToList().ForEach(value =>
-                            {
-                                if(int.Parse(column.Lowest) > newValue)
-                                {
-                                    int tmpValue = 0;
-                                    if (!int.TryParse(value.Value, out tmpValue))
-                                    {
-                                        _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Map column {0} Missing Value {1} to {2}", column.Name,value.Key, newValue) });
-                                        column.MissingValues[value.Key] = newValue.ToString();                                        
-                                    }
-                                    newValue++;
-                                }
-                                else
-                                {
-                                    _logManager.Add(new LogEntity() { Level = LogLevel.Warning, Section = _logSection, Message = string.Format("No new Missing value code for column: {0}", column.Name) });
-                                }
-                            });
-                        }                        
+                        if (_report.ScriptType == ScriptType.SPSS) { ConvertMissingValuesToNumbers(regex, column); }
+                        if (_report.ScriptType == ScriptType.SAS) { ConvertMissingValuesToChars(regex, column,_sasSpecialNumerics.ToArray()); }
+                        if (_report.ScriptType == ScriptType.Stata) { ConvertMissingValuesToChars(regex, column, _stataSpecialNumerics.ToArray()); }
                     });
                 });
             }
@@ -290,7 +328,7 @@ namespace Rigsarkiv.Styx
                 path = string.Format(TablePath, _srcPath, column.CodeList.SrcFolder);
                 StreamElement(delegate (XElement row) {
                     var code = row.Element(tableNS + C1).Value;
-                    if (_report.ScriptType == ScriptType.SPSS && column.MissingValues != null && column.MissingValues.ContainsKey(code))
+                    if (column.MissingValues != null && column.MissingValues.ContainsKey(code))
                     {
                         code = column.MissingValues[code];
                     }

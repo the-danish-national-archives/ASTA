@@ -113,9 +113,9 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(23, 51);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(148, 20);
+            this.label1.Size = new System.Drawing.Size(220, 20);
             this.label1.TabIndex = 17;
-            this.label1.Text = "Vælg  mappe (AIP):";
+            this.label1.Text = "Vælg arkiveringsversion (AIP):";
             // 
             // sipButton
             // 
@@ -144,7 +144,7 @@
             this.logButton.Name = "logButton";
             this.logButton.Size = new System.Drawing.Size(75, 32);
             this.logButton.TabIndex = 26;
-            this.logButton.Text = "Log";
+            this.logButton.Text = "Vis Log";
             this.logButton.UseVisualStyleBackColor = true;
             this.logButton.Click += new System.EventHandler(this.logButton_Click);
             // 
@@ -175,14 +175,14 @@
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(26, 268);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(104, 20);
+            this.label5.Size = new System.Drawing.Size(155, 20);
             this.label5.TabIndex = 27;
-            this.label5.Text = "Statistik type:";
+            this.label5.Text = "Vælg statistikformat:";
             // 
             // scriptTypeComboBox
             // 
             this.scriptTypeComboBox.FormattingEnabled = true;
-            this.scriptTypeComboBox.Location = new System.Drawing.Point(145, 265);
+            this.scriptTypeComboBox.Location = new System.Drawing.Point(195, 265);
             this.scriptTypeComboBox.Name = "scriptTypeComboBox";
             this.scriptTypeComboBox.Size = new System.Drawing.Size(121, 28);
             this.scriptTypeComboBox.TabIndex = 28;
