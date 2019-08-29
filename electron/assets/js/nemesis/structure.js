@@ -53,6 +53,7 @@ function (n) {
 
         //reset status & input fields
         var Reset = function () {
+            settings.ConvertBtn.hidden = true;
             settings.errors = 0;
             settings.errorStop = false;
             settings.convertStop = false;
@@ -547,6 +548,7 @@ function (n) {
         }
 
         var UpdatePath = function(path) {
+            settings.ConvertBtn.hidden = true;
             settings.selectedPath = path; 
             console.logInfo(`selected path: ${path}`,"Rigsarkiv.Nemesis.Structure.AddEvents"); 
             settings.pathDirTxt.value = settings.selectedPath;
