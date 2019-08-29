@@ -275,7 +275,7 @@ namespace Rigsarkiv.Styx
             hasError = (lengths[0] == 0 && lengths[1] == 0);
             if (!hasError)
             {
-                if (_report.ScriptType == ScriptType.SPSS && column.MissingValues != null && column.MissingValues.ContainsKey(result))
+                if (column.MissingValues != null && column.MissingValues.ContainsKey(result))
                 {
                     result = column.MissingValues[result];
                 }
@@ -319,7 +319,7 @@ namespace Rigsarkiv.Styx
             hasError = length == 0;
             if (!hasError)
             {
-                if (_report.ScriptType == ScriptType.SPSS && column.MissingValues != null && column.MissingValues.ContainsKey(result))
+                if (column.MissingValues != null && column.MissingValues.ContainsKey(result))
                 {
                     result = column.MissingValues[result];
                 }
