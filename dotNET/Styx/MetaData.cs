@@ -15,7 +15,6 @@ namespace Rigsarkiv.Styx
     public class MetaData : Converter
     {
         const string VariablesPath = "{0}\\Data\\{1}_{2}\\{1}_{2}_VARIABEL.txt";
-        const string UserCodesPath = "{0}\\Data\\{1}_{2}\\{1}_{2}_BRUGERKODE.txt";
         const string DescriptionsPath = "{0}\\Data\\{1}_{2}\\{1}_{2}_VARIABELBESKRIVELSE.txt";
         private StringBuilder _variables = null;
         private StringBuilder _descriptions = null;

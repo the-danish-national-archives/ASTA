@@ -21,6 +21,7 @@ namespace Rigsarkiv.Styx
         protected const string TableSchemaLocation = "http://www.sa.dk/xmlns/siard/1.0/schema0/{0}.xsd {0}.xsd";
         protected const string TableXsiNs = "http://www.w3.org/2001/XMLSchema-instance";
         protected const string CodeListPath = "{0}\\Data\\{1}_{2}\\{1}_{2}_KODELISTE.txt";
+        protected const string UserCodesPath = "{0}\\Data\\{1}_{2}\\{1}_{2}_BRUGERKODE.txt";
         protected const string TableDataPath = "{0}\\Data\\{1}_{2}\\{1}_{2}.csv";
         protected const string C1 = "c1";
         protected const string C2 = "c2";
@@ -273,7 +274,11 @@ namespace Rigsarkiv.Styx
             var lengths = GetDecimalLength(column);
             hasError = (lengths[0] == 0 && lengths[1] == 0);
             if (!hasError)
-            {                                  
+            {
+                if (_report.ScriptType == ScriptType.SPSS && column.MissingValues != null && column.MissingValues.ContainsKey(result))
+                {
+                    result = column.MissingValues[result];
+                }
                 if (lengths[0] > 0 && lengths[1] > 0)
                 {
                     hasError = result.Length > (lengths[0] + lengths[1] + 2);
@@ -284,7 +289,7 @@ namespace Rigsarkiv.Styx
             return result;
         }
 
-        private int[] GetDecimalLength(Column column)
+        protected int[] GetDecimalLength(Column column)
         {
             var result = new int[2] { 0, 0 };
             var regex = GetRegex(DataTypeDecimalPattern);            
@@ -325,7 +330,7 @@ namespace Rigsarkiv.Styx
             return result;
         }
 
-        private int GetIntegerLength(Column column)
+        protected int GetIntegerLength(Column column)
         {
             var result = 0;
             var regex = GetRegex(DataTypeIntPattern);

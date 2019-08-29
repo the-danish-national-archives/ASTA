@@ -44,9 +44,11 @@ namespace Rigsarkiv.Styx
             var message = string.Format("Start Converting Data {0} -> {1}", _srcFolder, _destFolder);
             _log.Info(message);
             _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = message });
-            if(EnsureMissingValues() && EnsureCodeLists() && EnsureTables())
+            var ensureMissingValues = _report.ScriptType != ScriptType.SPSS || (_report.ScriptType == ScriptType.SPSS && EnsureMissingValues());
+            if(ensureMissingValues && EnsureCodeLists() && EnsureTables())
             {
                 result = true;
+                if (_report.ScriptType == ScriptType.SPSS) { result = EnsureUserCodes(); }                
             }
             message = result ? "End Converting Data" : "End Converting Data with errors";
             _log.Info(message);
@@ -171,7 +173,8 @@ namespace Rigsarkiv.Styx
 
         private bool EnsureMissingValues()
         {
-            var result = true;            
+            var result = true;
+            int length = -1;
             try
             {
                 var regex = GetRegex(SpecialNumericPattern);
@@ -179,9 +182,33 @@ namespace Rigsarkiv.Styx
                 {
                    EnsureTableMissingValues(table, string.Format(TableXmlNs, table.SrcFolder));
                    EnsureCodeListMissingValues(table);
-
-
-
+                    table.Columns.Where(c => c.MissingValues != null).ToList().ForEach(column =>
+                    {
+                        if (column.TypeOriginal == "INTEGER") { length = GetIntegerLength(column); }
+                        if (column.TypeOriginal == "DECIMAL") { length = GetDecimalLength(column)[0]; }
+                        if(length > 0)
+                        {
+                            
+                            int newValue = ((int.Parse(Math.Pow(10, length).ToString()) - 1) * -1);                            
+                            column.MissingValues.Where(v => regex.IsMatch(v.Key)).ToList().ForEach(value =>
+                            {
+                                if(int.Parse(column.Lowest) > newValue)
+                                {
+                                    int tmpValue = 0;
+                                    if (!int.TryParse(value.Value, out tmpValue))
+                                    {
+                                        _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Map column {0} Missing Value {1} to {2}", column.Name,value.Key, newValue) });
+                                        column.MissingValues[value.Key] = newValue.ToString();                                        
+                                    }
+                                    newValue++;
+                                }
+                                else
+                                {
+                                    _logManager.Add(new LogEntity() { Level = LogLevel.Warning, Section = _logSection, Message = string.Format("No new Missing value code for column: {0}", column.Name) });
+                                }
+                            });
+                        }                        
+                    });
                 });
             }
             catch (Exception ex)
@@ -191,6 +218,41 @@ namespace Rigsarkiv.Styx
                 _logManager.Add(new LogEntity() { Level = LogLevel.Error, Section = _logSection, Message = string.Format("EnsureMissingValues Failed: {0}", ex.Message) });
             }
             return result;
+        }
+
+        private bool EnsureUserCodes()
+        {
+            var result = true;
+            try
+            {
+                _report.Tables.ForEach(table =>
+                {
+                    _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Write {0} user codes", table.Folder) });
+                    EnsureUserCode(table);
+                });
+            }
+            catch (Exception ex)
+            {
+                result = false;
+                _log.Error("EnsureUserCodes Failed", ex);
+                _logManager.Add(new LogEntity() { Level = LogLevel.Error, Section = _logSection, Message = string.Format("EnsureUserCodes Failed: {0}", ex.Message) });
+            }
+            return result;
+        }
+
+        private void EnsureUserCode(Table table)
+        {
+            var usercodes = new List<string>();
+            var path = string.Format(UserCodesPath, _destFolderPath, _report.ScriptType.ToString().ToLower(), table.Name);
+            var content = File.ReadAllText(path);
+            table.Columns.Where(c => c.MissingValues != null).ToList().ForEach(column =>
+            {   
+                usercodes.Add(string.Join(" ", column.MissingValues.Select(v => string.Format("'{0}'", v.Value)).ToArray()));
+            });
+            using (var sw = new StreamWriter(path, false, Encoding.UTF8))
+            {
+                sw.Write(string.Format(content, usercodes.ToArray()));
+            }
         }
 
         private bool EnsureCodeLists()
