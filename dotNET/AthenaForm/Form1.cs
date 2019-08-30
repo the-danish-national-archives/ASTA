@@ -68,7 +68,12 @@ namespace Rigsarkiv.AthenaForm
         {
             if (!ValidateInputs()) { return; }
             Cursor.Current = Cursors.WaitCursor;
-             outputRichTextBox.Clear();
+            sipButton.Enabled = false;
+            aipButton.Enabled = false;
+            convertButton.Enabled = false;
+            nextForm.Enabled = false;
+            logButton.Enabled = false;
+            outputRichTextBox.Clear();
             _logManager = new LogManager();
             _logManager.LogAdded += OnLogAdded;
             var srcPath = sipTextBox.Text;
@@ -92,6 +97,9 @@ namespace Rigsarkiv.AthenaForm
                 }
             }
             Cursor.Current = Cursors.Default;
+            sipButton.Enabled = true;
+            aipButton.Enabled = true;
+            convertButton.Enabled = true;
             logButton.Enabled = true;
         }
 
