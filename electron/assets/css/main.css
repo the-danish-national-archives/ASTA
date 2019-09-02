@@ -44,6 +44,18 @@ button:disabled {
     margin-left: 5px;
 }
 
+#hybris-references-addReferenceVariableBtn {
+    margin-left: 68.9%;
+}
+
+#hybris-references-addForeignVariableBtn {
+    margin-left: 68.9%;
+}
+
+#hybris-references-addReferenceBtn {
+    margin-left: 68.2%;
+}
+
 input[type=text] {
     border: solid 0.5px #b2b2b2;
     height: 27px;
@@ -64,6 +76,10 @@ input[type=text] {
 
 #keyVarContainer {
     text-align: right;
+    width: 60%;
+}
+
+#referenceContainer {
     width: 60%;
 }
 
@@ -219,8 +235,6 @@ td .path {
 #hybris-contextdocuments-uploads td .path{
     width: 85% !important;
 }
-
-
 
 /* hybris-contextdocuments-uploads END*/
 
