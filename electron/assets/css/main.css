@@ -40,6 +40,10 @@ button:disabled {
     background-color: #665c5c;
 }
 
+.docBtn{
+    margin-left: 5px;
+}
+
 input[type=text] {
     border: solid 0.5px #b2b2b2;
     height: 27px;
@@ -194,11 +198,31 @@ td {
 td .path {
     width: 76% !important;
 }
+/* hybris-contextdocuments-uploads */
+#hybris-contextdocuments-uploads {
+    width: 100%;
+}
+
+#hybris-contextdocuments-uploads tr td:nth-child(1) {
+    width: 10%;
+}
+
+#hybris-contextdocuments-uploads tr td:nth-child(2) {
+    width: 10%;
+}
 
 #hybris-contextdocuments-uploads tr td:nth-child(3) {
     text-align: center;
-    width: 400px;
+    width: 80%;
 }
+
+#hybris-contextdocuments-uploads td .path{
+    width: 85% !important;
+}
+
+
+
+/* hybris-contextdocuments-uploads END*/
 
 table {
     border-collapse: collapse;

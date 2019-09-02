@@ -88,7 +88,7 @@ function (n) {
                     }
                 }
                 settings.documents.forEach(upload => {
-                    $(settings.uploadsTbl).append("<tr><td>{0}</td><td>{1}</td><td><input type=\"text\" id=\"hybris-contextdocuments-document-{0}\" class=\"path\" text=\"{2}\" readonly=\"true\" placeholder=\"Vælg sti med knappen\"/><button id=\"hybris-contextdocuments-selectFile-{0}\">Browse</button></td></tr>".format(upload.id,upload.title,upload.path));
+                    $(settings.uploadsTbl).append("<tr><td>{0}</td><td>{1}</td><td><input type=\"text\" id=\"hybris-contextdocuments-document-{0}\" class=\"path\" text=\"{2}\" readonly=\"true\" placeholder=\"Vælg sti med knappen\"/><button class=\"docBtn\" id=\"hybris-contextdocuments-selectFile-{0}\">Browse</button></td></tr>".format(upload.id,upload.title,upload.path));
                     document.getElementById("hybris-contextdocuments-selectFile-{0}".format(upload.id)).addEventListener('click', (event) => {
                         ipcRenderer.send('contextdocuments-open-file-dialog',upload.id);
                     })
