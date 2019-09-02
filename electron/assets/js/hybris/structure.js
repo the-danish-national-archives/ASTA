@@ -13,12 +13,14 @@ function (n) {
 
         //private data memebers
         var settings = {
-            metadataCallback: null,
-            selectDirBtn: null,
-            pathDirTxt: null,
+            selectNewDirBtn: null,
+            selectEditDirBtn: null,
+            newPathDirTxt: null,
+            editPathDirTxt: null,
             selectedPath: null,
             deliveryPackageTxt: null,
-            okBtn: null,
+            okNewBtn: null,
+            okEditBtn: null,
             outputErrorSpn: null,
             outputErrorText: null,
             outputExistsSpn: null,
@@ -47,6 +49,8 @@ function (n) {
             outputStatisticsHeaderOverviewSpn: null,
             outputStatisticsHeaderOverviewText: null,
             statisticsTab: null,
+            newPanelDiv: null,
+            editPanelDiv: null,
             selectDeliveryPackage: null,
             folderPrefix: "FD.",
             defaultFolderPostfix: "99999",
@@ -123,29 +127,46 @@ function (n) {
             });
         }
 
+        var Render = function()
+        {
+            if(settings.mode === "Edit") {
+
+            }
+        }
+
         //add Event Listener to HTML elmenets
         var AddEvents = function () {
-            settings.okBtn.addEventListener('click', (event) => {
+            settings.okNewBtn.addEventListener('click', (event) => {
                 Reset();
-                settings.metadataCallback().reset();
-                if(settings.pathDirTxt.value === "") {
+                Rigsarkiv.Hybris.MetaData.callback().reset();
+                if(settings.newPathDirTxt.value === "") {
                     ipcRenderer.send('open-error-dialog',settings.outputRequiredPathTitle.innerHTML,settings.outputRequiredPathText.innerHTML);
                 }
                 if(settings.deliveryPackageTxt.value !== "" && !pattern.test(settings.deliveryPackageTxt.value)) {
                     ipcRenderer.send('open-error-dialog',settings.outputUnvalidDeliveryPackageTitle.innerHTML,settings.outputUnvalidDeliveryPackageText.innerHTML);
                 }
-                if(settings.selectedPath != null && settings.pathDirTxt.value !== "" && (settings.deliveryPackageTxt.value === "" || (settings.deliveryPackageTxt.value !== "" && pattern.test(settings.deliveryPackageTxt.value)))) {
+                if(settings.selectedPath != null && settings.newPathDirTxt.value !== "" && (settings.deliveryPackageTxt.value === "" || (settings.deliveryPackageTxt.value !== "" && pattern.test(settings.deliveryPackageTxt.value)))) {
                     EnsureStructure();
                 }
             });
-            settings.selectDirBtn.addEventListener('click', (event) => {
+            settings.okEditBtn.addEventListener('click', (event) => {
+                Reset();
+                Rigsarkiv.Hybris.MetaData.callback().reset();
+
+            });
+            settings.selectNewDirBtn.addEventListener('click', (event) => {
+                Reset();
+                ipcRenderer.send('structure-open-file-dialog');
+            });
+            settings.selectEditDirBtn.addEventListener('click', (event) => {
                 Reset();
                 ipcRenderer.send('structure-open-file-dialog');
             });
             ipcRenderer.on('structure-selected-directory', (event, path) => {
                 settings.selectedPath = path; 
                 console.logInfo(`selected path: ${path}`,"Rigsarkiv.Hybris.Structure.AddEvents"); 
-                settings.pathDirTxt.value = settings.selectedPath;
+                if(Rigsarkiv.Hybris.Base.callback().mode === "New") { settings.newPathDirTxt.value = settings.selectedPath; }
+                if(Rigsarkiv.Hybris.Base.callback().mode === "Edit") { settings.editPathDirTxt.value = settings.selectedPath; }
             });
             settings.selectDeliveryPackage.addEventListener('click', (event) => {
                 var folderPath = settings.selectedPath[0];
@@ -155,12 +176,14 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Hybris.Structure = {        
-            initialize: function (metadataCallback,selectDirectoryId,pathDirectoryId,deliveryPackageId,okId,outputErrorId,outputExistsId,outputRequiredPathId,outputUnvalidDeliveryPackageId,outputOkId,selectDeliveryPackageId,statisticsTabId,outputStatisticsHeaderTrin1,outputStatisticsHeaderTrin2,outputStatisticsHeaderTrin3,outputStatisticsHeaderInformation2,outputStatisticsHeaderReferences,outputStatisticsHeaderindexfiles,outputStatisticsHeadercontextdocuments,outputStatisticsHeaderOverview) {            
-                settings.metadataCallback = metadataCallback;
-                settings.selectDirBtn =  document.getElementById(selectDirectoryId);
-                settings.pathDirTxt =  document.getElementById(pathDirectoryId);
+            initialize: function (selectNewDirectoryId,selectEditDirectoryId,newPathDirectoryId,editPathDirectoryId,deliveryPackageId,okNewId,okEditId,outputErrorId,outputExistsId,outputRequiredPathId,outputUnvalidDeliveryPackageId,outputOkId,selectDeliveryPackageId,statisticsTabId,outputStatisticsHeaderTrin1,outputStatisticsHeaderTrin2,outputStatisticsHeaderTrin3,outputStatisticsHeaderInformation2,outputStatisticsHeaderReferences,outputStatisticsHeaderindexfiles,outputStatisticsHeadercontextdocuments,outputStatisticsHeaderOverview,modePanelId) {            
+                settings.selectNewDirBtn =  document.getElementById(selectNewDirectoryId);
+                settings.selectEditDirBtn =  document.getElementById(selectEditDirectoryId);
+                settings.newPathDirTxt =  document.getElementById(newPathDirectoryId);
+                settings.editPathDirTxt =  document.getElementById(editPathDirectoryId);
                 settings.deliveryPackageTxt =  document.getElementById(deliveryPackageId);
-                settings.okBtn =  document.getElementById(okId);
+                settings.okNewBtn =  document.getElementById(okNewId);
+                settings.okEditBtn =  document.getElementById(okEditId);
                 settings.outputErrorSpn =  document.getElementById(outputErrorId);
                 settings.outputErrorText = settings.outputErrorSpn.innerHTML;
                 settings.outputExistsTitle =  document.getElementById(outputExistsId + "-Title");
@@ -189,6 +212,8 @@ function (n) {
                 settings.outputStatisticsHeadercontextdocumentsText = settings.outputStatisticsHeadercontextdocumentsSpn.innerHTML;
                 settings.outputStatisticsHeaderOverviewSpn = document.getElementById(outputStatisticsHeaderOverview);
                 settings.outputStatisticsHeaderOverviewText = settings.outputStatisticsHeaderOverviewSpn.innerHTML;
+                settings.newPanelDiv = document.getElementById(modePanelId + "-New");
+                settings.editPanelDiv = document.getElementById(modePanelId + "-Edit");
                 AddEvents();
             },
             callback: function () {
@@ -198,10 +223,18 @@ function (n) {
                     selectedPath: folderPath,
                     reset: function() 
                     { 
-                        settings.pathDirTxt.value = "";
+                        settings.newPathDirTxt.value = "";
                         settings.deliveryPackageTxt.value = "";
                         Reset();
-                    }  
+                        if(Rigsarkiv.Hybris.Base.callback().mode === "New") {
+                            $(settings.newPanelDiv).show();
+                            $(settings.editPanelDiv).hide();
+                        }
+                        if(Rigsarkiv.Hybris.Base.callback().mode === "Edit") {
+                            $(settings.newPanelDiv).hide();
+                            $(settings.editPanelDiv).show();                            
+                        }
+                    }
                 };
             }
         };

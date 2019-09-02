@@ -16,7 +16,6 @@ function (n) {
 
         //private data memebers
         var settings = {
-            structureCallback: null,
             printBtn: null,
             outputErrorSpn: null,
             outputErrorText: null,
@@ -115,7 +114,7 @@ function (n) {
 
         //Ensure documents folder Structure 
         var EnsureStructure = function () {
-            var destPath = settings.structureCallback().deliveryPackagePath;
+            var destPath = Rigsarkiv.Hybris.Structure.callback().deliveryPackagePath;
             settings.documentsPath = (destPath.indexOf("\\") > -1) ? "{0}\\{1}\\{2}".format(destPath,settings.contextDocumentationFolder,settings.docCollectionFolderName) : "{0}/{1}/{2}".format(destPath,settings.contextDocumentationFolder,settings.docCollectionFolderName);
             if(!fs.existsSync(settings.documentsPath)) {
                 console.logInfo(`Create documents Path: ${settings.filePath}`,"Rigsarkiv.Hybris.ContextDocuments.EnsureStructure");
@@ -134,7 +133,7 @@ function (n) {
         //commit print data
         var EnsureData = function() {
             var data = fs.readFileSync(settings.filePath);        
-            var folders = settings.structureCallback().deliveryPackagePath.getFolders();
+            var folders = Rigsarkiv.Hybris.Structure.callback().deliveryPackagePath.getFolders();
             var folderName = folders[folders.length - 1];
             var updatedData = data.toString().format(folderName,settings.logs.join("\r\n"));
             fs.writeFileSync(settings.filePath, updatedData);                         
@@ -190,8 +189,8 @@ function (n) {
                         UpdateSpinner("");                    
                         //ipcRenderer.send('open-information-dialog',settings.outputOkInformationTitle.innerHTML,settings.outputOkInformationText.innerHTML);
                     }
-                    settings.selectDeliveryPackage.innerHTML = "[{0}]".format(settings.structureCallback().deliveryPackagePath);
-                    var folders = settings.structureCallback().deliveryPackagePath.getFolders();
+                    settings.selectDeliveryPackage.innerHTML = "[{0}]".format(Rigsarkiv.Hybris.Structure.callback().deliveryPackagePath);
+                    var folders = Rigsarkiv.Hybris.Structure.callback().deliveryPackagePath.getFolders();
                     var folderName = folders[folders.length - 1];
                     settings.validateBtn.innerText = settings.validateBtnText.format(folderName);
                     settings.overviewTab.click();
@@ -199,15 +198,15 @@ function (n) {
             });
             ipcRenderer.on('confirm-dialog-selection-contextdocuments', (event, index) => {
                 if(index === 0) {
-                    settings.selectDeliveryPackage.innerHTML = "[{0}]".format(settings.structureCallback().deliveryPackagePath);
-                    var folders = settings.structureCallback().deliveryPackagePath.getFolders();
+                    settings.selectDeliveryPackage.innerHTML = "[{0}]".format(Rigsarkiv.Hybris.Structure.callback().deliveryPackagePath);
+                    var folders = Rigsarkiv.Hybris.Structure.callback().deliveryPackagePath.getFolders();
                     var folderName = folders[folders.length - 1]; 
                     settings.validateBtn.innerText = settings.validateBtnText.format(folderName);
                     settings.overviewTab.click();
                 }            
             });
             settings.printBtn.addEventListener('click', function (event) {
-                settings.filePath = settings.filePostfix.format(settings.structureCallback().deliveryPackagePath);
+                settings.filePath = settings.filePostfix.format(Rigsarkiv.Hybris.Structure.callback().deliveryPackagePath);
                 settings.documents.forEach(upload => {
                     settings.logs.push("<tr><td>{0}</td><td>{1}</td><td>{2}</td></tr>".format(upload.id,upload.title,upload.path));
                 });
@@ -225,8 +224,7 @@ function (n) {
         
         //Model interfaces functions
         Rigsarkiv.Hybris.ContextDocuments = {
-            initialize: function (structureCallback,outputErrorId,uploadsId,printId,outputEmptyFileId,nextId,overviewTabId,outputOkInformationPrefixId,spinnerId,selectDeliveryPackageId,outputOkConfirmId,outputCancelConfirmId,outputNextConfirmId,validateId) {
-                settings.structureCallback = structureCallback;
+            initialize: function (outputErrorId,uploadsId,printId,outputEmptyFileId,nextId,overviewTabId,outputOkInformationPrefixId,spinnerId,selectDeliveryPackageId,outputOkConfirmId,outputCancelConfirmId,outputNextConfirmId,validateId) {
                 settings.outputErrorSpn =  document.getElementById(outputErrorId);
                 settings.outputErrorText = settings.outputErrorSpn.innerHTML;
                 settings.uploadsTbl = document.getElementById(uploadsId);

@@ -22,7 +22,6 @@ function (n) {
 
         //private data memebers
         var settings = {
-            structureCallback: null,
             scriptType: null,
             scriptApplication: null,
             scriptFileName: null,
@@ -262,7 +261,7 @@ function (n) {
 
         //create data tables folder structures
         var EnsureData = function() {
-            settings.dataFolderPath = settings.structureCallback().deliveryPackagePath;
+            settings.dataFolderPath = Rigsarkiv.Hybris.Structure.callback().deliveryPackagePath;
             settings.dataFolderPath += (settings.dataFolderPath.indexOf("\\") > -1) ? "\\{0}".format(settings.dataPathPostfix) : "/{0}".format(settings.dataPathPostfix);
             fs.readdir(settings.dataFolderPath, (err, files) => {
                 if (err) {
@@ -444,7 +443,7 @@ function (n) {
                 if(settings.pathStatisticsFileTxt.value === "") {
                     ipcRenderer.send('open-error-dialog',settings.outputStatisticsRequiredPathTitle.innerHTML,settings.outputStatisticsRequiredPathText.innerHTML);
                 }
-                if(settings.pathStatisticsFileTxt.value !== "" && settings.structureCallback != null && settings.structureCallback().deliveryPackagePath != null) {
+                if(settings.pathStatisticsFileTxt.value !== "" && Rigsarkiv.Hybris.Structure.callback().deliveryPackagePath != null) {
                     EnsureData();
                 }                     
             })
@@ -475,8 +474,7 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Hybris.DataExtraction = {        
-            initialize: function (structureCallback,selectStatisticsFileId,pathStatisticsFileId,okStatisticsId,outputStatisticsErrorId,outputStatisticsOkCopyScriptId,outputStatisticsSASWarningPrefixId,scriptPanel1Id,scriptPanel2Id,okScriptBtnId,okScriptDataPathId,outputStatisticsOkCopyScriptInfoId,outputStatisticsRequiredPathId,outputScriptRequiredFilesWarningPrefixId,outputScriptOkId,outputScriptEncodingFileErrorPrefixId,nextId,metdataTabId,outputScriptCloseApplicationWarningPrefixId,outputStructureOkId,selectStructureDeliveryPackageId,metadataFileName,spinnerId,outputScriptPath,outputHeaderLinkTrin2,outputHeaderLinkTrin3,outputHeaderLinkInformation2,outputOkConfirmId,outputCancelConfirmId,outputStatisticsSASPopupId,variablesId) {
-                settings.structureCallback = structureCallback;
+            initialize: function (selectStatisticsFileId,pathStatisticsFileId,okStatisticsId,outputStatisticsErrorId,outputStatisticsOkCopyScriptId,outputStatisticsSASWarningPrefixId,scriptPanel1Id,scriptPanel2Id,okScriptBtnId,okScriptDataPathId,outputStatisticsOkCopyScriptInfoId,outputStatisticsRequiredPathId,outputScriptRequiredFilesWarningPrefixId,outputScriptOkId,outputScriptEncodingFileErrorPrefixId,nextId,metdataTabId,outputScriptCloseApplicationWarningPrefixId,outputStructureOkId,selectStructureDeliveryPackageId,metadataFileName,spinnerId,outputScriptPath,outputHeaderLinkTrin2,outputHeaderLinkTrin3,outputHeaderLinkInformation2,outputOkConfirmId,outputCancelConfirmId,outputStatisticsSASPopupId,variablesId) {
                 settings.selectStatisticsFileBtn = document.getElementById(selectStatisticsFileId);
                 settings.pathStatisticsFileTxt = document.getElementById(pathStatisticsFileId);
                 settings.okStatisticsBtn = document.getElementById(okStatisticsId);
@@ -522,7 +520,6 @@ function (n) {
             },
             callback: function () {
                 return { 
-                    structureCallback: settings.structureCallback(),
                     dataFolderPath: settings.dataFolderPath, 
                     selectedStatisticsFilePath: settings.selectedStatisticsFilePath != null ? settings.selectedStatisticsFilePath[0] : null, 
                     scriptType: settings.scriptType, 

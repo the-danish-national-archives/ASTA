@@ -12,8 +12,6 @@ function (n) {
 
         //private data memebers
         var settings = { 
-            structureCallback: null,
-            contextDocumentsCallback: null,
             selectArchiveIndexFileBtn: null,
             pathArchiveIndexFileTxt: null,
             selectedArchiveIndexFilePath: null,
@@ -54,7 +52,7 @@ function (n) {
 
         //upload Indeces files 
         var EnsureFiles= function () {
-            settings.IndecesPath = settings.structureCallback().deliveryPackagePath;
+            settings.IndecesPath = Rigsarkiv.Hybris.Structure.callback().deliveryPackagePath;
             settings.IndecesPath += (settings.IndecesPath.indexOf("\\") > -1) ? "\\{0}".format(settings.IndecesPostfix) : "/{0}".format(settings.IndecesPostfix);
             var fileName = GetFileName(settings.selectedArchiveIndexFilePath);
             console.logInfo("copy file " + fileName + " to  " + settings.IndecesPath,"Rigsarkiv.Hybris.IndexFiles.EnsureFiles");
@@ -80,7 +78,7 @@ function (n) {
                             settings.outputOkSpn.innerHTML =  settings.outputOkText.format(selectedArchiveIndexFileName,selectedContextDocumentationIndexFileName);
                             settings.selectDeliveryPackage.innerHTML = "[{0}]".format(settings.IndecesPath);
                             var filePath = (settings.IndecesPath.indexOf("\\") > -1) ? "{0}\\{1}".format(settings.IndecesPath,selectedContextDocumentationIndexFileName) : "{0}/{1}".format(settings.IndecesPath,selectedContextDocumentationIndexFileName);
-                            settings.contextDocumentsCallback().load(fs.readFileSync(filePath));
+                            Rigsarkiv.Hybris.ContextDocuments.callback().load(fs.readFileSync(filePath));
                             //ipcRenderer.send('open-information-dialog',settings.outputOkInformationTitle.innerHTML,settings.outputOkInformationText.innerHTML);
                             settings.contextDocumentsTab.click();
                         }
@@ -128,9 +126,7 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Hybris.IndexFiles = {
-            initialize: function (structureCallback,contextDocumentsCallback,selectArchiveIndexFileId,pathSArchiveIndexFileId,selectContextDocumentationIndexFileId,pathContextDocumentationIndexFileId,indexFilesOkBtn,outputErrorId,outputRequiredPathId,outputOkId,selectDeliveryPackageId,outputOkInformationPrefixId,contextDocumentsTabId,outputWrongFileNameId) {
-                settings.structureCallback = structureCallback;
-                settings.contextDocumentsCallback = contextDocumentsCallback;
+            initialize: function (selectArchiveIndexFileId,pathSArchiveIndexFileId,selectContextDocumentationIndexFileId,pathContextDocumentationIndexFileId,indexFilesOkBtn,outputErrorId,outputRequiredPathId,outputOkId,selectDeliveryPackageId,outputOkInformationPrefixId,contextDocumentsTabId,outputWrongFileNameId) {
                 settings.selectArchiveIndexFileBtn = document.getElementById(selectArchiveIndexFileId);
                 settings.pathArchiveIndexFileTxt = document.getElementById(pathSArchiveIndexFileId);
                 settings.selectContextDocumentationIndexFileBtn = document.getElementById(selectContextDocumentationIndexFileId);

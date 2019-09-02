@@ -20,7 +20,6 @@ window.Rigsarkiv = window.Rigsarkiv || {},
 
             //private data memebers
             var settings = {
-                metadataCallback: null,
                 outputErrorSpn: null,
                 outputErrorText: null,
                 okBtn: null,
@@ -63,7 +62,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
             //get data JSON table object pointer by table file name
             var GetTableData = function (name) {
                 var result = null;
-                settings.metadataCallback().data.forEach(table => {
+                Rigsarkiv.Hybris.MetaData.callback().data.forEach(table => {
                     if(table.name === name) {
                         result = table;
                     }
@@ -152,9 +151,9 @@ window.Rigsarkiv = window.Rigsarkiv || {},
             var AddEvents = function () {
                 settings.okBtn.addEventListener('click', function (event) {
                     var result = true;
-                    var dataFolderPath = settings.metadataCallback().structureCallback.deliveryPackagePath;
+                    var dataFolderPath = Rigsarkiv.Hybris.Structure.callback().deliveryPackagePath;
                     dataFolderPath = (dataFolderPath.indexOf("\\") > -1) ? "{0}\\{1}".format(dataFolderPath,settings.dataPathPostfix) : "{0}/{1}".format(dataFolderPath,settings.dataPathPostfix);
-                    settings.metadataCallback().data.forEach(table => {
+                    Rigsarkiv.Hybris.MetaData.callback().data.forEach(table => {
                         var fileName = settings.metadataFileName.format(table.fileName);
                         var path = (dataFolderPath.indexOf("\\") > -1) ? "{0}\\{1}\\{2}".format(dataFolderPath,table.fileName,fileName) : "{0}/{1}/{2}".format(dataFolderPath,table.fileName,fileName);
                         if(!UpdateFile(path,table.references)) { result = false; }
@@ -163,7 +162,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 });
                 settings.cancelBtn.addEventListener('click', function (event) {
                     Reset();
-                    settings.metadataCallback().data.forEach(table => {
+                    Rigsarkiv.Hybris.MetaData.callback().data.forEach(table => {
                         table.references = [];
                     });
                 });
@@ -223,8 +222,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
 
             //Model interfaces functions
             Rigsarkiv.Hybris.References = { 
-                initialize: function (metadataCallback,outputErrorId,okId,tablesId,tableBoxId,refVarsId,foreignTableBoxId,foreignVariablesId,addReferenceId,referenceReqId,refVarBoxId,foreignVariableBoxId,numberFirstReference,illegalCharReference,referenceLength,referenceReservedWord,foreignVariableId,referenceVariableId,referencesId,indexfilesTabId,addReferenceVariableId,referenceVariablesId,addForeignVariableId,foreignVariablesTable,cancelId) {
-                    settings.metadataCallback = metadataCallback;
+                initialize: function (outputErrorId,okId,tablesId,tableBoxId,refVarsId,foreignTableBoxId,foreignVariablesId,addReferenceId,referenceReqId,refVarBoxId,foreignVariableBoxId,numberFirstReference,illegalCharReference,referenceLength,referenceReservedWord,foreignVariableId,referenceVariableId,referencesId,indexfilesTabId,addReferenceVariableId,referenceVariablesId,addForeignVariableId,foreignVariablesTable,cancelId) {
                     settings.outputErrorSpn = document.getElementById(outputErrorId);
                     settings.outputErrorText = settings.outputErrorSpn.innerHTML;
                     settings.okBtn = document.getElementById(okId);
