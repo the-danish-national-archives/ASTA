@@ -18,7 +18,10 @@ namespace Rigsarkiv.Styx
         const int RowsChunk = 500;
         const string Separator = ";";
         const string TablePath = "{0}\\Tables\\{1}\\{1}.xml";
-        const string CodeFormat = "'{0}' '{1}'"; 
+        const string CodeFormat = "'{0}' '{1}'";
+        const string SpecialNumericPattern = "^(\\.[a-z])|([A-Z])$";
+        const string SasSpecialNumericPattern = "^[A-Z]$";
+        const string StataSpecialNumericPattern = "^\\.[a-z]$";
         const string Alphabet = "abcdefghijklmnopqrstuvwxyz";
         private List<string> _codeLists = null;
         private List<string> _sasSpecialNumerics = null;
@@ -233,7 +236,13 @@ namespace Rigsarkiv.Styx
             var result = true;            
             try
             {
-                var regex = GetRegex(SpecialNumericPattern);
+                Regex regex = null;
+                switch(_report.ScriptType)
+                {
+                    case ScriptType.SPSS: regex = GetRegex(SpecialNumericPattern);break;
+                    case ScriptType.SAS: regex = GetRegex(SasSpecialNumericPattern); break;
+                    case ScriptType.Stata: regex = GetRegex(StataSpecialNumericPattern); break;
+                }                
                 _report.Tables.ForEach(table =>
                 {
                     if (_report.ScriptType == ScriptType.SPSS)

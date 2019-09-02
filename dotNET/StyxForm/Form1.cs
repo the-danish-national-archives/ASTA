@@ -30,7 +30,7 @@ namespace Rigsarkiv.StyxForm
             InitializeComponent();
             _srcFolderNameRegex = new Regex(SrcFolderNamePattern, RegexOptions.Compiled | RegexOptions.IgnoreCase);
             var scripts = Enum.GetValues(typeof(ScriptType)).Cast<ScriptType>();
-            scriptTypeComboBox.Items.AddRange(scripts.Select(s => s.ToString()).ToArray());
+            scriptTypeComboBox.Items.AddRange(scripts.Where(s => s != ScriptType.Xml).Select(s => s.ToString()).ToArray());
             scriptTypeComboBox.SelectedIndex = 0;
             sipTextBox.Text = destPath;
             aipTextBox.Text = srcPath;
