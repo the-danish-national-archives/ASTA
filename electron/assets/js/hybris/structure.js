@@ -48,6 +48,7 @@ function (n) {
             outputStatisticsHeadercontextdocumentsText: null,
             outputStatisticsHeaderOverviewSpn: null,
             outputStatisticsHeaderOverviewText: null,
+            structureTab: null,
             statisticsTab: null,
             newPanelDiv: null,
             editPanelDiv: null,
@@ -176,7 +177,7 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Hybris.Structure = {        
-            initialize: function (selectNewDirectoryId,selectEditDirectoryId,newPathDirectoryId,editPathDirectoryId,deliveryPackageId,okNewId,okEditId,outputErrorId,outputExistsId,outputRequiredPathId,outputUnvalidDeliveryPackageId,outputOkId,selectDeliveryPackageId,statisticsTabId,outputStatisticsHeaderTrin1,outputStatisticsHeaderTrin2,outputStatisticsHeaderTrin3,outputStatisticsHeaderInformation2,outputStatisticsHeaderReferences,outputStatisticsHeaderindexfiles,outputStatisticsHeadercontextdocuments,outputStatisticsHeaderOverview,modePanelId) {            
+            initialize: function (selectNewDirectoryId,selectEditDirectoryId,newPathDirectoryId,editPathDirectoryId,deliveryPackageId,okNewId,okEditId,outputErrorId,outputExistsId,outputRequiredPathId,outputUnvalidDeliveryPackageId,outputOkId,selectDeliveryPackageId,structureTabId,statisticsTabId,outputStatisticsHeaderTrin1,outputStatisticsHeaderTrin2,outputStatisticsHeaderTrin3,outputStatisticsHeaderInformation2,outputStatisticsHeaderReferences,outputStatisticsHeaderindexfiles,outputStatisticsHeadercontextdocuments,outputStatisticsHeaderOverview,modePanelId) {            
                 settings.selectNewDirBtn =  document.getElementById(selectNewDirectoryId);
                 settings.selectEditDirBtn =  document.getElementById(selectEditDirectoryId);
                 settings.newPathDirTxt =  document.getElementById(newPathDirectoryId);
@@ -195,6 +196,7 @@ function (n) {
                 settings.outputOkSpn =  document.getElementById(outputOkId);
                 settings.outputOkText = settings.outputOkSpn.innerHTML;
                 settings.selectDeliveryPackage = document.getElementById(selectDeliveryPackageId);
+                settings.structureTab = document.getElementById(structureTabId);
                 settings.statisticsTab = document.getElementById(statisticsTabId);
                 settings.outputStatisticsHeaderTrin1Spn = document.getElementById(outputStatisticsHeaderTrin1);
                 settings.outputStatisticsHeaderTrin1Text = settings.outputStatisticsHeaderTrin1Spn.innerHTML;
@@ -234,6 +236,7 @@ function (n) {
                             $(settings.newPanelDiv).hide();
                             $(settings.editPanelDiv).show();                            
                         }
+                        settings.structureTab.click();
                     }
                 };
             }
