@@ -254,59 +254,77 @@
                         <p>
                             <h2 class="boldfaced">Tilføj referencer i afleveringspakken <span id="hybris-output-statistics-header-references" class="trinHeader">{0}</span></h2>
                         </p>
-                        <span>
-                            <label class="descriptionLabel" for="hybrisreferencestable">Datafil</label>
-                            <input type="text" name="hybrisreferencestable" id="hybris-references-table" list="hybris-references-tables">                                                            
-                        </span>
-                        <i id="hybris-message-references-referencesTable" class="far fa-question-circle"></i>
-                        <span id="hybris-message-references-referencesTable-Title" hidden="true">Datafilen som referencen laves fra</span>
-                        <span id="hybris-message-references-referencesTable-Text" hidden="true">Referencevariablen fra denne datafil skal altid referere en nøglevariabel i fremmeddatafilen.</span>
-                        <br/>
-                        <span>
-                            <label class="descriptionLabel" for="hybrisreferencesrefVar">Referencevariabel</label>
-                            <input type="text" name="hybrisreferencesrefVar" id="hybris-references-refVar" list="hybris-references-refVars">
-                            <datalist name="hybrisreferencesrefVar" id="hybris-references-refVars"></datalist>                                
-                        </span>
-                        <i id="hybris-message-references-referenceVariable" class="far fa-question-circle"></i>
-                        <span id="hybris-message-references-referenceVariable-Title" hidden="true">REFERENCE (referencevariabel)</span>
-                        <span id="hybris-message-references-referenceVariable-Text" hidden="true">Variabelnavn(e) for variable fra den statistikfil som referencen laves fra (referencevariabel), som refererer til nøglevariablen (fremmedvariablen) i den anden statistikfil i afleveringspakken (fremmeddatafilen).</span>
-                        <br/>
-                        <button id="hybris-references-addReferenceVariableBtn">Tilføj variabel</button>
-                        <br/>
-                        <table id="hybris-references-referenceVariablesTable" hidden="true">
-                            <tr><th>Referencevariabel</th></tr>
-                         </table>
-                        <br/>
-                        <span>
-                            <label class="descriptionLabel" for="hybrisreferencesforeigntable">Fremmeddatafil</label>
-                            <input type="text" name="hybrisreferencesforeigntable" id="hybris-references-foreigntable" list="hybris-references-tables">                                                            
-                        </span>
-                        <i id="hybris-message-references-foreignFile" class="far fa-question-circle"></i>
-                        <span id="hybris-message-references-foreignFile-Title" hidden="true">REFERENCE (fremmeddatafil)</span>
-                        <span id="hybris-message-references-foreignFile-Text" hidden="true">Navn på den anden statistikfil i afleveringspakken, der refereres til (fremmeddatafil).</span>
-                        <br/>
-                        <span>
-                            <label class="descriptionLabel" for="hybrisreferencesforeignVariable">Fremmedvariabel</label>
-                            <input type="text" name="hybrisreferencesforeignVariable" id="hybris-references-foreignVariable" list="hybris-references-foreignVariables">
-                            <datalist name="hybrisreferencesforeignVariables" id="hybris-references-foreignVariables"></datalist>                                
-                        </span>
-                        <i id="hybris-message-references-foreignVariable" class="far fa-question-circle"></i>
-                        <span id="hybris-message-references-foreignVariable-Title" hidden="true">REFERENCE (fremmedvariabel)</span>
-                        <span id="hybris-message-references-foreignVariable-Text" hidden="true">Variabelnavn(e) for fremmeddatafilens nøglevariabel.</span>
-                        <br/>
-                        <button id="hybris-references-addForeignVariableBtn">Tilføj variabel</button>
-                        <br/>
-                        <table id="hybris-references-foreignVariablesTable" hidden="true">
-                            <tr><th>Fremmedvariabel</th></tr>
-                         </table>
-                        <br/>
-                        <datalist name="hybrisreferencestables" id="hybris-references-tables"></datalist>
-                        <button id="hybris-references-addReferenceBtn" style="margin-left: 43%;">Tilføj reference</button>
-                        <br/>
-                        <table id="hybris-references-dataTable" hidden="true">
-                            <tr><th>Datafil</th><th>Referencevariabel</th><th>Fremmeddatafil</th><th>Fremmedvariabel</th></tr>
-                         </table>
-                        <br/>
+                        <div id="referenceContainer" style="background-color: brown">
+                            <span>
+                                <label class="descriptionLabel" for="hybrisreferencestable">Datafil</label>
+                                <input type="text" name="hybrisreferencestable" id="hybris-references-table" list="hybris-references-tables">
+                            </span>
+                            <i id="hybris-message-references-referencesTable" class="far fa-question-circle"></i>
+                            <span id="hybris-message-references-referencesTable-Title" hidden="true">Datafilen som referencen laves fra</span>
+                            <span id="hybris-message-references-referencesTable-Text" hidden="true">Referencevariablen fra denne datafil skal
+                                altid referere en nøglevariabel i fremmeddatafilen.</span>
+                            <br />
+                            <span>
+                                <label class="descriptionLabel" for="hybrisreferencesrefVar">Referencevariabel</label>
+                                <input type="text" name="hybrisreferencesrefVar" id="hybris-references-refVar" list="hybris-references-refVars">
+                                <datalist name="hybrisreferencesrefVar" id="hybris-references-refVars"></datalist>
+                            </span>
+                            <i id="hybris-message-references-referenceVariable" class="far fa-question-circle"></i>
+                            <span id="hybris-message-references-referenceVariable-Title" hidden="true">REFERENCE (referencevariabel)</span>
+                            <span id="hybris-message-references-referenceVariable-Text" hidden="true">Variabelnavn(e) for variable fra den
+                                statistikfil som referencen laves fra (referencevariabel), som refererer til nøglevariablen (fremmedvariablen) i
+                                den anden statistikfil i afleveringspakken (fremmeddatafilen).</span>
+                            <br />
+                            <button id="hybris-references-addReferenceVariableBtn">Tilføj variabel</button>
+                            <br />
+                            <table id="hybris-references-referenceVariablesTable" hidden="true">
+                                <tr>
+                                    <th>Referencevariabel</th>
+                                </tr>
+                            </table>
+                            <br />
+                            <span>
+                                <label class="descriptionLabel" for="hybrisreferencesforeigntable">Fremmeddatafil</label>
+                                <input type="text" name="hybrisreferencesforeigntable" id="hybris-references-foreigntable"
+                                    list="hybris-references-tables">
+                            </span>
+                            <i id="hybris-message-references-foreignFile" class="far fa-question-circle"></i>
+                            <span id="hybris-message-references-foreignFile-Title" hidden="true">REFERENCE (fremmeddatafil)</span>
+                            <span id="hybris-message-references-foreignFile-Text" hidden="true">Navn på den anden statistikfil i
+                                afleveringspakken, der refereres til (fremmeddatafil).</span>
+                            <br />
+                            <span>
+                                <label class="descriptionLabel" for="hybrisreferencesforeignVariable">Fremmedvariabel</label>
+                                <input type="text" name="hybrisreferencesforeignVariable" id="hybris-references-foreignVariable"
+                                    list="hybris-references-foreignVariables">
+                                <datalist name="hybrisreferencesforeignVariables" id="hybris-references-foreignVariables"></datalist>
+                            </span>
+                            <i id="hybris-message-references-foreignVariable" class="far fa-question-circle"></i>
+                            <span id="hybris-message-references-foreignVariable-Title" hidden="true">REFERENCE (fremmedvariabel)</span>
+                            <span id="hybris-message-references-foreignVariable-Text" hidden="true">Variabelnavn(e) for fremmeddatafilens
+                                nøglevariabel.</span>
+                            <br />
+                            <button id="hybris-references-addForeignVariableBtn">Tilføj variabel</button>
+                            <br />
+                            <table id="hybris-references-foreignVariablesTable" hidden="true">
+                                <tr>
+                                    <th>Fremmedvariabel</th>
+                                </tr>
+                            </table>
+                            <br />
+                            <datalist name="hybrisreferencestables" id="hybris-references-tables"></datalist>
+                            <button id="hybris-references-addReferenceBtn" style="margin-left: 43%;">Tilføj reference</button>
+                            <br />
+                            <table id="hybris-references-dataTable" hidden="true">
+                                <tr>
+                                    <th>Datafil</th>
+                                    <th>Referencevariabel</th>
+                                    <th>Fremmeddatafil</th>
+                                    <th>Fremmedvariabel</th>
+                                </tr>
+                            </table>
+                            <br />
+                        </div>
                         <button id="hybris-references-cancelBtn">Fortryd alt</button> <button id="hybris-references-okBtn">Næste</button>
                         <br/>
                         <span id="hybris-output-references-Error" hidden="true"><br />Error: {0}</span>
