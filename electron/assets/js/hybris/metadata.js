@@ -372,6 +372,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
             //add Event Listener to HTML elmenets
             var AddEvents = function () {
                 settings.nextBtn.addEventListener('click', (event) => {
+                    $(settings.tablesDropdown).empty();
                     Rigsarkiv.Hybris.Base.callback().metadata.forEach(table => {
                         var el = document.createElement('option');
                         el.textContent = table.fileName;

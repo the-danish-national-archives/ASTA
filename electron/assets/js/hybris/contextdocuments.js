@@ -67,9 +67,23 @@ function (n) {
             return result;
         }
 
+        // Update file control
+        var UpdatePath = function(upload)
+        {
+            var path = (settings.documentsPath.indexOf("\\") > -1) ? "{0}\\{1}".format(settings.documentsPath,upload.id) : "{0}/{1}".format(settings.documentsPath,upload.id);
+            if(fs.existsSync(path)) {
+                var files = fs.readdirSync(path);
+                if(files != null && files.length > 0) {
+                    upload.path = (settings.documentsPath.indexOf("\\") > -1) ? "{0}\\{1}".format(path,files[0]) : "{0}/{1}".format(path,files[0]);
+                    settings.hasSelected = true;
+                }
+            }
+        }
+
         // Render Documents control
         var RenderDocuments = function(data) {
             if(data != null && data.toString() != null && data.toString() !== "") {
+                EnsurePath();
                 var doc = new domParser.DOMParser().parseFromString(data.toString());
                 for(var i = 0; i < doc.documentElement.childNodes.length;i++) {
                     var node = doc.documentElement.childNodes[i];
@@ -87,7 +101,8 @@ function (n) {
                     }
                 }
                 settings.documents.forEach(upload => {
-                    $(settings.uploadsTbl).append("<tr><td>{0}</td><td>{1}</td><td><input type=\"text\" id=\"hybris-contextdocuments-document-{0}\" class=\"path\" text=\"{2}\" readonly=\"true\" placeholder=\"Vælg sti med knappen\"/><button class=\"docBtn\" id=\"hybris-contextdocuments-selectFile-{0}\">Browse</button></td></tr>".format(upload.id,upload.title,upload.path));
+                    if(Rigsarkiv.Hybris.Base.callback().mode === "Edit") { UpdatePath(upload); }
+                    $(settings.uploadsTbl).append("<tr><td>{0}</td><td>{1}</td><td><input type=\"text\" id=\"hybris-contextdocuments-document-{0}\" class=\"path\" value=\"{2}\" readonly=\"true\" placeholder=\"Vælg sti med knappen\"/><button class=\"docBtn\" id=\"hybris-contextdocuments-selectFile-{0}\">Browse</button></td></tr>".format(upload.id,upload.title,upload.path));
                     document.getElementById("hybris-contextdocuments-selectFile-{0}".format(upload.id)).addEventListener('click', (event) => {
                         ipcRenderer.send('contextdocuments-open-file-dialog',upload.id);
                     })
@@ -102,20 +117,29 @@ function (n) {
         var EnsureDocuments = function () {
             settings.documents.forEach(upload => {
                 if(upload.path !== "") {
+                    var enableCopy = true;
                     var folders = upload.path.getFolders();
                     var fileName = folders[folders.length - 1];
                     var fileExt = fileName.substring(fileName.indexOf(".") + 1);
                     var path = (settings.documentsPath.indexOf("\\") > -1) ? "{0}\\{1}\\1.{2}".format(settings.documentsPath,upload.id,fileExt) : "{0}/{1}/1.{2}".format(settings.documentsPath,upload.id,fileExt);
-                    console.logInfo(`copy file: ${fileName} to ${path}`,"Rigsarkiv.Hybris.ContextDocuments.EnsureDocuments");
-                    fs.copyFileSync(upload.path, path);
+                    if(Rigsarkiv.Hybris.Base.callback().mode === "Edit" && path === upload.path) { enableCopy = false; }
+                    if(enableCopy) {
+                        console.logInfo(`copy file: ${fileName} to ${path}`,"Rigsarkiv.Hybris.ContextDocuments.EnsureDocuments");
+                        fs.copyFileSync(upload.path, path);
+                    }                    
                 }
             });
         }
 
-        //Ensure documents folder Structure 
-        var EnsureStructure = function () {
+        //ensure documents path
+        var EnsurePath = function() {
             var destPath = Rigsarkiv.Hybris.Structure.callback().deliveryPackagePath;
             settings.documentsPath = (destPath.indexOf("\\") > -1) ? "{0}\\{1}\\{2}".format(destPath,settings.contextDocumentationFolder,settings.docCollectionFolderName) : "{0}/{1}/{2}".format(destPath,settings.contextDocumentationFolder,settings.docCollectionFolderName);
+        }
+
+        //Ensure documents folder Structure 
+        var EnsureStructure = function () {
+            EnsurePath();
             if(!fs.existsSync(settings.documentsPath)) {
                 console.logInfo(`Create documents Path: ${settings.filePath}`,"Rigsarkiv.Hybris.ContextDocuments.EnsureStructure");
                 fs.mkdirSync(settings.documentsPath, { recursive: true });
