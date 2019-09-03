@@ -7,6 +7,7 @@ function (n) {
     function (n){
         //private data memebers
         var settings = {
+            metadata: [],
             mode: "New"
         }
 
@@ -18,8 +19,12 @@ function (n) {
             callback: function () {
                 return { 
                     mode: settings.mode,
+                    metadata: settings.metadata,
                     setMode: function(mode) {
                         settings.mode = mode;   
+                    },
+                    setMetadata: function(metadata) {
+                        settings.metadata = metadata;   
                     }
                 }
             }

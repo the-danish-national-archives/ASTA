@@ -71,7 +71,6 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 varKeys: [],
                 references: [],
                 variables: [],
-                data: [],
                 metadataFileName: "{0}.txt",
                 dataFileName: "{0}.csv",
                 metadataTemplateFileName: "metadata.txt",
@@ -156,9 +155,9 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                             settings.outputNewExtractionSpn.innerHTML = settings.outputNewExtractionText.format(folders[folders.length - 3]);
                             settings.indexFilesDescriptionSpn.innerHTML = settings.indexFilesDescriptionText.format(folders[folders.length - 3]);
                             EnsureVariables();
-                            settings.data.push({ "fileName":fileName, "name":settings.fileName.value, "variables":settings.variables, "keys":settings.varKeys, "references":[] });
+                            Rigsarkiv.Hybris.Base.callback().metadata.push({ "fileName":fileName, "name":settings.fileName.value, "variables":settings.variables, "keys":settings.varKeys, "references":[] });
                             console.log("{0} data output: ".format(settings.fileName));
-                            console.log(settings.data);
+                            console.log(Rigsarkiv.Hybris.Base.callback().metadata);
                         }                                                          
                     }
                 });
@@ -373,7 +372,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
             //add Event Listener to HTML elmenets
             var AddEvents = function () {
                 settings.nextBtn.addEventListener('click', (event) => {
-                    settings.data.forEach(table => {
+                    Rigsarkiv.Hybris.Base.callback().metadata.forEach(table => {
                         var el = document.createElement('option');
                         el.textContent = table.fileName;
                         el.value = table.name;
@@ -472,12 +471,11 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 },
                 callback: function () {
                     return { 
-                        structureCallback: Rigsarkiv.Hybris.DataExtraction.callback().structureCallback,
-                        data: settings.data,
                         reset: function() 
                         { 
-                            settings.data = [];
+                            Rigsarkiv.Hybris.Base.callback().setMetadata([]);
                             Reset();
+                            ResetExtraction();
                         } 
                     };
                 }

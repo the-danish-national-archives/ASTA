@@ -62,7 +62,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
             //get data JSON table object pointer by table file name
             var GetTableData = function (name) {
                 var result = null;
-                Rigsarkiv.Hybris.MetaData.callback().data.forEach(table => {
+                Rigsarkiv.Hybris.Base.callback().metadata.forEach(table => {
                     if(table.name === name) {
                         result = table;
                     }
@@ -153,7 +153,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                     var result = true;
                     var dataFolderPath = Rigsarkiv.Hybris.Structure.callback().deliveryPackagePath;
                     dataFolderPath = (dataFolderPath.indexOf("\\") > -1) ? "{0}\\{1}".format(dataFolderPath,settings.dataPathPostfix) : "{0}/{1}".format(dataFolderPath,settings.dataPathPostfix);
-                    Rigsarkiv.Hybris.MetaData.callback().data.forEach(table => {
+                    Rigsarkiv.Hybris.Base.callback().metadata.forEach(table => {
                         var fileName = settings.metadataFileName.format(table.fileName);
                         var path = (dataFolderPath.indexOf("\\") > -1) ? "{0}\\{1}\\{2}".format(dataFolderPath,table.fileName,fileName) : "{0}/{1}/{2}".format(dataFolderPath,table.fileName,fileName);
                         if(!UpdateFile(path,table.references)) { result = false; }
@@ -162,7 +162,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 });
                 settings.cancelBtn.addEventListener('click', function (event) {
                     Reset();
-                    Rigsarkiv.Hybris.MetaData.callback().data.forEach(table => {
+                    Rigsarkiv.Hybris.Base.callback().metadata.forEach(table => {
                         table.references = [];
                     });
                 });
@@ -250,6 +250,14 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                     settings.foreignVariablesTbl = document.getElementById(foreignVariablesTable);
                     settings.cancelBtn = document.getElementById(cancelId);
                     AddEvents();
+                },
+                callback: function () {
+                    return { 
+                        reset: function() 
+                        { 
+                            Reset();
+                        } 
+                    };
                 }
             }
         }(jQuery);

@@ -249,6 +249,9 @@ function (n) {
             },
             callback: function () {
                 return {
+                    reset: function()  {
+                        Reset();
+                    },
                     load: function(data) {
                         try {
                             Reset();
