@@ -5,24 +5,24 @@ Note: The working directory must contain the data file (sas7bdat)
 */
 
 * Set the working directory and data file name;
-%let dataDir=%str({0});
-%let outDir=%str({1});
+%let astaDir=%str({3}{0});
+%let outDir=%str({1}{0});
 %let inputSas=%str({2});
-libname mylib "&dataDir";
+libname mylib "&outDir";
 
 * Set options;
 options locale=da_DK replace=yes;
 options nofmterr;
 
 * Escape reserved xml characters;
-%macro clean(varName);
+*/%macro clean(varName);
 &varname=strip(&varname);
 label=tranwrd(&varName,'&','&amp;');
 label=tranwrd(&varName,'<','<');
 label=tranwrd(&varName,'>','>');
 label=tranwrd(&varName,"'",'&apos;');
 label=tranwrd(&varName,'"','&quot;');
-%mend clean;
+%mend clean;*/
 
 * CREATE VARIABEL;
 ods listing;
@@ -42,25 +42,93 @@ if varnum(id, 'Format')=0 then Format='';
 rc=close(id);
 drop rc id;
 run;
+
+/**/
+
+%let felter=;
+proc sql noprint;
+select variable into :felter separated by ';'
+from mylib.odsOut
+;
+quit;
+data mylib.varinfo(keep=name fmt);
+set mylib.&inputSas end=eof;
+length felt $ 32;
+length Name $ 32;
+length Fmt $ 20;
+retain a1-a9999 0 b1-b9999 0;
+array bred{9999} a1-a9999 (0);
+array deci{9999} b1-b9999 (0);
+
+count=0;
+do until(felt=' ');
+count+1;
+felt=scan("&felter", count,';');
+if felt~=' ' then do;
+val=trim(left(vvaluex(felt)));
+tjekExp=indexc(val,'E');
+w=length(val);
+if tjekExp>0 then do;
+w=substr(val,tjekexp+1,length(val)-tjekExp)+1;
+end;
+if w>bred{count} then bred{count}=w;
+tmp=indexc(val,'.');
+if tmp>0 then do;
+if tmp>1 then do;
+val1=substr(val,1,tmp-1);
+w2=length(val1);
+w3=w-w2-1;
+if w3>deci{count} and tjekExp=0 then do;
+deci{count}=w3;
+end;
+end;
+end;
+end;
+end;
+
+if eof then do; 
+count=0;
+do until(Name=' ');
+count+1;
+Name=scan("&felter", count,';');
+Fmt=compress('f'||bred{count}||'.'||deci{count});
+if Name ne ' ' then output;
+end;
+
+end;
+run;
+
+/**/
+
+/*nyt*/
+proc sql;
+create table mylib.odsOut as
+select a.*, b.Fmt
+from mylib.odsOut a left join mylib.varinfo b on upcase(a.Variable)=upcase(b.Name);
+quit;
+/*nyt*/
+
+proc sort data=mylib.odsOut;by num;run;
 * Create output with variable name and format;
 data mylib.varNames(keep=varNameFormat);
 set mylib.odsOut;
-format Format $char200.;
+format Format $200.;
 *If format is missing, map the generic type to format;
-if lowcase(type) eq 'num' then type='';
-else
-do;
-if lowcase(type) EQ 'char' then type='$';
+if lowcase(type) eq 'num' then do;
+if format='' then format=Fmt;
 end;
-if Format eq '' then Format=cats(type,len,'.');
-* If present in format, remove "char" and "best";
-if prxmatch('/\$char\d+\./',lowcase(strip(Format)))>0 then Format=cats(type,len,'.');
-if prxmatch('/best\d*\./',lowcase(strip(Format)))>0 then Format=cats(type,len,'.');
+else do;
+if lowcase(type) EQ 'char' then do;
+type='$';
+Format=cats(type,len,'.');
+end;
+end;
+
 varNameFormat=cat(strip(Variable),' ',strip(lowcase(Format)));
 run;
 * Write output to file;
 %let name=%str({2}_VARIABEL.txt);
-%let outfile=&outDir&name;
+%let outfile=&astaDir&name;
 data _null_;
 set mylib.varNames;
 file "&outfile" encoding='utf-8' dsd dlm='09'x lrecl=2000000;
@@ -71,14 +139,14 @@ run;
 data mylib.varLabels(keep=varLabels);
 length Label $6400;
 set mylib.odsOut;
-%clean(Label);
+*%clean(Label);
 if Label eq '' then Label='n.a.';
 length varLabels $7200;
 varLabels=cat(strip(Variable)," '",strip(Label),"'");
 run;
 * Write output to file;
 %let name=%str({2}_VARIABELBESKRIVELSE.txt);
-%let outfile=&outDir&name;
+%let outfile=&astaDir&name;
 data _null_;
 set mylib.varLabels;
 file "&outfile" encoding='utf-8' dsd dlm='09'x lrecl=2000000;
@@ -87,37 +155,16 @@ run;
 
 * Delete temporary files on disk;
 proc datasets library=mylib;
-delete odsOut varNames varLabels valLabels;
+delete odsOut varNames varLabels valLabels varinfo;
 run;
 
-/*
-CONVERT DATA TO DELIMITED TEXT FILE (DEFAULT METHOD)
-Note: Write variable names on the first line
-Note: Write text qualifier only if data contain the delimiter
-Note: Escape a double quote in string data with a double quote and double quoting of the whole string
-Note: Null values in numeric variables are not respresented at all
-Note: Special codes for missing values are written as uppercase letters (A-Z)
-NB: Max lrecl in output=32767
-*/
+
 data _null_;
 call symput('datafile', "mylib.&inputSas");
-filename csv "&outDir\&inputSas..csv" encoding='utf-8';
+filename csv "&astaDir&inputSas..csv" encoding='utf-8';
 %let outFile=csv;
 proc export data=&datafile outfile=&outFile dbms=dlm replace;
 delimiter=';';
 putnames=yes;
 run;
 
-/*
-CONVERT DATA TO DELIMITED TEXT FILE (ALTERNATIVE METHOD)
-Note: Write text qualifier only if data contain the delimiter
-Note: Escape a double quote in string data with a double quote and double quoting of the whole string
-Note: Null values in numeric variables are not respresented at all
-Note: Special codes for missing values are written as uppercase letters (A-Z)
-NB: Does not write variable names on the first line
-data _null_;
-file csv dsd dlm=';' lrecl=2000000;
-set mylib.&inputName;
-put(_all_)(+0);
-run;
-*/
