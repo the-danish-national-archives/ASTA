@@ -122,7 +122,18 @@ function (n) {
                     var fileName = folders[folders.length - 1];
                     var fileExt = fileName.substring(fileName.indexOf(".") + 1);
                     var path = (settings.documentsPath.indexOf("\\") > -1) ? "{0}\\{1}\\1.{2}".format(settings.documentsPath,upload.id,fileExt) : "{0}/{1}/1.{2}".format(settings.documentsPath,upload.id,fileExt);
-                    if(Rigsarkiv.Hybris.Base.callback().mode === "Edit" && path === upload.path) { enableCopy = false; }
+                    if(Rigsarkiv.Hybris.Base.callback().mode === "Edit") {
+                        if(path === upload.path) { enableCopy = false; }
+                       if(enableCopy) {
+                            var folderPath = (settings.documentsPath.indexOf("\\") > -1) ? "{0}\\{1}".format(settings.documentsPath,upload.id) : "{0}/{1}".format(settings.documentsPath,upload.id);                        
+                            var files = fs.readdirSync(folderPath);
+                            if(files != null && files.length > 0) {
+                                console.logInfo(`delete file: ${files[0]} at ${folderPath}`,"Rigsarkiv.Hybris.ContextDocuments.EnsureDocuments");
+                                var filePath = (settings.documentsPath.indexOf("\\") > -1) ? "{0}\\{1}".format(folderPath,files[0]) : "{0}/{1}".format(folderPath,files[0]);
+                                fs.unlinkSync(filePath); 
+                            }
+                        }
+                    } 
                     if(enableCopy) {
                         console.logInfo(`copy file: ${fileName} to ${path}`,"Rigsarkiv.Hybris.ContextDocuments.EnsureDocuments");
                         fs.copyFileSync(upload.path, path);
