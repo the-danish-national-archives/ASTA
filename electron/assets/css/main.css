@@ -44,16 +44,9 @@ button:disabled {
     margin-left: 5px;
 }
 
-#hybris-references-addReferenceVariableBtn {
-    margin-left: 68.9%;
-}
-
-#hybris-references-addForeignVariableBtn {
-    margin-left: 68.9%;
-}
-
-#hybris-references-addReferenceBtn {
-    margin-left: 68.2%;
+#hybris-references-addReferenceVariableBtn, #hybris-references-addForeignVariableBtn, #hybris-references-addReferenceBtn{
+    float: right;
+    margin-right: 32px;
 }
 
 input[type=text] {
