@@ -44,11 +44,6 @@ button:disabled {
     margin-left: 5px;
 }
 
-#hybris-references-addReferenceVariableBtn, #hybris-references-addForeignVariableBtn, #hybris-references-addReferenceBtn{
-    float: right;
-    margin-right: 32px;
-}
-
 input[type=text] {
     border: solid 0.5px #b2b2b2;
     height: 27px;
@@ -187,9 +182,19 @@ h2.subHeader {
 .tdRightContent {
     width: 40%
 }
-
-
 /* Welcome (Start) page END */
+
+/* References */
+#hybris-references-addReferenceVariableBtn, #hybris-references-addForeignVariableBtn, #hybris-references-addReferenceBtn{
+    float: right;
+    margin-right: 32px;
+}
+
+#hybris-references-referenceVariablesTable, #hybris-references-foreignVariablesTable {
+    margin-left: 71.9%;
+}
+
+/* References END */
 
 /* Table */
 
