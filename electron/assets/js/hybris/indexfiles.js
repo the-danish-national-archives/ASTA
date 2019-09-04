@@ -63,31 +63,22 @@ function (n) {
             settings.contextDocumentsTab.click();
         }
 
-        //upload Indeces files 
-        var EnsureFiles= function () {
-            var fileName = GetFileName(settings.selectedArchiveIndexFilePath);
-            console.logInfo("copy file " + fileName + " to  " + settings.IndecesPath,"Rigsarkiv.Hybris.IndexFiles.EnsureFiles");
-            var destFilePath = settings.IndecesPath;
-            destFilePath += (destFilePath.indexOf("\\") > -1) ? "\\{0}".format(fileName) : "/{0}".format(fileName);
-            fs.copyFile(settings.selectedArchiveIndexFilePath,destFilePath, (err) => {
-                if (err) {
-                    err.Handle(settings.outputErrorSpn,settings.outputErrorText,"Rigsarkiv.Hybris.IndexFiles.EnsureFiles");
-                }
-                else {                   
-                    var fileName = GetFileName(settings.selectedContextDocumentationIndexFilePath);
-                    console.logInfo("copy file " + fileName + " to  " + settings.IndecesPath,"Rigsarkiv.Hybris.IndexFiles.EnsureFiles");
-                    var destFilePath = settings.IndecesPath;
-                    destFilePath += (destFilePath.indexOf("\\") > -1) ? "\\{0}".format(fileName) : "/{0}".format(fileName);
-                    fs.copyFile(settings.selectedContextDocumentationIndexFilePath, "{0}/{1}".format(settings.IndecesPath,fileName), (err) => {
-                        if (err) {
-                            err.Handle(settings.outputErrorSpn,settings.outputErrorText,"Rigsarkiv.Hybris.IndexFiles.EnsureFiles");
-                        }
-                        else {
-                            NextTab();
-                        }
-                    });
-                }
-            });
+        //upload Indeces file 
+        var EnsureFile = function (filePath) {
+            var result = true;
+            try 
+            {
+                var fileName = GetFileName(filePath);
+                console.logInfo("copy file " + fileName + " to  " + settings.IndecesPath,"Rigsarkiv.Hybris.IndexFiles.EnsureFile");
+                var destFilePath = settings.IndecesPath;
+                destFilePath += (destFilePath.indexOf("\\") > -1) ? "\\{0}".format(fileName) : "/{0}".format(fileName);
+                fs.copyFileSync(filePath,destFilePath);    
+            }
+            catch(err) {
+                result = false;
+                err.Handle(settings.outputErrorSpn,settings.outputErrorText,"Rigsarkiv.Hybris.IndexFiles.EnsureFile");
+            }
+            return result;
         }
 
         //add Event Listener to HTML elmenets
@@ -115,17 +106,18 @@ function (n) {
                 }
                 if(settings.selectedArchiveIndexFilePath != null && settings.selectedContextDocumentationIndexFilePath != null && settings.pathArchiveIndexFileTxt.value !== "" && settings.pathContextDocumentationIndexFileTxt.value !== "") { 
                     if(GetFileName(settings.selectedArchiveIndexFilePath) === settings.defaultIndicesFiles[0] && GetFileName(settings.selectedContextDocumentationIndexFilePath) === settings.defaultIndicesFiles[1]) {
-                        var redirect = false;
+                        var redirect = true;
                         settings.IndecesPath = Rigsarkiv.Hybris.Structure.callback().deliveryPackagePath;
                         settings.IndecesPath += (settings.IndecesPath.indexOf("\\") > -1) ? "\\{0}".format(settings.IndecesPostfix) : "/{0}".format(settings.IndecesPostfix);            
                         if(Rigsarkiv.Hybris.Base.callback().mode === "Edit") {
                             var archiveIndexPath = (settings.IndecesPath.indexOf("\\") > -1) ? "{0}\\{1}".format(settings.IndecesPath,settings.defaultIndicesFiles[0]) : "{0}/{1}".format(settings.IndecesPath,settings.defaultIndicesFiles[0]);
                             var contextDocumentationIndexPath = (settings.IndecesPath.indexOf("\\") > -1) ? "{0}\\{1}".format(settings.IndecesPath,settings.defaultIndicesFiles[1]) : "{0}/{1}".format(settings.IndecesPath,settings.defaultIndicesFiles[1]);
-                            if(settings.selectedArchiveIndexFilePath === archiveIndexPath && settings.selectedContextDocumentationIndexFilePath === contextDocumentationIndexPath) {
-                                redirect = true;
-                            }
+                            if(settings.selectedArchiveIndexFilePath !== archiveIndexPath) { redirect = EnsureFile(settings.selectedArchiveIndexFilePath); }
+                            if(settings.selectedContextDocumentationIndexFilePath !== contextDocumentationIndexPath && redirect) { redirect = EnsureFile(settings.selectedContextDocumentationIndexFilePath); }
                         }
-                        if(!redirect) { EnsureFiles(); }
+                        else {
+                            redirect = (EnsureFile(settings.selectedArchiveIndexFilePath) && EnsureFile(settings.selectedContextDocumentationIndexFilePath));
+                        }
                         if(redirect) { NextTab(); }
                     }
                     else {
