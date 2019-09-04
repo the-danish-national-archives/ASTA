@@ -201,6 +201,7 @@ namespace Rigsarkiv.Athena
             var rowError = false;
             var row = line.Split(Separator).ToList();
             if(line.IndexOf("\"") > -1) { row = ParseRow(line); }
+            if(table.Columns.Count == (row.Count +1)) { row.Add(""); }
             for(int i = 0; i < table.Columns.Count; i++)
             {                
                 var column = table.Columns[i];

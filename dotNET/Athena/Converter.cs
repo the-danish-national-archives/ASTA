@@ -130,6 +130,7 @@ namespace Rigsarkiv.Athena
                     result = new Row() { DestValues = new Dictionary<string, string>(), SrcValues = new Dictionary<string, string>(), ErrorsColumns = new List<string>() };
                     if (rowLine != null)
                     {
+                        if(table.Columns.Count == (rowLine.Count + 1)) { rowLine.Add(""); }
                         table.Columns.ForEach(column =>
                         {
                             UpdateRow(table, result, column, rowLine[counter], rowNode.Element(tableNS + column.Id).Value, index - 1);
