@@ -1,12 +1,12 @@
 ﻿*/
-Version: 2,0
+Version: 6,0
 Encoding: UTF-8 with byte order mark
 Note: The working directory must contain the data file (sav)
 */
 
 * Set the working directory and data file name.
 file handle astaDir
-/name '{3}'
+/name '{3}'.
 file handle dataDir
 /name '{1}'.
 file handle inputSpss
@@ -104,13 +104,12 @@ save outfile 'dataDir{0}variable_to_code_list.sav'
 /keep varName varName_.
 execute.
 
+
 * Remove redundant code lists.
 match files file 'dataDir{0}code_lists.sav'
 /table='dataDir{0}variable_to_code_list.sav'
 /by varName.
 compute keep=1.
-if varName ne varName_ keep=0.
-select if keep=1.
 save outfile 'dataDir{0}all_code_lists.sav'.
 
 * CREATE VARIABEL.
@@ -118,7 +117,7 @@ save outfile 'dataDir{0}all_code_lists.sav'.
 get file 'dataDir{0}dictionary.sav'
 /keep var1 writeformat
 /rename var1=varName writeformat=varFormat.
-alter type varName(a64) varFormat(amin).
+alter type varName(a64) varFormat(a64).
 compute varFormat=lower(varFormat).
 compute casenum=$casenum.
 sort cases by varName.
@@ -138,15 +137,15 @@ match files file 'dataDir{0}variable.sav' /in=master
 /file='dataDir{0}variable_to_code_list.sav' /in=codeListName
 /by varName.
 string type(a1) variable(a32767).
-alter type varFormat(a66).
+alter type varFormat(a66) varName_(a66).
 * If variable has a code list, make sure to use it
 compute type=char.substr(varFormat, 1, 1).
 *if codeVar eq 1 varFormat=concat(varName_, '.').
 *if codeVar eq 1 and type eq 'a' varFormat=concat('$', varFormat).
-if codeVar eq 1 varName_=concat(varName_, '.').
+if codeVar eq 1 varName_=concat(ltrim(rtrim(varName_)), '.').
 if codeVar eq 1 and type eq 'a' varName_=concat('$', varName_).
 *compute variable=concat(ltrim(rtrim(varName)), ' ', ltrim(rtrim(varFormat))).
-compute variable=concat(ltrim(rtrim(varName)), ' ', ltrim(rtrim(varFormat)), ' ', ltrim(rtrim(varName_))).
+        compute variable=concat(ltrim(rtrim(varName)), ' ', ltrim(rtrim(varFormat)), ' ', varName_).
 sort cases by casenum.
 select if varName ne 'absoluteDum'.
 alter type variable(amin).
@@ -175,8 +174,21 @@ execute.
 
 * CREATE KODELISTE.
 get file 'dataDir{0}all_code_lists.sav'.
-string varRef codeList(a32767).
-compute codeList=concat('"', "'", ltrim(rtrim(val)), "'", concat(" '", ltrim(rtrim(valLabel)), "'"), '"').
+sort cases by varName.
+get file  'dataDir{0}variable.sav'.
+sort cases by varName.
+match files file='dataDir{0}all_code_lists.sav'
+/table='dataDir{0}variable.sav'
+/by varName.
+execute.
+save outfile 'dataDir{0}all_codes_and_formats.sav'.
+get file  'dataDir{0}all_codes_and_formats.sav'.
+string tmp(a100) varRef codeList(a32767).
+compute tmp=val.
+alter type tmp (f).
+alter type tmp (amin).
+* compute codeList=concat('"', "'", ltrim(rtrim(tmp)), "'", concat(" '", ltrim(rtrim(valLabel)), "'"), '"').
+compute codeList=concat(ltrim(rtrim(tmp)), concat(" '", ltrim(rtrim(valLabel)), "'")).
 if lag(varName) ne varName varRef=concat('"', ltrim(rtrim(varName)), '"').
 select if varName ne 'absoluteDum'.
 alter type codeList varRef(amin).
@@ -227,6 +239,9 @@ execute.
 get file 'outputSpss'.
 save outfile 'outputSpss'
 /drop absoluteDum.
+*get file 'inputSpss'.
+*save outfile 'inputSpss'.
+* /drop absoluteDum.
 erase file='dataDir{0}dictionary.sav'.
 erase file='dataDir{0}code_lists.sav'.
 erase file='dataDir{0}variable_to_code_list.sav'.

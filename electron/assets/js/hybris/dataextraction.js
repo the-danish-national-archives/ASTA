@@ -68,7 +68,7 @@ function (n) {
             variablesDropdown: null,   
             scriptPath: "./assets/scripts/{0}",
             resourceWinPath: "resources\\{0}",
-            scripts: ["spss_script.sps","sas_uden_katalog_script.sas","sas_med_katalog_script.sas","stata_script.do"],
+            scripts: ["spss_script.sps","sas_without_catalog_script.sas","sas_with_catalog_script.sas","stata_script.do"],
             outputPostfixFiles: ["{0}.csv","{0}_VARIABEL.txt","{0}_VARIABELBESKRIVELSE.txt"],
             outputOptionalPostfixFiles: ["{0}_KODELISTE.txt","{0}_BRUGERKODE.txt"],
             sasCatalogFileExt: "{0}.sas7bcat",

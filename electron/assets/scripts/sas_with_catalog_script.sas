@@ -1,7 +1,11 @@
 /*
-Version: 2.0
+Version: 6.0
 Encoding: UTF-8 without byte order mark
-Note: The working directory must contain the data file (sas7bdat)
+Note: The working directory must contain the data file (sas7bdat) and catalog file (sas7bcat)
+NB: The data and catalog files must have the same name
+NB: The link between variable and format must be stored in the data file
+NB: The formats in the catalog file must represent code list(s) only
+NB: The values in the catalog file must be explicitly specified (ranges are invalid)
 */
 
 * Set the working directory and data file name;
@@ -14,8 +18,8 @@ libname mylib "&outDir";
 options locale=da_DK replace=yes;
 options nofmterr;
 
-* Escape reserved xml characters;
-*/%macro clean(varName);
+/* Escape reserved xml characters;
+%macro clean(varName);
 &varname=strip(&varname);
 label=tranwrd(&varName,'&','&amp;');
 label=tranwrd(&varName,'<','<');
@@ -44,7 +48,6 @@ drop rc id;
 run;
 
 /**/
-
 %let felter=;
 proc sql noprint;
 select variable into :felter separated by ';'
@@ -98,7 +101,26 @@ end;
 end;
 run;
 
+
 /**/
+
+* Get code list items;
+proc catalog catalog=mylib.&inputSas;
+contents out=mylib.odsFmtOut;
+run;
+* Get ready for merge;
+data mylib.odsFmtOut(keep=FmtNam CodeList);
+    set mylib.odsFmtOut;
+    FmtNam=upcase(cat(strip(name),'.'));
+    if type='FORMATC' then FmtNam=upcase(cat('$',strip(name),'.'));
+    CodeList=1;
+run;
+* Merge to get code-list vars flagged;
+proc sql;
+    create table mylib.odsOut as
+    select a.*, b.Codelist
+    from mylib.odsOut a left join mylib.odsFmtOut b on upcase(a.Format)=b.FmtNam;
+quit;
 
 /*nyt*/
 proc sql;
@@ -106,26 +128,36 @@ create table mylib.odsOut as
 select a.*, b.Fmt
 from mylib.odsOut a left join mylib.varinfo b on upcase(a.Variable)=upcase(b.Name);
 quit;
-/*nyt*/
-
-proc sort data=mylib.odsOut;by num;run;
-* Create output with variable name and format;
+/*nyt*/								  
+* Create output with variable name, type and format;
 data mylib.varNames(keep=varNameFormat);
 set mylib.odsOut;
-format Format $200.;
-*If format is missing, map the generic type to format;
+format Format $char200.;
+format VarType $char200.;
+*If format is missing, or we have a UserFormat, map the generic type to type;
 if lowcase(type) eq 'num' then do;
-if format='' then format=Fmt;
+    if format ne '' and codelist ne 1 then do;
+    Vartype=format;
+    if prxmatch('/f\d*\./',lowcase(strip(Format)))=1 then vartype=Fmt;
+    end;
 end;
 else do;
-if lowcase(type) EQ 'char' then do;
-type='$';
-Format=cats(type,len,'.');
-end;
+    if lowcase(type) EQ 'char' then do; 
+    VarType=cats('$',len,'.');
+    end;
 end;
 
-varNameFormat=cat(strip(Variable),' ',strip(lowcase(Format)));
+
+if CodeList=1 then do;
+    VarType=Fmt;
+    Format=lowcase(Format);
+end;
+else do;
+    Format='';
+end;
+varNameFormat=cat(strip(Variable),' ',strip(lowcase(VarType)),' ',strip(lowcase(Format)));
 run;
+
 * Write output to file;
 %let name=%str({2}_VARIABEL.txt);
 %let outfile=&astaDir&name;
@@ -134,6 +166,8 @@ set mylib.varNames;
 file "&outfile" encoding='utf-8' dsd dlm='09'x lrecl=2000000;
 put(_all_)(+0);
 run;
+
+proc datasets lib=mylib;delete odsFmtOut;quit;
 
 * CREATE VARIABELBESKRIVELSE;
 data mylib.varLabels(keep=varLabels);
@@ -153,6 +187,51 @@ file "&outfile" encoding='utf-8' dsd dlm='09'x lrecl=2000000;
 put(_all_)(+0);
 run;
 
+* CREATE KODELISTE;
+%let name=%str(valLabels);
+%let outfile=&outDir&name;
+* Get content from the catalog file;
+proc format out="&outfile" fmtlib library=mylib.&inputSas;
+run;
+data mylib.valLabels(keep=Fmtname valLabels);
+length Label $32767;
+set mylib.valLabels;
+*%clean(Label);
+* If label is empty, use default value;
+if Label eq '' then Label='n.a.';
+Fmtname=strip(lowcase(Fmtname));
+if lag(Fmtname)=Fmtname then Fmtname='';
+* Remove preceding dot in front of special values (.A-.Z);
+if prxmatch('/\.[a-z]/',lowcase(strip(Start)))>0 then Start=substr(strip(Start),2,1);
+length valLabels $32767;
+valLabels=cat("'",strip(Start),"'"," '",strip(Label),"'");
+run;
+* Create output with code list(s);
+%let name=%str({2}_KODELISTE.txt);
+%let outfile=&astaDir&name;
+data _null_;
+set mylib.valLabels;
+file "&outfile" encoding='utf-8' dsd dlm='09'x lrecl=2000000;
+put(Fmtname)(+0);
+put(valLabels)(+0);
+run;
+data mylib.valLabels;
+infile "&outfile" encoding='utf-8' delimiter='09'x missover dsd lrecl=32767;
+informat var1 $32767.;
+format var1 $32767.;
+input var1 $; var1=strip(var1);
+run;
+data mylib.valLabels;
+set mylib.valLabels;
+if var1 eq '' then delete;
+run;
+* Write output to file;
+data _null_;
+set mylib.valLabels;
+file "&outfile" encoding='utf-8' dsd dlm='09'x lrecl=2000000;
+put(_all_)(+0);
+run;
+
 * Delete temporary files on disk;
 proc datasets library=mylib;
 delete odsOut varNames varLabels valLabels varinfo;
@@ -167,4 +246,3 @@ proc export data=&datafile outfile=&outFile dbms=dlm replace;
 delimiter=';';
 putnames=yes;
 run;
-

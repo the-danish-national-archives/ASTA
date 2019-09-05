@@ -1,5 +1,5 @@
 /*
-Version: 2.0
+Version: 6.0
 Encoding: UTF-8 without byte order mark
 Note: The working directory must contain the data file (dta)
 */
@@ -175,5 +175,5 @@ Note: Null values in numeric variables are not respresented at all
 Note: Special codes for missing values are written as lowercase letters with a preceding dot (.a-.z)
 */
 use $inputStata, clear
-export delimited using $astaDir{0}inputStata_.csv, delimiter(";") nolabel replace
+export delimited using $astaDir{0}{2}.csv, delimiter(";") nolabel replace
 
