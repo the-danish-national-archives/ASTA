@@ -12,7 +12,10 @@ function (n) {
         const pattern = /^([1-9]{1}[0-9]{4,})$/;
 
         //private data memebers
-        var settings = {
+        var settings = {            
+            sectionTitleH1: null,
+            titleNewSpn: null,
+            titleEditSpn: null,
             selectNewDirBtn: null,
             selectEditDirBtn: null,
             newPathDirTxt: null,
@@ -53,8 +56,12 @@ function (n) {
             indexfilesTab: null,
             newPanelDiv: null,
             editPanelDiv: null,
+            indexFilesDescriptionSpn: null,
+            indexFilesDescriptionText: null,
+            indexFilesEditDescriptionText: null,
             selectDeliveryPackage: null,
-            IndecesPostfix: "Indices",
+            indecesFolder: "Indices",
+            contextDocumentationFolder: "ContextDocumentation",
             defaultIndicesFiles: ["archiveIndex.xml","contextDocumentationIndex.xml"],
             folderPrefix: "FD.",
             defaultFolderPostfix: "99999",
@@ -95,7 +102,11 @@ function (n) {
             settings.outputStatisticsHeaderOverviewSpn.innerHTML = settings.outputStatisticsHeaderOverviewText.format(folder);
             
             if(Rigsarkiv.Hybris.Base.callback().mode === "New") { settings.statisticsTab.click(); }
-            if(Rigsarkiv.Hybris.Base.callback().mode === "Edit") {  settings.indexfilesTab.click(); }
+            if(Rigsarkiv.Hybris.Base.callback().mode === "Edit") { 
+                var description = "{0} {1}".format(folder,settings.indexFilesEditDescriptionText);
+                settings.indexFilesDescriptionSpn.innerHTML = settings.indexFilesDescriptionText.format(description);
+                settings.indexfilesTab.click(); 
+            }
         }
 
         //create delivery Package folder Structure
@@ -152,18 +163,25 @@ function (n) {
                 }
             });
             settings.okEditBtn.addEventListener('click', (event) => {
-                Reset();                
-                settings.deliveryPackagePath = settings.selectedPath[0];
-                var path = (settings.deliveryPackagePath.indexOf("\\") > -1) ? "{0}\\{1}".format(settings.deliveryPackagePath,settings.IndecesPostfix) : "{0}/{1}".format(settings.deliveryPackagePath,settings.IndecesPostfix);
-                var archiveIndexPath = (settings.deliveryPackagePath.indexOf("\\") > -1) ? "{0}\\{1}".format(path,settings.defaultIndicesFiles[0]) : "{0}/{1}".format(path,settings.defaultIndicesFiles[0]);
-                var contextDocumentationIndexPath = (settings.deliveryPackagePath.indexOf("\\") > -1) ? "{0}\\{1}".format(path,settings.defaultIndicesFiles[1]) : "{0}/{1}".format(path,settings.defaultIndicesFiles[1]);
-                if(fs.existsSync(archiveIndexPath) && fs.existsSync(contextDocumentationIndexPath)) {
-                    Rigsarkiv.Hybris.IndexFiles.callback().load(archiveIndexPath,contextDocumentationIndexPath);
-                    NextTab();
+                Reset(); 
+                if(settings.editPathDirTxt.value === "") {
+                    ipcRenderer.send('open-error-dialog',settings.outputRequiredPathTitle.innerHTML,settings.outputRequiredPathText.innerHTML);
                 }
                 else {
-                    ipcRenderer.send('open-error-dialog',settings.requiredIndexFilesTitle.innerHTML,settings.requiredIndexFilesText.innerHTML);
-                }
+                    settings.deliveryPackagePath = settings.selectedPath[0];
+                    var contextDocumentationPath = (settings.deliveryPackagePath.indexOf("\\") > -1) ? "{0}\\{1}".format(settings.deliveryPackagePath,settings.contextDocumentationFolder) : "{0}/{1}".format(settings.deliveryPackagePath,settings.contextDocumentationFolder);
+                    var indecesPath = (settings.deliveryPackagePath.indexOf("\\") > -1) ? "{0}\\{1}".format(settings.deliveryPackagePath,settings.indecesFolder) : "{0}/{1}".format(settings.deliveryPackagePath,settings.indecesFolder);
+                    if(fs.existsSync(indecesPath) && fs.existsSync(contextDocumentationPath))
+                    {
+                        var archiveIndexPath = (settings.deliveryPackagePath.indexOf("\\") > -1) ? "{0}\\{1}".format(indecesPath,settings.defaultIndicesFiles[0]) : "{0}/{1}".format(indecesPath,settings.defaultIndicesFiles[0]);
+                        var contextDocumentationIndexPath = (settings.deliveryPackagePath.indexOf("\\") > -1) ? "{0}\\{1}".format(indecesPath,settings.defaultIndicesFiles[1]) : "{0}/{1}".format(indecesPath,settings.defaultIndicesFiles[1]);
+                        if(fs.existsSync(archiveIndexPath) && fs.existsSync(contextDocumentationIndexPath)) { Rigsarkiv.Hybris.IndexFiles.callback().load(archiveIndexPath,contextDocumentationIndexPath); }
+                        NextTab();
+                    }
+                    else {
+                        ipcRenderer.send('open-error-dialog',settings.requiredIndexFilesTitle.innerHTML,settings.requiredIndexFilesText.innerHTML);
+                    }
+                } 
             });
             settings.selectNewDirBtn.addEventListener('click', (event) => {
                 Reset();
@@ -187,7 +205,10 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Hybris.Structure = {        
-            initialize: function (selectNewDirectoryId,selectEditDirectoryId,newPathDirectoryId,editPathDirectoryId,deliveryPackageId,okNewId,okEditId,outputErrorId,outputExistsId,outputRequiredPathId,outputUnvalidDeliveryPackageId,outputOkId,selectDeliveryPackageId,structureTabId,statisticsTabId,indexfilesTabId,outputStatisticsHeaderTrin1,outputStatisticsHeaderTrin2,outputStatisticsHeaderTrin3,outputStatisticsHeaderInformation2,outputStatisticsHeaderReferences,outputStatisticsHeaderindexfiles,outputStatisticsHeadercontextdocuments,outputStatisticsHeaderOverview,modePanelId,requiredIndexFilesId) {            
+            initialize: function (sectionTitleId,titleNewId,titleEditId,selectNewDirectoryId,selectEditDirectoryId,newPathDirectoryId,editPathDirectoryId,deliveryPackageId,okNewId,okEditId,outputErrorId,outputExistsId,outputRequiredPathId,outputUnvalidDeliveryPackageId,outputOkId,selectDeliveryPackageId,structureTabId,statisticsTabId,indexfilesTabId,outputStatisticsHeaderTrin1,outputStatisticsHeaderTrin2,outputStatisticsHeaderTrin3,outputStatisticsHeaderInformation2,outputStatisticsHeaderReferences,outputStatisticsHeaderindexfiles,outputStatisticsHeadercontextdocuments,outputStatisticsHeaderOverview,modePanelId,requiredIndexFilesId,indexFilesDescriptionId,indexFilesEditDescriptionId) {            
+                settings.sectionTitleH1 =  document.getElementById(sectionTitleId);
+                settings.titleNewSpn =  document.getElementById(titleNewId);
+                settings.titleEditSpn =  document.getElementById(titleEditId);
                 settings.selectNewDirBtn =  document.getElementById(selectNewDirectoryId);
                 settings.selectEditDirBtn =  document.getElementById(selectEditDirectoryId);
                 settings.newPathDirTxt =  document.getElementById(newPathDirectoryId);
@@ -229,6 +250,9 @@ function (n) {
                 settings.editPanelDiv = document.getElementById(modePanelId + "-Edit");
                 settings.requiredIndexFilesTitle =  document.getElementById(requiredIndexFilesId + "-Title");
                 settings.requiredIndexFilesText =  document.getElementById(requiredIndexFilesId + "-Text");
+                settings.indexFilesDescriptionSpn = document.getElementById(indexFilesDescriptionId);
+                settings.indexFilesDescriptionText = settings.indexFilesDescriptionSpn.innerHTML;
+                settings.indexFilesEditDescriptionText = document.getElementById(indexFilesEditDescriptionId).innerHTML;
                 AddEvents();
             },
             callback: function () {
@@ -243,10 +267,12 @@ function (n) {
                         settings.editPathDirTxt.value = "";
                         Reset();
                         if(Rigsarkiv.Hybris.Base.callback().mode === "New") {
+                            settings.sectionTitleH1.innerText = settings.titleNewSpn.innerHTML;
                             $(settings.newPanelDiv).show();
                             $(settings.editPanelDiv).hide();
                         }
                         if(Rigsarkiv.Hybris.Base.callback().mode === "Edit") {
+                            settings.sectionTitleH1.innerText = settings.titleEditSpn.innerHTML;
                             $(settings.newPanelDiv).hide();
                             $(settings.editPanelDiv).show();                            
                         }
