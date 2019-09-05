@@ -1,4 +1,5 @@
 ﻿using Rigsarkiv.Asta.Logging;
+using System;
 using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -68,7 +69,7 @@ namespace Rigsarkiv.Athena
                 _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Create path: {0}", _destFolderPath) });
                 Directory.CreateDirectory(_destFolderPath);
             }
-            catch (IOException ex)
+            catch (Exception ex)
             {
                 result = false;
                 _log.Error("EnsureRootFolder Failed", ex);
@@ -86,7 +87,7 @@ namespace Rigsarkiv.Athena
                 _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Ensure Tables : {0}", path) });
                 Directory.CreateDirectory(path);
             }
-            catch (IOException ex)
+            catch (Exception ex)
             {
                 result = false;
                 _log.Error("EnsureTables Failed", ex);
@@ -106,7 +107,7 @@ namespace Rigsarkiv.Athena
                 path = string.Format(SchemasStandardPath, _destFolderPath);
                 Directory.CreateDirectory(path);                
             }
-            catch (IOException ex)
+            catch (Exception ex)
             {
                 result = false;
                 _log.Error("EnsureSchemas Failed", ex);
@@ -137,7 +138,7 @@ namespace Rigsarkiv.Athena
                     }                    
                 }
             }
-            catch (IOException ex)
+            catch (Exception ex)
             {
                 result = false;
                 _log.Error("CopySchemas Failed", ex);
@@ -188,7 +189,7 @@ namespace Rigsarkiv.Athena
                     }
                 }
             }
-            catch (IOException ex)
+            catch (Exception ex)
             {
                 result = false;
                 _log.Error("CopyFolder Failed", ex);
