@@ -195,6 +195,21 @@ namespace Rigsarkiv.Athena
             return result;
         }
 
+        private void EnsureSpecialNumeric(XElement tableNode, XElement researchIndexNode,Column column,string value)
+        {
+            if (RequiredSpecialNumeric(column, value))
+            {
+                EnableSpecialNumeric(column, tableNode, researchIndexNode, value);
+                _updateDocuments = true;
+            }
+            if (column.HasSpecialNumeric)
+            {
+                AddMissingColumnNode(value, researchIndexNode, column.Id);
+                _updateDocuments = true;
+            }
+
+        }
+
         private void AddRow(Table table, XElement tableNode, XElement researchIndexNode, string line, int index)
         {
             _writer.WriteStartElement("row");
@@ -215,11 +230,7 @@ namespace Rigsarkiv.Athena
                 {
                     var hasError = false;
                     var isDifferent = false;
-                    if (HasSpecialNumeric(column, value))
-                    {
-                        HandleSpecialNumeric(column, tableNode, researchIndexNode, value, true);
-                        _updateDocuments = true;
-                    }
+                    EnsureSpecialNumeric(tableNode, researchIndexNode, column, value);
                     convertedValue = GetConvertedValue(column, value, out hasError,out isDifferent);
                     if (isDifferent) { column.Differences++; }
                     if (hasError)
