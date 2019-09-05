@@ -379,7 +379,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                         el.value = table.name;
                         settings.tablesDropdown.appendChild(el);
                     });
-                    settings.referencesTab.click();
+                    settings.referencesTab.click();                    
                 });
                 settings.newExtractionBtn.addEventListener('click', (event) => {
                     ResetExtraction();
@@ -390,7 +390,16 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 })
                 settings.okBtn.addEventListener('click', function (event) {
                     Reset();
-                    if(ValidateFields()) { EnsureData(); }
+                    if(ValidateFields()) 
+                    { 
+                        var key = settings.keyVar.value;
+                        if(key != null && key !== "") {
+                            ipcRenderer.send('open-confirm-dialog','metadata-addkey',settings.addKeyWarningTitle.innerHTML,settings.addKeyWarningText.innerHTML,settings.okConfirm.innerHTML,settings.cancelConfirm.innerHTML);
+                        }
+                        else {
+                            EnsureData();
+                        }
+                    }
                 })
                 settings.cancelBtn.addEventListener('click', function (event) {
                     $("#{0} tr:not(:first-child)".format(settings.varKeysTbl.id)).remove();
@@ -413,11 +422,17 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                         ipcRenderer.send('open-error-dialog',settings.varKeyReqTitle.innerHTML,settings.varKeyReqText.innerHTML);
                     }
                 });
+                ipcRenderer.on('confirm-dialog-selection-metadata-addkey', (event, index) => {
+                    if(index === 0) {
+                        EnsureData();
+                    } 
+                    if(index === 1) { }            
+                });
             }
 
             //Model interfaces functions
             Rigsarkiv.Hybris.MetaData = {
-                initialize: function (metadataFileName,metadataFileNameDescription,metadataKeyVariable,metdataOkBtn,inputFileNameRequired,inputNumberFirst,inputIllegalChar,outputOkId,okDataPathId,outputErrorId,outputNewExtractionId,newExtractionBtn,extractionTabId,outputNextId,nextBtn,referencesTabId,fileNameLengthId,fileNameReservedWordId,fileDescrReqId,informationPanel1Id,informationPanel2Id,indexFilesDescriptionId,outputCloseApplicationErrorPrefixId,resetHideBox,numberFirstKeyId,illegalCharKeyId,keyLengthId,keyReservedWordId,variablesId,addVarKeyId,varKeysId,varKeyReqId,tablesId,cancelId) {
+                initialize: function (metadataFileName,metadataFileNameDescription,metadataKeyVariable,metdataOkBtn,inputFileNameRequired,inputNumberFirst,inputIllegalChar,outputOkId,okDataPathId,outputErrorId,outputNewExtractionId,newExtractionBtn,extractionTabId,outputNextId,nextBtn,referencesTabId,fileNameLengthId,fileNameReservedWordId,fileDescrReqId,informationPanel1Id,informationPanel2Id,indexFilesDescriptionId,outputCloseApplicationErrorPrefixId,resetHideBox,numberFirstKeyId,illegalCharKeyId,keyLengthId,keyReservedWordId,variablesId,addVarKeyId,varKeysId,varKeyReqId,tablesId,cancelId,addKeyWarningId,okConfirmId,cancelConfirmId) {
                     settings.fileName = document.getElementById(metadataFileName);
                     settings.fileDescr = document.getElementById(metadataFileNameDescription);
                     settings.keyVar = document.getElementById(metadataKeyVariable);
@@ -468,6 +483,10 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                     settings.varKeyReqText = document.getElementById(varKeyReqId + "-Text");
                     settings.tablesDropdown = document.getElementById(tablesId);
                     settings.cancelBtn = document.getElementById(cancelId);
+                    settings.addKeyWarningTitle = document.getElementById(addKeyWarningId + "-Title");
+                    settings.addKeyWarningText = document.getElementById(addKeyWarningId + "-Text");
+                    settings.okConfirm = document.getElementById(okConfirmId);
+                    settings.cancelConfirm = document.getElementById(cancelConfirmId);
                     AddEvents();
                 },
                 callback: function () {
