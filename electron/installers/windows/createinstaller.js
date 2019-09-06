@@ -19,7 +19,7 @@ function getInstallerConfig () {
     noMsi: true,
     outputDirectory: path.join(outPath, 'windows-installer'),
     exe: 'file-converter-app.exe',
-    setupExe: 'FileConverter.exe',
+    setupExe: 'Asta.exe',
     setupIcon: path.join(rootPath, 'assets', 'icons', 'win', 'SA_Krone_App.ico')
   })
 }
