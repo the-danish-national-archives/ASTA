@@ -28,16 +28,16 @@
   "author": "ProActive A/S - Brian Lynnerup Pedersen, Nawar Hajwal",
   "license": "ISC",
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.7.2",
+    "@fortawesome/fontawesome-free": "^5.10.2",
     "chardet": "^0.7.0",
-    "electron-log": "^3.0.6",
+    "electron-log": "^3.0.7",
     "fast-csv": "^2.5.0",
-    "junk": "^3.0.0",
+    "junk": "^3.1.0",
     "nodejs-base64": "^1.0.3",
     "xmldom": "^0.1.27"
   },
   "devDependencies": {
-    "electron": "^4.2.6",
+    "electron": "^4.2.10",
     "electron-installer-dmg": "^2.0.0",
     "electron-packager": "^13.1.1",
     "electron-winstaller": "^2.7.0"
