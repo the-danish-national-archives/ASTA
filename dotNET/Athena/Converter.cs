@@ -231,17 +231,13 @@ namespace Rigsarkiv.Athena
         /// <param name="researchIndexNode"></param>
         /// <param name="columnId"></param>
         protected void AddMissingColumnNode(string codeName, XElement researchIndexNode, string columnId)
-        {
-            var regex = GetRegex(SpecialNumericPattern);
-            if (regex.IsMatch(codeName))
+        {            
+            XElement columnNode = researchIndexNode.Element(_tableIndexXNS + "columns").Elements().Where(e => e.Element(_tableIndexXNS + "columnID").Value == columnId).FirstOrDefault();
+            if (!columnNode.Element(_tableIndexXNS + "missingValues").Elements().Any(e => e.Value == codeName))
             {
-                XElement columnNode = researchIndexNode.Element(_tableIndexXNS + "columns").Elements().Where(e => e.Element(_tableIndexXNS + "columnID").Value == columnId).FirstOrDefault();
-                if (!columnNode.Element(_tableIndexXNS + "missingValues").Elements().Any(e => e.Value == codeName))
-                {
-                    _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add missing value: {0} ", codeName) });
-                    var missingValueNode = new XElement(_tableIndexXNS + "value", codeName);
-                    columnNode.Element(_tableIndexXNS + "missingValues").Add(missingValueNode);
-                }
+                _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add missing value: {0} ", codeName) });
+                var missingValueNode = new XElement(_tableIndexXNS + "value", codeName);
+                columnNode.Element(_tableIndexXNS + "missingValues").Add(missingValueNode);
             }
         }
 
@@ -293,8 +289,7 @@ namespace Rigsarkiv.Athena
         /// <param name="column"></param>
         /// <param name="tableNode"></param>
         /// <param name="researchIndexNode"></param>
-        /// <param name="value"></param>
-        protected void EnableSpecialNumeric(Column column, XElement tableNode, XElement researchIndexNode, string value)
+        protected void EnableSpecialNumeric(Column column, XElement tableNode, XElement researchIndexNode)
         {
             column.Type = string.Format(VarCharPrefix, GetColumnLength(column.Type, column.RegExp));
             column.Modified = true;
@@ -324,6 +319,16 @@ namespace Rigsarkiv.Athena
                 });
             }
             column.HasSpecialNumeric = true;
+            AddSpecialNumeric(column, researchIndexNode);
+        }
+
+        /// <summary>
+        /// Add Special Numeric for column
+        /// </summary>
+        /// <param name="column"></param>
+        /// <param name="researchIndexNode"></param>
+        protected void AddSpecialNumeric(Column column, XElement researchIndexNode)
+        {
             researchIndexNode.Element(_tableIndexXNS + "specialNumeric").Value = true.ToString().ToLower();
             XElement columnsIndexNode = researchIndexNode.Element(_tableIndexXNS + "columns");
             XElement columnIndexNode = new XElement(_tableIndexXNS + "column", new XElement(_tableIndexXNS + "columnID", column.Id), new XElement(_tableIndexXNS + "missingValues"));

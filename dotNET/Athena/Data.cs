@@ -199,10 +199,10 @@ namespace Rigsarkiv.Athena
         {
             if (RequiredSpecialNumeric(column, value))
             {
-                EnableSpecialNumeric(column, tableNode, researchIndexNode, value);
+                EnableSpecialNumeric(column, tableNode, researchIndexNode);
                 _updateDocuments = true;
             }
-            if (column.HasSpecialNumeric)
+            if (column.HasSpecialNumeric && GetRegex(SpecialNumericPattern).IsMatch(value))
             {
                 AddMissingColumnNode(value, researchIndexNode, column.Id);
                 _updateDocuments = true;
