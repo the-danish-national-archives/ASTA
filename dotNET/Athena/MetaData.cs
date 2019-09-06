@@ -243,8 +243,10 @@ namespace Rigsarkiv.Athena
                 codeList.Options.Add(new string[2] { value, description });
                 if (description.Length > result) { result = description.Length; }
                 if((bool)code["isMissing"]) {
-                    if (!column.HasMissingValues) { AddSpecialNumeric(column, researchIndexNode); ; }
-                    column.HasMissingValues = true;
+                    if (!column.HasMissingValues) {
+                        AddSpecialNumeric(column, researchIndexNode);
+                        column.HasMissingValues = true;
+                    }                    
                     AddMissingColumnNode(value, researchIndexNode, column.Id);
                 }                
             }            
