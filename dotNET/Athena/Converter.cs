@@ -486,7 +486,7 @@ namespace Rigsarkiv.Athena
         private string GetMonth(string monthValue)
         {
             string result = null;
-            switch (monthValue)
+            switch (monthValue.ToUpper())
             {
                 case "JAN": result = "01"; break;
                 case "FEB": result = "02"; break;
