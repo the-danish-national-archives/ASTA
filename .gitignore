@@ -45,3 +45,5 @@ electron/assets/scripts/Athena.exe.config
 /dotNET/Asta/bin
 /dotNET/Asta/obj
 /electron/assets/scripts/Asta.pdb
+/electron/release-builds/asta-app-win32-ia32
+/electron/release-builds/asta-extended-app-win32-ia32
