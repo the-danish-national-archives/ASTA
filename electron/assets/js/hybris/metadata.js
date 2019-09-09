@@ -37,6 +37,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 outputNextSpn: null,
                 extractionTab: null,
                 referencesTab: null,
+                indexfilesTab: null,
                 fileNameReqTitle: null,
                 fileNameReqText: null,
                 fileDescrReqTitle: null,
@@ -67,10 +68,15 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 varKeyReqTitle: null,
                 varKeyReqText: null,
                 cancelBtn: null,
+                addKeyWarningTitle: null,
+                addKeyWarningText: null,
+                okConfirm: null,
+                cancelConfirm: null,
                 contents: ["","","",""],
                 varKeys: [],
                 references: [],
                 variables: [],
+                dataPathPostfix: "Data",
                 metadataFileName: "{0}.txt",
                 dataFileName: "{0}.csv",
                 metadataTemplateFileName: "metadata.txt",
@@ -146,9 +152,6 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                         }
                         else {
                             var folders = callback.selectedStatisticsFilePath.getFolders();                            
-                            settings.informationPanel1.hidden = true;
-                            settings.informationPanel2.hidden = false;
-                            settings.nextBtn.hidden = false;
                             settings.outputOkSpn.innerHTML = settings.outputOkText.format(settings.dataFileName.format(fileName),settings.metadataFileName.format(fileName),folders[folders.length - 1]);
                             settings.okDataPath.innerHTML = callback.localFolderPath;
                             folders = dataFolderPath.getFolders();
@@ -158,6 +161,9 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                             Rigsarkiv.Hybris.Base.callback().metadata.push({ "fileName":fileName, "name":settings.fileName.value, "variables":settings.variables, "keys":settings.varKeys, "references":[] });
                             console.log("{0} data output: ".format(settings.fileName));
                             console.log(Rigsarkiv.Hybris.Base.callback().metadata);
+                            settings.informationPanel1.hidden = true;
+                            settings.informationPanel2.hidden = false;
+                            settings.nextBtn.hidden = false;
                         }                                                          
                     }
                 });
@@ -372,14 +378,21 @@ window.Rigsarkiv = window.Rigsarkiv || {},
             //add Event Listener to HTML elmenets
             var AddEvents = function () {
                 settings.nextBtn.addEventListener('click', (event) => {
-                    $(settings.tablesDropdown).empty();
+                    var tablesCounter = 0;
+                     $(settings.tablesDropdown).empty();
                     Rigsarkiv.Hybris.Base.callback().metadata.forEach(table => {
+                        tablesCounter = tablesCounter + 1;
                         var el = document.createElement('option');
                         el.textContent = table.fileName;
                         el.value = table.name;
                         settings.tablesDropdown.appendChild(el);
                     });
-                    settings.referencesTab.click();                    
+                    if(tablesCounter === 1 && Rigsarkiv.Hybris.References.callback().updateFile(Rigsarkiv.Hybris.Base.callback().metadata[0])) {
+                        settings.indexfilesTab.click();
+                    } 
+                    else {
+                        settings.referencesTab.click(); 
+                    }                   
                 });
                 settings.newExtractionBtn.addEventListener('click', (event) => {
                     ResetExtraction();
@@ -432,7 +445,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
 
             //Model interfaces functions
             Rigsarkiv.Hybris.MetaData = {
-                initialize: function (metadataFileName,metadataFileNameDescription,metadataKeyVariable,metdataOkBtn,inputFileNameRequired,inputNumberFirst,inputIllegalChar,outputOkId,okDataPathId,outputErrorId,outputNewExtractionId,newExtractionBtn,extractionTabId,outputNextId,nextBtn,referencesTabId,fileNameLengthId,fileNameReservedWordId,fileDescrReqId,informationPanel1Id,informationPanel2Id,indexFilesDescriptionId,outputCloseApplicationErrorPrefixId,resetHideBox,numberFirstKeyId,illegalCharKeyId,keyLengthId,keyReservedWordId,variablesId,addVarKeyId,varKeysId,varKeyReqId,tablesId,cancelId,addKeyWarningId,okConfirmId,cancelConfirmId) {
+                initialize: function (metadataFileName,metadataFileNameDescription,metadataKeyVariable,metdataOkBtn,inputFileNameRequired,inputNumberFirst,inputIllegalChar,outputOkId,okDataPathId,outputErrorId,outputNewExtractionId,newExtractionBtn,extractionTabId,outputNextId,nextBtn,referencesTabId,fileNameLengthId,fileNameReservedWordId,fileDescrReqId,informationPanel1Id,informationPanel2Id,indexFilesDescriptionId,outputCloseApplicationErrorPrefixId,resetHideBox,numberFirstKeyId,illegalCharKeyId,keyLengthId,keyReservedWordId,variablesId,addVarKeyId,varKeysId,varKeyReqId,tablesId,cancelId,addKeyWarningId,okConfirmId,cancelConfirmId,indexfilesTabId) {
                     settings.fileName = document.getElementById(metadataFileName);
                     settings.fileDescr = document.getElementById(metadataFileNameDescription);
                     settings.keyVar = document.getElementById(metadataKeyVariable);
@@ -487,6 +500,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                     settings.addKeyWarningText = document.getElementById(addKeyWarningId + "-Text");
                     settings.okConfirm = document.getElementById(okConfirmId);
                     settings.cancelConfirm = document.getElementById(cancelConfirmId);
+                    settings.indexfilesTab = document.getElementById(indexfilesTabId);
                     AddEvents();
                 },
                 callback: function () {

@@ -46,6 +46,10 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 addForeignVariableBtn: null,
                 foreignVariablesTbl: null,
                 cancelBtn: null,
+                addKeyWarningTitle: null,
+                addKeyWarningText: null,
+                okConfirm: null,
+                cancelConfirm: null,
                 foreignVariables: [],
                 referenceVariables: [],
                 dataPathPostfix: "Data",
@@ -88,34 +92,39 @@ window.Rigsarkiv = window.Rigsarkiv || {},
             } 
 
             //Update metadata file references
-            var UpdateFile = function(filePath,references) {
+            var UpdateFile = function(dataFolderPath,table) {
                 var result = true;
-                console.logInfo("update metadata file: {0}".format(filePath),"Rigsarkiv.Hybris.References.UpdateFile");
-                fs.readFile(filePath, (err, data) => {
-                    if (err) {
-                        result = false;
-                        err.Handle(settings.outputErrorSpn,settings.outputErrorText,"Rigsarkiv.Hybris.References.UpdateFile");
-                    }
-                    else {
-                        var text = "";
-                        if(references.length > 0) {
-                            references.forEach(reference => {
-                                text += "{0} {1} {2}{3}".format(reference.table,"'{0}'".format(reference.key.join(" ")),"'{0}'".format(reference.refKey.join(" ")),GetNewLine());
-                            });
-                        }
-                        var updatedData = data.toString().format(text);
-                        fs.writeFile(filePath, updatedData, (err) => {
-                            if (err) {
-                                result = false;
-                                err.Handle(settings.outputErrorSpn,settings.outputErrorText,"Rigsarkiv.Hybris.References.UpdateFile");
-                            }
-                            else {
-                                
-                            }
+                try
+                {
+                    var fileName = settings.metadataFileName.format(table.fileName);
+                    var filePath = (dataFolderPath.indexOf("\\") > -1) ? "{0}\\{1}\\{2}".format(dataFolderPath,table.fileName,fileName) : "{0}/{1}/{2}".format(dataFolderPath,table.fileName,fileName);
+                    console.logInfo("update metadata file: {0}".format(filePath),"Rigsarkiv.Hybris.References.UpdateFile");
+                    data = fs.readFileSync(filePath)
+                    var text = "";
+                    if(table.references.length > 0) {
+                        table.references.forEach(reference => {
+                            text += "{0} {1} {2}{3}".format(reference.table,"'{0}'".format(reference.key.join(" ")),"'{0}'".format(reference.refKey.join(" ")),GetNewLine());
                         });
                     }
+                    var updatedData = data.toString().format(text);
+                    fs.writeFileSync(filePath, updatedData);
+                }
+                catch(err) 
+                {
+                    err.Handle(settings.outputErrorSpn,settings.outputErrorText,"Rigsarkiv.Hybris.References.UpdateFile");
+                }
+                return result;               
+            }
+
+            //Redirect to index files
+            var Redirect = function() {
+                var result = true;
+                var dataFolderPath = Rigsarkiv.Hybris.Structure.callback().deliveryPackagePath;
+                dataFolderPath = (dataFolderPath.indexOf("\\") > -1) ? "{0}\\{1}".format(dataFolderPath,settings.dataPathPostfix) : "{0}/{1}".format(dataFolderPath,settings.dataPathPostfix);
+                Rigsarkiv.Hybris.Base.callback().metadata.forEach(table => {
+                    if(!UpdateFile(dataFolderPath,table)) { result = false; }
                 });
-                return result;
+                if(result) { settings.indexfilesTab.click(); }
             }
 
             // Validate refernces inputs
@@ -149,18 +158,17 @@ window.Rigsarkiv = window.Rigsarkiv || {},
 
             //add Event Listener to HTML elmenets
             var AddEvents = function () {
-                settings.okBtn.addEventListener('click', function (event) {
-                    var result = true;
-                    var dataFolderPath = Rigsarkiv.Hybris.Structure.callback().deliveryPackagePath;
-                    dataFolderPath = (dataFolderPath.indexOf("\\") > -1) ? "{0}\\{1}".format(dataFolderPath,settings.dataPathPostfix) : "{0}/{1}".format(dataFolderPath,settings.dataPathPostfix);
-                    Rigsarkiv.Hybris.Base.callback().metadata.forEach(table => {
-                        var fileName = settings.metadataFileName.format(table.fileName);
-                        var path = (dataFolderPath.indexOf("\\") > -1) ? "{0}\\{1}\\{2}".format(dataFolderPath,table.fileName,fileName) : "{0}/{1}/{2}".format(dataFolderPath,table.fileName,fileName);
-                        if(!UpdateFile(path,table.references)) { result = false; }
-                    });
-                    if(result) { settings.indexfilesTab.click(); }
+                settings.okBtn.addEventListener('click', function (event) {    
+                    if(settings.foreignVariableBox.value !== "" || settings.refVarBox.value !== "" || settings.referenceVariables.length > 0 || settings.foreignVariables > 0) {
+                        ipcRenderer.send('open-confirm-dialog','references-addkey',settings.addKeyWarningTitle.innerHTML,settings.addKeyWarningText.innerHTML,settings.okConfirm.innerHTML,settings.cancelConfirm.innerHTML);
+                    }
+                    else {
+                        Redirect();
+                    }
                 });
                 settings.cancelBtn.addEventListener('click', function (event) {
+                    settings.tableBox.value = "";
+                    settings.foreignTableBox.value = "";
                     Reset();
                     Rigsarkiv.Hybris.Base.callback().metadata.forEach(table => {
                         table.references = [];
@@ -217,12 +225,18 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                         settings.foreignVariablesTbl.hidden = false;
                         settings.foreignVariableBox.value = "";
                     }
+                });
+                ipcRenderer.on('confirm-dialog-selection-references-addkey', (event, index) => {
+                    if(index === 0) {
+                        Redirect();
+                    } 
+                    if(index === 1) { }            
                 });   
             }
 
             //Model interfaces functions
             Rigsarkiv.Hybris.References = { 
-                initialize: function (outputErrorId,okId,tablesId,tableBoxId,refVarsId,foreignTableBoxId,foreignVariablesId,addReferenceId,referenceReqId,refVarBoxId,foreignVariableBoxId,numberFirstReference,illegalCharReference,referenceLength,referenceReservedWord,foreignVariableId,referenceVariableId,referencesId,indexfilesTabId,addReferenceVariableId,referenceVariablesId,addForeignVariableId,foreignVariablesTable,cancelId) {
+                initialize: function (outputErrorId,okId,tablesId,tableBoxId,refVarsId,foreignTableBoxId,foreignVariablesId,addReferenceId,referenceReqId,refVarBoxId,foreignVariableBoxId,numberFirstReference,illegalCharReference,referenceLength,referenceReservedWord,foreignVariableId,referenceVariableId,referencesId,indexfilesTabId,addReferenceVariableId,referenceVariablesId,addForeignVariableId,foreignVariablesTable,cancelId,addKeyWarningId,okConfirmId,cancelConfirmId) {
                     settings.outputErrorSpn = document.getElementById(outputErrorId);
                     settings.outputErrorText = settings.outputErrorSpn.innerHTML;
                     settings.okBtn = document.getElementById(okId);
@@ -249,6 +263,10 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                     settings.addForeignVariableBtn = document.getElementById(addForeignVariableId);
                     settings.foreignVariablesTbl = document.getElementById(foreignVariablesTable);
                     settings.cancelBtn = document.getElementById(cancelId);
+                    settings.addKeyWarningTitle = document.getElementById(addKeyWarningId + "-Title");
+                    settings.addKeyWarningText = document.getElementById(addKeyWarningId + "-Text");
+                    settings.okConfirm = document.getElementById(okConfirmId);
+                    settings.cancelConfirm = document.getElementById(cancelConfirmId);
                     AddEvents();
                 },
                 callback: function () {
@@ -256,6 +274,12 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                         reset: function() 
                         { 
                             Reset();
+                        },
+                        updateFile: function(table)
+                        {
+                            var dataFolderPath = Rigsarkiv.Hybris.Structure.callback().deliveryPackagePath;
+                            dataFolderPath = (dataFolderPath.indexOf("\\") > -1) ? "{0}\\{1}".format(dataFolderPath,settings.dataPathPostfix) : "{0}/{1}".format(dataFolderPath,settings.dataPathPostfix);
+                            return UpdateFile(dataFolderPath,table);
                         } 
                     };
                 }
