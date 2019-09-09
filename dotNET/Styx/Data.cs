@@ -191,6 +191,7 @@ namespace Rigsarkiv.Styx
             if (column.TypeOriginal == "DECIMAL") { length = GetDecimalLength(column)[0]; }
             if (length > 0)
             {
+                if(length > 9) { length = 9; }
                 int newValue = ((int.Parse(Math.Pow(10, length).ToString()) - 1) * -1);
                 column.MissingValues.Where(v => regex.IsMatch(v.Key)).ToList().ForEach(value =>
                 {
