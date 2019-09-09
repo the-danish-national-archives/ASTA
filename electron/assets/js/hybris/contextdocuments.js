@@ -16,7 +16,6 @@ function (n) {
 
         //private data memebers
         var settings = {
-            structureCallback: null,
             printBtn: null,
             outputErrorSpn: null,
             outputErrorText: null,
@@ -68,9 +67,23 @@ function (n) {
             return result;
         }
 
+        // Update file control
+        var UpdatePath = function(upload)
+        {
+            var path = (settings.documentsPath.indexOf("\\") > -1) ? "{0}\\{1}".format(settings.documentsPath,upload.id) : "{0}/{1}".format(settings.documentsPath,upload.id);
+            if(fs.existsSync(path)) {
+                var files = fs.readdirSync(path);
+                if(files != null && files.length > 0) {
+                    upload.path = (settings.documentsPath.indexOf("\\") > -1) ? "{0}\\{1}".format(path,files[0]) : "{0}/{1}".format(path,files[0]);
+                    settings.hasSelected = true;
+                }
+            }
+        }
+
         // Render Documents control
         var RenderDocuments = function(data) {
             if(data != null && data.toString() != null && data.toString() !== "") {
+                EnsurePath();
                 var doc = new domParser.DOMParser().parseFromString(data.toString());
                 for(var i = 0; i < doc.documentElement.childNodes.length;i++) {
                     var node = doc.documentElement.childNodes[i];
@@ -88,7 +101,8 @@ function (n) {
                     }
                 }
                 settings.documents.forEach(upload => {
-                    $(settings.uploadsTbl).append("<tr><td>{0}</td><td>{1}</td><td><input type=\"text\" id=\"hybris-contextdocuments-document-{0}\" class=\"path\" text=\"{2}\" readonly=\"true\" placeholder=\"Vælg sti med knappen\"/><button id=\"hybris-contextdocuments-selectFile-{0}\">Browse</button></td></tr>".format(upload.id,upload.title,upload.path));
+                    if(Rigsarkiv.Hybris.Base.callback().mode === "Edit") { UpdatePath(upload); }
+                    $(settings.uploadsTbl).append("<tr><td>{0}</td><td>{1}</td><td><input type=\"text\" id=\"hybris-contextdocuments-document-{0}\" class=\"path\" value=\"{2}\" readonly=\"true\" placeholder=\"Vælg sti med knappen\"/><button class=\"docBtn\" id=\"hybris-contextdocuments-selectFile-{0}\">Browse</button></td></tr>".format(upload.id,upload.title,upload.path));
                     document.getElementById("hybris-contextdocuments-selectFile-{0}".format(upload.id)).addEventListener('click', (event) => {
                         ipcRenderer.send('contextdocuments-open-file-dialog',upload.id);
                     })
@@ -103,20 +117,40 @@ function (n) {
         var EnsureDocuments = function () {
             settings.documents.forEach(upload => {
                 if(upload.path !== "") {
+                    var enableCopy = true;
                     var folders = upload.path.getFolders();
                     var fileName = folders[folders.length - 1];
                     var fileExt = fileName.substring(fileName.indexOf(".") + 1);
                     var path = (settings.documentsPath.indexOf("\\") > -1) ? "{0}\\{1}\\1.{2}".format(settings.documentsPath,upload.id,fileExt) : "{0}/{1}/1.{2}".format(settings.documentsPath,upload.id,fileExt);
-                    console.logInfo(`copy file: ${fileName} to ${path}`,"Rigsarkiv.Hybris.ContextDocuments.EnsureDocuments");
-                    fs.copyFileSync(upload.path, path);
+                    if(Rigsarkiv.Hybris.Base.callback().mode === "Edit") {
+                        if(path === upload.path) { enableCopy = false; }
+                       if(enableCopy) {
+                            var folderPath = (settings.documentsPath.indexOf("\\") > -1) ? "{0}\\{1}".format(settings.documentsPath,upload.id) : "{0}/{1}".format(settings.documentsPath,upload.id);                        
+                            var files = fs.readdirSync(folderPath);
+                            if(files != null && files.length > 0) {
+                                console.logInfo(`delete file: ${files[0]} at ${folderPath}`,"Rigsarkiv.Hybris.ContextDocuments.EnsureDocuments");
+                                var filePath = (settings.documentsPath.indexOf("\\") > -1) ? "{0}\\{1}".format(folderPath,files[0]) : "{0}/{1}".format(folderPath,files[0]);
+                                fs.unlinkSync(filePath); 
+                            }
+                        }
+                    } 
+                    if(enableCopy) {
+                        console.logInfo(`copy file: ${fileName} to ${path}`,"Rigsarkiv.Hybris.ContextDocuments.EnsureDocuments");
+                        fs.copyFileSync(upload.path, path);
+                    }                    
                 }
             });
         }
 
+        //ensure documents path
+        var EnsurePath = function() {
+            var destPath = Rigsarkiv.Hybris.Structure.callback().deliveryPackagePath;
+            settings.documentsPath = (destPath.indexOf("\\") > -1) ? "{0}\\{1}\\{2}".format(destPath,settings.contextDocumentationFolder,settings.docCollectionFolderName) : "{0}/{1}/{2}".format(destPath,settings.contextDocumentationFolder,settings.docCollectionFolderName);
+        }
+
         //Ensure documents folder Structure 
         var EnsureStructure = function () {
-            var destPath = settings.structureCallback().deliveryPackagePath;
-            settings.documentsPath = (destPath.indexOf("\\") > -1) ? "{0}\\{1}\\{2}".format(destPath,settings.contextDocumentationFolder,settings.docCollectionFolderName) : "{0}/{1}/{2}".format(destPath,settings.contextDocumentationFolder,settings.docCollectionFolderName);
+            EnsurePath();
             if(!fs.existsSync(settings.documentsPath)) {
                 console.logInfo(`Create documents Path: ${settings.filePath}`,"Rigsarkiv.Hybris.ContextDocuments.EnsureStructure");
                 fs.mkdirSync(settings.documentsPath, { recursive: true });
@@ -134,7 +168,7 @@ function (n) {
         //commit print data
         var EnsureData = function() {
             var data = fs.readFileSync(settings.filePath);        
-            var folders = settings.structureCallback().deliveryPackagePath.getFolders();
+            var folders = Rigsarkiv.Hybris.Structure.callback().deliveryPackagePath.getFolders();
             var folderName = folders[folders.length - 1];
             var updatedData = data.toString().format(folderName,settings.logs.join("\r\n"));
             fs.writeFileSync(settings.filePath, updatedData);                         
@@ -190,8 +224,8 @@ function (n) {
                         UpdateSpinner("");                    
                         //ipcRenderer.send('open-information-dialog',settings.outputOkInformationTitle.innerHTML,settings.outputOkInformationText.innerHTML);
                     }
-                    settings.selectDeliveryPackage.innerHTML = "[{0}]".format(settings.structureCallback().deliveryPackagePath);
-                    var folders = settings.structureCallback().deliveryPackagePath.getFolders();
+                    settings.selectDeliveryPackage.innerHTML = "[{0}]".format(Rigsarkiv.Hybris.Structure.callback().deliveryPackagePath);
+                    var folders = Rigsarkiv.Hybris.Structure.callback().deliveryPackagePath.getFolders();
                     var folderName = folders[folders.length - 1];
                     settings.validateBtn.innerText = settings.validateBtnText.format(folderName);
                     settings.overviewTab.click();
@@ -199,15 +233,15 @@ function (n) {
             });
             ipcRenderer.on('confirm-dialog-selection-contextdocuments', (event, index) => {
                 if(index === 0) {
-                    settings.selectDeliveryPackage.innerHTML = "[{0}]".format(settings.structureCallback().deliveryPackagePath);
-                    var folders = settings.structureCallback().deliveryPackagePath.getFolders();
+                    settings.selectDeliveryPackage.innerHTML = "[{0}]".format(Rigsarkiv.Hybris.Structure.callback().deliveryPackagePath);
+                    var folders = Rigsarkiv.Hybris.Structure.callback().deliveryPackagePath.getFolders();
                     var folderName = folders[folders.length - 1]; 
                     settings.validateBtn.innerText = settings.validateBtnText.format(folderName);
                     settings.overviewTab.click();
                 }            
             });
             settings.printBtn.addEventListener('click', function (event) {
-                settings.filePath = settings.filePostfix.format(settings.structureCallback().deliveryPackagePath);
+                settings.filePath = settings.filePostfix.format(Rigsarkiv.Hybris.Structure.callback().deliveryPackagePath);
                 settings.documents.forEach(upload => {
                     settings.logs.push("<tr><td>{0}</td><td>{1}</td><td>{2}</td></tr>".format(upload.id,upload.title,upload.path));
                 });
@@ -225,8 +259,7 @@ function (n) {
         
         //Model interfaces functions
         Rigsarkiv.Hybris.ContextDocuments = {
-            initialize: function (structureCallback,outputErrorId,uploadsId,printId,outputEmptyFileId,nextId,overviewTabId,outputOkInformationPrefixId,spinnerId,selectDeliveryPackageId,outputOkConfirmId,outputCancelConfirmId,outputNextConfirmId,validateId) {
-                settings.structureCallback = structureCallback;
+            initialize: function (outputErrorId,uploadsId,printId,outputEmptyFileId,nextId,overviewTabId,outputOkInformationPrefixId,spinnerId,selectDeliveryPackageId,outputOkConfirmId,outputCancelConfirmId,outputNextConfirmId,validateId) {
                 settings.outputErrorSpn =  document.getElementById(outputErrorId);
                 settings.outputErrorText = settings.outputErrorSpn.innerHTML;
                 settings.uploadsTbl = document.getElementById(uploadsId);
@@ -251,6 +284,9 @@ function (n) {
             },
             callback: function () {
                 return {
+                    reset: function()  {
+                        Reset();
+                    },
                     load: function(data) {
                         try {
                             Reset();

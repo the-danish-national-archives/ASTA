@@ -11,7 +11,8 @@ RELEASES
 /electron/release-builds/file-converter-app-darwin-x64
 /electron/release-builds/file-converter-admin-app-win32-ia32
 /electron/release-builds/file-converter-admin-app-darwin-x64
-#/release-builds/windows-installer
+#/release-builds/windows-installer - included this once the program is out of development (use tagging in GitHub instead of pushing .exe files)
+#/release-builds/windows-installer-admin - included this once the program is out of development (use tagging in GitHub instead of pushing .exe files)
 
 
 #Include specific files
