@@ -60,9 +60,6 @@ electron/assets/scripts/Athena.exe.config
 /dotNET/Asta/bin
 /dotNET/Asta/obj
 /electron/assets/scripts/Asta.pdb
-<<<<<<< HEAD
 /electron/assets/scripts/styx.log
-=======
 /electron/release-builds/asta-app-win32-ia32
 /electron/release-builds/asta-extended-app-win32-ia32
->>>>>>> fd7a40912c568cbba2522f94bc96a056ffe7647d
