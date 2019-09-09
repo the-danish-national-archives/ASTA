@@ -35,9 +35,17 @@ window.navigation = window.navigation || {},
             setMenuOnClickEvent: function () {
                 document.body.addEventListener('click', function (event) {
                     if (event.target.dataset.section) {
+                        if(event.target.id === "hybris-edit-menu") {
+                            Rigsarkiv.Hybris.Base.callback().setMode("Edit");
+                            Rigsarkiv.Hybris.Structure.callback().reset();
+                        }
+                        if(event.target.id === "hybris-new-menu") {
+                            Rigsarkiv.Hybris.Base.callback().setMode("New");
+                            Rigsarkiv.Hybris.Structure.callback().reset();
+                        }
                         $('#side-menu').find('.selected').removeClass('selected');
-                        navigation.menu.hideAllSections()
-                        navigation.menu.showSection(event)
+                        navigation.menu.hideAllSections();
+                        navigation.menu.showSection(event);
                     }
                 })
             },

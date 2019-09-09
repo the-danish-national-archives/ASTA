@@ -22,7 +22,6 @@ function (n) {
 
         //private data memebers
         var settings = {
-            structureCallback: null,
             scriptType: null,
             scriptApplication: null,
             scriptFileName: null,
@@ -69,7 +68,7 @@ function (n) {
             variablesDropdown: null,   
             scriptPath: "./assets/scripts/{0}",
             resourceWinPath: "resources\\{0}",
-            scripts: ["spss_script.sps","sas_uden_katalog_script.sas","sas_med_katalog_script.sas","stata_script.do"],
+            scripts: ["spss_script.sps","sas_without_catalog_script.sas","sas_with_catalog_script.sas","stata_script.do"],
             outputPostfixFiles: ["{0}.csv","{0}_VARIABEL.txt","{0}_VARIABELBESKRIVELSE.txt"],
             outputOptionalPostfixFiles: ["{0}_KODELISTE.txt","{0}_BRUGERKODE.txt"],
             sasCatalogFileExt: "{0}.sas7bcat",
@@ -138,12 +137,7 @@ function (n) {
                     filePath += (filePath.indexOf("\\") > -1) ? "\\{0}".format(GetScriptFileName()) : "/{0}".format(GetScriptFileName());
                     var fileName = GetFileName();  
                     var datafolderPath = settings.dataFolderPath;
-                    if(settings.scriptType === "SAS" || settings.scriptType === "Stata") 
-                    { 
-                        datafolderPath = (datafolderPath.indexOf("\\") > -1) ? "{0}\\".format(datafolderPath) : "{0}/".format(datafolderPath);
-                        if(settings.scriptType !== "Stata") { folderPath = (folderPath.indexOf("\\") > -1) ? "{0}\\".format(folderPath) : "{0}/".format(folderPath); }
-                    }
-                    var updatedData = data.toString().format(folderPath,datafolderPath,fileName.substring(0,fileName.indexOf(".")),GetSlash());
+                    var updatedData = data.toString().format(GetSlash(),folderPath,fileName.substring(0,fileName.indexOf(".")),datafolderPath);
                     console.logInfo(`Update script file ${filePath}`,"Rigsarkiv.Hybris.DataExtraction.UpdateScript");
                     fs.writeFile(filePath, updatedData, (err) => {
                         if (err) {
@@ -262,7 +256,7 @@ function (n) {
 
         //create data tables folder structures
         var EnsureData = function() {
-            settings.dataFolderPath = settings.structureCallback().deliveryPackagePath;
+            settings.dataFolderPath = Rigsarkiv.Hybris.Structure.callback().deliveryPackagePath;
             settings.dataFolderPath += (settings.dataFolderPath.indexOf("\\") > -1) ? "\\{0}".format(settings.dataPathPostfix) : "/{0}".format(settings.dataPathPostfix);
             fs.readdir(settings.dataFolderPath, (err, files) => {
                 if (err) {
@@ -444,7 +438,7 @@ function (n) {
                 if(settings.pathStatisticsFileTxt.value === "") {
                     ipcRenderer.send('open-error-dialog',settings.outputStatisticsRequiredPathTitle.innerHTML,settings.outputStatisticsRequiredPathText.innerHTML);
                 }
-                if(settings.pathStatisticsFileTxt.value !== "" && settings.structureCallback != null && settings.structureCallback().deliveryPackagePath != null) {
+                if(settings.pathStatisticsFileTxt.value !== "" && Rigsarkiv.Hybris.Structure.callback().deliveryPackagePath != null) {
                     EnsureData();
                 }                     
             })
@@ -475,8 +469,7 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Hybris.DataExtraction = {        
-            initialize: function (structureCallback,selectStatisticsFileId,pathStatisticsFileId,okStatisticsId,outputStatisticsErrorId,outputStatisticsOkCopyScriptId,outputStatisticsSASWarningPrefixId,scriptPanel1Id,scriptPanel2Id,okScriptBtnId,okScriptDataPathId,outputStatisticsOkCopyScriptInfoId,outputStatisticsRequiredPathId,outputScriptRequiredFilesWarningPrefixId,outputScriptOkId,outputScriptEncodingFileErrorPrefixId,nextId,metdataTabId,outputScriptCloseApplicationWarningPrefixId,outputStructureOkId,selectStructureDeliveryPackageId,metadataFileName,spinnerId,outputScriptPath,outputHeaderLinkTrin2,outputHeaderLinkTrin3,outputHeaderLinkInformation2,outputOkConfirmId,outputCancelConfirmId,outputStatisticsSASPopupId,variablesId) {
-                settings.structureCallback = structureCallback;
+            initialize: function (selectStatisticsFileId,pathStatisticsFileId,okStatisticsId,outputStatisticsErrorId,outputStatisticsOkCopyScriptId,outputStatisticsSASWarningPrefixId,scriptPanel1Id,scriptPanel2Id,okScriptBtnId,okScriptDataPathId,outputStatisticsOkCopyScriptInfoId,outputStatisticsRequiredPathId,outputScriptRequiredFilesWarningPrefixId,outputScriptOkId,outputScriptEncodingFileErrorPrefixId,nextId,metdataTabId,outputScriptCloseApplicationWarningPrefixId,outputStructureOkId,selectStructureDeliveryPackageId,metadataFileName,spinnerId,outputScriptPath,outputHeaderLinkTrin2,outputHeaderLinkTrin3,outputHeaderLinkInformation2,outputOkConfirmId,outputCancelConfirmId,outputStatisticsSASPopupId,variablesId) {
                 settings.selectStatisticsFileBtn = document.getElementById(selectStatisticsFileId);
                 settings.pathStatisticsFileTxt = document.getElementById(pathStatisticsFileId);
                 settings.okStatisticsBtn = document.getElementById(okStatisticsId);
@@ -522,7 +515,6 @@ function (n) {
             },
             callback: function () {
                 return { 
-                    structureCallback: settings.structureCallback(),
                     dataFolderPath: settings.dataFolderPath, 
                     selectedStatisticsFilePath: settings.selectedStatisticsFilePath != null ? settings.selectedStatisticsFilePath[0] : null, 
                     scriptType: settings.scriptType, 

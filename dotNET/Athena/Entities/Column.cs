@@ -17,6 +17,8 @@ namespace Rigsarkiv.Athena.Entities
         public string Type { get; set; }
         public string TypeOriginal { get; set; }
         public bool Nullable { get; set; }
+        public bool HasSpecialNumeric { get; set; }
+        public bool HasMissingValues { get; set; }
         public string RegExp { get; set; }
         public bool Modified { get; set; }
         public int Differences { get; set; }

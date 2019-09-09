@@ -14,12 +14,12 @@ function getInstallerConfig () {
   const outPath = path.join(rootPath, 'release-builds')
 
   return Promise.resolve({
-    appDirectory: path.join(outPath, 'file-converter-app-win32-ia32/'),
+    appDirectory: path.join(outPath, 'asta-app-win32-ia32/'),
     authors: 'ProActive',
     noMsi: true,
     outputDirectory: path.join(outPath, 'windows-installer'),
-    exe: 'file-converter-app.exe',
-    setupExe: 'FileConverter.exe',
+    exe: 'asta-app.exe',
+    setupExe: 'Asta.exe',
     setupIcon: path.join(rootPath, 'assets', 'icons', 'win', 'SA_Krone_App.ico')
   })
 }

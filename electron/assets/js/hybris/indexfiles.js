@@ -12,8 +12,6 @@ function (n) {
 
         //private data memebers
         var settings = { 
-            structureCallback: null,
-            contextDocumentsCallback: null,
             selectArchiveIndexFileBtn: null,
             pathArchiveIndexFileTxt: null,
             selectedArchiveIndexFilePath: null,
@@ -42,51 +40,45 @@ function (n) {
         var Reset = function () {
             settings.outputErrorSpn.hidden = true;
             settings.outputOkSpn.hidden = true;
-            settings.selectDeliveryPackage.hidden = true;
+            settings.selectDeliveryPackage.hidden = true;            
         }
 
         //get selcted file name
         var GetFileName = function(selectedPath) {
-            var filePath = selectedPath[0];
+            var filePath = selectedPath;
             var folders = filePath.getFolders();
             return folders[folders.length - 1];
         }
 
-        //upload Indeces files 
-        var EnsureFiles= function () {
-            settings.IndecesPath = settings.structureCallback().deliveryPackagePath;
-            settings.IndecesPath += (settings.IndecesPath.indexOf("\\") > -1) ? "\\{0}".format(settings.IndecesPostfix) : "/{0}".format(settings.IndecesPostfix);
-            var fileName = GetFileName(settings.selectedArchiveIndexFilePath);
-            console.logInfo("copy file " + fileName + " to  " + settings.IndecesPath,"Rigsarkiv.Hybris.IndexFiles.EnsureFiles");
-            var destFilePath = settings.IndecesPath;
-            destFilePath += (destFilePath.indexOf("\\") > -1) ? "\\{0}".format(fileName) : "/{0}".format(fileName);
-            fs.copyFile(settings.selectedArchiveIndexFilePath[0],destFilePath, (err) => {
-                if (err) {
-                    err.Handle(settings.outputErrorSpn,settings.outputErrorText,"Rigsarkiv.Hybris.IndexFiles.EnsureFiles");
-                }
-                else {                   
-                    var fileName = GetFileName(settings.selectedContextDocumentationIndexFilePath);
-                    console.logInfo("copy file " + fileName + " to  " + settings.IndecesPath,"Rigsarkiv.Hybris.IndexFiles.EnsureFiles");
-                    var destFilePath = settings.IndecesPath;
-                    destFilePath += (destFilePath.indexOf("\\") > -1) ? "\\{0}".format(fileName) : "/{0}".format(fileName);
-                    fs.copyFile(settings.selectedContextDocumentationIndexFilePath[0], "{0}/{1}".format(settings.IndecesPath,fileName), (err) => {
-                        if (err) {
-                            err.Handle(settings.outputErrorSpn,settings.outputErrorText,"Rigsarkiv.Hybris.IndexFiles.EnsureFiles");
-                        }
-                        else {
-                            settings.outputOkSpn.hidden = false;
-                            var selectedArchiveIndexFileName = GetFileName(settings.selectedArchiveIndexFilePath);
-                            var selectedContextDocumentationIndexFileName = GetFileName(settings.selectedContextDocumentationIndexFilePath);
-                            settings.outputOkSpn.innerHTML =  settings.outputOkText.format(selectedArchiveIndexFileName,selectedContextDocumentationIndexFileName);
-                            settings.selectDeliveryPackage.innerHTML = "[{0}]".format(settings.IndecesPath);
-                            var filePath = (settings.IndecesPath.indexOf("\\") > -1) ? "{0}\\{1}".format(settings.IndecesPath,selectedContextDocumentationIndexFileName) : "{0}/{1}".format(settings.IndecesPath,selectedContextDocumentationIndexFileName);
-                            settings.contextDocumentsCallback().load(fs.readFileSync(filePath));
-                            //ipcRenderer.send('open-information-dialog',settings.outputOkInformationTitle.innerHTML,settings.outputOkInformationText.innerHTML);
-                            settings.contextDocumentsTab.click();
-                        }
-                    });
-                }
-            });
+        //redirect
+        var NextTab = function() {
+            settings.outputOkSpn.hidden = false;
+            var selectedArchiveIndexFileName = GetFileName(settings.selectedArchiveIndexFilePath);
+            var selectedContextDocumentationIndexFileName = GetFileName(settings.selectedContextDocumentationIndexFilePath);
+            settings.outputOkSpn.innerHTML =  settings.outputOkText.format(selectedArchiveIndexFileName,selectedContextDocumentationIndexFileName);
+            settings.selectDeliveryPackage.innerHTML = "[{0}]".format(settings.IndecesPath);
+            var filePath = (settings.IndecesPath.indexOf("\\") > -1) ? "{0}\\{1}".format(settings.IndecesPath,selectedContextDocumentationIndexFileName) : "{0}/{1}".format(settings.IndecesPath,selectedContextDocumentationIndexFileName);
+            Rigsarkiv.Hybris.ContextDocuments.callback().load(fs.readFileSync(filePath));
+            //ipcRenderer.send('open-information-dialog',settings.outputOkInformationTitle.innerHTML,settings.outputOkInformationText.innerHTML);
+            settings.contextDocumentsTab.click();
+        }
+
+        //upload Indeces file 
+        var EnsureFile = function (filePath) {
+            var result = true;
+            try 
+            {
+                var fileName = GetFileName(filePath);
+                console.logInfo("copy file " + fileName + " to  " + settings.IndecesPath,"Rigsarkiv.Hybris.IndexFiles.EnsureFile");
+                var destFilePath = settings.IndecesPath;
+                destFilePath += (destFilePath.indexOf("\\") > -1) ? "\\{0}".format(fileName) : "/{0}".format(fileName);
+                fs.copyFileSync(filePath,destFilePath);    
+            }
+            catch(err) {
+                result = false;
+                err.Handle(settings.outputErrorSpn,settings.outputErrorText,"Rigsarkiv.Hybris.IndexFiles.EnsureFile");
+            }
+            return result;
         }
 
         //add Event Listener to HTML elmenets
@@ -95,7 +87,7 @@ function (n) {
                 ipcRenderer.send('indexfiles-open-archiveindex-file-dialog');
             })
             ipcRenderer.on('indexfiles-selected-archiveindex-file', (event, path) => {
-                settings.selectedArchiveIndexFilePath = path; 
+                settings.selectedArchiveIndexFilePath = path[0]; 
                 console.logInfo(`selected ArchiveIndex path: ${path}`,"Rigsarkiv.Hybris.IndexFiles.AddEvents"); 
                 settings.pathArchiveIndexFileTxt.value = settings.selectedArchiveIndexFilePath;            
             })
@@ -103,7 +95,7 @@ function (n) {
                 ipcRenderer.send('indexfiles-open-contextdocumentationindex-file-dialog');
             })
             ipcRenderer.on('indexfiles-selected-contextdocumentationindex-file', (event, path) => {
-                settings.selectedContextDocumentationIndexFilePath = path; 
+                settings.selectedContextDocumentationIndexFilePath = path[0]; 
                 console.logInfo(`selected ContextDocumentationIndex path: ${path}`,"Rigsarkiv.Hybris.IndexFiles.AddEvents"); 
                 settings.pathContextDocumentationIndexFileTxt.value = settings.selectedContextDocumentationIndexFilePath;            
             })
@@ -114,7 +106,19 @@ function (n) {
                 }
                 if(settings.selectedArchiveIndexFilePath != null && settings.selectedContextDocumentationIndexFilePath != null && settings.pathArchiveIndexFileTxt.value !== "" && settings.pathContextDocumentationIndexFileTxt.value !== "") { 
                     if(GetFileName(settings.selectedArchiveIndexFilePath) === settings.defaultIndicesFiles[0] && GetFileName(settings.selectedContextDocumentationIndexFilePath) === settings.defaultIndicesFiles[1]) {
-                        EnsureFiles(); 
+                        var redirect = true;
+                        settings.IndecesPath = Rigsarkiv.Hybris.Structure.callback().deliveryPackagePath;
+                        settings.IndecesPath += (settings.IndecesPath.indexOf("\\") > -1) ? "\\{0}".format(settings.IndecesPostfix) : "/{0}".format(settings.IndecesPostfix);            
+                        if(Rigsarkiv.Hybris.Base.callback().mode === "Edit") {
+                            var archiveIndexPath = (settings.IndecesPath.indexOf("\\") > -1) ? "{0}\\{1}".format(settings.IndecesPath,settings.defaultIndicesFiles[0]) : "{0}/{1}".format(settings.IndecesPath,settings.defaultIndicesFiles[0]);
+                            var contextDocumentationIndexPath = (settings.IndecesPath.indexOf("\\") > -1) ? "{0}\\{1}".format(settings.IndecesPath,settings.defaultIndicesFiles[1]) : "{0}/{1}".format(settings.IndecesPath,settings.defaultIndicesFiles[1]);
+                            if(settings.selectedArchiveIndexFilePath !== archiveIndexPath) { redirect = EnsureFile(settings.selectedArchiveIndexFilePath); }
+                            if(settings.selectedContextDocumentationIndexFilePath !== contextDocumentationIndexPath && redirect) { redirect = EnsureFile(settings.selectedContextDocumentationIndexFilePath); }
+                        }
+                        else {
+                            redirect = (EnsureFile(settings.selectedArchiveIndexFilePath) && EnsureFile(settings.selectedContextDocumentationIndexFilePath));
+                        }
+                        if(redirect) { NextTab(); }
                     }
                     else {
                         ipcRenderer.send('open-error-dialog',settings.outputWrongFileNameTitle.innerHTML,settings.outputWrongFileNameText.innerHTML);    
@@ -128,11 +132,9 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Hybris.IndexFiles = {
-            initialize: function (structureCallback,contextDocumentsCallback,selectArchiveIndexFileId,pathSArchiveIndexFileId,selectContextDocumentationIndexFileId,pathContextDocumentationIndexFileId,indexFilesOkBtn,outputErrorId,outputRequiredPathId,outputOkId,selectDeliveryPackageId,outputOkInformationPrefixId,contextDocumentsTabId,outputWrongFileNameId) {
-                settings.structureCallback = structureCallback;
-                settings.contextDocumentsCallback = contextDocumentsCallback;
+            initialize: function (selectArchiveIndexFileId,pathArchiveIndexFileId,selectContextDocumentationIndexFileId,pathContextDocumentationIndexFileId,indexFilesOkBtn,outputErrorId,outputRequiredPathId,outputOkId,selectDeliveryPackageId,outputOkInformationPrefixId,contextDocumentsTabId,outputWrongFileNameId) {
                 settings.selectArchiveIndexFileBtn = document.getElementById(selectArchiveIndexFileId);
-                settings.pathArchiveIndexFileTxt = document.getElementById(pathSArchiveIndexFileId);
+                settings.pathArchiveIndexFileTxt = document.getElementById(pathArchiveIndexFileId);
                 settings.selectContextDocumentationIndexFileBtn = document.getElementById(selectContextDocumentationIndexFileId);
                 settings.pathContextDocumentationIndexFileTxt = document.getElementById(pathContextDocumentationIndexFileId);
                 settings.okBtn = document.getElementById(indexFilesOkBtn);
@@ -149,7 +151,24 @@ function (n) {
                 settings.outputWrongFileNameTitle = document.getElementById(outputWrongFileNameId + "-Title");
                 settings.outputWrongFileNameText = document.getElementById(outputWrongFileNameId + "-Text");
                 AddEvents();
+            },
+            callback: function () {
+                return {
+                    reset: function()  {
+                        Reset();
+                        settings.selectedArchiveIndexFilePath = null;
+                        settings.selectedContextDocumentationIndexFilePath = null;
+                        settings.pathArchiveIndexFileTxt.value = "";
+                        settings.pathContextDocumentationIndexFileTxt.value = "";
+                    },
+                    load: function(pathArchiveIndexFile,pathContextDocumentationIndexFile) {
+                        settings.selectedArchiveIndexFilePath = pathArchiveIndexFile;
+                        settings.selectedContextDocumentationIndexFilePath = pathContextDocumentationIndexFile;
+                        settings.pathArchiveIndexFileTxt.value = settings.selectedArchiveIndexFilePath;
+                        settings.pathContextDocumentationIndexFileTxt.value = settings.selectedContextDocumentationIndexFilePath;
+                    }
+                }
             }
-        }
+        }        
     }(jQuery);
 }(jQuery);

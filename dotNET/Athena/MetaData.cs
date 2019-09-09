@@ -160,7 +160,7 @@ namespace Rigsarkiv.Athena
             var columnId = string.Format(ColumnIDPrefix, index);
             var columnTypeOriginal = variableInfo["format"].ToString();
             var appliedRegExp = GetRegExp(variableInfo);
-            var column = new Column() { Name = columnName, Id = columnId, Description = columnDescription, Type = columnType, TypeOriginal = columnTypeOriginal, Nullable = (bool)variableInfo["nullable"], RegExp = appliedRegExp, Differences = 0, Errors = 0, ErrorsRows = new List<int>() };
+            var column = new Column() { Name = columnName, Id = columnId, Description = columnDescription, Type = columnType, TypeOriginal = columnTypeOriginal, Nullable = (bool)variableInfo["nullable"], HasSpecialNumeric = false, HasMissingValues = false, RegExp = appliedRegExp, Differences = 0, Errors = 0, ErrorsRows = new List<int>() };
             var columnNode = new XElement(_tableIndexXNS + "column",
                  new XElement(_tableIndexXNS + "name", columnName),
                  new XElement(_tableIndexXNS + "columnID", columnId),
@@ -208,8 +208,8 @@ namespace Rigsarkiv.Athena
 
             var options = (object[])variableInfo["options"];
             var codeList = new Table() { Name = refTableName, Folder = folder, Rows = options.Length, Errors = 0, RowsCounter = 0, Options= new List<string[]>(), ErrorsRows = new Dictionary<string, Row>() };
-            codeList.Columns = new List<Column>() { (new Column() { Name = Code, Id = C1, Description = "Kode", Type = column.Type, TypeOriginal = "", Differences = 0, Errors = 0, ErrorsRows = new List<int>() }), (new Column() { Name = CodeValue, Id = C2, Description = "Kodeværdi", Type = "", TypeOriginal = "", Differences = 0, Errors = 0, ErrorsRows = new List<int>() }) };
-            var optionsType = ParseOptions(options, researchIndexNode, codeList, folder, column);
+            codeList.Columns = new List<Column>() { (new Column() { Name = Code, Id = C1, Description = "Kode", Type = column.Type, TypeOriginal = "", HasSpecialNumeric = false, HasMissingValues = false, Differences = 0, Errors = 0, ErrorsRows = new List<int>() }), (new Column() { Name = CodeValue, Id = C2, Description = "Kodeværdi", Type = "", TypeOriginal = "", HasSpecialNumeric = false, HasMissingValues = false, Differences = 0, Errors = 0, ErrorsRows = new List<int>() }) };
+            var optionsType = ParseOptions(options, tableNode, researchIndexNode, codeList, folder, column);
             var columnNode1 = new XElement(_tableIndexXNS + "column", new XElement(_tableIndexXNS + "name", Code),new XElement(_tableIndexXNS + "columnID", C1),new XElement(_tableIndexXNS + "type", column.Type),new XElement(_tableIndexXNS + "typeOriginal"),new XElement(_tableIndexXNS + "nullable", "false"), new XElement(_tableIndexXNS + "description", "Kode"));
             var columnNode2 = new XElement(_tableIndexXNS + "column", new XElement(_tableIndexXNS + "name", CodeValue), new XElement(_tableIndexXNS + "columnID", C2), new XElement(_tableIndexXNS + "type", optionsType), new XElement(_tableIndexXNS + "typeOriginal"), new XElement(_tableIndexXNS + "nullable", "false"), new XElement(_tableIndexXNS + "description", "Kodeværdi"));
             var refTableNode = new XElement(_tableIndexXNS + "table",
@@ -224,11 +224,12 @@ namespace Rigsarkiv.Athena
             table.CodeList.Add(codeList);
             foreach(var pair in codeList.Options)
             {
-                if (HasSpecialNumeric(column, pair[0])) { HandleSpecialNumeric(column, tableNode, researchIndexNode, pair[0], true); }
+                if (RequiredSpecialNumeric(column, pair[0])) { EnableSpecialNumeric(column, tableNode, researchIndexNode); }
+                if (column.HasSpecialNumeric && GetRegex(SpecialNumericPattern).IsMatch(pair[0])) { AddMissingColumnNode(pair[0], researchIndexNode, column.Id); }
             }
         }
         
-        private string ParseOptions(object[] options, XElement researchIndexNode, Table codeList, string folder, Column column)
+        private string ParseOptions(object[] options, XElement tableNode, XElement researchIndexNode, Table codeList, string folder, Column column)
         {
             var result = 0;
             var codeListColumn = codeList.Columns[0];
@@ -241,8 +242,14 @@ namespace Rigsarkiv.Athena
                 var description = code["description"].ToString();
                 codeList.Options.Add(new string[2] { value, description });
                 if (description.Length > result) { result = description.Length; }
-                if((bool)code["isMissing"]) { AddMissingColumnNode(value, researchIndexNode, column.Id); }                
-            }         
+                if((bool)code["isMissing"]) {
+                    if (!column.HasMissingValues) {
+                        AddSpecialNumeric(column, researchIndexNode);
+                        column.HasMissingValues = true;
+                    }                    
+                    AddMissingColumnNode(value, researchIndexNode, column.Id);
+                }                
+            }            
             return string.Format(VarCharPrefix, result);
         }        
 

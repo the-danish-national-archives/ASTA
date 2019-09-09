@@ -40,13 +40,17 @@ button:disabled {
     background-color: #665c5c;
 }
 
+.docBtn{
+    margin-left: 5px;
+}
+
 input[type=text] {
     border: solid 0.5px #b2b2b2;
     height: 27px;
     padding-left:5px;
     font-family: SourceSansPro;
     margin-bottom: 5px;
-    width: 30%
+    width: 49%
 }
 
 /* Override the size of the input boxes in nemesis as the general layout of that is more packed. */
@@ -58,13 +62,23 @@ input[type=text] {
     width: 75%;
 }
 
+#keyVarContainer {
+    text-align: right;
+    width: 60%;
+}
+
+#referenceContainer {
+    width: 60%;
+}
+
 textarea {
     border: solid 0.5px #b2b2b2;
-    padding-left:0px;
+    padding-right:0px;
     font-family: SourceSansPro;
     margin-bottom: 5px;
     padding-left: 5px;
-    width: 30%;
+    width: 49%;
+    float: inline-end;
 }
 
 .path {
@@ -102,6 +116,8 @@ i {
     border: solid 0.5px #faebcc; 
     color: #8a6d3b;
     padding: 10px;
+    display: block;
+    width: fit-content;
 }
 
 .confirmation {
@@ -166,9 +182,19 @@ h2.subHeader {
 .tdRightContent {
     width: 40%
 }
-
-
 /* Welcome (Start) page END */
+
+/* References */
+#hybris-references-addReferenceVariableBtn, #hybris-references-addForeignVariableBtn, #hybris-references-addReferenceBtn{
+    float: right;
+    margin-right: 32px;
+}
+
+#hybris-references-referenceVariablesTable, #hybris-references-foreignVariablesTable {
+    margin-left: 71.9%;
+}
+
+/* References END */
 
 /* Table */
 
@@ -186,16 +212,43 @@ td {
 td .path {
     width: 76% !important;
 }
+/* hybris-contextdocuments-uploads */
+#hybris-contextdocuments-uploads {
+    width: 100%;
+}
+
+#hybris-contextdocuments-uploads tr td:nth-child(1) {
+    width: 10%;
+}
+
+#hybris-contextdocuments-uploads tr td:nth-child(2) {
+    width: 10%;
+}
 
 #hybris-contextdocuments-uploads tr td:nth-child(3) {
     text-align: center;
-    width: 400px;
+    width: 80%;
 }
+
+#hybris-contextdocuments-uploads td .path{
+    width: 85% !important;
+}
+
+/* hybris-contextdocuments-uploads END*/
 
 table {
     border-collapse: collapse;
     margin-bottom: 6px;
     margin-top:6px;
+}
+
+/* Specific for the Nøglevariable table */
+.right-align {
+    margin-left: auto;
+    margin-right: 28px;
+}
+#hybris-metdata-addVarKeyBtn {
+    margin-right: 25px !important;
 }
 
 /* Table END */
@@ -322,10 +375,11 @@ a.selected:hover {
 /* Label elements */
 
 .descriptionLabel {
-    margin-right: 20px;
+    margin-right: 10%;
     width: 200px;
     display: inline-block;
     vertical-align: top;
+    text-align: left;
 }
 
 /* Label elements END */
@@ -340,6 +394,7 @@ a.selected:hover {
 
 .nemesisControls {
     width: 40%;
+    overflow-wrap: break-word;
 }
 
 .nemesisOutput {

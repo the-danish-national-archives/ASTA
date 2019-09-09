@@ -1,29 +1,31 @@
 ﻿*/
-Version: 2,0
+Version: 6,0
 Encoding: UTF-8 with byte order mark
 Note: The working directory must contain the data file (sav)
 */
 
 * Set the working directory and data file name.
+file handle astaDir
+/name '{3}'.
 file handle dataDir
-/name '{0}'.
-file handle outDir
 /name '{1}'.
 file handle inputSpss
-/name 'dataDir{3}{2}.sav'.
+/name 'dataDir{0}{2}.sav'.
+file handle OutputSpss
+/name 'dataDir{0}{2}_output.sav'.
 
 * Set options.
 set unicode on decimal dot olang=english.
 
 * Escape reserved xml characters.
-define !clean(var=!tokens(1))
-compute !var=ltrim(rtrim(!var)).
-compute !var=replace(!var, '&', '&amp;').
-compute !var=replace(!var, '<', '<').
-compute !var=replace(!var, '>', '>').
-compute !var=replace(!var, "'", '&apos;').
-compute !var=replace(!var, '"', '&quot;').
-!enddefine.
+*define !clean(var=!tokens(1))
+*compute !var=ltrim(rtrim(!var)).
+*compute !var=replace(!var, '&', '&amp;').
+*compute !var=replace(!var, '<', '<').
+*compute !var=replace(!var, '>', '>').
+*compute !var=replace(!var, "'", '&apos;').
+*compute !var=replace(!var, '"', '&quot;').
+*!enddefine.
 
 * Create dictionary file.
 define !dictionary(subtype=!tokens(1))
@@ -31,7 +33,7 @@ get file 'inputSpss'.
 oms
 /select tables
 /if subtypes=[!subtype]
-/destination format=sav outfile='dataDir{3}dictionary.sav' viewer=no.
+/destination format=sav outfile='dataDir{0}dictionary.sav' viewer=no.
 display dictionary.
 omsend.
 !enddefine.
@@ -43,23 +45,23 @@ alter type absoluteDum(f1).
 variable labels absoluteDum 'Nothing'.
 value labels absoluteDum 1 'Nothing'.
 missing values absoluteDum(1).
-save outfile 'inputSpss'.
+save outfile 'outputSpss'.
 
 * Create file with all code lists.
 * NB: Dummy decimals are added to all code values, if a code value has decimals somewhere.
 !dictionary subtype='variable values'.
-get file 'dataDir{3}dictionary.sav'
+get file 'dataDir{0}dictionary.sav'
 /keep var1 var2 label
 /rename var1=varName var2=val label=valLabel.
 alter type varName(a64) val valLabel(a32767).
 sort cases by varName val valLabel.
-!clean var=val.
-!clean var=valLabel.
+*!clean var=val.
+*!clean var=valLabel.
 alter type val valLabel(amin).
-save outfile 'dataDir{3}code_lists.sav'.
+save outfile 'dataDir{0}code_lists.sav'.
 
 * Map variable to code list.
-get file 'dataDir{3}code_lists.sav'.
+get file 'dataDir{0}code_lists.sav'.
 string compare(a32767).
 compute casenum=$casenum.
 sort cases by varName.
@@ -91,97 +93,109 @@ execute.
 * Select string to compare.
 select if rep eq codeCount and compare ne ''.
 execute.
-* Link the unique code list to variables.
+* Link the all code list to variables.
 sort cases by compare.
 string varName_(a64).
 compute varName_=varName.
-if lag(compare) eq compare varName_=lag(varName_).
-alter type varName_(amin).
+* if lag(compare) eq compare varName_=lag(varName_).
+alter type varName_(a66).
 sort cases by varName.
-save outfile 'dataDir{3}variable_to_code_list.sav'
+save outfile 'dataDir{0}variable_to_code_list.sav'
 /keep varName varName_.
 execute.
 
+
 * Remove redundant code lists.
-match files file 'dataDir{3}code_lists.sav'
-/table='dataDir{3}variable_to_code_list.sav'
+match files file 'dataDir{0}code_lists.sav'
+/table='dataDir{0}variable_to_code_list.sav'
 /by varName.
 compute keep=1.
-if varName ne varName_ keep=0.
-select if keep=1.
-save outfile 'dataDir{3}unique_code_lists.sav'.
+save outfile 'dataDir{0}all_code_lists.sav'.
 
 * CREATE VARIABEL.
 !dictionary subtype='variable information'.
-get file 'dataDir{3}dictionary.sav'
+get file 'dataDir{0}dictionary.sav'
 /keep var1 writeformat
 /rename var1=varName writeformat=varFormat.
-alter type varName(a64) varFormat(amin).
+alter type varName(a64) varFormat(a64).
 compute varFormat=lower(varFormat).
 compute casenum=$casenum.
 sort cases by varName.
-save outfile='dataDir{3}variable.sav'.
+save outfile='dataDir{0}variable.sav'.
 * Link variable to code list (if link exists).
-get file 'dataDir{3}code_lists.sav'.
+get file 'dataDir{0}code_lists.sav'.
 compute rep=1.
-* Keep unique variable names.
+* Keep all variable names.
 if lag(varName)=varName rep=1+lag(rep).
 select if rep eq 1.
 sort cases by varName.
-save outfile='dataDir{3}variable_has_code_list.sav'
+save outfile='dataDir{0}variable_has_code_list.sav'
 /keep varName.
 * Add code list reference to variable list.
-match files file 'dataDir{3}variable.sav' /in=master
-/file='dataDir{3}variable_has_code_list.sav' /in=codeVar
-/file='dataDir{3}variable_to_code_list.sav' /in=codeListName
+match files file 'dataDir{0}variable.sav' /in=master
+/file='dataDir{0}variable_has_code_list.sav' /in=codeVar
+/file='dataDir{0}variable_to_code_list.sav' /in=codeListName
 /by varName.
 string type(a1) variable(a32767).
-alter type varFormat(a66).
+alter type varFormat(a66) varName_(a66).
 * If variable has a code list, make sure to use it
 compute type=char.substr(varFormat, 1, 1).
 *if codeVar eq 1 varFormat=concat(varName_, '.').
 *if codeVar eq 1 and type eq 'a' varFormat=concat('$', varFormat).
-if codeVar eq 1 varName_=concat(varName_, '.').
+if codeVar eq 1 varName_=concat(ltrim(rtrim(varName_)), '.').
 if codeVar eq 1 and type eq 'a' varName_=concat('$', varName_).
 *compute variable=concat(ltrim(rtrim(varName)), ' ', ltrim(rtrim(varFormat))).
-compute variable=concat(ltrim(rtrim(varName)), ' ', ltrim(rtrim(varFormat)), ' ', ltrim(rtrim(varName_))).
+        compute variable=concat(ltrim(rtrim(varName)), ' ', ltrim(rtrim(varFormat)), ' ', varName_).
 sort cases by casenum.
 select if varName ne 'absoluteDum'.
 alter type variable(amin).
 delete variables casenum varName varName_ type varFormat master codeVar codeListName.
 * Note: Trailing spaces included in output lines.
-write outfile 'outDir{3}{2}_VARIABEL.txt' /variable.
+write outfile 'astaDir{0}{2}_VARIABEL.txt' /variable.
 execute.
 
 * CREATE VARIABELBESKRIVELSE.
 !dictionary subtype='variable information'.
-get file 'dataDir{3}dictionary.sav'
+get file 'dataDir{0}dictionary.sav'
 /keep var1 label
 /rename var1=varName label=varLabel.
 alter type varName(a64) varLabel(a32767).
 * If label is empty, use default value.
 if varLabel='<none>' varLabel='n.a.'.
-!clean var=varLabel.
+*!clean var=varLabel.
 alter type varLabel(amin).
 string varDescription(a32767).
 compute varDescription=concat(ltrim(rtrim(varName)), concat(" '", ltrim(rtrim(varLabel)), "'")).
 select if varName ne 'absoluteDum'.
 alter type varDescription(amin).
 * Note: Trailing spaces included in output lines.
-write outfile 'outDir{3}{2}_VARIABELBESKRIVELSE.txt' /varDescription.
+write outfile 'astaDir{0}{2}_VARIABELBESKRIVELSE.txt' /varDescription.
 execute.
 
 * CREATE KODELISTE.
-get file 'dataDir{3}unique_code_lists.sav'.
-string varRef codeList(a32767).
-compute codeList=concat('"', "'", ltrim(rtrim(val)), "'", concat(" '", ltrim(rtrim(valLabel)), "'"), '"').
+get file 'dataDir{0}all_code_lists.sav'.
+sort cases by varName.
+get file  'dataDir{0}variable.sav'.
+sort cases by varName.
+match files file='dataDir{0}all_code_lists.sav'
+/table='dataDir{0}variable.sav'
+/by varName.
+execute.
+save outfile 'dataDir{0}all_codes_and_formats.sav'.
+get file  'dataDir{0}all_codes_and_formats.sav'.
+string tmp(a100) varRef codeList(a32767).
+compute tmp=val.
+alter type tmp (f).
+alter type tmp (amin).
+* compute codeList=concat('"', "'", ltrim(rtrim(tmp)), "'", concat(" '", ltrim(rtrim(valLabel)), "'"), '"').
+compute codeList=concat(ltrim(rtrim(tmp)), concat(" '", ltrim(rtrim(valLabel)), "'")).
 if lag(varName) ne varName varRef=concat('"', ltrim(rtrim(varName)), '"').
 select if varName ne 'absoluteDum'.
 alter type codeList varRef(amin).
-write outfile 'dataDir{3}temp.txt' /1 varRef /2 codeList.
+write outfile 'dataDir{0}temp.txt' /1 varRef /2 codeList.
 get data
 /type=txt
-/file='dataDir{3}temp.txt'
+/file='dataDir{0}temp.txt'
 /arrangement=delimited
 /delimiters=';'
 /qualifier='"'
@@ -189,20 +203,20 @@ get data
 select if codeList ne ''.
 alter type codeList(amin).
 * Note: Trailing spaces included in output lines.
-write outfile 'outDir{3}{2}_KODELISTE.txt' /codeList.
+write outfile 'astaDir{0}{2}_KODELISTE.txt' /codeList.
 execute.
 
 * CREATE BRUGERKODE.
 !dictionary subtype='variable information'.
-get file 'dataDir{3}dictionary.sav'
+get file 'dataDir{0}dictionary.sav'
 /keep var1 missingvalues
 /rename var1=varName missingvalues=missing.
 alter type varName(a64) missing(amin).
 sort cases by varName.
-save outfile 'dataDir{3}user_defined_missing_values.sav'.
+save outfile 'dataDir{0}user_defined_missing_values.sav'.
 * Remove missing values from redundant code lists.
-match files file 'dataDir{3}user_defined_missing_values.sav'
-/file='dataDir{3}variable_to_code_list.sav'
+match files file 'dataDir{0}user_defined_missing_values.sav'
+/file='dataDir{0}variable_to_code_list.sav'
 /by varName.
 compute keep=1.
 if varName ne varName_ keep=0.
@@ -211,28 +225,32 @@ select if keep=1.
 select if char.length(missing) gt 0.
 compute missing=replace(missing, '"', '').
 compute missing=replace(missing, ',', '').
-!clean var=missing.
+*!clean var=missing.
 alter type missing(amin).
 string varMissing(a32767).
 compute varMissing=concat(ltrim(rtrim(varName)), " '", replace(ltrim(rtrim(missing)), ' ', "' '"), "'").
 select if varName ne 'absoluteDum'.
 alter type varMissing(amin).
 * Note: Trailing spaces included in output lines.
-write outfile 'outDir{3}{2}_BRUGERKODE.txt' /varMissing.
+write outfile 'astaDir{0}{2}_BRUGERKODE.txt' /varMissing.
 execute.
 
 * Delete temporary content (in file and on disk).
-get file 'inputSpss'.
-save outfile 'inputSpss'
+get file 'outputSpss'.
+save outfile 'outputSpss'
 /drop absoluteDum.
-erase file='dataDir{3}dictionary.sav'.
-erase file='dataDir{3}code_lists.sav'.
-erase file='dataDir{3}variable_to_code_list.sav'.
-erase file='dataDir{3}unique_code_lists.sav'.
-erase file='dataDir{3}variable.sav'.
-erase file='dataDir{3}variable_has_code_list.sav'.
-erase file='dataDir{3}user_defined_missing_values.sav'.
-erase file='dataDir{3}temp.txt'.
+*get file 'inputSpss'.
+*save outfile 'inputSpss'.
+* /drop absoluteDum.
+erase file='dataDir{0}dictionary.sav'.
+erase file='dataDir{0}code_lists.sav'.
+erase file='dataDir{0}variable_to_code_list.sav'.
+erase file='dataDir{0}all_code_lists.sav'.
+erase file='dataDir{0}all_codes_and_formats.sav'.
+erase file='dataDir{0}variable.sav'.
+erase file='dataDir{0}variable_has_code_list.sav'.
+erase file='dataDir{0}user_defined_missing_values.sav'.
+erase file='dataDir{0}temp.txt'.
 execute.
 
 */
@@ -245,8 +263,8 @@ Note: User-defined missing values are presented "as is" (either number or string
 */
 
 define !export(outfile=!tokens(1))
-get file !QUOTE(!CONCAT(dataDir, '{3}', !outfile, '.sav')).
-save translate outfile=!QUOTE(!CONCAT(outDir, '{3}', !outfile, '.csv'))
+get file !QUOTE(!CONCAT(dataDir, '{0}', !outfile, '.sav')).
+save translate outfile=!QUOTE(!CONCAT(astaDir, '{0}', !outfile, '.csv'))
 /textoptions delimiter=';' qualifier='"' decimal=dot format=variable
 /type=csv
 /encoding='utf8'

@@ -13,6 +13,7 @@ namespace Rigsarkiv.Asta.Logging
     {
         protected static readonly ILog _log = log4net.LogManager.GetLogger(typeof(LogManager));
         const string Span = "<span id=\"{0}_{1}\" name=\"{2}\" class=\"{3}\">{4}</span><br/>{5}";
+        const string EndMessage = "Convert afsluttet med {0} fejl";
         private List<LogEntity> _entities = null;
         /// <summary>
         /// Events subscription end points
@@ -60,6 +61,11 @@ namespace Rigsarkiv.Asta.Logging
                     content.AppendFormat(Span, e.Section, DateTime.Now.ToString("yyyyMMddHHmmss"), name, e.Level, e.Message, Environment.NewLine);
                 });
                 File.WriteAllText(path, string.Format(logTemplate, DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss"), name, content.ToString(), counter));
+                var args = new LogEventArgs
+                {
+                    LogEntity = new LogEntity() { Level = LogLevel.Info, Message = string.Format(EndMessage, counter) }
+                };
+                LogAdded?.Invoke(this, args);
             }
             catch (Exception ex)
             {
