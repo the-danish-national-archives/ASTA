@@ -280,7 +280,7 @@ function (n) {
         var GetMonth = function (monthValue) {
             result = monthValue;
             if(isNaN(monthValue)) {
-                switch (monthValue) {
+                switch (monthValue.toUpperCase()) {
                     case 'JAN': result = "1";break;
                     case 'FEB': result = "2";break;
                     case 'MAR': result = "3";break;
