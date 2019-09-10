@@ -1,0 +1,310 @@
+﻿SYSTEMNAVN
+SPSS
+
+DATAFILNAVN
+opd_test_a
+
+DATAFILBESKRIVELSE
+Der manglede en beskrivelse ...
+
+NØGLEVARIABEL
+V10sas
+
+REFERENCE
+
+VARIABEL
+V10sas v10sas.
+V11sas $51.
+V12sas 4.
+V13sas laba.
+V14sas laba.
+V15sas laba.
+V16sas laba.
+V17sas laba.
+V18sas laba.
+V19sas $52.
+V1sas 4.
+V20sas v20sas.
+V21sas $89.
+V22sas v22sas.
+V23sas $73.
+V24sas v24sas.
+V25sas $81.
+V26sas v26sas.
+V27sas $55.
+V28sas v28sas.
+V29sas v29sas.
+V2sas 4.
+V30sas $48.
+V31sas v31sas.
+V32sas 3.
+V33sas v33sas.
+V34sas 3.
+V35sas v35sas.
+V36sas 3.
+V37sas v37sas.
+V38sas v38sas.
+V39sas v39sas.
+V3sas 4.
+V40sas v40sas.
+V41sas v41sas.
+V42sas v42sas.
+V43sas v43sas.
+V44sas labb.
+V45sas labb.
+V46sas labb.
+V47sas labb.
+V48sas v48sas.
+V49sas labc.
+V4sas 4.
+V50sas labc.
+V51sas labc.
+V52sas labc.
+V53sas labc.
+V54sas labc.
+V55sas labc.
+V56sas $65.
+V57sas labd.
+V58sas labd.
+V59sas labd.
+V5sas 6.
+V60sas labd.
+V61sas v61sas.
+V62sas labe.
+V63sas labe.
+V64sas labe.
+V65sas labe.
+V66sas labe.
+V67sas $50.
+V68sas labe.
+V69sas labe.
+V6sas 3.
+V70sas labe.
+V71sas labe.
+V72sas v72sas.
+V73sas v73sas.
+V74sas v74sas.
+V7sas 4.
+V8sas v8sas.
+V9sas v9sas.
+
+VARIABELBESKRIVELSE
+V10sas 'HVILKEN KLASSE GÅR DU I'
+V11sas 'HVILKEN KLASSE GÅR DU I - ANDET SKRIV'
+V12sas 'HVILKET POSTNUMMER BOR DU I'
+V13sas 'BOR SAMMEN MED - BEGGE MINE FOR?LDRE'
+V14sas 'BOR SAMMEN MED - SKIFTEVIS MOR OG FAR'
+V15sas 'BOR SAMMEN MED - KUN DEN ENE AF MINE FOR?LDRE'
+V16sas 'BOR SAMMEN MED -  ÆLDRE SØSKENDE'
+V17sas 'BOR SAMMEN MED - YNGRE SØSKENDE'
+V18sas 'BOR SAMMEN MED  - ANDRE'
+V19sas 'BOR SAMMEN MED - ANDRE, SKRIV'
+V1sas 'DDA STUDIENUMMER'
+V20sas 'HAR MOR ET ARBEJDE'
+V21sas 'SKRIV HVILKET ARBEJDE'
+V22sas 'HVORFOR MOR IKKE NOGET ARBEJDE'
+V23sas 'HVORFOR MOR IKKE NOGET ARBEJDE - ANDEN GRUND'
+V24sas 'HAR FAR ET ARBEJDE'
+V25sas 'SKRIV HVILKET ARBEJDE'
+V26sas 'HVORFOR FAR IKKE NOGET ARBEJDE'
+V27sas 'HVORFOR FAR IKKE NOGET ARBEJDE - ANDEN GRUND'
+V28sas 'HVORDAN SYNES DU, DIT HELBRED ER'
+V29sas 'RELIGIØS BAGGRUND'
+V2sas 'DDA LØBENUMMER'
+V30sas 'RELIGIØS BAGGRUND - SKRIV ANDEN'
+V31sas 'DRUKKET MERE END EN MUNDFULD ALKOHOL'
+V32sas 'HVOR GAMMEL VAR DU FØRSTE GANG'
+V33sas 'DRUKKET SÅ MEGET ALKOHOL, KUNNE MÆRKE VIRKNING'
+V34sas 'HVOR GAMMEL VAR DU FØRSTE GANG'
+V35sas 'DRUKKET SÅ MEGET ALKOHOL, AT DU VAR FULD'
+V36sas 'HVOR GAMMEL VAR DU FØRSTE GANG'
+V37sas 'DE SIDSTE SEKS MDR. ANTAL GANGE DRUKKET MEGET ALKOHOL OPLEVET SIG FULD'
+V38sas 'DE SIDSTE 30 DAGE. ANTAL LEJLIGHEDER DU HAR ALKOHOL  - FESTER ETC'
+V39sas 'ANTAL ØL'
+V3sas 'UNDERSØGELSE 5758'
+V40sas 'ANTAL GLAS VIN'
+V41sas 'ANTAL ALKOHOLSODAVAND'
+V42sas 'ANTAL GLAS SPIRITUS'
+V43sas 'SELV KØBT ALKOHOLEN I EN BUTIK'
+V44sas 'KØBTE DU ØL I EN BUTIK'
+V45sas 'KØBTE VIN I EN BUTIK'
+V46sas 'KØBTE ALKOHOLSODAVAND I EN BUTIK'
+V47sas 'KØBTE SPIRITUS I EN BUTIK'
+V48sas 'DEN SIDSTE MDR - KØBT ALKOHOL ANDRE STEDER END BUTIK'
+V49sas 'VAR DET PÅ RESTAURANT, CAFE?'
+V4sas 'BUNDTNUMMER'
+V50sas 'VAR DET TIL FEST'
+V51sas 'VAR DET TIL KONCERT, FESTIVAL'
+V52sas 'VAR DET HOS VENNER'
+V53sas 'VAR DET HOS FORÆLDRE'
+V54sas 'VAR DET HOS ANDRE I DIN FAMILIE'
+V55sas 'VAR DET ANDRE STEDER'
+V56sas 'ANDRE STEDER, SKRIV HVOR'
+V57sas 'KØBTE ØL ANDRE STEDER END I EN BUTIK'
+V58sas 'KØBTE VIN ANDRE STEDER END I EN BUTIK'
+V59sas 'KØBTE ALKOHOLSODAVAND ANDRE STEDER END I EN BUTIK'
+V5sas 'BUNDTID'
+V60sas 'KØBTE SPIRITUS ANDRE STEDER END I EN BUTIK'
+V61sas 'HAR DU DRUKKET ALKOHOL SIDSTE MÅNED, SOM DU IKKE SELV HAR KØBT'
+V62sas 'FIK ALKOHOLEN AF VENNER'
+V63sas 'FIK ALKOHOLEN AF SØSKENDE'
+V64sas 'FIK ALKOHOLEN AF FORÆLDRE'
+V65sas 'FIK  ALKOHOLEN AF ANDRE I DIN FAMILIE'
+V66sas 'FIK ALKOHOLEN AF ANDRE'
+V67sas 'FIK ALKOHOLEN AF ANDRE PERSONER, SKRIV HVEM'
+V68sas 'FIK DU ØL'
+V69sas 'FIK DU VIN'
+V6sas 'SKEMATYPE'
+V70sas 'FIK DU ALKOHOLSODAVAND'
+V71sas 'FIK DU SPIRITUS'
+V72sas 'RYGER DU'
+V73sas 'NOGENSINDE RØGET HASH ELLER POT'
+V74sas 'DE SIDSTE 12 MÅNEDER. ANTAL GANGE RØGET HASH ELLER POT'
+V7sas 'IP.NR.'
+V8sas 'ER DU DRENG ELLER PIGE'
+V9sas 'HVOR GAMMEL ER DU'
+
+KODELISTE
+laba
+'0' 'Ikke nævnt'
+'1' 'Nævnt'
+labb
+'0' 'Ikke nævnt'
+'1' 'Nævnt'
+labc
+'0' 'Ikke nævnt'
+'1' 'Nævnt'
+labd
+'0' 'Ikke nævnt'
+'1' 'Nævnt'
+labe
+'0' 'Ikke nævnt'
+'1' 'Nævnt'
+v10sas
+'1' '5. klasse'
+'2' '6. klasse'
+'3' '7. klasse'
+'4' '8. klasse'
+'5' '9. klasse'
+'6' '10. klasse'
+'7' 'Andet, skriv'
+v20sas
+'1' 'Ja, hun har et arbejde, gå til spørgsmål 6a'
+'2' 'Nej, hun har ikke noget arbejde, gå til spørgsmål 6b'
+'3' 'Jeg har ingen mor, gå til spørgsmål 7'
+v22sas
+'1' 'Hun søger job (er arbejdsløs)'
+'2' 'Hun er under uddannelse'
+'3' 'Hun er pensioneret, på efterløn eller syg'
+'4' 'Andet'
+v24sas
+'1' 'Ja, han har et arbejde, gå til spørgsmål 7a'
+'2' 'Nej, han har ikke noget arbejde, gå til spørgsmål 7b'
+'3' 'Jeg har ingen far, gå til spørgsmål 8'
+v26sas
+'1' 'Han søger job (er arbejdsløs)'
+'2' 'Han er under uddannelse'
+'3' 'Han er pensioneret, på efterløn eller syg'
+'4' 'Andet'
+v28sas
+'1' 'Virkelig godt'
+'2' 'Godt'
+'3' 'Nogenlunde'
+'4' 'Dårligt'
+'5' 'Meget dårligt'
+v29sas
+'1' 'Ingen religiøs baggrund'
+'2' 'Protestantisk (dansk folkekirke)'
+'3' 'Katolsk'
+'4' 'Islamisk'
+'5' 'Jødisk'
+'6' 'Anden religion'
+v31sas
+'1' 'Ja'
+'2' 'Nej'
+v33sas
+'1' 'Ja'
+'2' 'Nej'
+v35sas
+'1' 'Ja'
+'2' 'Nej'
+v37sas
+'1' 'Ingen gange indenfor de sidste seks måneder'
+'2' 'En gang'
+'3' '2-4 gange'
+'4' '5-9 gange'
+'5' 'Flere end 10 gange'
+v38sas
+'1' 'Ingen'
+'2' '1-2 gange'
+'3' '3-5 gange'
+'4' '6-9 gange'
+'5' 'Flere end 10 gange'
+v39sas
+'1' 'Jeg drikker aldrig øl'
+'2' 'Jeg drak øl, sidste gang jeg drak alkohol'
+'3' 'Mindre end 1 flaske øl'
+'4' '1-2 flasker'
+'5' '3-4 flasker'
+'6' '5-6 flasker'
+'7' '7 eller flere flasker'
+v40sas
+'1' 'Jeg drikker aldrig vin'
+'2' 'Jeg drak ikke vin , sidste gang jeg drak alkohol'
+'3' 'Mindre end 1 glas vin'
+'4' '1-2 glas vin'
+'5' '3-4 glas vin'
+'6' '5-6 glas vin'
+'7' '7 eller flere glas vin'
+v41sas
+'1' 'Jeg drikker aldrig alkoholsodavand'
+'2' 'Jeg drak ikke alkoholsodavand, sidste gang jeg drak'
+'3' 'Mindre end 1 flaske alkoholsodavand'
+'4' '1-2 flasker aloholsodavand'
+'5' '3-4 flasker alkoholsodavand'
+'6' '5-6 flasker alkoholsodavand'
+'7' '7 eller flere flasker alkoholsodavand'
+v42sas
+'1' 'Jeg drikker aldrig spiritus'
+'2' 'Jeg drak ikke spiritus sidste gang jeg drak'
+'3' 'Mindre end 1 glas spiritus'
+'4' '1-2 glas spiritus'
+'5' '3-4 glas spiritus'
+'6' '5-6 glas spiritus'
+'7' '7 eller flere glas spiritus'
+v43sas
+'1' 'Nej, gå til spørgsmål 20'
+'2' 'Ja, en enkelt gang'
+'3' 'Ja, flere gange'
+v48sas
+'1' 'Nej, gå til spørgsmål 21'
+'2' 'Ja'
+v61sas
+'1' 'Nej, gå til spørgsmål 22'
+'2' 'Ja'
+v72sas
+'1' 'Ja, jeg ryger mindst en gang om dagen'
+'2' 'Ja, jeg ryger mindst en gang om ugen'
+'3' 'Ja, jeg ryger sjældnere end en gang om ugen'
+'4' 'Nej, jeg ryger aldrig'
+v73sas
+'1' 'Nej'
+'2' 'Ja'
+v74sas
+'1' 'Ingen gange indenfor de sidste 12 måneder'
+'2' 'En gang'
+'3' '2 gange'
+'4' '3 eller flere gange'
+v8sas
+'1' 'Dreng'
+'2' 'Pige'
+v9sas
+'1' '12 år'
+'2' '13 år'
+'3' '14 år'
+'4' '15 år'
+'5' '16 år'
+'6' '17 år'
+
+BRUGERKODE
+

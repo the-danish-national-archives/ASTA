@@ -1,0 +1,6 @@
+342 til 1007 benyttes til at konvertere data liggende i en ældre struktur, og er på den måde ikke relateret til ASTA.
+Der er vedlagt et eksempel på 342 data (AV 00000115) som kan benyttes til demo.
+ 
+Hvis i forsøger at skabe en 1007 - udfra AV 00000115 - vil programmet konvertering af TIF filer fejle, fordi programmet "PDF Creator" ikke er installeret. 
+
+René

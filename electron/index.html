@@ -26,6 +26,7 @@
         <a href="#" id="hybris-new-menu" data-section="hybris">Skab afleveringspakke</a>
         <a href="#" id="hybris-edit-menu" data-section="hybris">Rediger afleveringspakke</a>
         <a href="#" id="nemesis-menu" data-section="nemesis">Test afleveringspakke</a>
+        <a href="#" id="styx-menu">Skab udleveringsformat</a>
         <hr class="divider">
         <a href="#" id="instructions-menu" data-section="instructions">Vejledning</a>
         <a href="#" id="about-menu" data-section="about">FAQ</a>
@@ -35,11 +36,12 @@
 
     <!-- Main Content -->
     <div id="content">
-
+            <span id="menu-output-Error" hidden="true"><br />Error: {0}</span>
     </div>
     <script>window.$ = window.jQuery = require('./assets/js/jquery.min.js');</script>
     <script>
         require('./assets/js/utilities');
+        require('./assets/js/rights');        
         require('./assets/js/menu');
     </script>
 </body>

@@ -25,6 +25,8 @@
                                 <a id="nemesis-select-logFile" hidden="true"></a>
                                 <span id="nemesis-output-Supplement" hidden="true">]</span>                                
                                 <span id="nemesis-output-Confirmation"></span>
+                                <br/>
+                                <button id="nemesis-Athen-StartBtn" hidden="true">Konverter til AV</button>
                                 <span id="nemesis-output-ValidateRows" hidden="true"><br/><br/>{0} af {1} rækker i {2} er valideret.</span>
                                 <span id="nemesis-output-CheckEncoding" hidden="true"><br/><br/>Vent mens check {0} encoding</span>                                
                                 <span id="nemesis-output-ConvertEnabled" hidden="true"><br/><p class="ok">Afleveringspakken er gennemtestet og uden fejl.</p></span>  
@@ -215,9 +217,9 @@
             Rigsarkiv.Rights.initialize("nemesis-output-Error");
             Rigsarkiv.Log.initialize("nemesis-output-Error","nemesis-output-Ok","nemesis-select-logFile","nemesis-output-Supplement", "nemesis-validate-Spinner","lds-ring");
             Rigsarkiv.Nemesis.Batch.initialize(Rigsarkiv.Rights.callback,Rigsarkiv.Nemesis.Structure.callback,"nemesis-output-Error","nemesis-select-batch-directory","nemesis-batch-path","nemesis-batch-validateBtn","nemesis-validate-Spinner","nemesis-batch-Ok","nemesis-batch-select-logFile","nemesis-batch-Supplement","nemesis-batch-test-panel","lds-ring");
-            Rigsarkiv.Nemesis.Structure.initialize(Rigsarkiv.Log.callback,Rigsarkiv.Nemesis.MetaData.callback,"nemesis-output-Error","nemesis-select-directory","nemesis-path","nemesis-validateBtn","nemesis-output-structure-logStart","nemesis-output-structure-logEndNoError","nemesis-output-structure-logEndWithError","nemesis-output-structure-logEndWithErrorStop","nemesis-processing", "nemesis-test-id","nemesis-output-Confirmation","nemesis-output-ConvertDisabled");
+            Rigsarkiv.Nemesis.Structure.initialize(Rigsarkiv.Log.callback,Rigsarkiv.Nemesis.MetaData.callback,"nemesis-output-Error","nemesis-select-directory","nemesis-path","nemesis-validateBtn","nemesis-output-structure-logStart","nemesis-output-structure-logEndNoError","nemesis-output-structure-logEndWithError","nemesis-output-structure-logEndWithErrorStop","nemesis-processing", "nemesis-test-id","nemesis-output-Confirmation","nemesis-output-ConvertDisabled","nemesis-Athen-StartBtn");
             Rigsarkiv.Nemesis.MetaData.initialize(Rigsarkiv.Log.callback,Rigsarkiv.Nemesis.Data.callback,"nemesis-output-Error","nemesis-output-metadata-logStart","nemesis-output-metadata-logEndNoError","nemesis-output-metadata-logEndWithError","nemesis-output-metadata-logEndWithErrorStop","nemesis-processing","nemesis-select-directory","nemesis-validateBtn","nemesis-output-Confirmation","nemesis-output-ConvertDisabled");
-            Rigsarkiv.Nemesis.Data.initialize(Rigsarkiv.Log.callback,"nemesis-output-Error","nemesis-output-data-logStart","nemesis-output-data-logEndNoError","nemesis-output-data-logEndWithError","nemesis-output-data-logEndWithErrorStop","nemesis-processing","nemesis-select-directory","nemesis-validateBtn","nemesis-output-Confirmation","nemesis-output-ValidateRows","nemesis-output-CheckEncoding","nemesis-output-ConvertDisabled","nemesis-output-ConvertEnabled","nemesis-output-ConvertWarningEnabled");             
+            Rigsarkiv.Nemesis.Data.initialize(Rigsarkiv.Rights.callback,Rigsarkiv.Log.callback,"nemesis-output-Error","nemesis-output-data-logStart","nemesis-output-data-logEndNoError","nemesis-output-data-logEndWithError","nemesis-output-data-logEndWithErrorStop","nemesis-processing","nemesis-select-directory","nemesis-validateBtn","nemesis-output-Confirmation","nemesis-output-ValidateRows","nemesis-output-CheckEncoding","nemesis-output-ConvertDisabled","nemesis-output-ConvertEnabled","nemesis-output-ConvertWarningEnabled","nemesis-Athen-StartBtn"); 
         </script>
     </section>
 </template>

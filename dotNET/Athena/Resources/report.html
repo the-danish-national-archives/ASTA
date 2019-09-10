@@ -1,0 +1,123 @@
+﻿<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Convert Log</title>
+    <style>
+            .Error {{
+                color: red;
+            }}
+
+            .Warning {{
+                color: gray;
+            }}
+
+            .Info {{
+                color: black;
+            }}
+        table, th, td {{
+                border: 1px solid black;
+                border-spacing: 0px;
+            }}
+    </style>
+    <script type="text/javascript">
+        var report = {2}
+    </script>
+    </head>
+<body>
+    <div class="header">
+        <h1 class="title">ASTA Konverteringsrapport</h1>
+        <p class="runDate">Dato for report kørsel: {0}</p>
+    </div>
+    <div class="content">
+        <h3>Afleveringspakke ID: {1}</h3>
+        <div class="results" id="testContent">
+            <p>Antal tabeller</p>
+            <table>
+                <tr><th></th><th>Før</th><th>Efter</th></tr>
+                <tr><td>Antal tabeller</td><td id="tablesBefore">0</td><td id="tablesAfter">0</td></tr>
+                <tr><td>Antal kodetabeller</td><td id="codeListsBefore">0</td><td id="codeListsAfter">0</td></tr>
+            </table>
+            <br />
+            <p>Antal rækker</p>
+            <table id="rowsTable">
+                <tr><th>Tabel</th><th>Før</th><th>Efter</th></tr>
+            </table>
+            <br />
+            <p>Optælling af konverteringfejl</p>
+            <table id="columnsTable">
+                <tr><th>Tabel</th><th>Variabel</th><th>Datatype</th><th>Antal fejl</th></tr>
+            </table>
+            <br />
+            <p>Konverteringfejl</p>
+            <table id="errorsTable">
+                <tr><th>Tabel</th><th>Række</th><th>Variabel</th><th>Værdi orginal</th><th>Værdi SQL</th></tr>
+            </table>
+        </div>
+    </div>
+    <script type="text/javascript">
+        if (!String.prototype.format) {{
+            String.prototype.format = function () {{
+                var args = arguments;
+                return this.replace(/{{(\d+)}}/g, function (match, number) {{
+                    return typeof args[number] != 'undefined'
+                        ? args[number]
+                        : match
+                        ;
+                }});
+            }};
+        }}
+        var rowsTable = document.getElementById("rowsTable");
+        var columnsTable = document.getElementById("columnsTable");
+        var errorsTable = document.getElementById("errorsTable");
+        var rowHtml = "<tr><td>{{0}} ({{1}})</td><td{{4}}>{{2}}</td><td{{4}}>{{3}}</td></tr>";
+        var columnHtml = "<tr><td>{{0}} ({{1}})</td><td>{{2}}</td><td>{{3}}</td><td class=\"Error\">{{4}}</td></tr>";
+        var errorHtml = "<tr><td>{{0}} ({{1}})</td><td>{{2}}</td><td>{{3}}</td><td class=\"Error\">{{4}}</td><td class=\"Error\">{{5}}</td></tr>";
+        (function () {{
+            UpdateTable("tablesBefore", "tablesAfter", report.Tables.length, report.TablesCounter);
+            var codeLists = 0;
+            for (var i = 0; i < report.Tables.length; i++) {{
+                UpdateRow(report.Tables[i]);
+                codeLists += report.Tables[i].CodeList.length;
+                for (var k = 0; k < report.Tables[i].Columns.length; k++) {{
+                    UpdateColumn(report.Tables[i], report.Tables[i].Columns[k]);
+                }}                
+                for (var j = 0; j < report.Tables[i].CodeList.length; j++) {{
+                    UpdateRow(report.Tables[i].CodeList[j]);
+                    for (var l = 0; l < report.Tables[i].CodeList[j].Columns.length; l++) {{
+                        UpdateColumn(report.Tables[i].CodeList[j], report.Tables[i].CodeList[j].Columns[l]);
+                    }}
+                }}
+            }}
+            UpdateTable("codeListsBefore", "codeListsAfter", codeLists, report.CodeListsCounter);
+        }})();
+        function UpdateErrors(table, column) {{
+            for (var i = 0; i < column.ErrorsRows.length; i++) {{
+                var index = column.ErrorsRows[i];
+                var srcValue = table.ErrorsRows[index].SrcValues[column.Id];
+                var destValue = table.ErrorsRows[index].DestValues[column.Id];
+                errorsTable.insertAdjacentHTML("beforeend", errorHtml.format(table.Folder, table.Name, (index + 1), column.Name, srcValue, destValue));
+            }}
+        }}
+        function UpdateColumn(table, column) {{
+            if (column.Errors > 0) {{
+                columnsTable.insertAdjacentHTML("beforeend", columnHtml.format(table.Folder, table.Name, column.Name, column.Type, column.Errors));
+                UpdateErrors(table, column);
+            }}
+        }}
+        function UpdateRow(table) {{
+                var className = (table.Rows !== table.RowsCounter) ? " class=\"Error\"" : "";
+                rowsTable.insertAdjacentHTML("beforeend", rowHtml.format(table.Folder, table.Name, table.Rows, table.RowsCounter, className));
+        }}
+        function UpdateTable(beforeId, afterId, beforeValue, afterValue) {{
+            var before = document.getElementById(beforeId);
+            var after = document.getElementById(afterId);
+            before.innerText = beforeValue;
+            after.innerText = afterValue;
+            if (beforeValue !== afterValue) {{
+                before.className = "Error";
+                after.className = "Error";
+            }}
+        }}        
+    </script>
+</body>
+</html>

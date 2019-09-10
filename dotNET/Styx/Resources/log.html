@@ -1,0 +1,35 @@
+﻿<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Convert Log</title>
+    <style>
+            .Error {{
+                color: red;
+            }}
+
+            .Warning {{
+                color: gray;
+            }}
+
+            .Info {{
+                color: black;
+            }}
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1 class="title">ASTA Convert Log</h1>
+        <p class="runDate">Dato for convert kørsel: {0}</p>
+    </div>
+    <div class="content">
+        <h3>Convert afleveringspakke ID: {1}</h3>
+        <p>Convert startet</p>
+        <div class="results" id="testContent">
+            <!--Start Log Data-->
+            {2}
+            <!--End Log Data-->
+        </div>
+        <p>Convert afsluttet med {3} fejl</p>
+    </div>
+</body>
+</html>

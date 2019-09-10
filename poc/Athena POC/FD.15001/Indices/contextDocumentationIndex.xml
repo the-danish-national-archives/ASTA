@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<contextDocumentationIndex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.sa.dk/xmlns/diark/1.0" xsi:schemaLocation="http://www.sa.dk/xmlns/diark/1.0 ../Schemas/standard/contextDocumentationIndex.xsd">
+	<document>
+		<documentID>1</documentID>
+		<documentTitle>Afleveringsbestemmelse</documentTitle>
+		<documentDescription>Afleveringsbestemmelse</documentDescription>
+		<documentDate>1999-02-02</documentDate>
+		<documentAuthor>
+			<authorInstitution>SA</authorInstitution>
+		</documentAuthor>
+		<documentCategory>
+			<submissionInformation>
+				<archivalProvisions>true</archivalProvisions>
+			</submissionInformation>
+		</documentCategory>
+	</document>
+	<document>
+		<documentID>2</documentID>
+		<documentTitle>Systemformål</documentTitle>
+		<documentDescription>Dokument, som beskriver systemets formål </documentDescription>
+		<documentCategory>
+			<systemInformation>
+				<systemPurpose>true</systemPurpose>
+			</systemInformation>
+		</documentCategory>
+	</document>
+	<document>
+		<documentID>3</documentID>
+		<documentTitle>Vejledning</documentTitle>
+		<documentDescription>Journalvejledning </documentDescription>
+		<documentCategory>
+			<systemInformation>
+				<systemPurpose>true</systemPurpose>
+				<systemRegulations>true</systemRegulations>
+				<systemContent>true</systemContent>
+				<systemAdministrativeFunctions>true</systemAdministrativeFunctions>
+				<systemDataProvision>true</systemDataProvision>
+			</systemInformation>
+		</documentCategory>
+	</document>
+	<document>
+		<documentID>4</documentID>
+		<documentTitle>Brugerhåndbog</documentTitle>
+		<documentDescription>Brugermanual. Vejledning i betjening af it-systemet</documentDescription>
+		<documentCategory>
+			<systemInformation>
+				<systemAdministrativeFunctions>true</systemAdministrativeFunctions>
+			</systemInformation>
+		</documentCategory>
+	</document>
+	<document>
+		<documentID>5</documentID>
+		<documentTitle>Rapporter</documentTitle>
+		<documentDescription>De mest anvendte rapporter fra systemet</documentDescription>
+		<documentCategory>
+			<systemInformation>
+				<systemContent>true</systemContent>
+				<systemAdministrativeFunctions>true</systemAdministrativeFunctions>
+				<systemAgencyQualityControl>true</systemAgencyQualityControl>
+			</systemInformation>
+		</documentCategory>
+	</document>
+	<document>
+		<documentID>6</documentID>
+		<documentTitle>Brugervejledning</documentTitle>
+		<documentDescription>Leverandørs brugervejledning til systemet</documentDescription>
+		<documentDate>1999-04-20</documentDate>
+		<documentCategory>
+			<systemInformation>
+				<systemPresentationStructure>true</systemPresentationStructure>
+			</systemInformation>
+		</documentCategory>
+	</document>
+	<document>
+		<documentID>7</documentID>
+		<documentTitle>ER-diagram</documentTitle>
+		<documentDescription>ER-diagram over arkiveringsversionens tabeller</documentDescription>
+		<documentCategory>
+			<operationalInformation>
+				<operationalSystemInformation>true</operationalSystemInformation>
+			</operationalInformation>
+		</documentCategory>
+	</document>
+	<document>
+		<documentID>8</documentID>
+		<documentTitle>Forskelsnotat</documentTitle>
+		<documentDescription>Notat, der beskriver forskellen mellem drifts- og arkiveringsversion</documentDescription>
+		<documentCategory>
+			<submissionInformation>
+				<archivalTransformationInformation>true</archivalTransformationInformation>
+			</submissionInformation>
+		</documentCategory>
+	</document>
+	<document>
+		<documentID>9</documentID>
+		<documentTitle>Kasserede tabeller</documentTitle>
+		<documentDescription>Oversigt over tabeller, der ikke findes i arkiveringsversionen</documentDescription>
+		<documentCategory>
+			<submissionInformation>
+				<archivalTransformationInformation>true</archivalTransformationInformation>
+			</submissionInformation>
+		</documentCategory>
+	</document>
+</contextDocumentationIndex>
