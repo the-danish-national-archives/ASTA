@@ -184,52 +184,100 @@ namespace Rigsarkiv.Styx
             });
         }
 
-        private void ConvertMissingValuesToNumbers(Regex regex, Column column)
+        private void ConvertMissingValuesToIntegers(Regex regex, Column column, int length, List<string> availableNumerics)
         {
-            int length = -1;
-            if (column.TypeOriginal == "INTEGER") { length = GetIntegerLength(column); }
-            if (column.TypeOriginal == "DECIMAL") { length = GetDecimalLength(column)[0]; }
             if (length > 0)
             {
-                if(length > 9) { length = 9; }
+                if (length > 9) { length = 9; }
                 int newValue = ((int.Parse(Math.Pow(10, length).ToString()) - 1) * -1);
                 column.MissingValues.Where(v => regex.IsMatch(v.Key)).ToList().ForEach(value =>
                 {
-                    if (int.Parse(column.Lowest) > newValue)
+                    while (int.Parse(column.Lowest) > newValue && availableNumerics.Contains(newValue.ToString()))
                     {
-                        int tmpValue = 0;
-                        if (!int.TryParse(value.Value, out tmpValue))
-                        {
-                            _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Map column {0} Missing Value {1} to {2}", column.Name, value.Key, newValue) });
-                            column.MissingValues[value.Key] = newValue.ToString();
-                        }
                         newValue++;
+                    }
+                    if (newValue >= int.Parse(column.Lowest))
+                    {
+                        _logManager.Add(new LogEntity() { Level = LogLevel.Warning, Section = _logSection, Message = string.Format("No new numric code available for column: {0}", column.Name) });
                     }
                     else
                     {
-                        _logManager.Add(new LogEntity() { Level = LogLevel.Warning, Section = _logSection, Message = string.Format("No new numric value code for column: {0}", column.Name) });
+                        _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Map column {0} Missing Value {1} to {2}", column.Name, value.Key, newValue) });
+                        column.MissingValues[value.Key] = newValue.ToString();
+                        availableNumerics.Add(newValue.ToString());
                     }
                 });
             }
         }
 
+        private void ConvertMissingValuesToDecimals(Regex regex, Column column, int length, List<string> availableNumerics)
+        {
+            if (length > 0)
+            {
+                if (length > 9) { length = 9; }
+                decimal newValue = ((decimal.Parse(Math.Pow(10, length).ToString()) - 1) * -1);
+                column.MissingValues.Where(v => regex.IsMatch(v.Key)).ToList().ForEach(value =>
+                {
+                    while (int.Parse(column.Lowest) > newValue && availableNumerics.Contains(newValue.ToString()))
+                    {
+                        newValue++;
+                    }
+                    if (newValue >= decimal.Parse(column.Lowest))
+                    {
+                        _logManager.Add(new LogEntity() { Level = LogLevel.Warning, Section = _logSection, Message = string.Format("No new numric code available for column: {0}", column.Name) });
+                    }
+                    else
+                    {
+                        _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Map column {0} Missing Value {1} to {2}", column.Name, value.Key, newValue) });
+                        column.MissingValues[value.Key] = newValue.ToString();
+                        availableNumerics.Add(newValue.ToString());
+                    }
+                });
+            }
+        }
+
+        private void ConvertMissingValuesToNumbers(Regex regex, Column column)
+        {
+            var availableNumerics = new List<string>();
+            column.MissingValues.Where(v => !regex.IsMatch(v.Key)).ToList().ForEach(value => {
+                if (!availableNumerics.Contains(value.Value)) { availableNumerics.Add(value.Value); }
+            });
+            int length = -1;
+            if (column.TypeOriginal == "INTEGER")
+            {
+                length = GetIntegerLength(column);
+                ConvertMissingValuesToIntegers(regex, column, length, availableNumerics);
+            }
+            if (column.TypeOriginal == "DECIMAL")
+            {
+                length = GetDecimalLength(column)[0];
+                ConvertMissingValuesToDecimals(regex, column, length, availableNumerics);
+            }            
+        }
+
         private void ConvertMissingValuesToChars(Regex regex, Column column,string[] specialNumerics)
         {
-            var index = 0;
+            var result = true;
+            var availableNumerics = new List<string>();
+            availableNumerics.AddRange(specialNumerics);
+            column.MissingValues.Where(v => regex.IsMatch(v.Value)).ToList().ForEach(value => {
+                if(availableNumerics.Contains(value.Value)) { availableNumerics.Remove(value.Value); }
+            });
             column.MissingValues.Where(v => !regex.IsMatch(v.Value)).ToList().ForEach(value =>
             {
-                if(specialNumerics.Length > index)
+                result = availableNumerics.Count > 0;
+                if(result)
                 {
-                    var newValue = specialNumerics[index];
+                    var newValue = availableNumerics[0];
                     _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Map column {0} Missing Value {1} to {2}", column.Name, value.Key, newValue) });
                     column.MissingValues[value.Key] = newValue;
-                }
-                else
-                {
-                    _logManager.Add(new LogEntity() { Level = LogLevel.Warning, Section = _logSection, Message = string.Format("No new Special Numeric value code for column: {0}", column.Name) });
-                }
-                index++;
+                    availableNumerics.Remove(newValue);
+                }                    
             });
+            if (!result)
+            {
+                _logManager.Add(new LogEntity() { Level = LogLevel.Warning, Section = _logSection, Message = string.Format("No new Special Numeric code available for column: {0}", column.Name) });
+            }
         }
 
         private bool EnsureMissingValues()
