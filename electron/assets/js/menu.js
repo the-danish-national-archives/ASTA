@@ -81,6 +81,7 @@ window.navigation = window.navigation || {},
             var outputErrorText = outputErrorSpn.innerHTML;
             Rigsarkiv.Rights.initialize("menu-output-Error");
             navigation.menu.init();
+            Rigsarkiv.Language.initialize("menu-output-Error","en-GB");
             document.getElementById("menu-reload").addEventListener('click', function (event) {
                 ipcRenderer.send('open-confirm-dialog','menu-reload',"Program genstart","Du er ved at genstarte programmet. Er du sikker?","GENSTART","FORTRYD");
             });

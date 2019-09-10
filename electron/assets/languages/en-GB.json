@@ -1,5 +1,15 @@
-{
-    "instructions.html" : {
-        "instructionsTitle" : "Instructions Guide"
+[  
+    {
+        "section": "instructions",
+        "keys": [
+            {
+                "key": "instructions-Title",
+                "value": "Instructions"
+            },
+            {
+                "key": "instructions-title-H2",
+                "value": "Quick guide to producing and testing a delivery package"
+            }
+        ]
     }
-}
+]

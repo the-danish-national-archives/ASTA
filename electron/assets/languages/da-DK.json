@@ -1,5 +1,15 @@
-{
-    "instructions.html" :{
-        "instructionsTitle" : "Vejledning"
+[  
+    {
+        "section": "instructions",
+        "keys": [
+            {
+                "key": "instructions-Title",
+                "value": "Vejledning"
+            },
+            {
+                "key": "instructions-title-H2",
+                "value": "Quick-guide til produktion og test af en afleveringspakke"
+            }
+        ]
     }
-}
+]
