@@ -1,10 +1,43 @@
 [  
     {
+        "section": "profile",
+        "keys": [
+            {
+                "key": "profile-Title",
+                "value": "Profile"
+            },
+            {
+                "key": "profile-title-H2",
+                "value": "Your profile"
+            },
+            {
+                "key": "profile-select-Language",
+                "value": "Select language"
+            },
+            {
+                "key": "profile-save",
+                "value": "Save"
+            },
+            {
+                "key": "profile-language-da-DK",
+                "value": "Danish"
+            },
+            {
+                "key": "profile-language-en-GB",
+                "value": "English"
+            }
+        ]
+    },
+    {
         "section": "instructions",
         "keys": [
             {
                 "key": "instructions-Title",
                 "value": "Instructions"
+            },
+            {
+                "key": "instructions-profile-Link",
+                "value": "Profile"
             },
             {
                 "key": "instructions-title-H2",

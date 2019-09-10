@@ -81,11 +81,15 @@ window.navigation = window.navigation || {},
             var outputErrorText = outputErrorSpn.innerHTML;
             Rigsarkiv.Rights.initialize("menu-output-Error");
             navigation.menu.init();
-            Rigsarkiv.Language.initialize("menu-output-Error","en-GB");
+            Rigsarkiv.Profile.initialize("menu-output-Error","profile-menu","profile-select-Languages","profile-save",["instructions-profile-Link"]);
+            Rigsarkiv.Language.initialize("menu-output-Error");
+            Rigsarkiv.Language.callback().setLanguage(Rigsarkiv.Profile.callback().lcid);
             document.getElementById("menu-reload").addEventListener('click', function (event) {
                 ipcRenderer.send('open-confirm-dialog','menu-reload',"Program genstart","Du er ved at genstarte programmet. Er du sikker?","GENSTART","FORTRYD");
             });
-            styxLink = document.getElementById("styx-menu");
+            var profileLink  = document.getElementById("profile-menu");
+            $(profileLink).hide();
+            var styxLink = document.getElementById("styx-menu");
             styxLink.addEventListener('click', function (event) {
                 var converterFilePath = navigation.menu.constants.scriptPath.format(navigation.menu.constants.converterFileName);        
                 if(!fs.existsSync(converterFilePath)) {

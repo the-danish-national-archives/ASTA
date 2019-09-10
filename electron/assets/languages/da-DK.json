@@ -1,10 +1,43 @@
 [  
     {
+        "section": "profile",
+        "keys": [
+            {
+                "key": "profile-Title",
+                "value": "Profil"
+            },
+            {
+                "key": "profile-title-H2",
+                "value": "Din profil"
+            },
+            {
+                "key": "profile-select-Language",
+                "value": "Vægler sprog"
+            },
+            {
+                "key": "profile-save",
+                "value": "Gem"
+            },
+            {
+                "key": "profile-language-da-DK",
+                "value": "Dansk"
+            },
+            {
+                "key": "profile-language-en-GB",
+                "value": "Englisk"
+            }
+        ]
+    },
+    {
         "section": "instructions",
         "keys": [
             {
                 "key": "instructions-Title",
                 "value": "Vejledning"
+            },
+            {
+                "key": "instructions-profile-Link",
+                "value": "Profil"
             },
             {
                 "key": "instructions-title-H2",

@@ -46,9 +46,15 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 }
             }        
             console.logInfo(`read ${settings.lcid} file from: ${languageFilePath}`,"Rigsarkiv.Language.EnsureData");
-            var data = JSON.parse(fs.readFileSync(languageFilePath));
+            return JSON.parse(fs.readFileSync(languageFilePath));            
+        }
+
+        // Ensure Caches
+        var EnsureCache = function(data) {
+            settings.keys = [];
+            settings.values = [];
             for(var i =0; i < data.length; i++) {
-                console.logInfo(`add section ${data[i].section}`,"Rigsarkiv.Language.EnsureData");
+                console.logInfo(`add section ${data[i].section}`,"Rigsarkiv.Language.EnsureCache");
                 data[i].keys.forEach(pair => {
                   settings.keys.push(pair.key);
                   settings.values.push(pair.value);  
@@ -56,26 +62,42 @@ window.Rigsarkiv = window.Rigsarkiv || {},
             }
         }
 
+        // Update language
+        var Update = function(lcid) {
+            settings.lcid = lcid;            
+            try
+            {
+                var data = EnsureData();
+                EnsureCache(data);
+                console.logInfo(`apply langaugaes keys`,"Rigsarkiv.Language.EnsureData");
+                $(".languages").each(function() {
+                    var id = this.id;
+                    if(id !== undefined) {
+                        var tagName = $(this).get(0).tagName;
+                        this.innerHTML = getValue(id);
+                    }                        
+                });
+            }
+            catch(err) 
+            {
+                err.Handle(settings.outputErrorSpn,settings.outputErrorText,"Rigsarkiv.Language.Update"); 
+            }            
+        }
+
         Rigsarkiv.Language = {
-            initialize: function (outputErrorId,lcid) {
+            initialize: function (outputErrorId) {
                 settings.outputErrorSpn = document.getElementById(outputErrorId);
                 settings.outputErrorText = settings.outputErrorSpn.innerHTML; 
-                settings.lcid = lcid;
-                try
-                {
-                    EnsureData();
-                    console.logInfo(`apply langaugaes keys`,"Rigsarkiv.Language.EnsureData");
-                    $(".languages").each(function() {
-                        var id = this.id;
-                        if(id !== undefined) {
-                            var tagName = $(this).get(0).tagName;
-                            this.innerHTML = getValue(id);
-                        }                        
-                    });
-                }
-                catch(err) 
-                {
-                    err.Handle(settings.outputErrorSpn,settings.outputErrorText,"Rigsarkiv.Language.initialize"); 
+            },
+            callback: function () {
+                return { 
+                    lcid: settings.lcid,
+                    setLanguage: function(lcid) {
+                        Update(lcid);   
+                    },
+                    getValue: function(key) {
+                        return getValue(key);   
+                    }
                 }
             } 
         }
