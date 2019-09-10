@@ -16,7 +16,7 @@ window.navigation = window.navigation || {},
             constants: {
                 sectionTemplate: '.section-template',
                 contentContainer: '#content',
-                startSectionMenuItem: "#welcome-menu",
+                startSectionMenuItem: "#menu-welcome",
                 startSection: "#welcome",
                 scriptPath: "./assets/scripts/{0}",
                 resourceWinPath: "resources\\{0}",
@@ -35,15 +35,15 @@ window.navigation = window.navigation || {},
             setMenuOnClickEvent: function () {
                 document.body.addEventListener('click', function (event) {
                     if (event.target.dataset.section) {
-                        if(event.target.id === "hybris-edit-menu") {
+                        if(event.target.id === "menu-hybris-edit") {
                             Rigsarkiv.Hybris.Base.callback().setMode("Edit");
                             Rigsarkiv.Hybris.Structure.callback().reset();
                         }
-                        if(event.target.id === "hybris-new-menu") {
+                        if(event.target.id === "menu-hybris-new") {
                             Rigsarkiv.Hybris.Base.callback().setMode("New");
                             Rigsarkiv.Hybris.Structure.callback().reset();
                         }
-                        $('#side-menu').find('.selected').removeClass('selected');
+                        $('#menu-side').find('.selected').removeClass('selected');
                         navigation.menu.hideAllSections();
                         navigation.menu.showSection(event);
                     }
@@ -81,15 +81,16 @@ window.navigation = window.navigation || {},
             var outputErrorText = outputErrorSpn.innerHTML;
             Rigsarkiv.Rights.initialize("menu-output-Error");
             navigation.menu.init();
-            Rigsarkiv.Profile.initialize("menu-output-Error","profile-menu","profile-select-Languages","profile-save",["instructions-profile-Link"]);
+            Rigsarkiv.Profile.initialize("menu-output-Error","menu-profile","profile-select-Languages","profile-save",["instructions-profile-Link"]);
             Rigsarkiv.Language.initialize("menu-output-Error");
-            Rigsarkiv.Language.callback().setLanguage(Rigsarkiv.Profile.callback().lcid);
+            var languageCallback = Rigsarkiv.Language.callback();
+            languageCallback.setLanguage(Rigsarkiv.Profile.callback().lcid);
             document.getElementById("menu-reload").addEventListener('click', function (event) {
-                ipcRenderer.send('open-confirm-dialog','menu-reload',"Program genstart","Du er ved at genstarte programmet. Er du sikker?","GENSTART","FORTRYD");
+                ipcRenderer.send('open-confirm-dialog','menu-reload',languageCallback.getValue("menu-reload-dialog-title"),languageCallback.getValue("menu-reload-dialog-text"),languageCallback.getValue("menu-reload-dialog-ok"),languageCallback.getValue("menu-reload-dialog-cancel"));
             });
-            var profileLink  = document.getElementById("profile-menu");
+            var profileLink  = document.getElementById("menu-profile");
             $(profileLink).hide();
-            var styxLink = document.getElementById("styx-menu");
+            var styxLink = document.getElementById("menu-styx");
             styxLink.addEventListener('click', function (event) {
                 var converterFilePath = navigation.menu.constants.scriptPath.format(navigation.menu.constants.converterFileName);        
                 if(!fs.existsSync(converterFilePath)) {

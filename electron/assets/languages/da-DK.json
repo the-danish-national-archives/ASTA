@@ -1,4 +1,29 @@
-[  
+[ 
+    {
+        "section": "menu",
+        "keys": [
+            {
+                "key": "menu-reload",
+                "value": "Genstart ASTA"
+            },
+            {
+                "key": "menu-reload-dialog-title",
+                "value": "Program genstart"
+            },
+            {
+                "key": "menu-reload-dialog-text",
+                "value": "Du er ved at genstarte programmet. Er du sikker?"
+            },
+            {
+                "key": "menu-reload-dialog-ok",
+                "value": "GENSTART"
+            },
+            {
+                "key": "menu-reload-dialog-cancel",
+                "value": "FORTRYD"
+            }
+        ]
+    }, 
     {
         "section": "profile",
         "keys": [

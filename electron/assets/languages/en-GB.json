@@ -1,5 +1,30 @@
 [  
     {
+        "section": "menu",
+        "keys": [
+            {
+                "key": "menu-reload",
+                "value": "Restart ASTA"
+            },
+            {
+                "key": "menu-reload-dialog-title",
+                "value": "Program restart"
+            },
+            {
+                "key": "menu-reload-dialog-text",
+                "value": "You are about to restart the program. Are you sure?"
+            },
+            {
+                "key": "menu-reload-dialog-ok",
+                "value": "RESTART"
+            },
+            {
+                "key": "menu-reload-dialog-cancel",
+                "value": "CANCEL"
+            }
+        ]
+    }, 
+    {
         "section": "profile",
         "keys": [
             {
