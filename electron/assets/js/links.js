@@ -38,23 +38,34 @@ window.Rigsarkiv = window.Rigsarkiv || {},
             return result;
         }
 
+        //Add links events
+        var UpdateLinks = function(elemnetIds) {
+            var element = null;
+            elemnetIds.forEach(elementId => {
+                element = document.getElementById(elementId);
+                if(element != null) {
+                    element.addEventListener('click', (event) => {
+                        var fileName = event.srcElement.href.split("#")[1];
+                        shell.openItem(GetPath(fileName));
+                    });
+                }
+                else {
+                    console.logInfo(`none exist elment with id: ${elementId}`,"Rigsarkiv.Links.initialize");
+                }  
+            }); 
+        }
+
         Rigsarkiv.Links = {
-            initialize: function (outputErrorId,elemnetIds) {
+            initialize: function (outputErrorId) {
                 settings.outputErrorSpn = document.getElementById(outputErrorId);
-                settings.outputErrorText = settings.outputErrorSpn.innerHTML;
-                var element = null;
-                elemnetIds.forEach(elementId => {
-                    element = document.getElementById(elementId);
-                    if(element != null) {
-                        element.addEventListener('click', (event) => {
-                            var fileName = event.srcElement.href.split("#")[1];
-                            shell.openItem(GetPath(fileName));
-                        });
+                settings.outputErrorText = settings.outputErrorSpn.innerHTML;                
+            },
+            callback: function () {
+                return { 
+                    updateLinks: function(elemnetIds) {
+                        UpdateLinks(elemnetIds); 
                     }
-                    else {
-                        console.logInfo(`none exist elment with id: ${elementId}`,"Rigsarkiv.Links.initialize");
-                    }  
-                });
-            }
+                }
+            } 
         }
 }(jQuery);
