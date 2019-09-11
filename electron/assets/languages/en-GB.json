@@ -83,6 +83,10 @@
             {
                 "key": "instructions-title-H2",
                 "value": "Quick guide to producing and testing a delivery package"
+            },
+            {
+                "key": "instructions-content1-Left",
+                "value": ""
             }
         ]
     }

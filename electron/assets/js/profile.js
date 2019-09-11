@@ -5,6 +5,7 @@
 window.Rigsarkiv = window.Rigsarkiv || {},
 function (n) {
     const electron = require('electron');
+    const {getCurrentWindow} = require('electron').remote;
     const fs = require('fs');
     
     //private data members
@@ -51,12 +52,12 @@ function (n) {
             try
             {
                 fs.writeFileSync(filePath, JSON.stringify(settings.data));
+                getCurrentWindow().reload();
             }
             catch(err) 
             {
                 err.Handle(settings.outputErrorSpn,settings.outputErrorText,"Rigsarkiv.Profile.AddEvents"); 
             }
-            Rigsarkiv.Language.callback().setLanguage(settings.data.lcid);
         });
     }
 

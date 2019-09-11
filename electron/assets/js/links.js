@@ -58,14 +58,15 @@ window.Rigsarkiv = window.Rigsarkiv || {},
         Rigsarkiv.Links = {
             initialize: function (outputErrorId) {
                 settings.outputErrorSpn = document.getElementById(outputErrorId);
-                settings.outputErrorText = settings.outputErrorSpn.innerHTML;                
+                settings.outputErrorText = settings.outputErrorSpn.innerHTML;
+                UpdateLinks(elemnetIds);                
             },
             callback: function () {
                 return { 
                     updateLinks: function(elemnetIds) {
-                        UpdateLinks(elemnetIds); 
+                        UpdateLinks(elemnetIds);   
                     }
                 }
-            } 
+            }
         }
 }(jQuery);
