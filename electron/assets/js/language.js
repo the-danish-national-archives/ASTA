@@ -5,7 +5,8 @@
 window.Rigsarkiv = window.Rigsarkiv || {},
     function (n) {
         const fs = require('fs');
-        const os = require('os');
+        const path = require('path');
+        const os = require('os');        
 
         //private data memebers
         var settings = {

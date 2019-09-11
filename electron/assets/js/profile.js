@@ -6,9 +6,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
 function (n) {
     const electron = require('electron');
     const fs = require('fs');
-    const path = require('path');
-    const os = require('os');
-
+    
     //private data members
     var settings = {
         outputErrorSpn: null,
@@ -61,8 +59,8 @@ function (n) {
         });
         settings.saveBtn.addEventListener('click', function (event) {
             settings.data.lcid = settings.languagesDropdown.options[settings.languagesDropdown.selectedIndex].value; 
-            console.logInfo(`update profile file: ${filePath}`,"Rigsarkiv.Profile.EnsureProfile");
             var filePath = GetFilePath();
+            console.logInfo(`update profile file: ${filePath}`,"Rigsarkiv.Profile.EnsureProfile");
             try
             {
                 fs.writeFileSync(filePath, JSON.stringify(settings.data));

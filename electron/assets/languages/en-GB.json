@@ -1,7 +1,23 @@
 [  
     {
-        "section": "menu",
+        "section": "index",
         "keys": [
+            {
+                "key": "app-close-dialog-title",
+                "value": "The program closes"
+            },
+            {
+                "key": "app-close-dialog-text",
+                "value": "You are closing the program. Are you sure?"
+            },
+            {
+                "key": "app-close-dialog-ok",
+                "value": "CLOSE"
+            },
+            {
+                "key": "app-close-dialog-cancel",
+                "value": "CANCEL"
+            },
             {
                 "key": "menu-reload",
                 "value": "Restart ASTA"

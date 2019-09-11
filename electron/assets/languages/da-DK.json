@@ -1,7 +1,23 @@
 [ 
     {
-        "section": "menu",
+        "section": "index",
         "keys": [
+            {
+                "key": "app-close-dialog-title",
+                "value": "Programmet lukkes"
+            },
+            {
+                "key": "app-close-dialog-text",
+                "value": "Du er ved at lukke programmet ned. Er du sikker?"
+            },
+            {
+                "key": "app-close-dialog-ok",
+                "value": "LUK"
+            },
+            {
+                "key": "app-close-dialog-cancel",
+                "value": "FORTRYD"
+            },
             {
                 "key": "menu-reload",
                 "value": "Genstart ASTA"
