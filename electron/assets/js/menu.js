@@ -5,12 +5,12 @@
 */
 window.navigation = window.navigation || {},
     function (n) {
-        const {getCurrentWindow, globalShortcut} = require('electron').remote;
+        const {app, getCurrentWindow, globalShortcut} = require('electron').remote;
         const fs = require('fs');
         const path = require('path');
         const os = require('os');
         const { spawn } = require('child_process');
-        const {ipcRenderer} = require('electron');
+        const { ipcRenderer} = require('electron');
 
         navigation.menu = {
             constants: {
@@ -119,7 +119,11 @@ window.navigation = window.navigation || {},
                     getCurrentWindow().reload();
                 } 
                 if(index === 1) {  }            
-            })
+            });
+            ipcRenderer.on('app-close', (e) => {
+                var languageCallback = Rigsarkiv.Language.callback();
+                ipcRenderer.send('app-close',languageCallback.getValue("app-close-dialog-title"),languageCallback.getValue("app-close-dialog-text"),languageCallback.getValue("app-close-dialog-ok"),languageCallback.getValue("app-close-dialog-cancel")); 
+            });
         })
 
     }(jQuery);

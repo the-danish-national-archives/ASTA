@@ -3,16 +3,34 @@ The script that runs in the main process can display a GUI by creating web pages
 https://electronjs.org/docs/tutorial/application-architecture
 */
 // Modules to control application life and create native browser window
-const { app, BrowserWindow, dialog } = require('electron')
+const { ipcMain, app, BrowserWindow, dialog } = require('electron')
 const setupEvents = require('./installers/setupEvents')
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
+var preventClose = true;
 
 if (setupEvents.handleSquirrelEvent()) {
   // squirrel event handled and app will exit in 1000ms, so don't do anything else
   return;
 }
+
+ipcMain.on('app-close', (event,title,text,okTest,cancelText) => {
+  const options = {
+    type: 'warning',
+    title: title,
+    message: text,
+    cancelId: 1,
+    buttons: [okTest, cancelText]
+  }
+  dialog.showMessageBox(options, (index) => {
+    if(index === 0) 
+    { 
+      preventClose = false; 
+      app.quit();
+    }
+  })  
+})
 
 function createWindow() {
   // Create the browser window.
@@ -37,20 +55,13 @@ function createWindow() {
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
     mainWindow = null
-  })
+  })  
 
   mainWindow.on('close', function (e) {
-    var choice = dialog.showMessageBox(this,
-      {
-        type: 'warning',
-        cancelId: 1,
-        buttons: ['LUK', 'FORTRYD'],
-        title: 'Programmet lukkes',
-        message: 'Du er ved at lukke programmet ned. Er du sikker?'
-     });
-     if(choice == 1){
-       e.preventDefault();
-     }
+    if(preventClose) { 
+      e.preventDefault();
+      mainWindow.webContents.send('app-close');
+    }
   })
 }
 
