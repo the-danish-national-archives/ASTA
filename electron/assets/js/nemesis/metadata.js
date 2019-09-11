@@ -834,8 +834,8 @@ function (n) {
                 intLength = intLength - 1;
                 decimalLength = intLength;
             }
-            variable.regExps.push("^(\\+|\\-){0,1}[0-9]{0," + intLength + "}\\.[0-9]{1," + decimalLength + "}$");
-            variable.regExps.push("^(\\+|\\-){0,1}[0-9]{0," + intLength + "}\\,[0-9]{1," + decimalLength + "}$");
+            variable.regExps.push("^(\\+|\\-){0,1}[0-9]{0," + intLength + "}\\.[0-9]{0," + decimalLength + "}$");
+            variable.regExps.push("^(\\+|\\-){0,1}[0-9]{0," + intLength + "}\\,[0-9]{0," + decimalLength + "}$");
             variable.regExps.push("^(\\+|\\-){0,1}[0-9]{1," + intLength + "}$");
             return result;
         }

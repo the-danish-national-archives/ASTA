@@ -1,10 +1,11 @@
-﻿*/
-Version: 6,0
-Encoding: UTF-8 with byte order mark
-Note: The working directory must contain the data file (sav)
-*/
+﻿* Encoding: UTF-8.
+ */
+                      Version: 7,0
+                      Encoding: UTF-8 with byte order mark
+                      Note: The working directory must contain the data file (sav)
+                      */
 
-* Set the working directory and data file name.
+                      * Set the working directory and data file name.
 file handle astaDir
 /name '{3}'.
 file handle dataDir
@@ -109,7 +110,6 @@ execute.
 match files file 'dataDir{0}code_lists.sav'
 /table='dataDir{0}variable_to_code_list.sav'
 /by varName.
-compute keep=1.
 save outfile 'dataDir{0}all_code_lists.sav'.
 
 * CREATE VARIABEL.
@@ -138,7 +138,7 @@ match files file 'dataDir{0}variable.sav' /in=master
 /by varName.
 string type(a1) variable(a32767).
 alter type varFormat(a66) varName_(a66).
-* If variable has a code list, make sure to use it
+* If variable has a code list, make sure to use it.
 compute type=char.substr(varFormat, 1, 1).
 *if codeVar eq 1 varFormat=concat(varName_, '.').
 *if codeVar eq 1 and type eq 'a' varFormat=concat('$', varFormat).
@@ -187,8 +187,8 @@ string tmp(a100) varRef codeList(a32767).
 compute tmp=val.
 alter type tmp (f).
 alter type tmp (amin).
-* compute codeList=concat('"', "'", ltrim(rtrim(tmp)), "'", concat(" '", ltrim(rtrim(valLabel)), "'"), '"').
-compute codeList=concat(ltrim(rtrim(tmp)), concat(" '", ltrim(rtrim(valLabel)), "'")).
+compute codeList=concat('"', "'", ltrim(rtrim(tmp)), "'", concat(" '", ltrim(rtrim(valLabel)), "'"), '"').
+* compute codeList=concat(ltrim(rtrim(tmp)), concat(" '", ltrim(rtrim(valLabel)), "'")).
 if lag(varName) ne varName varRef=concat('"', ltrim(rtrim(varName)), '"').
 select if varName ne 'absoluteDum'.
 alter type codeList varRef(amin).
