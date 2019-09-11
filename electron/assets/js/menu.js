@@ -84,7 +84,7 @@ window.navigation = window.navigation || {},
             Rigsarkiv.Profile.initialize("menu-output-Error","menu-profile","profile-select-Languages","profile-save",["instructions-profile-Link"]);
             Rigsarkiv.Language.initialize("menu-output-Error");
             var languageCallback = Rigsarkiv.Language.callback();
-            languageCallback.setLanguage(Rigsarkiv.Profile.callback().lcid);
+            languageCallback.setLanguage(Rigsarkiv.Profile.callback().data.lcid);
             document.getElementById("menu-reload").addEventListener('click', function (event) {
                 ipcRenderer.send('open-confirm-dialog','menu-reload',languageCallback.getValue("menu-reload-dialog-title"),languageCallback.getValue("menu-reload-dialog-text"),languageCallback.getValue("menu-reload-dialog-ok"),languageCallback.getValue("menu-reload-dialog-cancel"));
             });

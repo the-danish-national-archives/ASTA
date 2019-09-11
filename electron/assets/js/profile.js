@@ -4,6 +4,10 @@
  */
 window.Rigsarkiv = window.Rigsarkiv || {},
 function (n) {
+    const electron = require('electron');
+    const fs = require('fs');
+    const path = require('path');
+    const os = require('os');
 
     //private data members
     var settings = {
@@ -11,8 +15,34 @@ function (n) {
         outputErrorText: null,
         menuSection: null,
         languagesDropdown: null,
-        lcid: null,
-        linkIds: []
+        linkIds: [],
+        defaultLcid: "da-DK",
+        fileName: "profile.json",
+        data: { "lcid":"" }
+    }
+
+    //get profile path
+    var GetFilePath = function() {
+        var userDataPath = electron.remote["app"].getPath('userData');
+        return (userDataPath.indexOf("\\") > -1) ? "{0}\\{1}".format(userDataPath,settings.fileName) : "{0}/{1}".format(userDataPath,settings.fileName);        
+    }
+
+    // ensure profile json file
+    var EnsureProfile = function() {        
+        var filePath = GetFilePath();
+        try
+        {
+            if(!fs.existsSync(filePath)) {
+                console.logInfo(`create profile file: ${filePath}`,"Rigsarkiv.Profile.EnsureProfile");
+                settings.data.lcid = settings.defaultLcid;
+                fs.writeFileSync(filePath, JSON.stringify(settings.data));
+            }
+            settings.data = JSON.parse(fs.readFileSync(filePath));
+        }
+        catch(err) 
+        {
+            err.Handle(settings.outputErrorSpn,settings.outputErrorText,"Rigsarkiv.Profile.EnsureProfile"); 
+        }
     }
 
     //add Event Listener to HTML elmenets
@@ -26,31 +56,41 @@ function (n) {
                 });
             }
             else {
-                console.logInfo(`none exist elment with id: ${linkId}`,"Rigsarkiv.Profile.initialize");
+                console.logInfo(`none exist elment with id: ${linkId}`,"Rigsarkiv.Profile.AddEvents");
             }                
         });
         settings.saveBtn.addEventListener('click', function (event) {
-            settings.lcid = settings.languagesDropdown.options[settings.languagesDropdown.selectedIndex].value; 
-            Rigsarkiv.Language.callback().setLanguage(settings.lcid);
+            settings.data.lcid = settings.languagesDropdown.options[settings.languagesDropdown.selectedIndex].value; 
+            console.logInfo(`update profile file: ${filePath}`,"Rigsarkiv.Profile.EnsureProfile");
+            var filePath = GetFilePath();
+            try
+            {
+                fs.writeFileSync(filePath, JSON.stringify(settings.data));
+            }
+            catch(err) 
+            {
+                err.Handle(settings.outputErrorSpn,settings.outputErrorText,"Rigsarkiv.Profile.AddEvents"); 
+            }
+            Rigsarkiv.Language.callback().setLanguage(settings.data.lcid);
         });
     }
 
     //Model interfaces functions
     Rigsarkiv.Profile = {
         initialize: function (outputErrorId,menuId,languagesId,saveId,linkIds) {
-            settings.lcid = "en-GB";            
+            EnsureProfile();           
             settings.outputErrorSpn = document.getElementById(outputErrorId);
             settings.outputErrorText = settings.outputErrorSpn.innerHTML;
             settings.menuSection = document.getElementById(menuId);
             settings.languagesDropdown = document.getElementById(languagesId);
-            settings.languagesDropdown.value = settings.lcid;
+            settings.languagesDropdown.value = settings.data.lcid;
             settings.saveBtn = document.getElementById(saveId);
             settings.linkIds = linkIds;
             AddEvents();           
         },
         callback: function () {
             return { 
-                lcid: settings.lcid
+                data: settings.data
             }
         } 
     }
