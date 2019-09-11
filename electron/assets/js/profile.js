@@ -13,7 +13,6 @@ function (n) {
         outputErrorText: null,
         menuSection: null,
         languagesDropdown: null,
-        linkIds: [],
         defaultLcid: "da-DK",
         fileName: "profile.json",
         data: { "lcid":"" }
@@ -44,19 +43,7 @@ function (n) {
     }
 
     //add Event Listener to HTML elmenets
-    var AddEvents = function () {
-        var link = null;
-        settings.linkIds.forEach(linkId => {
-            link = document.getElementById(linkId);
-            if(link != null) {
-                link.addEventListener('click', (event) => {
-                    settings.menuSection.click();
-                });
-            }
-            else {
-                console.logInfo(`none exist elment with id: ${linkId}`,"Rigsarkiv.Profile.AddEvents");
-            }                
-        });
+    var AddEvents = function () {        
         settings.saveBtn.addEventListener('click', function (event) {
             settings.data.lcid = settings.languagesDropdown.options[settings.languagesDropdown.selectedIndex].value; 
             var filePath = GetFilePath();
@@ -75,7 +62,7 @@ function (n) {
 
     //Model interfaces functions
     Rigsarkiv.Profile = {
-        initialize: function (outputErrorId,menuId,languagesId,saveId,linkIds) {
+        initialize: function (outputErrorId,menuId,languagesId,saveId) {
             EnsureProfile();           
             settings.outputErrorSpn = document.getElementById(outputErrorId);
             settings.outputErrorText = settings.outputErrorSpn.innerHTML;
@@ -83,7 +70,6 @@ function (n) {
             settings.languagesDropdown = document.getElementById(languagesId);
             settings.languagesDropdown.value = settings.data.lcid;
             settings.saveBtn = document.getElementById(saveId);
-            settings.linkIds = linkIds;
             AddEvents();           
         },
         callback: function () {

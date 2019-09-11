@@ -81,7 +81,7 @@ window.navigation = window.navigation || {},
             var outputErrorText = outputErrorSpn.innerHTML;
             Rigsarkiv.Rights.initialize("menu-output-Error");
             navigation.menu.init();
-            Rigsarkiv.Profile.initialize("menu-output-Error","menu-profile","profile-select-Languages","profile-save",["instructions-profile-Link"]);
+            Rigsarkiv.Profile.initialize("menu-output-Error","menu-profile","profile-select-Languages","profile-save");
             Rigsarkiv.Language.initialize("menu-output-Error");
             var languageCallback = Rigsarkiv.Language.callback();
             languageCallback.setLanguage(Rigsarkiv.Profile.callback().data.lcid);
