@@ -117,6 +117,7 @@ namespace Rigsarkiv.Styx
             }
             try
             {
+                //TODO remove following if all scripts ready
                 if(_report.ScriptType == ScriptType.SPSS)
                 {
                     var path = string.Format(DataPath, _destFolderPath);
@@ -125,6 +126,8 @@ namespace Rigsarkiv.Styx
                     {
                         var folderPath = string.Format("{0}\\{1}", path, table.Folder);
                         var filePath = string.Format("{0}\\{1}.{2}", folderPath, table.Folder, ext);
+                        _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Ensure Script file: {0}", filePath) });
+
                         using (var sw = new StreamWriter(filePath, false, Encoding.UTF8))
                         {
                             sw.Write(string.Format(content, "", folderPath, table.Folder));
