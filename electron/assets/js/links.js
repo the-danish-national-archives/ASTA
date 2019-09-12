@@ -59,7 +59,6 @@ window.Rigsarkiv = window.Rigsarkiv || {},
             initialize: function (outputErrorId) {
                 settings.outputErrorSpn = document.getElementById(outputErrorId);
                 settings.outputErrorText = settings.outputErrorSpn.innerHTML;
-                UpdateLinks(elemnetIds);                
             },
             callback: function () {
                 return { 
