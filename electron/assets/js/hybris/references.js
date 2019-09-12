@@ -76,9 +76,19 @@ window.Rigsarkiv = window.Rigsarkiv || {},
 
             //reset status & input fields
             var Reset = function () {
+                settings.tableBox.value = "";
+                settings.foreignTableBox.value = "";
+                settings.refVarBox.value = "";
+                settings.foreignVariableBox.value = "";
                 $("#{0} tr:not(:first-child)".format(settings.referencesTbl.id)).remove();
                 settings.referencesTbl.hidden = true;
                 Clear();
+                var metadata = Rigsarkiv.Hybris.Base.callback().metadata;
+                if(metadata != null && metadata.length > 0) {
+                    metadata.forEach(table => {
+                        table.references = [];
+                    });
+                }               
             }
 
             // clear 1 reference row
@@ -166,13 +176,8 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                         Redirect();
                     }
                 });
-                settings.cancelBtn.addEventListener('click', function (event) {
-                    settings.tableBox.value = "";
-                    settings.foreignTableBox.value = "";
-                    Reset();
-                    Rigsarkiv.Hybris.Base.callback().metadata.forEach(table => {
-                        table.references = [];
-                    });
+                settings.cancelBtn.addEventListener('click', function (event) {                    
+                    Reset();                    
                 });
                 settings.tableBox.addEventListener('change', function (event) {
                     $(settings.refVarsDropdown).empty();
