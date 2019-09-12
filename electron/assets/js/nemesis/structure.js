@@ -233,6 +233,7 @@ function (n) {
                     else {
                         if(dataFilePattern.test(file) || metadataFilePattern.test(file)) {
                             result = LogError("-CheckFolderData-TableFolderFileOrder-Error",tableFolderName,file);
+                            settings.errorStop = true;
                         }
                         else {
                             result = LogError("-CheckFolderData-TableFolderFile-Error",tableFolderName,file);
@@ -259,8 +260,7 @@ function (n) {
             else {
                 result = LogError("-CheckFolderData-TableFolderEmpty-Error",tableFolderName);
             }
-            //minimum one tableX valid files
-            if(result) { settings.errorStop = false; }
+            if(!result) { settings.errorStop = true; }
             return result;
         }
 
