@@ -234,6 +234,7 @@ function (n) {
                     else {
                         if(dataFilePattern.test(file) || metadataFilePattern.test(file)) {
                             result = LogError("-CheckFolderData-TableFolderFileOrder-Error",tableFolderName,file);
+                            settings.errorStop = true;
                         }
                         else {
                             result = LogError("-CheckFolderData-TableFolderFile-Error",tableFolderName,file);
@@ -260,8 +261,7 @@ function (n) {
             else {
                 result = LogError("-CheckFolderData-TableFolderEmpty-Error",tableFolderName);
             }
-            //minimum one tableX valid files
-            if(result) { settings.errorStop = false; }
+            if(!result) { settings.errorStop = true; }
             return result;
         }
 
@@ -296,7 +296,6 @@ function (n) {
             var destPath = (settings.deliveryPackagePath.indexOf("\\") > -1) ? "{0}\\{1}".format(settings.deliveryPackagePath,settings.defaultSubFolders[1]) : "{0}/{1}".format(settings.deliveryPackagePath,settings.defaultSubFolders[1]); 
             var subFolders = fs.readdirSync(destPath);
             if(subFolders != null && subFolders.length > 0) {
-                settings.errorStop = true;
                 var validTablesName = true;
                 subFolders.filter(junk.not).forEach(folder => {
                     if(!dataTablePattern.test(folder)) {
