@@ -269,7 +269,7 @@ namespace Rigsarkiv.Styx
         private string GetDecimalValue(Column column, string value, out bool hasError, out bool isDifferent)
         {
             isDifferent = false;
-            var result = value;
+            var result = value.Replace(".", ",");
             var lengths = GetDecimalLength(column);
             hasError = (lengths[0] == 0 && lengths[1] == 0);
             if (!hasError)
