@@ -295,7 +295,6 @@ function (n) {
             var destPath = (settings.deliveryPackagePath.indexOf("\\") > -1) ? "{0}\\{1}".format(settings.deliveryPackagePath,settings.defaultSubFolders[1]) : "{0}/{1}".format(settings.deliveryPackagePath,settings.defaultSubFolders[1]); 
             var subFolders = fs.readdirSync(destPath);
             if(subFolders != null && subFolders.length > 0) {
-                settings.errorStop = true;
                 var validTablesName = true;
                 subFolders.filter(junk.not).forEach(folder => {
                     if(!dataTablePattern.test(folder)) {
