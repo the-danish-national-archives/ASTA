@@ -51,7 +51,7 @@ window.navigation = window.navigation || {},
             },
 
             showSection: function (event) {
-                const sectionId = event.target.dataset.section
+                const sectionId = event.target.dataset.section;
                 $('#' + sectionId).show()
                 $('#' + sectionId + ' section').show()
                 $(event.target).addClass('selected');
@@ -86,7 +86,9 @@ window.navigation = window.navigation || {},
             });
             styxLink = document.getElementById("styx-menu");
             styxLink.addEventListener('click', function (event) {
-                var converterFilePath = navigation.menu.constants.scriptPath.format(navigation.menu.constants.converterFileName);        
+                var converterFilePath = navigation.menu.constants.scriptPath.format(navigation.menu.constants.converterFileName);    
+                $('#side-menu').find('.selected').removeClass('selected');
+                $(styxLink).addClass('selected');
                 if(!fs.existsSync(converterFilePath)) {
                     var rootPath = null;
                     if(os.platform() == "win32") {
