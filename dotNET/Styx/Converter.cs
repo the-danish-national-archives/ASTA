@@ -15,6 +15,7 @@ namespace Rigsarkiv.Styx
     {
         protected static readonly ILog _log = LogManager.GetLogger(typeof(Converter));
         protected const string ResourceLogFile = "Rigsarkiv.Styx.Resources.log.html";
+        protected const string ResourceScriptFile = "Rigsarkiv.Styx.Resources.{0}_import.{1}";
         protected const string DataPath = "{0}\\Data";       
         protected const string TableIndexXmlNs = "http://www.sa.dk/xmlns/diark/1.0";
         protected const string TableXmlNs = "http://www.sa.dk/xmlns/siard/1.0/schema0/{0}.xsd";
@@ -105,8 +106,28 @@ namespace Rigsarkiv.Styx
         /// <returns></returns>
         public string GetLogTemplate()
         {
-            string result = null;
+            string result = null;            
             using (Stream stream = _assembly.GetManifestResourceStream(ResourceLogFile))
+            {
+                using (StreamReader reader = new StreamReader(stream, Encoding.UTF8))
+                {
+                    result = reader.ReadToEnd();
+                }
+            }
+            return result;
+        }
+
+        protected string GetScriptTemplate()
+        {
+            string result = null;
+            string resourceName = null;
+            switch (_report.ScriptType)
+            {
+                case ScriptType.SPSS: resourceName = string.Format(ResourceScriptFile, _report.ScriptType.ToString().ToLower(),"sps"); break;
+                case ScriptType.SAS: string.Format(ResourceScriptFile, _report.ScriptType.ToString().ToLower(), "sas"); break;
+                case ScriptType.Stata: string.Format(ResourceScriptFile, _report.ScriptType.ToString().ToLower(), "do"); break;
+            }
+            using (Stream stream = _assembly.GetManifestResourceStream(resourceName))
             {
                 using (StreamReader reader = new StreamReader(stream, Encoding.UTF8))
                 {

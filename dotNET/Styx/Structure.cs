@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Xml.Linq;
 using Rigsarkiv.Asta.Logging;
 using Rigsarkiv.Styx.Entities;
@@ -39,7 +40,7 @@ namespace Rigsarkiv.Styx
             var message = string.Format("Start Converting structure {0} -> {1}", _srcFolder, _destFolder);
             _log.Info(message);
             _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = message });
-            if (EnsureRootFolder() && EnsureTables())
+            if (EnsureRootFolder() && EnsureTables() && EnsureScripts())
             {
                 result = true;
             }
@@ -100,6 +101,42 @@ namespace Rigsarkiv.Styx
                 result = false;
                 _log.Error("EnsureTables Failed", ex);
                 _logManager.Add(new LogEntity() { Level = LogLevel.Error, Section = _logSection, Message = string.Format("EnsureTables Failed: {0}", ex.Message) });
+            }
+            return result;
+        }
+
+        private bool EnsureScripts()
+        {
+            var result = true;
+            string ext = null;
+            switch (_report.ScriptType)
+            {
+                case ScriptType.SPSS: ext = "sps"; break;
+                case ScriptType.SAS: ext = "sas"; ; break;
+                case ScriptType.Stata: ext = "do"; ; break;
+            }
+            try
+            {
+                if(_report.ScriptType == ScriptType.SPSS)
+                {
+                    var path = string.Format(DataPath, _destFolderPath);
+                    var content = GetScriptTemplate();
+                    _report.Tables.ForEach(table =>
+                    {
+                        var folderPath = string.Format("{0}\\{1}", path, table.Folder);
+                        var filePath = string.Format("{0}\\{1}.{2}", folderPath, table.Folder, ext);
+                        using (var sw = new StreamWriter(filePath, false, Encoding.UTF8))
+                        {
+                            sw.Write(string.Format(content, "", folderPath, table.Folder));
+                        }
+                    });
+                }
+            }
+            catch (IOException ex)
+            {
+                result = false;
+                _log.Error("EnsureScripts Failed", ex);
+                _logManager.Add(new LogEntity() { Level = LogLevel.Error, Section = _logSection, Message = string.Format("EnsureScripts Failed: {0}", ex.Message) });
             }
             return result;
         }
