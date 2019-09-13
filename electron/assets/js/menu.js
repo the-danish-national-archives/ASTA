@@ -52,15 +52,15 @@ window.navigation = window.navigation || {},
 
             showSection: function (event) {
                 const sectionId = event.target.dataset.section;
-                $('#' + sectionId).show()
-                $('#' + sectionId + ' section').show()
+                $('#' + sectionId).show();
+                $('#' + sectionId + ' section').show();
                 $(event.target).addClass('selected');
             },
 
             showStartSection: function () {
-                $(this.constants.startSectionMenuItem).click()
-                $(this.constants.startSection).show()
-                $(this.constants.startSection + ' section').show()
+                $(this.constants.startSectionMenuItem).click();
+                $(this.constants.startSection).show();
+                $(this.constants.startSection + ' section').show();
                 $(this.constants.startSectionMenuItem).addClass('selected');
             },
 
@@ -89,6 +89,7 @@ window.navigation = window.navigation || {},
                 var converterFilePath = navigation.menu.constants.scriptPath.format(navigation.menu.constants.converterFileName);    
                 $('#side-menu').find('.selected').removeClass('selected');
                 $(styxLink).addClass('selected');
+                $('#' + event.target.dataset.section + ' section').show()
                 if(!fs.existsSync(converterFilePath)) {
                     var rootPath = null;
                     if(os.platform() == "win32") {
