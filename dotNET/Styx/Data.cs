@@ -179,7 +179,10 @@ namespace Rigsarkiv.Styx
                 path = string.Format(TablePath, _srcPath, column.CodeList.SrcFolder);
                 StreamElement(delegate (XElement row) {
                     var content = row.Element(tableNS + C1).Value;
-                    UpdateRange(column, content);
+                    if (column.MissingValues != null && !column.MissingValues.ContainsKey(content))
+                    {
+                        column.MissingValues.Add(content, content);
+                    }
                 }, path);
             });
         }
