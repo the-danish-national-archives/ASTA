@@ -100,14 +100,7 @@ namespace Rigsarkiv.StyxForm
             var path = string.Format("{0}\\{1}_log.html", sipTextBox.Text, sipNameTextBox.Text);
             if (_logManager.Flush(path, sipNameTextBox.Text, _converter.GetLogTemplate()))
             {
-                try
-                {
-                    Process.Start(path);
-                }
-                catch (Exception ex)
-                {
-                    _log.Error(string.Format("Start Process {0} Failed", path), ex);
-                }
+                OpenFile(path);
             }
             Cursor.Current = Cursors.Default;
         }
@@ -173,6 +166,28 @@ namespace Rigsarkiv.StyxForm
             }
             Cursor.Current = Cursors.Default;
             logButton.Enabled = true;
+        }
+
+        private void reportButton_Click(object sender, EventArgs e)
+        {
+            Cursor.Current = Cursors.WaitCursor;
+            //OpenFile(_reportPath);
+            Cursor.Current = Cursors.Default;
+        }
+
+        private bool OpenFile(string path)
+        {
+            var result = true;
+            try
+            {
+                Process.Start(path);
+            }
+            catch (Exception ex)
+            {
+                result = false;
+                _log.Error(string.Format("Start Process {0} Failed", path), ex);
+            }
+            return result;
         }
     }
 }

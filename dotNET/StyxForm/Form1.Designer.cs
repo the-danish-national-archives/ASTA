@@ -46,6 +46,7 @@
             this.sipNameRequired = new System.Windows.Forms.ErrorProvider(this.components);
             this.label5 = new System.Windows.Forms.Label();
             this.scriptTypeComboBox = new System.Windows.Forms.ComboBox();
+            this.reportButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.aipPathRequired)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sipPathRequired)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sipNameRequired)).BeginInit();
@@ -187,11 +188,23 @@
             this.scriptTypeComboBox.Size = new System.Drawing.Size(121, 28);
             this.scriptTypeComboBox.TabIndex = 28;
             // 
+            // reportButton
+            // 
+            this.reportButton.Enabled = false;
+            this.reportButton.Location = new System.Drawing.Point(132, 318);
+            this.reportButton.Name = "reportButton";
+            this.reportButton.Size = new System.Drawing.Size(111, 32);
+            this.reportButton.TabIndex = 29;
+            this.reportButton.Text = "Vis Rapport";
+            this.reportButton.UseVisualStyleBackColor = true;
+            this.reportButton.Click += new System.EventHandler(this.reportButton_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1005, 604);
+            this.Controls.Add(this.reportButton);
             this.Controls.Add(this.scriptTypeComboBox);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.logButton);
@@ -236,6 +249,7 @@
         private System.Windows.Forms.ErrorProvider sipNameRequired;
         private System.Windows.Forms.ComboBox scriptTypeComboBox;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Button reportButton;
     }
 }
 

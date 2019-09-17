@@ -163,7 +163,7 @@ namespace Rigsarkiv.Styx
                     var folderPath = string.Format("{0}\\{1}", path,folder);
                     _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Ensure Table: {0}", folderPath) });
                     Directory.CreateDirectory(folderPath);                                        
-                    _report.Tables.Add(new Table() { Folder = folder, SrcFolder = srcFolder, Name = tableName, Rows = tableRows, Columns = new List<Column>() });                    
+                    _report.Tables.Add(new Table() { Folder = folder, SrcFolder = srcFolder, Name = tableName, Rows = tableRows, RowsCounter = 0, Columns = new List<Column>() });                    
                 }
             }
             catch (IOException ex)

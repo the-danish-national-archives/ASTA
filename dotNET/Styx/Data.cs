@@ -77,7 +77,6 @@ namespace Rigsarkiv.Styx
             {
                  _report.Tables.ForEach(table =>
                 {
-                    var counter = 0;
                     XNamespace tableNS = string.Format(TableXmlNs, table.SrcFolder);
                     path = string.Format(TableDataPath, _destFolderPath, _report.ScriptType.ToString().ToLower(), table.Name);
                     _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add file: {0}", path) });
@@ -85,12 +84,11 @@ namespace Rigsarkiv.Styx
                     {
                         _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Write {0} data header", table.Folder) });
                         sw.WriteLine(string.Join(Separator, table.Columns.Select(c => c.Name).ToArray()));
-                        counter++;
                         path = string.Format(TablePath, _srcPath, table.SrcFolder);
                         StreamElement(delegate (XElement row) {
                             sw.WriteLine(GetRow(table, row, tableNS));
-                            counter++;
-                            if ((counter % RowsChunk) == 0) { _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("{0} of {1} rows added", counter, table.Rows) }); }
+                            table.RowsCounter++;
+                            if ((table.RowsCounter % RowsChunk) == 0) { _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("{0} of {1} rows added", table.RowsCounter, table.Rows) }); }
                         }, path);
                     }
                 });
@@ -396,6 +394,7 @@ namespace Rigsarkiv.Styx
                         code = column.MissingValues[code];
                     }
                     codeList.AppendLine(string.Format(CodeFormat, code, row.Element(tableNS + C2).Value));
+                    table.RowsCounter++;
                 }, path);
                 var codeListContent = codeList.ToString();                
                 _codeLists.Add(codeListContent.Substring(0, codeListContent.Length - 2));

@@ -197,7 +197,7 @@ namespace Rigsarkiv.Styx
             {
                 return null;
             }
-            var result = new Table() { Columns = new List<Column>() };
+            var result = new Table() { Columns = new List<Column>(), RowsCounter = 0 };
 
             var codelistName = foreignKeyNode.Element(_tableIndexXNS + "name").Value;
             codelistName = codelistName.Substring(3 + table.Name.Length + 1);
