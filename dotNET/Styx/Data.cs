@@ -114,8 +114,9 @@ namespace Rigsarkiv.Styx
                             sw.WriteLine(GetRow(table, row, tableNS));
                             table.RowsCounter++;
                             if ((table.RowsCounter % RowsChunk) == 0) { _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("{0} of {1} rows added", table.RowsCounter, table.Rows) }); }
-                        }, path);
+                        }, path);                        
                     }
+                    _report.TablesCounter++;
                 });
             }
             catch (Exception ex)
@@ -390,7 +391,7 @@ namespace Rigsarkiv.Styx
                     _codeLists.Clear();
                     if (table.Columns.Any(c => c.CodeList != null))
                     {
-                        EnsureCodeList(table);
+                        EnsureCodeList(table);                        
                     }
                 });
             }
@@ -419,18 +420,19 @@ namespace Rigsarkiv.Styx
                         code = column.MissingValues[code];
                     }
                     codeList.AppendLine(string.Format(CodeFormat, code, row.Element(tableNS + C2).Value));
-                    table.RowsCounter++;
+                    column.CodeList.RowsCounter++;
                 }, path);
                 var codeListContent = codeList.ToString();                
                 _codeLists.Add(codeListContent.Substring(0, codeListContent.Length - 2));
                 codeList.Clear();
+                _report.CodeListsCounter++;
             });
             path = string.Format(CodeListPath, _destFolderPath, _report.ScriptType.ToString().ToLower(), table.Name);
             var content = File.ReadAllText(path);
             using (var sw = new StreamWriter(path, false, Encoding.UTF8))
             {
                 sw.Write(string.Format(content, _codeLists.ToArray()));
-            }
+            }            
         }
 
         private string GetReportTemplate()

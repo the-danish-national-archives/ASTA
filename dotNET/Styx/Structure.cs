@@ -21,7 +21,6 @@ namespace Rigsarkiv.Styx
         const string ContextDocumentationIndexPath = "{0}\\Indices\\contextDocumentationIndex.xml";
         const string ContextDocumentationPath = "{0}\\ContextDocumentation";
         const string ContextDocumentationPattern = "^[1-9]{1}[0-9]{0,}.(tif|mpg|mp3|jpg|jp2)$";
-        private int _tablesCounter = 0;
         private XDocument _contextDocumentationIndexXDocument = null;
         private Regex _contextDocumentationRegex = null;
 
@@ -154,8 +153,7 @@ namespace Rigsarkiv.Styx
                 _tableIndexXDocument = XDocument.Load(string.Format(TableIndexPath, _srcPath));
                 foreach (var tableNode in _researchIndexXDocument.Element(_tableIndexXNS + "researchIndex").Element(_tableIndexXNS + "mainTables").Elements())
                 {
-                    _tablesCounter++;
-                    var srcFolder = tableNode.Element(_tableIndexXNS + "tableID").Value;
+                     var srcFolder = tableNode.Element(_tableIndexXNS + "tableID").Value;
                     var tableIndexNode = _tableIndexXDocument.Element(_tableIndexXNS + "siardDiark").Element(_tableIndexXNS + "tables").Elements().Where(e => e.Element(_tableIndexXNS + "folder").Value == srcFolder).FirstOrDefault();
                     var tableName = tableIndexNode.Element(_tableIndexXNS + "name").Value;
                     var tableRows = int.Parse(tableIndexNode.Element(_tableIndexXNS + "rows").Value);

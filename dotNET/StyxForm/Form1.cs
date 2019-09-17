@@ -100,10 +100,7 @@ namespace Rigsarkiv.StyxForm
         {
             Cursor.Current = Cursors.WaitCursor;
             var path = string.Format(LogPath, sipTextBox.Text, sipNameTextBox.Text);
-            if (_logManager.Flush(path, sipNameTextBox.Text, _converter.GetLogTemplate()))
-            {
-                OpenFile(path);
-            }
+            OpenFile(path);
             Cursor.Current = Cursors.Default;
         }
 
@@ -166,8 +163,13 @@ namespace Rigsarkiv.StyxForm
                     }
                 }
             }
+            var path = string.Format(LogPath, sipTextBox.Text, sipNameTextBox.Text);
+            if (_logManager.Flush(path, sipNameTextBox.Text, _converter.GetLogTemplate()))
+            {
+                logButton.Enabled = true;
+            }
             Cursor.Current = Cursors.Default;
-            logButton.Enabled = true;
+            
         }
 
         private void reportButton_Click(object sender, EventArgs e)

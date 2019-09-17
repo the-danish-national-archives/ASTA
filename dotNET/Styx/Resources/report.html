@@ -31,6 +31,7 @@
     <div class="content">
         <h3>Afleveringspakke ID: {1}</h3>
         <div class="results" id="testContent">
+            <p id="scriptType">Scripttype: <b>{{0}}</b></p>
             <p>Antal tabeller</p>
             <table>
                 <tr><th></th><th>Før</th><th>Efter</th></tr>
@@ -66,44 +67,24 @@
                 }});
             }};
         }}
+        var scriptTypeP = document.getElementById("scriptType");
         var rowsTable = document.getElementById("rowsTable");
-        var columnsTable = document.getElementById("columnsTable");
-        var errorsTable = document.getElementById("errorsTable");
         var rowHtml = "<tr><td>{{0}} ({{1}})</td><td{{4}}>{{2}}</td><td{{4}}>{{3}}</td></tr>";
-        var columnHtml = "<tr><td>{{0}} ({{1}})</td><td>{{2}}</td><td>{{3}}</td><td class=\"Error\">{{4}}</td></tr>";
-        var errorHtml = "<tr><td>{{0}} ({{1}})</td><td>{{2}}</td><td>{{3}}</td><td class=\"Error\">{{4}}</td><td class=\"Error\">{{5}}</td></tr>";
         (function () {{
+            scriptTypeP.innerHtml = scriptTypeP.innerHtml.format(report.ScriptTypeString);
             UpdateTable("tablesBefore", "tablesAfter", report.Tables.length, report.TablesCounter);
             var codeLists = 0;
             for (var i = 0; i < report.Tables.length; i++) {{
                 UpdateRow(report.Tables[i]);
-                codeLists += report.Tables[i].CodeList.length;
                 for (var k = 0; k < report.Tables[i].Columns.length; k++) {{
-                    UpdateColumn(report.Tables[i], report.Tables[i].Columns[k]);
-                }}                
-                for (var j = 0; j < report.Tables[i].CodeList.length; j++) {{
-                    UpdateRow(report.Tables[i].CodeList[j]);
-                    for (var l = 0; l < report.Tables[i].CodeList[j].Columns.length; l++) {{
-                        UpdateColumn(report.Tables[i].CodeList[j], report.Tables[i].CodeList[j].Columns[l]);
+                    if (report.Tables[i].Columns[k].CodeList != null) {{
+                        codeLists = codeLists + 1;
+                        UpdateRow(report.Tables[i].Columns[k].CodeList);
                     }}
                 }}
             }}
             UpdateTable("codeListsBefore", "codeListsAfter", codeLists, report.CodeListsCounter);
         }})();
-        function UpdateErrors(table, column) {{
-            for (var i = 0; i < column.ErrorsRows.length; i++) {{
-                var index = column.ErrorsRows[i];
-                var srcValue = table.ErrorsRows[index].SrcValues[column.Id];
-                var destValue = table.ErrorsRows[index].DestValues[column.Id];
-                errorsTable.insertAdjacentHTML("beforeend", errorHtml.format(table.Folder, table.Name, (index + 1), column.Name, srcValue, destValue));
-            }}
-        }}
-        function UpdateColumn(table, column) {{
-            if (column.Errors > 0) {{
-                columnsTable.insertAdjacentHTML("beforeend", columnHtml.format(table.Folder, table.Name, column.Name, column.Type, column.Errors));
-                UpdateErrors(table, column);
-            }}
-        }}
         function UpdateRow(table) {{
                 var className = (table.Rows !== table.RowsCounter) ? " class=\"Error\"" : "";
                 rowsTable.insertAdjacentHTML("beforeend", rowHtml.format(table.Folder, table.Name, table.Rows, table.RowsCounter, className));
