@@ -44,14 +44,10 @@
                 <tr><th>Tabel</th><th>Før</th><th>Efter</th></tr>
             </table>
             <br />
-            <p>Optælling af konverteringfejl</p>
-            <table id="columnsTable">
-                <tr><th>Tabel</th><th>Variabel</th><th>Datatype</th><th>Antal fejl</th></tr>
-            </table>
             <br />
-            <p>Konverteringfejl</p>
-            <table id="errorsTable">
-                <tr><th>Tabel</th><th>Række</th><th>Variabel</th><th>Værdi orginal</th><th>Værdi SQL</th></tr>
+            <p>Spcialkoder</p>
+            <table id="missingValuesTable">
+                <tr><th>Tabel</th><th>Variabel</th><th>Værdi SQL</th><th>Værdi</th></tr>
             </table>
         </div>
     </div>
@@ -69,25 +65,37 @@
         }}
         var scriptTypeP = document.getElementById("scriptType");
         var rowsTable = document.getElementById("rowsTable");
-        var rowHtml = "<tr><td>{{0}} ({{1}})</td><td{{4}}>{{2}}</td><td{{4}}>{{3}}</td></tr>";
+        var missingValuesTable = document.getElementById("missingValuesTable");
+        var rowHtml = "<tr><td>{{0}}</td><td{{3}}>{{1}}</td><td{{3}}>{{2}}</td></tr>";
+        var missingValuesHtml = "<tr><td>{{0}}</td><td>{{1}}</td><td{{4}}>{{2}}</td><td{{4}}>{{3}}</td></tr>";
         (function () {{
-            scriptTypeP.innerHtml = scriptTypeP.innerHtml.format(report.ScriptTypeString);
+            scriptTypeP.innerHTML = scriptTypeP.innerHTML.format(report.ScriptTypeString);
             UpdateTable("tablesBefore", "tablesAfter", report.Tables.length, report.TablesCounter);
             var codeLists = 0;
             for (var i = 0; i < report.Tables.length; i++) {{
                 UpdateRow(report.Tables[i]);
                 for (var k = 0; k < report.Tables[i].Columns.length; k++) {{
-                    if (report.Tables[i].Columns[k].CodeList != null) {{
+                    var column = report.Tables[i].Columns[k];
+                    if (column.CodeList != null) {{
                         codeLists = codeLists + 1;
-                        UpdateRow(report.Tables[i].Columns[k].CodeList);
+                        UpdateRow(column.CodeList);
+                    }}
+                    if (column.CodeList != null && column.MissingValues != null) {{ 
+                        Object.keys(column.MissingValues).forEach(function (key, index) {{
+                            UpdateMissingValue(column.CodeList, column, key, column.MissingValues[key]);
+                        }});                        
                     }}
                 }}
             }}
             UpdateTable("codeListsBefore", "codeListsAfter", codeLists, report.CodeListsCounter);
         }})();
+        function UpdateMissingValue(table, column, key, value) {{
+            var className = (key !== value) ? " class=\"Error\"" : "";
+            missingValuesTable.insertAdjacentHTML("beforeend", missingValuesHtml.format(table.Name, column.Name, key, value, className));
+        }}
         function UpdateRow(table) {{
                 var className = (table.Rows !== table.RowsCounter) ? " class=\"Error\"" : "";
-                rowsTable.insertAdjacentHTML("beforeend", rowHtml.format(table.Folder, table.Name, table.Rows, table.RowsCounter, className));
+                rowsTable.insertAdjacentHTML("beforeend", rowHtml.format(table.Name, table.Rows, table.RowsCounter, className));
         }}
         function UpdateTable(beforeId, afterId, beforeValue, afterValue) {{
             var before = document.getElementById(beforeId);
