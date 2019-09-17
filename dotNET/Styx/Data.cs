@@ -342,12 +342,14 @@ namespace Rigsarkiv.Styx
         private void EnsureUserCode(Table table)
         {
             var usercodes = new List<string>();
-            var path = string.Format(UserCodesPath, _destFolderPath, _report.ScriptType.ToString().ToLower(), table.Name);
-            var content = File.ReadAllText(path);
             table.Columns.Where(c => c.MissingValues != null).ToList().ForEach(column =>
             {   
                 usercodes.Add(string.Join(" ", column.MissingValues.Select(v => string.Format("'{0}'", v.Value)).ToArray()));
             });
+            if(usercodes.Count == 0) { return; }
+
+            var path = string.Format(UserCodesPath, _destFolderPath, _report.ScriptType.ToString().ToLower(), table.Name);
+            var content = File.ReadAllText(path);
             using (var sw = new StreamWriter(path, false, Encoding.UTF8))
             {
                 sw.Write(string.Format(content, usercodes.ToArray()));
