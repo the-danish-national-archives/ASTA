@@ -94,7 +94,7 @@ namespace Rigsarkiv.Styx
                 foreach (var documentNode in _contextDocumentationIndexXDocument.Element(_tableIndexXNS + "contextDocumentationIndex").Elements())
                 {
                     var id = documentNode.Element(_tableIndexXNS + "documentID").Value;
-                    var title = documentNode.Element(_tableIndexXNS + "documentTitle").Value;
+                    var title = ReplaceInvalidChars(documentNode.Element(_tableIndexXNS + "documentTitle").Value);
                     if(files.ContainsKey(id))
                     {
                         var srcFilePath = files[id];
@@ -111,6 +111,16 @@ namespace Rigsarkiv.Styx
                 result = false;
                 _log.Error("CopyFiles Failed", ex);
                 _logManager.Add(new LogEntity() { Level = LogLevel.Error, Section = _logSection, Message = string.Format("CopyFiles Failed: {0}", ex.Message) });
+            }
+            return result;
+        }
+
+        private string ReplaceInvalidChars(string fileName)
+        {
+            var result = string.Join("_", fileName.Split(Path.GetInvalidFileNameChars()));
+            if(result != fileName)
+            {
+                _logManager.Add(new LogEntity() { Level = LogLevel.Warning, Section = _logSection, Message = string.Format("file renamed {0} -> {1}", fileName, result) });
             }
             return result;
         }
