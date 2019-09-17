@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using Rigsarkiv.Asta.Logging;
 using Rigsarkiv.Styx.Entities;
@@ -15,8 +17,13 @@ namespace Rigsarkiv.Styx
     {
         const string TableIndexPath = "{0}\\Indices\\tableIndex.xml";        
         const string ResearchIndexPath = "{0}\\Indices\\researchIndex.xml";
-        const string TableFolderPrefix = "{0}_{1}";        
+        const string TableFolderPrefix = "{0}_{1}";
+        const string ContextDocumentationIndexPath = "{0}\\Indices\\contextDocumentationIndex.xml";
+        const string ContextDocumentationPath = "{0}\\ContextDocumentation";
+        const string ContextDocumentationPattern = "^[1-9]{1}[0-9]{0,}.(tif|mpg|mp3|jpg|jp2)$";
         private int _tablesCounter = 0;
+        private XDocument _contextDocumentationIndexXDocument = null;
+        private Regex _contextDocumentationRegex = null;
 
         /// <summary>
         /// Constructore
@@ -29,6 +36,7 @@ namespace Rigsarkiv.Styx
         {
             _logSection = "Structure";
             _report.ScriptType = scriptType;
+            _contextDocumentationRegex = new Regex(ContextDocumentationPattern, RegexOptions.Compiled | RegexOptions.IgnoreCase);
         }
 
         /// <summary>
@@ -40,7 +48,7 @@ namespace Rigsarkiv.Styx
             var message = string.Format("Start Converting structure {0} -> {1}", _srcFolder, _destFolder);
             _log.Info(message);
             _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = message });
-            if (EnsureRootFolder() && EnsureTables() && EnsureScripts())
+            if (EnsureRootFolder() && EnsureTables() && EnsureScripts() && CopyFiles())
             {
                 result = true;
             }
@@ -68,6 +76,58 @@ namespace Rigsarkiv.Styx
                 result = false;
                 _log.Error("EnsureRootFolder Failed", ex);
                 _logManager.Add(new LogEntity() { Level = LogLevel.Error, Section = _logSection, Message = string.Format("EnsureRootFolder Failed: {0}", ex.Message) });
+            }
+            return result;
+        }
+
+        private bool CopyFiles()
+        {
+            var result = true;
+            var srcPath = string.Format(ContextDocumentationPath, _srcPath);
+            var destPath = string.Format(ContextDocumentationPath, _destFolderPath);
+            try
+            {
+                _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("create folder: {0}", destPath) });
+                Directory.CreateDirectory(destPath);
+                var files = Getfiles();
+                _contextDocumentationIndexXDocument = XDocument.Load(string.Format(ContextDocumentationIndexPath, _srcPath));
+                foreach (var documentNode in _contextDocumentationIndexXDocument.Element(_tableIndexXNS + "contextDocumentationIndex").Elements())
+                {
+                    var id = documentNode.Element(_tableIndexXNS + "documentID").Value;
+                    var title = documentNode.Element(_tableIndexXNS + "documentTitle").Value;
+                    if(files.ContainsKey(id))
+                    {
+                        var srcFilePath = files[id];
+                        var fileExt = srcFilePath.Substring(srcFilePath.LastIndexOf(".") + 1);
+                        var destFilePath = string.Format("{0}\\{1}_{2}.{3}", destPath, id, title, fileExt);
+                        _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("copy file {0} -> {1}", srcFilePath, destFilePath) });
+                        File.Copy(srcFilePath, destFilePath, true);
+                    }                    
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                result = false;
+                _log.Error("CopyFiles Failed", ex);
+                _logManager.Add(new LogEntity() { Level = LogLevel.Error, Section = _logSection, Message = string.Format("CopyFiles Failed: {0}", ex.Message) });
+            }
+            return result;
+        }
+
+        private Dictionary<string,string> Getfiles()
+        {
+            var result = new Dictionary<string, string>();
+            var srcPath = string.Format(ContextDocumentationPath, _srcPath);
+            foreach (string filePath in Directory.GetFiles(srcPath, "*.*", SearchOption.AllDirectories))
+            {
+                var fileName = filePath.Substring(filePath.LastIndexOf("\\") + 1);
+                if(_contextDocumentationRegex.IsMatch(fileName))
+                {
+                    var id = filePath.Substring(0, filePath.Length - (fileName.Length + 1));
+                    id = id.Substring(id.LastIndexOf("\\") + 1);
+                    result.Add(id, filePath);
+                }
             }
             return result;
         }
