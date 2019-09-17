@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Web.Script.Serialization;
 using System.Xml.Linq;
 
 namespace Rigsarkiv.Styx
@@ -17,6 +18,7 @@ namespace Rigsarkiv.Styx
     {
         const int RowsChunk = 500;
         const string Separator = ";";
+        const string ResourceReportFile = "Rigsarkiv.Styx.Resources.report.html";
         const string TablePath = "{0}\\Tables\\{1}\\{1}.xml";
         const string CodeFormat = "'{0}' '{1}'";
         const string SpecialNumericPattern = "^(\\.[a-z])|([A-Z])$";
@@ -66,6 +68,29 @@ namespace Rigsarkiv.Styx
             message = result ? "End Converting Data" : "End Converting Data with errors";
             _log.Info(message);
             _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = message });
+            return result;
+        }
+
+        /// <summary>
+        /// flush and save report file
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="name"></param>
+        public bool Flush(string path, string name)
+        {
+            var result = true;
+            try
+            {
+                _log.Info("Flush report");
+                var json = new JavaScriptSerializer().Serialize(_report);
+                string data = GetReportTemplate();
+                File.WriteAllText(path, string.Format(data, DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss"), name, json));
+            }
+            catch (Exception ex)
+            {
+                result = false;
+                _log.Error("Failed to Flush log", ex);
+            }
             return result;
         }
 
@@ -406,6 +431,19 @@ namespace Rigsarkiv.Styx
             {
                 sw.Write(string.Format(content, _codeLists.ToArray()));
             }
+        }
+
+        private string GetReportTemplate()
+        {
+            string result = null;
+            using (Stream stream = _assembly.GetManifestResourceStream(ResourceReportFile))
+            {
+                using (StreamReader reader = new StreamReader(stream, Encoding.UTF8))
+                {
+                    result = reader.ReadToEnd();
+                }
+            }
+            return result;
         }
     }
 }
