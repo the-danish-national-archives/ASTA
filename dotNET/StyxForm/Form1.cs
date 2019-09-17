@@ -97,7 +97,7 @@ namespace Rigsarkiv.StyxForm
         private void logButton_Click(object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
-            var path = string.Format("{0}\\{1}_log.html", sipTextBox.Text, sipNameTextBox.Text);
+            var path = string.Format("{0}\\{1}_ASTA_konverteringslog.html", sipTextBox.Text, sipNameTextBox.Text);
             if (_logManager.Flush(path, sipNameTextBox.Text, _converter.GetLogTemplate()))
             {
                 OpenFile(path);
@@ -160,7 +160,7 @@ namespace Rigsarkiv.StyxForm
                     _converter = new Data(_logManager, srcPath, destPath, destFolder, _converter.Report);
                     if (_converter.Run())
                     {
-
+                        reportButton.Enabled = true;
                     }
                 }
             }
