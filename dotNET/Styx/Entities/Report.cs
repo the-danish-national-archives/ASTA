@@ -14,6 +14,6 @@ namespace Rigsarkiv.Styx.Entities
         public int TablesCounter { get; set; }
         public int CodeListsCounter { get; set; }
         public List<Table> Tables { get; set; }
-
+        public Dictionary<string, string> ContextDocuments { get; set; }
     }
 }

@@ -93,11 +93,13 @@ namespace Rigsarkiv.Styx
                 foreach (var documentNode in _contextDocumentationIndexXDocument.Element(_tableIndexXNS + "contextDocumentationIndex").Elements())
                 {
                     var id = documentNode.Element(_tableIndexXNS + "documentID").Value;
-                    var title = ReplaceInvalidChars(documentNode.Element(_tableIndexXNS + "documentTitle").Value);
+                    var documentTitle = documentNode.Element(_tableIndexXNS + "documentTitle").Value;
+                    var title = ReplaceInvalidChars(documentTitle);
                     if(files.ContainsKey(id))
                     {
                         var srcFilePath = files[id];
                         var fileExt = srcFilePath.Substring(srcFilePath.LastIndexOf(".") + 1);
+                        _report.ContextDocuments.Add(string.Format("{0}_{1}.{2}", id, documentTitle, fileExt), string.Format("{0}_{1}.{2}", id, title, fileExt));
                         var destFilePath = string.Format("{0}\\{1}_{2}.{3}", destPath, id, title, fileExt);
                         _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("copy file {0} -> {1}", srcFilePath, destFilePath) });
                         File.Copy(srcFilePath, destFilePath, true);

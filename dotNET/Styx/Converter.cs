@@ -56,7 +56,7 @@ namespace Rigsarkiv.Styx
             _assembly = Assembly.GetExecutingAssembly();
             _logManager = logManager;
             _regExps = new Dictionary<string, Regex>();
-            _report = new Report() { Tables = new List<Table>(), TablesCounter = 0, CodeListsCounter = 0 };
+            _report = new Report() { Tables = new List<Table>(), ContextDocuments = new Dictionary<string, string>(), TablesCounter = 0, CodeListsCounter = 0 };
             _srcPath = srcPath;
             _destPath = destPath;
             _destFolder = destFolder;

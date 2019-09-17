@@ -44,10 +44,14 @@
                 <tr><th>Tabel</th><th>Før</th><th>Efter</th></tr>
             </table>
             <br />
-            <br />
             <p>Spcialkoder</p>
             <table id="missingValuesTable">
                 <tr><th>Tabel</th><th>Variabel</th><th>Værdi SQL</th><th>Værdi</th></tr>
+            </table>
+            <br />
+            <p>Kontekstdokumenter</p>
+            <table id="contextDocumentsTable">
+                <tr><th>orginal titel</th><th>titel</th></tr>
             </table>
         </div>
     </div>
@@ -66,8 +70,10 @@
         var scriptTypeP = document.getElementById("scriptType");
         var rowsTable = document.getElementById("rowsTable");
         var missingValuesTable = document.getElementById("missingValuesTable");
+        var contextDocumentsTable = document.getElementById("contextDocumentsTable");
         var rowHtml = "<tr><td>{{0}}</td><td{{3}}>{{1}}</td><td{{3}}>{{2}}</td></tr>";
         var missingValuesHtml = "<tr><td>{{0}}</td><td>{{1}}</td><td{{4}}>{{2}}</td><td{{4}}>{{3}}</td></tr>";
+        var contextDocumentsHtml = "<tr><td{{2}}>{{0}}</td><td{{2}}>{{1}}</td></tr>";
         (function () {{
             scriptTypeP.innerHTML = scriptTypeP.innerHTML.format(report.ScriptTypeString);
             UpdateTable("tablesBefore", "tablesAfter", report.Tables.length, report.TablesCounter);
@@ -88,7 +94,14 @@
                 }}
             }}
             UpdateTable("codeListsBefore", "codeListsAfter", codeLists, report.CodeListsCounter);
+            Object.keys(report.ContextDocuments).forEach(function (key, index) {{
+                UpdateContextDocument(key, report.ContextDocuments[key]);
+            }});
         }})();
+        function UpdateContextDocument(key, value) {{
+            var className = (key !== value) ? " class=\"Error\"" : "";
+            contextDocumentsTable.insertAdjacentHTML("beforeend", contextDocumentsHtml.format(key, value, className));
+        }}
         function UpdateMissingValue(table, column, key, value) {{
             var className = (key !== value) ? " class=\"Error\"" : "";
             missingValuesTable.insertAdjacentHTML("beforeend", missingValuesHtml.format(table.Name, column.Name, key, value, className));
