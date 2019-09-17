@@ -160,8 +160,7 @@ namespace Rigsarkiv.Athena
         public string GetLogTemplate()
         {
             string result = null;
-            var assembly = Assembly.GetExecutingAssembly();
-            using (Stream stream = assembly.GetManifestResourceStream(ResourceLogFile))
+            using (Stream stream = _assembly.GetManifestResourceStream(ResourceLogFile))
             {
                 using (StreamReader reader = new StreamReader(stream, Encoding.UTF8))
                 {

@@ -16,7 +16,7 @@ namespace Rigsarkiv.Athena
     /// </summary>
     public class Index : Converter
     {
-        const string ResourceLogFile = "Rigsarkiv.Athena.Resources.report.html";
+        const string ResourceReportFile = "Rigsarkiv.Athena.Resources.report.html";
         const string FileIndex = "fileIndex.xml";
         private XDocument _fileIndexXDocument = null;
 
@@ -66,7 +66,7 @@ namespace Rigsarkiv.Athena
             {
                 _log.Info("Flush report");
                 var json = new JavaScriptSerializer().Serialize(_report);
-                string data = GetLogTemplate();
+                string data = GetReportTemplate();
                File.WriteAllText(path, string.Format(data, DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss"), name, json));
             }
             catch (Exception ex)
@@ -163,11 +163,10 @@ namespace Rigsarkiv.Athena
             return result;
         }
 
-        private string GetLogTemplate()
+        private string GetReportTemplate()
         {
             string result = null;
-            var assembly = Assembly.GetExecutingAssembly();
-            using (Stream stream = assembly.GetManifestResourceStream(ResourceLogFile))
+            using (Stream stream = _assembly.GetManifestResourceStream(ResourceReportFile))
             {
                 using (StreamReader reader = new StreamReader(stream, Encoding.UTF8))
                 {
