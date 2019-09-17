@@ -270,7 +270,7 @@
                             </span>
                             <i id="hybris-message-references-referencesTable" class="far fa-question-circle"></i>
                             <span id="hybris-message-references-referencesTable-Title" hidden="true">Datafilen som referencen laves fra</span>
-                            <span id="hybris-message-references-referencesTable-Text" hidden="true">Referencevariablen fra denne datafil skal altid referere en nøglevariabel i fremmeddatafilen.</span>
+                            <span id="hybris-message-references-referencesTable-Text" hidden="true">Datafilen som referencen laves fra. Referencevariablen fra denne datafil skal altid referere en nøglevariabel i fremmeddatafilen.</span>
                             <br />
                             <span>
                                 <label class="descriptionLabel" for="hybrisreferencesrefVar">Referencevariabel</label>
@@ -317,7 +317,6 @@
                                     <th>Fremmedvariabel</th>
                                 </tr>
                             </table>
-                            <br />
                             <datalist name="hybrisreferencestables" id="hybris-references-tables"></datalist>
                             <button id="hybris-references-addReferenceBtn" style="margin-left: 43%;">Tilføj reference</button>
                             <br />
@@ -332,7 +331,9 @@
                             </table>
                             <br />
                         </div>
-                        <button id="hybris-references-cancelBtn">Fortryd alt</button> <button id="hybris-references-okBtn">Næste</button>
+                        <button id="hybris-references-cancelBtn">Fortryd alt</button>
+                        <br>
+                        <button id="hybris-references-okBtn">Næste</button>
                         <br/>
                         <span id="hybris-output-references-Error" hidden="true"><br />Error: {0}</span>
                         <span id="hybris-output-references-referenceRequired-Title" hidden="true">Referencen</span>

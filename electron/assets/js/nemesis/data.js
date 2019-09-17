@@ -606,7 +606,9 @@ function (n) {
             .validate(function(data){
                 var result = true;
                 settings.rowIndex++;
-                settings.confirmationSpn.innerHTML = settings.validateRowsText.format(settings.rowIndex,settings.tableRows,settings.fileName);
+                if(settings.rowIndex > 1) {
+                    settings.confirmationSpn.innerHTML = settings.validateRowsText.format(settings.rowIndex - 1,settings.tableRows - 1,settings.fileName);
+                }
                 console.log("validate row: {0}".format(settings.rowIndex));
                 if(settings.rowIndex === 1 && !ValidateHeader(data)) { 
                     settings.table.errorStop = true;
