@@ -416,7 +416,7 @@ function (n) {
             var subFolders = fs.readdirSync(destPath);
             if(subFolders != null && subFolders.length > 0) {
                 var validFoldersName = true;
-                subFolders.forEach(folder => {
+                subFolders.filter(junk.not).forEach(folder => {
                     settings.documents.push(folder);
                     if(!docFolderPattern.test(folder)) {
                         result = LogError("-CheckFolderContextDocumentation-DocCollectionDocumentFolder-Error",folder);
@@ -430,7 +430,7 @@ function (n) {
                         }
                     }
                 });
-                if(validFoldersName && !ValidateDocumentFoldersOrder(subFolders)) { result = false; }
+                if(validFoldersName && !ValidateDocumentFoldersOrder(subFolders.filter(junk.not))) { result = false; }
             }
             else {
                 result = LogError("-CheckFolderContextDocumentation-DocCollectionEmpty-Error",null);
@@ -452,7 +452,7 @@ function (n) {
                     if(!ValidateDocCollection(destPath)) {
                         result = false;
                     }
-                    subFolders.forEach(folder => {
+                    subFolders.filter(junk.not).forEach(folder => {
                         if(folder != settings.docCollectionFolderName) {
                             result = LogError("-CheckFolderContextDocumentation-DocCollectionsCount-Error",folder);
                         }
