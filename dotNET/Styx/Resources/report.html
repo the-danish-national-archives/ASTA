@@ -44,12 +44,12 @@
                 <tr><th>Tabel</th><th>Før</th><th>Efter</th></tr>
             </table>
             <br />
-            <p>Spcialkoder</p>
+            <p id="missingValues">Antal spcialkoder der ændret <b>{{0}}</b></p>
             <table id="missingValuesTable">
                 <tr><th>Tabel</th><th>Variabel</th><th>Værdi SQL</th><th>Værdi</th></tr>
             </table>
             <br />
-            <p>Kontekstdokumenter</p>
+            <p id="contextDocuments">Antal kontekstdokumenter der ændret navne <b>{{0}}</b></p>
             <table id="contextDocumentsTable">
                 <tr><th>orginal titel</th><th>titel</th></tr>
             </table>
@@ -69,12 +69,15 @@
         }}
         var scriptTypeP = document.getElementById("scriptType");
         var rowsTable = document.getElementById("rowsTable");
+        var missingValuesP = document.getElementById("missingValues");
         var missingValuesTable = document.getElementById("missingValuesTable");
+        var contextDocumentsP = document.getElementById("contextDocuments");
         var contextDocumentsTable = document.getElementById("contextDocumentsTable");
         var rowHtml = "<tr><td>{{0}}</td><td{{3}}>{{1}}</td><td{{3}}>{{2}}</td></tr>";
         var missingValuesHtml = "<tr><td>{{0}}</td><td>{{1}}</td><td{{4}}>{{2}}</td><td{{4}}>{{3}}</td></tr>";
         var contextDocumentsHtml = "<tr><td{{2}}>{{0}}</td><td{{2}}>{{1}}</td></tr>";
         (function () {{
+            var counter = 0;
             scriptTypeP.innerHTML = scriptTypeP.innerHTML.format(report.ScriptTypeString);
             UpdateTable("tablesBefore", "tablesAfter", report.Tables.length, report.TablesCounter);
             var codeLists = 0;
@@ -86,17 +89,26 @@
                         codeLists = codeLists + 1;
                         UpdateRow(column.CodeList);
                     }}
-                    if (column.CodeList != null && column.MissingValues != null) {{ 
+                    if (column.CodeList != null && column.MissingValues != null) {{                         
                         Object.keys(column.MissingValues).forEach(function (key, index) {{
-                            UpdateMissingValue(column.CodeList, column, key, column.MissingValues[key]);
+                            var value = column.MissingValues[key];
+                            if (key !== value) {{
+                                UpdateMissingValue(column.CodeList, column, key, value);
+                                counter = counter + 1;
+                            }}                           
                         }});                        
                     }}
                 }}
             }}
             UpdateTable("codeListsBefore", "codeListsAfter", codeLists, report.CodeListsCounter);
+            missingValuesP.innerHTML = missingValuesP.innerHTML.format(counter === 0 ? "" : counter);
+            counter = 0;
             Object.keys(report.ContextDocuments).forEach(function (key, index) {{
-                UpdateContextDocument(key, report.ContextDocuments[key]);
+                    var value = report.ContextDocuments[key];
+                    if (key !== value) {{ counter = counter + 1; }}
+                    UpdateContextDocument(key, value);
             }});
+            contextDocumentsP.innerHTML = contextDocumentsP.innerHTML.format(counter === 0 ? "" : counter);
         }})();
         function UpdateContextDocument(key, value) {{
             var className = (key !== value) ? " class=\"Error\"" : "";
