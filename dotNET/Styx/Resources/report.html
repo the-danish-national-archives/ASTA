@@ -96,12 +96,12 @@
                                 UpdateMissingValue(column.CodeList, column, key, value);
                                 counter = counter + 1;
                             }}                           
-                        }});
-                        missingValuesP.innerHTML = missingValuesP.innerHTML.format(counter === 0 ? "" : counter);
+                        }});                        
                     }}
                 }}
             }}
             UpdateTable("codeListsBefore", "codeListsAfter", codeLists, report.CodeListsCounter);
+            missingValuesP.innerHTML = missingValuesP.innerHTML.format(counter === 0 ? "" : counter);
             counter = 0;
             Object.keys(report.ContextDocuments).forEach(function (key, index) {{
                     var value = report.ContextDocuments[key];
