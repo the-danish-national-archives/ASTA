@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Web.Script.Serialization;
 using System.Xml.Linq;
 
 namespace Rigsarkiv.Styx
@@ -17,6 +18,7 @@ namespace Rigsarkiv.Styx
     {
         const int RowsChunk = 500;
         const string Separator = ";";
+        const string ResourceReportFile = "Rigsarkiv.Styx.Resources.report.html";
         const string TablePath = "{0}\\Tables\\{1}\\{1}.xml";
         const string CodeFormat = "'{0}' '{1}'";
         const string SpecialNumericPattern = "^(\\.[a-z])|([A-Z])$";
@@ -69,6 +71,29 @@ namespace Rigsarkiv.Styx
             return result;
         }
 
+        /// <summary>
+        /// flush and save report file
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="name"></param>
+        public bool Flush(string path, string name)
+        {
+            var result = true;
+            try
+            {
+                _log.Info("Flush report");
+                var json = new JavaScriptSerializer().Serialize(_report);
+                string data = GetReportTemplate();
+                File.WriteAllText(path, string.Format(data, DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss"), name, json));
+            }
+            catch (Exception ex)
+            {
+                result = false;
+                _log.Error("Failed to Flush log", ex);
+            }
+            return result;
+        }
+
         private bool EnsureTables()
         {
             var result = true;
@@ -77,7 +102,6 @@ namespace Rigsarkiv.Styx
             {
                  _report.Tables.ForEach(table =>
                 {
-                    var counter = 0;
                     XNamespace tableNS = string.Format(TableXmlNs, table.SrcFolder);
                     path = string.Format(TableDataPath, _destFolderPath, _report.ScriptType.ToString().ToLower(), table.Name);
                     _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add file: {0}", path) });
@@ -85,14 +109,14 @@ namespace Rigsarkiv.Styx
                     {
                         _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Write {0} data header", table.Folder) });
                         sw.WriteLine(string.Join(Separator, table.Columns.Select(c => c.Name).ToArray()));
-                        counter++;
                         path = string.Format(TablePath, _srcPath, table.SrcFolder);
                         StreamElement(delegate (XElement row) {
                             sw.WriteLine(GetRow(table, row, tableNS));
-                            counter++;
-                            if ((counter % RowsChunk) == 0) { _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("{0} of {1} rows added", counter, table.Rows) }); }
-                        }, path);
+                            table.RowsCounter++;
+                            if ((table.RowsCounter % RowsChunk) == 0) { _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("{0} of {1} rows added", table.RowsCounter, table.Rows) }); }
+                        }, path);                        
                     }
+                    _report.TablesCounter++;
                 });
             }
             catch (Exception ex)
@@ -179,7 +203,10 @@ namespace Rigsarkiv.Styx
                 path = string.Format(TablePath, _srcPath, column.CodeList.SrcFolder);
                 StreamElement(delegate (XElement row) {
                     var content = row.Element(tableNS + C1).Value;
-                    UpdateRange(column, content);
+                    if (column.MissingValues != null && !column.MissingValues.ContainsKey(content))
+                    {
+                        column.MissingValues.Add(content, content);
+                    }
                 }, path);
             });
         }
@@ -339,12 +366,14 @@ namespace Rigsarkiv.Styx
         private void EnsureUserCode(Table table)
         {
             var usercodes = new List<string>();
-            var path = string.Format(UserCodesPath, _destFolderPath, _report.ScriptType.ToString().ToLower(), table.Name);
-            var content = File.ReadAllText(path);
             table.Columns.Where(c => c.MissingValues != null).ToList().ForEach(column =>
             {   
                 usercodes.Add(string.Join(" ", column.MissingValues.Select(v => string.Format("'{0}'", v.Value)).ToArray()));
             });
+            if(usercodes.Count == 0) { return; }
+
+            var path = string.Format(UserCodesPath, _destFolderPath, _report.ScriptType.ToString().ToLower(), table.Name);
+            var content = File.ReadAllText(path);
             using (var sw = new StreamWriter(path, false, Encoding.UTF8))
             {
                 sw.Write(string.Format(content, usercodes.ToArray()));
@@ -362,7 +391,7 @@ namespace Rigsarkiv.Styx
                     _codeLists.Clear();
                     if (table.Columns.Any(c => c.CodeList != null))
                     {
-                        EnsureCodeList(table);
+                        EnsureCodeList(table);                        
                     }
                 });
             }
@@ -391,17 +420,32 @@ namespace Rigsarkiv.Styx
                         code = column.MissingValues[code];
                     }
                     codeList.AppendLine(string.Format(CodeFormat, code, row.Element(tableNS + C2).Value));
+                    column.CodeList.RowsCounter++;
                 }, path);
                 var codeListContent = codeList.ToString();                
                 _codeLists.Add(codeListContent.Substring(0, codeListContent.Length - 2));
                 codeList.Clear();
+                _report.CodeListsCounter++;
             });
             path = string.Format(CodeListPath, _destFolderPath, _report.ScriptType.ToString().ToLower(), table.Name);
             var content = File.ReadAllText(path);
             using (var sw = new StreamWriter(path, false, Encoding.UTF8))
             {
                 sw.Write(string.Format(content, _codeLists.ToArray()));
+            }            
+        }
+
+        private string GetReportTemplate()
+        {
+            string result = null;
+            using (Stream stream = _assembly.GetManifestResourceStream(ResourceReportFile))
+            {
+                using (StreamReader reader = new StreamReader(stream, Encoding.UTF8))
+                {
+                    result = reader.ReadToEnd();
+                }
             }
+            return result;
         }
     }
 }

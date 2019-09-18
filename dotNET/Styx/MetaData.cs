@@ -176,7 +176,8 @@ namespace Rigsarkiv.Styx
 
         private Dictionary<string, string> GetMissingValues(XElement tableNode, Table table, Column column)
         {
-            if(!tableNode.Element(_tableIndexXNS + "columns").Elements().Any(e => e.Element(_tableIndexXNS + "columnID").Value == column.Id))
+            if (tableNode.Element(_tableIndexXNS + "columns") == null) { return null; }
+            if (!tableNode.Element(_tableIndexXNS + "columns").Elements().Any(e => e.Element(_tableIndexXNS + "columnID").Value == column.Id))
             {
                 return null;
             }
@@ -196,7 +197,7 @@ namespace Rigsarkiv.Styx
             {
                 return null;
             }
-            var result = new Table() { Columns = new List<Column>() };
+            var result = new Table() { Columns = new List<Column>(), RowsCounter = 0 };
 
             var codelistName = foreignKeyNode.Element(_tableIndexXNS + "name").Value;
             codelistName = codelistName.Substring(3 + table.Name.Length + 1);

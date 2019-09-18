@@ -25,7 +25,7 @@
     "Arkivering",
     "Afleveringspakke"
   ],
-  "author": "ProActive A/S - Brian Lynnerup Pedersen, Nawar Hajwal",
+  "author": "Rigsarkivet",
   "license": "ISC",
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.10.2",

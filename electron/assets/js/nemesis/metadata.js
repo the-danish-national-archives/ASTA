@@ -403,17 +403,10 @@ function (n) {
             else {
                 name = line.trim().reduceWhiteSpace().substring(0,index);
                 var descriptionTemp = line.trim().reduceWhiteSpace().substring(index + 1);
-                descriptionMultiPattern.lastIndex = 0;
-                var matches = descriptionTemp.match(descriptionMultiPattern)
-                if(matches != null && matches.length > 0) {
-                    description = matches[0].substring(1,matches[0].length - 1);
+                if(descriptionTemp[0] === "'" && descriptionTemp[descriptionTemp.length - 1] === "'") {
+                    description = descriptionTemp.substring(1,descriptionTemp.length - 1);
                     if(description.reduceWhiteSpace() === "" || description === "<none>" || description === "n.a." || description === " ") {
                         LogError("-CheckMetadata-FileVariable-DescriptionEmpty-Error",settings.fileName,name);
-                    }
-                    if(matches.length > 1 || (description.reduceWhiteSpace().length > 0 && name.length > 0 && line.trim().reduceWhiteSpace().length > (description.reduceWhiteSpace().length + 3 + name.length))) {
-                        LogError("-CheckMetadata-FileVariable-DescriptionMax-Error",settings.fileName,startIndex + 1); 
-                        description = "";
-                        settings.errorStop = true;
                     }
                 }
                 else {
@@ -834,8 +827,8 @@ function (n) {
                 intLength = intLength - 1;
                 decimalLength = intLength;
             }
-            variable.regExps.push("^(\\+|\\-){0,1}[0-9]{0," + intLength + "}\\.[0-9]{1," + decimalLength + "}$");
-            variable.regExps.push("^(\\+|\\-){0,1}[0-9]{0," + intLength + "}\\,[0-9]{1," + decimalLength + "}$");
+            variable.regExps.push("^(\\+|\\-){0,1}[0-9]{0," + intLength + "}\\.[0-9]{0," + decimalLength + "}$");
+            variable.regExps.push("^(\\+|\\-){0,1}[0-9]{0," + intLength + "}\\,[0-9]{0," + decimalLength + "}$");
             variable.regExps.push("^(\\+|\\-){0,1}[0-9]{1," + intLength + "}$");
             return result;
         }

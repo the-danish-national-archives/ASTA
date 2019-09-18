@@ -185,6 +185,9 @@ h2.subHeader {
 /* Welcome (Start) page END */
 
 /* References */
+#hybris-references-addReferenceVariableBtn {
+    margin-bottom: 30px;
+}
 #hybris-references-addReferenceVariableBtn, #hybris-references-addForeignVariableBtn, #hybris-references-addReferenceBtn{
     float: right;
     margin-right: 32px;

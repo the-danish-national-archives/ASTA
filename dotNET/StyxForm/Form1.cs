@@ -16,6 +16,8 @@ namespace Rigsarkiv.StyxForm
         private static readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(Form1));
         const string DestFolderName = "DIP.{0}";
         const string SrcFolderNamePattern = "^AVID.SA.([0-9]+).[0-9]$";
+        const string LogPath = "{0}\\{1}_ASTA_konverteringslog.html";
+        const string ReportPath = "{0}\\{1}_ASTA_konverteringsrapport.html";
         private LogManager _logManager = null;
         private Converter _converter = null;
         private Regex _srcFolderNameRegex = null;
@@ -97,18 +99,8 @@ namespace Rigsarkiv.StyxForm
         private void logButton_Click(object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
-            var path = string.Format("{0}\\{1}_log.html", sipTextBox.Text, sipNameTextBox.Text);
-            if (_logManager.Flush(path, sipNameTextBox.Text, _converter.GetLogTemplate()))
-            {
-                try
-                {
-                    Process.Start(path);
-                }
-                catch (Exception ex)
-                {
-                    _log.Error(string.Format("Start Process {0} Failed", path), ex);
-                }
-            }
+            var path = string.Format(LogPath, sipTextBox.Text, sipNameTextBox.Text);
+            OpenFile(path);
             Cursor.Current = Cursors.Default;
         }
 
@@ -165,14 +157,42 @@ namespace Rigsarkiv.StyxForm
                 if (_converter.Run())
                 {
                     _converter = new Data(_logManager, srcPath, destPath, destFolder, _converter.Report);
-                    if (_converter.Run())
+                    if (_converter.Run() && ((Data)_converter).Flush(string.Format(ReportPath, destPath, destFolder), destFolder))
                     {
-
+                        reportButton.Enabled = true;
                     }
                 }
             }
+            var path = string.Format(LogPath, sipTextBox.Text, sipNameTextBox.Text);
+            if (_logManager.Flush(path, sipNameTextBox.Text, _converter.GetLogTemplate()))
+            {
+                logButton.Enabled = true;
+            }
             Cursor.Current = Cursors.Default;
-            logButton.Enabled = true;
+            
+        }
+
+        private void reportButton_Click(object sender, EventArgs e)
+        {
+            var path = string.Format(ReportPath, sipTextBox.Text, sipNameTextBox.Text);
+            Cursor.Current = Cursors.WaitCursor;
+            OpenFile(path);
+            Cursor.Current = Cursors.Default;
+        }
+
+        private bool OpenFile(string path)
+        {
+            var result = true;
+            try
+            {
+                Process.Start(path);
+            }
+            catch (Exception ex)
+            {
+                result = false;
+                _log.Error(string.Format("Start Process {0} Failed", path), ex);
+            }
+            return result;
         }
     }
 }

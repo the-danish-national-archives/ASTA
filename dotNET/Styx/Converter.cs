@@ -15,6 +15,7 @@ namespace Rigsarkiv.Styx
     {
         protected static readonly ILog _log = LogManager.GetLogger(typeof(Converter));
         protected const string ResourceLogFile = "Rigsarkiv.Styx.Resources.log.html";
+        protected const string ResourceScriptFile = "Rigsarkiv.Styx.Resources.{0}_import.{1}";
         protected const string DataPath = "{0}\\Data";       
         protected const string TableIndexXmlNs = "http://www.sa.dk/xmlns/diark/1.0";
         protected const string TableXmlNs = "http://www.sa.dk/xmlns/siard/1.0/schema0/{0}.xsd";
@@ -55,7 +56,7 @@ namespace Rigsarkiv.Styx
             _assembly = Assembly.GetExecutingAssembly();
             _logManager = logManager;
             _regExps = new Dictionary<string, Regex>();
-            _report = new Report() { Tables = new List<Table>() };
+            _report = new Report() { Tables = new List<Table>(), ContextDocuments = new Dictionary<string, string>(), TablesCounter = 0, CodeListsCounter = 0 };
             _srcPath = srcPath;
             _destPath = destPath;
             _destFolder = destFolder;
@@ -105,8 +106,28 @@ namespace Rigsarkiv.Styx
         /// <returns></returns>
         public string GetLogTemplate()
         {
-            string result = null;
+            string result = null;            
             using (Stream stream = _assembly.GetManifestResourceStream(ResourceLogFile))
+            {
+                using (StreamReader reader = new StreamReader(stream, Encoding.UTF8))
+                {
+                    result = reader.ReadToEnd();
+                }
+            }
+            return result;
+        }
+
+        protected string GetScriptTemplate()
+        {
+            string result = null;
+            string resourceName = null;
+            switch (_report.ScriptType)
+            {
+                case ScriptType.SPSS: resourceName = string.Format(ResourceScriptFile, _report.ScriptType.ToString().ToLower(),"sps"); break;
+                case ScriptType.SAS: string.Format(ResourceScriptFile, _report.ScriptType.ToString().ToLower(), "sas"); break;
+                case ScriptType.Stata: string.Format(ResourceScriptFile, _report.ScriptType.ToString().ToLower(), "do"); break;
+            }
+            using (Stream stream = _assembly.GetManifestResourceStream(resourceName))
             {
                 using (StreamReader reader = new StreamReader(stream, Encoding.UTF8))
                 {
@@ -269,7 +290,7 @@ namespace Rigsarkiv.Styx
         private string GetDecimalValue(Column column, string value, out bool hasError, out bool isDifferent)
         {
             isDifferent = false;
-            var result = value;
+            var result = value.Replace(".", ",");
             var lengths = GetDecimalLength(column);
             hasError = (lengths[0] == 0 && lengths[1] == 0);
             if (!hasError)
