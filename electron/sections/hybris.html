@@ -9,7 +9,7 @@
                 <section>
                     <span id="hybris-section-title-New" hidden="true">Skab afleveringspakke</span>
                     <span id="hybris-section-title-Edit" hidden="true">Rediger afleveringspakke</span>
-                    <div class="btnContaier" hidden="true">
+                    <div class="btnContaier" hidden="true"> 
                         <button name="button" class="menuBtn" id="hybris-tab-structure">Skab Mappestruktur</button>
                         <button name="button" class="menuBtn" id="hybris-tab-statistics">Skab Script Fil</button>
                         <button name="button" class="menuBtn" id="hybris-tab-metdata">Skab Metadata</button>
@@ -260,11 +260,13 @@
                     </div>
                     <div id="hybris-panel-references" class="formularContainer" hidden="true">
                         <p>
-                            <h2 class="boldfaced">Tilføj referencer i afleveringspakken <span id="hybris-output-statistics-header-references" class="trinHeader">{0}</span></h2>
+                            <h2 class="boldfaced">Tilføj relationer mellem datasæt i afleveringspakken<span id="hybris-output-statistics-header-references" class="trinHeader">{0}</span></h2>
+                            <p>Du kan her angive relationer mellem datasæt i afleveringspakken, hvis de findes. <br />Du skal kun angive de relationer, hvor sammenfletningen resulterer i, at variable tillægges datasættet (horisontal sammenfletning). Dvs. i det tilfælde hvor der er flere datasæt med forskellige variable, men samme individer, som over en fælles flettevariabel skal samles til et datasæt. <br />Relationer til eventuelle nøglefiler skal også angives her</p>
+                            <br />
                         </p>
                         <div id="referenceContainer">
                             <span>
-                                <label class="descriptionLabel" for="hybrisreferencestable">Datafil</label>
+                                <label class="descriptionLabel boldfaced" for="hybrisreferencestable"><b></b>Datasæt 1</label>
                                 <input type="text" name="hybrisreferencestable" id="hybris-references-table" list="hybris-references-tables">
                             </span>
                             <i id="hybris-message-references-referencesTable" class="far fa-question-circle"></i>
@@ -272,7 +274,7 @@
                             <span id="hybris-message-references-referencesTable-Text" hidden="true">Datafilen som referencen laves fra. Referencevariablen fra denne datafil skal altid referere en nøglevariabel i fremmeddatafilen.</span>
                             <br />
                             <span>
-                                <label class="descriptionLabel" for="hybrisreferencesrefVar">Referencevariabel</label>
+                                <label class="descriptionLabel boldfaced" for="hybrisreferencesrefVar">Flettevariabel 1 (unik)</label>
                                 <input type="text" name="hybrisreferencesrefVar" id="hybris-references-refVar" list="hybris-references-refVars">
                                 <datalist name="hybrisreferencesrefVar" id="hybris-references-refVars"></datalist>
                             </span>
@@ -285,12 +287,12 @@
                             <br>
                             <table id="hybris-references-referenceVariablesTable" hidden="true">
                                 <tr>
-                                    <th>Referencevariabel</th>
+                                    <th>Flettevariabel 1</th>
                                 </tr>
                             </table>
                             <br />
                             <span>
-                                <label class="descriptionLabel" for="hybrisreferencesforeigntable">Fremmeddatafil</label>
+                                <label class="descriptionLabel boldfaced" for="hybrisreferencesforeigntable">Datasæt 2</label>
                                 <input type="text" name="hybrisreferencesforeigntable" id="hybris-references-foreigntable"
                                     list="hybris-references-tables">
                             </span>
@@ -299,7 +301,7 @@
                             <span id="hybris-message-references-foreignFile-Text" hidden="true">Navn på den anden statistikfil i afleveringspakken, der refereres til (fremmeddatafil).</span>
                             <br />
                             <span>
-                                <label class="descriptionLabel" for="hybrisreferencesforeignVariable">Fremmedvariabel</label>
+                                <label class="descriptionLabel boldfaced" for="hybrisreferencesforeignVariable">Flettevariabel 2</label>
                                 <input type="text" name="hybrisreferencesforeignVariable" id="hybris-references-foreignVariable"
                                     list="hybris-references-foreignVariables">
                                 <datalist name="hybrisreferencesforeignVariables" id="hybris-references-foreignVariables"></datalist>
@@ -313,7 +315,7 @@
                             <br>
                             <table id="hybris-references-foreignVariablesTable" hidden="true">
                                 <tr>
-                                    <th>Fremmedvariabel</th>
+                                    <th>Flettevariabel 2</th>
                                 </tr>
                             </table>
                             <datalist name="hybrisreferencestables" id="hybris-references-tables"></datalist>
@@ -322,10 +324,10 @@
                             <br>
                             <table id="hybris-references-dataTable" hidden="true">
                                 <tr>
-                                    <th>Datafil</th>
-                                    <th>Referencevariabel</th>
-                                    <th>Fremmeddatafil</th>
-                                    <th>Fremmedvariabel</th>
+                                    <th>Datasæt 1</th>
+                                    <th>Flettevariabel 1</th>
+                                    <th>Datasæt 2</th>
+                                    <th>Flettevariabel 2</th>
                                 </tr>
                             </table>
                             <br />
