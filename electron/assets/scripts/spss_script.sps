@@ -1,6 +1,6 @@
 ﻿* Encoding: UTF-8.
  */
-                      Version: 7,0
+                      Version: 11,0
                       Encoding: UTF-8 with byte order mark
                       Note: The working directory must contain the data file (sav)
                       */
@@ -30,7 +30,7 @@ set unicode on decimal dot olang=english.
 
 * Create dictionary file.
 define !dictionary(subtype=!tokens(1))
-get file 'inputSpss'.
+get file 'outputSpss'.
 oms
 /select tables
 /if subtypes=[!subtype]
@@ -50,6 +50,7 @@ save outfile 'outputSpss'.
 
 * Create file with all code lists.
 * NB: Dummy decimals are added to all code values, if a code value has decimals somewhere.
+get file 'outputSpss'.
 !dictionary subtype='variable values'.
 get file 'dataDir{0}dictionary.sav'
 /keep var1 var2 label
@@ -187,7 +188,9 @@ string tmp(a100) varRef codeList(a32767).
 compute tmp=val.
 alter type tmp (f).
 alter type tmp (amin).
-compute codeList=concat('"', "'", ltrim(rtrim(tmp)), "'", concat(" '", ltrim(rtrim(valLabel)), "'"), '"').
+if tmp='' codeList=concat('"', "'", ltrim(rtrim(val)), "'", concat(" '", ltrim(rtrim(valLabel)), "'"), '"').
+if tmp ne '' codeList=concat('"', "'", ltrim(rtrim(tmp)), "'", concat(" '", ltrim(rtrim(valLabel)), "'"), '"').
+* compute codeList=concat('"', "'", ltrim(rtrim(tmp)), "'", concat(" '", ltrim(rtrim(valLabel)), "'"), '"').
 * compute codeList=concat(ltrim(rtrim(tmp)), concat(" '", ltrim(rtrim(valLabel)), "'")).
 if lag(varName) ne varName varRef=concat('"', ltrim(rtrim(varName)), '"').
 select if varName ne 'absoluteDum'.
@@ -274,3 +277,4 @@ save translate outfile=!QUOTE(!CONCAT(astaDir, '{0}', !outfile, '.csv'))
 /cells=values.
 !enddefine.
 !export outfile={2}.
+
