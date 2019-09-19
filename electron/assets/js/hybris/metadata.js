@@ -23,7 +23,6 @@ window.Rigsarkiv = window.Rigsarkiv || {},
             var settings = {
                 fileName: null,
                 fileDescr: null,
-                keyVar: null,
                 okBtn: null,
                 outputOkSpn: null,
                 outputOkText: null,
@@ -364,7 +363,6 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 settings.variables = [];
                 settings.fileName.value = "";
                 settings.fileDescr.value = "";
-                settings.keyVar.value = "";
             }
 
             var EnsureVariables = function() {
@@ -405,30 +403,23 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                     Reset();
                     if(ValidateFields()) 
                     { 
-                        var key = settings.keyVar.value;
-                        if(key != null && key !== "") {
-                            ipcRenderer.send('open-confirm-dialog','metadata-addkey',settings.addKeyWarningTitle.innerHTML,settings.addKeyWarningText.innerHTML,settings.okConfirm.innerHTML,settings.cancelConfirm.innerHTML);
-                        }
-                        else {
-                            EnsureData();
-                        }
+                        //ipcRenderer.send('open-confirm-dialog','metadata-addkey',settings.addKeyWarningTitle.innerHTML,settings.addKeyWarningText.innerHTML,settings.okConfirm.innerHTML,settings.cancelConfirm.innerHTML);
+                        EnsureData();
                     }
                 })
                 settings.cancelBtn.addEventListener('click', function (event) {
                     $("#{0} tr:not(:first-child)".format(settings.varKeysTbl.id)).remove();
                     settings.varKeysTbl.hidden = true;
-                    settings.varKeys = [];
-                    settings.keyVar.value = "";    
+                    settings.varKeys = [];    
                 })
                 settings.addVarKeyBtn.addEventListener('click', function (event) {
                     EnsureVariables();                           
-                    var key = settings.keyVar.value;
+                    var key = settings.variablesDropdown.options[settings.variablesDropdown.selectedIndex].value;
                     if(key != null && key !== "") {
                         if(ValidateKey(key) && !settings.varKeys.includes(key) && settings.variables.includes(key)) {
                             settings.varKeys.push(key);
                             settings.varKeysTbl.hidden = false;
                             $(settings.varKeysTbl).append("<tr><td>{0}</td></tr>".format(key));
-                            settings.keyVar.value = "";
                         }
                     }
                     else {
@@ -445,10 +436,9 @@ window.Rigsarkiv = window.Rigsarkiv || {},
 
             //Model interfaces functions
             Rigsarkiv.Hybris.MetaData = {
-                initialize: function (metadataFileName,metadataFileNameDescription,metadataKeyVariable,metdataOkBtn,inputFileNameRequired,inputNumberFirst,inputIllegalChar,outputOkId,okDataPathId,outputErrorId,outputNewExtractionId,newExtractionBtn,extractionTabId,outputNextId,nextBtn,referencesTabId,fileNameLengthId,fileNameReservedWordId,fileDescrReqId,informationPanel1Id,informationPanel2Id,indexFilesDescriptionId,outputCloseApplicationErrorPrefixId,resetHideBox,numberFirstKeyId,illegalCharKeyId,keyLengthId,keyReservedWordId,variablesId,addVarKeyId,varKeysId,varKeyReqId,tablesId,cancelId,addKeyWarningId,okConfirmId,cancelConfirmId,indexfilesTabId) {
+                initialize: function (metadataFileName,metadataFileNameDescription,metdataOkBtn,inputFileNameRequired,inputNumberFirst,inputIllegalChar,outputOkId,okDataPathId,outputErrorId,outputNewExtractionId,newExtractionBtn,extractionTabId,outputNextId,nextBtn,referencesTabId,fileNameLengthId,fileNameReservedWordId,fileDescrReqId,informationPanel1Id,informationPanel2Id,indexFilesDescriptionId,outputCloseApplicationErrorPrefixId,resetHideBox,numberFirstKeyId,illegalCharKeyId,keyLengthId,keyReservedWordId,variablesId,addVarKeyId,varKeysId,varKeyReqId,tablesId,cancelId,addKeyWarningId,okConfirmId,cancelConfirmId,indexfilesTabId) {
                     settings.fileName = document.getElementById(metadataFileName);
                     settings.fileDescr = document.getElementById(metadataFileNameDescription);
-                    settings.keyVar = document.getElementById(metadataKeyVariable);
                     settings.okBtn = document.getElementById(metdataOkBtn);
                     settings.fileNameReqTitle = document.getElementById(inputFileNameRequired + "-Title");
                     settings.fileNameReqText = document.getElementById(inputFileNameRequired + "-Text");
