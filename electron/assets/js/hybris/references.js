@@ -24,15 +24,12 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 outputErrorText: null,
                 okBtn: null,
                 tablesDropdown: null,
-                tableBox: null,
+                foreignTablesDropdown: null,
                 refVarsDropdown: null,
-                foreignTableBox: null,
                 foreignVariablesDropdown: null,
                 addReferenceBtn: null,
                 referenceReqTitle: null,
                 referenceReqText: null,
-                refVarBox: null,
-                foreignVariableBox: null,
                 numberFirstReferenceText: null,
                 illegalCharReferenceText: null,
                 referenceLengthText: null,
@@ -76,10 +73,6 @@ window.Rigsarkiv = window.Rigsarkiv || {},
 
             //reset status & input fields
             var Reset = function () {
-                settings.tableBox.value = "";
-                settings.foreignTableBox.value = "";
-                settings.refVarBox.value = "";
-                settings.foreignVariableBox.value = "";
                 $("#{0} tr:not(:first-child)".format(settings.referencesTbl.id)).remove();
                 settings.referencesTbl.hidden = true;
                 Clear();
@@ -169,7 +162,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
             //add Event Listener to HTML elmenets
             var AddEvents = function () {
                 settings.okBtn.addEventListener('click', function (event) {    
-                    if(settings.foreignVariableBox.value !== "" || settings.refVarBox.value !== "" || settings.referenceVariables.length > 0 || settings.foreignVariables > 0) {
+                    if(settings.referenceVariables.length > 0 || settings.foreignVariables > 0) {
                         ipcRenderer.send('open-confirm-dialog','references-addkey',settings.addKeyWarningTitle.innerHTML,settings.addKeyWarningText.innerHTML,settings.okConfirm.innerHTML,settings.cancelConfirm.innerHTML);
                     }
                     else {
@@ -179,9 +172,8 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 settings.cancelBtn.addEventListener('click', function (event) {                    
                     Reset();                    
                 });
-                settings.tableBox.addEventListener('change', function (event) {
+                settings.tablesDropdown.addEventListener('change', function (event) {
                     $(settings.refVarsDropdown).empty();
-                    settings.refVarBox.value = "";
                     var table = GetTableData(event.srcElement.value);
                     table.variables.forEach(variable => {
                         var el = document.createElement('option');
@@ -190,9 +182,8 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                         settings.refVarsDropdown.appendChild(el);
                     });                    
                 });
-                settings.foreignTableBox.addEventListener('change', function (event) {
+                settings.foreignTablesDropdown.addEventListener('change', function (event) {
                     $(settings.foreignVariablesDropdown).empty();
-                    settings.foreignVariableBox.value = "";
                     var table = GetTableData(event.srcElement.value);
                     table.variables.forEach(variable => {
                         var el = document.createElement('option');
@@ -202,13 +193,13 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                     });                    
                 });
                 settings.addReferenceBtn.addEventListener('click', function (event) {
-                    if (settings.tableBox.value !== "" && settings.foreignTableBox.value !== "" && settings.referenceVariables.length > 0 && settings.foreignVariables.length > 0) {
-                            var table = GetTableData(settings.tableBox.value);
-                            table.references.push({"table":settings.foreignTableBox.value, "key":settings.foreignVariables, "refKey":settings.referenceVariables});
-                            $(settings.referencesTbl).append("<tr><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td></tr>".format(settings.tableBox.value,settings.referenceVariables.join(" "),settings.foreignTableBox.value,settings.foreignVariables.join(" ")));
+                    var tableName = settings.tablesDropdown.options[settings.tablesDropdown.selectedIndex].value;
+                    var foreignTableName = settings.foreignTablesDropdown.options[settings.foreignTablesDropdown.selectedIndex].value;
+                    if (settings.referenceVariables.length > 0 && settings.foreignVariables.length > 0) {
+                            var table = GetTableData(tableName);
+                            table.references.push({"table":foreignTableName, "key":settings.foreignVariables, "refKey":settings.referenceVariables});
+                            $(settings.referencesTbl).append("<tr><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td></tr>".format(tableName,settings.referenceVariables.join(" "),foreignTableName,settings.foreignVariables.join(" ")));
                             settings.referencesTbl.hidden = false;
-                            settings.tableBox.value = "";
-                            settings.foreignTableBox.value = "";
                             Clear();
                     }
                     else {
@@ -216,19 +207,19 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                     }               
                 });
                 settings.addReferenceVariableBtn.addEventListener('click', function (event) { 
-                    if(settings.refVarBox.value !== "" && ValidateReference("referenceVariable",settings.refVarBox.value) && !settings.referenceVariables.includes(settings.refVarBox.value)) {
-                        settings.referenceVariables.push(settings.refVarBox.value);
-                        $(settings.referenceVariablesTbl).append("<tr><td>{0}</td></tr>".format(settings.refVarBox.value));
+                    var refVar = settings.refVarsDropdown.options[settings.refVarsDropdown.selectedIndex].value;
+                    if(ValidateReference("referenceVariable",refVar) && !settings.referenceVariables.includes(refVar)) {
+                        settings.referenceVariables.push(refVar);
+                        $(settings.referenceVariablesTbl).append("<tr><td>{0}</td></tr>".format(refVar));
                         settings.referenceVariablesTbl.hidden = false;
-                        settings.refVarBox.value = "";
                     }
                 });
                 settings.addForeignVariableBtn.addEventListener('click', function (event) { 
-                    if(settings.foreignVariableBox.value !== "" && ValidateReference("foreignVariable",settings.foreignVariableBox.value) && !settings.foreignVariables.includes(settings.foreignVariableBox.value)) {
-                        settings.foreignVariables.push(settings.foreignVariableBox.value);
-                        $(settings.foreignVariablesTbl).append("<tr><td>{0}</td></tr>".format(settings.foreignVariableBox.value));
+                    var foreignVariable = settings.foreignVariablesDropdown.options[settings.foreignVariablesDropdown.selectedIndex].value;
+                    if(ValidateReference("foreignVariable",foreignVariable) && !settings.foreignVariables.includes(foreignVariable)) {
+                        settings.foreignVariables.push(foreignVariable);
+                        $(settings.foreignVariablesTbl).append("<tr><td>{0}</td></tr>".format(foreignVariable));
                         settings.foreignVariablesTbl.hidden = false;
-                        settings.foreignVariableBox.value = "";
                     }
                 });
                 ipcRenderer.on('confirm-dialog-selection-references-addkey', (event, index) => {
@@ -241,20 +232,17 @@ window.Rigsarkiv = window.Rigsarkiv || {},
 
             //Model interfaces functions
             Rigsarkiv.Hybris.References = { 
-                initialize: function (outputErrorId,okId,tablesId,tableBoxId,refVarsId,foreignTableBoxId,foreignVariablesId,addReferenceId,referenceReqId,refVarBoxId,foreignVariableBoxId,numberFirstReference,illegalCharReference,referenceLength,referenceReservedWord,foreignVariableId,referenceVariableId,referencesId,indexfilesTabId,addReferenceVariableId,referenceVariablesId,addForeignVariableId,foreignVariablesTable,cancelId,addKeyWarningId,okConfirmId,cancelConfirmId) {
+                initialize: function (outputErrorId,okId,tablesId,foreignTablesId,refVarsId,foreignVariablesId,addReferenceId,referenceReqId,numberFirstReference,illegalCharReference,referenceLength,referenceReservedWord,foreignVariableId,referenceVariableId,referencesId,indexfilesTabId,addReferenceVariableId,referenceVariablesId,addForeignVariableId,foreignVariablesTable,cancelId,addKeyWarningId,okConfirmId,cancelConfirmId) {
                     settings.outputErrorSpn = document.getElementById(outputErrorId);
                     settings.outputErrorText = settings.outputErrorSpn.innerHTML;
                     settings.okBtn = document.getElementById(okId);
-                    settings.tablesDropdown = document.getElementById(tablesId); 
-                    settings.tableBox = document.getElementById(tableBoxId);
+                    settings.tablesDropdown = document.getElementById(tablesId);
+                    settings.foreignTablesDropdown = document.getElementById(foreignTablesId); 
                     settings.refVarsDropdown = document.getElementById(refVarsId);
-                    settings.foreignTableBox = document.getElementById(foreignTableBoxId);
                     settings.foreignVariablesDropdown = document.getElementById(foreignVariablesId);
                     settings.addReferenceBtn = document.getElementById(addReferenceId);
                     settings.referenceReqTitle = document.getElementById(referenceReqId + "-Title");
                     settings.referenceReqText = document.getElementById(referenceReqId + "-Text");
-                    settings.refVarBox = document.getElementById(refVarBoxId);
-                    settings.foreignVariableBox = document.getElementById(foreignVariableBoxId);
                     settings.numberFirstReferenceText = document.getElementById(numberFirstReference + "-Text");
                     settings.illegalCharReferenceText = document.getElementById(illegalCharReference + "-Text");
                     settings.referenceLengthText = document.getElementById(referenceLength + "-Text");
@@ -278,6 +266,10 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                     return { 
                         reset: function() 
                         { 
+                            $(settings.tablesDropdown).empty();
+                            $(settings.foreignTablesDropdown).empty();
+                            $(settings.refVarsDropdown).empty();
+                            $(settings.foreignVariablesDropdown).empty();                
                             Reset();
                         },
                         updateFile: function(table)
