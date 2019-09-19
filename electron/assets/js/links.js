@@ -30,7 +30,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
             if(os.platform() == "darwin") {                
                 var folders =  __dirname.split("/");
                 rootPath = folders.slice(0,folders.length - 1).join("/");
-                result = "{0}\\documents\\{1}".format(rootPath,fileName);
+                result = "{0}/documents/{1}".format(rootPath,fileName);
                 if(!fs.existsSync(settings.documentPath.format(fileName))) {
                     rootPath = folders.slice(0,folders.length - 3).join("/");
                     result = "{0}/{1}".format(rootPath,fileName);
