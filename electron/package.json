@@ -1,7 +1,7 @@
 {
   "name": "asta",
   "version": "1.0.0",
-  "description": "Electron app for converting files",
+  "description": "Aflevering Af Statistikfiler til Arkiv",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
