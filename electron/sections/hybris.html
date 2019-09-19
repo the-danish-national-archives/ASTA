@@ -185,8 +185,7 @@
                                 <br>
                                 <span>
                                     <label class="descriptionLabel" for="hybrismetdatafileDescription">Datafilbeskrivelse*</label>
-                                    <textarea maxlength="4096" rows="8" placeholder="En kort beskrivelse af datafilen (4096 tegn)."
-                                        name="hybrismetdatafileDescription" id="hybris-metdata-fileDescription"></textarea>
+                                    <textarea maxlength="4096" rows="8" placeholder="En kort beskrivelse af datafilen (4096 tegn)." name="hybrismetdatafileDescription" id="hybris-metdata-fileDescription"></textarea>
                                 </span>
                                 <i id="hybris-message-metdata-fileDescription" class="far fa-question-circle" style="vertical-align: top"></i>
                                 <span id="hybris-message-metdata-fileDescription-Title" hidden="true">DATAFILBESKRIVELSE</span>
@@ -235,9 +234,7 @@
                             <span id="hybris-output-metdata-keyLength-Text" hidden="true">En angivet nøglevariabel er længere end den tilladte længde på 128 tegn. Forkort nøglevariabel.</span>
                             <span id="hybris-output-metdata-keyReservedWord-Title" hidden="true">Nøglevariabel</span>
                             <span id="hybris-output-metdata-keyReservedWord-Text" hidden="true">En angivet nøglevariabel er et reserveret ord i SQL 99 standarden. Omkrans nøglevariabel med dobbeltapostrof (fx "select") eller omdøb nøglevariabel.</span>
-                            <span id="hybris-output-metdata-addKeyWarning-Title" hidden="true">Nøglevariabel er ikke tilføjet</span>
-                            <span id="hybris-output-metdata-addKeyWarning-Text" hidden="true">Du har valgt en nøglevariabel som ikke er tilføjet. Hvis du vælger FORTSÆT medtages variablen ikke som nøglevariabel.</span>
-                            <span id="hybris-output-metdata-OkConfirm" hidden="true">FORTSÆT</span>
+                             <span id="hybris-output-metdata-OkConfirm" hidden="true">FORTSÆT</span>
                             <span id="hybris-output-metdata-CancelConfirm" hidden="true">FORTRYD</span>  
                         </div>
                         <div id="hybris-panel-information2" hidden="true">    
@@ -262,7 +259,7 @@
                         <div id="referenceContainer">
                             <span>
                                 <label class="descriptionLabel boldfaced" for="hybrisreferencestable"><b></b>Datasæt 1</label>
-                                <input type="text" name="hybrisreferencestable" id="hybris-references-table" list="hybris-references-tables">
+                                <select name="hybrisreferencestables" id="hybris-references-tables"></select>
                             </span>
                             <i id="hybris-message-references-referencesTable" class="far fa-question-circle"></i>
                             <span id="hybris-message-references-referencesTable-Title" hidden="true">Datafilen som referencen laves fra</span>
@@ -270,8 +267,7 @@
                             <br />
                             <span>
                                 <label class="descriptionLabel boldfaced" for="hybrisreferencesrefVar">Flettevariabel 1 (unik)</label>
-                                <input type="text" name="hybrisreferencesrefVar" id="hybris-references-refVar" list="hybris-references-refVars">
-                                <datalist name="hybrisreferencesrefVar" id="hybris-references-refVars"></datalist>
+                                <select name="hybrisreferencesrefVar" id="hybris-references-refVars"></select>
                             </span>
                             <i id="hybris-message-references-referenceVariable" class="far fa-question-circle"></i>
                             <span id="hybris-message-references-referenceVariable-Title" hidden="true">REFERENCE (referencevariabel)</span>
@@ -288,8 +284,7 @@
                             <br />
                             <span>
                                 <label class="descriptionLabel boldfaced" for="hybrisreferencesforeigntable">Datasæt 2</label>
-                                <input type="text" name="hybrisreferencesforeigntable" id="hybris-references-foreigntable"
-                                    list="hybris-references-tables">
+                                <select name="hybrisreferencestables" id="hybris-references-foreignTables"></select>
                             </span>
                             <i id="hybris-message-references-foreignFile" class="far fa-question-circle"></i>
                             <span id="hybris-message-references-foreignFile-Title" hidden="true">REFERENCE (fremmeddatafil)</span>
@@ -297,9 +292,7 @@
                             <br />
                             <span>
                                 <label class="descriptionLabel boldfaced" for="hybrisreferencesforeignVariable">Flettevariabel 2</label>
-                                <input type="text" name="hybrisreferencesforeignVariable" id="hybris-references-foreignVariable"
-                                    list="hybris-references-foreignVariables">
-                                <datalist name="hybrisreferencesforeignVariables" id="hybris-references-foreignVariables"></datalist>
+                                <select name="hybrisreferencesforeignVariables" id="hybris-references-foreignVariables"></select>
                             </span>
                             <i id="hybris-message-references-foreignVariable" class="far fa-question-circle"></i>
                             <span id="hybris-message-references-foreignVariable-Title" hidden="true">REFERENCE (fremmedvariabel)</span>
@@ -307,13 +300,12 @@
                             <br />
                             <button id="hybris-references-addForeignVariableBtn">Tilføj variabel</button>
                             <br />
-                            <br>
+                            <br />
                             <table id="hybris-references-foreignVariablesTable" hidden="true">
                                 <tr>
                                     <th>Flettevariabel 2</th>
                                 </tr>
-                            </table>
-                            <datalist name="hybrisreferencestables" id="hybris-references-tables"></datalist>
+                            </table>                            
                             <button id="hybris-references-addReferenceBtn" style="margin-left: 43%;">Tilføj reference</button>
                             <br />
                             <br>
@@ -340,6 +332,8 @@
                         <span id="hybris-output-references-referenceReservedWord-Text" hidden="true">Det angivne {0} er et reserveret ord i SQL 99 standarden. Omkrans {0} med dobbeltapostrof (fx "select") eller omdøb {0}.</span>
                         <span id="hybris-output-references-referenceForeignVariable-Title" hidden="true">fremmedvariabelnavn</span>
                         <span id="hybris-output-references-referenceRefVar-Title" hidden="true">referencevariabelnavn</span>
+                        <span id="hybris-output-references-addKeyWarning-Title" hidden="true">Referencevariabel er ikke tilføjet</span>
+                        <span id="hybris-output-references-addKeyWarning-Text" hidden="true">Du har valgt en referencevariabel som ikke er tilføjet. Hvis du vælger FORTSÆT medtages variablen ikke som referencevariabel.</span>
                         <span id="hybris-output-references-OkConfirm" hidden="true">FORTSÆT</span>
                         <span id="hybris-output-references-CancelConfirm" hidden="true">FORTRYD</span>
                     </div>
@@ -454,8 +448,8 @@
             Rigsarkiv.Messages.initialize(["hybris-message-structure-delivery-package","hybris-message-structure-edit-path","hybris-message-structure-new-path","hybris-message-statistics-filepath","hybris-message-metdata-fileName","hybris-message-metdata-fileDescription","hybris-message-metdata-keyVariable","hybris-message-references-foreignFile","hybris-message-references-foreignVariable","hybris-message-references-referencesTable","hybris-message-references-referenceVariable","hybris-message-indexfiles-archiveIndex","hybris-message-indexfiles-contextDocumentationIndex"]);
             Rigsarkiv.Hybris.Structure.initialize("hybris-section-title","hybris-section-title-New","hybris-section-title-Edit","hybris-select-structure-new-directory","hybris-select-structure-edit-directory","hybris-structure-new-path","hybris-structure-edit-path","hybris-structure-delivery-package","hybris-structure-new-okBtn","hybris-structure-edit-okBtn","hybris-output-structure-Error","hybris-output-structure-Exists","hybris-output-structure-RequiredPath","hybris-output-structure-UnvalidDeliveryPackage","hybris-output-structure-Ok","hybris-structure-select-delivery-package","hybris-tab-structure","hybris-tab-statistics","hybris-tab-indexfiles","hybris-output-statistics-header-trin1","hybris-output-statistics-header-trin2","hybris-output-statistics-header-trin3","hybris-output-statistics-header-information2","hybris-output-statistics-header-references","hybris-output-statistics-header-indexfiles","hybris-output-statistics-header-contextdocuments","hybris-output-statistics-header-overview","hybris-panel-structure","hybris-structure-indexfiles-RequiredPath","hybris-output-indexfiles-Description","hybris-structure-indexfiles-Description");          
             Rigsarkiv.Hybris.DataExtraction.initialize("hybris-select-statistics-file","hybris-statistics-filepath","hybris-statistics-okBtn","hybris-output-statistics-Error","hybris-output-script-OKCopyScript","hybris-message-statistics-SASCatalogWarning","hybris-panel-script1","hybris-panel-script2","hybris-script-okBtn","hybris-output-script-dataPath","hybris-output-script-OKCopyScriptInfo","hybris-output-statistics-RequiredPath","hybris-output-script-RequiredFilesWarning","hybris-output-script-Ok","hybris-output-script-EncodingFileError","hybris-script-nextBtn","hybris-tab-metdata","hybris-output-script-CloseApplicationWarning","hybris-output-structure-Ok","hybris-structure-select-delivery-package","hybris-metdata-fileName","hybris-script-Spinner","hybris-output-script-dataPath-link","hybris-output-statistics-headerLink-trin2","hybris-output-statistics-headerLink-trin3","hybris-output-statistics-headerLink-information2","hybris-output-statistics-OkConfirm","hybris-output-statistics-CancelConfirm","hybris-output-statistics-SASCatalogPopup","hybris-metdata-Variables");
-            Rigsarkiv.Hybris.MetaData.initialize("hybris-metdata-fileName", "hybris-metdata-fileDescription", "hybris-metdata-okBtn", "hybris-output-metdata-fileNameRequired", "hybris-output-metdata-fileNameNumberFirst", "hybris-output-metdata-fileNameIllegalChar","hybris-output-metdata-Ok","hybris-output-metdata-path","hybris-output-metdata-Error","hybris-output-metdata-NewExtraction","hybris-metdata-NewExtractionBtn","hybris-tab-statistics","hybris-output-metdata-Next","hybris-metdata-NextBtn","hybris-tab-references","hybris-output-metdata-fileNameLength","hybris-output-metdata-fileNamereservedWord","hybris-output-metdata-fileDescrRequired","hybris-panel-information1","hybris-panel-information2","hybris-output-indexfiles-Description","hybris-output-metdata-CloseApplicationError","hybris-reset-hide-box","hybris-output-metdata-keyNumberFirst","hybris-output-metdata-keyIllegalChar","hybris-output-metdata-keyLength","hybris-output-metdata-keyReservedWord","hybris-metdata-Variables","hybris-metdata-addVarKeyBtn","hybris-metdata-varKeys","hybris-output-metdata-varKeyRequired","hybris-references-tables","hybris-metdata-cancelBtn","hybris-output-metdata-addKeyWarning","hybris-output-metdata-OkConfirm","hybris-output-metdata-CancelConfirm","hybris-tab-indexfiles");
-            Rigsarkiv.Hybris.References.initialize("hybris-output-references-Error","hybris-references-okBtn","hybris-references-tables","hybris-references-table","hybris-references-refVars","hybris-references-foreigntable","hybris-references-foreignVariables","hybris-references-addReferenceBtn","hybris-output-references-referenceRequired","hybris-references-refVar","hybris-references-foreignVariable","hybris-output-references-referenceNumberFirst","hybris-output-references-referenceIllegalChar","hybris-output-references-referenceLength","hybris-output-references-referenceReservedWord","hybris-output-references-referenceForeignVariable","hybris-output-references-referenceRefVar","hybris-references-dataTable","hybris-tab-indexfiles","hybris-references-addReferenceVariableBtn","hybris-references-referenceVariablesTable","hybris-references-addForeignVariableBtn","hybris-references-foreignVariablesTable","hybris-references-cancelBtn","hybris-output-references-OkConfirm","hybris-output-references-CancelConfirm");
+            Rigsarkiv.Hybris.MetaData.initialize("hybris-metdata-fileName", "hybris-metdata-fileDescription", "hybris-metdata-okBtn", "hybris-output-metdata-fileNameRequired", "hybris-output-metdata-fileNameNumberFirst", "hybris-output-metdata-fileNameIllegalChar","hybris-output-metdata-Ok","hybris-output-metdata-path","hybris-output-metdata-Error","hybris-output-metdata-NewExtraction","hybris-metdata-NewExtractionBtn","hybris-tab-statistics","hybris-output-metdata-Next","hybris-metdata-NextBtn","hybris-tab-references","hybris-output-metdata-fileNameLength","hybris-output-metdata-fileNamereservedWord","hybris-output-metdata-fileDescrRequired","hybris-panel-information1","hybris-panel-information2","hybris-output-indexfiles-Description","hybris-output-metdata-CloseApplicationError","hybris-reset-hide-box","hybris-output-metdata-keyNumberFirst","hybris-output-metdata-keyIllegalChar","hybris-output-metdata-keyLength","hybris-output-metdata-keyReservedWord","hybris-metdata-Variables","hybris-metdata-addVarKeyBtn","hybris-metdata-varKeys","hybris-output-metdata-varKeyRequired","hybris-references-tables","hybris-references-foreignTables","hybris-metdata-cancelBtn","hybris-output-metdata-OkConfirm","hybris-output-metdata-CancelConfirm","hybris-tab-indexfiles","hybris-references-refVars","hybris-references-foreignVariables");
+            Rigsarkiv.Hybris.References.initialize("hybris-output-references-Error","hybris-references-okBtn","hybris-references-tables","hybris-references-foreignTables","hybris-references-refVars","hybris-references-foreignVariables","hybris-references-addReferenceBtn","hybris-output-references-referenceRequired","hybris-output-references-referenceNumberFirst","hybris-output-references-referenceIllegalChar","hybris-output-references-referenceLength","hybris-output-references-referenceReservedWord","hybris-output-references-referenceForeignVariable","hybris-output-references-referenceRefVar","hybris-references-dataTable","hybris-tab-indexfiles","hybris-references-addReferenceVariableBtn","hybris-references-referenceVariablesTable","hybris-references-addForeignVariableBtn","hybris-references-foreignVariablesTable","hybris-references-cancelBtn","hybris-output-references-addKeyWarning","hybris-output-references-OkConfirm","hybris-output-references-CancelConfirm");
             Rigsarkiv.Hybris.IndexFiles.initialize("hybris-indexfiles-archiveIndex-selectFile","hybris-indexfiles-archiveIndex","hybris-indexfiles-contextDocumentationIndex-selectFile","hybris-indexfiles-contextDocumentationIndex","hybris-indexfiles-okBtn","hybris-output-indexfiles-Error","hybris-output-indexfiles-RequiredPath","hybris-output-indexfiles-Ok","hybris-indexfiles-delivery-package","hybris-output-indexfiles-OkInformation","hybris-tab-contextdocuments","hybris-output-indexfiles-WrongFileName");
             Rigsarkiv.Hybris.ContextDocuments.initialize("hybris-output-contextdocuments-Error","hybris-contextdocuments-uploads","hybris-contextdocuments-printBtn","hybris-output-contextdocuments-EmptyFile","hybris-contextdocuments-nextBtn","hybris-tab-overview","hybris-output-contextdocuments-OkInformation","hybris-contextdocuments-Spinner","hybris-overview-deliveryPackage","hybris-output-contextdocuments-OkConfirm","hybris-output-contextdocuments-CancelConfirm","hybris-output-contextdocuments-NextConfirm","hybris-overview-validateBtn");
             Rigsarkiv.Hybris.Overview.initialize("hybris-overview-deliveryPackage","hybris-overview-validateBtn","nemesis-menu");
