@@ -67,8 +67,6 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 varKeyReqTitle: null,
                 varKeyReqText: null,
                 cancelBtn: null,
-                addKeyWarningTitle: null,
-                addKeyWarningText: null,
                 okConfirm: null,
                 cancelConfirm: null,
                 contents: ["","","",""],
@@ -403,7 +401,6 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                     Reset();
                     if(ValidateFields()) 
                     { 
-                        //ipcRenderer.send('open-confirm-dialog','metadata-addkey',settings.addKeyWarningTitle.innerHTML,settings.addKeyWarningText.innerHTML,settings.okConfirm.innerHTML,settings.cancelConfirm.innerHTML);
                         EnsureData();
                     }
                 })
@@ -426,17 +423,11 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                         ipcRenderer.send('open-error-dialog',settings.varKeyReqTitle.innerHTML,settings.varKeyReqText.innerHTML);
                     }
                 });
-                ipcRenderer.on('confirm-dialog-selection-metadata-addkey', (event, index) => {
-                    if(index === 0) {
-                        EnsureData();
-                    } 
-                    if(index === 1) { }            
-                });
             }
 
             //Model interfaces functions
             Rigsarkiv.Hybris.MetaData = {
-                initialize: function (metadataFileName,metadataFileNameDescription,metdataOkBtn,inputFileNameRequired,inputNumberFirst,inputIllegalChar,outputOkId,okDataPathId,outputErrorId,outputNewExtractionId,newExtractionBtn,extractionTabId,outputNextId,nextBtn,referencesTabId,fileNameLengthId,fileNameReservedWordId,fileDescrReqId,informationPanel1Id,informationPanel2Id,indexFilesDescriptionId,outputCloseApplicationErrorPrefixId,resetHideBox,numberFirstKeyId,illegalCharKeyId,keyLengthId,keyReservedWordId,variablesId,addVarKeyId,varKeysId,varKeyReqId,tablesId,cancelId,addKeyWarningId,okConfirmId,cancelConfirmId,indexfilesTabId) {
+                initialize: function (metadataFileName,metadataFileNameDescription,metdataOkBtn,inputFileNameRequired,inputNumberFirst,inputIllegalChar,outputOkId,okDataPathId,outputErrorId,outputNewExtractionId,newExtractionBtn,extractionTabId,outputNextId,nextBtn,referencesTabId,fileNameLengthId,fileNameReservedWordId,fileDescrReqId,informationPanel1Id,informationPanel2Id,indexFilesDescriptionId,outputCloseApplicationErrorPrefixId,resetHideBox,numberFirstKeyId,illegalCharKeyId,keyLengthId,keyReservedWordId,variablesId,addVarKeyId,varKeysId,varKeyReqId,tablesId,cancelId,okConfirmId,cancelConfirmId,indexfilesTabId) {
                     settings.fileName = document.getElementById(metadataFileName);
                     settings.fileDescr = document.getElementById(metadataFileNameDescription);
                     settings.okBtn = document.getElementById(metdataOkBtn);
@@ -486,8 +477,6 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                     settings.varKeyReqText = document.getElementById(varKeyReqId + "-Text");
                     settings.tablesDropdown = document.getElementById(tablesId);
                     settings.cancelBtn = document.getElementById(cancelId);
-                    settings.addKeyWarningTitle = document.getElementById(addKeyWarningId + "-Title");
-                    settings.addKeyWarningText = document.getElementById(addKeyWarningId + "-Text");
                     settings.okConfirm = document.getElementById(okConfirmId);
                     settings.cancelConfirm = document.getElementById(cancelConfirmId);
                     settings.indexfilesTab = document.getElementById(indexfilesTabId);
