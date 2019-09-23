@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.mainTablesListBox = new System.Windows.Forms.ListBox();
@@ -99,21 +99,21 @@
             this.columnValue,
             this.Differences,
             this.Errors});
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataValues.DefaultCellStyle = dataGridViewCellStyle1;
-            this.dataValues.Location = new System.Drawing.Point(547, 141);
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataValues.DefaultCellStyle = dataGridViewCellStyle2;
+            this.dataValues.Location = new System.Drawing.Point(547, 187);
             this.dataValues.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.dataValues.Name = "dataValues";
             this.dataValues.RowHeadersVisible = false;
             this.dataValues.RowTemplate.ReadOnly = true;
             this.dataValues.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.dataValues.Size = new System.Drawing.Size(1002, 722);
+            this.dataValues.Size = new System.Drawing.Size(1002, 676);
             this.dataValues.TabIndex = 5;
             this.dataValues.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataValues_CellClick);
             this.dataValues.SelectionChanged += new System.EventHandler(this.dataValues_SelectionChanged);
@@ -121,7 +121,7 @@
             // prevButton
             // 
             this.prevButton.Enabled = false;
-            this.prevButton.Location = new System.Drawing.Point(721, 95);
+            this.prevButton.Location = new System.Drawing.Point(1125, 101);
             this.prevButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.prevButton.Name = "prevButton";
             this.prevButton.Size = new System.Drawing.Size(70, 35);
@@ -133,7 +133,7 @@
             // nextButton
             // 
             this.nextButton.Enabled = false;
-            this.nextButton.Location = new System.Drawing.Point(799, 95);
+            this.nextButton.Location = new System.Drawing.Point(1203, 102);
             this.nextButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.nextButton.Name = "nextButton";
             this.nextButton.Size = new System.Drawing.Size(70, 35);
@@ -156,7 +156,7 @@
             // 
             // searchTextBox
             // 
-            this.searchTextBox.Location = new System.Drawing.Point(1131, 99);
+            this.searchTextBox.Location = new System.Drawing.Point(1337, 102);
             this.searchTextBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.searchTextBox.Name = "searchTextBox";
             this.searchTextBox.Size = new System.Drawing.Size(148, 26);
@@ -205,7 +205,7 @@
             // searchButton
             // 
             this.searchButton.Enabled = false;
-            this.searchButton.Location = new System.Drawing.Point(1285, 95);
+            this.searchButton.Location = new System.Drawing.Point(1493, 101);
             this.searchButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.searchButton.Name = "searchButton";
             this.searchButton.Size = new System.Drawing.Size(52, 35);
@@ -227,7 +227,7 @@
             // rowErrorsLabel
             // 
             this.rowErrorsLabel.AutoSize = true;
-            this.rowErrorsLabel.Location = new System.Drawing.Point(1434, 106);
+            this.rowErrorsLabel.Location = new System.Drawing.Point(543, 151);
             this.rowErrorsLabel.Name = "rowErrorsLabel";
             this.rowErrorsLabel.Size = new System.Drawing.Size(116, 20);
             this.rowErrorsLabel.TabIndex = 22;
@@ -246,11 +246,11 @@
             // nextErrorButton
             // 
             this.nextErrorButton.Enabled = false;
-            this.nextErrorButton.Location = new System.Drawing.Point(1005, 95);
+            this.nextErrorButton.Location = new System.Drawing.Point(1391, 142);
             this.nextErrorButton.Name = "nextErrorButton";
-            this.nextErrorButton.Size = new System.Drawing.Size(99, 35);
+            this.nextErrorButton.Size = new System.Drawing.Size(155, 35);
             this.nextErrorButton.TabIndex = 25;
-            this.nextErrorButton.Text = "Næste fejl";
+            this.nextErrorButton.Text = "Næste Forskelle";
             this.nextErrorButton.UseVisualStyleBackColor = true;
             this.nextErrorButton.Click += new System.EventHandler(this.nextErrorButton_Click);
             // 
@@ -276,11 +276,11 @@
             // prevErrorButton
             // 
             this.prevErrorButton.Enabled = false;
-            this.prevErrorButton.Location = new System.Drawing.Point(900, 95);
+            this.prevErrorButton.Location = new System.Drawing.Point(1215, 142);
             this.prevErrorButton.Name = "prevErrorButton";
-            this.prevErrorButton.Size = new System.Drawing.Size(99, 35);
+            this.prevErrorButton.Size = new System.Drawing.Size(156, 35);
             this.prevErrorButton.TabIndex = 28;
-            this.prevErrorButton.Text = "Forrige fejl";
+            this.prevErrorButton.Text = "Forrige Forskelle";
             this.prevErrorButton.UseVisualStyleBackColor = true;
             this.prevErrorButton.Click += new System.EventHandler(this.prevErrorButton_Click);
             // 
@@ -352,16 +352,14 @@
             // 
             // Differences
             // 
-            this.Differences.FillWeight = 35F;
-            this.Differences.HeaderText = "Forskelle";
+            this.Differences.HeaderText = "Formatændring";
             this.Differences.Name = "Differences";
             this.Differences.ReadOnly = true;
             this.Differences.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // Errors
             // 
-            this.Errors.FillWeight = 35F;
-            this.Errors.HeaderText = "Fejl";
+            this.Errors.HeaderText = "Forskelle";
             this.Errors.Name = "Errors";
             this.Errors.ReadOnly = true;
             this.Errors.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;

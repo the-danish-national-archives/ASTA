@@ -328,7 +328,7 @@ namespace Rigsarkiv.Athena
         /// <param name="researchIndexNode"></param>
         protected void AddSpecialNumeric(Column column, XElement researchIndexNode)
         {
-            researchIndexNode.Element(_tableIndexXNS + "specialNumeric").Value = true.ToString().ToLower();
+            researchIndexNode.Element(_tableIndexXNS + "specialNumeric").Value = column.HasSpecialNumeric.ToString().ToLower();
             XElement columnsIndexNode = researchIndexNode.Element(_tableIndexXNS + "columns");
             XElement columnIndexNode = new XElement(_tableIndexXNS + "column", new XElement(_tableIndexXNS + "columnID", column.Id), new XElement(_tableIndexXNS + "missingValues"));
             if (columnsIndexNode == null)
