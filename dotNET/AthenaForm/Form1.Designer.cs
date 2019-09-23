@@ -45,6 +45,7 @@
             this.nextForm = new System.Windows.Forms.Button();
             this.logButton = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.sipPathRequired)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.aipNameRequired)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.aipPathRequired)).BeginInit();
@@ -193,11 +194,21 @@
             this.label4.TabIndex = 15;
             this.label4.Text = "Konverter til arkiveringsversion (AV)";
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(38, 290);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(36, 20);
+            this.label5.TabIndex = 16;
+            this.label5.Text = "Log";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1080, 681);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.logButton);
             this.Controls.Add(this.nextForm);
@@ -241,5 +252,6 @@
         private System.Windows.Forms.Button nextForm;
         private System.Windows.Forms.Button logButton;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label5;
     }
 }
