@@ -9,7 +9,7 @@
                 <section>
                     <span id="hybris-section-title-New" hidden="true">Skab afleveringspakke</span>
                     <span id="hybris-section-title-Edit" hidden="true">Rediger afleveringspakke</span>
-                    <div class="btnContaier" hidden="true"> 
+                    <div class="btnContaier"> 
                         <button name="button" class="menuBtn" id="hybris-tab-structure">Skab Mappestruktur</button>
                         <button name="button" class="menuBtn" id="hybris-tab-statistics">Skab Script Fil</button>
                         <button name="button" class="menuBtn" id="hybris-tab-metdata">Skab Metadata</button>
@@ -129,7 +129,7 @@
                             <span id="hybris-output-statistics-OkConfirm" hidden="true">FORTSÆT</span>
                             <span id="hybris-output-statistics-CancelConfirm" hidden="true">FORTRYD</span>   
                             <span id="hybris-message-statistics-SASCatalogWarning-Title" hidden="true">SAS fil uden katalog</span>
-                            <span id="hybris-message-statistics-SASCatalogWarning-Text" hidden="true">Du er ved at udtrække data fra en SAS-datafil uden katalog. Enten mangler SAS katalogfilen eller den er navngivet forkert. Når der udtrækkes data for en SAS-datafil med katalog, skal katalogfilen (.sas7bcat) placeres i samme mappe som den valgte SAS-datafil (.sas7bdat), der skal laves udtræk fra, og katalogfilen skal navngives på samme måde som SAS-datafilen. OBS: Det er vigtigt at du omdøber en kopi af katalogfilen, ellers kan du ikke åbne statistikfilen korrekt efterfølgende i dit statistikprogram. OBS: Katalogfilen må kun indeholde value labels (formats) som anvendes i den statistikfil, som udtrækket laves fra. Klik ”FORSÆT”, hvis du ønsker at fortsætte udtræk uden katalogfil. Klik ”FORTRYD” hvis du ønsker at vælge ny statistikfil med katalog.</span>
+                            <span id="hybris-message-statistics-SASCatalogWarning-Text" hidden="true">Du er ved at udtrække data fra en SAS-datafil uden katalog (format-filen). Enten mangler SAS katalogfilen eller den er navngivet forkert. Når der udtrækkes data for en SAS-datafil med katalog, skal katalogfilen (.sas7bcat) placeres i samme mappe som den valgte SAS-datafil (.sas7bdat), der skal laves udtræk fra, og katalogfilen skal navngives på samme måde som SAS-datafilen. OBS: Det er vigtigt at du omdøber en kopi af katalogfilen, ellers kan du ikke åbne statistikfilen korrekt efterfølgende i dit statistikprogram. OBS: Katalogfilen må kun indeholde value labels (formats) som anvendes i den statistikfil, som udtrækket laves fra. Klik ”FORSÆT”, hvis du ønsker at fortsætte udtræk uden katalogfil. Klik ”FORTRYD” hvis du ønsker at vælge ny statistikfil med katalog.</span>
                         </div>                        
                         <div id="hybris-panel-script2" hidden="true">
                             <p>
@@ -193,7 +193,7 @@
                                 <br>
                                 <span>
                                     <label class="descriptionLabel" for="hybrismetdatakeyVar">Nøglevariabel</label>
-                                    <select id="hybris-metdata-Variables"></select>
+                                    <select id="hybris-metdata-Variables" class="dropDownSizing"></select>
                                 </span>
                                 <i id="hybris-message-metdata-keyVariable" class="far fa-question-circle"></i>
                                 <span id="hybris-message-metdata-keyVariable-Title" hidden="true">NØGLEVARIABEL</span>
@@ -259,19 +259,19 @@
                         <div id="referenceContainer">
                             <span>
                                 <label class="descriptionLabel boldfaced" for="hybrisreferencestable"><b></b>Datasæt 1</label>
-                                <select name="hybrisreferencestables" id="hybris-references-tables"></select>
+                                <select name="hybrisreferencestables" class="dropDownSizing" id="hybris-references-tables"></select>
                             </span>
                             <i id="hybris-message-references-referencesTable" class="far fa-question-circle"></i>
                             <span id="hybris-message-references-referencesTable-Title" hidden="true">Datafilen som referencen laves fra</span>
-                            <span id="hybris-message-references-referencesTable-Text" hidden="true">Datafilen som referencen laves fra. Referencevariablen fra denne datafil skal altid referere en nøglevariabel i fremmeddatafilen.</span>
+                            <span id="hybris-message-references-referencesTable-Text" hidden="true">Datafilen som referencen laves fra. Referencevariablen fra denne datafil skal altid referere en nøglevariabel (Flettevariabel 2) i fremmeddatafilen (Datasæt 2).</span>
                             <br />
                             <span>
-                                <label class="descriptionLabel boldfaced" for="hybrisreferencesrefVar">Flettevariabel 1 (unik)</label>
-                                <select name="hybrisreferencesrefVar" id="hybris-references-refVars"></select>
+                                <label class="descriptionLabel boldfaced" for="hybrisreferencesrefVar">Flettevariabel 1</label>
+                                <select name="hybrisreferencesrefVar" class="dropDownSizing" id="hybris-references-refVars"></select>
                             </span>
                             <i id="hybris-message-references-referenceVariable" class="far fa-question-circle"></i>
                             <span id="hybris-message-references-referenceVariable-Title" hidden="true">REFERENCE (referencevariabel)</span>
-                            <span id="hybris-message-references-referenceVariable-Text" hidden="true">Variabelnavn(e) for variable fra den statistikfil som referencen laves fra (referencevariabel), som refererer til nøglevariablen (fremmedvariablen) i den anden statistikfil i afleveringspakken (fremmeddatafilen).</span>
+                            <span id="hybris-message-references-referenceVariable-Text" hidden="true">Variabelnavn(e) for variable fra den statistikfil som referencen laves fra (referencevariabel), som refererer til nøglevariablen (fremmedvariablen = flettevariabel 2) i den anden statistikfil i afleveringspakken (fremmeddatafilen = datasæt 2).</span>
                             <br />
                             <button id="hybris-references-addReferenceVariableBtn">Tilføj variabel</button>
                             <br />
@@ -281,22 +281,23 @@
                                     <th>Flettevariabel 1</th>
                                 </tr>
                             </table>
-                            <br />
+                            <br>
+                            <br>
                             <span>
                                 <label class="descriptionLabel boldfaced" for="hybrisreferencesforeigntable">Datasæt 2</label>
-                                <select name="hybrisreferencestables" id="hybris-references-foreignTables"></select>
+                                <select name="hybrisreferencestables" class="dropDownSizing" id="hybris-references-foreignTables"></select>
                             </span>
                             <i id="hybris-message-references-foreignFile" class="far fa-question-circle"></i>
                             <span id="hybris-message-references-foreignFile-Title" hidden="true">REFERENCE (fremmeddatafil)</span>
                             <span id="hybris-message-references-foreignFile-Text" hidden="true">Navn på den anden statistikfil i afleveringspakken, der refereres til (fremmeddatafil).</span>
                             <br />
                             <span>
-                                <label class="descriptionLabel boldfaced" for="hybrisreferencesforeignVariable">Flettevariabel 2</label>
-                                <select name="hybrisreferencesforeignVariables" id="hybris-references-foreignVariables"></select>
+                                <label class="descriptionLabel boldfaced" for="hybrisreferencesforeignVariable">Flettevariabel 2 (unik)</label>
+                                <select name="hybrisreferencesforeignVariables" class="dropDownSizing" id="hybris-references-foreignVariables"></select>
                             </span>
                             <i id="hybris-message-references-foreignVariable" class="far fa-question-circle"></i>
                             <span id="hybris-message-references-foreignVariable-Title" hidden="true">REFERENCE (fremmedvariabel)</span>
-                            <span id="hybris-message-references-foreignVariable-Text" hidden="true">Variabelnavn(e) for fremmeddatafilens nøglevariabel.</span>
+                            <span id="hybris-message-references-foreignVariable-Text" hidden="true">Variabelnavn(e) for fremmeddatafilens (Datasæt 2) nøglevariabel.</span>
                             <br />
                             <button id="hybris-references-addForeignVariableBtn">Tilføj variabel</button>
                             <br />
