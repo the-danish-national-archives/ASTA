@@ -56,7 +56,7 @@
             // 
             this.logButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.logButton.Enabled = false;
-            this.logButton.Location = new System.Drawing.Point(803, 848);
+            this.logButton.Location = new System.Drawing.Point(802, 911);
             this.logButton.Name = "logButton";
             this.logButton.Size = new System.Drawing.Size(120, 35);
             this.logButton.TabIndex = 12;
@@ -89,7 +89,7 @@
             this.tablesDataGridView.ReadOnly = true;
             this.tablesDataGridView.RowHeadersVisible = false;
             this.tablesDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.tablesDataGridView.Size = new System.Drawing.Size(764, 102);
+            this.tablesDataGridView.Size = new System.Drawing.Size(909, 102);
             this.tablesDataGridView.TabIndex = 15;
             // 
             // TextColumn
@@ -129,7 +129,7 @@
             // 
             this.reportButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.reportButton.Enabled = false;
-            this.reportButton.Location = new System.Drawing.Point(803, 788);
+            this.reportButton.Location = new System.Drawing.Point(802, 644);
             this.reportButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.reportButton.Name = "reportButton";
             this.reportButton.Size = new System.Drawing.Size(120, 35);
@@ -163,7 +163,7 @@
             this.rowsDataGridView.ReadOnly = true;
             this.rowsDataGridView.RowHeadersVisible = false;
             this.rowsDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.rowsDataGridView.Size = new System.Drawing.Size(764, 157);
+            this.rowsDataGridView.Size = new System.Drawing.Size(909, 157);
             this.rowsDataGridView.TabIndex = 18;
             this.rowsDataGridView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.rowsDataGridView_CellContentClick);
             // 
@@ -196,9 +196,9 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(9, 440);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(206, 20);
+            this.label3.Size = new System.Drawing.Size(253, 20);
             this.label3.TabIndex = 21;
-            this.label3.Text = "Optælling af konverteringfejl";
+            this.label3.Text = "Optælling af konverteringsforskelle";
             // 
             // columnsDataGridView
             // 
@@ -216,7 +216,7 @@
             this.columnsDataGridView.ReadOnly = true;
             this.columnsDataGridView.RowHeadersVisible = false;
             this.columnsDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.columnsDataGridView.Size = new System.Drawing.Size(764, 169);
+            this.columnsDataGridView.Size = new System.Drawing.Size(909, 169);
             this.columnsDataGridView.TabIndex = 20;
             // 
             // dataGridViewTextBoxColumn4
@@ -247,7 +247,7 @@
             // 
             this.Errors.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.Errors.FillWeight = 15F;
-            this.Errors.HeaderText = "Antal fejl";
+            this.Errors.HeaderText = "Antal forskelle";
             this.Errors.Name = "Errors";
             this.Errors.ReadOnly = true;
             // 
@@ -255,7 +255,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(935, 895);
+            this.ClientSize = new System.Drawing.Size(935, 958);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.columnsDataGridView);
             this.Controls.Add(this.label2);
@@ -265,7 +265,7 @@
             this.Controls.Add(this.tablesDataGridView);
             this.Controls.Add(this.titlelabel);
             this.Controls.Add(this.logButton);
-            this.MinimumSize = new System.Drawing.Size(957, 0);
+            this.MinimumSize = new System.Drawing.Size(957, 56);
             this.Name = "Form3";
             this.Text = "ASTA";
             this.Shown += new System.EventHandler(this.Form3_Shown);

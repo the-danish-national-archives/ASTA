@@ -25,11 +25,11 @@
     </head>
 <body>
     <div class="header">
-        <h1 class="title">ASTA Konverteringsrapport</h1>
-        <p class="runDate">Dato for report kørsel: {0}</p>
+        <h1 class="title">ASTA konverteringsrapport - bevaringsformat</h1>
+        <p class="runDate">Dato for konvertering: {0}</p>
     </div>
     <div class="content">
-        <h3>Afleveringspakke ID: {1}</h3>
+        <h3>Arkiveringsversionsnummer: {1}</h3>
         <div class="results" id="testContent">
             <p>Antal tabeller</p>
             <table>
@@ -43,12 +43,12 @@
                 <tr><th>Tabel</th><th>Før</th><th>Efter</th></tr>
             </table>
             <br />
-            <p>Optælling af konverteringfejl</p>
+            <p>Optælling af konverteringsforskelle</p>
             <table id="columnsTable">
-                <tr><th>Tabel</th><th>Variabel</th><th>Datatype</th><th>Antal fejl</th></tr>
+                <tr><th>Tabel</th><th>Variabel</th><th>Datatype</th><th>Antal forskelle</th></tr>
             </table>
             <br />
-            <p>Konverteringfejl</p>
+            <p>Eksempler på konverteringsforskelle (viser max 10 pr. variabel)</p>
             <table id="errorsTable">
                 <tr><th>Tabel</th><th>Række</th><th>Variabel</th><th>Værdi orginal</th><th>Værdi SQL</th></tr>
             </table>

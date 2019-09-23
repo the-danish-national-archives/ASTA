@@ -144,7 +144,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.outputRichTextBox.Location = new System.Drawing.Point(39, 328);
             this.outputRichTextBox.Name = "outputRichTextBox";
-            this.outputRichTextBox.Size = new System.Drawing.Size(1011, 269);
+            this.outputRichTextBox.Size = new System.Drawing.Size(1011, 291);
             this.outputRichTextBox.TabIndex = 9;
             this.outputRichTextBox.Text = "";
             // 
@@ -175,7 +175,7 @@
             // logButton
             // 
             this.logButton.Enabled = false;
-            this.logButton.Location = new System.Drawing.Point(39, 284);
+            this.logButton.Location = new System.Drawing.Point(975, 637);
             this.logButton.Name = "logButton";
             this.logButton.Size = new System.Drawing.Size(75, 32);
             this.logButton.TabIndex = 11;
@@ -197,7 +197,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1080, 628);
+            this.ClientSize = new System.Drawing.Size(1080, 681);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.logButton);
             this.Controls.Add(this.nextForm);
