@@ -25,13 +25,13 @@
     </head>
 <body>
     <div class="header">
-        <h1 class="title">ASTA Konverteringsrapport</h1>
-        <p class="runDate">Dato for report kørsel: {0}</p>
+        <h1 class="title">Udleveringsformat (DIP)</h1>
+        <p class="runDate">Dato for konvertering: {0}</p>
     </div>
     <div class="content">
-        <h3>Afleveringspakke ID: {1}</h3>
+        <h3>DIP-ID: {1}</h3>
         <div class="results" id="testContent">
-            <p id="scriptType">Scripttype: <b>{{0}}</b></p>
+            <p id="scriptType">Udleveringsformat: <b>{{0}}</b></p>
             <p>Antal tabeller</p>
             <table>
                 <tr><th></th><th>Før</th><th>Efter</th></tr>
@@ -44,14 +44,14 @@
                 <tr><th>Tabel</th><th>Før</th><th>Efter</th></tr>
             </table>
             <br />
-            <p id="missingValues">Antal spcialkoder der ændret <b>{{0}}</b></p>
+            <p id="missingValues">Konvertering af specialkoder, ialt: <b>{{0}}</b></p>
             <table id="missingValuesTable">
-                <tr><th>Tabel</th><th>Variabel</th><th>Værdi SQL</th><th>Værdi</th></tr>
+                <tr><th>Tabel</th><th>Variabel</th><th>Værdi (AIP)</th><th>Værdi (DIP)</th></tr>
             </table>
             <br />
-            <p id="contextDocuments">Antal kontekstdokumenter der ændret navne <b>{{0}}</b></p>
+            <p id="contextDocuments">Liste over kontekstdokumenter. (Ny linje) Rødt markerede dokumenter har ændringer i filnavn (dokumenttitel), ialt: <b>{{0}}</b></p>
             <table id="contextDocumentsTable">
-                <tr><th>orginal titel</th><th>titel</th></tr>
+                <tr><th>Original titel (AIP)</th><th>Konverteret titel (DIP)</th></tr>
             </table>
         </div>
     </div>
