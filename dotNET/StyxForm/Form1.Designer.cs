@@ -73,9 +73,9 @@
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.Location = new System.Drawing.Point(22, 9);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(339, 29);
+            this.label4.Size = new System.Drawing.Size(266, 29);
             this.label4.TabIndex = 16;
-            this.label4.Text = "Konverter til udleveringsformat";
+            this.label4.Text = "Skab udleveringsformat";
             // 
             // sipTextBox
             // 
@@ -192,14 +192,14 @@
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(22, 277);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(155, 20);
+            this.label5.Size = new System.Drawing.Size(181, 20);
             this.label5.TabIndex = 27;
-            this.label5.Text = "Vælg statistikformat:";
+            this.label5.Text = "Vælg udleveringsformat:";
             // 
             // scriptTypeComboBox
             // 
             this.scriptTypeComboBox.FormattingEnabled = true;
-            this.scriptTypeComboBox.Location = new System.Drawing.Point(177, 272);
+            this.scriptTypeComboBox.Location = new System.Drawing.Point(199, 274);
             this.scriptTypeComboBox.Name = "scriptTypeComboBox";
             this.scriptTypeComboBox.Size = new System.Drawing.Size(108, 28);
             this.scriptTypeComboBox.TabIndex = 28;
