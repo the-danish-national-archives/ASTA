@@ -160,6 +160,10 @@ namespace Rigsarkiv.StyxForm
                     if (_converter.Run() && ((Data)_converter).Flush(string.Format(ReportPath, destPath, destFolder), destFolder))
                     {
                         reportButton.Enabled = true;
+                        scriptLabel1.Text = string.Format(scriptLabel1.Text, destFolder);
+                        scriptLabel1.Visible = true;
+                        scriptLabel2.Visible = true;
+                        scriptLabel3.Visible = true;
                     }
                 }
             }
