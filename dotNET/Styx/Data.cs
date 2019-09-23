@@ -196,17 +196,14 @@ namespace Rigsarkiv.Styx
         private void EnsureCodeListMissingValues(Table table)
         {
             string path = null;
-            table.Columns.Where(c => c.CodeList != null).ToList().ForEach(column =>
+            table.Columns.Where(c => c.CodeList != null && c.MissingValues != null).ToList().ForEach(column =>
             {
                 _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Ensure Missing Values for codelist: {0}", column.CodeList.Name) });
                 XNamespace tableNS = string.Format(TableXmlNs, column.CodeList.SrcFolder);
                 path = string.Format(TablePath, _srcPath, column.CodeList.SrcFolder);
                 StreamElement(delegate (XElement row) {
                     var content = row.Element(tableNS + C1).Value;
-                    if (column.MissingValues != null && !column.MissingValues.ContainsKey(content))
-                    {
-                        column.MissingValues.Add(content, content);
-                    }
+                    UpdateRange(column, content);
                 }, path);
             });
         }

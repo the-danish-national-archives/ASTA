@@ -290,15 +290,16 @@ namespace Rigsarkiv.Styx
         private string GetDecimalValue(Column column, string value, out bool hasError, out bool isDifferent)
         {
             isDifferent = false;
-            var result = value.Replace(".", ",");
+            var result = value;
+            if (column.MissingValues != null && column.MissingValues.ContainsKey(result))
+            {
+                result = column.MissingValues[result];
+            }
+            result = result.Replace(".", ",");
             var lengths = GetDecimalLength(column);
             hasError = (lengths[0] == 0 && lengths[1] == 0);
             if (!hasError)
-            {
-                if (column.MissingValues != null && column.MissingValues.ContainsKey(result))
-                {
-                    result = column.MissingValues[result];
-                }
+            {                
                 if (lengths[0] > 0 && lengths[1] > 0)
                 {
                     hasError = result.Length > (lengths[0] + lengths[1] + 2);
