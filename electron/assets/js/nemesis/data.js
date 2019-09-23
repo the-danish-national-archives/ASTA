@@ -378,7 +378,7 @@ function (n) {
                     {
                         result = ValidateString(dataValue, regExp, variable);
                         if(result) { result = ValidateOptions(ApostropheNormalizer(dataValue,null),variable); }
-                        if(result && emptyPattern.test(dataValue)) { LogError("-CheckData-FileRow-ColumnsStringEmpty-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name,dataValue.replace("<","&lt;").replace(">","&gt;")); }
+                        if(result && emptyPattern.test(dataValue)) { LogWarn("-CheckData-FileRow-ColumnsStringEmpty-Warning",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name,dataValue.replace("<","&lt;").replace(">","&gt;")); }
                     };break;
                 case 'Int':
                     {
