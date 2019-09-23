@@ -47,6 +47,7 @@
             this.Variable = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.DataType = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Errors = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.label5 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.tablesDataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.rowsDataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.columnsDataGridView)).BeginInit();
@@ -251,11 +252,21 @@
             this.Errors.Name = "Errors";
             this.Errors.ReadOnly = true;
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(13, 651);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(36, 20);
+            this.label5.TabIndex = 22;
+            this.label5.Text = "Log";
+            // 
             // Form3
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(935, 958);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.columnsDataGridView);
             this.Controls.Add(this.label2);
@@ -298,5 +309,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Variable;
         private System.Windows.Forms.DataGridViewTextBoxColumn DataType;
         private System.Windows.Forms.DataGridViewTextBoxColumn Errors;
+        private System.Windows.Forms.Label label5;
     }
 }
