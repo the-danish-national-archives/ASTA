@@ -56,9 +56,9 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(35, 55);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(143, 20);
+            this.label1.Size = new System.Drawing.Size(255, 20);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Vælg .json fil (SIP):";
+            this.label1.Text = "Vælg .json fil, FD.12345.json (SIP):";
             // 
             // sipTextBox
             // 
@@ -85,9 +85,9 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(38, 125);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(95, 20);
+            this.label2.Size = new System.Drawing.Size(291, 20);
             this.label2.TabIndex = 3;
-            this.label2.Text = "Angiv AVID:";
+            this.label2.Text = "Angiv AV-ID, fx AVID.SA.12345.1 (AIP):";
             // 
             // aipNameTextBox
             // 
@@ -103,9 +103,9 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(35, 198);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(289, 20);
+            this.label3.Size = new System.Drawing.Size(222, 20);
             this.label3.TabIndex = 5;
-            this.label3.Text = "Vælg AV destination (drev eller mappe):";
+            this.label3.Text = "Vælg AV destination (mappe):";
             // 
             // aipTextBox
             // 
