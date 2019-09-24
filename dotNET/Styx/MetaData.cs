@@ -112,7 +112,7 @@ namespace Rigsarkiv.Styx
 
         private void EnsureFile(Table table,string filePath,string content)
         {
-            var path = string.Format(filePath, _destFolderPath, _report.ScriptType.ToString().ToLower(), table.Name);
+            var path = string.Format(filePath, _destFolderPath, _report.ScriptType.ToString().ToLower(), NormalizeName(table.Name));
             _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add file: {0}", path) });
             using (var sw = new StreamWriter(path, true, Encoding.UTF8))
             {
@@ -198,9 +198,9 @@ namespace Rigsarkiv.Styx
                 return null;
             }
             var result = new Table() { Columns = new List<Column>(), RowsCounter = 0 };
-
+            var tableName = NormalizeName(table.Name);
             var codelistName = foreignKeyNode.Element(_tableIndexXNS + "name").Value;
-            codelistName = codelistName.Substring(3 + table.Name.Length + 1);
+            codelistName = codelistName.Substring(3 + tableName.Length + 1);
             codelistName = codelistName.Substring(0, codelistName.LastIndexOf("_"));
             result.Name = codelistName;
 

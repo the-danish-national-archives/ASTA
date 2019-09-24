@@ -22,7 +22,7 @@ namespace Rigsarkiv.Styx
         const string ContextDocumentationPath = "{0}\\ContextDocumentation";
         const string ContextDocumentationPattern = "^[1-9]{1}[0-9]{0,}.(tif|mpg|mp3|jpg|jp2)$";
         private XDocument _contextDocumentationIndexXDocument = null;
-        private Regex _contextDocumentationRegex = null;
+        private Regex _contextDocumentationRegex = null;        
 
         /// <summary>
         /// Constructore
@@ -35,7 +35,7 @@ namespace Rigsarkiv.Styx
         {
             _logSection = "Structure";
             _report.ScriptType = scriptType;
-            _contextDocumentationRegex = new Regex(ContextDocumentationPattern, RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            _contextDocumentationRegex = new Regex(ContextDocumentationPattern, RegexOptions.Compiled | RegexOptions.IgnoreCase);            
         }
 
         /// <summary>
@@ -159,14 +159,14 @@ namespace Rigsarkiv.Styx
                     var tableIndexNode = _tableIndexXDocument.Element(_tableIndexXNS + "siardDiark").Element(_tableIndexXNS + "tables").Elements().Where(e => e.Element(_tableIndexXNS + "folder").Value == srcFolder).FirstOrDefault();
                     var tableName = tableIndexNode.Element(_tableIndexXNS + "name").Value;
                     var tableRows = int.Parse(tableIndexNode.Element(_tableIndexXNS + "rows").Value);
-                    var folder = string.Format(TableFolderPrefix, _report.ScriptType.ToString().ToLower(), tableName);
+                    var folder = string.Format(TableFolderPrefix, _report.ScriptType.ToString().ToLower(), NormalizeName(tableName));
                     var folderPath = string.Format("{0}\\{1}", path,folder);
                     _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Ensure Table: {0}", folderPath) });
                     Directory.CreateDirectory(folderPath);                                        
                     _report.Tables.Add(new Table() { Folder = folder, SrcFolder = srcFolder, Name = tableName, Rows = tableRows, RowsCounter = 0, Columns = new List<Column>() });                    
                 }
             }
-            catch (IOException ex)
+            catch (Exception ex)
             {
                 result = false;
                 _log.Error("EnsureTables Failed", ex);
@@ -205,13 +205,13 @@ namespace Rigsarkiv.Styx
                     });
                 }
             }
-            catch (IOException ex)
+            catch (Exception ex)
             {
                 result = false;
                 _log.Error("EnsureScripts Failed", ex);
                 _logManager.Add(new LogEntity() { Level = LogLevel.Error, Section = _logSection, Message = string.Format("EnsureScripts Failed: {0}", ex.Message) });
             }
             return result;
-        }
+        }        
     }
 }

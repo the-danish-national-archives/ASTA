@@ -29,6 +29,7 @@ namespace Rigsarkiv.Styx
         protected const string VarCharPrefix = "VARCHAR(";
         protected const string DataTypeIntPattern = "^(int)$|^(\\%([0-9]+)\\.0f)$|^(f([0-9]+)\\.)$|^(f([0-9]+))$";
         protected const string DataTypeDecimalPattern = "^(decimal)$|^(\\%([0-9]+)\\.([0-9]+)f)$|^(f([0-9]+)\\.([0-9]+))$|^(f([0-9]+)\\.([0-9]+))$";
+        protected const string EnclosedReservedWordPattern = "^(\")(ABSOLUTE|ACTION|ADD|ADMIN|AFTER|AGGREGATE|ALIAS|ALL|ALLOCATE|ALTER|AND|ANY|ARE|ARRAY|AS|ASC|ASSERTION|AT|AUTHORIZATION|BEFORE|BEGIN|BINARY|BIT|BLOB|BOOLEAN|BOTH|BREADTH|BY|CALL|CASCADE|CASCADED|CASE|CAST|CATALOG|CHAR|CHARACTER|CHECK|CLASS|CLOB|CLOSE|COLLATE|COLLATION|COLUMN|COMMIT|COMPLETION|CONNECT|CONNECTION|CONSTRAINT|CONSTRAINTS ||CONSTRUCTOR|CONTINUE|CORRESPONDING|CREATE|CROSS|CUBE|CURRENT|CURRENT_DATE|CURRENT_PATH|CURRENT_ROLE|CURRENT_TIME|CURRENT_TIMESTAMP|CURRENT_USER|CURSOR|CYCLE|DATA|DATE|DAY|DEALLOCATE|DEC|DECIMAL|DECLARE|DEFAULT|DEFERRABLE|DEFERRED|DELETE|DEPTH|DEREF|DESC|DESCRIBE|DESCRIPTOR|DESTROY|DESTRUCTOR|DETERMINISTIC|DICTIONARY|DIAGNOSTICS|DISCONNECT|DISTINCT|DOMAIN|DOUBLE|DROP|DYNAMIC|EACH|ELSE|END|END-EXEC|EQUALS|ESCAPE|EVERY|EXCEPT|EXCEPTION|EXEC|EXECUTE|EXTERNAL|FALSE|FETCH|FIRST|FLOAT|FOR|FOREIGN|FOUND|FROM|FREE|FULL|FUNCTION|GENERAL|GET|GLOBAL|GO|GOTO|GRANT|GROUP|GROUPING|HAVING|HOST|HOUR|IDENTITY|IGNORE|IMMEDIATE|IN|INDICATOR|INITIALIZE|INITIALLY|INNER|INOUT|INPUT|INSERT|INT|INTEGER|INTERSECT|INTERVAL|INTO|IS|ISOLATION|ITERATE|JOIN|KEY|LANGUAGE|LARGE|LAST|LATERAL|LEADING|LEFT|LESS|LEVEL|LIKE|LIMIT|LOCAL|LOCALTIME|LOCALTIMESTAMP|LOCATOR|MAP|MATCH|MINUTE|MODIFIES|MODIFY|MODULE|MONTH|NAMES|NATIONAL|NATURAL|NCHAR|NCLOB|NEW|NEXT|NO|NONE|NOT|NULL|NUMERIC|OBJECT|OF|OFF|OLD|ON|ONLY|OPEN|OPERATION|OPTION|OR|ORDER|ORDINALITY|OUT|OUTER|OUTPUT|PAD|PARAMETER|PARAMETERS|PARTIAL|PATH|POSTFIX|PRECISION|PREFIX|PREORDER|PREPARE|PRESERVE|PRIMARY|PRIOR|PRIVILEGES|PROCEDURE|PUBLIC|READ|READS|REAL|RECURSIVE|REF|REFERENCES|REFERENCING|RELATIVE|RESTRICT|RESULT|RETURN|RETURNS|REVOKE|RIGHT|ROLE|ROLLBACK|ROLLUP|ROUTINE|ROW|ROWS|SAVEPOINT|SCHEMA|SCROLL|SCOPE|SEARCH|SECOND|SECTION|SELECT|SEQUENCE|SESSION|SESSION_USER|SET|SETS|SIZE|SMALLINT|SOME|SPACE|SPECIFIC|SPECIFICTYPE|SQL|SQLEXCEPTION|SQLSTATE|SQLWARNING|START|STATE|STATEMENT|STATIC|STRUCTURE|SYSTEM_USER|TABLE|TEMPORARY|TERMINATE|THAN|THEN|TIME|TIMESTAMP|TIMEZONE_HOUR|TIMEZONE_MINUTE|TO|TRAILING|TRANSACTION|TRANSLATION|TREAT|TRIGGER|TRUE|UNDER|UNION|UNIQUE|UNKNOWN|UNNEST|UPDATE|USAGE|USER|USING|VALUE|VALUES|VARCHAR|VARIABLE|VARYING|VIEW|WHEN|WHENEVER|WHERE|WITH|WITHOUT|WORK|WRITE|YEAR|ZONE)(\")$";
         protected delegate void OperationOnRow(XElement row);
         protected Assembly _assembly = null;
         protected Asta.Logging.LogManager _logManager = null;
@@ -37,6 +38,7 @@ namespace Rigsarkiv.Styx
         protected Report _report = null;
         protected XDocument _researchIndexXDocument = null;
         protected XDocument _tableIndexXDocument = null;
+        protected Regex _enclosedReservedWord = null;
         protected string _srcPath = null;
         protected string _destPath = null;
         protected string _destFolder = null;
@@ -57,6 +59,7 @@ namespace Rigsarkiv.Styx
             _logManager = logManager;
             _regExps = new Dictionary<string, Regex>();
             _report = new Report() { Tables = new List<Table>(), ContextDocuments = new Dictionary<string, string>(), TablesCounter = 0, CodeListsCounter = 0 };
+            _enclosedReservedWord = new Regex(EnclosedReservedWordPattern, RegexOptions.Compiled | RegexOptions.IgnoreCase);
             _srcPath = srcPath;
             _destPath = destPath;
             _destFolder = destFolder;
@@ -133,6 +136,17 @@ namespace Rigsarkiv.Styx
                 {
                     result = reader.ReadToEnd();
                 }
+            }
+            return result;
+        }
+
+        protected string NormalizeName(string tableName)
+        {
+            var result = tableName;
+            if (_enclosedReservedWord.IsMatch(tableName))
+            {
+                var groups = _enclosedReservedWord.Match(tableName).Groups;
+                result = groups[2].Value;
             }
             return result;
         }

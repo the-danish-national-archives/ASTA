@@ -103,7 +103,7 @@ namespace Rigsarkiv.Styx
                  _report.Tables.ForEach(table =>
                 {
                     XNamespace tableNS = string.Format(TableXmlNs, table.SrcFolder);
-                    path = string.Format(TableDataPath, _destFolderPath, _report.ScriptType.ToString().ToLower(), table.Name);
+                    path = string.Format(TableDataPath, _destFolderPath, _report.ScriptType.ToString().ToLower(), NormalizeName(table.Name));
                     _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add file: {0}", path) });
                     using (TextWriter sw = new StreamWriter(path))
                     {
@@ -369,7 +369,7 @@ namespace Rigsarkiv.Styx
             });
             if(usercodes.Count == 0) { return; }
 
-            var path = string.Format(UserCodesPath, _destFolderPath, _report.ScriptType.ToString().ToLower(), table.Name);
+            var path = string.Format(UserCodesPath, _destFolderPath, _report.ScriptType.ToString().ToLower(), NormalizeName(table.Name));
             var content = File.ReadAllText(path);
             using (var sw = new StreamWriter(path, false, Encoding.UTF8))
             {
@@ -424,7 +424,7 @@ namespace Rigsarkiv.Styx
                 codeList.Clear();
                 _report.CodeListsCounter++;
             });
-            path = string.Format(CodeListPath, _destFolderPath, _report.ScriptType.ToString().ToLower(), table.Name);
+            path = string.Format(CodeListPath, _destFolderPath, _report.ScriptType.ToString().ToLower(), NormalizeName(table.Name));
             var content = File.ReadAllText(path);
             using (var sw = new StreamWriter(path, false, Encoding.UTF8))
             {
