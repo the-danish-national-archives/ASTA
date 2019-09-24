@@ -376,28 +376,24 @@ window.Rigsarkiv = window.Rigsarkiv || {},
             }
 
             //create HTML select option element
-            var CreateOption = function(table) {
+            var CreateOption = function(value,text) {
                 var result = document.createElement('option');
-                result.textContent = "{0} ({1})".format(table.name,table.fileName);
-                result.value = table.name;
+                result.textContent = text;
+                result.value = value;
                 return result;
             }
 
             // Update Refernces dropdowns
             var UpdateRefernces = function() {
                 settings.tablesDropdown.options[0].selected = true;
+                settings.refVarsDropdown.appendChild(CreateOption("",""));
                 Rigsarkiv.Hybris.Base.callback().metadata[0].variables.forEach(variable => {
-                    var el = document.createElement('option');
-                    el.textContent = variable;
-                    el.value = variable;
-                    settings.refVarsDropdown.appendChild(el);
+                    settings.refVarsDropdown.appendChild(CreateOption(variable,variable));
                 });
                 settings.foreignTablesDropdown.options[1].selected = true;
+                settings.foreignVariablesDropdown.appendChild(CreateOption("",""));
                 Rigsarkiv.Hybris.Base.callback().metadata[1].variables.forEach(variable => {
-                    var el = document.createElement('option');
-                    el.textContent = variable;
-                    el.value = variable;
-                    settings.foreignVariablesDropdown.appendChild(el);
+                    settings.foreignVariablesDropdown.appendChild(CreateOption(variable,variable));
                 });
             }
 
@@ -410,8 +406,8 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                      $(settings.foreignTablesDropdown).empty();
                     Rigsarkiv.Hybris.Base.callback().metadata.forEach(table => {
                         tablesCounter = tablesCounter + 1;
-                        settings.tablesDropdown.appendChild(CreateOption(table));
-                        settings.foreignTablesDropdown.appendChild(CreateOption(table));
+                        settings.tablesDropdown.appendChild(CreateOption(table.name, "{0} ({1})".format(table.name,table.fileName)));
+                        settings.foreignTablesDropdown.appendChild(CreateOption(table.name, "{0} ({1})".format(table.name,table.fileName)));
                     });
                     if(tablesCounter === 1 && Rigsarkiv.Hybris.References.callback().updateFile(Rigsarkiv.Hybris.Base.callback().metadata[0])) {
                         settings.indexfilesTab.click();

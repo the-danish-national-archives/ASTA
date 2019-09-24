@@ -91,7 +91,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 settings.referenceVariablesTbl.hidden = true;
                 settings.foreignVariablesTbl.hidden = true;
                 settings.referenceVariables = [];
-                settings.foreignVariables = [];
+                settings.foreignVariables = [];                
             } 
 
             //Update metadata file references
@@ -159,10 +159,18 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 return result;
             }
 
+             //create HTML select option element
+             var CreateOption = function(value,text) {
+                var result = document.createElement('option');
+                result.textContent = text;
+                result.value = value;
+                return result;
+            }
+
             //add Event Listener to HTML elmenets
             var AddEvents = function () {
                 settings.okBtn.addEventListener('click', function (event) {    
-                    if(settings.referenceVariables.length > 0 || settings.foreignVariables > 0) {
+                    if(settings.foreignVariablesDropdown.selectedIndex > 0 || settings.refVarsDropdown.selectedIndex > 0 || settings.referenceVariables.length > 0 || settings.foreignVariables > 0) {
                         ipcRenderer.send('open-confirm-dialog','references-addkey',settings.addKeyWarningTitle.innerHTML,settings.addKeyWarningText.innerHTML,settings.okConfirm.innerHTML,settings.cancelConfirm.innerHTML);
                     }
                     else {
@@ -170,26 +178,24 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                     }
                 });
                 settings.cancelBtn.addEventListener('click', function (event) {                    
-                    Reset();                    
+                    Reset();
+                    settings.refVarsDropdown.selectedIndex = 0;
+                    settings.foreignVariablesDropdown.selectedIndex = 0;                    
                 });
                 settings.tablesDropdown.addEventListener('change', function (event) {
                     $(settings.refVarsDropdown).empty();
+                    settings.refVarsDropdown.appendChild(CreateOption("",""));
                     var table = GetTableData(event.srcElement.value);
                     table.variables.forEach(variable => {
-                        var el = document.createElement('option');
-                        el.textContent = variable;
-                        el.value = variable;
-                        settings.refVarsDropdown.appendChild(el);
+                        settings.refVarsDropdown.appendChild(CreateOption(variable,variable));
                     });                    
                 });
                 settings.foreignTablesDropdown.addEventListener('change', function (event) {
                     $(settings.foreignVariablesDropdown).empty();
+                    settings.foreignVariablesDropdown.appendChild(CreateOption("",""));
                     var table = GetTableData(event.srcElement.value);
                     table.variables.forEach(variable => {
-                        var el = document.createElement('option');
-                        el.textContent = variable;
-                        el.value = variable;
-                        settings.foreignVariablesDropdown.appendChild(el);
+                        settings.foreignVariablesDropdown.appendChild(CreateOption(variable,variable));
                     });                    
                 });
                 settings.addReferenceBtn.addEventListener('click', function (event) {
@@ -201,6 +207,8 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                             $(settings.referencesTbl).append("<tr><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td></tr>".format(tableName,settings.referenceVariables.join(" "),foreignTableName,settings.foreignVariables.join(" ")));
                             settings.referencesTbl.hidden = false;
                             Clear();
+                            settings.refVarsDropdown.selectedIndex = 0;
+                            settings.foreignVariablesDropdown.selectedIndex = 0;
                     }
                     else {
                         ipcRenderer.send('open-error-dialog',settings.referenceReqTitle.innerHTML,settings.referenceReqText.innerHTML);
@@ -208,18 +216,18 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 });
                 settings.addReferenceVariableBtn.addEventListener('click', function (event) { 
                     var refVar = settings.refVarsDropdown.options[settings.refVarsDropdown.selectedIndex].value;
-                    if(ValidateReference("referenceVariable",refVar) && !settings.referenceVariables.includes(refVar)) {
+                    if(settings.refVarsDropdown.selectedIndex > 0 && ValidateReference("referenceVariable",refVar) && !settings.referenceVariables.includes(refVar)) {
                         settings.referenceVariables.push(refVar);
                         $(settings.referenceVariablesTbl).append("<tr><td>{0}</td></tr>".format(refVar));
-                        settings.referenceVariablesTbl.hidden = false;
+                        settings.referenceVariablesTbl.hidden = false;                        
                     }
                 });
                 settings.addForeignVariableBtn.addEventListener('click', function (event) { 
                     var foreignVariable = settings.foreignVariablesDropdown.options[settings.foreignVariablesDropdown.selectedIndex].value;
-                    if(ValidateReference("foreignVariable",foreignVariable) && !settings.foreignVariables.includes(foreignVariable)) {
+                    if(settings.foreignVariablesDropdown.selectedIndex > 0 && ValidateReference("foreignVariable",foreignVariable) && !settings.foreignVariables.includes(foreignVariable)) {
                         settings.foreignVariables.push(foreignVariable);
                         $(settings.foreignVariablesTbl).append("<tr><td>{0}</td></tr>".format(foreignVariable));
-                        settings.foreignVariablesTbl.hidden = false;
+                        settings.foreignVariablesTbl.hidden = false;                        
                     }
                 });
                 ipcRenderer.on('confirm-dialog-selection-references-addkey', (event, index) => {
