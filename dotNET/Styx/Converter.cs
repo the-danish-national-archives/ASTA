@@ -283,8 +283,10 @@ namespace Rigsarkiv.Styx
         private string GetTimeStampValue(Column column, string value, out bool hasError, out bool isDifferent)
         {
             hasError = false;
-            isDifferent = false;
-            return value;
+            var result = value;
+            result = result.Replace("T", " ");
+            isDifferent = result != value;
+            return result;
         }
 
         private string GetDateValue(Column column, string value, out bool hasError, out bool isDifferent)
