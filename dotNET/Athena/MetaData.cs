@@ -195,6 +195,18 @@ namespace Rigsarkiv.Athena
                 {
                     AddReferencedTable(variableInfo, tableNode, researchIndexNode, table, column, refTableName, index);
                 }
+                var codeList = table.CodeList.FirstOrDefault(t => t.Name == refTableName);
+                foreach (var pair in codeList.Options)
+                {                    
+                    if (RequiredSpecialNumeric(column, pair[0])) { EnableSpecialNumeric(column, tableNode, researchIndexNode); }
+                    if (column.HasSpecialNumeric && GetRegex(SpecialNumericPattern).IsMatch(pair[0])) { AddMissingColumnNode(pair[0], researchIndexNode, column.Id); }
+                    if (bool.Parse(pair[2]) && !column.HasMissingValues)
+                    {
+                        column.HasMissingValues = true;
+                        AddSpecialNumeric(column, researchIndexNode);
+                    }
+                    if (column.HasMissingValues && bool.Parse(pair[2])) { AddMissingColumnNode(pair[0], researchIndexNode, column.Id); }
+                }
             }
         }
         
@@ -221,12 +233,7 @@ namespace Rigsarkiv.Athena
                 new XElement(_tableIndexXNS + "rows", options.Length.ToString()));
             tableNode.Parent.Add(refTableNode);
             codeList.Columns[1].Type = optionsType;
-            table.CodeList.Add(codeList);
-            foreach(var pair in codeList.Options)
-            {
-                if (RequiredSpecialNumeric(column, pair[0])) { EnableSpecialNumeric(column, tableNode, researchIndexNode); }
-                if (column.HasSpecialNumeric && GetRegex(SpecialNumericPattern).IsMatch(pair[0])) { AddMissingColumnNode(pair[0], researchIndexNode, column.Id); }
-            }
+            table.CodeList.Add(codeList);            
         }
         
         private string ParseOptions(object[] options, XElement tableNode, XElement researchIndexNode, Table codeList, string folder, Column column)
@@ -240,15 +247,12 @@ namespace Rigsarkiv.Athena
                 var code = (Dictionary<string, object>)option;
                 var value = code["name"].ToString();
                 var description = code["description"].ToString();
-                codeList.Options.Add(new string[2] { value, description });
+                var isMissing = false;                
                 if (description.Length > result) { result = description.Length; }
                 if((bool)code["isMissing"]) {
-                    if (!column.HasMissingValues) {
-                        AddSpecialNumeric(column, researchIndexNode);
-                        column.HasMissingValues = true;
-                    }                    
-                    AddMissingColumnNode(value, researchIndexNode, column.Id);
-                }                
+                    isMissing = true;
+                }
+                codeList.Options.Add(new string[3] { value, description, isMissing.ToString() });
             }            
             return string.Format(VarCharPrefix, result);
         }        
