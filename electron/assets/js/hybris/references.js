@@ -180,10 +180,13 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 settings.cancelBtn.addEventListener('click', function (event) {                    
                     Reset();
                     settings.refVarsDropdown.selectedIndex = 0;
-                    settings.foreignVariablesDropdown.selectedIndex = 0;                    
+                    settings.foreignVariablesDropdown.selectedIndex = 0;
+                    settings.tablesDropdown.selectedIndex = 0;
+                    settings.foreignTablesDropdown.selectedIndex = 0;                    
                 });
                 settings.tablesDropdown.addEventListener('change', function (event) {
                     $(settings.refVarsDropdown).empty();
+                    if(event.srcElement.selectedIndex === 0) { return; }
                     settings.refVarsDropdown.appendChild(CreateOption("",""));
                     var table = GetTableData(event.srcElement.value);
                     table.variables.forEach(variable => {
@@ -192,6 +195,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 });
                 settings.foreignTablesDropdown.addEventListener('change', function (event) {
                     $(settings.foreignVariablesDropdown).empty();
+                    if(event.srcElement.selectedIndex === 0) { return; }
                     settings.foreignVariablesDropdown.appendChild(CreateOption("",""));
                     var table = GetTableData(event.srcElement.value);
                     table.variables.forEach(variable => {
@@ -209,6 +213,8 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                             Clear();
                             settings.refVarsDropdown.selectedIndex = 0;
                             settings.foreignVariablesDropdown.selectedIndex = 0;
+                            settings.tablesDropdown.selectedIndex = 0;
+                            settings.foreignTablesDropdown.selectedIndex = 0;
                     }
                     else {
                         ipcRenderer.send('open-error-dialog',settings.referenceReqTitle.innerHTML,settings.referenceReqText.innerHTML);
