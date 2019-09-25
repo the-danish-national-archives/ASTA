@@ -97,12 +97,14 @@ namespace Rigsarkiv.Styx
         {
             var index = 0;
             table.Columns.ForEach(column =>
-            {
+            {                
                 var codeList = string.Empty;
                 if (column.CodeList != null)
                 {
-                    codeList = string.Format("{0}{1}.", column.TypeOriginal.StartsWith("VARCHAR") ? "$" : string.Empty, column.CodeList.Name);
-                    _codeList.AppendLine(column.CodeList.Name);
+                    var codelistName = column.CodeList.Name;
+                    if (_report.ScriptType == ScriptType.SPSS) { codelistName = column.Name; }
+                    codeList = string.Format("{0}{1}.", column.TypeOriginal.StartsWith("VARCHAR") ? "$" : string.Empty, codelistName);
+                    _codeList.AppendLine(codelistName);
                     _codeList.AppendLine(string.Format("{{{0}}}", index));
                     index++;
                 }
