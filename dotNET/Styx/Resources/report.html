@@ -39,9 +39,9 @@
                 <tr><td>Antal kodetabeller</td><td id="codeListsBefore">0</td><td id="codeListsAfter">0</td></tr>
             </table>
             <br />
-            <p>Antal rækker</p>
+            <p>Tabeller oplysninger</p>
             <table id="rowsTable">
-                <tr><th>Tabel</th><th>Før</th><th>Efter</th></tr>
+                <tr><th>Tabel</th><th>Antal variable (AIP)</th><th>Antal rækker (AIP)</th><th>Antal rækker (DIP)</th></tr>
             </table>
             <br />
             <p id="missingValues">Konvertering af specialkoder, ialt: <b>{{0}}</b></p>
@@ -73,7 +73,7 @@
         var missingValuesTable = document.getElementById("missingValuesTable");
         var contextDocumentsP = document.getElementById("contextDocuments");
         var contextDocumentsTable = document.getElementById("contextDocumentsTable");
-        var rowHtml = "<tr><td>{{0}}</td><td{{3}}>{{1}}</td><td{{3}}>{{2}}</td></tr>";
+        var rowHtml = "<tr><td>{{0}}</td><td>{{1}}</td><td{{4}}>{{2}}</td><td{{4}}>{{3}}</td></tr>";
         var missingValuesHtml = "<tr><td>{{0}}</td><td>{{1}}</td><td{{4}}>{{2}}</td><td{{4}}>{{3}}</td></tr>";
         var contextDocumentsHtml = "<tr><td{{2}}>{{0}}</td><td{{2}}>{{1}}</td></tr>";
         (function () {{
@@ -120,7 +120,7 @@
         }}
         function UpdateRow(table) {{
                 var className = (table.Rows !== table.RowsCounter) ? " class=\"Error\"" : "";
-                rowsTable.insertAdjacentHTML("beforeend", rowHtml.format(table.Name, table.Rows, table.RowsCounter, className));
+            rowsTable.insertAdjacentHTML("beforeend", rowHtml.format(table.Name, table.Columns.length, table.Rows, table.RowsCounter, className));
         }}
         function UpdateTable(beforeId, afterId, beforeValue, afterValue) {{
             var before = document.getElementById(beforeId);
