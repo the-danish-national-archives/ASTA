@@ -67,6 +67,8 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 varKeyReqTitle: null,
                 varKeyReqText: null,
                 cancelBtn: null,
+                addKeyWarningTitle: null,
+                addKeyWarningText: null,
                 okConfirm: null,
                 cancelConfirm: null,
                 tablesDropdown: null,
@@ -369,7 +371,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
 
             var EnsureVariables = function() {
                 if(settings.variables.length === 0) {
-                    for (var i = 0; i < settings.variablesDropdown.options.length; i++) {
+                    for (var i = 1; i < settings.variablesDropdown.options.length; i++) {
                         settings.variables.push(settings.variablesDropdown.options[i].value);
                     }
                 }
@@ -383,39 +385,30 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 return result;
             }
 
-            // Update Refernces dropdowns
-            var UpdateRefernces = function() {
-                settings.tablesDropdown.options[0].selected = true;
-                settings.refVarsDropdown.appendChild(CreateOption("",""));
-                Rigsarkiv.Hybris.Base.callback().metadata[0].variables.forEach(variable => {
-                    settings.refVarsDropdown.appendChild(CreateOption(variable,variable));
+             //Redirect to references or index files
+             var Redirect = function() {
+                var tablesCounter = 0;
+                $(settings.tablesDropdown).empty();
+                $(settings.foreignTablesDropdown).empty();
+                settings.tablesDropdown.appendChild(CreateOption("",""));
+                settings.foreignTablesDropdown.appendChild(CreateOption("",""));
+                Rigsarkiv.Hybris.Base.callback().metadata.forEach(table => {
+                    tablesCounter = tablesCounter + 1;
+                    settings.tablesDropdown.appendChild(CreateOption(table.name, "{0} ({1})".format(table.name,table.fileName)));
+                    settings.foreignTablesDropdown.appendChild(CreateOption(table.name, "{0} ({1})".format(table.name,table.fileName)));
                 });
-                settings.foreignTablesDropdown.options[1].selected = true;
-                settings.foreignVariablesDropdown.appendChild(CreateOption("",""));
-                Rigsarkiv.Hybris.Base.callback().metadata[1].variables.forEach(variable => {
-                    settings.foreignVariablesDropdown.appendChild(CreateOption(variable,variable));
-                });
-            }
-
+                if(tablesCounter === 1 && Rigsarkiv.Hybris.References.callback().updateFile(Rigsarkiv.Hybris.Base.callback().metadata[0])) {
+                    settings.indexfilesTab.click();
+                } 
+                else {
+                    settings.referencesTab.click(); 
+                }
+             }
 
             //add Event Listener to HTML elmenets
             var AddEvents = function () {
                 settings.nextBtn.addEventListener('click', (event) => {
-                    var tablesCounter = 0;
-                     $(settings.tablesDropdown).empty();
-                     $(settings.foreignTablesDropdown).empty();
-                    Rigsarkiv.Hybris.Base.callback().metadata.forEach(table => {
-                        tablesCounter = tablesCounter + 1;
-                        settings.tablesDropdown.appendChild(CreateOption(table.name, "{0} ({1})".format(table.name,table.fileName)));
-                        settings.foreignTablesDropdown.appendChild(CreateOption(table.name, "{0} ({1})".format(table.name,table.fileName)));
-                    });
-                    if(tablesCounter === 1 && Rigsarkiv.Hybris.References.callback().updateFile(Rigsarkiv.Hybris.Base.callback().metadata[0])) {
-                        settings.indexfilesTab.click();
-                    } 
-                    else {
-                        UpdateRefernces();
-                        settings.referencesTab.click(); 
-                    }                   
+                    Redirect();
                 });
                 settings.newExtractionBtn.addEventListener('click', (event) => {
                     ResetExtraction();
@@ -428,13 +421,19 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                     Reset();
                     if(ValidateFields()) 
                     { 
-                        EnsureData();
+                        if(settings.variablesDropdown.selectedIndex > 0) {
+                            ipcRenderer.send('open-confirm-dialog','metadata-addkey',settings.addKeyWarningTitle.innerHTML,settings.addKeyWarningText.innerHTML,settings.okConfirm.innerHTML,settings.cancelConfirm.innerHTML);
+                        } 
+                        else {
+                            EnsureData();
+                        }                       
                     }
                 })
                 settings.cancelBtn.addEventListener('click', function (event) {
                     $("#{0} tr:not(:first-child)".format(settings.varKeysTbl.id)).remove();
                     settings.varKeysTbl.hidden = true;
-                    settings.varKeys = [];    
+                    settings.varKeys = [];
+                    settings.variablesDropdown.selectedIndex = 0;    
                 })
                 settings.addVarKeyBtn.addEventListener('click', function (event) {
                     EnsureVariables();                           
@@ -444,17 +443,24 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                             settings.varKeys.push(key);
                             settings.varKeysTbl.hidden = false;
                             $(settings.varKeysTbl).append("<tr><td>{0}</td></tr>".format(key));
+                            settings.variablesDropdown.selectedIndex = 0;
                         }
                     }
                     else {
                         ipcRenderer.send('open-error-dialog',settings.varKeyReqTitle.innerHTML,settings.varKeyReqText.innerHTML);
                     }
                 });
+                ipcRenderer.on('confirm-dialog-selection-metadata-addkey', (event, index) => {
+                    if(index === 0) {
+                        EnsureData();
+                    } 
+                    if(index === 1) { } 
+                });
             }
 
             //Model interfaces functions
             Rigsarkiv.Hybris.MetaData = {
-                initialize: function (metadataFileName,metadataFileNameDescription,metdataOkBtn,inputFileNameRequired,inputNumberFirst,inputIllegalChar,outputOkId,okDataPathId,outputErrorId,outputNewExtractionId,newExtractionBtn,extractionTabId,outputNextId,nextBtn,referencesTabId,fileNameLengthId,fileNameReservedWordId,fileDescrReqId,informationPanel1Id,informationPanel2Id,indexFilesDescriptionId,outputCloseApplicationErrorPrefixId,resetHideBox,numberFirstKeyId,illegalCharKeyId,keyLengthId,keyReservedWordId,variablesId,addVarKeyId,varKeysId,varKeyReqId,tablesId,foreignTablesId,cancelId,okConfirmId,cancelConfirmId,indexfilesTabId,refVarsId,foreignVariablesId) {
+                initialize: function (metadataFileName,metadataFileNameDescription,metdataOkBtn,inputFileNameRequired,inputNumberFirst,inputIllegalChar,outputOkId,okDataPathId,outputErrorId,outputNewExtractionId,newExtractionBtn,extractionTabId,outputNextId,nextBtn,referencesTabId,fileNameLengthId,fileNameReservedWordId,fileDescrReqId,informationPanel1Id,informationPanel2Id,indexFilesDescriptionId,outputCloseApplicationErrorPrefixId,resetHideBox,numberFirstKeyId,illegalCharKeyId,keyLengthId,keyReservedWordId,variablesId,addVarKeyId,varKeysId,varKeyReqId,tablesId,foreignTablesId,cancelId,addKeyWarningId,okConfirmId,cancelConfirmId,indexfilesTabId,refVarsId,foreignVariablesId) {
                     settings.fileName = document.getElementById(metadataFileName);
                     settings.fileDescr = document.getElementById(metadataFileNameDescription);
                     settings.okBtn = document.getElementById(metdataOkBtn);
@@ -505,6 +511,8 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                     settings.tablesDropdown = document.getElementById(tablesId);
                     settings.foreignTablesDropdown = document.getElementById(foreignTablesId);
                     settings.cancelBtn = document.getElementById(cancelId);
+                    settings.addKeyWarningTitle = document.getElementById(addKeyWarningId + "-Title");
+                    settings.addKeyWarningText = document.getElementById(addKeyWarningId + "-Text");
                     settings.okConfirm = document.getElementById(okConfirmId);
                     settings.cancelConfirm = document.getElementById(cancelConfirmId);
                     settings.indexfilesTab = document.getElementById(indexfilesTabId);
