@@ -141,12 +141,12 @@ namespace Rigsarkiv.Styx
             return result;
         }
 
-        protected string NormalizeName(string tableName)
+        protected string NormalizeName(string name)
         {
-            var result = tableName;
-            if (_enclosedReservedWord.IsMatch(tableName))
+            var result = name;
+            if (_enclosedReservedWord.IsMatch(name))
             {
-                var groups = _enclosedReservedWord.Match(tableName).Groups;
+                var groups = _enclosedReservedWord.Match(name).Groups;
                 result = groups[2].Value;
             }
             return result;

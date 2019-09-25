@@ -17,8 +17,6 @@ namespace Rigsarkiv.Styx
     {
         const string VariablesPath = "{0}\\Data\\{1}_{2}\\{1}_{2}_VARIABEL.txt";
         const string DescriptionsPath = "{0}\\Data\\{1}_{2}\\{1}_{2}_VARIABELBESKRIVELSE.txt";
-        const string ReservedWordPattern = "^(ABSOLUTE|ACTION|ADD|ADMIN|AFTER|AGGREGATE|ALIAS|ALL|ALLOCATE|ALTER|AND|ANY|ARE|ARRAY|AS|ASC|ASSERTION|AT|AUTHORIZATION|BEFORE|BEGIN|BINARY|BIT|BLOB|BOOLEAN|BOTH|BREADTH|BY|CALL|CASCADE|CASCADED|CASE|CAST|CATALOG|CHAR|CHARACTER|CHECK|CLASS|CLOB|CLOSE|COLLATE|COLLATION|COLUMN|COMMIT|COMPLETION|CONNECT|CONNECTION|CONSTRAINT|CONSTRAINTS ||CONSTRUCTOR|CONTINUE|CORRESPONDING|CREATE|CROSS|CUBE|CURRENT|CURRENT_DATE|CURRENT_PATH|CURRENT_ROLE|CURRENT_TIME|CURRENT_TIMESTAMP|CURRENT_USER|CURSOR|CYCLE|DATA|DATE|DAY|DEALLOCATE|DEC|DECIMAL|DECLARE|DEFAULT|DEFERRABLE|DEFERRED|DELETE|DEPTH|DEREF|DESC|DESCRIBE|DESCRIPTOR|DESTROY|DESTRUCTOR|DETERMINISTIC|DICTIONARY|DIAGNOSTICS|DISCONNECT|DISTINCT|DOMAIN|DOUBLE|DROP|DYNAMIC|EACH|ELSE|END|END-EXEC|EQUALS|ESCAPE|EVERY|EXCEPT|EXCEPTION|EXEC|EXECUTE|EXTERNAL|FALSE|FETCH|FIRST|FLOAT|FOR|FOREIGN|FOUND|FROM|FREE|FULL|FUNCTION|GENERAL|GET|GLOBAL|GO|GOTO|GRANT|GROUP|GROUPING|HAVING|HOST|HOUR|IDENTITY|IGNORE|IMMEDIATE|IN|INDICATOR|INITIALIZE|INITIALLY|INNER|INOUT|INPUT|INSERT|INT|INTEGER|INTERSECT|INTERVAL|INTO|IS|ISOLATION|ITERATE|JOIN|KEY|LANGUAGE|LARGE|LAST|LATERAL|LEADING|LEFT|LESS|LEVEL|LIKE|LIMIT|LOCAL|LOCALTIME|LOCALTIMESTAMP|LOCATOR|MAP|MATCH|MINUTE|MODIFIES|MODIFY|MODULE|MONTH|NAMES|NATIONAL|NATURAL|NCHAR|NCLOB|NEW|NEXT|NO|NONE|NOT|NULL|NUMERIC|OBJECT|OF|OFF|OLD|ON|ONLY|OPEN|OPERATION|OPTION|OR|ORDER|ORDINALITY|OUT|OUTER|OUTPUT|PAD|PARAMETER|PARAMETERS|PARTIAL|PATH|POSTFIX|PRECISION|PREFIX|PREORDER|PREPARE|PRESERVE|PRIMARY|PRIOR|PRIVILEGES|PROCEDURE|PUBLIC|READ|READS|REAL|RECURSIVE|REF|REFERENCES|REFERENCING|RELATIVE|RESTRICT|RESULT|RETURN|RETURNS|REVOKE|RIGHT|ROLE|ROLLBACK|ROLLUP|ROUTINE|ROW|ROWS|SAVEPOINT|SCHEMA|SCROLL|SCOPE|SEARCH|SECOND|SECTION|SELECT|SEQUENCE|SESSION|SESSION_USER|SET|SETS|SIZE|SMALLINT|SOME|SPACE|SPECIFIC|SPECIFICTYPE|SQL|SQLEXCEPTION|SQLSTATE|SQLWARNING|START|STATE|STATEMENT|STATIC|STRUCTURE|SYSTEM_USER|TABLE|TEMPORARY|TERMINATE|THAN|THEN|TIME|TIMESTAMP|TIMEZONE_HOUR|TIMEZONE_MINUTE|TO|TRAILING|TRANSACTION|TRANSLATION|TREAT|TRIGGER|TRUE|UNDER|UNION|UNIQUE|UNKNOWN|UNNEST|UPDATE|USAGE|USER|USING|VALUE|VALUES|VARCHAR|VARIABLE|VARYING|VIEW|WHEN|WHENEVER|WHERE|WITH|WITHOUT|WORK|WRITE|YEAR|ZONE)$";
-        protected Regex _reservedWord = null;
         private StringBuilder _variables = null;
         private StringBuilder _descriptions = null;
         private StringBuilder _codeList = null;
@@ -28,7 +26,6 @@ namespace Rigsarkiv.Styx
         {
             _logSection = "Metadata";
             _report = report;
-            _reservedWord = new Regex(ReservedWordPattern, RegexOptions.Compiled | RegexOptions.IgnoreCase);
             _variables = new StringBuilder();
             _descriptions = new StringBuilder();
             _codeList = new StringBuilder();
@@ -84,7 +81,7 @@ namespace Rigsarkiv.Styx
             var index = 0;
             table.Columns.Where(c => c.MissingValues != null).ToList().ForEach(column =>
             {
-                _usercodes.AppendLine(string.Format("{0} {{{1}}}", column.Name, index));
+                _usercodes.AppendLine(string.Format("{0} {{{1}}}", NormalizeName(column.Name), index));
                 index++;
             });
             if (_usercodes.Length > 0)
@@ -101,15 +98,15 @@ namespace Rigsarkiv.Styx
                 var codeList = string.Empty;
                 if (column.CodeList != null)
                 {
-                    var codelistName = column.CodeList.Name;
-                    if (_report.ScriptType == ScriptType.SPSS) { codelistName = column.Name; }
+                    var codelistName = NormalizeName(column.CodeList.Name);
+                    if (_report.ScriptType == ScriptType.SPSS) { codelistName = NormalizeName(column.Name); }
                     codeList = string.Format("{0}{1}.", column.TypeOriginal.StartsWith("VARCHAR") ? "$" : string.Empty, codelistName);
                     _codeList.AppendLine(codelistName);
                     _codeList.AppendLine(string.Format("{{{0}}}", index));
                     index++;
                 }
-                _variables.AppendLine(string.Format("{0} {1} {2}", column.Name, GetColumnType(column), codeList));
-                _descriptions.AppendLine(string.Format("{0} '{1}'", column.Name, column.Description));
+                _variables.AppendLine(string.Format("{0} {1} {2}", NormalizeName(column.Name), GetColumnType(column), codeList));
+                _descriptions.AppendLine(string.Format("{0} '{1}'", NormalizeName(column.Name), column.Description));
             });
             EnsureFile(table, VariablesPath, _variables.ToString());
             EnsureFile(table, DescriptionsPath, _descriptions.ToString());
@@ -208,10 +205,6 @@ namespace Rigsarkiv.Styx
             var codelistName = foreignKeyNode.Element(_tableIndexXNS + "name").Value;
             codelistName = codelistName.Substring(3 + tableName.Length + 1);
             codelistName = codelistName.Substring(0, codelistName.LastIndexOf("_"));
-            if (_reservedWord.IsMatch(codelistName))
-            {
-                codelistName = string.Format("\"{0}\"", codelistName);
-            }
             result.Name = codelistName;
 
             var tableNode = _tableIndexXDocument.Element(_tableIndexXNS + "siardDiark").Element(_tableIndexXNS + "tables").Elements().Where(e => e.Element(_tableIndexXNS + "name").Value == referencedTable).FirstOrDefault();
