@@ -14,6 +14,7 @@
     <link rel="import" href="sections/instructions.html" />
     <link rel="import" href="sections/about.html" />
     <link rel="import" href="sections/welcome.html" />
+    <link rel="import" href="sections/profile.html" />
 </head>
 
 <body>
@@ -30,17 +31,22 @@
         <a href="#" id="instructions-menu" data-section="instructions">Vejledning</a>
         <a href="#" id="about-menu" data-section="about">FAQ</a>
         <a href="#" id="help-menu" data-section="help">Hjælp</a>
-        <a href="#" id="menu-reload">Genstart ASTA</a>    
+        <a href="#" id="menu-profile" data-section="profile">Sprog</a>
+        <a href="#" class="languages" id="menu-reload"></a>    
     </div>
-
+ 
     <!-- Main Content -->
     <div id="content">
-
+        <span id="menu-output-Error" hidden="true"><br />Error: {0}</span>
     </div>
     <script>window.$ = window.jQuery = require('./assets/js/jquery.min.js');</script>
     <script>
         require('./assets/js/utilities');
-        require('./assets/js/menu');
+        require('./assets/js/rights');
+        require('./assets/js/language');
+        require('./assets/js/profile'); 
+        require('./assets/js/links');       
+        require('./assets/js/menu'); 
     </script>
 </body>
 
