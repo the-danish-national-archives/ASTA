@@ -5,8 +5,13 @@
 */
 window.navigation = window.navigation || {},
     function (n) {
-        const {getCurrentWindow, globalShortcut} = require('electron').remote;
-        const {ipcRenderer} = require('electron');
+        const {app, getCurrentWindow, globalShortcut} = require('electron').remote;
+        const fs = require('fs');
+        const path = require('path');
+        const os = require('os');
+        const { spawn } = require('child_process');
+        const { ipcRenderer} = require('electron');
+
         navigation.menu = {
             constants: {
                 sectionTemplate: '.section-template',
@@ -69,7 +74,19 @@ window.navigation = window.navigation || {},
         };
 
         n(function () {
+            var outputErrorSpn = document.getElementById("menu-output-Error");
+            var outputErrorText = outputErrorSpn.innerHTML;
+            Rigsarkiv.Rights.initialize("menu-output-Error");
             navigation.menu.init();
+            Rigsarkiv.Profile.initialize("menu-output-Error","menu-profile","profile-select-Languages","profile-save");
+            Rigsarkiv.Language.initialize("menu-output-Error");
+            var languageCallback = Rigsarkiv.Language.callback();
+            languageCallback.setLanguage(Rigsarkiv.Profile.callback().data.lcid);
+            Rigsarkiv.Links.callback().updateLinks(["instructions-link1","instructions-link2","instructions-link3","instructions-link4","instructions-link5","instructions-link6","instructions-link7","instructions-link8","instructions-link9","instructions-link10","instructions-link11","instructions-link12"]);
+            //TODO :remove
+            var profileLink  = document.getElementById("menu-profile");
+            $(profileLink).hide();
+            
             document.getElementById("menu-reload").addEventListener('click', function (event) {
                 ipcRenderer.send('open-confirm-dialog','menu-reload',"Program genstart","Du er ved at genstarte programmet. Er du sikker?","GENSTART","FORTRYD");
             });
@@ -78,7 +95,11 @@ window.navigation = window.navigation || {},
                     getCurrentWindow().reload();
                 } 
                 if(index === 1) {  }            
-            })
+            });
+            ipcRenderer.on('app-close', (e) => {
+                var languageCallback = Rigsarkiv.Language.callback();
+                ipcRenderer.send('app-close',languageCallback.getValue("app-close-dialog-title"),languageCallback.getValue("app-close-dialog-text"),languageCallback.getValue("app-close-dialog-ok"),languageCallback.getValue("app-close-dialog-cancel")); 
+            });
         })
 
     }(jQuery);

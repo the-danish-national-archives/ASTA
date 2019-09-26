@@ -1,0 +1,110 @@
+[  
+    {
+        "section": "index",
+        "keys": [
+            {
+                "key": "app-close-dialog-title",
+                "value": "The program closes"
+            },
+            {
+                "key": "app-close-dialog-text",
+                "value": "You are closing the program. Are you sure?"
+            },
+            {
+                "key": "app-close-dialog-ok",
+                "value": "CLOSE"
+            },
+            {
+                "key": "app-close-dialog-cancel",
+                "value": "CANCEL"
+            },
+            {
+                "key": "menu-reload",
+                "value": "Restart ASTA"
+            },
+            {
+                "key": "menu-reload-dialog-title",
+                "value": "Program restart"
+            },
+            {
+                "key": "menu-reload-dialog-text",
+                "value": "You are about to restart the program. Are you sure?"
+            },
+            {
+                "key": "menu-reload-dialog-ok",
+                "value": "RESTART"
+            },
+            {
+                "key": "menu-reload-dialog-cancel",
+                "value": "CANCEL"
+            }
+        ]
+    }, 
+    {
+        "section": "profile",
+        "keys": [
+            {
+                "key": "profile-Title",
+                "value": "Profile"
+            },
+            {
+                "key": "profile-title-H2",
+                "value": "Your profile"
+            },
+            {
+                "key": "profile-select-Language",
+                "value": "Select language"
+            },
+            {
+                "key": "profile-save",
+                "value": "Save"
+            },
+            {
+                "key": "profile-language-da-DK",
+                "value": "Danish"
+            },
+            {
+                "key": "profile-language-en-GB",
+                "value": "English"
+            }
+        ]
+    },
+    {
+        "section": "instructions",
+        "keys": [
+            {
+                "key": "instructions-Title",
+                "value": "Instructions"
+            },
+            {
+                "key": "instructions-title-H2",
+                "value": "Quick guide to producing and testing a delivery package"
+            },
+            {
+                "key": "instructions-content1-Left",
+                "value": ""
+            }
+        ]
+    },
+    {
+        "section": "nemesis",
+        "keys": [
+            {
+                "key": "nemesis-Title",
+                "value": "Test delivery package"
+            },
+            {
+                "key": "nemesis-title-H2",
+                "value": "Test a delivery package"
+            },
+            {
+                "key": "nemesis-logFile-runDate",
+                "value": "Date of test run"
+            },
+            {
+                "key": "nemesis-processing-CheckData-FileRow-ColumnsString-ValueBlankCharacters-Warning",
+                "value": "<i class=\"fas fa-exclamation-triangle warning\"><div id=\"15811\" hidden=\"true\">yyyy</div></i>The value for the variable <i> {3} </i> in row <i> {2} </i> is contained in the data file <i> {0} </i> in the value before or after the blank. If these spaces are meaningful, they must be replaced by some allowed characters.<br/>"
+            }
+        ]
+    }
+]

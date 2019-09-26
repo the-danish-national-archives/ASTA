@@ -14,10 +14,14 @@ function (n) {
             elemnetIds.forEach(elementId => {
                 element = document.getElementById(elementId);
                 if(element != null) {
-                    var titleElement = document.getElementById(elementId + "-Title");
-                    var textElement = document.getElementById(elementId + "-Text");
+                    var title = Rigsarkiv.Language.callback().getValue(elementId + "-Title"); 
+                    //TODO : remove
+                    if(title == null) { title = document.getElementById(elementId + "-Title").innerHTML; }                    
+                    var text = Rigsarkiv.Language.callback().getValue(elementId + "-Title"); 
+                    //TODO : remove
+                    if(text == null) { text = document.getElementById(elementId + "-Text").innerHTML; }                   
                     element.addEventListener('click', (event) => {
-                        ipcRenderer.send('open-information-dialog',titleElement.innerHTML,textElement.innerHTML);
+                        ipcRenderer.send('open-information-dialog',title,text);
                     });
                 }
                 else {
