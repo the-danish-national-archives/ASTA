@@ -17,7 +17,7 @@ function (n) {
                     var title = Rigsarkiv.Language.callback().getValue(elementId + "-Title"); 
                     //TODO : remove
                     if(title == null) { title = document.getElementById(elementId + "-Title").innerHTML; }                    
-                    var text = Rigsarkiv.Language.callback().getValue(elementId + "-Title"); 
+                    var text = Rigsarkiv.Language.callback().getValue(elementId + "-Text"); 
                     //TODO : remove
                     if(text == null) { text = document.getElementById(elementId + "-Text").innerHTML; }                   
                     element.addEventListener('click', (event) => {
