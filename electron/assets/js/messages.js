@@ -13,14 +13,15 @@ function (n) {
             var element = null;
             elemnetIds.forEach(elementId => {
                 element = document.getElementById(elementId);
-                if(element != null) {
-                    var title = Rigsarkiv.Language.callback().getValue(elementId + "-Title"); 
-                    //TODO : remove
-                    if(title == null) { title = document.getElementById(elementId + "-Title").innerHTML; }                    
-                    var text = Rigsarkiv.Language.callback().getValue(elementId + "-Text"); 
-                    //TODO : remove
-                    if(text == null) { text = document.getElementById(elementId + "-Text").innerHTML; }                   
+                if(element != null) {                                      
                     element.addEventListener('click', (event) => {
+                        var srcElementId = event.srcElement.id;
+                        var title = Rigsarkiv.Language.callback().getValue(srcElementId + "-Title"); 
+                        //TODO : remove
+                        if(title == null) { title = document.getElementById(srcElementId + "-Title").innerHTML; }                    
+                        var text = Rigsarkiv.Language.callback().getValue(srcElementId + "-Text"); 
+                        //TODO : remove
+                        if(text == null) { text = document.getElementById(srcElementId + "-Text").innerHTML; } 
                         ipcRenderer.send('open-information-dialog',title,text);
                     });
                 }
