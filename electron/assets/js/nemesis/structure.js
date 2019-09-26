@@ -72,7 +72,9 @@ function (n) {
 
         // View Element by id & return texts
         var ViewElement = function(id,formatText1,formatText2,formatText3,formatText4, formatText5, formatText6) {
-            var result = settings.outputText[id];
+            var result = Rigsarkiv.Language.callback().getValue(id); 
+            //TODO : Remove
+            if(result == null) { result = settings.outputText[id]; }
             if(formatText1 != null) { 
                 if(formatText2 != null) {
                     if(formatText3 != null) {

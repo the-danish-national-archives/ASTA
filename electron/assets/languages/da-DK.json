@@ -1,0 +1,110 @@
+[ 
+    {
+        "section": "index",
+        "keys": [
+            {
+                "key": "app-close-dialog-title",
+                "value": "Programmet lukkes"
+            },
+            {
+                "key": "app-close-dialog-text",
+                "value": "Du er ved at lukke programmet ned. Er du sikker?"
+            },
+            {
+                "key": "app-close-dialog-ok",
+                "value": "LUK"
+            },
+            {
+                "key": "app-close-dialog-cancel",
+                "value": "FORTRYD"
+            },
+            {
+                "key": "menu-reload",
+                "value": "Genstart ASTA"
+            },
+            {
+                "key": "menu-reload-dialog-title",
+                "value": "Program genstart"
+            },
+            {
+                "key": "menu-reload-dialog-text",
+                "value": "Du er ved at genstarte programmet. Er du sikker?"
+            },
+            {
+                "key": "menu-reload-dialog-ok",
+                "value": "GENSTART"
+            },
+            {
+                "key": "menu-reload-dialog-cancel",
+                "value": "FORTRYD"
+            }
+        ]
+    }, 
+    {
+        "section": "profile",
+        "keys": [
+            {
+                "key": "profile-Title",
+                "value": "Profil"
+            },
+            {
+                "key": "profile-title-H2",
+                "value": "Din profil"
+            },
+            {
+                "key": "profile-select-Language",
+                "value": "Vægler sprog"
+            },
+            {
+                "key": "profile-save",
+                "value": "Gem"
+            },
+            {
+                "key": "profile-language-da-DK",
+                "value": "Dansk"
+            },
+            {
+                "key": "profile-language-en-GB",
+                "value": "Englesk"
+            }
+        ]
+    },
+    {
+        "section": "instructions",
+        "keys": [
+            {
+                "key": "instructions-Title",
+                "value": "Vejledning"
+            },
+            {
+                "key": "instructions-title-H2",
+                "value": "Quick-guide til produktion og test af en afleveringspakke"
+            },
+            {
+                "key": "instructions-content1-Left",
+                "value": "<h4>Sådan kvalitetssikrer du statistikfilen før du laver udtræk</h4><span> Funktionen \"Skab afleveringspakke\" i ASTA udtrækker blot de data- og metadata der findes i statistikfilen. </br>Det er derfor vigtigt at du sikrer dig, at kvaliteten af data- og metadata i statistikfilen lever op til arkivets krav, før du laver udtræk med ASTA. </br></br>Krav til data- og metadatakvalitet er listet herunder. Du kan også finde quickguiden her: <a id=\"instructions-link1\" href=\"#Quickguide.pdf\">Quickguide.pdf</a>:<ul><li>Tegnsættet for statistikfilerne skal være indkodet som UTF-8. Se vejledning om UTF-8.</li><li>Der må ikke være linjeskift i indhold i variable.</li><li>Variabelnavne [Variable name] skal være angivet for alle variable.</li><li>Variabelnavne skal være unikke inden for statistikfilen.</li><li>Variabelnavne må aldrig begynde med et tal, men må godt være en blanding af bogstaver og tal.</li><li>Variabelnavne må max være 128 tegn lange.</li><li>Variabelbeskrivelser [Variable labels] skal være angivet for alle variable.</li><li>Datatyper for variable i statistikfilen skal overholde de tilladte datatyper i en afleveringspakke. Hvis dette ikke er tilfældet, skal du selv konvertere datatyperne til til ASTA</li><li>Hvis der kun er angivet kodeforklaringer [value labels] for nogle af koderne [values] der fremgår af en skala, skal dette beskrives i variabelbeskrivelsen for variablen.</li><li>Specialkoder for manglende værdier må kun antage værdier A-Z eller .a-.z.</li><li>Der må konsekvent kun anvendes enten specialkoder (.a-.z eller A-Z) eller brugerdefinerede koder for manglende værdier.</li><li>Specialkoder og brugerdefinerede koder for manglende værdier må kun anvendes for numeriske og kategoriske variable med datatyperne numerisk heltal og decimal.</li><li>Hvis brugerdefinerede koder for manglende værdier er anvendt for variable med datatypen dato eller tidstempel skal dette beskrives i et kontekstdokument i afleveringspakken.</li><li>Brugerdefinerede koder for manglende værdier i en variabel skal altid fremgå af kodelisten [Value labels] for denne variabel</li><li>Der skal være fuld overensstemmelse mellem datatype og længde for de variable, der indgår i en reference mellem flere statistikfiler i afleveringspakken.</li><li>Alle koderværdier i data [Value] skal være beskrevet med en kodeforklaring [Value labels]</li><li>Kodelister [Value labels] må kun være tilknyttet numeriske og kategoriske variable med datatyperne numerisk heltal, decimal og tekst.</li><li>Koder [Values] skal være unikke inden for samme kodeliste [Value labelsknyttet til en variabel]</li></ul></br>Læs <a id=\"instructions-link2\" href=\"#Bilag9Kravtilafleveringspakke.pdf\">Bilag 9_Krav til afleveringspakke.pdf</a> igennem, for en mere detaljeret beskrivelse af hvad en afleveringspakke er og hvilke krav der stilles til data- og metadatafilen.</br>Her findes hele <a id=\"instructions-link3\" href=\"#Bekendtgoerelse1007plusinklbilag9.pdf\">Bekendtgørelse 1007+ inkl bilag 9.pdf</a>.<br/><br/></span>"
+            }
+        ]
+    },
+    {
+        "section": "nemesis",
+        "keys": [
+            {
+                "key": "nemesis-Title",
+                "value": "Test afleveringspakke"
+            },
+            {
+                "key": "nemesis-title-H2",
+                "value": "Test en afleveringspakke"
+            },
+            {
+                "key": "nemesis-logFile-runDate",
+                "value": "Dato for testkørsel"
+            },
+            {
+                "key": "nemesis-processing-CheckData-FileRow-ColumnsString-ValueBlankCharacters-Warning",
+                "value": "<i class=\"fas fa-exclamation-triangle warning\"><div id=\"15811\" hidden=\"true\">xxxx</div></i>Der findes foran- eller efterstillede blanktegn i værdien for variablen <i>{3}</i> i række <i>{2}</i> i datafilen <i>{0}</i>. Hvis disse blanktegn er betydningsbærende skal de erstattes af nogle tilladte tegn.<br/>"
+            }
+        ]
+    }
+]

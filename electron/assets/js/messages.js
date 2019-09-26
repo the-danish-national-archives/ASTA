@@ -13,11 +13,16 @@ function (n) {
             var element = null;
             elemnetIds.forEach(elementId => {
                 element = document.getElementById(elementId);
-                if(element != null) {
-                    var titleElement = document.getElementById(elementId + "-Title");
-                    var textElement = document.getElementById(elementId + "-Text");
+                if(element != null) {                                      
                     element.addEventListener('click', (event) => {
-                        ipcRenderer.send('open-information-dialog',titleElement.innerHTML,textElement.innerHTML);
+                        var srcElementId = event.srcElement.id;
+                        var title = Rigsarkiv.Language.callback().getValue(srcElementId + "-Title"); 
+                        //TODO : remove
+                        if(title == null) { title = document.getElementById(srcElementId + "-Title").innerHTML; }                    
+                        var text = Rigsarkiv.Language.callback().getValue(srcElementId + "-Text"); 
+                        //TODO : remove
+                        if(text == null) { text = document.getElementById(srcElementId + "-Text").innerHTML; } 
+                        ipcRenderer.send('open-information-dialog',title,text);
                     });
                 }
                 else {
