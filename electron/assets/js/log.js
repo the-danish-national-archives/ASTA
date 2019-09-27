@@ -31,7 +31,8 @@ function (n) {
         sectionElement: "<span id=\"{0}_{1}\" name=\"{2}\" class=\"section\">{3}</span>",
         spinner: null,
         spinnerClass: null,
-        spinnerEnable: true
+        spinnerEnable: true,
+        outputShowBtn: null
     }
 
     //reset status & input fields
@@ -40,6 +41,7 @@ function (n) {
         settings.outputOkSpn.hidden = true;
         settings.selectLogfile.hidden = true;
         settings.outputSupplementSpn.hidden = true;
+        settings.outputShowBtn.hidden = true;
     }
 
     //commit log data
@@ -60,7 +62,8 @@ function (n) {
         settings.outputOkSpn.innerHTML = settings.outputOkText.format(folderName);
         settings.selectLogfile.hidden = false;
         settings.outputOkSpn.hidden = false;
-        settings.outputSupplementSpn.hidden = false;                        
+        settings.outputSupplementSpn.hidden = false; 
+        settings.outputShowBtn.hidden = false;                       
    }
 
     //copy log HTML template file to parent folder of selected Delivery Package folder
@@ -103,11 +106,14 @@ function (n) {
         settings.selectLogfile.addEventListener('click', (event) => {
             shell.openItem(settings.filePath);
         }); 
+        settings.outputShowBtn.addEventListener('click', (event) => {
+            shell.openItem(settings.filePath);
+        }); 
     }
 
     //Model interfaces functions
     Rigsarkiv.Log = {
-        initialize: function (outputErrorId,outputOkId,selectLogfileId,outputSupplementId, spinnerId,spinnerClassName) {
+        initialize: function (outputErrorId,outputOkId,selectLogfileId,outputSupplementId, spinnerId,spinnerClassName,outputShowId) {
             settings.outputErrorSpn = document.getElementById(outputErrorId);
             settings.outputErrorText = settings.outputErrorSpn.innerHTML;
             settings.outputOkSpn =  document.getElementById(outputOkId);
@@ -117,6 +123,7 @@ function (n) {
             settings.spinner = document.getElementById(spinnerId);
             settings.spinnerClass = spinnerClassName;
             settings.spinner.className = "";
+            settings.outputShowBtn = document.getElementById(outputShowId);
             AddEvents();               
         },
         callback: function () {

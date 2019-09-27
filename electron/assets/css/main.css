@@ -407,7 +407,7 @@ a.selected:hover {
 
 .nemesisOutput {
     height: 400px;
-    width: 45%;
+    width: 100%;
     border: 1px solid #000;    
     overflow-y: auto;
     /*box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.4);*/
@@ -422,6 +422,16 @@ a.selected:hover {
 .box {
     display: flex;
     justify-content: space-between;
+}
+
+.box-column {
+    display: flex;
+    flex-direction: column;
+    width: 45%;
+}
+
+#nemesis-output-logBtn  {
+    float: right;
 }
 
 .testlogTitle {
