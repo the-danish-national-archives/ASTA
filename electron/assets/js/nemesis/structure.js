@@ -33,7 +33,8 @@ function (n) {
             logEndWithErrorSpn:null,
             logEndWithErrorStopSpn:null,
             deliveryPackagePath: null,
-            testId: null,
+            testSpn: null,
+            testText: null,
             confirmationSpn: null,
             convertDisabledText: null,
             outputText: {},
@@ -564,7 +565,7 @@ function (n) {
                 settings.selectDirBtn.disabled = true;
                 settings.validateBtn.disabled = true;
                 var folderName = GetFolderName();
-                settings.testId.innerText = folderName;
+                settings.testSpn.innerText = settings.testText.format(folderName);
                 settings.logCallback().section(settings.logType,folderName,settings.logStartSpn.innerHTML);
                 setTimeout(Validate, 1000);                          
             })
@@ -592,7 +593,9 @@ function (n) {
                 settings.logEndWithErrorSpn = document.getElementById(logEndWithErrorId);
                 settings.logEndWithErrorStopSpn = document.getElementById(logEndWithErrorStopId);
                 settings.outputPrefix = outputPrefix;
-                settings.testId = document.getElementById(testId);
+                settings.testSpn = document.getElementById(testId);
+                settings.testText = settings.testSpn.innerText;
+                settings.testSpn.innerText = settings.testText.format("");
                 settings.confirmationSpn = document.getElementById(confirmationId);
                 settings.convertDisabledText = document.getElementById(convertDisabledId).innerHTML;
                 $("span[id^='" + settings.outputPrefix + "']").each(function() {
@@ -611,7 +614,7 @@ function (n) {
                         settings.selectDirBtn.disabled = true;
                         settings.validateBtn.disabled = true;
                         var folderName = GetFolderName();
-                        settings.testId.innerText = folderName;
+                        settings.testSpn.innerText = settings.testText.format(folderName);
                         settings.logCallback().section(settings.logType,folderName,settings.logStartSpn.innerHTML);
                         return Validate();
                     },
