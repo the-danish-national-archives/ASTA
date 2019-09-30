@@ -950,7 +950,10 @@ function (n) {
             var dataTableNames = [];
             var dataTableFiles = [];
             settings.data.forEach(table => { 
-                dataTableNames.push(table.name);
+                if(dataTableNames.includes(table.name)) {
+                    result = LogError("-CheckMetadata-DataFile-NameUnique-Error",table.fileName,table.name);
+                }
+                dataTableNames.push(table.name);                
                 dataTableFiles.push(table.fileName);
             });
             settings.data.forEach(table => {
