@@ -58,7 +58,7 @@ namespace Rigsarkiv.AthenaForm
             _report = report;
             _outputRichTextBox = outputRichTextBox;
             mainTablesListBox.Items.AddRange(_report.Tables.Select(t => t.Name).ToArray());
-            Reset(true, true);
+            Reset(false, false);
             titlelabel.Text = string.Format(titlelabel.Text, destFolder);
         }
 
@@ -89,23 +89,22 @@ namespace Rigsarkiv.AthenaForm
         private void codeTablesListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             if(codeTablesListBox.SelectedIndex == -1) { return; }
-            _selectedColumn = -1;
+            
             nextErrorButton.Enabled = prevErrorButton.Enabled = false;
             Reset(false, true);
 
             _codeTable = _mainTable.CodeList[codeTablesListBox.SelectedIndex];
             tableInfoLabel.Text = string.Format(CodeTableLabel, _codeTable.Name);
             UpdateCodeRow();
-            nextButton.Enabled = prevButton.Enabled = searchButton.Enabled = true;
+            nextButton.Enabled = prevButton.Enabled = searchButton.Enabled = false;
             searchTextBox.Text = _rowIndex.ToString();
         }
 
         private void mainTablesListBox_SelectedIndexChanged(object sender, EventArgs e)
         {            
             if(mainTablesListBox.SelectedIndex == -1) { return; }
-            _selectedColumn = -1;
-            nextErrorButton.Enabled = prevErrorButton.Enabled = false;
             
+            nextErrorButton.Enabled = prevErrorButton.Enabled = false;            
             nextButton.Enabled = prevButton.Enabled = searchButton.Enabled = false;
             Reset(true, false);
             _codeTable = null;
@@ -116,7 +115,7 @@ namespace Rigsarkiv.AthenaForm
                 codeTablesListBox.Items.AddRange(_mainTable.CodeList.Select(t => t.Name).ToArray());
             }
             tableInfoLabel.Text = string.Format(MainTableLabel, _mainTable.Name);            
-            UpdateDataRow(_mainTable);
+            UpdateDataRow();
             nextButton.Enabled = prevButton.Enabled = searchButton.Enabled = true;
             searchTextBox.Text = _rowIndex.ToString();
         }
@@ -125,13 +124,12 @@ namespace Rigsarkiv.AthenaForm
         {
             Cursor.Current = Cursors.WaitCursor;
             _rowIndex++;
-            var table = (_codeTable != null) ? _codeTable : _mainTable;
-            if (table.Rows >= _rowIndex)
+            if (_mainTable.Rows >= _rowIndex)
             {
-                UpdateDataRow(table);
+                UpdateDataRow();
             }
             searchTextBox.Text = _rowIndex.ToString();
-            nextButton.Enabled = (table.Rows > _rowIndex);
+            nextButton.Enabled = (_mainTable.Rows > _rowIndex);
             prevButton.Enabled = true;
             Cursor.Current = Cursors.Default;
         }
@@ -140,10 +138,9 @@ namespace Rigsarkiv.AthenaForm
         {
             Cursor.Current = Cursors.WaitCursor;
             _rowIndex--;
-            var table = (_codeTable != null) ? _codeTable : _mainTable;
-            if (_rowIndex >= 1 && _rowIndex <= table.Rows)
+            if (_rowIndex >= 1 && _rowIndex <= _mainTable.Rows)
             {
-               UpdateDataRow(table);
+               UpdateDataRow();
             }
             searchTextBox.Text = _rowIndex.ToString();
             prevButton.Enabled = (_rowIndex > 1);            
@@ -156,12 +153,11 @@ namespace Rigsarkiv.AthenaForm
             if(int.TryParse(searchTextBox.Text,out _rowIndex))
             {
                 Cursor.Current = Cursors.WaitCursor;
-                var table = (_codeTable != null) ? _codeTable : _mainTable;
-                if (_rowIndex > 0 && _rowIndex <= table.Rows)
+                if (_rowIndex > 0 && _rowIndex <= _mainTable.Rows)
                 {
-                    UpdateDataRow(table);
+                    UpdateDataRow();
                     prevButton.Enabled = (_rowIndex > 1);
-                    nextButton.Enabled = (table.Rows > _rowIndex);
+                    nextButton.Enabled = (_mainTable.Rows > _rowIndex);
                 }
                 Cursor.Current = Cursors.Default;
             }
@@ -186,34 +182,31 @@ namespace Rigsarkiv.AthenaForm
         private void nextErrorButton_Click(object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
-            var table = (_codeTable != null) ? _codeTable : _mainTable;
-            var errorRows = table.Columns[_selectedColumn].ErrorsRows;
+            var errorRows = _mainTable.Columns[_selectedColumn].ErrorsRows;
             if (errorRows.Any(index => (_rowIndex - 1) < index))
             {
                 var nextIndex = errorRows.FirstOrDefault(index => (_rowIndex - 1) < index);
                 _rowIndex = nextIndex + 1;
                 searchTextBox.Text = _rowIndex.ToString();
-                UpdateDataRow(table);
+                UpdateDataRow();
                 prevButton.Enabled = (_rowIndex > 1);
-                nextButton.Enabled = (table.Rows > _rowIndex);
+                nextButton.Enabled = (_mainTable.Rows > _rowIndex);
             }
             Cursor.Current = Cursors.Default;
         }
 
-
         private void prevErrorButton_Click(object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
-            var table = (_codeTable != null) ? _codeTable : _mainTable;
-            var errorRows = table.Columns[_selectedColumn].ErrorsRows;            
+            var errorRows = _mainTable.Columns[_selectedColumn].ErrorsRows;            
             if (errorRows.Any(index => (_rowIndex - 1) > index))
             {
                 var nextIndex = errorRows.LastOrDefault(index => (_rowIndex - 1) > index);
                 _rowIndex = nextIndex + 1;
                 searchTextBox.Text = _rowIndex.ToString();
-                UpdateDataRow(table);
+                UpdateDataRow();
                 prevButton.Enabled = (_rowIndex > 1);
-                nextButton.Enabled = (table.Rows > _rowIndex);
+                nextButton.Enabled = (_mainTable.Rows > _rowIndex);
             }
             Cursor.Current = Cursors.Default;
         }
@@ -238,7 +231,7 @@ namespace Rigsarkiv.AthenaForm
                         dataValues.Rows[_selectedColumn].DefaultCellStyle.Font = new Font(dataValues.Font, FontStyle.Regular);
                     }
                     _selectedColumn = e.RowIndex;                    
-                    UpdateErrorButton(table);
+                    UpdateErrorButton();
                 }
             }
             valueRichTextBox.Text = string.Empty;
@@ -248,18 +241,47 @@ namespace Rigsarkiv.AthenaForm
             }
         }
 
+        private void codeListValues_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex == 0)
+            {
+                if (e.RowIndex == _selectedColumn)
+                {
+                    codeListValues.Rows[_selectedColumn].DefaultCellStyle.Font = new Font(dataValues.Font, FontStyle.Regular);
+                    codeListValues.ClearSelection();
+                    _selectedColumn = -1;
+                }
+                else
+                {
+                    if (_selectedColumn > -1)
+                    {
+                        codeListValues.Rows[_selectedColumn].DefaultCellStyle.Font = new Font(dataValues.Font, FontStyle.Regular);
+                    }
+                    _selectedColumn = e.RowIndex;
+                }
+            }
+            valueRichTextBox.Text = string.Empty;
+            if (e.ColumnIndex == 0 || e.ColumnIndex == 1 || e.ColumnIndex == 2 || e.ColumnIndex == 3)
+            {
+                valueRichTextBox.Text = codeListValues[e.ColumnIndex, e.RowIndex].Value.ToString();
+            }
+        }
+
         private void Reset(bool mainTable, bool codelist)
         {
             _rowIndex = 1;
             rowLabel.Text = "";
             rowErrorsLabel.Text = "";
             tableErrorsLabel.Text = "";
-
+            _selectedColumn = -1;
             if (mainTable)
             {
                 dataValues.Rows.Clear();
             }
-
+            if (codelist)
+            {
+                codeListValues.Rows.Clear();
+            }
             dataValues.Visible = mainTable;
             codeListValues.Visible = codelist;
         }
@@ -271,11 +293,10 @@ namespace Rigsarkiv.AthenaForm
             codeListValues.Columns[2].HeaderText = string.Format(CodeListValueHeaderText, column.Type);
             codeListValues.Columns[3].HeaderText = string.Format(CodeListDescriptionHeaderText, _codeTable.Columns[1].Type);
             column = _codeTable.Columns[1];
-            if (_codeTable.Columns[0].Modified)
-            {
-                codeListValues.Columns[0].HeaderCell.Style.BackColor = Color.LightGreen;
-                codeListValues.Columns[2].HeaderCell.Style.BackColor = Color.LightGreen;
-            }
+            
+            codeListValues.Columns[0].HeaderCell.Style.BackColor = _codeTable.Columns[0].Modified ? Color.LightGreen : Color.White;
+            codeListValues.Columns[2].HeaderCell.Style.BackColor = _codeTable.Columns[0].Modified ? Color.LightGreen : Color.White;
+            codeListValues.EnableHeadersVisualStyles = false;
             codeListValues.Rows.Add(_codeTable.Rows);
             for (int i = 0; i < _codeTable.Rows; i++)
             {
@@ -286,32 +307,35 @@ namespace Rigsarkiv.AthenaForm
                     codeListValues[1, i].Value = row.SrcValues[C2];
                     codeListValues[2, i].Value = row.DestValues[C1];
                     codeListValues[3, i].Value = row.DestValues[C2];
+                    codeListValues[4, i].Value = codeListValues[5, i].Value = "0";
                     if (row.SrcValues[C1] != row.DestValues[C1])
                     {
                         codeListValues[0, i].Style.BackColor = Color.LightGreen;
                         codeListValues[2, i].Style.BackColor = Color.LightGreen;
+                        codeListValues[4, i].Value = "1";
                     }
                     if (row.ErrorsColumns.Contains(C1))
                     {
                         codeListValues[0, i].Style.BackColor = Color.Red;
                         codeListValues[2, i].Style.BackColor = Color.Red;
+                        codeListValues[5, i].Value = "1";
                     }
-                }
-                dataValues[6, i].Value = column.Differences;
-                dataValues[7, i].Value = column.ErrorsRows.Count > 0 ? column.ErrorsRows.Count : 0;
+                }                
             }
+            codeListValues.ClearSelection();
+            tableErrorsLabel.Text = string.Format(TableErrorsLabel, _codeTable.Errors);
         }
 
-        private void UpdateDataRow(Table table)
+        private void UpdateDataRow()
         {
             valueRichTextBox.Text = string.Empty;
-            rowLabel.Text = string.Format(RowsLabel, _rowIndex, table.Rows);
+            rowLabel.Text = string.Format(RowsLabel, _rowIndex, _mainTable.Rows);
             dataValues.Rows.Clear();            
-            var row = _converter.GetRow(table, _rowIndex);
-            dataValues.Rows.Add(table.Columns.Count);
-            for (int i = 0; i < table.Columns.Count; i++)
+            var row = _converter.GetRow(_mainTable, _rowIndex);
+            dataValues.Rows.Add(_mainTable.Columns.Count);
+            for (int i = 0; i < _mainTable.Columns.Count; i++)
             {                
-                var column = table.Columns[i];
+                var column = _mainTable.Columns[i];
                 dataValues[0, i].Value = column.Name;
                 dataValues[1, i].Value = column.Description;
                 dataValues[2, i].Value = column.TypeOriginal;
@@ -334,23 +358,23 @@ namespace Rigsarkiv.AthenaForm
                 dataValues[7, i].Value = column.ErrorsRows.Count > 0 ? column.ErrorsRows.Count : 0;
                 if(column.ErrorsRows.Count > 0) { dataValues[7, i].Style.BackColor = Color.Red; }
             }
-            tableErrorsLabel.Text = string.Format(TableErrorsLabel, table.Errors);
+            tableErrorsLabel.Text = string.Format(TableErrorsLabel, _mainTable.Errors);
             if (row != null) { rowErrorsLabel.Text = string.Format(RowErrorsLabel, row.ErrorsColumns.Count); }
             dataValues.ClearSelection();
             if (_selectedColumn > -1)
             {
                 dataValues.Rows[_selectedColumn].Cells[0].Selected = true;
                 dataValues.FirstDisplayedScrollingRowIndex = _selectedColumn;
-                UpdateErrorButton(table);
+                UpdateErrorButton();
             }
         }
 
-        private void UpdateErrorButton(Table table)
+        private void UpdateErrorButton()
         {
-           var errorRows = table.Columns[_selectedColumn].ErrorsRows;
+           var errorRows = _mainTable.Columns[_selectedColumn].ErrorsRows;
            nextErrorButton.Enabled = errorRows.Any(index => (_rowIndex - 1) < index);
            prevErrorButton.Enabled = errorRows.Any(index => (_rowIndex - 1) > index);
            dataValues.Rows[_selectedColumn].DefaultCellStyle.Font = new Font(dataValues.Font, FontStyle.Bold);
-        }
+        }       
     }
 }
