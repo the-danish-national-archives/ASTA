@@ -48,6 +48,7 @@
             this.DataType = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Errors = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label5 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.tablesDataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.rowsDataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.columnsDataGridView)).BeginInit();
@@ -57,7 +58,7 @@
             // 
             this.logButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.logButton.Enabled = false;
-            this.logButton.Location = new System.Drawing.Point(802, 911);
+            this.logButton.Location = new System.Drawing.Point(802, 955);
             this.logButton.Name = "logButton";
             this.logButton.Size = new System.Drawing.Size(120, 35);
             this.logButton.TabIndex = 12;
@@ -84,7 +85,7 @@
             this.TextColumn,
             this.BeforeColumn1,
             this.AfterColumn});
-            this.tablesDataGridView.Location = new System.Drawing.Point(13, 102);
+            this.tablesDataGridView.Location = new System.Drawing.Point(13, 127);
             this.tablesDataGridView.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tablesDataGridView.Name = "tablesDataGridView";
             this.tablesDataGridView.ReadOnly = true;
@@ -120,7 +121,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(9, 77);
+            this.label4.Location = new System.Drawing.Point(9, 102);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(102, 20);
             this.label4.TabIndex = 16;
@@ -130,7 +131,7 @@
             // 
             this.reportButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.reportButton.Enabled = false;
-            this.reportButton.Location = new System.Drawing.Point(802, 644);
+            this.reportButton.Location = new System.Drawing.Point(802, 669);
             this.reportButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.reportButton.Name = "reportButton";
             this.reportButton.Size = new System.Drawing.Size(120, 35);
@@ -142,7 +143,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(9, 234);
+            this.label2.Location = new System.Drawing.Point(9, 259);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(100, 20);
             this.label2.TabIndex = 19;
@@ -158,7 +159,7 @@
             this.dataGridViewTextBoxColumn1,
             this.dataGridViewTextBoxColumn2,
             this.dataGridViewTextBoxColumn3});
-            this.rowsDataGridView.Location = new System.Drawing.Point(13, 259);
+            this.rowsDataGridView.Location = new System.Drawing.Point(13, 284);
             this.rowsDataGridView.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.rowsDataGridView.Name = "rowsDataGridView";
             this.rowsDataGridView.ReadOnly = true;
@@ -195,7 +196,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(9, 440);
+            this.label3.Location = new System.Drawing.Point(9, 465);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(253, 20);
             this.label3.TabIndex = 21;
@@ -211,7 +212,7 @@
             this.Variable,
             this.DataType,
             this.Errors});
-            this.columnsDataGridView.Location = new System.Drawing.Point(13, 465);
+            this.columnsDataGridView.Location = new System.Drawing.Point(13, 490);
             this.columnsDataGridView.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.columnsDataGridView.Name = "columnsDataGridView";
             this.columnsDataGridView.ReadOnly = true;
@@ -255,17 +256,29 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(13, 651);
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Location = new System.Drawing.Point(8, 699);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(36, 20);
+            this.label5.Size = new System.Drawing.Size(175, 25);
             this.label5.TabIndex = 22;
-            this.label5.Text = "Log";
+            this.label5.Text = "Konverteringslog";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(8, 66);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(214, 25);
+            this.label1.TabIndex = 23;
+            this.label1.Text = "Konverteringsrapport";
             // 
             // Form3
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(935, 958);
+            this.ClientSize = new System.Drawing.Size(935, 993);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.columnsDataGridView);
@@ -310,5 +323,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn DataType;
         private System.Windows.Forms.DataGridViewTextBoxColumn Errors;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label1;
     }
 }

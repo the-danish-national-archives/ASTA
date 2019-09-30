@@ -28,11 +28,19 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.mainTablesListBox = new System.Windows.Forms.ListBox();
             this.dataValues = new System.Windows.Forms.DataGridView();
+            this.variableName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Description = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.variableType = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.variableValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.columnType = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.columnValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Differences = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Errors = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.prevButton = new System.Windows.Forms.Button();
             this.nextButton = new System.Windows.Forms.Button();
             this.IndexButton = new System.Windows.Forms.Button();
@@ -51,14 +59,6 @@
             this.prevErrorButton = new System.Windows.Forms.Button();
             this.titlelabel = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.variableName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Description = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.variableType = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.variableValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.columnType = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.columnValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Differences = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Errors = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataValues)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -99,14 +99,14 @@
             this.columnValue,
             this.Differences,
             this.Errors});
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataValues.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataValues.DefaultCellStyle = dataGridViewCellStyle3;
             this.dataValues.Location = new System.Drawing.Point(547, 187);
             this.dataValues.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.dataValues.Name = "dataValues";
@@ -118,10 +118,66 @@
             this.dataValues.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataValues_CellClick);
             this.dataValues.SelectionChanged += new System.EventHandler(this.dataValues_SelectionChanged);
             // 
+            // variableName
+            // 
+            this.variableName.HeaderText = "Variabelnavn";
+            this.variableName.Name = "variableName";
+            this.variableName.ReadOnly = true;
+            this.variableName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Description
+            // 
+            this.Description.HeaderText = "Beskrivelse";
+            this.Description.Name = "Description";
+            this.Description.ReadOnly = true;
+            this.Description.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // variableType
+            // 
+            this.variableType.HeaderText = "Datatype SIP";
+            this.variableType.Name = "variableType";
+            this.variableType.ReadOnly = true;
+            this.variableType.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // variableValue
+            // 
+            this.variableValue.HeaderText = "Værdi";
+            this.variableValue.Name = "variableValue";
+            this.variableValue.ReadOnly = true;
+            this.variableValue.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // columnType
+            // 
+            this.columnType.HeaderText = "Datatype AIP";
+            this.columnType.Name = "columnType";
+            this.columnType.ReadOnly = true;
+            this.columnType.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // columnValue
+            // 
+            this.columnValue.HeaderText = "Værdi";
+            this.columnValue.Name = "columnValue";
+            this.columnValue.ReadOnly = true;
+            this.columnValue.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Differences
+            // 
+            this.Differences.HeaderText = "Formatændring";
+            this.Differences.Name = "Differences";
+            this.Differences.ReadOnly = true;
+            this.Differences.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Errors
+            // 
+            this.Errors.HeaderText = "Forskelle";
+            this.Errors.Name = "Errors";
+            this.Errors.ReadOnly = true;
+            this.Errors.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
             // prevButton
             // 
             this.prevButton.Enabled = false;
-            this.prevButton.Location = new System.Drawing.Point(1125, 101);
+            this.prevButton.Location = new System.Drawing.Point(808, 102);
             this.prevButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.prevButton.Name = "prevButton";
             this.prevButton.Size = new System.Drawing.Size(70, 35);
@@ -133,7 +189,7 @@
             // nextButton
             // 
             this.nextButton.Enabled = false;
-            this.nextButton.Location = new System.Drawing.Point(1203, 102);
+            this.nextButton.Location = new System.Drawing.Point(886, 102);
             this.nextButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.nextButton.Name = "nextButton";
             this.nextButton.Size = new System.Drawing.Size(70, 35);
@@ -246,11 +302,11 @@
             // nextErrorButton
             // 
             this.nextErrorButton.Enabled = false;
-            this.nextErrorButton.Location = new System.Drawing.Point(1391, 142);
+            this.nextErrorButton.Location = new System.Drawing.Point(952, 144);
             this.nextErrorButton.Name = "nextErrorButton";
-            this.nextErrorButton.Size = new System.Drawing.Size(155, 35);
+            this.nextErrorButton.Size = new System.Drawing.Size(143, 35);
             this.nextErrorButton.TabIndex = 25;
-            this.nextErrorButton.Text = "Næste Forskelle";
+            this.nextErrorButton.Text = "Næste forskel";
             this.nextErrorButton.UseVisualStyleBackColor = true;
             this.nextErrorButton.Click += new System.EventHandler(this.nextErrorButton_Click);
             // 
@@ -276,11 +332,11 @@
             // prevErrorButton
             // 
             this.prevErrorButton.Enabled = false;
-            this.prevErrorButton.Location = new System.Drawing.Point(1215, 142);
+            this.prevErrorButton.Location = new System.Drawing.Point(808, 144);
             this.prevErrorButton.Name = "prevErrorButton";
-            this.prevErrorButton.Size = new System.Drawing.Size(156, 35);
+            this.prevErrorButton.Size = new System.Drawing.Size(138, 35);
             this.prevErrorButton.TabIndex = 28;
-            this.prevErrorButton.Text = "Forrige Forskelle";
+            this.prevErrorButton.Text = "Forrige forskel";
             this.prevErrorButton.UseVisualStyleBackColor = true;
             this.prevErrorButton.Click += new System.EventHandler(this.prevErrorButton_Click);
             // 
@@ -307,62 +363,6 @@
             this.groupBox1.TabIndex = 30;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "TABELLER";
-            // 
-            // variableName
-            // 
-            this.variableName.HeaderText = "Variabelnavn";
-            this.variableName.Name = "variableName";
-            this.variableName.ReadOnly = true;
-            this.variableName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Description
-            // 
-            this.Description.HeaderText = "Beskrivelse";
-            this.Description.Name = "Description";
-            this.Description.ReadOnly = true;
-            this.Description.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // variableType
-            // 
-            this.variableType.HeaderText = "Datatype SIP";
-            this.variableType.Name = "variableType";
-            this.variableType.ReadOnly = true;
-            this.variableType.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // variableValue
-            // 
-            this.variableValue.HeaderText = "Værdi";
-            this.variableValue.Name = "variableValue";
-            this.variableValue.ReadOnly = true;
-            this.variableValue.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // columnType
-            // 
-            this.columnType.HeaderText = "Datatype AIP";
-            this.columnType.Name = "columnType";
-            this.columnType.ReadOnly = true;
-            this.columnType.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // columnValue
-            // 
-            this.columnValue.HeaderText = "Værdi";
-            this.columnValue.Name = "columnValue";
-            this.columnValue.ReadOnly = true;
-            this.columnValue.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Differences
-            // 
-            this.Differences.HeaderText = "Formatændring";
-            this.Differences.Name = "Differences";
-            this.Differences.ReadOnly = true;
-            this.Differences.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Errors
-            // 
-            this.Errors.HeaderText = "Forskelle";
-            this.Errors.Name = "Errors";
-            this.Errors.ReadOnly = true;
-            this.Errors.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // Form2
             // 
