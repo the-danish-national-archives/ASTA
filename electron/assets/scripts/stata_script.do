@@ -1,5 +1,5 @@
 /*
-Version: 6.0
+Version: 7.0
 Encoding: UTF-8 without byte order mark
 Note: The working directory must contain the data file (dta)
 */
@@ -149,7 +149,7 @@ replace onlyLabel="'"+onlyLabel+"'" if onlyLabel!=""
 replace valLabel=var1+" "+onlyLabel if valLabel==""
 keep valLabel
 * Write output to file
-export delimited using $astaDir{0}{2}_KODELIST.txt, delimiter(tab) novarnames nolabel replace
+export delimited using $astaDir{0}{2}_KODELISTE.txt, delimiter(tab) novarnames nolabel replace
 }
 else {
 cls
