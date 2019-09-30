@@ -108,7 +108,7 @@ namespace Rigsarkiv.Styx
                     using (TextWriter sw = new StreamWriter(path))
                     {
                         _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Write {0} data header", table.Folder) });
-                        sw.WriteLine(string.Join(Separator, table.Columns.Select(c => c.Name).ToArray()));
+                        sw.WriteLine(string.Join(Separator, table.Columns.Select(c => NormalizeName(c.Name)).ToArray()));
                         path = string.Format(TablePath, _srcPath, table.SrcFolder);
                         StreamElement(delegate (XElement row) {
                             sw.WriteLine(GetRow(table, row, tableNS));
