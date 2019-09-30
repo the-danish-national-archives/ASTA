@@ -19,6 +19,11 @@ namespace Rigsarkiv.AthenaForm
         const string RowErrorsLabel = "Forskelle i række: {0}";
         const string CodeTableLabel = "Kodetabel: {0}";
         const string MainTableLabel = "Hovedtabel: {0}";
+        const string CodeValueHeaderText = "Kode {0} (SIP)";
+        const string CodeListValueHeaderText = "Kode {0} (AIP)";
+        const string CodeListDescriptionHeaderText = "Kodeforklaring {0}";
+        const string C1 = "c1";
+        const string C2 = "c2";
         private LogManager _logManager = null;
         private string _srcPath = null;
         private string _destPath = null;
@@ -43,10 +48,8 @@ namespace Rigsarkiv.AthenaForm
         public Form2(string srcPath, string destPath,string destFolder, LogManager logManager, Report report, RichTextBox outputRichTextBox)
         {
             InitializeComponent();
-            //Sætter dataGridView til at være doublebuffered
-            typeof(DataGridView).InvokeMember("DoubleBuffered", BindingFlags.NonPublic |
-            BindingFlags.Instance | BindingFlags.SetProperty, null,
-            dataValues, new object[] { true });
+            typeof(DataGridView).InvokeMember("DoubleBuffered", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.SetProperty, null, dataValues, new object[] { true });
+            typeof(DataGridView).InvokeMember("DoubleBuffered", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.SetProperty, null, codeListValues, new object[] { true });
             _logManager = logManager;
             _srcPath = srcPath;
             _destPath = destPath;
@@ -55,10 +58,7 @@ namespace Rigsarkiv.AthenaForm
             _report = report;
             _outputRichTextBox = outputRichTextBox;
             mainTablesListBox.Items.AddRange(_report.Tables.Select(t => t.Name).ToArray());
-            rowLabel.Text = "";
-            tableInfoLabel.Text = "";
-            rowErrorsLabel.Text = "";
-            tableErrorsLabel.Text = "";
+            Reset(true, true);
             titlelabel.Text = string.Format(titlelabel.Text, destFolder);
         }
 
@@ -84,21 +84,18 @@ namespace Rigsarkiv.AthenaForm
 
             e.DrawFocusRectangle();
             this.ResumeLayout();
-        }
+        }       
 
         private void codeTablesListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             if(codeTablesListBox.SelectedIndex == -1) { return; }
             _selectedColumn = -1;
             nextErrorButton.Enabled = prevErrorButton.Enabled = false;
-            _rowIndex = 1;
-            rowLabel.Text = "";
-            rowErrorsLabel.Text = "";
-            tableErrorsLabel.Text = "";
-            dataValues.Rows.Clear();            
+            Reset(false, true);
+
             _codeTable = _mainTable.CodeList[codeTablesListBox.SelectedIndex];
-            tableInfoLabel.Text = string.Format(CodeTableLabel, _codeTable.Name);            
-            UpdateDataRow(_codeTable);
+            tableInfoLabel.Text = string.Format(CodeTableLabel, _codeTable.Name);
+            UpdateCodeRow();
             nextButton.Enabled = prevButton.Enabled = searchButton.Enabled = true;
             searchTextBox.Text = _rowIndex.ToString();
         }
@@ -108,13 +105,10 @@ namespace Rigsarkiv.AthenaForm
             if(mainTablesListBox.SelectedIndex == -1) { return; }
             _selectedColumn = -1;
             nextErrorButton.Enabled = prevErrorButton.Enabled = false;
-            _rowIndex = 1;
-            rowLabel.Text = "";
-            rowErrorsLabel.Text = "";
-            tableErrorsLabel.Text = "";
+            
             nextButton.Enabled = prevButton.Enabled = searchButton.Enabled = false;
-            dataValues.Rows.Clear();
-           _codeTable = null;
+            Reset(true, false);
+            _codeTable = null;
             codeTablesListBox.Items.Clear();
             _mainTable = _report.Tables[mainTablesListBox.SelectedIndex];
             if(_mainTable.CodeList != null && _mainTable.CodeList.Count > 0)
@@ -251,6 +245,60 @@ namespace Rigsarkiv.AthenaForm
             if (e.ColumnIndex == 1 || e.ColumnIndex == 3 || e.ColumnIndex == 5)
             {
                 valueRichTextBox.Text = dataValues[e.ColumnIndex, e.RowIndex].Value.ToString();
+            }
+        }
+
+        private void Reset(bool mainTable, bool codelist)
+        {
+            _rowIndex = 1;
+            rowLabel.Text = "";
+            rowErrorsLabel.Text = "";
+            tableErrorsLabel.Text = "";
+
+            if (mainTable)
+            {
+                dataValues.Rows.Clear();
+            }
+
+            dataValues.Visible = mainTable;
+            codeListValues.Visible = codelist;
+        }
+
+        private void UpdateCodeRow()
+        {
+            var column = _mainTable.Columns.FirstOrDefault(c => c.CodeListName == _codeTable.Name);
+            codeListValues.Columns[0].HeaderText = string.Format(CodeValueHeaderText, column.TypeOriginal);
+            codeListValues.Columns[2].HeaderText = string.Format(CodeListValueHeaderText, column.Type);
+            codeListValues.Columns[3].HeaderText = string.Format(CodeListDescriptionHeaderText, _codeTable.Columns[1].Type);
+            column = _codeTable.Columns[1];
+            if (_codeTable.Columns[0].Modified)
+            {
+                codeListValues.Columns[0].HeaderCell.Style.BackColor = Color.LightGreen;
+                codeListValues.Columns[2].HeaderCell.Style.BackColor = Color.LightGreen;
+            }
+            codeListValues.Rows.Add(_codeTable.Rows);
+            for (int i = 0; i < _codeTable.Rows; i++)
+            {
+                var row = _converter.GetRow(_codeTable, i + 1);
+                if (row != null)
+                {
+                    codeListValues[0, i].Value = row.SrcValues[C1];
+                    codeListValues[1, i].Value = row.SrcValues[C2];
+                    codeListValues[2, i].Value = row.DestValues[C1];
+                    codeListValues[3, i].Value = row.DestValues[C2];
+                    if (row.SrcValues[C1] != row.DestValues[C1])
+                    {
+                        codeListValues[0, i].Style.BackColor = Color.LightGreen;
+                        codeListValues[2, i].Style.BackColor = Color.LightGreen;
+                    }
+                    if (row.ErrorsColumns.Contains(C1))
+                    {
+                        codeListValues[0, i].Style.BackColor = Color.Red;
+                        codeListValues[2, i].Style.BackColor = Color.Red;
+                    }
+                }
+                dataValues[6, i].Value = column.Differences;
+                dataValues[7, i].Value = column.ErrorsRows.Count > 0 ? column.ErrorsRows.Count : 0;
             }
         }
 
