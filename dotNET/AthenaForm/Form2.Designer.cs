@@ -374,6 +374,12 @@
             // 
             // codeListValues
             // 
+            this.codeListValues.AllowUserToAddRows = false;
+            this.codeListValues.AllowUserToDeleteRows = false;
+            this.codeListValues.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.codeListValues.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.codeListValues.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.codeListValues.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.codeValue,
@@ -386,6 +392,7 @@
             this.codeListValues.Name = "codeListValues";
             this.codeListValues.RowHeadersVisible = false;
             this.codeListValues.RowTemplate.Height = 28;
+            this.codeListValues.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.codeListValues.Size = new System.Drawing.Size(1003, 676);
             this.codeListValues.TabIndex = 31;
             this.codeListValues.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.codeListValues_CellClick);
