@@ -119,7 +119,7 @@ namespace Rigsarkiv.Athena
             _tableIndexXDocument.Element(_tableIndexXNS + "siardDiark").Element(_tableIndexXNS + "tables").Add(tableNode);
             var srcFolder = tableInfo["fileName"].ToString();
             srcFolder = srcFolder.Substring(0, srcFolder.LastIndexOf("."));
-            var table = new Table() { SrcFolder = srcFolder, Name = tableName, Folder = folder, Rows = int.Parse(rows), Errors = 0, RowsCounter = 0, Columns = new List<Column>(), ErrorsRows = new Dictionary<string, Row>() };
+            var table = new Table() { SrcFolder = srcFolder, Name = tableName, Folder = folder, Rows = int.Parse(rows), Errors = 0, RowsCounter = 0, HasKey = false, Columns = new List<Column>(), ErrorsRows = new Dictionary<string, Row>() };
             _report.Tables.Add(table);
             foreach (var variable in (object[])tableInfo["variables"])
             {
@@ -132,6 +132,7 @@ namespace Rigsarkiv.Athena
                     AddReferenceNode((Dictionary<string, object>)reference, tableNode, table, index++);
                 }
             }
+            if (!table.HasKey) { tableNode.Element(_tableIndexXNS + "primaryKey").Remove(); }
         }
 
         private void AddReferenceNode(Dictionary<string, object> referenceInfo, XElement tableNode, Table table, int index)
@@ -179,6 +180,7 @@ namespace Rigsarkiv.Athena
             {
                 _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add primary Key columnName: {0} ", column.Name) });
                 tableNode.Element(_tableIndexXNS + "primaryKey").Add(new XElement(_tableIndexXNS + "column", column.Name));
+                table.HasKey = true;
             }
             if (variableInfo["codeListKey"] != null && !string.IsNullOrEmpty(variableInfo["codeListKey"].ToString()))
             {
@@ -220,7 +222,7 @@ namespace Rigsarkiv.Athena
             Directory.CreateDirectory(string.Format(TablePath, _destFolderPath, folder));
 
             var options = (object[])variableInfo["options"];
-            var codeList = new Table() { Name = refTableName, Folder = folder, Rows = options.Length, Errors = 0, RowsCounter = 0, Options= new List<string[]>(), ErrorsRows = new Dictionary<string, Row>() };
+            var codeList = new Table() { Name = refTableName, Folder = folder, Rows = options.Length, Errors = 0, RowsCounter = 0, HasKey = true, Options= new List<string[]>(), ErrorsRows = new Dictionary<string, Row>() };
             codeList.Columns = new List<Column>() { (new Column() { Name = Code, Id = C1, Description = "Kode", Type = column.Type, TypeOriginal = "", HasSpecialNumeric = false, HasMissingValues = false, Differences = 0, Errors = 0, ErrorsRows = new List<int>() }), (new Column() { Name = CodeValue, Id = C2, Description = "Kodeværdi", Type = "", TypeOriginal = "", HasSpecialNumeric = false, HasMissingValues = false, Differences = 0, Errors = 0, ErrorsRows = new List<int>() }) };
             var optionsType = ParseOptions(options, tableNode, researchIndexNode, codeList, folder, column);
             var columnNode1 = new XElement(_tableIndexXNS + "column", new XElement(_tableIndexXNS + "name", Code),new XElement(_tableIndexXNS + "columnID", C1),new XElement(_tableIndexXNS + "type", column.Type),new XElement(_tableIndexXNS + "typeOriginal"),new XElement(_tableIndexXNS + "nullable", "false"), new XElement(_tableIndexXNS + "description", "Kode"));
