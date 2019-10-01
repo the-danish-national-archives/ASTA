@@ -20,7 +20,7 @@ function (n) {
         const doubleApostrophePattern2 = /(")/g;
         const doubleApostrophePattern3 = /(["]{2,2})/g
         const datatypeDecimal = /^(\%([0-9]+)\.([0-9]+)g)$/;
-        
+        const csvSplitPattern = /(?:^|;)(\"(?:[^\"]+|\"\")*\"|[^;]*)/g;
         const errorsMax = 40;
         const warningMax = 100;
         
@@ -534,40 +534,17 @@ function (n) {
             }
             return result;
         }
-
-        // parse column
-        var ParseColumn = function (data,offset) {
-            var startIndex = data.indexOf("\"",offset);
-            var endIndex = -1;
-            if(startIndex === offset) {
-                endIndex = data.indexOf("\";",offset);
-                if(endIndex === -1) {
-                    endIndex = data.indexOf("\"",offset + 1);
-                    if(endIndex === -1) {
-                        endIndex = data.indexOf(";",offset);
-                    }
-                }
-                if(endIndex > -1) { endIndex++; }
-            }
-            else {
-                startIndex = offset;
-                endIndex = data.indexOf(";",offset);
-            }
-           
-            return (endIndex > -1) ? data.substring(startIndex,endIndex) : data.substring(startIndex);
-        }
         
         //Parse single row
         var ParseRow = function (data) {
             var result = [];
-            var offset = 0;
-            var column = ParseColumn(data,offset);
-            result.push(column);
-            offset += (column.length + 1);
-            while(offset < (data.length - 1)) {
-                column = ParseColumn(data,offset);
-                result.push(column);
-                offset += (column.length + 1);
+             var matches = data.match(csvSplitPattern);
+            if(matches != null && matches.length > 0) {
+                for(var i = 0;i < matches.length;i++) {
+                    var value = matches[i];
+                    if(value.indexOf(";") === 0) { value = value.substring(1); }
+                    result.push(value);
+                }
             }
             return result;
         }
