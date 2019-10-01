@@ -195,6 +195,7 @@ namespace Rigsarkiv.Athena
                 {
                     AddReferencedTable(variableInfo, tableNode, researchIndexNode, table, column, refTableName, index);
                 }
+                column.CodeListName = refTableName;
                 var codeList = table.CodeList.FirstOrDefault(t => t.Name == refTableName);
                 foreach (var pair in codeList.Options)
                 {                    

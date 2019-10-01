@@ -24,5 +24,6 @@ namespace Rigsarkiv.Athena.Entities
         public int Differences { get; set; }
         public int Errors { get; set; }
         public List<int> ErrorsRows { get; set; }
+        public string CodeListName { get; set; }
     }
 }

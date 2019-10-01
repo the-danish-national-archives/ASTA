@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.mainTablesListBox = new System.Windows.Forms.ListBox();
@@ -59,8 +59,16 @@
             this.prevErrorButton = new System.Windows.Forms.Button();
             this.titlelabel = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.codeListValues = new System.Windows.Forms.DataGridView();
+            this.codeValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.codeDescription = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.codeListValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.codeListDescription = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.codeDifferences = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.codeErrors = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataValues)).BeginInit();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.codeListValues)).BeginInit();
             this.SuspendLayout();
             // 
             // openFileDialog1
@@ -99,14 +107,14 @@
             this.columnValue,
             this.Differences,
             this.Errors});
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataValues.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataValues.DefaultCellStyle = dataGridViewCellStyle1;
             this.dataValues.Location = new System.Drawing.Point(547, 187);
             this.dataValues.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.dataValues.Name = "dataValues";
@@ -364,11 +372,79 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "TABELLER";
             // 
+            // codeListValues
+            // 
+            this.codeListValues.AllowUserToAddRows = false;
+            this.codeListValues.AllowUserToDeleteRows = false;
+            this.codeListValues.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.codeListValues.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.codeListValues.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.codeListValues.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.codeValue,
+            this.codeDescription,
+            this.codeListValue,
+            this.codeListDescription,
+            this.codeDifferences,
+            this.codeErrors});
+            this.codeListValues.Location = new System.Drawing.Point(547, 187);
+            this.codeListValues.Name = "codeListValues";
+            this.codeListValues.RowHeadersVisible = false;
+            this.codeListValues.RowTemplate.Height = 28;
+            this.codeListValues.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
+            this.codeListValues.Size = new System.Drawing.Size(1003, 676);
+            this.codeListValues.TabIndex = 31;
+            this.codeListValues.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.codeListValues_CellClick);
+            // 
+            // codeValue
+            // 
+            this.codeValue.HeaderText = "Kode (SIP)";
+            this.codeValue.Name = "codeValue";
+            this.codeValue.ReadOnly = true;
+            this.codeValue.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // codeDescription
+            // 
+            this.codeDescription.HeaderText = "Kodeforklaring";
+            this.codeDescription.Name = "codeDescription";
+            this.codeDescription.ReadOnly = true;
+            this.codeDescription.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // codeListValue
+            // 
+            this.codeListValue.HeaderText = "Kode (AIP)";
+            this.codeListValue.Name = "codeListValue";
+            this.codeListValue.ReadOnly = true;
+            this.codeListValue.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // codeListDescription
+            // 
+            this.codeListDescription.HeaderText = "Kodeforklaring";
+            this.codeListDescription.Name = "codeListDescription";
+            this.codeListDescription.ReadOnly = true;
+            this.codeListDescription.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // codeDifferences
+            // 
+            this.codeDifferences.HeaderText = "Formatændring";
+            this.codeDifferences.Name = "codeDifferences";
+            this.codeDifferences.ReadOnly = true;
+            this.codeDifferences.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // codeErrors
+            // 
+            this.codeErrors.HeaderText = "Forskelle";
+            this.codeErrors.Name = "codeErrors";
+            this.codeErrors.ReadOnly = true;
+            this.codeErrors.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1562, 922);
+            this.Controls.Add(this.codeListValues);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.titlelabel);
             this.Controls.Add(this.prevErrorButton);
@@ -391,6 +467,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataValues)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.codeListValues)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -427,6 +504,13 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn columnValue;
         private System.Windows.Forms.DataGridViewTextBoxColumn Differences;
         private System.Windows.Forms.DataGridViewTextBoxColumn Errors;
+        private System.Windows.Forms.DataGridView codeListValues;
+        private System.Windows.Forms.DataGridViewTextBoxColumn codeValue;
+        private System.Windows.Forms.DataGridViewTextBoxColumn codeDescription;
+        private System.Windows.Forms.DataGridViewTextBoxColumn codeListValue;
+        private System.Windows.Forms.DataGridViewTextBoxColumn codeListDescription;
+        private System.Windows.Forms.DataGridViewTextBoxColumn codeDifferences;
+        private System.Windows.Forms.DataGridViewTextBoxColumn codeErrors;
     }
 }
 
