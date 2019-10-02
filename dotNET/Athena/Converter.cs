@@ -37,6 +37,7 @@ namespace Rigsarkiv.Athena
         protected const string C2 = "c2";
         protected string SpecialNumericPattern = "^(\\.[a-z])|([A-Z])$";
         protected string DoubleApostrophePattern = "^\"([\\w\\W\\s]*)\"$";
+        protected string CsvSplitPattern = "(?:^|;)(\"(?:[^\"]+|\"\")*\"|[^;]*)";
         protected Dictionary<string, Regex> _regExps = null;
         protected Assembly _assembly = null;
         protected Asta.Logging.LogManager _logManager = null;
@@ -369,43 +370,12 @@ namespace Rigsarkiv.Athena
         protected List<string> ParseRow(string line)
         {
             var result = new List<string>();
-            var offset = 0;
-            var column = ParseColumn(line, offset);
-            result.Add(column);
-            offset += (column.Length + 1);
-            while (offset < (line.Length - 1))
+            Regex csvSplit = GetRegex(CsvSplitPattern);
+            foreach (Match match in csvSplit.Matches(line))
             {
-                column = ParseColumn(line, offset);
-                result.Add(column);
-                offset += (column.Length + 1);
+                result.Add(match.Groups[1].Value);
             }
             return result;
-        }
-
-        private string ParseColumn(string line, int offset)
-        {
-            var startIndex = line.IndexOf("\"", offset);
-            var endIndex = -1;
-            if (startIndex == offset)
-            {
-                endIndex = line.IndexOf("\";", offset);
-                if (endIndex == -1)
-                {
-                    endIndex = line.IndexOf("\"", offset + 1);
-                    if (endIndex == -1)
-                    {
-                        endIndex = line.IndexOf(";", offset);
-                    }
-                }
-                if (endIndex > -1) { endIndex++; }
-            }
-            else
-            {
-                startIndex = offset;
-                endIndex = line.IndexOf(";", offset);
-            }
-
-            return (endIndex > -1) ? line.Substring(startIndex, endIndex - startIndex) : line.Substring(startIndex);
         }
 
         private void UpdateRow(Table table, Row row, Column column, string value, string newValue, int index)
