@@ -213,7 +213,7 @@ namespace Rigsarkiv.AthenaForm
 
         private void dataValues_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            var table = (_codeTable != null) ? _codeTable : _mainTable;
+            if(e.RowIndex == -1) { return; }
             if(e.ColumnIndex == 0)
             {
                 if (e.RowIndex == _selectedColumn)
@@ -243,6 +243,7 @@ namespace Rigsarkiv.AthenaForm
 
         private void codeListValues_CellClick(object sender, DataGridViewCellEventArgs e)
         {
+            if (e.RowIndex == -1) { return; }
             if (e.ColumnIndex == 0)
             {
                 if (e.RowIndex == _selectedColumn)
