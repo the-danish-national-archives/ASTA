@@ -538,7 +538,8 @@ function (n) {
         //Parse single row
         var ParseRow = function (data) {
             var result = [];
-             var matches = data.match(csvSplitPattern);
+            csvSplitPattern.lastIndex = 0;
+            var matches = data.match(csvSplitPattern);
             if(matches != null && matches.length > 0) {
                 for(var i = 0;i < matches.length;i++) {
                     var value = matches[i];
@@ -559,11 +560,7 @@ function (n) {
                 if(row.indexOf("\"") > -1) { //Reparsing of row if it contains double apstrof
                     newData = ParseRow(row);
                     result = (settings.table.variables.length === newData.length); 
-                }  
-                if(settings.table.variables.length === (newData.length + 1)) { 
-                    newData.push(""); 
-                    result = true;
-                }                                      
+                }                                   
             }
             if(!result) { //less or more separators
                 result = LogError("-CheckData-FileRows-MatchLength-Error",settings.fileName,settings.rowIndex);
