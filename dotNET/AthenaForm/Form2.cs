@@ -110,9 +110,9 @@ namespace Rigsarkiv.AthenaForm
             _codeTable = null;
             codeTablesListBox.Items.Clear();
             _mainTable = _report.Tables[mainTablesListBox.SelectedIndex];
-            if(_mainTable.CodeList != null && _mainTable.CodeList.Count > 0)
+            if (_mainTable.CodeList != null && _mainTable.CodeList.Count > 0)
             {
-                codeTablesListBox.Items.AddRange(_mainTable.CodeList.Select(t => t.Name).ToArray());
+                codeTablesListBox.Items.AddRange(_mainTable.CodeList.Select(t => t.Name.Substring(_mainTable.Name.Length + 1)).ToArray());
             }
             tableInfoLabel.Text = string.Format(MainTableLabel, _mainTable.Name);            
             UpdateDataRow();
