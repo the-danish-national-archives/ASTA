@@ -23,7 +23,11 @@ function (n) {
         const csvSplitPattern = /(?:^|;)(\"(?:[^\"]+|\"\")*\"|[^;]*)/g;
         const errorsMax = 40;
         const warningMax = 100;
-        
+        const maxInt = 2147483647;
+        const minInt = -2147483648;
+        const maxDecimal = 79228162514264337593543950335.79228162514264337593543950335;
+        const minDecimal = -79228162514264337593543950335.79228162514264337593543950335;
+
         //private data memebers
         var settings = { 
             outputErrorSpn: null,
@@ -215,7 +219,7 @@ function (n) {
                 result = LogError("-CheckData-FileRow-ColumnsIntValue-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);  
             }
             else {
-                if(parsedValue > 2147483647 || parsedValue < -2147483648) {
+                if(parsedValue > maxInt || parsedValue < minInt) {
                     result = LogError("-CheckData-FileRow-ColumnsInt-ValueRange-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
                 }
                 else {
@@ -250,7 +254,7 @@ function (n) {
                         result = LogError("-CheckData-FileRow-ColumnsDecimalType-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, variable.format,dataValue);
                     }
                 }
-                if(parsedValue > 79228162514264337593543950335.79228162514264337593543950335 || parsedValue < -79228162514264337593543950335.79228162514264337593543950335) {
+                if(parsedValue > maxDecimal || parsedValue < minDecimal) {
                     result = LogError("-CheckData-FileRow-ColumnsDecimal-ValueRange-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
                 }
                 else {

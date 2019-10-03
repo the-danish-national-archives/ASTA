@@ -28,6 +28,9 @@ function (n) {
         const titleMaxLength = 128;
         const stringMaxLength = 32767;
         const errorsMax = 40;
+        const intMaxLength = 10;
+        const decimalPart1MaxLength = 29;
+        const decimalPart2MaxLength = 29;
 
         //private data memebers
         var settings = { 
@@ -800,11 +803,11 @@ function (n) {
         // Validate Int format type
         var ValidateIntFormat = function (variable,regExp) {
             var result = true;
-            var length = "";
-            var matches = variable.format.match(regExp);
+            var length = intMaxLength;
+            /*var matches = variable.format.match(regExp);
             matches.forEach(match => {
                 if(!isNaN(match)) { length = match; }
-            });
+            });*/
             variable.regExps.push("^(\\+|\\-){0,1}[0-9]{1," + length + "}$");
             return result;
         }
@@ -812,9 +815,9 @@ function (n) {
         // Validate Decimal Format type
         var ValidateDecimalFormat = function (variable,regExp) {
             var result = true;
-            var intLength = "";
-            var decimalLength = "";
-            var matches = variable.format.match(regExp);
+            var intLength = decimalPart1MaxLength;
+            var decimalLength = decimalPart2MaxLength;
+            /*var matches = variable.format.match(regExp);
             matches.forEach(match => {
                 if(!isNaN(match)) {
                     if(intLength === "") {
@@ -828,7 +831,7 @@ function (n) {
             if(regExp.toString() === "/^(\\%([0-9]+)\\.([0-9]+)g)$/") {
                 intLength = intLength - 1;
                 decimalLength = intLength;
-            }
+            }*/
             variable.regExps.push("^(\\+|\\-){0,1}[0-9]{0," + intLength + "}\\.[0-9]{0," + decimalLength + "}$");
             variable.regExps.push("^(\\+|\\-){0,1}[0-9]{0," + intLength + "}\\,[0-9]{0," + decimalLength + "}$");
             variable.regExps.push("^(\\+|\\-){0,1}[0-9]{1," + intLength + "}$");
