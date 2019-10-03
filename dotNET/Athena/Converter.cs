@@ -202,7 +202,7 @@ namespace Rigsarkiv.Athena
                         endIndex = regExp.IndexOf("}", startIndex);
                         result = int.Parse(regExp.Substring(startIndex, endIndex - startIndex));
                         result++;
-                        startIndex = regExp.IndexOf("{1,", endIndex + 1);
+                        startIndex = regExp.IndexOf("{0,", endIndex + 1);
                         if(startIndex > -1)
                         {
                             startIndex = startIndex + 3;
