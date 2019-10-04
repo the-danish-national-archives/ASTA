@@ -130,7 +130,7 @@
             // convertButton
             // 
             this.convertButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.convertButton.Location = new System.Drawing.Point(798, 284);
+            this.convertButton.Location = new System.Drawing.Point(914, 284);
             this.convertButton.Name = "convertButton";
             this.convertButton.Size = new System.Drawing.Size(136, 32);
             this.convertButton.TabIndex = 8;
@@ -165,7 +165,7 @@
             // 
             this.nextForm.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.nextForm.Enabled = false;
-            this.nextForm.Location = new System.Drawing.Point(951, 284);
+            this.nextForm.Location = new System.Drawing.Point(957, 637);
             this.nextForm.Name = "nextForm";
             this.nextForm.Size = new System.Drawing.Size(93, 32);
             this.nextForm.TabIndex = 10;
@@ -176,7 +176,7 @@
             // logButton
             // 
             this.logButton.Enabled = false;
-            this.logButton.Location = new System.Drawing.Point(975, 637);
+            this.logButton.Location = new System.Drawing.Point(39, 637);
             this.logButton.Name = "logButton";
             this.logButton.Size = new System.Drawing.Size(75, 32);
             this.logButton.TabIndex = 11;
