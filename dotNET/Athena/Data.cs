@@ -204,7 +204,7 @@ namespace Rigsarkiv.Athena
             }
             if (column.HasSpecialNumeric && GetRegex(SpecialNumericPattern).IsMatch(value))
             {
-                AddMissingColumnNode(value, researchIndexNode, column.Id);
+                AddMissingColumnNode(value, researchIndexNode, column);
                 _updateDocuments = true;
             }
 

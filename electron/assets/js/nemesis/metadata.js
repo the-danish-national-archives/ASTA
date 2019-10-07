@@ -218,6 +218,7 @@ function (n) {
             var result = true;
             var options = [];
             var codeVariable = null;
+            var missingValues = 0;
             table.variables.forEach(variable => {
                 if(variable.name === info.name) {
                     codeVariable = variable;
@@ -239,8 +240,10 @@ function (n) {
                     if(codeVariable.type === "Decimal" && isNaN(parseFloat(codeValue.replace(",",".")))) {
                         result = LogError("-CheckMetadata-FileUserCodes-CodeDecimalType-Error",settings.fileName,info.name,codeValue,codeVariable.format);
                     }
+                    missingValues = missingValues + 1;
                 }                               
             });
+            if(codeVariable != null) { codeVariable.missingValues = missingValues; }
             return result; 
         }
 
@@ -548,7 +551,7 @@ function (n) {
                             var codeListKey = GetCodeListKey(expressions);
                             if(codeListKey == null) { result = false; }                            
                             var isKey = (settings.fileKeys.includes(variableName)) ? true : false;
-                            var variable = { "name":variableName, "format":expressions[1], "isKey":isKey, "type":"", "nullable":false, "description":"", "codeListKey":(codeListKey == null ? "" : codeListKey), "options":[], "regExps":[], "appliedRegExp":-1 }
+                            var variable = { "name":variableName, "format":expressions[1], "isKey":isKey, "type":"", "nullable":false, "description":"", "codeListKey":(codeListKey == null ? "" : codeListKey), "options":[], "regExps":[], "appliedRegExp":-1, missingValues:0 }
                             table.variables.push(variable);
                             if(!ValidateDataFormats(variable)) { result = false; } 
                         } 
