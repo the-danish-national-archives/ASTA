@@ -333,12 +333,16 @@ function (n) {
         //strip text double Apostrophe
         var ApostropheNormalizer = function(dataValue,variable) {
             var result = dataValue;
+            var isReferenced = false;
             if(result.indexOf("\"") > -1 && doubleApostrophePattern1.test(result)) {
                 result = result.match(doubleApostrophePattern1)[1];
                 result = result.replace(/""/g, "\"");
-            }
+            }            
             if(variable != null && result.length > 0 && (result[0] === " " || result[result.length - 1] === " ")) {
-                if(variable.isKey) {
+                settings.table.references.forEach(reference => {
+                    if(reference.refKeys.includes(variable.name)) { isReferenced = true; }
+                });
+                if(variable.isKey || isReferenced) {
                     result = LogError("-CheckData-FileRow-ColumnsString-ValueBlankCharacters-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name);
                 }
                 else {
