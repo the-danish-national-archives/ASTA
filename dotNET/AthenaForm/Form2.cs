@@ -89,7 +89,7 @@ namespace Rigsarkiv.AthenaForm
         private void codeTablesListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             if(codeTablesListBox.SelectedIndex == -1) { return; }
-            
+            infoLabel.Visible = false;
             nextErrorButton.Enabled = prevErrorButton.Enabled = false;
             Reset(false, true);
 
@@ -103,7 +103,7 @@ namespace Rigsarkiv.AthenaForm
         private void mainTablesListBox_SelectedIndexChanged(object sender, EventArgs e)
         {            
             if(mainTablesListBox.SelectedIndex == -1) { return; }
-            
+            infoLabel.Visible = false;
             nextErrorButton.Enabled = prevErrorButton.Enabled = false;            
             nextButton.Enabled = prevButton.Enabled = searchButton.Enabled = false;
             Reset(true, false);
