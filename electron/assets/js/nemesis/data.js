@@ -338,7 +338,12 @@ function (n) {
                 result = result.replace(/""/g, "\"");
             }
             if(variable != null && result.length > 0 && (result[0] === " " || result[result.length - 1] === " ")) {
-                result = LogWarn("-CheckData-FileRow-ColumnsString-ValueBlankCharacters-Warning",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name);
+                if(variable.isKey) {
+                    result = LogError("-CheckData-FileRow-ColumnsString-ValueBlankCharacters-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name);
+                }
+                else {
+                    result = LogWarn("-CheckData-FileRow-ColumnsString-ValueBlankCharacters-Warning",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name);
+                }                
             }
             return result;
         }
