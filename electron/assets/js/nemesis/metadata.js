@@ -217,8 +217,10 @@ function (n) {
         var ValidateUserCodeValues = function(table,info) {
             var result = true;
             var options = [];
+            var codeVariable = null;
             table.variables.forEach(variable => {
-                if(variable.name === info.name) { 
+                if(variable.name === info.name) {
+                    codeVariable = variable;
                     options = variable.options;
                 }
             });
@@ -227,9 +229,16 @@ function (n) {
                     result = LogError("-CheckMetadata-FileUserCodes-CodeValidation-Error",settings.fileName,info.name,code);
                 } 
                 else {
+                    var codeValue = code.substring(1,code.length - 1);                        
                     options.forEach(option => {
-                        if(option.name === code.substring(1,code.length - 1)) { option.isMissing = true; }
+                       if(option.name === codeValue) { option.isMissing = true; }                        
                     });
+                    if(codeVariable.type === "Int" && isNaN(parseInt(codeValue))) {
+                        result = LogError("-CheckMetadata-FileUserCodes-CodeIntType-Error",settings.fileName,info.name,codeValue,codeVariable.format);
+                    }
+                    if(codeVariable.type === "Decimal" && isNaN(parseFloat(codeValue.replace(",",".")))) {
+                        result = LogError("-CheckMetadata-FileUserCodes-CodeDecimalType-Error",settings.fileName,info.name,codeValue,codeVariable.format);
+                    }
                 }                               
             });
             return result; 
