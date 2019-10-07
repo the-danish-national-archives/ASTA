@@ -803,11 +803,7 @@ function (n) {
         // Validate Int format type
         var ValidateIntFormat = function (variable,regExp) {
             var result = true;
-            var length = intMaxLength;
-            /*var matches = variable.format.match(regExp);
-            matches.forEach(match => {
-                if(!isNaN(match)) { length = match; }
-            });*/
+            var length = intMaxLength;            
             variable.regExps.push("^(\\+|\\-){0,1}[0-9]{1," + length + "}$");
             return result;
         }
@@ -816,22 +812,7 @@ function (n) {
         var ValidateDecimalFormat = function (variable,regExp) {
             var result = true;
             var intLength = decimalPart1MaxLength;
-            var decimalLength = decimalPart2MaxLength;
-            /*var matches = variable.format.match(regExp);
-            matches.forEach(match => {
-                if(!isNaN(match)) {
-                    if(intLength === "") {
-                        intLength = match;
-                    }
-                    else {
-                        decimalLength = match;
-                    }
-                }
-            });
-            if(regExp.toString() === "/^(\\%([0-9]+)\\.([0-9]+)g)$/") {
-                intLength = intLength - 1;
-                decimalLength = intLength;
-            }*/
+            var decimalLength = decimalPart2MaxLength;            
             variable.regExps.push("^(\\+|\\-){0,1}[0-9]{0," + intLength + "}\\.[0-9]{0," + decimalLength + "}$");
             variable.regExps.push("^(\\+|\\-){0,1}[0-9]{0," + intLength + "}\\,[0-9]{0," + decimalLength + "}$");
             variable.regExps.push("^(\\+|\\-){0,1}[0-9]{1," + intLength + "}$");
