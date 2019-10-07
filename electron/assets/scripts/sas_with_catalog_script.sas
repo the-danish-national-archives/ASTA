@@ -1,5 +1,5 @@
 /*
-Version: 7.0
+Version: 8.0
 Encoding: UTF-8 without byte order mark
 Note: The working directory must contain the data file (sas7bdat) and catalog file (sas7bcat)
 NB: The data and catalog files must have the same name
@@ -47,7 +47,10 @@ NB: The values in the catalog file must be explicitly specified (ranges are inva
                                   drop rc id;
                                   run;
 								  
-								  /**/
+ /**/
+
+
+
   %let felter=;
   proc sql noprint;
     select variable into :felter separated by ';'
@@ -59,9 +62,9 @@ data mylib.varinfo(keep=name fmt);
  length felt $ 32;
  length Name $ 32;
  length Fmt $ 20;
- retain a1-a9999 0 b1-b9999 0;
- array bred{9999} a1-a9999 (0);
- array deci{9999} b1-b9999 (0);
+ retain a1-a25000 0 b1-b25000 0;
+ array bred{25000} a1-a25000 (0);
+ array deci{25000} b1-b25000 (0);
  
  count=0;
  do until(felt=' ');
@@ -95,6 +98,7 @@ end;
    count+1;
    Name=scan("&felter", count,';');
    Fmt=compress('f'||bred{count}||'.'||deci{count});
+   if deci{count}=0 then Fmt=compress('f'||bred{count}||'.');
    if Name ne ' ' then output;
  end;
     
@@ -103,6 +107,8 @@ run;
 
 
 /**/
+
+
 								  
 								  * Get code list items;
 								  proc catalog catalog=mylib.&inputSas;
