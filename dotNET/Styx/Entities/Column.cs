@@ -17,5 +17,6 @@ namespace Rigsarkiv.Styx.Entities
         public string Lowest { get; set; }
         public Dictionary<string,string> MissingValues { get; set; }
         public Table CodeList { get; set; }
+        public string Message { get; set; }
     }
 }

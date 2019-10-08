@@ -167,12 +167,14 @@ namespace Rigsarkiv.Styx
                 {
                     column.TypeOriginal = "INTEGER";
                     column.Modified = true;
+                    return;
                 }
                 regex = GetRegex(DataTypeDecimalPattern);
                 if (regex.IsMatch(column.Type))
                 {
                     column.TypeOriginal = "DECIMAL";
                     column.Modified = true;
+                    return;
                 }
             }
         }

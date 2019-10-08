@@ -46,7 +46,7 @@
             <br />
             <p id="missingValues">Konvertering af specialkoder, ialt: <b>{{0}}</b></p>
             <table id="missingValuesTable">
-                <tr><th>Tabel</th><th>Variabel</th><th>Værdi (AIP)</th><th>Værdi (DIP)</th></tr>
+                <tr><th>Tabel</th><th>Variabel</th><th>Værdi (AIP)</th><th>Værdi (DIP)</th><th>Information</th></tr>
             </table>
             <br />
             <p id="contextDocuments">Liste over kontekstdokumenter. Rødt markerede dokumenter har ændringer i filnavn (dokumenttitel), ialt: <b>{{0}}</b></p>
@@ -67,6 +67,7 @@
                 }});
             }};
         }}
+        var specialNumericPattern = /^(\.[a-z])$|^([A-Z])$/;
         var scriptTypeP = document.getElementById("scriptType");
         var rowsTable = document.getElementById("rowsTable");
         var missingValuesP = document.getElementById("missingValues");
@@ -74,7 +75,7 @@
         var contextDocumentsP = document.getElementById("contextDocuments");
         var contextDocumentsTable = document.getElementById("contextDocumentsTable");
         var rowHtml = "<tr><td>{{0}}</td><td>{{1}}</td><td{{4}}>{{2}}</td><td{{4}}>{{3}}</td></tr>";
-        var missingValuesHtml = "<tr><td>{{0}}</td><td>{{1}}</td><td{{4}}>{{2}}</td><td{{4}}>{{3}}</td></tr>";
+        var missingValuesHtml = "<tr><td>{{0}}</td><td>{{1}}</td><td{{4}}>{{2}}</td><td{{4}}>{{3}}</td><td>{{5}}</td></tr>";
         var contextDocumentsHtml = "<tr><td{{2}}>{{0}}</td><td{{2}}>{{1}}</td></tr>";
         (function () {{
             var counter = 0;
@@ -92,8 +93,7 @@
                     if (column.CodeList != null && column.MissingValues != null) {{                         
                         Object.keys(column.MissingValues).forEach(function (key, index) {{
                             var value = column.MissingValues[key];
-                            if (key !== value) {{
-                                UpdateMissingValue(column.CodeList, column, key, value);
+                            if (UpdateMissingValue(column.CodeList, column, key, value)) {{
                                 counter = counter + 1;
                             }}                           
                         }});                        
@@ -115,8 +115,17 @@
             contextDocumentsTable.insertAdjacentHTML("beforeend", contextDocumentsHtml.format(key, value, className));
         }}
         function UpdateMissingValue(table, column, key, value) {{
-            var className = (key !== value) ? " class=\"Error\"" : "";
-            missingValuesTable.insertAdjacentHTML("beforeend", missingValuesHtml.format(table.Name, column.Name, key, value, className));
+            var className = "";
+            if (key !== value) {{
+                className = " class=\"Warning\"";
+            }}
+            else {{
+                if (report.ScriptTypeString === "SPSS" && specialNumericPattern.test(value)) {{
+                        className = " class=\"Error\"";
+                }}
+            }}
+            missingValuesTable.insertAdjacentHTML("beforeend", missingValuesHtml.format(table.Name, column.Name, key, value, className, column.Message != null ? column.Message : ""));
+            return (className !== "");
         }}
         function UpdateRow(table) {{
                 var className = (table.Rows !== table.RowsCounter) ? " class=\"Error\"" : "";

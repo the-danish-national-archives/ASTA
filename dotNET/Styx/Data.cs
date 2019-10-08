@@ -222,7 +222,8 @@ namespace Rigsarkiv.Styx
                     }
                     if (newValue >= int.Parse(column.Lowest))
                     {
-                        _logManager.Add(new LogEntity() { Level = LogLevel.Warning, Section = _logSection, Message = string.Format("No new numric code available for column: {0}", column.Name) });
+                        column.Message = string.Format("No new numric code less than {0} available for column: {1}", column.Lowest, column.Name);
+                        _logManager.Add(new LogEntity() { Level = LogLevel.Warning, Section = _logSection, Message = column.Message });
                     }
                     else
                     {
@@ -242,13 +243,14 @@ namespace Rigsarkiv.Styx
                 decimal newValue = ((decimal.Parse(Math.Pow(10, length).ToString()) - 1) * -1);
                 column.MissingValues.Where(v => regex.IsMatch(v.Key)).ToList().ForEach(value =>
                 {
-                    while (int.Parse(column.Lowest) > newValue && availableNumerics.Contains(newValue.ToString()))
+                    while (decimal.Parse(column.Lowest) > newValue && availableNumerics.Contains(newValue.ToString()))
                     {
                         newValue++;
                     }
                     if (newValue >= decimal.Parse(column.Lowest))
                     {
-                        _logManager.Add(new LogEntity() { Level = LogLevel.Warning, Section = _logSection, Message = string.Format("No new numric code available for column: {0}", column.Name) });
+                        column.Message = string.Format("No new numric code less than {0} available for column: {1}", column.Lowest, column.Name);
+                        _logManager.Add(new LogEntity() { Level = LogLevel.Warning, Section = _logSection, Message = column.Message });
                     }
                     else
                     {
