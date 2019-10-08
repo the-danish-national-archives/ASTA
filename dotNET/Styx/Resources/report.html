@@ -44,7 +44,7 @@
                 <tr><th>Tabel</th><th>Antal variable (AIP)</th><th>Antal rækker (AIP)</th><th>Antal rækker (DIP)</th></tr>
             </table>
             <br />
-            <p id="missingValues">Konvertering af specialkoder, ialt: <b>{{0}}</b></p>
+            <p id="missingValues">Konvertering af brugerkoder/specialkoder, ialt: <b>{{0}}</b></p>
             <table id="missingValuesTable">
                 <tr><th>Tabel</th><th>Variabel</th><th>Værdi (AIP)</th><th>Værdi (DIP)</th><th>Information</th></tr>
             </table>
@@ -96,7 +96,23 @@
                             if (UpdateMissingValue(column.CodeList, column, key, value)) {{
                                 counter = counter + 1;
                             }}                           
-                        }});                        
+                        }});
+                        if (column.SortedMissingValues != null && column.SortedMissingValues.length > 3) {{
+                            var lastValue = column.SortedMissingValues[0];
+                            var lastIndex = 1;
+                            for (var s = 0; s < column.SortedMissingValues.length; s++) {{
+                                if ((column.TypeOriginal === "INTEGER" && parseInt(column.SortedMissingValues[s]) === (parseInt(lastValue) + 1)) || (column.TypeOriginal === "DECIMAL" && parseFloat(column.SortedMissingValues[s]) === (parseFloat(lastValue) + 1))) {{
+                                    lastValue = column.SortedMissingValues[s];
+                                    lastIndex = lastIndex + 1;
+                                }}
+                            }}
+                            if (column.SortedMissingValues.length > (lastIndex + 1)) {{
+                                for (var s = (lastIndex + 1); s < column.SortedMissingValues.length; s++) {{
+                                    UpdateSortedMissingValue(column.CodeList, column, column.SortedMissingValues[s]);
+                                    counter = counter + 1;
+                                }}
+                            }}
+                        }}
                     }}
                 }}
             }}
@@ -113,6 +129,10 @@
         function UpdateContextDocument(key, value) {{
             var className = (key !== value) ? " class=\"Error\"" : "";
             contextDocumentsTable.insertAdjacentHTML("beforeend", contextDocumentsHtml.format(key, value, className));
+        }}
+        function UpdateSortedMissingValue(table, column, value) {{
+            className = " class=\"Error\"";
+            missingValuesTable.insertAdjacentHTML("beforeend", missingValuesHtml.format(table.Name, column.Name, value, "", className, column.Message != null ? column.Message : ""));
         }}
         function UpdateMissingValue(table, column, key, value) {{
             var className = "";

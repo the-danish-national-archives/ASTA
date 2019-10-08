@@ -399,6 +399,7 @@ namespace Rigsarkiv.Styx
                                 lastIndex++;
                             }
                         });
+                        if (column.SortedMissingValues.Count > (lastIndex + 1)) { column.Message = "out of range"; }
                         content = string.Format(UserCodeRange, column.SortedMissingValues[0], lastValue, lastIndex < column.SortedMissingValues.Count ? string.Format(UserCodeExtra, column.SortedMissingValues[lastIndex]) : string.Empty);
                     }
                 }                
