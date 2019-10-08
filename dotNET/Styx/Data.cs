@@ -378,26 +378,30 @@ namespace Rigsarkiv.Styx
         {
             string content = null;
             var usercodes = new List<string>();
-            table.Columns.Where(c => c.SortedMissingValues != null).ToList().ForEach(column =>
+            table.Columns.Where(c => c.MissingValues != null).ToList().ForEach(column =>
             {
-                if(column.SortedMissingValues.Count < 4)
+                content = string.Empty;
+                if (column.SortedMissingValues != null)
                 {
-                    content = string.Join(" ", column.SortedMissingValues.Select(v => string.Format("'{0}'", v)).ToArray());
-                }
-                else
-                {
-                    _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Apply User codes range for column {0}", column.Name) });
-                    string lastValue = column.SortedMissingValues[0];
-                    var lastIndex = 1;                    
-                    column.SortedMissingValues.ForEach(v => {
-                        if((column.TypeOriginal == "INTEGER" && int.Parse(v) == (int.Parse(lastValue) + 1)) || (column.TypeOriginal == "DECIMAL" && decimal.Parse(v) == (decimal.Parse(lastValue) + 1)))
-                        {
-                            lastValue = v;
-                            lastIndex++;
-                        }
-                    });
-                    content = string.Format(UserCodeRange, column.SortedMissingValues[0], lastValue, lastIndex < column.SortedMissingValues.Count ? string.Format(UserCodeExtra, column.SortedMissingValues[lastIndex]) : string.Empty);
-                }
+                    if (column.SortedMissingValues.Count < 4)
+                    {
+                        content = string.Join(" ", column.SortedMissingValues.Select(v => string.Format("'{0}'", v)).ToArray());
+                    }
+                    else
+                    {
+                        _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Apply User codes range for column {0}", column.Name) });
+                        string lastValue = column.SortedMissingValues[0];
+                        var lastIndex = 1;
+                        column.SortedMissingValues.ForEach(v => {
+                            if ((column.TypeOriginal == "INTEGER" && int.Parse(v) == (int.Parse(lastValue) + 1)) || (column.TypeOriginal == "DECIMAL" && decimal.Parse(v) == (decimal.Parse(lastValue) + 1)))
+                            {
+                                lastValue = v;
+                                lastIndex++;
+                            }
+                        });
+                        content = string.Format(UserCodeRange, column.SortedMissingValues[0], lastValue, lastIndex < column.SortedMissingValues.Count ? string.Format(UserCodeExtra, column.SortedMissingValues[lastIndex]) : string.Empty);
+                    }
+                }                
                 usercodes.Add(content);
             });
             if(usercodes.Count == 0) { return; }
