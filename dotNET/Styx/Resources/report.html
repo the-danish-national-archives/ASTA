@@ -124,8 +124,11 @@
                         className = " class=\"Error\"";
                 }}
             }}
-            missingValuesTable.insertAdjacentHTML("beforeend", missingValuesHtml.format(table.Name, column.Name, key, value, className, column.Message != null ? column.Message : ""));
-            return (className !== "");
+            var result = (className !== "");
+            if (result) {{
+                    missingValuesTable.insertAdjacentHTML("beforeend", missingValuesHtml.format(table.Name, column.Name, key, value, className, column.Message != null ? column.Message : ""));
+            }}
+            return result;
         }}
         function UpdateRow(table) {{
                 var className = (table.Rows !== table.RowsCounter) ? " class=\"Error\"" : "";

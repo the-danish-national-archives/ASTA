@@ -25,6 +25,8 @@ namespace Rigsarkiv.Styx
         const string SasSpecialNumericPattern = "^[A-Z]$";
         const string StataSpecialNumericPattern = "^\\.[a-z]$";
         const string Alphabet = "abcdefghijklmnopqrstuvwxyz";
+        const string UserCodeRange = "'{0}' 'through' '{1}'{2}";
+        const string UserCodeExtra = " 'and' '{0}'";
         private List<string> _codeLists = null;
         private List<string> _sasSpecialNumerics = null;
         private List<string> _stataSpecialNumerics = null;
@@ -232,6 +234,11 @@ namespace Rigsarkiv.Styx
                         availableNumerics.Add(newValue.ToString());
                     }
                 });
+                if(string.IsNullOrEmpty(column.Message))
+                {
+                    column.SortedMissingValues = column.MissingValues.Values.ToList();
+                    column.SortedMissingValues.Sort(new IntComparer());
+                }
             }
         }
 
@@ -259,6 +266,11 @@ namespace Rigsarkiv.Styx
                         availableNumerics.Add(newValue.ToString());
                     }
                 });
+                if (string.IsNullOrEmpty(column.Message))
+                {
+                    column.SortedMissingValues = column.MissingValues.Values.ToList();
+                    column.SortedMissingValues.Sort(new DecimalComparer());
+                }
             }
         }
 
@@ -364,15 +376,34 @@ namespace Rigsarkiv.Styx
 
         private void EnsureUserCode(Table table)
         {
+            string content = null;
             var usercodes = new List<string>();
-            table.Columns.Where(c => c.MissingValues != null).ToList().ForEach(column =>
-            {   
-                usercodes.Add(string.Join(" ", column.MissingValues.Select(v => string.Format("'{0}'", v.Value)).ToArray()));
+            table.Columns.Where(c => c.SortedMissingValues != null).ToList().ForEach(column =>
+            {
+                if(column.SortedMissingValues.Count < 4)
+                {
+                    content = string.Join(" ", column.SortedMissingValues.Select(v => string.Format("'{0}'", v)).ToArray());
+                }
+                else
+                {
+                    _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Apply User codes range for column {0}", column.Name) });
+                    string lastValue = column.SortedMissingValues[0];
+                    var lastIndex = 1;                    
+                    column.SortedMissingValues.ForEach(v => {
+                        if((column.TypeOriginal == "INTEGER" && int.Parse(v) == (int.Parse(lastValue) + 1)) || (column.TypeOriginal == "DECIMAL" && decimal.Parse(v) == (decimal.Parse(lastValue) + 1)))
+                        {
+                            lastValue = v;
+                            lastIndex++;
+                        }
+                    });
+                    content = string.Format(UserCodeRange, column.SortedMissingValues[0], lastValue, lastIndex < column.SortedMissingValues.Count ? string.Format(UserCodeExtra, column.SortedMissingValues[lastIndex]) : string.Empty);
+                }
+                usercodes.Add(content);
             });
             if(usercodes.Count == 0) { return; }
 
             var path = string.Format(UserCodesPath, _destFolderPath, _report.ScriptType.ToString().ToLower(), NormalizeName(table.Name));
-            var content = File.ReadAllText(path);
+            content = File.ReadAllText(path);
             using (var sw = new StreamWriter(path, false, Encoding.UTF8))
             {
                 sw.Write(string.Format(content, usercodes.ToArray()));

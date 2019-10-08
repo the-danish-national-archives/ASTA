@@ -450,4 +450,34 @@ namespace Rigsarkiv.Styx
             }
         }
     }
+
+    public class IntComparer : IComparer<string>
+    {
+        public int Compare(string x, string y)
+        {
+            int xValue = 0;
+            int yValue = 0;
+            if (int.TryParse(x,out xValue) && int.TryParse(y, out yValue))
+            {
+                return xValue.CompareTo(yValue);
+            }
+
+             return 0;
+        }
+    }
+
+    public class DecimalComparer : IComparer<string>
+    {
+        public int Compare(string x, string y)
+        {
+            decimal xValue = 0;
+            decimal yValue = 0;
+            if (!decimal.TryParse(x, out xValue) && !decimal.TryParse(y, out yValue))
+            {
+                return xValue.CompareTo(yValue);
+            }
+
+            return 0;
+        }
+    }
 }
