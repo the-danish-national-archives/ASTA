@@ -229,15 +229,16 @@ namespace Rigsarkiv.Athena
         /// </summary>
         /// <param name="codeName"></param>
         /// <param name="researchIndexNode"></param>
-        /// <param name="columnId"></param>
-        protected void AddMissingColumnNode(string codeName, XElement researchIndexNode, string columnId)
+        /// <param name="column"></param>
+        protected void AddMissingColumnNode(string codeName, XElement researchIndexNode, Column column)
         {            
-            XElement columnNode = researchIndexNode.Element(_tableIndexXNS + "columns").Elements().Where(e => e.Element(_tableIndexXNS + "columnID").Value == columnId).FirstOrDefault();
+            XElement columnNode = researchIndexNode.Element(_tableIndexXNS + "columns").Elements().Where(e => e.Element(_tableIndexXNS + "columnID").Value == column.Id).FirstOrDefault();
             if (!columnNode.Element(_tableIndexXNS + "missingValues").Elements().Any(e => e.Value == codeName))
             {
                 _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add missing value: {0} ", codeName) });
                 var missingValueNode = new XElement(_tableIndexXNS + "value", codeName);
                 columnNode.Element(_tableIndexXNS + "missingValues").Add(missingValueNode);
+                column.MissingValuesCounter++;
             }
         }
 

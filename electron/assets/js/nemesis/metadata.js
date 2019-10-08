@@ -217,8 +217,11 @@ function (n) {
         var ValidateUserCodeValues = function(table,info) {
             var result = true;
             var options = [];
+            var codeVariable = null;
+            var missingValues = 0;
             table.variables.forEach(variable => {
-                if(variable.name === info.name) { 
+                if(variable.name === info.name) {
+                    codeVariable = variable;
                     options = variable.options;
                 }
             });
@@ -227,11 +230,20 @@ function (n) {
                     result = LogError("-CheckMetadata-FileUserCodes-CodeValidation-Error",settings.fileName,info.name,code);
                 } 
                 else {
+                    var codeValue = code.substring(1,code.length - 1);                        
                     options.forEach(option => {
-                        if(option.name === code.substring(1,code.length - 1)) { option.isMissing = true; }
+                       if(option.name === codeValue) { option.isMissing = true; }                        
                     });
+                    if(codeVariable.type === "Int" && isNaN(parseInt(codeValue))) {
+                        result = LogError("-CheckMetadata-FileUserCodes-CodeIntType-Error",settings.fileName,info.name,codeValue,codeVariable.format);
+                    }
+                    if(codeVariable.type === "Decimal" && isNaN(parseFloat(codeValue.replace(",",".")))) {
+                        result = LogError("-CheckMetadata-FileUserCodes-CodeDecimalType-Error",settings.fileName,info.name,codeValue,codeVariable.format);
+                    }
+                    missingValues = missingValues + 1;
                 }                               
             });
+            if(codeVariable != null) { codeVariable.missingValues = missingValues; }
             return result; 
         }
 
@@ -539,7 +551,7 @@ function (n) {
                             var codeListKey = GetCodeListKey(expressions);
                             if(codeListKey == null) { result = false; }                            
                             var isKey = (settings.fileKeys.includes(variableName)) ? true : false;
-                            var variable = { "name":variableName, "format":expressions[1], "isKey":isKey, "type":"", "nullable":false, "description":"", "codeListKey":(codeListKey == null ? "" : codeListKey), "options":[], "regExps":[], "appliedRegExp":-1 }
+                            var variable = { "name":variableName, "format":expressions[1], "isKey":isKey, "type":"", "nullable":false, "description":"", "codeListKey":(codeListKey == null ? "" : codeListKey), "options":[], "regExps":[], "appliedRegExp":-1, missingValues:0 }
                             table.variables.push(variable);
                             if(!ValidateDataFormats(variable)) { result = false; } 
                         } 
@@ -803,11 +815,7 @@ function (n) {
         // Validate Int format type
         var ValidateIntFormat = function (variable,regExp) {
             var result = true;
-            var length = intMaxLength;
-            /*var matches = variable.format.match(regExp);
-            matches.forEach(match => {
-                if(!isNaN(match)) { length = match; }
-            });*/
+            var length = intMaxLength;            
             variable.regExps.push("^(\\+|\\-){0,1}[0-9]{1," + length + "}$");
             return result;
         }
@@ -816,22 +824,7 @@ function (n) {
         var ValidateDecimalFormat = function (variable,regExp) {
             var result = true;
             var intLength = decimalPart1MaxLength;
-            var decimalLength = decimalPart2MaxLength;
-            /*var matches = variable.format.match(regExp);
-            matches.forEach(match => {
-                if(!isNaN(match)) {
-                    if(intLength === "") {
-                        intLength = match;
-                    }
-                    else {
-                        decimalLength = match;
-                    }
-                }
-            });
-            if(regExp.toString() === "/^(\\%([0-9]+)\\.([0-9]+)g)$/") {
-                intLength = intLength - 1;
-                decimalLength = intLength;
-            }*/
+            var decimalLength = decimalPart2MaxLength;            
             variable.regExps.push("^(\\+|\\-){0,1}[0-9]{0," + intLength + "}\\.[0-9]{0," + decimalLength + "}$");
             variable.regExps.push("^(\\+|\\-){0,1}[0-9]{0," + intLength + "}\\,[0-9]{0," + decimalLength + "}$");
             variable.regExps.push("^(\\+|\\-){0,1}[0-9]{1," + intLength + "}$");

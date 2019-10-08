@@ -42,6 +42,10 @@
             <table id="rowsTable">
                 <tr><th>Tabel</th><th>Før</th><th>Efter</th></tr>
             </table>
+            <p>Optælling af brugerkoder forskelle</p>
+            <table id="missingValuesTable">
+                <tr><th>Tabel</th><th>Variabel</th><th>Før</th><th>Efter</th></tr>
+            </table>
             <br />
             <p>Optælling af konverteringsforskelle</p>
             <table id="columnsTable">
@@ -67,9 +71,11 @@
             }};
         }}
         var rowsTable = document.getElementById("rowsTable");
+        var missingValuesTable = document.getElementById("missingValuesTable");
         var columnsTable = document.getElementById("columnsTable");
         var errorsTable = document.getElementById("errorsTable");
         var rowHtml = "<tr><td>{{0}} ({{1}})</td><td{{4}}>{{2}}</td><td{{4}}>{{3}}</td></tr>";
+        var missingValueHtml = "<tr><td>{{0}} ({{1}})</td><td>{{2}}</td><td{{5}}>{{3}}</td><td{{5}}>{{4}}</td></tr>";
         var columnHtml = "<tr><td>{{0}} ({{1}})</td><td>{{2}}</td><td>{{3}}</td><td class=\"Error\">{{4}}</td></tr>";
         var errorHtml = "<tr><td>{{0}} ({{1}})</td><td>{{2}}</td><td>{{3}}</td><td class=\"Error\">{{4}}</td><td class=\"Error\">{{5}}</td></tr>";
         (function () {{
@@ -79,6 +85,7 @@
                 UpdateRow(report.Tables[i]);
                 codeLists += report.Tables[i].CodeList.length;
                 for (var k = 0; k < report.Tables[i].Columns.length; k++) {{
+                    UpdateMissingValue(report.Tables[i], report.Tables[i].Columns[k]);
                     UpdateColumn(report.Tables[i], report.Tables[i].Columns[k]);
                 }}                
                 for (var j = 0; j < report.Tables[i].CodeList.length; j++) {{
@@ -103,6 +110,12 @@
                 columnsTable.insertAdjacentHTML("beforeend", columnHtml.format(table.Folder, table.Name, column.Name, column.Type, column.Errors));
                 UpdateErrors(table, column);
             }}
+        }}
+        function UpdateMissingValue(table, column) {{
+            if (column.MissingValues > 0) {{
+                    var className = (column.MissingValues !== column.MissingValuesCounter) ? " class=\"Error\"" : "";
+                    missingValuesTable.insertAdjacentHTML("beforeend", missingValueHtml.format(table.Folder, table.Name, column.Name, column.MissingValues, column.MissingValuesCounter, className));
+                }}
         }}
         function UpdateRow(table) {{
                 var className = (table.Rows !== table.RowsCounter) ? " class=\"Error\"" : "";

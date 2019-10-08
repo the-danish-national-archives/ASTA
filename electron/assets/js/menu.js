@@ -89,9 +89,8 @@ window.navigation = window.navigation || {},
             //TODO :remove
             var profileLink  = document.getElementById("menu-profile");
             $(profileLink).hide();
-            
             document.getElementById("menu-reload").addEventListener('click', function (event) {
-                ipcRenderer.send('open-confirm-dialog','menu-reload',"Program genstart","Du er ved at genstarte programmet. Er du sikker?","GENSTART","FORTRYD");
+                ipcRenderer.send('open-confirm-dialog','menu-reload',languageCallback.getValue("menu-reload-dialog-title"),languageCallback.getValue("menu-reload-dialog-text"),languageCallback.getValue("menu-reload-dialog-ok"),languageCallback.getValue("menu-reload-dialog-cancel"));
             });
             styxLink = document.getElementById("styx-menu");
             styxLink.addEventListener('click', function (event) {

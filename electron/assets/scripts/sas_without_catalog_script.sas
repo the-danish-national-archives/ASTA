@@ -1,5 +1,5 @@
 /*
-Version: 6.0
+Version: 8.0
 Encoding: UTF-8 without byte order mark
 Note: The working directory must contain the data file (sas7bdat)
 */
@@ -56,9 +56,9 @@ set mylib.&inputSas end=eof;
 length felt $ 32;
 length Name $ 32;
 length Fmt $ 20;
-retain a1-a9999 0 b1-b9999 0;
-array bred{9999} a1-a9999 (0);
-array deci{9999} b1-b9999 (0);
+retain a1-a25000 0 b1-b25000 0;
+array bred{25000} a1-a25000 (0);
+array deci{25000} b1-b25000 (0);
 
 count=0;
 do until(felt=' ');
@@ -92,13 +92,18 @@ do until(Name=' ');
 count+1;
 Name=scan("&felter", count,';');
 Fmt=compress('f'||bred{count}||'.'||deci{count});
+if deci{count}=0 then Fmt=compress('f'||bred{count}||'.');
 if Name ne ' ' then output;
 end;
 
 end;
 run;
 
+
+
 /**/
+
+
 
 /*nyt*/
 proc sql;
@@ -106,6 +111,7 @@ create table mylib.odsOut as
 select a.*, b.Fmt
 from mylib.odsOut a left join mylib.varinfo b on upcase(a.Variable)=upcase(b.Name);
 quit;
+
 /*nyt*/
 
 proc sort data=mylib.odsOut;by num;run;
