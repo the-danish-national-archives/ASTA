@@ -1,10 +1,10 @@
-﻿
+﻿* Encoding: UTF-8.
+
 ***********************************.
-* Version: 1,0
+* Version: 2,0
 * Importscript.
 * TFL august 2019.
 ***********************************.
-
 
 * dan underscripts.
 
@@ -47,6 +47,7 @@ EXECUTE.
 sort cases id (D).
 execute.
 
+compute varfmt = 'AUTO'.
 do if $casenum=1.
 compute varfmt=concat(varfmt,'.').
 end if.
@@ -115,6 +116,7 @@ execute.
 
 do if varlabel<>''.
 compute varlabel=concat("'",varlabel,"'").
+compute varname=concat("'",varname,"'").
 end if.
 execute.
 
@@ -151,7 +153,7 @@ execute.
                       /arrangement=delimited
                       /delimiters=' '
                       /QUALIFIER="'"
-                      /variables=varname A64 var1 A50  var2 A50  var3 A50  var4 A50  var5 A50 .
+                      /variables=varname A64 var1 A50  var2 A50  var3 A50  var4 A50  var5 A50 var6 A50 var7 A50 var8 A50 var9 A50 var10 A50 .
 execute.
 
 do if var2<>''.
@@ -170,6 +172,26 @@ do if var5<>''.
 compute var1=concat(var1,',',var5).
 end if.
 execute.
+do if var6<>''.
+compute var1=concat(var1,',',var6).
+end if.
+execute.
+do if var7<>''.
+compute var1=concat(var1,',',var7).
+end if.
+execute.
+do if var8<>''.
+compute var1=concat(var1,',',var8).
+end if.
+execute.
+do if var9<>''.
+compute var1=concat(var1,',',var9).
+end if.
+execute.
+do if var10<>''.
+compute var1=concat(var1,',',var10).
+end if.
+execute.
 
 compute varname=concat('MISSING VALUES ',varname,' (',var1,').').
 execute.
@@ -179,12 +201,12 @@ execute.
 
 
 * 5. kør scripts.
+
 insert file= 'dataDir\getdatascript.sps'.
 insert file= 'dataDir\setvarlabelsscript.sps'.
 insert file= 'dataDir\setvaluelabelsscript.sps'.
 insert file= 'dataDir\setmissingscript.sps'.
 execute.
-
 
 
 
