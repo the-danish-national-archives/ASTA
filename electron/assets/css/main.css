@@ -146,6 +146,7 @@ i {
 .welcomeImg {
     width: 73%;
     height: 100%;
+    margin-left: 100px;
 }
 
 .welcomeTextContainer {
@@ -156,6 +157,7 @@ i {
 
 .imageText {
     font-style: italic;
+    margin-left: 100px;
 }
 
 .welcomeHeadline {

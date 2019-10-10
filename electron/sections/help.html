@@ -8,15 +8,128 @@
                 </div>
                 <section>
                    <div class="formularContainer">
-                        <h2 class="boldfaced">System log filer </h2>
-                        <span>Log fil [asta.log] er placeret i mappen [</span>
-                        <a id="help-log-select-logFolder"></a>
-                        <span>]</span>
-                        <br/>                   
-                        <div id="help-admin-panel">
-                            <span>Log filer [athena.log] og [styx.log] er også placeret i mappen overpå</span>
-                         </div>
-                        <span id="help-output-Error" hidden="true"><br />Error: {0}</span>
+                        <h2 class="boldfaced">Hjælp til fejlidentifikation og fejlmelding</h2>
+                        <table>
+                            <tr>
+                                <td class="bottomBorderTd">
+                                    <div class="tdContent">
+                                        <div class="tdLeftContent">
+                                            <h4>Hjælp til forståelse af fejl i ASTA testloggen efter test af afleveringspakke</h4>
+                                            <p>Når du tester en afleveringspakke med "Test afleveringspakke" funktionen i ASTA skabes en ASTA testlog.
+                                                </br>I html-versionen af ASTA testloggen vises et fejl-ID, fx. 15700, ved hver fejlbesked. 
+                                                </br>Ved klik på dette fejl-ID fremkommer følgende:
+                                                    <ol>
+                                                        <li>Vejledning i hvordan fejlen rettes</li>
+                                                        <li>Eksempel der overholder krav i bilag 9</li>
+                                                        <li>Angivelse af krav fra bilag 9 som fejlen omhandler</li>
+                                                    </ol> 
+                                                </p>
+                                                <!--<span class="alert-warning"><strong>Information!</strong> Ikke alle fejlID'er indeholder vejledningstekst, hvilket vil blive udbedret i senere releases af ASTA</span> <br/>-->
+                                        </div>
+                                        <div class="tdRightContent">
+
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="bottomBorderTd">
+                                    <div class="tdContent">
+                                        <div class="tdLeftContent">
+                                                    <h4>Fejlmelding af ASTA</h4>
+                                                    <p>Hvis ASTA lukker uventet ned med en systemteknisk fejlbesked, der forhindrer færdigskabelsen af afleveringspakken, kan du fejlmelde dette til Rigsarkivet. Tag et print screen af fejlbeskeden og indsend dette sammen med ASTA_systemlog filen og en præcis beskrivelse af, hvad der fremkaldte fejlen eller hvor i programmet den opstod.</p> 
+                                                    <p>Fejlmeldingen sendes til mailbox@sa.dk, att. datamanager for forskningsdata.</p>
+                                                        
+                                                    <p><b>Systemlogfiler</b></p>
+                                                    <span>ASTA danner systemlog filen [ASTA_systemlog.log] som er placeret i mappen </span>
+                                                    <a id="help-log-select-logFolder"></a>
+                                                    <span></span>
+                                                    <br/>                   
+                                                    <div id="help-admin-panel">
+                                                        <span></span>
+                                                     </div>
+                                                    <span id="help-output-Error" hidden="true"><br />Error: {0}</span>
+                                                    <p>Generel sti til systemlogfiler:
+                                                        <br/>macOS: ~/Library/Logs/asta/ASTA_systemlog.log
+                                                        <br/>Windows: Users\%USERPROFILE%\AppData\Roaming\asta\ASTA_systemlog.log
+                                                    </p>
+                                        </div>
+                                        <div class="tdRightContent">
+    
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="bottomBorderTd">
+                                    <div class="tdContent">
+                                        <div class="tdLeftContent">
+                                            <h4>Systemtekniske krav til din computer med ASTA</h4>
+                                            <p>Fejl i ASTA kan også skyldes at din computer eller software ikke lever op til de systemtekniske krav til at køre ASTA.</p>
+                                            <p>Nedenfor kan du se hvilke styresystemer, internet browsere og versioner af statistikprogrammer, som ASTA er testet til at kunne fungere på. 
+                                                </br>Anvender du andre styresystemer, internetbrowsere eller statistikprogramversioner kan det ikke garanteres at ASTA virker.</p>
+                                                <p><b>Styresystemer:</b><br/>ASTA er testet på følgende styresystemer:</p></p>
+                                                <ul>
+                                                    <li>Windows 7 og 10</li>
+                                                    <li>macOS High Sierra</li>
+                                                </ul> 
+                    
+                                                <p><b>Internetbrowsere:</b><br/>Testloggen med visning af vejledning under fejl-ID'er virker i følgende browsere:</p>                                
+                                                    <ul>
+                                                        <li>Google Chrome, Version 77.0.3865.90 (Officiel version) (64-bit)</li>
+                                                        <li>Mozilla Firefox, version 69.0.2 (64-bit)</li>
+                                                        <li>Microsoft Internet explorer 11 [Husk evt. at tillade blocked content for at se fejl-ID'erne]</li>
+                                                        <li>Microsoft Edge, version 17.17134</li>
+                                                        <li>Safari version 11.1.2 (13605.3.8)</li>
+                                                    </ul> 
+                                                
+                                                <p><b>Statistikprogrammer</b><br/>Export scripts til udtræk af sata og metadata fra statistikfilerne kan eksekveres i følgende versioner af statistikprogrammerne</p>     
+                                                    <ul>
+                                                        <li>SAS v. 9.4</li>
+                                                        <li>SPSS v. 24</li>
+                                                        <li>Stata v. 14.2</li>
+                                                    </ul> 
+                    
+                                                <p><b>Øvrige systemtekniske krav</b></p>     
+                                                    <ul>
+                                                        <li>Optimal skærmopløsning er 1920 x 1080 eller 1920 x 1200. Anvendes en mindre opløsning kan nogle knapper være skjult i ASTA.</li>
+                                                        <li>Da ASTA installeres på din computer, skal du have adminstrative rettigheder på din computer for at kunne køre programmet.</li>
+                                                    </ul>
+                                        </div>
+                                        <div class="tdRightContent">
+        
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="bottomBorderTd">
+                                    <div class="tdContent">
+                                        <div class="tdLeftContent">
+                                            <h4>Oprydning på din computer efter brug af ASTA</h4>
+                                            <p>Når du arbejder med ASTA gemmes en række filer og programmer på din computer.
+                                                    <ul>
+                                                        <li>ASTA installeres som et program på din computer. Slet programmet fra din computer.</li><br/>
+                                                        <li>ASTA opretter automatisk en genvej til programmet på dit skrivebord, når du installerer programmet. Slet denne genvej.</li><br/>
+                                                        <li>Ved brug af ASTA gemmes en række systemlogfiler og en profil på din computer. Du sletter disse ved at slette mappen "asta" på følgende lokation:</li>
+                                                        <p>macOS: ~/Library/Logs/
+                                                            <br/>Windows: Users\%USERPROFILE%\AppData\Roaming\
+                                                        </p>
+                                                        <li>Ved brug af ASTA gemmes en række testlogs, scripts og scriptslogs på din computer på samme destination, hvor den valgte originale statistikfil ligger. Det anbefales at du arbejder inde i en mappe, når du anvender ASTA. Du kan således rydde op efter brug af ASTA ved at slette hele denne mappe.</li>
+                                                        <br/><span class="alert-warning"><strong>Information!</strong> Slet først filer som ASTA har skabt, når afleveringen er godkendt af arkivet</span>   
+                                                    </ul> 
+                                                </p>
+                                                </div>
+                                        <div class="tdRightContent">
+
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>  
                     </div>
                 </section>
             </div>
