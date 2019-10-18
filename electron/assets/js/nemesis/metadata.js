@@ -635,9 +635,9 @@ function (n) {
         var ValidateReferences = function (lines,startIndex) {
             var result = true;
             var i = startIndex;
-            do {
-                var requiredInfo = false;
+            do {                
                 var index = lines[i].trim().reduceWhiteSpace().indexOf(" ");
+                var requiredInfo = index < 0;
                 if(index > 0) {                
                     var tableName = lines[i].trim().reduceWhiteSpace().substring(0,index); 
                     if(!ValidateReferenceName(tableName)) { result = false; }
