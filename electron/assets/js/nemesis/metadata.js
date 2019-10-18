@@ -303,6 +303,7 @@ function (n) {
             var result = true;
             if(!codePattern.test(lines[i].trim().reduceWhiteSpace())) { 
                 result = LogError("-CheckMetadata-FileCodeList-CodeValidation-Error",settings.fileName,codeName,(i + 1));
+                settings.errorStop = true;
             }
             else {
                 var text = lines[i].trim().reduceWhiteSpace();
@@ -319,7 +320,6 @@ function (n) {
                     }
                 });
            }
-           if(!result) { settings.errorStop = true; }
            return result;
         }
 
