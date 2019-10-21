@@ -1,10 +1,11 @@
-﻿*/
-Version: 6,0
-Encoding: UTF-8 with byte order mark
-Note: The working directory must contain the data file (sav)
-*/
+﻿* Encoding: UTF-8.
+ */
+                      Version: 12,0
+                      Encoding: UTF-8 with byte order mark
+                      Note: The working directory must contain the data file (sav)
+                      */
 
-* Set the working directory and data file name.
+                      * Set the working directory and data file name.
 file handle astaDir
 /name '{3}'.
 file handle dataDir
@@ -29,7 +30,7 @@ set unicode on decimal dot olang=english.
 
 * Create dictionary file.
 define !dictionary(subtype=!tokens(1))
-get file 'inputSpss'.
+get file 'outputSpss'.
 oms
 /select tables
 /if subtypes=[!subtype]
@@ -37,6 +38,16 @@ oms
 display dictionary.
 omsend.
 !enddefine.
+
+define !dictionary_temp(subtype=!tokens(1))
+oms
+/select tables
+/if subtypes=[!subtype]
+/destination format=sav outfile='dataDir{0}dictionary.sav' viewer=no.
+display dictionary.
+omsend.
+!enddefine.
+
 
 * Create dummy variable with metadata.
 get file 'inputSpss'.
@@ -47,17 +58,65 @@ value labels absoluteDum 1 'Nothing'.
 missing values absoluteDum(1).
 save outfile 'outputSpss'.
 
+
+
+* golden solution part 1. Create control set.
+get file 'inputSpss'.
+!dictionary_temp subtype='variable information'.
+get file 'dataDir{0}dictionary.sav'
+/keep var1 writeformat
+/rename var1=varName writeformat=varFormat.
+string subsetfilename(a100).
+string erasefilename(a500).
+string varcreate(a1000).
+string codelistcreate(a2000).
+COMPUTE id=$CASENUM.
+compute subsetfilename = concat('subset_var_',varName,'.sav').
+compute erasefilename = concat("erase file='astaDir{0}",subsetfilename,"'.").
+compute varcreate = concat("get file 'outputSpss' /keep absoluteDum ",varName,".",string(13,pib1),string(10,pib1),"!dictionary_temp subtype='variable values'.",string(13,pib1),string(10,pib1)).
+compute varcreate = concat(varcreate,"get file 'dataDir{0}dictionary.sav' /keep var1 var2 label /rename var1=varName var2=val label=valLabel.",string(13,pib1),string(10,pib1)).
+compute varcreate = concat(varcreate,"alter type varname(a64) val(a64) vallabel(a32767).",string(13,pib1),string(10,pib1)).
+compute varcreate = concat(varcreate,"compute val=ltrim(val).",string(13,pib1),string(10,pib1)).
+compute varcreate = concat(varcreate,"save outfile 'astaDir{0}",subsetfilename,"'.").
+compute codelistcreate = concat("add files file='dataDir{0}code_lists.sav' /file=","'astaDir{0}",subsetfilename,"'.",string(13,pib1),string(10,pib1)).
+compute codelistcreate = concat(codelistcreate,"save outfile 'dataDir{0}code_lists.sav'.").
+do if $casenum=1.
+compute codelistcreate = concat("get file 'astaDir{0}",subsetfilename,"'. ",string(13,pib1),string(10,pib1),"save outfile 'dataDir{0}code_lists.sav'.").
+end if.
+execute.
+alter type varcreate (amin).
+alter type codelistcreate (amin).
+save outfile 'astaDir{0}Golden_control.sav'.
+
+write outfile 'dataDir{0}Golden_create_subsets.sps' / varcreate.
+execute.
+write outfile 'dataDir{0}Golden_create_codelists.sps' / codelistcreate.
+execute.
+write outfile 'dataDir{0}Golden_delete_lists.sps' / erasefilename.
+execute.
+
+
+insert file= 'dataDir{0}Golden_create_subsets.sps'.
+execute.
+insert file= 'dataDir{0}Golden_create_codelists.sps'.
+execute.
+insert file= 'dataDir{0}Golden_delete_lists.sps'.
+execute.
+
+
 * Create file with all code lists.
 * NB: Dummy decimals are added to all code values, if a code value has decimals somewhere.
-!dictionary subtype='variable values'.
-get file 'dataDir{0}dictionary.sav'
+*get file 'outputSpss'.
+*!dictionary subtype='variable values'.
+*get file 'dataDir{0}dictionary.sav'
 /keep var1 var2 label
 /rename var1=varName var2=val label=valLabel.
-alter type varName(a64) val valLabel(a32767).
+*alter type varName(a64) val valLabel(a32767).
+*sort cases by varName val valLabel.
+*alter type val valLabel(amin).
+get file 'dataDir{0}code_lists.sav'.
+alter type varName(a64) val(amin) vallabel(amin).
 sort cases by varName val valLabel.
-*!clean var=val.
-*!clean var=valLabel.
-alter type val valLabel(amin).
 save outfile 'dataDir{0}code_lists.sav'.
 
 * Map variable to code list.
@@ -109,7 +168,6 @@ execute.
 match files file 'dataDir{0}code_lists.sav'
 /table='dataDir{0}variable_to_code_list.sav'
 /by varName.
-compute keep=1.
 save outfile 'dataDir{0}all_code_lists.sav'.
 
 * CREATE VARIABEL.
@@ -138,7 +196,7 @@ match files file 'dataDir{0}variable.sav' /in=master
 /by varName.
 string type(a1) variable(a32767).
 alter type varFormat(a66) varName_(a66).
-* If variable has a code list, make sure to use it
+* If variable has a code list, make sure to use it.
 compute type=char.substr(varFormat, 1, 1).
 *if codeVar eq 1 varFormat=concat(varName_, '.').
 *if codeVar eq 1 and type eq 'a' varFormat=concat('$', varFormat).
@@ -187,8 +245,11 @@ string tmp(a100) varRef codeList(a32767).
 compute tmp=val.
 alter type tmp (f).
 alter type tmp (amin).
+compute codeList=concat('"', "'", ltrim(rtrim(val)), "'", concat(" '", ltrim(rtrim(valLabel)), "'"), '"').
+*if tmp='' codeList=concat('"', "'", ltrim(rtrim(val)), "'", concat(" '", ltrim(rtrim(valLabel)), "'"), '"').
+*if tmp ne '' codeList=concat('"', "'", ltrim(rtrim(tmp)), "'", concat(" '", ltrim(rtrim(valLabel)), "'"), '"').
 * compute codeList=concat('"', "'", ltrim(rtrim(tmp)), "'", concat(" '", ltrim(rtrim(valLabel)), "'"), '"').
-compute codeList=concat(ltrim(rtrim(tmp)), concat(" '", ltrim(rtrim(valLabel)), "'")).
+* compute codeList=concat(ltrim(rtrim(tmp)), concat(" '", ltrim(rtrim(valLabel)), "'")).
 if lag(varName) ne varName varRef=concat('"', ltrim(rtrim(varName)), '"').
 select if varName ne 'absoluteDum'.
 alter type codeList varRef(amin).
@@ -224,7 +285,7 @@ select if keep=1.
 * Format user-defined missing values.
 select if char.length(missing) gt 0.
 compute missing=replace(missing, '"', '').
-compute missing=replace(missing, ',', '').
+*compute missing=replace(missing, ',', '').
 *!clean var=missing.
 alter type missing(amin).
 string varMissing(a32767).
@@ -251,6 +312,11 @@ erase file='dataDir{0}variable.sav'.
 erase file='dataDir{0}variable_has_code_list.sav'.
 erase file='dataDir{0}user_defined_missing_values.sav'.
 erase file='dataDir{0}temp.txt'.
+erase file='astaDir{0}golden_control.sav'.
+erase file='dataDir{0}Golden_create_codelists.sps'.
+erase file='dataDir{0}Golden_create_subsets.sps'.
+erase file='dataDir{0}Golden_delete_lists.sps'.
+
 execute.
 
 */
@@ -263,7 +329,8 @@ Note: User-defined missing values are presented "as is" (either number or string
 */
 
 define !export(outfile=!tokens(1))
-get file !QUOTE(!CONCAT(dataDir, '{0}', !outfile, '.sav')).
+*get file !QUOTE(!CONCAT(dataDir, '{0}', !outfile, '.sav')).
+get file 'inputSPSS'.
 save translate outfile=!QUOTE(!CONCAT(astaDir, '{0}', !outfile, '.csv'))
 /textoptions delimiter=';' qualifier='"' decimal=dot format=variable
 /type=csv
@@ -274,3 +341,29 @@ save translate outfile=!QUOTE(!CONCAT(astaDir, '{0}', !outfile, '.csv'))
 /cells=values.
 !enddefine.
 !export outfile={2}.
+
+
+
+*****Sammenligning Input med Output****.
+
+get file 'OutputSpss'.
+
+ 
+COMPARE DATASETS  
+  /COMPDATASET = 
+    'InputSpss'
+  /VARIABLES  all
+  /SAVE FLAGMISMATCHES=YES VARNAME=CasesCompare MATCHDATASET=NO MISMATCHDATASET=NO
+  /OUTPUT VARPROPERTIES=LABEL VALUELABELS WIDTH MISSING MEASURE ROLE ATTRIBUTES CASETABLE=YES 
+    TABLELIMIT=NONE.
+
+
+SAVE OUTFILE='OutputSpss'
+  /COMPRESSED.
+
+
+OUTPUT SAVE NAME=Document1
+ OUTFILE=
+    'DataDir{0}Exportscriptlog.spv'
+ LOCK=NO.
+

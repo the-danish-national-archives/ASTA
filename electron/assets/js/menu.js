@@ -54,13 +54,13 @@ window.navigation = window.navigation || {},
                 const sectionId = event.target.dataset.section
                 $('#' + sectionId).show()
                 $('#' + sectionId + ' section').show()
-                $(event.target).addClass('selected');
+                $('#' + event.target.id).addClass('selected');
             },
 
             showStartSection: function () {
-                $(this.constants.startSectionMenuItem).click()
-                $(this.constants.startSection).show()
-                $(this.constants.startSection + ' section').show()
+                $(this.constants.startSectionMenuItem).click();
+                $(this.constants.startSection).show();
+                $(this.constants.startSection + ' section').show();
                 $(this.constants.startSectionMenuItem).addClass('selected');
             },
 
@@ -85,7 +85,10 @@ window.navigation = window.navigation || {},
             Rigsarkiv.Language.initialize("menu-output-Error");
             var languageCallback = Rigsarkiv.Language.callback();
             languageCallback.setLanguage(Rigsarkiv.Profile.callback().data.lcid);
-            Rigsarkiv.Links.callback().updateLinks(["instructions-link1","instructions-link2","instructions-link3","instructions-link4","instructions-link5","instructions-link6","instructions-link7","instructions-link8","instructions-link9","instructions-link10","instructions-link11","instructions-link12"]);
+            Rigsarkiv.Links.callback().updateLinks(["instructions-link1","instructions-link2","instructions-link3","instructions-link4","instructions-link5","instructions-link6","instructions-link7","instructions-link8","instructions-link9","instructions-link10","instructions-link11","instructions-link12","hypres-link1","about-link1"]);
+            //TODO :remove
+            var profileLink  = document.getElementById("menu-profile");
+            $(profileLink).hide();
             document.getElementById("menu-reload").addEventListener('click', function (event) {
                 ipcRenderer.send('open-confirm-dialog','menu-reload',languageCallback.getValue("menu-reload-dialog-title"),languageCallback.getValue("menu-reload-dialog-text"),languageCallback.getValue("menu-reload-dialog-ok"),languageCallback.getValue("menu-reload-dialog-cancel"));
             });
@@ -93,7 +96,10 @@ window.navigation = window.navigation || {},
             $(profileLink).hide();
             var styxLink = document.getElementById("menu-styx");
             styxLink.addEventListener('click', function (event) {
-                var converterFilePath = navigation.menu.constants.scriptPath.format(navigation.menu.constants.converterFileName);        
+                var converterFilePath = navigation.menu.constants.scriptPath.format(navigation.menu.constants.converterFileName);    
+                $('#side-menu').find('.selected').removeClass('selected');
+                $(styxLink).addClass('selected');
+                $('#' + event.target.dataset.section + ' section').show()
                 if(!fs.existsSync(converterFilePath)) {
                     var rootPath = null;
                     if(os.platform() == "win32") {

@@ -26,8 +26,11 @@ function (n) {
         const datatypeTime = [/^(time)$/,/^(\%tcHH:MM:SS)$/,/^((time\.)|(time8\.))$/,/^(time8)$/];
         const datatypeDateTime = [/^(datetime)$/,/^(\%tcCCYY-NN-DD\!THH:MM:SS)$/,/^((e8601dt\.)|(e8601dt19\.))$/,/^(datetime20)$/];
         const titleMaxLength = 128;
-        const stringMaxLength = 32767;
+        const stringMaxLength = 2147483648;
         const errorsMax = 40;
+        const intMaxLength = 10;
+        const decimalPart1MaxLength = 29;
+        const decimalPart2MaxLength = 29;
 
         //private data memebers
         var settings = { 
@@ -68,7 +71,9 @@ function (n) {
 
         // View Element by id & return texts
         var ViewElement = function(id,formatText1,formatText2,formatText3,formatText4, formatText5, formatText6) {
-            var result = settings.outputText[id];
+            var result = Rigsarkiv.Language.callback().getValue(id); 
+            //TODO : Remove
+            if(result == null) { result = settings.outputText[id]; }
             if(formatText1 != null) { 
                 if(formatText2 != null) {
                     if(formatText3 != null) {
@@ -212,8 +217,11 @@ function (n) {
         var ValidateUserCodeValues = function(table,info) {
             var result = true;
             var options = [];
+            var codeVariable = null;
+            var missingValues = 0;
             table.variables.forEach(variable => {
-                if(variable.name === info.name) { 
+                if(variable.name === info.name) {
+                    codeVariable = variable;
                     options = variable.options;
                 }
             });
@@ -222,11 +230,21 @@ function (n) {
                     result = LogError("-CheckMetadata-FileUserCodes-CodeValidation-Error",settings.fileName,info.name,code);
                 } 
                 else {
+                    var codeValue = code.substring(1,code.length - 1);
+                    var exist = false;                        
                     options.forEach(option => {
-                        if(option.name === code.substring(1,code.length - 1)) { option.isMissing = true; }
+                       if(option.name === codeValue) { 
+                           option.isMissing = true;
+                           exist = true; 
+                        }                        
                     });
+                    if(!exist) { result = LogError("-CheckMetadata-FileUserCodes-CodeListRequired-Error",settings.fileName,info.name,codeValue); }
+                    if(codeVariable.type === "Int" && isNaN(parseInt(codeValue))) { result = LogError("-CheckMetadata-FileUserCodes-CodeIntType-Error",settings.fileName,info.name,codeValue,codeVariable.format); }
+                    if(codeVariable.type === "Decimal" && isNaN(parseFloat(codeValue.replace(",",".")))) { result = LogError("-CheckMetadata-FileUserCodes-CodeDecimalType-Error",settings.fileName,info.name,codeValue,codeVariable.format); }
+                    missingValues = missingValues + 1;
                 }                               
             });
+            if(codeVariable != null) { codeVariable.missingValues = missingValues; }
             return result; 
         }
 
@@ -285,6 +303,7 @@ function (n) {
             var result = true;
             if(!codePattern.test(lines[i].trim().reduceWhiteSpace())) { 
                 result = LogError("-CheckMetadata-FileCodeList-CodeValidation-Error",settings.fileName,codeName,(i + 1));
+                settings.errorStop = true;
             }
             else {
                 var text = lines[i].trim().reduceWhiteSpace();
@@ -301,7 +320,6 @@ function (n) {
                     }
                 });
            }
-           if(!result) { settings.errorStop = true; }
            return result;
         }
 
@@ -403,17 +421,10 @@ function (n) {
             else {
                 name = line.trim().reduceWhiteSpace().substring(0,index);
                 var descriptionTemp = line.trim().reduceWhiteSpace().substring(index + 1);
-                descriptionMultiPattern.lastIndex = 0;
-                var matches = descriptionTemp.match(descriptionMultiPattern)
-                if(matches != null && matches.length > 0) {
-                    description = matches[0].substring(1,matches[0].length - 1);
+                if(descriptionTemp[0] === "'" && descriptionTemp[descriptionTemp.length - 1] === "'") {
+                    description = descriptionTemp.substring(1,descriptionTemp.length - 1);
                     if(description.reduceWhiteSpace() === "" || description === "<none>" || description === "n.a." || description === " ") {
                         LogError("-CheckMetadata-FileVariable-DescriptionEmpty-Error",settings.fileName,name);
-                    }
-                    if(matches.length > 1 || (description.reduceWhiteSpace().length > 0 && name.length > 0 && line.trim().reduceWhiteSpace().length > (description.reduceWhiteSpace().length + 3 + name.length))) {
-                        LogError("-CheckMetadata-FileVariable-DescriptionMax-Error",settings.fileName,startIndex + 1); 
-                        description = "";
-                        settings.errorStop = true;
                     }
                 }
                 else {
@@ -541,7 +552,7 @@ function (n) {
                             var codeListKey = GetCodeListKey(expressions);
                             if(codeListKey == null) { result = false; }                            
                             var isKey = (settings.fileKeys.includes(variableName)) ? true : false;
-                            var variable = { "name":variableName, "format":expressions[1], "isKey":isKey, "type":"", "nullable":false, "description":"", "codeListKey":(codeListKey == null ? "" : codeListKey), "options":[], "regExps":[], "appliedRegExp":-1 }
+                            var variable = { "name":variableName, "format":expressions[1], "isKey":isKey, "type":"", "nullable":false, "description":"", "codeListKey":(codeListKey == null ? "" : codeListKey), "options":[], "regExps":[], "appliedRegExp":-1, missingValues:0 }
                             table.variables.push(variable);
                             if(!ValidateDataFormats(variable)) { result = false; } 
                         } 
@@ -624,9 +635,9 @@ function (n) {
         var ValidateReferences = function (lines,startIndex) {
             var result = true;
             var i = startIndex;
-            do {
-                var requiredInfo = false;
+            do {                
                 var index = lines[i].trim().reduceWhiteSpace().indexOf(" ");
+                var requiredInfo = index < 0;
                 if(index > 0) {                
                     var tableName = lines[i].trim().reduceWhiteSpace().substring(0,index); 
                     if(!ValidateReferenceName(tableName)) { result = false; }
@@ -743,7 +754,7 @@ function (n) {
                 if(label === settings.metadataLabels[6] && !settings.errorStop && !ValidateVariablesDescription(lines,index)) { result = false; }
                 if(label === settings.metadataLabels[7] && !settings.errorStop) {
                     if(lines[index].trim() === "") {
-                        result = LogWarn("-CheckMetadata-FileCodeList-Empty-Warning",null);
+                        result = LogWarn("-CheckMetadata-FileCodeList-Empty-Warning",settings.fileName);
                     } else {
                         if(!ValidateCodeList(lines,index)) { result = false; }
                     }                    
@@ -791,10 +802,7 @@ function (n) {
             var maxLength = stringMaxLength.toString();
             var matches = variable.format.match(regExp);
             if(matches != null && matches.length > 2) {
-                if(parseInt(matches[2]) <= stringMaxLength) { 
-                    maxLength = matches[2];
-                }
-                else {
+                if(parseInt(matches[2]) > stringMaxLength) { 
                     result = LogError("-CheckMetadata-FileVariable-DataFormat-StringLength-Error",settings.fileName,variable.name,variable.format);
                 }
             }
@@ -805,11 +813,7 @@ function (n) {
         // Validate Int format type
         var ValidateIntFormat = function (variable,regExp) {
             var result = true;
-            var length = "";
-            var matches = variable.format.match(regExp);
-            matches.forEach(match => {
-                if(!isNaN(match)) { length = match; }
-            });
+            var length = intMaxLength;            
             variable.regExps.push("^(\\+|\\-){0,1}[0-9]{1," + length + "}$");
             return result;
         }
@@ -817,25 +821,10 @@ function (n) {
         // Validate Decimal Format type
         var ValidateDecimalFormat = function (variable,regExp) {
             var result = true;
-            var intLength = "";
-            var decimalLength = "";
-            var matches = variable.format.match(regExp);
-            matches.forEach(match => {
-                if(!isNaN(match)) {
-                    if(intLength === "") {
-                        intLength = match;
-                    }
-                    else {
-                        decimalLength = match;
-                    }
-                }
-            });
-            if(regExp.toString() === "/^(\\%([0-9]+)\\.([0-9]+)g)$/") {
-                intLength = intLength - 1;
-                decimalLength = intLength;
-            }
-            variable.regExps.push("^(\\+|\\-){0,1}[0-9]{0," + intLength + "}\\.[0-9]{1," + decimalLength + "}$");
-            variable.regExps.push("^(\\+|\\-){0,1}[0-9]{0," + intLength + "}\\,[0-9]{1," + decimalLength + "}$");
+            var intLength = decimalPart1MaxLength;
+            var decimalLength = decimalPart2MaxLength;            
+            variable.regExps.push("^(\\+|\\-){0,1}[0-9]{0," + intLength + "}\\.[0-9]{0," + decimalLength + "}$");
+            variable.regExps.push("^(\\+|\\-){0,1}[0-9]{0," + intLength + "}\\,[0-9]{0," + decimalLength + "}$");
             variable.regExps.push("^(\\+|\\-){0,1}[0-9]{1," + intLength + "}$");
             return result;
         }
@@ -955,7 +944,10 @@ function (n) {
             var dataTableNames = [];
             var dataTableFiles = [];
             settings.data.forEach(table => { 
-                dataTableNames.push(table.name);
+                if(dataTableNames.includes(table.name)) {
+                    result = LogError("-CheckMetadata-DataFile-NameUnique-Error",table.fileName,table.name);
+                }
+                dataTableNames.push(table.name);                
                 dataTableFiles.push(table.fileName);
             });
             settings.data.forEach(table => {

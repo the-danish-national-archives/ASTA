@@ -37,6 +37,7 @@ namespace Rigsarkiv.Athena
         protected const string C2 = "c2";
         protected string SpecialNumericPattern = "^(\\.[a-z])|([A-Z])$";
         protected string DoubleApostrophePattern = "^\"([\\w\\W\\s]*)\"$";
+        protected string CsvSplitPattern = "(?:^|;)(\"(?:[^\"]+|\"\")*\"|[^;]*)";
         protected Dictionary<string, Regex> _regExps = null;
         protected Assembly _assembly = null;
         protected Asta.Logging.LogManager _logManager = null;
@@ -179,9 +180,9 @@ namespace Rigsarkiv.Athena
             return _regExps[pattern];
         }
 
-        protected int GetColumnLength(string type,string regExp)
+        protected long GetColumnLength(string type,string regExp)
         {
-            var result = 0;
+            long result = 0;
             var startIndex = -1;
             var endIndex = -1;
             switch (type)
@@ -190,7 +191,7 @@ namespace Rigsarkiv.Athena
                     {
                         startIndex = regExp.IndexOf("{1,") + 3;
                         endIndex = regExp.IndexOf("}$");
-                        result = int.Parse(regExp.Substring(startIndex, endIndex - startIndex));
+                        result = long.Parse(regExp.Substring(startIndex, endIndex - startIndex));
                         result++;
                         if (result < 2) { result = 2; }                        
                     };
@@ -199,14 +200,14 @@ namespace Rigsarkiv.Athena
                     {
                         startIndex = regExp.IndexOf("[0-9]{0,") + 8;
                         endIndex = regExp.IndexOf("}", startIndex);
-                        result = int.Parse(regExp.Substring(startIndex, endIndex - startIndex));
+                        result = long.Parse(regExp.Substring(startIndex, endIndex - startIndex));
                         result++;
-                        startIndex = regExp.IndexOf("{1,", endIndex + 1);
+                        startIndex = regExp.IndexOf("{0,", endIndex + 1);
                         if(startIndex > -1)
                         {
                             startIndex = startIndex + 3;
                             endIndex = regExp.LastIndexOf("}");
-                            result += int.Parse(regExp.Substring(startIndex, endIndex - startIndex));
+                            result += long.Parse(regExp.Substring(startIndex, endIndex - startIndex));
                             result++;
                         }
                         if (result < 2) { result = 2; }
@@ -216,7 +217,7 @@ namespace Rigsarkiv.Athena
                     {
                         startIndex = regExp.IndexOf("{0,") + 3;
                         endIndex = regExp.IndexOf("}$");
-                        result = int.Parse(regExp.Substring(startIndex, endIndex - startIndex));
+                        result = long.Parse(regExp.Substring(startIndex, endIndex - startIndex));
                     };
                     break;
             }
@@ -228,15 +229,16 @@ namespace Rigsarkiv.Athena
         /// </summary>
         /// <param name="codeName"></param>
         /// <param name="researchIndexNode"></param>
-        /// <param name="columnId"></param>
-        protected void AddMissingColumnNode(string codeName, XElement researchIndexNode, string columnId)
+        /// <param name="column"></param>
+        protected void AddMissingColumnNode(string codeName, XElement researchIndexNode, Column column)
         {            
-            XElement columnNode = researchIndexNode.Element(_tableIndexXNS + "columns").Elements().Where(e => e.Element(_tableIndexXNS + "columnID").Value == columnId).FirstOrDefault();
+            XElement columnNode = researchIndexNode.Element(_tableIndexXNS + "columns").Elements().Where(e => e.Element(_tableIndexXNS + "columnID").Value == column.Id).FirstOrDefault();
             if (!columnNode.Element(_tableIndexXNS + "missingValues").Elements().Any(e => e.Value == codeName))
             {
                 _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add missing value: {0} ", codeName) });
                 var missingValueNode = new XElement(_tableIndexXNS + "value", codeName);
                 columnNode.Element(_tableIndexXNS + "missingValues").Add(missingValueNode);
+                column.MissingValuesCounter++;
             }
         }
 
@@ -328,7 +330,7 @@ namespace Rigsarkiv.Athena
         /// <param name="researchIndexNode"></param>
         protected void AddSpecialNumeric(Column column, XElement researchIndexNode)
         {
-            researchIndexNode.Element(_tableIndexXNS + "specialNumeric").Value = true.ToString().ToLower();
+            researchIndexNode.Element(_tableIndexXNS + "specialNumeric").Value = column.HasSpecialNumeric.ToString().ToLower();
             XElement columnsIndexNode = researchIndexNode.Element(_tableIndexXNS + "columns");
             XElement columnIndexNode = new XElement(_tableIndexXNS + "column", new XElement(_tableIndexXNS + "columnID", column.Id), new XElement(_tableIndexXNS + "missingValues"));
             if (columnsIndexNode == null)
@@ -369,43 +371,12 @@ namespace Rigsarkiv.Athena
         protected List<string> ParseRow(string line)
         {
             var result = new List<string>();
-            var offset = 0;
-            var column = ParseColumn(line, offset);
-            result.Add(column);
-            offset += (column.Length + 1);
-            while (offset < (line.Length - 1))
+            Regex csvSplit = GetRegex(CsvSplitPattern);
+            foreach (Match match in csvSplit.Matches(line))
             {
-                column = ParseColumn(line, offset);
-                result.Add(column);
-                offset += (column.Length + 1);
+                result.Add(match.Groups[1].Value);
             }
             return result;
-        }
-
-        private string ParseColumn(string line, int offset)
-        {
-            var startIndex = line.IndexOf("\"", offset);
-            var endIndex = -1;
-            if (startIndex == offset)
-            {
-                endIndex = line.IndexOf("\";", offset);
-                if (endIndex == -1)
-                {
-                    endIndex = line.IndexOf("\"", offset + 1);
-                    if (endIndex == -1)
-                    {
-                        endIndex = line.IndexOf(";", offset);
-                    }
-                }
-                if (endIndex > -1) { endIndex++; }
-            }
-            else
-            {
-                startIndex = offset;
-                endIndex = line.IndexOf(";", offset);
-            }
-
-            return (endIndex > -1) ? line.Substring(startIndex, endIndex - startIndex) : line.Substring(startIndex);
         }
 
         private void UpdateRow(Table table, Row row, Column column, string value, string newValue, int index)
@@ -552,7 +523,7 @@ namespace Rigsarkiv.Athena
                 }
             }
             result = result.Trim();
-            if (!isDifferent) { isDifferent = result != value; }
+            if (!isDifferent) { isDifferent = result != value; }            
             return result;
         }
 

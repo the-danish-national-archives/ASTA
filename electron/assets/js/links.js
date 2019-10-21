@@ -18,8 +18,6 @@ window.Rigsarkiv = window.Rigsarkiv || {},
 
         var GetPath = function(fileName) {
             var rootPath = null;
-            //settings.outputErrorSpn.hidden = false;
-            //settings.outputErrorSpn.innerHTML = settings.outputErrorText.format(__dirname);
             if(os.platform() == "win32") {
                 var folders =  __dirname.split("\\");
                 rootPath = folders.slice(0,folders.length - 1).join("\\");
@@ -29,12 +27,15 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                     result = "{0}\\{1}".format(rootPath,fileName);
                 }
             }
-            if(os.platform() == "darwin") {
+            if(os.platform() == "darwin") {                
                 var folders =  __dirname.split("/");
-                rootPath = folders.slice(0,folders.length - 3).join("/");
-                result = "{0}/{1}".format(rootPath,fileName);
-            }
-           
+                rootPath = folders.slice(0,folders.length - 1).join("/");
+                result = "{0}/documents/{1}".format(rootPath,fileName);
+                if(!fs.existsSync(settings.documentPath.format(fileName))) {
+                    rootPath = folders.slice(0,folders.length - 3).join("/");
+                    result = "{0}/{1}".format(rootPath,fileName);
+                }
+            }           
             return result;
         }
 
@@ -58,7 +59,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
         Rigsarkiv.Links = {
             initialize: function (outputErrorId) {
                 settings.outputErrorSpn = document.getElementById(outputErrorId);
-                settings.outputErrorText = settings.outputErrorSpn.innerHTML;
+                settings.outputErrorText = settings.outputErrorSpn.innerHTML;                
             },
             callback: function () {
                 return { 

@@ -35,6 +35,7 @@ function (n) {
                 settings.data.lcid = settings.defaultLcid;
                 fs.writeFileSync(filePath, JSON.stringify(settings.data));
             }
+            console.logInfo(`parse profile file: ${filePath}`,"Rigsarkiv.Profile.EnsureProfile");
             settings.data = JSON.parse(fs.readFileSync(filePath));
         }
         catch(err) 

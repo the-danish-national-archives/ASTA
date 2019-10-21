@@ -15,6 +15,7 @@ namespace Rigsarkiv.Styx
     {
         protected static readonly ILog _log = LogManager.GetLogger(typeof(Converter));
         protected const string ResourceLogFile = "Rigsarkiv.Styx.Resources.log.html";
+        protected const string ResourceScriptFile = "Rigsarkiv.Styx.Resources.{0}_import.{1}";
         protected const string DataPath = "{0}\\Data";       
         protected const string TableIndexXmlNs = "http://www.sa.dk/xmlns/diark/1.0";
         protected const string TableXmlNs = "http://www.sa.dk/xmlns/siard/1.0/schema0/{0}.xsd";
@@ -26,8 +27,11 @@ namespace Rigsarkiv.Styx
         protected const string C1 = "c1";
         protected const string C2 = "c2";
         protected const string VarCharPrefix = "VARCHAR(";
+        protected const string DataTypeStringPattern = "^(string)$|^(\\%([0-9]+)s)$|^(\\$([0-9]+)\\.)$|^(a([0-9]+))$";
         protected const string DataTypeIntPattern = "^(int)$|^(\\%([0-9]+)\\.0f)$|^(f([0-9]+)\\.)$|^(f([0-9]+))$";
-        protected const string DataTypeDecimalPattern = "^(decimal)$|^(\\%([0-9]+)\\.([0-9]+)f)$|^(f([0-9]+)\\.([0-9]+))$|^(f([0-9]+)\\.([0-9]+))$";
+        protected const string DataTypeDecimalPattern = "^(decimal)$|^(\\%([0-9]+)\\.([0-9]+)f)$|^(\\%([0-9]+)\\.([0-9]+)g)$|^(f([0-9]+)\\.([0-9]+))$|^(f([0-9]+)\\.([0-9]+))$";
+        protected const string EnclosedReservedWordPattern = "^(\")(ABSOLUTE|ACTION|ADD|ADMIN|AFTER|AGGREGATE|ALIAS|ALL|ALLOCATE|ALTER|AND|ANY|ARE|ARRAY|AS|ASC|ASSERTION|AT|AUTHORIZATION|BEFORE|BEGIN|BINARY|BIT|BLOB|BOOLEAN|BOTH|BREADTH|BY|CALL|CASCADE|CASCADED|CASE|CAST|CATALOG|CHAR|CHARACTER|CHECK|CLASS|CLOB|CLOSE|COLLATE|COLLATION|COLUMN|COMMIT|COMPLETION|CONNECT|CONNECTION|CONSTRAINT|CONSTRAINTS ||CONSTRUCTOR|CONTINUE|CORRESPONDING|CREATE|CROSS|CUBE|CURRENT|CURRENT_DATE|CURRENT_PATH|CURRENT_ROLE|CURRENT_TIME|CURRENT_TIMESTAMP|CURRENT_USER|CURSOR|CYCLE|DATA|DATE|DAY|DEALLOCATE|DEC|DECIMAL|DECLARE|DEFAULT|DEFERRABLE|DEFERRED|DELETE|DEPTH|DEREF|DESC|DESCRIBE|DESCRIPTOR|DESTROY|DESTRUCTOR|DETERMINISTIC|DICTIONARY|DIAGNOSTICS|DISCONNECT|DISTINCT|DOMAIN|DOUBLE|DROP|DYNAMIC|EACH|ELSE|END|END-EXEC|EQUALS|ESCAPE|EVERY|EXCEPT|EXCEPTION|EXEC|EXECUTE|EXTERNAL|FALSE|FETCH|FIRST|FLOAT|FOR|FOREIGN|FOUND|FROM|FREE|FULL|FUNCTION|GENERAL|GET|GLOBAL|GO|GOTO|GRANT|GROUP|GROUPING|HAVING|HOST|HOUR|IDENTITY|IGNORE|IMMEDIATE|IN|INDICATOR|INITIALIZE|INITIALLY|INNER|INOUT|INPUT|INSERT|INT|INTEGER|INTERSECT|INTERVAL|INTO|IS|ISOLATION|ITERATE|JOIN|KEY|LANGUAGE|LARGE|LAST|LATERAL|LEADING|LEFT|LESS|LEVEL|LIKE|LIMIT|LOCAL|LOCALTIME|LOCALTIMESTAMP|LOCATOR|MAP|MATCH|MINUTE|MODIFIES|MODIFY|MODULE|MONTH|NAMES|NATIONAL|NATURAL|NCHAR|NCLOB|NEW|NEXT|NO|NONE|NOT|NULL|NUMERIC|OBJECT|OF|OFF|OLD|ON|ONLY|OPEN|OPERATION|OPTION|OR|ORDER|ORDINALITY|OUT|OUTER|OUTPUT|PAD|PARAMETER|PARAMETERS|PARTIAL|PATH|POSTFIX|PRECISION|PREFIX|PREORDER|PREPARE|PRESERVE|PRIMARY|PRIOR|PRIVILEGES|PROCEDURE|PUBLIC|READ|READS|REAL|RECURSIVE|REF|REFERENCES|REFERENCING|RELATIVE|RESTRICT|RESULT|RETURN|RETURNS|REVOKE|RIGHT|ROLE|ROLLBACK|ROLLUP|ROUTINE|ROW|ROWS|SAVEPOINT|SCHEMA|SCROLL|SCOPE|SEARCH|SECOND|SECTION|SELECT|SEQUENCE|SESSION|SESSION_USER|SET|SETS|SIZE|SMALLINT|SOME|SPACE|SPECIFIC|SPECIFICTYPE|SQL|SQLEXCEPTION|SQLSTATE|SQLWARNING|START|STATE|STATEMENT|STATIC|STRUCTURE|SYSTEM_USER|TABLE|TEMPORARY|TERMINATE|THAN|THEN|TIME|TIMESTAMP|TIMEZONE_HOUR|TIMEZONE_MINUTE|TO|TRAILING|TRANSACTION|TRANSLATION|TREAT|TRIGGER|TRUE|UNDER|UNION|UNIQUE|UNKNOWN|UNNEST|UPDATE|USAGE|USER|USING|VALUE|VALUES|VARCHAR|VARIABLE|VARYING|VIEW|WHEN|WHENEVER|WHERE|WITH|WITHOUT|WORK|WRITE|YEAR|ZONE)(\")$";
+        protected const string DataTypeDatetimePattern = "^([0-9]{4,4})-([0-9]{2,2})-([0-9]{2,2})T([0-9]{2,2}):([0-9]{2,2}):([0-9]{2,2})$";
         protected delegate void OperationOnRow(XElement row);
         protected Assembly _assembly = null;
         protected Asta.Logging.LogManager _logManager = null;
@@ -36,6 +40,7 @@ namespace Rigsarkiv.Styx
         protected Report _report = null;
         protected XDocument _researchIndexXDocument = null;
         protected XDocument _tableIndexXDocument = null;
+        protected Regex _enclosedReservedWord = null;
         protected string _srcPath = null;
         protected string _destPath = null;
         protected string _destFolder = null;
@@ -55,7 +60,8 @@ namespace Rigsarkiv.Styx
             _assembly = Assembly.GetExecutingAssembly();
             _logManager = logManager;
             _regExps = new Dictionary<string, Regex>();
-            _report = new Report() { Tables = new List<Table>() };
+            _report = new Report() { Tables = new List<Table>(), ContextDocuments = new Dictionary<string, string>(), TablesCounter = 0, CodeListsCounter = 0 };
+            _enclosedReservedWord = new Regex(EnclosedReservedWordPattern, RegexOptions.Compiled | RegexOptions.IgnoreCase);
             _srcPath = srcPath;
             _destPath = destPath;
             _destFolder = destFolder;
@@ -105,13 +111,44 @@ namespace Rigsarkiv.Styx
         /// <returns></returns>
         public string GetLogTemplate()
         {
-            string result = null;
+            string result = null;            
             using (Stream stream = _assembly.GetManifestResourceStream(ResourceLogFile))
             {
                 using (StreamReader reader = new StreamReader(stream, Encoding.UTF8))
                 {
                     result = reader.ReadToEnd();
                 }
+            }
+            return result;
+        }
+
+        protected string GetScriptTemplate()
+        {
+            string result = null;
+            string resourceName = null;
+            switch (_report.ScriptType)
+            {
+                case ScriptType.SPSS: resourceName = string.Format(ResourceScriptFile, _report.ScriptType.ToString().ToLower(),"sps"); break;
+                case ScriptType.SAS: string.Format(ResourceScriptFile, _report.ScriptType.ToString().ToLower(), "sas"); break;
+                case ScriptType.Stata: string.Format(ResourceScriptFile, _report.ScriptType.ToString().ToLower(), "do"); break;
+            }
+            using (Stream stream = _assembly.GetManifestResourceStream(resourceName))
+            {
+                using (StreamReader reader = new StreamReader(stream, Encoding.UTF8))
+                {
+                    result = reader.ReadToEnd();
+                }
+            }
+            return result;
+        }
+
+        protected string NormalizeName(string name)
+        {
+            var result = name;
+            if (_enclosedReservedWord.IsMatch(name))
+            {
+                var groups = _enclosedReservedWord.Match(name).Groups;
+                result = groups[2].Value;
             }
             return result;
         }
@@ -232,9 +269,8 @@ namespace Rigsarkiv.Styx
 
         private string GetStringType(Column column)
         {
-            var result = column.TypeOriginal;            
-            var length = result.Substring(VarCharPrefix.Length);
-            length = length.Substring(0, length.Length - 1);
+            var result = column.TypeOriginal;
+            var length = GetStringLength(column);
             switch (_report.ScriptType)
             {
                 case ScriptType.SPSS: result = string.Format("a{0}", length); break;
@@ -245,11 +281,39 @@ namespace Rigsarkiv.Styx
             return result;
         }
 
+        private string GetMonth(string monthValue)
+        {
+            string result = null;
+            switch (monthValue)
+            {
+                case "01": result = "Jan"; break;
+                case "02": result = "Feb"; break;
+                case "03": result = "Mar"; break;
+                case "04": result = "Apr"; break;
+                case "05": result = "May"; break;
+                case "06": result = "Jun"; break;
+                case "07": result = "Jul"; break;
+                case "08": result = "Aug"; break;
+                case "09": result = "Sep"; break;
+                case "10": result = "Oct"; break;
+                case "11": result = "Nov"; break;
+                case "12": result = "Dec"; break;
+            }
+            return result;
+        }
+
         private string GetTimeStampValue(Column column, string value, out bool hasError, out bool isDifferent)
         {
-            hasError = false;
-            isDifferent = false;
-            return value;
+            var regex = GetRegex(DataTypeDatetimePattern);
+            hasError = !regex.IsMatch(value);
+            var result = value;            
+            if (!hasError)
+            {
+                var groups = regex.Match(value).Groups;
+                if (_report.ScriptType == ScriptType.SPSS) { result = string.Format("{0}-{1}-{2} {3}:{4}:{5}", groups[3].Value, GetMonth(groups[2].Value), groups[1].Value, groups[4].Value, groups[5].Value, groups[6].Value); }
+            }
+            isDifferent = result != value;
+            return result;
         }
 
         private string GetDateValue(Column column, string value, out bool hasError, out bool isDifferent)
@@ -270,14 +334,15 @@ namespace Rigsarkiv.Styx
         {
             isDifferent = false;
             var result = value;
+            if (column.MissingValues != null && column.MissingValues.ContainsKey(result))
+            {
+                result = column.MissingValues[result];
+            }
+            result = result.Replace(".", ",");
             var lengths = GetDecimalLength(column);
             hasError = (lengths[0] == 0 && lengths[1] == 0);
             if (!hasError)
-            {
-                if (column.MissingValues != null && column.MissingValues.ContainsKey(result))
-                {
-                    result = column.MissingValues[result];
-                }
+            {                
                 if (lengths[0] > 0 && lengths[1] > 0)
                 {
                     hasError = result.Length > (lengths[0] + lengths[1] + 2);
@@ -364,6 +429,21 @@ namespace Rigsarkiv.Styx
             return result;
         }
 
+        protected int GetStringLength(Column column)
+        {
+            var result = 0;
+            var regex = GetRegex(DataTypeStringPattern);
+            if (regex.IsMatch(column.Type))
+            {
+                var groups = regex.Match(column.Type).Groups;
+                foreach (Group group in groups)
+                {
+                    if (int.TryParse(group.Value, out result)) { break; }
+                }
+            }
+            return result;
+        }
+
         /// <summary>
         /// Stream xml rows by delegates
         /// </summary>
@@ -383,6 +463,36 @@ namespace Rigsarkiv.Styx
                 }
                 rdr.Close();
             }
+        }
+    }
+
+    public class IntComparer : IComparer<string>
+    {
+        public int Compare(string x, string y)
+        {
+            int xValue = 0;
+            int yValue = 0;
+            if (int.TryParse(x,out xValue) && int.TryParse(y, out yValue))
+            {
+                return xValue.CompareTo(yValue);
+            }
+
+             return 0;
+        }
+    }
+
+    public class DecimalComparer : IComparer<string>
+    {
+        public int Compare(string x, string y)
+        {
+            decimal xValue = 0;
+            decimal yValue = 0;
+            if (!decimal.TryParse(x, out xValue) && !decimal.TryParse(y, out yValue))
+            {
+                return xValue.CompareTo(yValue);
+            }
+
+            return 0;
         }
     }
 }

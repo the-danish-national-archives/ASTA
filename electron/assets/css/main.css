@@ -136,11 +136,17 @@ i {
     margin-top: -10px;
 }
 
+.dropDownSizing {
+    width: 50%;
+    padding-left: 5px;
+}
+
 /* Welcome (Start) page */
 
 .welcomeImg {
     width: 73%;
     height: 100%;
+    margin-left: 100px;
 }
 
 .welcomeTextContainer {
@@ -151,6 +157,7 @@ i {
 
 .imageText {
     font-style: italic;
+    margin-left: 100px;
 }
 
 .welcomeHeadline {
@@ -185,6 +192,9 @@ h2.subHeader {
 /* Welcome (Start) page END */
 
 /* References */
+#hybris-references-addReferenceVariableBtn {
+    margin-bottom: 30px;
+}
 #hybris-references-addReferenceVariableBtn, #hybris-references-addForeignVariableBtn, #hybris-references-addReferenceBtn{
     float: right;
     margin-right: 32px;
@@ -399,7 +409,7 @@ a.selected:hover {
 
 .nemesisOutput {
     height: 400px;
-    width: 45%;
+    width: 100%;
     border: 1px solid #000;    
     overflow-y: auto;
     /*box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.4);*/
@@ -414,6 +424,16 @@ a.selected:hover {
 .box {
     display: flex;
     justify-content: space-between;
+}
+
+.box-column {
+    display: flex;
+    flex-direction: column;
+    width: 45%;
+}
+
+#nemesis-output-logBtn  {
+    float: right;
 }
 
 .testlogTitle {

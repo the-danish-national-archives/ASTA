@@ -1,0 +1,169 @@
+﻿<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Convert Log</title>
+    <style>
+            .Error {{
+                color: red;
+            }}
+
+            .Warning {{
+                color: gray;
+            }}
+
+            .Info {{
+                color: black;
+            }}
+        table, th, td {{
+                border: 1px solid black;
+                border-spacing: 0px;
+            }}
+    </style>
+    <script type="text/javascript">
+        var report = {2}
+    </script>
+    </head>
+<body>
+    <div class="header">
+        <h1 class="title">ASTA konverteringsrapport - udleveringsformat (DIP)</h1>
+        <p class="runDate">Dato for konvertering: {0}</p>
+    </div>
+    <div class="content">
+        <h3>DIP-ID: {1}</h3>
+        <div class="results" id="testContent">
+            <p id="scriptType">Udleveringsformat: <b>{{0}}</b></p>
+            <p>Antal tabeller</p>
+            <table>
+                <tr><th></th><th>Før</th><th>Efter</th></tr>
+                <tr><td>Antal tabeller</td><td id="tablesBefore">0</td><td id="tablesAfter">0</td></tr>
+                <tr><td>Antal kodetabeller</td><td id="codeListsBefore">0</td><td id="codeListsAfter">0</td></tr>
+            </table>
+            <br />
+            <p>Tabeloplysninger</p>
+            <table id="rowsTable">
+                <tr><th>Tabel</th><th>Antal variable (AIP)</th><th>Antal rækker (AIP)</th><th>Antal rækker (DIP)</th></tr>
+            </table>
+            <br />
+            <p id="missingValues">Konvertering af brugerkoder/specialkoder, ialt: <b>{{0}}</b></p>
+            <table id="missingValuesTable">
+                <tr><th>Tabel</th><th>Variabel</th><th>Værdi (AIP)</th><th>Værdi (DIP)</th><th>Information</th></tr>
+            </table>
+            <br />
+            <p id="contextDocuments">Liste over kontekstdokumenter. Rødt markerede dokumenter har ændringer i filnavn (dokumenttitel), ialt: <b>{{0}}</b></p>
+            <table id="contextDocumentsTable">
+                <tr><th>Original titel (AIP)</th><th>Konverteret titel (DIP)</th></tr>
+            </table>
+        </div>
+    </div>
+    <script type="text/javascript">
+        if (!String.prototype.format) {{
+            String.prototype.format = function () {{
+                var args = arguments;
+                return this.replace(/{{(\d+)}}/g, function (match, number) {{
+                    return typeof args[number] != 'undefined'
+                        ? args[number]
+                        : match
+                        ;
+                }});
+            }};
+        }}
+        var specialNumericPattern = /^(\.[a-z])$|^([A-Z])$/;
+        var scriptTypeP = document.getElementById("scriptType");
+        var rowsTable = document.getElementById("rowsTable");
+        var missingValuesP = document.getElementById("missingValues");
+        var missingValuesTable = document.getElementById("missingValuesTable");
+        var contextDocumentsP = document.getElementById("contextDocuments");
+        var contextDocumentsTable = document.getElementById("contextDocumentsTable");
+        var rowHtml = "<tr><td>{{0}}</td><td>{{1}}</td><td{{4}}>{{2}}</td><td{{4}}>{{3}}</td></tr>";
+        var missingValuesHtml = "<tr><td>{{0}}</td><td>{{1}}</td><td{{4}}>{{2}}</td><td{{4}}>{{3}}</td><td>{{5}}</td></tr>";
+        var contextDocumentsHtml = "<tr><td{{2}}>{{0}}</td><td{{2}}>{{1}}</td></tr>";
+        (function () {{
+            var counter = 0;
+            scriptTypeP.innerHTML = scriptTypeP.innerHTML.format(report.ScriptTypeString);
+            UpdateTable("tablesBefore", "tablesAfter", report.Tables.length, report.TablesCounter);
+            var codeLists = 0;
+            for (var i = 0; i < report.Tables.length; i++) {{
+                UpdateRow(report.Tables[i]);
+                for (var k = 0; k < report.Tables[i].Columns.length; k++) {{
+                    var column = report.Tables[i].Columns[k];
+                    if (column.CodeList != null) {{
+                        codeLists = codeLists + 1;
+                        UpdateRow(column.CodeList);
+                    }}
+                    if (column.CodeList != null && column.MissingValues != null) {{                         
+                        Object.keys(column.MissingValues).forEach(function (key, index) {{
+                            var value = column.MissingValues[key];
+                            if (UpdateMissingValue(column.CodeList, column, key, value)) {{
+                                counter = counter + 1;
+                            }}                           
+                        }});
+                        if (column.SortedMissingValues != null && column.SortedMissingValues.length > 3) {{
+                            var lastValue = column.SortedMissingValues[0];
+                            var lastIndex = 1;
+                            for (var s = 0; s < column.SortedMissingValues.length; s++) {{
+                                if ((column.TypeOriginal === "INTEGER" && parseInt(column.SortedMissingValues[s]) === (parseInt(lastValue) + 1)) || (column.TypeOriginal === "DECIMAL" && parseFloat(column.SortedMissingValues[s]) === (parseFloat(lastValue) + 1))) {{
+                                    lastValue = column.SortedMissingValues[s];
+                                    lastIndex = lastIndex + 1;
+                                }}
+                            }}
+                            if (column.SortedMissingValues.length > (lastIndex + 1)) {{
+                                for (var s = (lastIndex + 1); s < column.SortedMissingValues.length; s++) {{
+                                    UpdateSortedMissingValue(column.CodeList, column, column.SortedMissingValues[s]);
+                                    counter = counter + 1;
+                                }}
+                            }}
+                        }}
+                    }}
+                }}
+            }}
+            UpdateTable("codeListsBefore", "codeListsAfter", codeLists, report.CodeListsCounter);
+            missingValuesP.innerHTML = missingValuesP.innerHTML.format(counter === 0 ? "" : counter);
+            counter = 0;
+            Object.keys(report.ContextDocuments).forEach(function (key, index) {{
+                    var value = report.ContextDocuments[key];
+                    if (key !== value) {{ counter = counter + 1; }}
+                    UpdateContextDocument(key, value);
+            }});
+            contextDocumentsP.innerHTML = contextDocumentsP.innerHTML.format(counter === 0 ? "" : counter);
+        }})();
+        function UpdateContextDocument(key, value) {{
+            var className = (key !== value) ? " class=\"Error\"" : "";
+            contextDocumentsTable.insertAdjacentHTML("beforeend", contextDocumentsHtml.format(key, value, className));
+        }}
+        function UpdateSortedMissingValue(table, column, value) {{
+            className = " class=\"Error\"";
+            missingValuesTable.insertAdjacentHTML("beforeend", missingValuesHtml.format(table.Name, column.Name, value, "", className, column.Message != null ? column.Message : ""));
+        }}
+        function UpdateMissingValue(table, column, key, value) {{
+            var className = "";
+            if (key !== value) {{
+                className = " class=\"Warning\"";
+            }}
+            else {{
+                if (report.ScriptTypeString === "SPSS" && specialNumericPattern.test(value)) {{
+                        className = " class=\"Error\"";
+                }}
+            }}
+            var result = (className !== "");
+            if (result) {{
+                    missingValuesTable.insertAdjacentHTML("beforeend", missingValuesHtml.format(table.Name, column.Name, key, value, className, column.Message != null ? column.Message : ""));
+            }}
+            return result;
+        }}
+        function UpdateRow(table) {{
+                var className = (table.Rows !== table.RowsCounter) ? " class=\"Error\"" : "";
+            rowsTable.insertAdjacentHTML("beforeend", rowHtml.format(table.Name, table.Columns.length, table.Rows, table.RowsCounter, className));
+        }}
+        function UpdateTable(beforeId, afterId, beforeValue, afterValue) {{
+            var before = document.getElementById(beforeId);
+            var after = document.getElementById(afterId);
+            before.innerText = beforeValue;
+            after.innerText = afterValue;
+            if (beforeValue !== afterValue) {{
+                before.className = "Error";
+                after.className = "Error";
+            }}
+        }}        
+    </script>
+</body>
+</html>

@@ -23,7 +23,6 @@ window.Rigsarkiv = window.Rigsarkiv || {},
             var settings = {
                 fileName: null,
                 fileDescr: null,
-                keyVar: null,
                 okBtn: null,
                 outputOkSpn: null,
                 outputOkText: null,
@@ -72,6 +71,12 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 addKeyWarningText: null,
                 okConfirm: null,
                 cancelConfirm: null,
+                tablesDropdown: null,
+                foreignTablesDropdown: null,
+                refVarsDropdown: null,
+                foreignVariablesDropdown: null,
+                newExtractionWarningTitle: null,
+                newExtractionWarningText: null,
                 contents: ["","","",""],
                 varKeys: [],
                 references: [],
@@ -364,39 +369,51 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 settings.variables = [];
                 settings.fileName.value = "";
                 settings.fileDescr.value = "";
-                settings.keyVar.value = "";
             }
 
             var EnsureVariables = function() {
                 if(settings.variables.length === 0) {
-                    for (var i = 0; i < settings.variablesDropdown.options.length; i++) {
+                    for (var i = 1; i < settings.variablesDropdown.options.length; i++) {
                         settings.variables.push(settings.variablesDropdown.options[i].value);
                     }
                 }
             }
 
+            //create HTML select option element
+            var CreateOption = function(value,text) {
+                var result = document.createElement('option');
+                result.textContent = text;
+                result.value = value;
+                return result;
+            }
+
+             //Redirect to references or index files
+             var Redirect = function() {
+                var tablesCounter = 0;
+                $(settings.tablesDropdown).empty();
+                $(settings.foreignTablesDropdown).empty();
+                settings.tablesDropdown.appendChild(CreateOption("",""));
+                settings.foreignTablesDropdown.appendChild(CreateOption("",""));
+                Rigsarkiv.Hybris.Base.callback().metadata.forEach(table => {
+                    tablesCounter = tablesCounter + 1;
+                    settings.tablesDropdown.appendChild(CreateOption(table.name, "{0} ({1})".format(table.name,table.fileName)));
+                    settings.foreignTablesDropdown.appendChild(CreateOption(table.name, "{0} ({1})".format(table.name,table.fileName)));
+                });
+                if(tablesCounter === 1 && Rigsarkiv.Hybris.References.callback().updateFile(Rigsarkiv.Hybris.Base.callback().metadata[0])) {
+                    settings.indexfilesTab.click();
+                } 
+                else {
+                    settings.referencesTab.click(); 
+                }
+             }
+
             //add Event Listener to HTML elmenets
             var AddEvents = function () {
                 settings.nextBtn.addEventListener('click', (event) => {
-                    var tablesCounter = 0;
-                     $(settings.tablesDropdown).empty();
-                    Rigsarkiv.Hybris.Base.callback().metadata.forEach(table => {
-                        tablesCounter = tablesCounter + 1;
-                        var el = document.createElement('option');
-                        el.textContent = table.fileName;
-                        el.value = table.name;
-                        settings.tablesDropdown.appendChild(el);
-                    });
-                    if(tablesCounter === 1 && Rigsarkiv.Hybris.References.callback().updateFile(Rigsarkiv.Hybris.Base.callback().metadata[0])) {
-                        settings.indexfilesTab.click();
-                    } 
-                    else {
-                        settings.referencesTab.click(); 
-                    }                   
+                    Redirect();
                 });
                 settings.newExtractionBtn.addEventListener('click', (event) => {
-                    ResetExtraction();
-                    settings.extractionTab.click();
+                    ipcRenderer.send('open-confirm-dialog','metadata-newextraction',settings.newExtractionWarningTitle.innerHTML,settings.newExtractionWarningText.innerHTML,settings.okConfirm.innerHTML,settings.cancelConfirm.innerHTML);
                 });
                 settings.okDataPath.addEventListener('click', (event) => {
                     ipcRenderer.send('open-item',Rigsarkiv.Hybris.DataExtraction.callback().localFolderPath);
@@ -405,30 +422,29 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                     Reset();
                     if(ValidateFields()) 
                     { 
-                        var key = settings.keyVar.value;
-                        if(key != null && key !== "") {
+                        if(settings.variablesDropdown.selectedIndex > 0) {
                             ipcRenderer.send('open-confirm-dialog','metadata-addkey',settings.addKeyWarningTitle.innerHTML,settings.addKeyWarningText.innerHTML,settings.okConfirm.innerHTML,settings.cancelConfirm.innerHTML);
-                        }
+                        } 
                         else {
                             EnsureData();
-                        }
+                        }                       
                     }
                 })
                 settings.cancelBtn.addEventListener('click', function (event) {
                     $("#{0} tr:not(:first-child)".format(settings.varKeysTbl.id)).remove();
                     settings.varKeysTbl.hidden = true;
                     settings.varKeys = [];
-                    settings.keyVar.value = "";    
+                    settings.variablesDropdown.selectedIndex = 0;    
                 })
                 settings.addVarKeyBtn.addEventListener('click', function (event) {
                     EnsureVariables();                           
-                    var key = settings.keyVar.value;
+                    var key = settings.variablesDropdown.options[settings.variablesDropdown.selectedIndex].value;
                     if(key != null && key !== "") {
                         if(ValidateKey(key) && !settings.varKeys.includes(key) && settings.variables.includes(key)) {
                             settings.varKeys.push(key);
                             settings.varKeysTbl.hidden = false;
                             $(settings.varKeysTbl).append("<tr><td>{0}</td></tr>".format(key));
-                            settings.keyVar.value = "";
+                            settings.variablesDropdown.selectedIndex = 0;
                         }
                     }
                     else {
@@ -439,16 +455,22 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                     if(index === 0) {
                         EnsureData();
                     } 
-                    if(index === 1) { }            
+                    if(index === 1) { } 
+                });
+                ipcRenderer.on('confirm-dialog-selection-metadata-newextraction', (event, index) => {
+                    if(index === 0) {
+                        ResetExtraction();
+                        settings.extractionTab.click();
+                    } 
+                    if(index === 1) { } 
                 });
             }
 
             //Model interfaces functions
             Rigsarkiv.Hybris.MetaData = {
-                initialize: function (metadataFileName,metadataFileNameDescription,metadataKeyVariable,metdataOkBtn,inputFileNameRequired,inputNumberFirst,inputIllegalChar,outputOkId,okDataPathId,outputErrorId,outputNewExtractionId,newExtractionBtn,extractionTabId,outputNextId,nextBtn,referencesTabId,fileNameLengthId,fileNameReservedWordId,fileDescrReqId,informationPanel1Id,informationPanel2Id,indexFilesDescriptionId,outputCloseApplicationErrorPrefixId,resetHideBox,numberFirstKeyId,illegalCharKeyId,keyLengthId,keyReservedWordId,variablesId,addVarKeyId,varKeysId,varKeyReqId,tablesId,cancelId,addKeyWarningId,okConfirmId,cancelConfirmId,indexfilesTabId) {
+                initialize: function (metadataFileName,metadataFileNameDescription,metdataOkBtn,inputFileNameRequired,inputNumberFirst,inputIllegalChar,outputOkId,okDataPathId,outputErrorId,outputNewExtractionId,newExtractionBtn,extractionTabId,outputNextId,nextBtn,referencesTabId,fileNameLengthId,fileNameReservedWordId,fileDescrReqId,informationPanel1Id,informationPanel2Id,indexFilesDescriptionId,outputCloseApplicationErrorPrefixId,resetHideBox,numberFirstKeyId,illegalCharKeyId,keyLengthId,keyReservedWordId,variablesId,addVarKeyId,varKeysId,varKeyReqId,tablesId,foreignTablesId,cancelId,addKeyWarningId,okConfirmId,cancelConfirmId,indexfilesTabId,refVarsId,foreignVariablesId,newExtractionWarningId) {
                     settings.fileName = document.getElementById(metadataFileName);
                     settings.fileDescr = document.getElementById(metadataFileNameDescription);
-                    settings.keyVar = document.getElementById(metadataKeyVariable);
                     settings.okBtn = document.getElementById(metdataOkBtn);
                     settings.fileNameReqTitle = document.getElementById(inputFileNameRequired + "-Title");
                     settings.fileNameReqText = document.getElementById(inputFileNameRequired + "-Text");
@@ -495,12 +517,17 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                     settings.varKeyReqTitle = document.getElementById(varKeyReqId + "-Title");
                     settings.varKeyReqText = document.getElementById(varKeyReqId + "-Text");
                     settings.tablesDropdown = document.getElementById(tablesId);
+                    settings.foreignTablesDropdown = document.getElementById(foreignTablesId);
                     settings.cancelBtn = document.getElementById(cancelId);
                     settings.addKeyWarningTitle = document.getElementById(addKeyWarningId + "-Title");
                     settings.addKeyWarningText = document.getElementById(addKeyWarningId + "-Text");
                     settings.okConfirm = document.getElementById(okConfirmId);
                     settings.cancelConfirm = document.getElementById(cancelConfirmId);
                     settings.indexfilesTab = document.getElementById(indexfilesTabId);
+                    settings.refVarsDropdown = document.getElementById(refVarsId);
+                    settings.foreignVariablesDropdown = document.getElementById(foreignVariablesId);
+                    settings.newExtractionWarningTitle = document.getElementById(newExtractionWarningId + "-Title");
+                    settings.newExtractionWarningText = document.getElementById(newExtractionWarningId + "-Text");
                     AddEvents();
                 },
                 callback: function () {

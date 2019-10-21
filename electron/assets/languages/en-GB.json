@@ -102,7 +102,7 @@
                 "value": "Date of test run"
             },
             {
-                "key": "nemesis-processing-CheckData-FileRow-ColumnsString-ValueBlankCharacters-Warning",
+                "key": "nemesis-processing-CheckData-FileRow-ColumnsString-ValueBlankCharacters-WarningXXX",
                 "value": "<i class=\"fas fa-exclamation-triangle warning\"><div id=\"15811\" hidden=\"true\">yyyy</div></i>The value for the variable <i> {3} </i> in row <i> {2} </i> is contained in the data file <i> {0} </i> in the value before or after the blank. If these spaces are meaningful, they must be replaced by some allowed characters.<br/>"
             }
         ]

@@ -23,7 +23,8 @@ namespace Rigsarkiv.Athena
         const string ReferencedTable = "{0}_{1}";
         const string ReferencedTableDescription = "Kodeliste til tabel {0}";
         const string Code = "Kode";
-        const string CodeValue = "Kodeværdi";
+        const string CodeValue = "Kodeforklaring";
+        const string CodeDescription = "Forklaring af kodens betydning";
         const string EnclosedReservedWordPattern = "^(\")(ABSOLUTE|ACTION|ADD|ADMIN|AFTER|AGGREGATE|ALIAS|ALL|ALLOCATE|ALTER|AND|ANY|ARE|ARRAY|AS|ASC|ASSERTION|AT|AUTHORIZATION|BEFORE|BEGIN|BINARY|BIT|BLOB|BOOLEAN|BOTH|BREADTH|BY|CALL|CASCADE|CASCADED|CASE|CAST|CATALOG|CHAR|CHARACTER|CHECK|CLASS|CLOB|CLOSE|COLLATE|COLLATION|COLUMN|COMMIT|COMPLETION|CONNECT|CONNECTION|CONSTRAINT|CONSTRAINTS ||CONSTRUCTOR|CONTINUE|CORRESPONDING|CREATE|CROSS|CUBE|CURRENT|CURRENT_DATE|CURRENT_PATH|CURRENT_ROLE|CURRENT_TIME|CURRENT_TIMESTAMP|CURRENT_USER|CURSOR|CYCLE|DATA|DATE|DAY|DEALLOCATE|DEC|DECIMAL|DECLARE|DEFAULT|DEFERRABLE|DEFERRED|DELETE|DEPTH|DEREF|DESC|DESCRIBE|DESCRIPTOR|DESTROY|DESTRUCTOR|DETERMINISTIC|DICTIONARY|DIAGNOSTICS|DISCONNECT|DISTINCT|DOMAIN|DOUBLE|DROP|DYNAMIC|EACH|ELSE|END|END-EXEC|EQUALS|ESCAPE|EVERY|EXCEPT|EXCEPTION|EXEC|EXECUTE|EXTERNAL|FALSE|FETCH|FIRST|FLOAT|FOR|FOREIGN|FOUND|FROM|FREE|FULL|FUNCTION|GENERAL|GET|GLOBAL|GO|GOTO|GRANT|GROUP|GROUPING|HAVING|HOST|HOUR|IDENTITY|IGNORE|IMMEDIATE|IN|INDICATOR|INITIALIZE|INITIALLY|INNER|INOUT|INPUT|INSERT|INT|INTEGER|INTERSECT|INTERVAL|INTO|IS|ISOLATION|ITERATE|JOIN|KEY|LANGUAGE|LARGE|LAST|LATERAL|LEADING|LEFT|LESS|LEVEL|LIKE|LIMIT|LOCAL|LOCALTIME|LOCALTIMESTAMP|LOCATOR|MAP|MATCH|MINUTE|MODIFIES|MODIFY|MODULE|MONTH|NAMES|NATIONAL|NATURAL|NCHAR|NCLOB|NEW|NEXT|NO|NONE|NOT|NULL|NUMERIC|OBJECT|OF|OFF|OLD|ON|ONLY|OPEN|OPERATION|OPTION|OR|ORDER|ORDINALITY|OUT|OUTER|OUTPUT|PAD|PARAMETER|PARAMETERS|PARTIAL|PATH|POSTFIX|PRECISION|PREFIX|PREORDER|PREPARE|PRESERVE|PRIMARY|PRIOR|PRIVILEGES|PROCEDURE|PUBLIC|READ|READS|REAL|RECURSIVE|REF|REFERENCES|REFERENCING|RELATIVE|RESTRICT|RESULT|RETURN|RETURNS|REVOKE|RIGHT|ROLE|ROLLBACK|ROLLUP|ROUTINE|ROW|ROWS|SAVEPOINT|SCHEMA|SCROLL|SCOPE|SEARCH|SECOND|SECTION|SELECT|SEQUENCE|SESSION|SESSION_USER|SET|SETS|SIZE|SMALLINT|SOME|SPACE|SPECIFIC|SPECIFICTYPE|SQL|SQLEXCEPTION|SQLSTATE|SQLWARNING|START|STATE|STATEMENT|STATIC|STRUCTURE|SYSTEM_USER|TABLE|TEMPORARY|TERMINATE|THAN|THEN|TIME|TIMESTAMP|TIMEZONE_HOUR|TIMEZONE_MINUTE|TO|TRAILING|TRANSACTION|TRANSLATION|TREAT|TRIGGER|TRUE|UNDER|UNION|UNIQUE|UNKNOWN|UNNEST|UPDATE|USAGE|USER|USING|VALUE|VALUES|VARCHAR|VARIABLE|VARYING|VIEW|WHEN|WHENEVER|WHERE|WITH|WITHOUT|WORK|WRITE|YEAR|ZONE)(\")$";
         private dynamic _metadata = null;        
         private int _tablesCounter = 0;
@@ -119,7 +120,7 @@ namespace Rigsarkiv.Athena
             _tableIndexXDocument.Element(_tableIndexXNS + "siardDiark").Element(_tableIndexXNS + "tables").Add(tableNode);
             var srcFolder = tableInfo["fileName"].ToString();
             srcFolder = srcFolder.Substring(0, srcFolder.LastIndexOf("."));
-            var table = new Table() { SrcFolder = srcFolder, Name = tableName, Folder = folder, Rows = int.Parse(rows), Errors = 0, RowsCounter = 0, Columns = new List<Column>(), ErrorsRows = new Dictionary<string, Row>() };
+            var table = new Table() { SrcFolder = srcFolder, Name = tableName, Folder = folder, Rows = int.Parse(rows), Errors = 0, RowsCounter = 0, HasKey = false, Columns = new List<Column>(), ErrorsRows = new Dictionary<string, Row>() };
             _report.Tables.Add(table);
             foreach (var variable in (object[])tableInfo["variables"])
             {
@@ -132,6 +133,7 @@ namespace Rigsarkiv.Athena
                     AddReferenceNode((Dictionary<string, object>)reference, tableNode, table, index++);
                 }
             }
+            if (!table.HasKey) { tableNode.Element(_tableIndexXNS + "primaryKey").Remove(); }
         }
 
         private void AddReferenceNode(Dictionary<string, object> referenceInfo, XElement tableNode, Table table, int index)
@@ -159,8 +161,9 @@ namespace Rigsarkiv.Athena
             var columnType = GetMappedType(variableInfo);
             var columnId = string.Format(ColumnIDPrefix, index);
             var columnTypeOriginal = variableInfo["format"].ToString();
+            var missingValues = variableInfo["missingValues"].ToString();
             var appliedRegExp = GetRegExp(variableInfo);
-            var column = new Column() { Name = columnName, Id = columnId, Description = columnDescription, Type = columnType, TypeOriginal = columnTypeOriginal, Nullable = (bool)variableInfo["nullable"], HasSpecialNumeric = false, HasMissingValues = false, RegExp = appliedRegExp, Differences = 0, Errors = 0, ErrorsRows = new List<int>() };
+            var column = new Column() { Name = columnName, Id = columnId, Description = columnDescription, Type = columnType, TypeOriginal = columnTypeOriginal, Nullable = (bool)variableInfo["nullable"], HasSpecialNumeric = false, HasMissingValues = false, MissingValues= int.Parse(missingValues), MissingValuesCounter = 0, RegExp = appliedRegExp, MaxLength =0, Differences = 0, Errors = 0, ErrorsRows = new List<int>() };
             var columnNode = new XElement(_tableIndexXNS + "column",
                  new XElement(_tableIndexXNS + "name", columnName),
                  new XElement(_tableIndexXNS + "columnID", columnId),
@@ -179,6 +182,7 @@ namespace Rigsarkiv.Athena
             {
                 _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add primary Key columnName: {0} ", column.Name) });
                 tableNode.Element(_tableIndexXNS + "primaryKey").Add(new XElement(_tableIndexXNS + "column", column.Name));
+                table.HasKey = true;
             }
             if (variableInfo["codeListKey"] != null && !string.IsNullOrEmpty(variableInfo["codeListKey"].ToString()))
             {
@@ -195,6 +199,19 @@ namespace Rigsarkiv.Athena
                 {
                     AddReferencedTable(variableInfo, tableNode, researchIndexNode, table, column, refTableName, index);
                 }
+                column.CodeListName = refTableName;
+                var codeList = table.CodeList.FirstOrDefault(t => t.Name == refTableName);
+                foreach (var pair in codeList.Options)
+                {                    
+                    if (RequiredSpecialNumeric(column, pair[0])) { EnableSpecialNumeric(column, tableNode, researchIndexNode); }
+                    if (column.HasSpecialNumeric && GetRegex(SpecialNumericPattern).IsMatch(pair[0])) { AddMissingColumnNode(pair[0], researchIndexNode, column); }
+                    if (bool.Parse(pair[2]) && !column.HasMissingValues)
+                    {
+                        column.HasMissingValues = true;
+                        AddSpecialNumeric(column, researchIndexNode);
+                    }
+                    if (column.HasMissingValues && bool.Parse(pair[2])) { AddMissingColumnNode(pair[0], researchIndexNode, column); }
+                }
             }
         }
         
@@ -207,11 +224,11 @@ namespace Rigsarkiv.Athena
             Directory.CreateDirectory(string.Format(TablePath, _destFolderPath, folder));
 
             var options = (object[])variableInfo["options"];
-            var codeList = new Table() { Name = refTableName, Folder = folder, Rows = options.Length, Errors = 0, RowsCounter = 0, Options= new List<string[]>(), ErrorsRows = new Dictionary<string, Row>() };
-            codeList.Columns = new List<Column>() { (new Column() { Name = Code, Id = C1, Description = "Kode", Type = column.Type, TypeOriginal = "", HasSpecialNumeric = false, HasMissingValues = false, Differences = 0, Errors = 0, ErrorsRows = new List<int>() }), (new Column() { Name = CodeValue, Id = C2, Description = "Kodeværdi", Type = "", TypeOriginal = "", HasSpecialNumeric = false, HasMissingValues = false, Differences = 0, Errors = 0, ErrorsRows = new List<int>() }) };
+            var codeList = new Table() { Name = refTableName, Folder = folder, Rows = options.Length, Errors = 0, RowsCounter = 0, HasKey = true, Options= new List<string[]>(), ErrorsRows = new Dictionary<string, Row>() };
+            codeList.Columns = new List<Column>() { (new Column() { Name = Code, Id = C1, Description = "Kode", Type = column.Type, TypeOriginal = "", HasSpecialNumeric = false, HasMissingValues = false, MissingValues = 0, MissingValuesCounter = 0, MaxLength = 0, Differences = 0, Errors = 0, ErrorsRows = new List<int>() }), (new Column() { Name = CodeValue, Id = C2, Description = CodeDescription, Type = "", TypeOriginal = "", HasSpecialNumeric = false, HasMissingValues = false, MissingValues = 0, MissingValuesCounter = 0, MaxLength = 0, Differences = 0, Errors = 0, ErrorsRows = new List<int>() }) };
             var optionsType = ParseOptions(options, tableNode, researchIndexNode, codeList, folder, column);
             var columnNode1 = new XElement(_tableIndexXNS + "column", new XElement(_tableIndexXNS + "name", Code),new XElement(_tableIndexXNS + "columnID", C1),new XElement(_tableIndexXNS + "type", column.Type),new XElement(_tableIndexXNS + "typeOriginal"),new XElement(_tableIndexXNS + "nullable", "false"), new XElement(_tableIndexXNS + "description", "Kode"));
-            var columnNode2 = new XElement(_tableIndexXNS + "column", new XElement(_tableIndexXNS + "name", CodeValue), new XElement(_tableIndexXNS + "columnID", C2), new XElement(_tableIndexXNS + "type", optionsType), new XElement(_tableIndexXNS + "typeOriginal"), new XElement(_tableIndexXNS + "nullable", "false"), new XElement(_tableIndexXNS + "description", "Kodeværdi"));
+            var columnNode2 = new XElement(_tableIndexXNS + "column", new XElement(_tableIndexXNS + "name", CodeValue), new XElement(_tableIndexXNS + "columnID", C2), new XElement(_tableIndexXNS + "type", optionsType), new XElement(_tableIndexXNS + "typeOriginal"), new XElement(_tableIndexXNS + "nullable", "false"), new XElement(_tableIndexXNS + "description", CodeDescription));
             var refTableNode = new XElement(_tableIndexXNS + "table",
                 new XElement(_tableIndexXNS + "name", refTableName),
                 new XElement(_tableIndexXNS + "folder", folder),
@@ -221,12 +238,7 @@ namespace Rigsarkiv.Athena
                 new XElement(_tableIndexXNS + "rows", options.Length.ToString()));
             tableNode.Parent.Add(refTableNode);
             codeList.Columns[1].Type = optionsType;
-            table.CodeList.Add(codeList);
-            foreach(var pair in codeList.Options)
-            {
-                if (RequiredSpecialNumeric(column, pair[0])) { EnableSpecialNumeric(column, tableNode, researchIndexNode); }
-                if (column.HasSpecialNumeric && GetRegex(SpecialNumericPattern).IsMatch(pair[0])) { AddMissingColumnNode(pair[0], researchIndexNode, column.Id); }
-            }
+            table.CodeList.Add(codeList);            
         }
         
         private string ParseOptions(object[] options, XElement tableNode, XElement researchIndexNode, Table codeList, string folder, Column column)
@@ -240,15 +252,12 @@ namespace Rigsarkiv.Athena
                 var code = (Dictionary<string, object>)option;
                 var value = code["name"].ToString();
                 var description = code["description"].ToString();
-                codeList.Options.Add(new string[2] { value, description });
+                var isMissing = false;                
                 if (description.Length > result) { result = description.Length; }
                 if((bool)code["isMissing"]) {
-                    if (!column.HasMissingValues) {
-                        AddSpecialNumeric(column, researchIndexNode);
-                        column.HasMissingValues = true;
-                    }                    
-                    AddMissingColumnNode(value, researchIndexNode, column.Id);
-                }                
+                    isMissing = true;
+                }
+                codeList.Options.Add(new string[3] { value, description, isMissing.ToString() });
             }            
             return string.Format(VarCharPrefix, result);
         }        
@@ -263,12 +272,7 @@ namespace Rigsarkiv.Athena
                 case "Date": result = "DATE"; break;
                 case "Time": result = "TIME"; break;
                 case "DateTime": result = "TIMESTAMP"; break;
-                case "String":
-                    {
-                        var regExSplit = GetRegExp(variableInfo);
-                        result = string.Format(VarCharPrefix, GetColumnLength(VarCharPrefix, regExSplit));
-                    };
-                    break;
+                case "String": result = VarCharPrefix; break;
             }
             return result;
         }

@@ -20,10 +20,14 @@ function (n) {
         const doubleApostrophePattern2 = /(")/g;
         const doubleApostrophePattern3 = /(["]{2,2})/g
         const datatypeDecimal = /^(\%([0-9]+)\.([0-9]+)g)$/;
-        
+        const csvSplitPattern = /(?:^|;)(\"(?:[^\"]+|\"\")*\"|[^;]*)/g;
         const errorsMax = 40;
         const warningMax = 100;
-        
+        const maxInt = 2147483647;
+        const minInt = -2147483648;
+        const maxDecimal = 79228162514264337593543950335.79228162514264337593543950335;
+        const minDecimal = -79228162514264337593543950335.79228162514264337593543950335;
+
         //private data memebers
         var settings = { 
             outputErrorSpn: null,
@@ -75,6 +79,7 @@ function (n) {
         // View Element by id & return texts
         var ViewElement = function(id,formatText1,formatText2,formatText3,formatText4, formatText5, formatText6) {
             var result = Rigsarkiv.Language.callback().getValue(id); 
+            //TODO : Remove
             if(result == null) { result = settings.outputText[id]; }
             if(formatText1 != null) { 
                 if(formatText2 != null) {
@@ -214,7 +219,7 @@ function (n) {
                 result = LogError("-CheckData-FileRow-ColumnsIntValue-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);  
             }
             else {
-                if(parsedValue > 2147483647 || parsedValue < -2147483648) {
+                if(parsedValue > maxInt || parsedValue < minInt) {
                     result = LogError("-CheckData-FileRow-ColumnsInt-ValueRange-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
                 }
                 else {
@@ -243,13 +248,7 @@ function (n) {
                 result = LogError("-CheckData-FileRow-ColumnsDecimalValue-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);  
             }
             else {
-                if(datatypeDecimal.test(variable.format)) {
-                    matches = variable.format.match(datatypeDecimal);
-                    if(parsedValue.toString().length > (parseInt(matches[2]) + 1)) {
-                        result = LogError("-CheckData-FileRow-ColumnsDecimalType-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, variable.format,dataValue);
-                    }
-                }
-                if(parsedValue > 79228162514264337593543950335.79228162514264337593543950335 || parsedValue < -79228162514264337593543950335.79228162514264337593543950335) {
+                if(parsedValue > maxDecimal || parsedValue < minDecimal) {
                     result = LogError("-CheckData-FileRow-ColumnsDecimal-ValueRange-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
                 }
                 else {
@@ -328,12 +327,21 @@ function (n) {
         //strip text double Apostrophe
         var ApostropheNormalizer = function(dataValue,variable) {
             var result = dataValue;
+            var isReferenced = false;
             if(result.indexOf("\"") > -1 && doubleApostrophePattern1.test(result)) {
                 result = result.match(doubleApostrophePattern1)[1];
                 result = result.replace(/""/g, "\"");
-            }
+            }            
             if(variable != null && result.length > 0 && (result[0] === " " || result[result.length - 1] === " ")) {
-                result = LogWarn("-CheckData-FileRow-ColumnsString-ValueBlankCharacters-Warning",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name);
+                settings.table.references.forEach(reference => {
+                    if(reference.refKeys.includes(variable.name)) { isReferenced = true; }
+                });
+                if(variable.isKey || isReferenced) {
+                    result = LogError("-CheckData-FileRow-ColumnsString-ValueBlankCharacters-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name);
+                }
+                else {
+                    result = LogWarn("-CheckData-FileRow-ColumnsString-ValueBlankCharacters-Warning",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name);
+                }                
             }
             return result;
         }
@@ -379,7 +387,7 @@ function (n) {
                     {
                         result = ValidateString(dataValue, regExp, variable);
                         if(result) { result = ValidateOptions(ApostropheNormalizer(dataValue,null),variable); }
-                        if(result && emptyPattern.test(dataValue)) { LogError("-CheckData-FileRow-ColumnsStringEmpty-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name,dataValue.replace("<","&lt;").replace(">","&gt;")); }
+                        if(result && emptyPattern.test(dataValue)) { LogWarn("-CheckData-FileRow-ColumnsStringEmpty-Warning",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name,dataValue.replace("<","&lt;").replace(">","&gt;")); }
                     };break;
                 case 'Int':
                     {
@@ -533,40 +541,18 @@ function (n) {
             }
             return result;
         }
-
-        // parse column
-        var ParseColumn = function (data,offset) {
-            var startIndex = data.indexOf("\"",offset);
-            var endIndex = -1;
-            if(startIndex === offset) {
-                endIndex = data.indexOf("\";",offset);
-                if(endIndex === -1) {
-                    endIndex = data.indexOf("\"",offset + 1);
-                    if(endIndex === -1) {
-                        endIndex = data.indexOf(";",offset);
-                    }
-                }
-                if(endIndex > -1) { endIndex++; }
-            }
-            else {
-                startIndex = offset;
-                endIndex = data.indexOf(";",offset);
-            }
-           
-            return (endIndex > -1) ? data.substring(startIndex,endIndex) : data.substring(startIndex);
-        }
         
         //Parse single row
         var ParseRow = function (data) {
             var result = [];
-            var offset = 0;
-            var column = ParseColumn(data,offset);
-            result.push(column);
-            offset += (column.length + 1);
-            while(offset < (data.length - 1)) {
-                column = ParseColumn(data,offset);
-                result.push(column);
-                offset += (column.length + 1);
+            csvSplitPattern.lastIndex = 0;
+            var matches = data.match(csvSplitPattern);
+            if(matches != null && matches.length > 0) {
+                for(var i = 0;i < matches.length;i++) {
+                    var value = matches[i];
+                    if(value.indexOf(";") === 0) { value = value.substring(1); }
+                    result.push(value);
+                }
             }
             return result;
         }
@@ -581,11 +567,11 @@ function (n) {
                 if(row.indexOf("\"") > -1) { //Reparsing of row if it contains double apstrof
                     newData = ParseRow(row);
                     result = (settings.table.variables.length === newData.length); 
-                }  
+                }
                 if(settings.table.variables.length === (newData.length + 1)) { 
                     newData.push(""); 
                     result = true;
-                }                                      
+                }                                 
             }
             if(!result) { //less or more separators
                 result = LogError("-CheckData-FileRows-MatchLength-Error",settings.fileName,settings.rowIndex);
@@ -607,7 +593,9 @@ function (n) {
             .validate(function(data){
                 var result = true;
                 settings.rowIndex++;
-                settings.confirmationSpn.innerHTML = settings.validateRowsText.format(settings.rowIndex,settings.tableRows,settings.fileName);
+                if(settings.rowIndex > 1) {
+                    settings.confirmationSpn.innerHTML = settings.validateRowsText.format(settings.rowIndex - 1,settings.tableRows - 1,settings.fileName);
+                }
                 console.log("validate row: {0}".format(settings.rowIndex));
                 if(settings.rowIndex === 1 && !ValidateHeader(data)) { 
                     settings.table.errorStop = true;

@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Web.Script.Serialization;
 using System.Xml.Linq;
 
 namespace Rigsarkiv.Styx
@@ -17,12 +18,15 @@ namespace Rigsarkiv.Styx
     {
         const int RowsChunk = 500;
         const string Separator = ";";
+        const string ResourceReportFile = "Rigsarkiv.Styx.Resources.report.html";
         const string TablePath = "{0}\\Tables\\{1}\\{1}.xml";
         const string CodeFormat = "'{0}' '{1}'";
         const string SpecialNumericPattern = "^(\\.[a-z])|([A-Z])$";
         const string SasSpecialNumericPattern = "^[A-Z]$";
         const string StataSpecialNumericPattern = "^\\.[a-z]$";
         const string Alphabet = "abcdefghijklmnopqrstuvwxyz";
+        const string UserCodeRange = "'{0}' 'through' '{1}'{2}";
+        const string UserCodeExtra = " 'and' '{0}'";
         private List<string> _codeLists = null;
         private List<string> _sasSpecialNumerics = null;
         private List<string> _stataSpecialNumerics = null;
@@ -69,6 +73,29 @@ namespace Rigsarkiv.Styx
             return result;
         }
 
+        /// <summary>
+        /// flush and save report file
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="name"></param>
+        public bool Flush(string path, string name)
+        {
+            var result = true;
+            try
+            {
+                _log.Info("Flush report");
+                var json = new JavaScriptSerializer().Serialize(_report);
+                string data = GetReportTemplate();
+                File.WriteAllText(path, string.Format(data, DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss"), name, json));
+            }
+            catch (Exception ex)
+            {
+                result = false;
+                _log.Error("Failed to Flush log", ex);
+            }
+            return result;
+        }
+
         private bool EnsureTables()
         {
             var result = true;
@@ -77,22 +104,21 @@ namespace Rigsarkiv.Styx
             {
                  _report.Tables.ForEach(table =>
                 {
-                    var counter = 0;
                     XNamespace tableNS = string.Format(TableXmlNs, table.SrcFolder);
-                    path = string.Format(TableDataPath, _destFolderPath, _report.ScriptType.ToString().ToLower(), table.Name);
+                    path = string.Format(TableDataPath, _destFolderPath, _report.ScriptType.ToString().ToLower(), NormalizeName(table.Name));
                     _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add file: {0}", path) });
                     using (TextWriter sw = new StreamWriter(path))
                     {
                         _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Write {0} data header", table.Folder) });
-                        sw.WriteLine(string.Join(Separator, table.Columns.Select(c => c.Name).ToArray()));
-                        counter++;
+                        sw.WriteLine(string.Join(Separator, table.Columns.Select(c => NormalizeName(c.Name)).ToArray()));
                         path = string.Format(TablePath, _srcPath, table.SrcFolder);
                         StreamElement(delegate (XElement row) {
                             sw.WriteLine(GetRow(table, row, tableNS));
-                            counter++;
-                            if ((counter % RowsChunk) == 0) { _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("{0} of {1} rows added", counter, table.Rows) }); }
-                        }, path);
+                            table.RowsCounter++;
+                            if ((table.RowsCounter % RowsChunk) == 0) { _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("{0} of {1} rows added", table.RowsCounter, table.Rows) }); }
+                        }, path);                        
                     }
+                    _report.TablesCounter++;
                 });
             }
             catch (Exception ex)
@@ -172,7 +198,7 @@ namespace Rigsarkiv.Styx
         private void EnsureCodeListMissingValues(Table table)
         {
             string path = null;
-            table.Columns.Where(c => c.CodeList != null).ToList().ForEach(column =>
+            table.Columns.Where(c => c.CodeList != null && c.MissingValues != null).ToList().ForEach(column =>
             {
                 _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Ensure Missing Values for codelist: {0}", column.CodeList.Name) });
                 XNamespace tableNS = string.Format(TableXmlNs, column.CodeList.SrcFolder);
@@ -198,7 +224,8 @@ namespace Rigsarkiv.Styx
                     }
                     if (newValue >= int.Parse(column.Lowest))
                     {
-                        _logManager.Add(new LogEntity() { Level = LogLevel.Warning, Section = _logSection, Message = string.Format("No new numric code available for column: {0}", column.Name) });
+                        column.Message = string.Format("No new numric code less than {0} available for column: {1}", column.Lowest, column.Name);
+                        _logManager.Add(new LogEntity() { Level = LogLevel.Warning, Section = _logSection, Message = column.Message });
                     }
                     else
                     {
@@ -207,6 +234,11 @@ namespace Rigsarkiv.Styx
                         availableNumerics.Add(newValue.ToString());
                     }
                 });
+                if(string.IsNullOrEmpty(column.Message))
+                {
+                    column.SortedMissingValues = column.MissingValues.Values.ToList();
+                    column.SortedMissingValues.Sort(new IntComparer());
+                }
             }
         }
 
@@ -218,13 +250,14 @@ namespace Rigsarkiv.Styx
                 decimal newValue = ((decimal.Parse(Math.Pow(10, length).ToString()) - 1) * -1);
                 column.MissingValues.Where(v => regex.IsMatch(v.Key)).ToList().ForEach(value =>
                 {
-                    while (int.Parse(column.Lowest) > newValue && availableNumerics.Contains(newValue.ToString()))
+                    while (decimal.Parse(column.Lowest) > newValue && availableNumerics.Contains(newValue.ToString()))
                     {
                         newValue++;
                     }
                     if (newValue >= decimal.Parse(column.Lowest))
                     {
-                        _logManager.Add(new LogEntity() { Level = LogLevel.Warning, Section = _logSection, Message = string.Format("No new numric code available for column: {0}", column.Name) });
+                        column.Message = string.Format("No new numric code less than {0} available for column: {1}", column.Lowest, column.Name);
+                        _logManager.Add(new LogEntity() { Level = LogLevel.Warning, Section = _logSection, Message = column.Message });
                     }
                     else
                     {
@@ -233,6 +266,11 @@ namespace Rigsarkiv.Styx
                         availableNumerics.Add(newValue.ToString());
                     }
                 });
+                if (string.IsNullOrEmpty(column.Message))
+                {
+                    column.SortedMissingValues = column.MissingValues.Values.ToList();
+                    column.SortedMissingValues.Sort(new DecimalComparer());
+                }
             }
         }
 
@@ -338,13 +376,39 @@ namespace Rigsarkiv.Styx
 
         private void EnsureUserCode(Table table)
         {
+            string content = null;
             var usercodes = new List<string>();
-            var path = string.Format(UserCodesPath, _destFolderPath, _report.ScriptType.ToString().ToLower(), table.Name);
-            var content = File.ReadAllText(path);
             table.Columns.Where(c => c.MissingValues != null).ToList().ForEach(column =>
-            {   
-                usercodes.Add(string.Join(" ", column.MissingValues.Select(v => string.Format("'{0}'", v.Value)).ToArray()));
+            {
+                content = string.Empty;
+                if (column.SortedMissingValues != null)
+                {
+                    if (column.SortedMissingValues.Count < 4)
+                    {
+                        content = string.Join(" ", column.SortedMissingValues.Select(v => string.Format("'{0}'", v)).ToArray());
+                    }
+                    else
+                    {
+                        _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Apply User codes range for column {0}", column.Name) });
+                        string lastValue = column.SortedMissingValues[0];
+                        var lastIndex = 1;
+                        column.SortedMissingValues.ForEach(v => {
+                            if ((column.TypeOriginal == "INTEGER" && int.Parse(v) == (int.Parse(lastValue) + 1)) || (column.TypeOriginal == "DECIMAL" && decimal.Parse(v) == (decimal.Parse(lastValue) + 1)))
+                            {
+                                lastValue = v;
+                                lastIndex++;
+                            }
+                        });
+                        if (column.SortedMissingValues.Count > (lastIndex + 1)) { column.Message = "out of range"; }
+                        content = string.Format(UserCodeRange, column.SortedMissingValues[0], lastValue, lastIndex < column.SortedMissingValues.Count ? string.Format(UserCodeExtra, column.SortedMissingValues[lastIndex]) : string.Empty);
+                    }
+                }                
+                usercodes.Add(content);
             });
+            if(usercodes.Count == 0) { return; }
+
+            var path = string.Format(UserCodesPath, _destFolderPath, _report.ScriptType.ToString().ToLower(), NormalizeName(table.Name));
+            content = File.ReadAllText(path);
             using (var sw = new StreamWriter(path, false, Encoding.UTF8))
             {
                 sw.Write(string.Format(content, usercodes.ToArray()));
@@ -362,7 +426,7 @@ namespace Rigsarkiv.Styx
                     _codeLists.Clear();
                     if (table.Columns.Any(c => c.CodeList != null))
                     {
-                        EnsureCodeList(table);
+                        EnsureCodeList(table);                        
                     }
                 });
             }
@@ -391,17 +455,32 @@ namespace Rigsarkiv.Styx
                         code = column.MissingValues[code];
                     }
                     codeList.AppendLine(string.Format(CodeFormat, code, row.Element(tableNS + C2).Value));
+                    column.CodeList.RowsCounter++;
                 }, path);
                 var codeListContent = codeList.ToString();                
                 _codeLists.Add(codeListContent.Substring(0, codeListContent.Length - 2));
                 codeList.Clear();
+                _report.CodeListsCounter++;
             });
-            path = string.Format(CodeListPath, _destFolderPath, _report.ScriptType.ToString().ToLower(), table.Name);
+            path = string.Format(CodeListPath, _destFolderPath, _report.ScriptType.ToString().ToLower(), NormalizeName(table.Name));
             var content = File.ReadAllText(path);
             using (var sw = new StreamWriter(path, false, Encoding.UTF8))
             {
                 sw.Write(string.Format(content, _codeLists.ToArray()));
+            }            
+        }
+
+        private string GetReportTemplate()
+        {
+            string result = null;
+            using (Stream stream = _assembly.GetManifestResourceStream(ResourceReportFile))
+            {
+                using (StreamReader reader = new StreamReader(stream, Encoding.UTF8))
+                {
+                    result = reader.ReadToEnd();
+                }
             }
+            return result;
         }
     }
 }

@@ -19,10 +19,14 @@ namespace Rigsarkiv.Athena.Entities
         public bool Nullable { get; set; }
         public bool HasSpecialNumeric { get; set; }
         public bool HasMissingValues { get; set; }
+        public int MissingValues { get; set; }
+        public int MissingValuesCounter { get; set; }
         public string RegExp { get; set; }
         public bool Modified { get; set; }
+        public long MaxLength { get; set; }
         public int Differences { get; set; }
         public int Errors { get; set; }
         public List<int> ErrorsRows { get; set; }
+        public string CodeListName { get; set; }
     }
 }

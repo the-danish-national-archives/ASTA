@@ -184,6 +184,7 @@ namespace Rigsarkiv.Athena
                     _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("{0} rows added", counter - 1) });
                 }                
                 EndWriter();
+                UpdateColumns(table, tableNode);
                 _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Table {0} has {1} total Differences", table.Folder, table.Columns.Sum(c => c.Differences)) });
             }
             catch (Exception ex)
@@ -204,7 +205,7 @@ namespace Rigsarkiv.Athena
             }
             if (column.HasSpecialNumeric && GetRegex(SpecialNumericPattern).IsMatch(value))
             {
-                AddMissingColumnNode(value, researchIndexNode, column.Id);
+                AddMissingColumnNode(value, researchIndexNode, column);
                 _updateDocuments = true;
             }
 
@@ -216,8 +217,8 @@ namespace Rigsarkiv.Athena
             var rowError = false;
             var row = line.Split(Separator).ToList();
             if(line.IndexOf("\"") > -1) { row = ParseRow(line); }
-            if(table.Columns.Count == (row.Count +1)) { row.Add(""); }
-            for(int i = 0; i < table.Columns.Count; i++)
+            if (table.Columns.Count == (row.Count + 1)) { row.Add(""); }
+            for (int i = 0; i < table.Columns.Count; i++)
             {                
                 var column = table.Columns[i];
                 var value = row[i];
@@ -262,7 +263,25 @@ namespace Rigsarkiv.Athena
             else
             {
                 _writer.WriteElementString(column.Id, convertedValue);
+                if (column.MaxLength < convertedValue.Length)
+                {
+                    column.MaxLength = convertedValue.Length;
+                }
             }
+            
+        }
+
+        private void UpdateColumns(Table table, XElement tableNode)
+        {
+            table.Columns.Where(c => c.Type.StartsWith(VarCharPrefix.Substring(0, 7))).ToList().ForEach(column => {
+                column.Type = string.Format(VarCharPrefix, column.MaxLength);
+                column.Modified = true;
+                _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Update column {0} type: {1}", column.Name, column.Type) });
+
+                var columnNode = tableNode.Element(_tableIndexXNS + "columns").Elements().Where(e => e.Element(_tableIndexXNS + "columnID").Value == column.Id).FirstOrDefault();
+                columnNode.Element(_tableIndexXNS + "type").Value = column.Type;
+                _updateDocuments = true;
+            });
         }
     }
 }

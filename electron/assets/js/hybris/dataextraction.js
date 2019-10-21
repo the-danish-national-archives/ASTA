@@ -375,6 +375,14 @@ function (n) {
             return data.split(splitChar);
         }
 
+         //create HTML select option element
+         var CreateOption = function(value,text) {
+            var result = document.createElement('option');
+            result.textContent = text;
+            result.value = value;
+            return result;
+        }
+
         //Redirect to metadata tab
         var Redirect = function() {
             var fileName = GetFileName();
@@ -385,6 +393,7 @@ function (n) {
             try
             {
                 $(settings.variablesDropdown).empty();
+                settings.variablesDropdown.appendChild(CreateOption("",""));
                 var destFilePath = settings.dataFolderPath;
                 destFilePath += (destFilePath.indexOf("\\") > -1) ? "\\{0}".format(settings.variableFileName) : "/{0}".format(settings.variableFileName);
                 var lines = GetFileContent(destFilePath);
@@ -392,11 +401,8 @@ function (n) {
                 do {
                     var expressions = lines[i].trim().reduceWhiteSpace().split(" ");
                     if(expressions.length >= 2 && expressions[0] !== "") {
-                        var el = document.createElement('option');
                         var variableName = expressions[0];
-                        el.textContent = variableName;
-                        el.value = variableName;
-                        settings.variablesDropdown.appendChild(el);
+                        settings.variablesDropdown.appendChild(CreateOption(variableName,variableName));
                     }
                     i++;
                 }

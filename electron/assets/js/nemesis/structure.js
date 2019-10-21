@@ -33,7 +33,8 @@ function (n) {
             logEndWithErrorSpn:null,
             logEndWithErrorStopSpn:null,
             deliveryPackagePath: null,
-            testId: null,
+            testSpn: null,
+            testText: null,
             confirmationSpn: null,
             convertDisabledText: null,
             outputText: {},
@@ -72,7 +73,9 @@ function (n) {
 
         // View Element by id & return texts
         var ViewElement = function(id,formatText1,formatText2,formatText3,formatText4, formatText5, formatText6) {
-            var result = settings.outputText[id];
+            var result = Rigsarkiv.Language.callback().getValue(id); 
+            //TODO : Remove
+            if(result == null) { result = settings.outputText[id]; }
             if(formatText1 != null) { 
                 if(formatText2 != null) {
                     if(formatText3 != null) {
@@ -234,6 +237,7 @@ function (n) {
                     else {
                         if(dataFilePattern.test(file) || metadataFilePattern.test(file)) {
                             result = LogError("-CheckFolderData-TableFolderFileOrder-Error",tableFolderName,file);
+                            settings.errorStop = true;
                         }
                         else {
                             result = LogError("-CheckFolderData-TableFolderFile-Error",tableFolderName,file);
@@ -260,8 +264,7 @@ function (n) {
             else {
                 result = LogError("-CheckFolderData-TableFolderEmpty-Error",tableFolderName);
             }
-            //minimum one tableX valid files
-            if(result) { settings.errorStop = false; }
+            if(!result) { settings.errorStop = true; }
             return result;
         }
 
@@ -296,7 +299,6 @@ function (n) {
             var destPath = (settings.deliveryPackagePath.indexOf("\\") > -1) ? "{0}\\{1}".format(settings.deliveryPackagePath,settings.defaultSubFolders[1]) : "{0}/{1}".format(settings.deliveryPackagePath,settings.defaultSubFolders[1]); 
             var subFolders = fs.readdirSync(destPath);
             if(subFolders != null && subFolders.length > 0) {
-                settings.errorStop = true;
                 var validTablesName = true;
                 subFolders.filter(junk.not).forEach(folder => {
                     if(!dataTablePattern.test(folder)) {
@@ -418,7 +420,7 @@ function (n) {
             var subFolders = fs.readdirSync(destPath);
             if(subFolders != null && subFolders.length > 0) {
                 var validFoldersName = true;
-                subFolders.forEach(folder => {
+                subFolders.filter(junk.not).forEach(folder => {
                     settings.documents.push(folder);
                     if(!docFolderPattern.test(folder)) {
                         result = LogError("-CheckFolderContextDocumentation-DocCollectionDocumentFolder-Error",folder);
@@ -432,7 +434,7 @@ function (n) {
                         }
                     }
                 });
-                if(validFoldersName && !ValidateDocumentFoldersOrder(subFolders)) { result = false; }
+                if(validFoldersName && !ValidateDocumentFoldersOrder(subFolders.filter(junk.not))) { result = false; }
             }
             else {
                 result = LogError("-CheckFolderContextDocumentation-DocCollectionEmpty-Error",null);
@@ -454,7 +456,7 @@ function (n) {
                     if(!ValidateDocCollection(destPath)) {
                         result = false;
                     }
-                    subFolders.forEach(folder => {
+                    subFolders.filter(junk.not).forEach(folder => {
                         if(folder != settings.docCollectionFolderName) {
                             result = LogError("-CheckFolderContextDocumentation-DocCollectionsCount-Error",folder);
                         }
@@ -565,7 +567,7 @@ function (n) {
                 settings.selectDirBtn.disabled = true;
                 settings.validateBtn.disabled = true;
                 var folderName = GetFolderName();
-                settings.testId.innerText = folderName;
+                settings.testSpn.innerText = settings.testText.format(folderName);
                 settings.logCallback().section(settings.logType,folderName,settings.logStartSpn.innerHTML);
                 setTimeout(Validate, 1000);                          
             })
@@ -593,7 +595,9 @@ function (n) {
                 settings.logEndWithErrorSpn = document.getElementById(logEndWithErrorId);
                 settings.logEndWithErrorStopSpn = document.getElementById(logEndWithErrorStopId);
                 settings.outputPrefix = outputPrefix;
-                settings.testId = document.getElementById(testId);
+                settings.testSpn = document.getElementById(testId);
+                settings.testText = settings.testSpn.innerText;
+                settings.testSpn.innerText = settings.testText.format("");
                 settings.confirmationSpn = document.getElementById(confirmationId);
                 settings.convertDisabledText = document.getElementById(convertDisabledId).innerHTML;
                 settings.ConvertBtn = document.getElementById(convertId);
@@ -613,7 +617,7 @@ function (n) {
                         settings.selectDirBtn.disabled = true;
                         settings.validateBtn.disabled = true;
                         var folderName = GetFolderName();
-                        settings.testId.innerText = folderName;
+                        settings.testSpn.innerText = settings.testText.format(folderName);
                         settings.logCallback().section(settings.logType,folderName,settings.logStartSpn.innerHTML);
                         return Validate();
                     },

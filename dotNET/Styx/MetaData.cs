@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Xml.Linq;
 
 namespace Rigsarkiv.Styx
@@ -80,7 +81,7 @@ namespace Rigsarkiv.Styx
             var index = 0;
             table.Columns.Where(c => c.MissingValues != null).ToList().ForEach(column =>
             {
-                _usercodes.AppendLine(string.Format("{0} {{{1}}}", column.Name, index));
+                _usercodes.AppendLine(string.Format("{0} {{{1}}}", NormalizeName(column.Name), index));
                 index++;
             });
             if (_usercodes.Length > 0)
@@ -93,17 +94,19 @@ namespace Rigsarkiv.Styx
         {
             var index = 0;
             table.Columns.ForEach(column =>
-            {
+            {                
                 var codeList = string.Empty;
                 if (column.CodeList != null)
                 {
-                    codeList = string.Format("{0}{1}.", column.TypeOriginal.StartsWith("VARCHAR") ? "$" : string.Empty, column.CodeList.Name);
-                    _codeList.AppendLine(column.CodeList.Name);
+                    var codelistName = NormalizeName(column.CodeList.Name);
+                    if (_report.ScriptType == ScriptType.SPSS) { codelistName = NormalizeName(column.Name); }
+                    codeList = string.Format("{0}{1}.", column.TypeOriginal.StartsWith("VARCHAR") ? "$" : string.Empty, codelistName);
+                    _codeList.AppendLine(codelistName);
                     _codeList.AppendLine(string.Format("{{{0}}}", index));
                     index++;
                 }
-                _variables.AppendLine(string.Format("{0} {1} {2}", column.Name, GetColumnType(column), codeList));
-                _descriptions.AppendLine(string.Format("{0} '{1}'", column.Name, column.Description));
+                _variables.AppendLine(string.Format("{0} {1} {2}", NormalizeName(column.Name), GetColumnType(column), codeList));
+                _descriptions.AppendLine(string.Format("{0} '{1}'", NormalizeName(column.Name), column.Description));
             });
             EnsureFile(table, VariablesPath, _variables.ToString());
             EnsureFile(table, DescriptionsPath, _descriptions.ToString());
@@ -112,7 +115,7 @@ namespace Rigsarkiv.Styx
 
         private void EnsureFile(Table table,string filePath,string content)
         {
-            var path = string.Format(filePath, _destFolderPath, _report.ScriptType.ToString().ToLower(), table.Name);
+            var path = string.Format(filePath, _destFolderPath, _report.ScriptType.ToString().ToLower(), NormalizeName(table.Name));
             _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add file: {0}", path) });
             using (var sw = new StreamWriter(path, true, Encoding.UTF8))
             {
@@ -164,19 +167,22 @@ namespace Rigsarkiv.Styx
                 {
                     column.TypeOriginal = "INTEGER";
                     column.Modified = true;
+                    return;
                 }
                 regex = GetRegex(DataTypeDecimalPattern);
                 if (regex.IsMatch(column.Type))
                 {
                     column.TypeOriginal = "DECIMAL";
                     column.Modified = true;
+                    return;
                 }
             }
         }
 
         private Dictionary<string, string> GetMissingValues(XElement tableNode, Table table, Column column)
         {
-            if(!tableNode.Element(_tableIndexXNS + "columns").Elements().Any(e => e.Element(_tableIndexXNS + "columnID").Value == column.Id))
+            if (tableNode.Element(_tableIndexXNS + "columns") == null) { return null; }
+            if (!tableNode.Element(_tableIndexXNS + "columns").Elements().Any(e => e.Element(_tableIndexXNS + "columnID").Value == column.Id))
             {
                 return null;
             }
@@ -196,10 +202,10 @@ namespace Rigsarkiv.Styx
             {
                 return null;
             }
-            var result = new Table() { Columns = new List<Column>() };
-
+            var result = new Table() { Columns = new List<Column>(), RowsCounter = 0 };
+            var tableName = NormalizeName(table.Name);
             var codelistName = foreignKeyNode.Element(_tableIndexXNS + "name").Value;
-            codelistName = codelistName.Substring(3 + table.Name.Length + 1);
+            codelistName = codelistName.Substring(3 + tableName.Length + 1);
             codelistName = codelistName.Substring(0, codelistName.LastIndexOf("_"));
             result.Name = codelistName;
 
