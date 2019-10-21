@@ -3,6 +3,42 @@
         "section": "index",
         "keys": [
             {
+                "key": "menu-welcome",
+                "value": "Forside"
+            },
+            {
+                "key": "menu-hybris-new",
+                "value": "Skab afleveringspakke"
+            },
+            {
+                "key": "menu-hybris-edit",
+                "value": "Rediger afleveringspakke"
+            },
+            {
+                "key": "menu-nemesis",
+                "value": "Test afleveringspakke"
+            },
+            {
+                "key": "menu-styx",
+                "value": "Skab udleveringsformat"
+            },
+            {
+                "key": "menu-instructions",
+                "value": "Vejledning"
+            },
+            {
+                "key": "menu-about",
+                "value": "FAQ"
+            },
+            {
+                "key": "menu-help",
+                "value": "Hjælp"
+            },
+            {
+                "key": "menu-profile",
+                "value": "Sprog"
+            },
+            {
                 "key": "app-close-dialog-title",
                 "value": "Programmet lukkes"
             },
