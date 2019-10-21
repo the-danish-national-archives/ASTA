@@ -180,9 +180,9 @@ namespace Rigsarkiv.Athena
             return _regExps[pattern];
         }
 
-        protected int GetColumnLength(string type,string regExp)
+        protected long GetColumnLength(string type,string regExp)
         {
-            var result = 0;
+            long result = 0;
             var startIndex = -1;
             var endIndex = -1;
             switch (type)
@@ -191,7 +191,7 @@ namespace Rigsarkiv.Athena
                     {
                         startIndex = regExp.IndexOf("{1,") + 3;
                         endIndex = regExp.IndexOf("}$");
-                        result = int.Parse(regExp.Substring(startIndex, endIndex - startIndex));
+                        result = long.Parse(regExp.Substring(startIndex, endIndex - startIndex));
                         result++;
                         if (result < 2) { result = 2; }                        
                     };
@@ -200,14 +200,14 @@ namespace Rigsarkiv.Athena
                     {
                         startIndex = regExp.IndexOf("[0-9]{0,") + 8;
                         endIndex = regExp.IndexOf("}", startIndex);
-                        result = int.Parse(regExp.Substring(startIndex, endIndex - startIndex));
+                        result = long.Parse(regExp.Substring(startIndex, endIndex - startIndex));
                         result++;
                         startIndex = regExp.IndexOf("{0,", endIndex + 1);
                         if(startIndex > -1)
                         {
                             startIndex = startIndex + 3;
                             endIndex = regExp.LastIndexOf("}");
-                            result += int.Parse(regExp.Substring(startIndex, endIndex - startIndex));
+                            result += long.Parse(regExp.Substring(startIndex, endIndex - startIndex));
                             result++;
                         }
                         if (result < 2) { result = 2; }
@@ -217,7 +217,7 @@ namespace Rigsarkiv.Athena
                     {
                         startIndex = regExp.IndexOf("{0,") + 3;
                         endIndex = regExp.IndexOf("}$");
-                        result = int.Parse(regExp.Substring(startIndex, endIndex - startIndex));
+                        result = long.Parse(regExp.Substring(startIndex, endIndex - startIndex));
                     };
                     break;
             }
@@ -523,7 +523,7 @@ namespace Rigsarkiv.Athena
                 }
             }
             result = result.Trim();
-            if (!isDifferent) { isDifferent = result != value; }
+            if (!isDifferent) { isDifferent = result != value; }            
             return result;
         }
 

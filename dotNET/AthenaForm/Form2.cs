@@ -24,6 +24,7 @@ namespace Rigsarkiv.AthenaForm
         const string CodeListDescriptionHeaderText = "Kodeforklaring {0}";
         const string C1 = "c1";
         const string C2 = "c2";
+        const int ValueMaxLength = 32767;
         private LogManager _logManager = null;
         private string _srcPath = null;
         private string _destPath = null;
@@ -337,27 +338,7 @@ namespace Rigsarkiv.AthenaForm
             for (int i = 0; i < _mainTable.Columns.Count; i++)
             {                
                 var column = _mainTable.Columns[i];
-                dataValues[0, i].Value = column.Name;
-                dataValues[1, i].Value = column.Description;
-                dataValues[2, i].Value = column.TypeOriginal;
-                if(column.Modified) { dataValues[2, i].Style.BackColor = Color.LightGreen; }
-                if (row != null && row.SrcValues.ContainsKey(column.Id))
-                {
-                    dataValues[3, i].Value = row.SrcValues[column.Id];
-                    if (row.SrcValues[column.Id] != row.DestValues[column.Id]) { dataValues[3, i].Style.BackColor = Color.LightGreen; }
-                    if (row.ErrorsColumns.Contains(column.Id)) { dataValues[3, i].Style.BackColor = Color.Red; }                    
-                }
-                dataValues[4, i].Value = column.Type;
-                if (column.Modified) { dataValues[4, i].Style.BackColor = Color.LightGreen; }
-                if (row != null && row.SrcValues.ContainsKey(column.Id))
-                {
-                    dataValues[5, i].Value = row.DestValues[column.Id];
-                    if (row.SrcValues[column.Id] != row.DestValues[column.Id]) { dataValues[5, i].Style.BackColor = Color.LightGreen; }
-                    if (row.ErrorsColumns.Contains(column.Id)) { dataValues[5, i].Style.BackColor = Color.Red; }                    
-                }
-                dataValues[6, i].Value = column.Differences;
-                dataValues[7, i].Value = column.ErrorsRows.Count > 0 ? column.ErrorsRows.Count : 0;
-                if(column.ErrorsRows.Count > 0) { dataValues[7, i].Style.BackColor = Color.Red; }
+                UpdateDataColumn(row, column, i);
             }
             tableErrorsLabel.Text = string.Format(TableErrorsLabel, _mainTable.Errors);
             if (row != null) { rowErrorsLabel.Text = string.Format(RowErrorsLabel, row.ErrorsColumns.Count); }
@@ -368,6 +349,34 @@ namespace Rigsarkiv.AthenaForm
                 dataValues.FirstDisplayedScrollingRowIndex = _selectedColumn;
                 UpdateErrorButton();
             }
+        }
+
+        private void UpdateDataColumn(Row row, Column column, int index)
+        {
+            string value = null;
+            dataValues[0, index].Value = column.Name;
+            dataValues[1, index].Value = column.Description;
+            dataValues[2, index].Value = column.TypeOriginal;
+            if (column.Modified) { dataValues[2, index].Style.BackColor = Color.LightGreen; }
+            if (row != null && row.SrcValues.ContainsKey(column.Id))
+            {
+                value = row.SrcValues[column.Id];
+                dataValues[3, index].Value = value.Length > ValueMaxLength ? value.Substring(0, ValueMaxLength) : value;
+                if (row.SrcValues[column.Id] != row.DestValues[column.Id]) { dataValues[3, index].Style.BackColor = Color.LightGreen; }
+                if (row.ErrorsColumns.Contains(column.Id)) { dataValues[3, index].Style.BackColor = Color.Red; }
+            }
+            dataValues[4, index].Value = column.Type;
+            if (column.Modified) { dataValues[4, index].Style.BackColor = Color.LightGreen; }
+            if (row != null && row.SrcValues.ContainsKey(column.Id))
+            {
+                value = row.DestValues[column.Id];
+                dataValues[5, index].Value = value.Length > ValueMaxLength ? value.Substring(0, ValueMaxLength) : value;
+                if (row.SrcValues[column.Id] != row.DestValues[column.Id]) { dataValues[5, index].Style.BackColor = Color.LightGreen; }
+                if (row.ErrorsColumns.Contains(column.Id)) { dataValues[5, index].Style.BackColor = Color.Red; }
+            }
+            dataValues[6, index].Value = column.Differences;
+            dataValues[7, index].Value = column.ErrorsRows.Count > 0 ? column.ErrorsRows.Count : 0;
+            if (column.ErrorsRows.Count > 0) { dataValues[7, index].Style.BackColor = Color.Red; }
         }
 
         private void UpdateErrorButton()

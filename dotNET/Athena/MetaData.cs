@@ -163,7 +163,7 @@ namespace Rigsarkiv.Athena
             var columnTypeOriginal = variableInfo["format"].ToString();
             var missingValues = variableInfo["missingValues"].ToString();
             var appliedRegExp = GetRegExp(variableInfo);
-            var column = new Column() { Name = columnName, Id = columnId, Description = columnDescription, Type = columnType, TypeOriginal = columnTypeOriginal, Nullable = (bool)variableInfo["nullable"], HasSpecialNumeric = false, HasMissingValues = false, MissingValues= int.Parse(missingValues), MissingValuesCounter = 0, RegExp = appliedRegExp, Differences = 0, Errors = 0, ErrorsRows = new List<int>() };
+            var column = new Column() { Name = columnName, Id = columnId, Description = columnDescription, Type = columnType, TypeOriginal = columnTypeOriginal, Nullable = (bool)variableInfo["nullable"], HasSpecialNumeric = false, HasMissingValues = false, MissingValues= int.Parse(missingValues), MissingValuesCounter = 0, RegExp = appliedRegExp, MaxLength =0, Differences = 0, Errors = 0, ErrorsRows = new List<int>() };
             var columnNode = new XElement(_tableIndexXNS + "column",
                  new XElement(_tableIndexXNS + "name", columnName),
                  new XElement(_tableIndexXNS + "columnID", columnId),
@@ -225,7 +225,7 @@ namespace Rigsarkiv.Athena
 
             var options = (object[])variableInfo["options"];
             var codeList = new Table() { Name = refTableName, Folder = folder, Rows = options.Length, Errors = 0, RowsCounter = 0, HasKey = true, Options= new List<string[]>(), ErrorsRows = new Dictionary<string, Row>() };
-            codeList.Columns = new List<Column>() { (new Column() { Name = Code, Id = C1, Description = "Kode", Type = column.Type, TypeOriginal = "", HasSpecialNumeric = false, HasMissingValues = false, MissingValues = 0, MissingValuesCounter = 0, Differences = 0, Errors = 0, ErrorsRows = new List<int>() }), (new Column() { Name = CodeValue, Id = C2, Description = CodeDescription, Type = "", TypeOriginal = "", HasSpecialNumeric = false, HasMissingValues = false, MissingValues = 0, MissingValuesCounter = 0, Differences = 0, Errors = 0, ErrorsRows = new List<int>() }) };
+            codeList.Columns = new List<Column>() { (new Column() { Name = Code, Id = C1, Description = "Kode", Type = column.Type, TypeOriginal = "", HasSpecialNumeric = false, HasMissingValues = false, MissingValues = 0, MissingValuesCounter = 0, MaxLength = 0, Differences = 0, Errors = 0, ErrorsRows = new List<int>() }), (new Column() { Name = CodeValue, Id = C2, Description = CodeDescription, Type = "", TypeOriginal = "", HasSpecialNumeric = false, HasMissingValues = false, MissingValues = 0, MissingValuesCounter = 0, MaxLength = 0, Differences = 0, Errors = 0, ErrorsRows = new List<int>() }) };
             var optionsType = ParseOptions(options, tableNode, researchIndexNode, codeList, folder, column);
             var columnNode1 = new XElement(_tableIndexXNS + "column", new XElement(_tableIndexXNS + "name", Code),new XElement(_tableIndexXNS + "columnID", C1),new XElement(_tableIndexXNS + "type", column.Type),new XElement(_tableIndexXNS + "typeOriginal"),new XElement(_tableIndexXNS + "nullable", "false"), new XElement(_tableIndexXNS + "description", "Kode"));
             var columnNode2 = new XElement(_tableIndexXNS + "column", new XElement(_tableIndexXNS + "name", CodeValue), new XElement(_tableIndexXNS + "columnID", C2), new XElement(_tableIndexXNS + "type", optionsType), new XElement(_tableIndexXNS + "typeOriginal"), new XElement(_tableIndexXNS + "nullable", "false"), new XElement(_tableIndexXNS + "description", CodeDescription));
@@ -272,12 +272,7 @@ namespace Rigsarkiv.Athena
                 case "Date": result = "DATE"; break;
                 case "Time": result = "TIME"; break;
                 case "DateTime": result = "TIMESTAMP"; break;
-                case "String":
-                    {
-                        var regExSplit = GetRegExp(variableInfo);
-                        result = string.Format(VarCharPrefix, GetColumnLength(VarCharPrefix, regExSplit));
-                    };
-                    break;
+                case "String": result = VarCharPrefix; break;
             }
             return result;
         }

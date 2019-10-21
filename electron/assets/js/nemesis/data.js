@@ -248,12 +248,6 @@ function (n) {
                 result = LogError("-CheckData-FileRow-ColumnsDecimalValue-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);  
             }
             else {
-                if(datatypeDecimal.test(variable.format)) {
-                    matches = variable.format.match(datatypeDecimal);
-                    if(parsedValue.toString().length > (parseInt(matches[2]) + 1)) {
-                        result = LogError("-CheckData-FileRow-ColumnsDecimalType-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, variable.format,dataValue);
-                    }
-                }
                 if(parsedValue > maxDecimal || parsedValue < minDecimal) {
                     result = LogError("-CheckData-FileRow-ColumnsDecimal-ValueRange-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
                 }

@@ -23,6 +23,7 @@ namespace Rigsarkiv.Athena.Entities
         public int MissingValuesCounter { get; set; }
         public string RegExp { get; set; }
         public bool Modified { get; set; }
+        public long MaxLength { get; set; }
         public int Differences { get; set; }
         public int Errors { get; set; }
         public List<int> ErrorsRows { get; set; }

@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.mainTablesListBox = new System.Windows.Forms.ListBox();
@@ -82,11 +82,9 @@
             | System.Windows.Forms.AnchorStyles.Left)));
             this.mainTablesListBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.mainTablesListBox.FormattingEnabled = true;
-            this.mainTablesListBox.ItemHeight = 20;
-            this.mainTablesListBox.Location = new System.Drawing.Point(17, 80);
-            this.mainTablesListBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.mainTablesListBox.Location = new System.Drawing.Point(11, 52);
             this.mainTablesListBox.Name = "mainTablesListBox";
-            this.mainTablesListBox.Size = new System.Drawing.Size(223, 444);
+            this.mainTablesListBox.Size = new System.Drawing.Size(150, 290);
             this.mainTablesListBox.TabIndex = 3;
             this.mainTablesListBox.SelectedIndexChanged += new System.EventHandler(this.mainTablesListBox_SelectedIndexChanged);
             // 
@@ -108,21 +106,20 @@
             this.columnValue,
             this.Differences,
             this.Errors});
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataValues.DefaultCellStyle = dataGridViewCellStyle7;
-            this.dataValues.Location = new System.Drawing.Point(547, 187);
-            this.dataValues.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataValues.DefaultCellStyle = dataGridViewCellStyle1;
+            this.dataValues.Location = new System.Drawing.Point(365, 122);
             this.dataValues.Name = "dataValues";
             this.dataValues.RowHeadersVisible = false;
             this.dataValues.RowTemplate.ReadOnly = true;
             this.dataValues.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.dataValues.Size = new System.Drawing.Size(1002, 676);
+            this.dataValues.Size = new System.Drawing.Size(668, 439);
             this.dataValues.TabIndex = 5;
             this.dataValues.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataValues_CellClick);
             this.dataValues.SelectionChanged += new System.EventHandler(this.dataValues_SelectionChanged);
@@ -186,10 +183,9 @@
             // prevButton
             // 
             this.prevButton.Enabled = false;
-            this.prevButton.Location = new System.Drawing.Point(808, 102);
-            this.prevButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.prevButton.Location = new System.Drawing.Point(539, 66);
             this.prevButton.Name = "prevButton";
-            this.prevButton.Size = new System.Drawing.Size(70, 35);
+            this.prevButton.Size = new System.Drawing.Size(47, 23);
             this.prevButton.TabIndex = 8;
             this.prevButton.Text = "Forrige";
             this.prevButton.UseVisualStyleBackColor = true;
@@ -198,10 +194,9 @@
             // nextButton
             // 
             this.nextButton.Enabled = false;
-            this.nextButton.Location = new System.Drawing.Point(886, 102);
-            this.nextButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.nextButton.Location = new System.Drawing.Point(591, 66);
             this.nextButton.Name = "nextButton";
-            this.nextButton.Size = new System.Drawing.Size(70, 35);
+            this.nextButton.Size = new System.Drawing.Size(47, 23);
             this.nextButton.TabIndex = 9;
             this.nextButton.Text = "Næste";
             this.nextButton.UseVisualStyleBackColor = true;
@@ -210,10 +205,9 @@
             // IndexButton
             // 
             this.IndexButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.IndexButton.Location = new System.Drawing.Point(1391, 873);
-            this.IndexButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.IndexButton.Location = new System.Drawing.Point(927, 567);
             this.IndexButton.Name = "IndexButton";
-            this.IndexButton.Size = new System.Drawing.Size(158, 35);
+            this.IndexButton.Size = new System.Drawing.Size(105, 23);
             this.IndexButton.TabIndex = 10;
             this.IndexButton.Text = "Afslut konvertering";
             this.IndexButton.UseVisualStyleBackColor = true;
@@ -221,27 +215,28 @@
             // 
             // searchTextBox
             // 
-            this.searchTextBox.Location = new System.Drawing.Point(1337, 102);
-            this.searchTextBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.searchTextBox.Location = new System.Drawing.Point(891, 66);
             this.searchTextBox.Name = "searchTextBox";
-            this.searchTextBox.Size = new System.Drawing.Size(148, 26);
+            this.searchTextBox.Size = new System.Drawing.Size(100, 20);
             this.searchTextBox.TabIndex = 11;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(13, 43);
+            this.label4.Location = new System.Drawing.Point(9, 28);
+            this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(120, 20);
+            this.label4.Size = new System.Drawing.Size(86, 13);
             this.label4.TabIndex = 15;
             this.label4.Text = "Hovedtabeller";
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(254, 43);
+            this.label5.Location = new System.Drawing.Point(169, 28);
+            this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(110, 20);
+            this.label5.Size = new System.Drawing.Size(78, 13);
             this.label5.TabIndex = 16;
             this.label5.Text = "Kodetabeller";
             // 
@@ -251,29 +246,29 @@
             | System.Windows.Forms.AnchorStyles.Left)));
             this.codeTablesListBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.codeTablesListBox.FormattingEnabled = true;
-            this.codeTablesListBox.ItemHeight = 20;
-            this.codeTablesListBox.Location = new System.Drawing.Point(258, 80);
+            this.codeTablesListBox.Location = new System.Drawing.Point(172, 52);
+            this.codeTablesListBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.codeTablesListBox.Name = "codeTablesListBox";
-            this.codeTablesListBox.Size = new System.Drawing.Size(218, 444);
+            this.codeTablesListBox.Size = new System.Drawing.Size(147, 290);
             this.codeTablesListBox.TabIndex = 17;
             this.codeTablesListBox.SelectedIndexChanged += new System.EventHandler(this.codeTablesListBox_SelectedIndexChanged);
             // 
             // rowLabel
             // 
             this.rowLabel.AutoSize = true;
-            this.rowLabel.Location = new System.Drawing.Point(543, 106);
+            this.rowLabel.Location = new System.Drawing.Point(362, 69);
+            this.rowLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.rowLabel.Name = "rowLabel";
-            this.rowLabel.Size = new System.Drawing.Size(73, 20);
+            this.rowLabel.Size = new System.Drawing.Size(50, 13);
             this.rowLabel.TabIndex = 19;
             this.rowLabel.Text = "rowLabel";
             // 
             // searchButton
             // 
             this.searchButton.Enabled = false;
-            this.searchButton.Location = new System.Drawing.Point(1493, 101);
-            this.searchButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.searchButton.Location = new System.Drawing.Point(995, 66);
             this.searchButton.Name = "searchButton";
-            this.searchButton.Size = new System.Drawing.Size(52, 35);
+            this.searchButton.Size = new System.Drawing.Size(35, 23);
             this.searchButton.TabIndex = 20;
             this.searchButton.Text = "Søg";
             this.searchButton.UseVisualStyleBackColor = true;
@@ -283,18 +278,20 @@
             // 
             this.tableInfoLabel.AutoSize = true;
             this.tableInfoLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tableInfoLabel.Location = new System.Drawing.Point(542, 45);
+            this.tableInfoLabel.Location = new System.Drawing.Point(361, 29);
+            this.tableInfoLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.tableInfoLabel.Name = "tableInfoLabel";
-            this.tableInfoLabel.Size = new System.Drawing.Size(165, 29);
+            this.tableInfoLabel.Size = new System.Drawing.Size(111, 20);
             this.tableInfoLabel.TabIndex = 21;
             this.tableInfoLabel.Text = "tableInfoLabel";
             // 
             // rowErrorsLabel
             // 
             this.rowErrorsLabel.AutoSize = true;
-            this.rowErrorsLabel.Location = new System.Drawing.Point(543, 151);
+            this.rowErrorsLabel.Location = new System.Drawing.Point(362, 98);
+            this.rowErrorsLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.rowErrorsLabel.Name = "rowErrorsLabel";
-            this.rowErrorsLabel.Size = new System.Drawing.Size(116, 20);
+            this.rowErrorsLabel.Size = new System.Drawing.Size(77, 13);
             this.rowErrorsLabel.TabIndex = 22;
             this.rowErrorsLabel.Text = "rowErrorsLabel";
             // 
@@ -302,18 +299,20 @@
             // 
             this.tableErrorsLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.tableErrorsLabel.AutoSize = true;
-            this.tableErrorsLabel.Location = new System.Drawing.Point(552, 880);
+            this.tableErrorsLabel.Location = new System.Drawing.Point(368, 572);
+            this.tableErrorsLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.tableErrorsLabel.Name = "tableErrorsLabel";
-            this.tableErrorsLabel.Size = new System.Drawing.Size(126, 20);
+            this.tableErrorsLabel.Size = new System.Drawing.Size(83, 13);
             this.tableErrorsLabel.TabIndex = 23;
             this.tableErrorsLabel.Text = "tableErrorsLabel";
             // 
             // nextErrorButton
             // 
             this.nextErrorButton.Enabled = false;
-            this.nextErrorButton.Location = new System.Drawing.Point(952, 144);
+            this.nextErrorButton.Location = new System.Drawing.Point(635, 94);
+            this.nextErrorButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.nextErrorButton.Name = "nextErrorButton";
-            this.nextErrorButton.Size = new System.Drawing.Size(143, 35);
+            this.nextErrorButton.Size = new System.Drawing.Size(95, 23);
             this.nextErrorButton.TabIndex = 25;
             this.nextErrorButton.Text = "Næste forskel";
             this.nextErrorButton.UseVisualStyleBackColor = true;
@@ -322,9 +321,10 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 626);
+            this.label2.Location = new System.Drawing.Point(8, 407);
+            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(52, 20);
+            this.label2.Size = new System.Drawing.Size(35, 13);
             this.label2.TabIndex = 26;
             this.label2.Text = "Værdi";
             // 
@@ -332,18 +332,20 @@
             // 
             this.valueRichTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.valueRichTextBox.Location = new System.Drawing.Point(12, 649);
+            this.valueRichTextBox.Location = new System.Drawing.Point(8, 422);
+            this.valueRichTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.valueRichTextBox.Name = "valueRichTextBox";
-            this.valueRichTextBox.Size = new System.Drawing.Size(499, 214);
+            this.valueRichTextBox.Size = new System.Drawing.Size(334, 140);
             this.valueRichTextBox.TabIndex = 27;
             this.valueRichTextBox.Text = "";
             // 
             // prevErrorButton
             // 
             this.prevErrorButton.Enabled = false;
-            this.prevErrorButton.Location = new System.Drawing.Point(808, 144);
+            this.prevErrorButton.Location = new System.Drawing.Point(539, 94);
+            this.prevErrorButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.prevErrorButton.Name = "prevErrorButton";
-            this.prevErrorButton.Size = new System.Drawing.Size(138, 35);
+            this.prevErrorButton.Size = new System.Drawing.Size(92, 23);
             this.prevErrorButton.TabIndex = 28;
             this.prevErrorButton.Text = "Forrige forskel";
             this.prevErrorButton.UseVisualStyleBackColor = true;
@@ -353,9 +355,10 @@
             // 
             this.titlelabel.AutoSize = true;
             this.titlelabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.titlelabel.Location = new System.Drawing.Point(11, 9);
+            this.titlelabel.Location = new System.Drawing.Point(7, 6);
+            this.titlelabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.titlelabel.Name = "titlelabel";
-            this.titlelabel.Size = new System.Drawing.Size(305, 29);
+            this.titlelabel.Size = new System.Drawing.Size(200, 20);
             this.titlelabel.TabIndex = 29;
             this.titlelabel.Text = "{0} - Kontrol af konvertering";
             // 
@@ -366,9 +369,11 @@
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox1.Location = new System.Drawing.Point(12, 62);
+            this.groupBox1.Location = new System.Drawing.Point(8, 40);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(501, 552);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox1.Size = new System.Drawing.Size(334, 359);
             this.groupBox1.TabIndex = 30;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "TABELLER";
@@ -389,12 +394,13 @@
             this.codeListDescription,
             this.codeDifferences,
             this.codeErrors});
-            this.codeListValues.Location = new System.Drawing.Point(547, 187);
+            this.codeListValues.Location = new System.Drawing.Point(365, 122);
+            this.codeListValues.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.codeListValues.Name = "codeListValues";
             this.codeListValues.RowHeadersVisible = false;
             this.codeListValues.RowTemplate.Height = 28;
             this.codeListValues.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.codeListValues.Size = new System.Drawing.Size(1003, 676);
+            this.codeListValues.Size = new System.Drawing.Size(669, 439);
             this.codeListValues.TabIndex = 31;
             this.codeListValues.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.codeListValues_CellClick);
             // 
@@ -444,18 +450,19 @@
             // 
             this.infoLabel.AutoSize = true;
             this.infoLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.infoLabel.Location = new System.Drawing.Point(510, 355);
+            this.infoLabel.Location = new System.Drawing.Point(340, 231);
+            this.infoLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.infoLabel.Name = "infoLabel";
-            this.infoLabel.Size = new System.Drawing.Size(1018, 29);
+            this.infoLabel.Size = new System.Drawing.Size(703, 20);
             this.infoLabel.TabIndex = 33;
             this.infoLabel.Text = "Klik på en tabel for at se data før (SIP) og efter (AIP) konvertering til arkiver" +
     "ingsversion";
             // 
             // Form2
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1562, 922);
+            this.ClientSize = new System.Drawing.Size(1041, 599);
             this.Controls.Add(this.infoLabel);
             this.Controls.Add(this.codeListValues);
             this.Controls.Add(this.groupBox1);
@@ -474,6 +481,7 @@
             this.Controls.Add(this.nextButton);
             this.Controls.Add(this.prevButton);
             this.Controls.Add(this.dataValues);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "Form2";
             this.Text = "ASTA";
             this.Shown += new System.EventHandler(this.Form2_Shown);
