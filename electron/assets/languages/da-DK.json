@@ -131,6 +131,23 @@
         ]
     },
     {
+        "section": "styx",
+        "keys": [
+            {
+                "key": "styx-Title",
+                "value": "Skab udleveringsformat"
+            },
+            {
+                "key": "styx-title-H2",
+                "value": "Skab udleveringsformat."
+            },
+            {
+                "key": "styx-body-DIV",
+                "value": "<p>Funktionen \"Skab udleveringsformat\" er valgt og er fremkommet i separat vindue.</p>"
+            }
+        ]
+    },
+    {
         "section": "instructions",
         "keys": [
             {
