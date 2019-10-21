@@ -10,27 +10,44 @@ function (n) {
     var settings = {
         outputErrorSpn: null,
         outputErrorText: null,
-        footerParagraph: null,
-        footerText: null,
         versionNo: null
+    }
+
+    //Add links events
+    var UpdateLinks = function(elemnetIds) {
+        var element = null;
+        var languageCallback = Rigsarkiv.Language.callback();
+        elemnetIds.forEach(elementId => {
+            element = document.getElementById(elementId);
+            if(element != null) {
+               element.innerHTML = languageCallback.getValue("welcome-versionfooter").format(settings.versionNo);
+            }
+            else {
+                console.logInfo(`none exist elment with id: ${elementId}`,"Rigsarkiv.Version.initialize");
+            }  
+        }); 
     }
 
     //Model interfaces functions
     Rigsarkiv.Version = {
-        initialize: function (outputErrorId,footerId) {
+        initialize: function (outputErrorId) {
             settings.outputErrorSpn = document.getElementById(outputErrorId);
-            settings.outputErrorText = settings.outputErrorSpn.innerHTML; 
-            settings.footerParagraph = document.getElementById(footerId);
-            settings.footerText = settings.footerParagraph.innerHTML;
+            settings.outputErrorText = settings.outputErrorSpn.innerHTML;
             try
             {
                 settings.versionNo = electron.remote["app"].getVersion();
-                settings.footerParagraph.innerHTML = settings.footerText.format(settings.versionNo);
             }
             catch(err) 
             {
                 err.Handle(settings.outputErrorSpn,settings.outputErrorText,"Rigsarkiv.Version.initialize"); 
             } 
+        },
+        callback: function () {
+            return { 
+                updateLinks: function(elemnetIds) {
+                    UpdateLinks(elemnetIds);   
+                }
+            }
         }
     }
 }(jQuery);

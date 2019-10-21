@@ -75,7 +75,32 @@
                 "value": "FORTRYD"
             }
         ]
-    }, 
+    },
+    {
+        "section": "welcome",
+        "keys": [
+            {
+                "key": "welcome-Title",
+                "value": "Forside"
+            },
+            {
+                "key": "welcome-title-H2",
+                "value": "ASTA - Aflevering af Statistikfiler Til Arkiv"
+            },
+            {
+                "key": "welcome-versionfooter",
+                "value": "&copy; 2019 <b>ASTA - Aflevering af Statistikfiler Til Arkiv</b> - Version: {0}"
+            },
+            {
+                "key": "welcome-imageText",
+                "value": "Afleveringspakkestruktur"
+            },
+            {
+                "key": "welcome-body-DIV",
+                "value": "<p>ASTA er Rigsarkivets værktøj til understøttelse af arbejdet med aflevering af data fra statistikfiler til arkiv.</p><p>Du kan downloade den nyeste version af ASTA fra Rigsarkivets hjemmeside.</p><p>Data fra statistikfiler skal afleveres i form af en afleveringspakke.</p><p>Med ASTA kan du lave udtræk fra statistikfiler i formaterne SAS, Stata og SPSS til en afleveringspakke og teste om den overholder de krav, som er specificeret for en afleveringspakke i bilag 9 i bekendtgørelsen om arkiveringsversioner.</p> <p>Bekendtgørelsen og nyttige vejledninger finder du under <a href=\"#\" id=\"menu-instructions\" data-section=\"instructions\">Vejledning</a></p>"
+            }
+        ]
+    },
     {
         "section": "profile",
         "keys": [

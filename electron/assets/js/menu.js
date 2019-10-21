@@ -86,6 +86,7 @@ window.navigation = window.navigation || {},
             var languageCallback = Rigsarkiv.Language.callback();
             languageCallback.setLanguage(Rigsarkiv.Profile.callback().data.lcid);
             Rigsarkiv.Links.callback().updateLinks(["instructions-link1","instructions-link2","instructions-link3","instructions-link4","instructions-link5","instructions-link6","instructions-link7","instructions-link8","instructions-link9","instructions-link10","instructions-link11","instructions-link12","hypres-link1","about-link1"]);
+            Rigsarkiv.Version.callback().updateLinks(["welcome-versionfooter"]);
             document.getElementById("menu-reload").addEventListener('click', function (event) {
                 ipcRenderer.send('open-confirm-dialog','menu-reload',languageCallback.getValue("menu-reload-dialog-title"),languageCallback.getValue("menu-reload-dialog-text"),languageCallback.getValue("menu-reload-dialog-ok"),languageCallback.getValue("menu-reload-dialog-cancel"));
             });
