@@ -510,7 +510,7 @@
                 "value": "<i class=\"fas fa-check-circle ok\"></i>Mappestrukturen er skabt"
             },
             {
-                "key": "hybris-output-statistics-header-trin1",
+                "key": "hybris-output-statistics-header-trin1-SPAN",
                 "value": "Udtræk data fra statistikfilen"
             },
             {
@@ -574,7 +574,15 @@
                 "value": "Du er ved at udtrække data fra en SAS-datafil uden katalog (format-filen). Enten mangler SAS katalogfilen eller den er navngivet forkert. Når der udtrækkes data for en SAS-datafil med katalog, skal katalogfilen (.sas7bcat) placeres i samme mappe som den valgte SAS-datafil (.sas7bdat), der skal laves udtræk fra, og katalogfilen skal navngives på samme måde som SAS-datafilen. OBS: Det er vigtigt at du omdøber en kopi af katalogfilen, ellers kan du ikke åbne statistikfilen korrekt efterfølgende i dit statistikprogram. OBS: Katalogfilen må kun indeholde value labels (formats) som anvendes i den statistikfil, som udtrækket laves fra. Klik ”FORSÆT”, hvis du ønsker at fortsætte udtræk uden katalogfil. Klik ”FORTRYD” hvis du ønsker at vælge ny statistikfil med katalog."
             },
             {
-                "key": "hybris-output-statistics-header-trin2",
+                "key": "hybris-output-script-dataPath-SPAN",
+                "value": "Eksport script er dannet og ligger"
+            },
+            {
+                "key": "hybris-output-script-dataPath",
+                "value": "her"
+            },
+            {
+                "key": "hybris-output-statistics-header-trin2-SPAN",
                 "value": "TRIN 2: Kør eksport script"
             },
             {
@@ -596,6 +604,22 @@
             {
                 "key": "hybris-script-nextBtn",
                 "value": "Næste"
+            },
+            {
+                "key": "hybris-output-script-RequiredFilesWarning-Title",
+                "value": "Data og metadata fra statistikfilen"
+            },
+            {
+                "key": "hybris-output-script-RequiredFilesWarning-Text",
+                "value": "Der er ikke udtrukket data og metadata fra statistikfilen. Kør export scriptet i dit statistikprogram før du klikker på knappen \"Næste\"."
+            },
+            {
+                "key": "hybris-output-script-EncodingFileError-Title",
+                "value": "Tegnsæt skal være indkodet som UTF-8"
+            },
+            {
+                "key": "hybris-output-script-EncodingFileError-Text",
+                "value": "Følgende filer udtrukket til afleveringspakken er muligvis ikke indkodet som UTF-8: {0}. Vil du fortsætte?"
             }
         ]
     },

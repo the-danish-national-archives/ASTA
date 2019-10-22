@@ -35,12 +35,6 @@ function (n) {
             outputStatisticsErrorText: null,
             outputStatisticsOkCopyScriptSpn: null,
             outputStatisticsOkCopyScriptInfoSpn: null,
-            outputScriptRequiredFilesWarningTitle: null,
-            outputScriptRequiredFilesWarningText: null,
-            outputScriptEncodingFileErrorTitle: null,
-            outputScriptEncodingFileErrorText: null,
-            outputScriptCloseApplicationWarningTitle: null,
-            outputScriptCloseApplicationWarningText: null,
             selectedStatisticsFilePath: null,
             outputScriptOkSpn: null,
             metadataFileName: null,
@@ -334,13 +328,13 @@ function (n) {
                     settings.okScriptBtn.disabled = false;
                     settings.spinner.className = "";
                     if(counter < 3) {
-                        ipcRenderer.send('open-warning-dialog',settings.outputScriptRequiredFilesWarningTitle.innerHTML,settings.outputScriptRequiredFilesWarningText.innerHTML);
+                        ipcRenderer.send('open-warning-dialog',Rigsarkiv.Language.callback().getValue("hybris-output-script-RequiredFilesWarning-Title"),Rigsarkiv.Language.callback().getValue("hybris-output-script-RequiredFilesWarning-Text"));
                     }
                     else {
                         if(unvalidFiles.length > 0) 
                         { 
                             var filesText = unvalidFiles.join(",");
-                            ipcRenderer.send('open-confirm-dialog','dataextraction-encodingfile',settings.outputScriptEncodingFileErrorTitle.innerHTML,settings.outputScriptEncodingFileErrorText.innerHTML.format(filesText),Rigsarkiv.Language.callback().getValue("hybris-output-statistics-OkConfirm"),Rigsarkiv.Language.callback().getValue("hybris-output-statistics-CancelConfirm")); 
+                            ipcRenderer.send('open-confirm-dialog','dataextraction-encodingfile',Rigsarkiv.Language.callback().getValue("hybris-output-script-EncodingFileError-Title"),Rigsarkiv.Language.callback().getValue("hybris-output-script-EncodingFileError-Text").format(filesText),Rigsarkiv.Language.callback().getValue("hybris-output-statistics-OkConfirm"),Rigsarkiv.Language.callback().getValue("hybris-output-statistics-CancelConfirm")); 
                         }
                         else {
                             Redirect();
@@ -466,7 +460,7 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Hybris.DataExtraction = {        
-            initialize: function (selectStatisticsFileId,pathStatisticsFileId,okStatisticsId,outputStatisticsErrorId,outputStatisticsOkCopyScriptId,scriptPanel1Id,scriptPanel2Id,okScriptBtnId,okScriptDataPathId,outputStatisticsOkCopyScriptInfoId,outputScriptRequiredFilesWarningPrefixId,outputScriptOkId,outputScriptEncodingFileErrorPrefixId,nextId,metdataTabId,outputScriptCloseApplicationWarningPrefixId,outputStructureOkId,selectStructureDeliveryPackageId,metadataFileName,spinnerId,outputScriptPath,outputHeaderLinkTrin2,outputHeaderLinkTrin3,outputHeaderLinkInformation2,outputStatisticsSASPopupId,variablesId) {
+            initialize: function (selectStatisticsFileId,pathStatisticsFileId,okStatisticsId,outputStatisticsErrorId,outputStatisticsOkCopyScriptId,scriptPanel1Id,scriptPanel2Id,okScriptBtnId,okScriptDataPathId,outputStatisticsOkCopyScriptInfoId,outputScriptOkId,nextId,metdataTabId,outputStructureOkId,selectStructureDeliveryPackageId,metadataFileName,spinnerId,outputScriptPath,outputHeaderLinkTrin2,outputHeaderLinkTrin3,outputHeaderLinkInformation2,outputStatisticsSASPopupId,variablesId) {
                 settings.selectStatisticsFileBtn = document.getElementById(selectStatisticsFileId);
                 settings.pathStatisticsFileTxt = document.getElementById(pathStatisticsFileId);
                 settings.okStatisticsBtn = document.getElementById(okStatisticsId);
@@ -478,15 +472,9 @@ function (n) {
                 settings.okScriptBtn = document.getElementById(okScriptBtnId);
                 settings.okScriptDataPath = document.getElementById(okScriptDataPathId);
                 settings.outputStatisticsOkCopyScriptInfoSpn = document.getElementById(outputStatisticsOkCopyScriptInfoId);
-                settings.outputScriptRequiredFilesWarningTitle = document.getElementById(outputScriptRequiredFilesWarningPrefixId + "-Title");
-                settings.outputScriptRequiredFilesWarningText = document.getElementById(outputScriptRequiredFilesWarningPrefixId + "-Text");
                 settings.outputScriptOkSpn =  document.getElementById(outputScriptOkId);
-                settings.outputScriptEncodingFileErrorTitle = document.getElementById(outputScriptEncodingFileErrorPrefixId + "-Title");
-                settings.outputScriptEncodingFileErrorText = document.getElementById(outputScriptEncodingFileErrorPrefixId + "-Text");
                 settings.nextBtn = document.getElementById(nextId);
                 settings.metdataTab = document.getElementById(metdataTabId);
-                settings.outputScriptCloseApplicationWarningTitle = document.getElementById(outputScriptCloseApplicationWarningPrefixId + "-Title");
-                settings.outputScriptCloseApplicationWarningText = document.getElementById(outputScriptCloseApplicationWarningPrefixId + "-Text");
                 settings.outputStructureOkSpn =  document.getElementById(outputStructureOkId);
                 settings.selectStructureDeliveryPackage = document.getElementById(selectStructureDeliveryPackageId);
                 settings.metadataFileName = document.getElementById(metadataFileName);
