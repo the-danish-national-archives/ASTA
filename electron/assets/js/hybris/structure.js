@@ -27,12 +27,6 @@ function (n) {
             outputErrorSpn: null,
             outputErrorText: null,
             outputExistsSpn: null,
-            outputExistsTitle:null,
-            outputExistsText: null,
-            outputRequiredPathTitle: null,
-            outputRequiredPathText: null,
-            outputUnvalidDeliveryPackageTitle: null,
-            outputUnvalidDeliveryPackageText: null,
             outputOkSpn: null,
             outputOkText: null,
             outputStatisticsHeaderTrin1Spn: null,
@@ -143,7 +137,7 @@ function (n) {
                     });
                 }
                 else  {
-                    ipcRenderer.send('open-warning-dialog',settings.outputExistsTitle.innerHTML,settings.outputExistsText.format(folderName));
+                    ipcRenderer.send('open-warning-dialog',Rigsarkiv.Language.callback().getValue("hybris-output-structure-Exists-Title"),Rigsarkiv.Language.callback().getValue("hybris-output-structure-Exists-Text").format(folderName));
                 }
             });
         }
@@ -153,10 +147,10 @@ function (n) {
             settings.okNewBtn.addEventListener('click', (event) => {
                 Reset();
                 if(settings.newPathDirTxt.value === "") {
-                    ipcRenderer.send('open-error-dialog',settings.outputRequiredPathTitle.innerHTML,settings.outputRequiredPathText.innerHTML);
+                    ipcRenderer.send('open-error-dialog',Rigsarkiv.Language.callback().getValue("hybris-output-structure-RequiredPath-Title"),Rigsarkiv.Language.callback().getValue("hybris-output-structure-RequiredPath-Text"));
                 }
                 if(settings.deliveryPackageTxt.value !== "" && !pattern.test(settings.deliveryPackageTxt.value)) {
-                    ipcRenderer.send('open-error-dialog',settings.outputUnvalidDeliveryPackageTitle.innerHTML,settings.outputUnvalidDeliveryPackageText.innerHTML);
+                    ipcRenderer.send('open-error-dialog',Rigsarkiv.Language.callback().getValue("hybris-output-structure-UnvalidDeliveryPackage-Title"),Rigsarkiv.Language.callback().getValue("hybris-output-structure-UnvalidDeliveryPackage-Text"));
                 }
                 if(settings.selectedPath != null && settings.newPathDirTxt.value !== "" && (settings.deliveryPackageTxt.value === "" || (settings.deliveryPackageTxt.value !== "" && pattern.test(settings.deliveryPackageTxt.value)))) {
                     EnsureStructure();
@@ -165,7 +159,7 @@ function (n) {
             settings.okEditBtn.addEventListener('click', (event) => {
                 Reset(); 
                 if(settings.editPathDirTxt.value === "") {
-                    ipcRenderer.send('open-error-dialog',settings.outputRequiredPathTitle.innerHTML,settings.outputRequiredPathText.innerHTML);
+                    ipcRenderer.send('open-error-dialog',Rigsarkiv.Language.callback().getValue("hybris-output-structure-RequiredPath-Title"),Rigsarkiv.Language.callback().getValue("hybris-output-structure-RequiredPath-Text"));
                 }
                 else {
                     settings.deliveryPackagePath = settings.selectedPath[0];
@@ -205,7 +199,7 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Hybris.Structure = {        
-            initialize: function (sectionTitleId,titleNewId,titleEditId,selectNewDirectoryId,selectEditDirectoryId,newPathDirectoryId,editPathDirectoryId,deliveryPackageId,okNewId,okEditId,outputErrorId,outputExistsId,outputRequiredPathId,outputUnvalidDeliveryPackageId,outputOkId,selectDeliveryPackageId,structureTabId,statisticsTabId,indexfilesTabId,outputStatisticsHeaderTrin1,outputStatisticsHeaderTrin2,outputStatisticsHeaderTrin3,outputStatisticsHeaderInformation2,outputStatisticsHeaderReferences,outputStatisticsHeaderindexfiles,outputStatisticsHeadercontextdocuments,outputStatisticsHeaderOverview,modePanelId,requiredIndexFilesId,indexFilesDescriptionId,indexFilesEditDescriptionId) {            
+            initialize: function (sectionTitleId,titleNewId,titleEditId,selectNewDirectoryId,selectEditDirectoryId,newPathDirectoryId,editPathDirectoryId,deliveryPackageId,okNewId,okEditId,outputErrorId,outputOkId,selectDeliveryPackageId,structureTabId,statisticsTabId,indexfilesTabId,outputStatisticsHeaderTrin1,outputStatisticsHeaderTrin2,outputStatisticsHeaderTrin3,outputStatisticsHeaderInformation2,outputStatisticsHeaderReferences,outputStatisticsHeaderindexfiles,outputStatisticsHeadercontextdocuments,outputStatisticsHeaderOverview,modePanelId,requiredIndexFilesId,indexFilesDescriptionId,indexFilesEditDescriptionId) {            
                 settings.sectionTitleH1 =  document.getElementById(sectionTitleId);
                 settings.titleNewSpn =  document.getElementById(titleNewId);
                 settings.titleEditSpn =  document.getElementById(titleEditId);
@@ -218,12 +212,6 @@ function (n) {
                 settings.okEditBtn =  document.getElementById(okEditId);
                 settings.outputErrorSpn =  document.getElementById(outputErrorId);
                 settings.outputErrorText = settings.outputErrorSpn.innerHTML;
-                settings.outputExistsTitle =  document.getElementById(outputExistsId + "-Title");
-                settings.outputExistsText = document.getElementById(outputExistsId + "-Text").innerHTML;
-                settings.outputRequiredPathTitle =  document.getElementById(outputRequiredPathId + "-Title");
-                settings.outputRequiredPathText =  document.getElementById(outputRequiredPathId + "-Text");
-                settings.outputUnvalidDeliveryPackageTitle =  document.getElementById(outputUnvalidDeliveryPackageId + "-Title");
-                settings.outputUnvalidDeliveryPackageText =  document.getElementById(outputUnvalidDeliveryPackageId + "-Text");
                 settings.outputOkSpn =  document.getElementById(outputOkId);
                 settings.outputOkText = settings.outputOkSpn.innerHTML;
                 settings.selectDeliveryPackage = document.getElementById(selectDeliveryPackageId);
