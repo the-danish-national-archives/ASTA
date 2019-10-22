@@ -504,6 +504,74 @@
             {
                 "key": "hybris-structure-indexfiles-Description",
                 "value": "hvis de mangler"
+            },
+            {
+                "key": "hybris-output-structure-Ok",
+                "value": "<i class=\"fas fa-check-circle ok\"></i>Mappestrukturen er skabt"
+            },
+            {
+                "key": "hybris-output-statistics-header-trin1",
+                "value": "Udtræk data fra statistikfilen <span class=\"trinHeader\">{0}</span>"
+            },
+            {
+                "key": "hybris-message-statistics-Description-DIV",
+                "value": "<p>Du kan her udtrække data og metadata fra dine statistikfiler til afleveringspakken<br/><br/> Udtrækket består af 3 trin for hver statistikfil:<br/> TRIN 1: Vælg statistikfil<br/> TRIN 2: Kør export script i dit statistikprogram<br/> TRIN 3: Indtast informationer om statistikfilen</p><span class=\"alert-warning\"><strong>Information!</strong>  Du kan kun lave udtræk fra statistikfiler i formaterne SPSS, SAS og Stata.</span>"
+            },
+            {
+                "key": "hybris-statistics-filepath-SPAN",
+                "value": "TRIN 1: Vælg statistikfilen som udtræk skal laves fra:"
+            },
+            {
+                "key": "hybris-message-statistics-filepath-Title",
+                "value": "Vælg statistikfil"
+            },
+            {
+                "key": "hybris-message-statistics-filepath-Text",
+                "value": "Vælg den statistikfil, du ønsker at lave udtræk fra. Filen skal have et af følgende formater: .sas7bdat (SAS-fil), .dta (Stata-fil) eller .sav (SPSS-fil). Når der udtrækkes data for en SAS-fil med katalog, skal katalogfilen (.sas7bcat) placeres i samme mappe som den valgte SAS-datafil (.sas7bdat), der skal laves udtræk fra og navngives på samme måde som datafilen.  Du skal lave en kopi af katalogfilen og omdøbe denne."
+            },
+            {
+                "key": "hybris-statistics-filepath",
+                "value": "Vælg sti med browse knappen"
+            },
+            {
+                "key": "hybris-select-statistics-file",
+                "value": "Browse"
+            },
+            {
+                "key": "hybris-statistics-okBtn",
+                "value": "Næste"
+            },
+            {
+                "key": "hybris-statistics-info-SPAN",
+                "value": "INFO: Mappestrukturen er skabt og placeret her: "
+            },
+            {
+                "key": "hybris-output-statistics-RequiredPath-Title",
+                "value": "Statistikfilen mangler"
+            },
+            {
+                "key": "hybris-output-statistics-RequiredPath-Text",
+                "value": "Vælg en statistikfil"
+            },
+            {
+                "key": "hybris-output-statistics-SASCatalogPopup",
+                "value": "<i class=\"fas fa-times error\"></i>Du kan ikke gå videre til \"Næste\" før du besvarer popup vindue [SAS fil uden katalog]"
+            },
+            {
+                "key": "hybris-output-statistics-OkConfirm",
+                "value": "FORTSÆT"
+            },
+            {
+                "key": "hybris-output-statistics-CancelConfirm",
+                "value": "FORTRYD"
+            },
+            {
+                "key": "hybris-message-statistics-SASCatalogWarning-Title",
+                "value": "SAS fil uden katalog"
+            },
+            {
+                "key": "hybris-message-statistics-SASCatalogWarning-Text",
+                "value": "Du er ved at udtrække data fra en SAS-datafil uden katalog (format-filen). Enten mangler SAS katalogfilen eller den er navngivet forkert. Når der udtrækkes data for en SAS-datafil med katalog, skal katalogfilen (.sas7bcat) placeres i samme mappe som den valgte SAS-datafil (.sas7bdat), der skal laves udtræk fra, og katalogfilen skal navngives på samme måde som SAS-datafilen. OBS: Det er vigtigt at du omdøber en kopi af katalogfilen, ellers kan du ikke åbne statistikfilen korrekt efterfølgende i dit statistikprogram. OBS: Katalogfilen må kun indeholde value labels (formats) som anvendes i den statistikfil, som udtrækket laves fra. Klik ”FORSÆT”, hvis du ønsker at fortsætte udtræk uden katalogfil. Klik ”FORTRYD” hvis du ønsker at vælge ny statistikfil med katalog."
             }
         ]
     },

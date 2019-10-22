@@ -36,13 +36,9 @@ function (n) {
             outputStatisticsOkCopyScriptSpn: null,
             outputStatisticsOkCopyScriptText: null,
             outputStatisticsOkCopyScriptInfoSpn: null,
-            outputStatisticsOkCopyScriptInfoText: null,        
-            outputStatisticsSASWarningTitle: null,
-            outputStatisticsSASWarningText: null,
+            outputStatisticsOkCopyScriptInfoText: null,
             outputScriptRequiredFilesWarningTitle: null,
             outputScriptRequiredFilesWarningText: null,
-            outputStatisticsRequiredPathTitle: null,
-            outputStatisticsRequiredPathText: null,
             outputScriptEncodingFileErrorTitle: null,
             outputScriptEncodingFileErrorText: null,
             outputScriptCloseApplicationWarningTitle: null,
@@ -61,8 +57,6 @@ function (n) {
             headerLinkTrin2: null,
             headerLinkTrin3: null,
             headerLinkInformation2: null,
-            okConfirm: null,
-            cancelConfirm: null,
             outputStatisticsSASPopup: null,
             okScriptDataPath: null,
             variablesDropdown: null,   
@@ -225,7 +219,7 @@ function (n) {
                         }; break;
                     }
                     if(!sasCatalogExists && fileExt === "sas7bdat") {
-                        ipcRenderer.send('open-confirm-dialog','dataextraction-catalogexists',settings.outputStatisticsSASWarningTitle.innerHTML,settings.outputStatisticsSASWarningText.innerHTML,settings.okConfirm.innerHTML,settings.cancelConfirm.innerHTML);
+                        ipcRenderer.send('open-confirm-dialog','dataextraction-catalogexists',Rigsarkiv.Language.callback().getValue("hybris-message-statistics-SASCatalogWarning-Title"),Rigsarkiv.Language.callback().getValue("hybris-message-statistics-SASCatalogWarning-Text"),Rigsarkiv.Language.callback().getValue("hybris-output-statistics-OkConfirm"),Rigsarkiv.Language.callback().getValue("hybris-output-statistics-CancelConfirm"));
                         settings.selectStatisticsFileBtn.disabled = true;
                         settings.okStatisticsBtn.disabled = true;
                         settings.outputStatisticsSASPopup.hidden = false;
@@ -349,7 +343,7 @@ function (n) {
                         if(unvalidFiles.length > 0) 
                         { 
                             var filesText = unvalidFiles.join(",");
-                            ipcRenderer.send('open-confirm-dialog','dataextraction-encodingfile',settings.outputScriptEncodingFileErrorTitle.innerHTML,settings.outputScriptEncodingFileErrorText.innerHTML.format(filesText),settings.okConfirm.innerHTML,settings.cancelConfirm.innerHTML); 
+                            ipcRenderer.send('open-confirm-dialog','dataextraction-encodingfile',settings.outputScriptEncodingFileErrorTitle.innerHTML,settings.outputScriptEncodingFileErrorText.innerHTML.format(filesText),Rigsarkiv.Language.callback().getValue("hybris-output-statistics-OkConfirm"),Rigsarkiv.Language.callback().getValue("hybris-output-statistics-CancelConfirm")); 
                         }
                         else {
                             Redirect();
@@ -442,7 +436,7 @@ function (n) {
             settings.okStatisticsBtn.addEventListener('click', (event) => {
                 Reset();
                 if(settings.pathStatisticsFileTxt.value === "") {
-                    ipcRenderer.send('open-error-dialog',settings.outputStatisticsRequiredPathTitle.innerHTML,settings.outputStatisticsRequiredPathText.innerHTML);
+                    ipcRenderer.send('open-error-dialog',Rigsarkiv.Language.callback().getValue("hybris-output-statistics-RequiredPath-Title"),Rigsarkiv.Language.callback().getValue("hybris-output-statistics-RequiredPath-Text"));
                 }
                 if(settings.pathStatisticsFileTxt.value !== "" && Rigsarkiv.Hybris.Structure.callback().deliveryPackagePath != null) {
                     EnsureData();
@@ -475,7 +469,7 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Hybris.DataExtraction = {        
-            initialize: function (selectStatisticsFileId,pathStatisticsFileId,okStatisticsId,outputStatisticsErrorId,outputStatisticsOkCopyScriptId,outputStatisticsSASWarningPrefixId,scriptPanel1Id,scriptPanel2Id,okScriptBtnId,okScriptDataPathId,outputStatisticsOkCopyScriptInfoId,outputStatisticsRequiredPathId,outputScriptRequiredFilesWarningPrefixId,outputScriptOkId,outputScriptEncodingFileErrorPrefixId,nextId,metdataTabId,outputScriptCloseApplicationWarningPrefixId,outputStructureOkId,selectStructureDeliveryPackageId,metadataFileName,spinnerId,outputScriptPath,outputHeaderLinkTrin2,outputHeaderLinkTrin3,outputHeaderLinkInformation2,outputOkConfirmId,outputCancelConfirmId,outputStatisticsSASPopupId,variablesId) {
+            initialize: function (selectStatisticsFileId,pathStatisticsFileId,okStatisticsId,outputStatisticsErrorId,outputStatisticsOkCopyScriptId,scriptPanel1Id,scriptPanel2Id,okScriptBtnId,okScriptDataPathId,outputStatisticsOkCopyScriptInfoId,outputScriptRequiredFilesWarningPrefixId,outputScriptOkId,outputScriptEncodingFileErrorPrefixId,nextId,metdataTabId,outputScriptCloseApplicationWarningPrefixId,outputStructureOkId,selectStructureDeliveryPackageId,metadataFileName,spinnerId,outputScriptPath,outputHeaderLinkTrin2,outputHeaderLinkTrin3,outputHeaderLinkInformation2,outputStatisticsSASPopupId,variablesId) {
                 settings.selectStatisticsFileBtn = document.getElementById(selectStatisticsFileId);
                 settings.pathStatisticsFileTxt = document.getElementById(pathStatisticsFileId);
                 settings.okStatisticsBtn = document.getElementById(okStatisticsId);
@@ -483,16 +477,12 @@ function (n) {
                 settings.outputStatisticsErrorText = settings.outputStatisticsErrorSpn.innerHTML;
                 settings.outputStatisticsOkCopyScriptSpn = document.getElementById(outputStatisticsOkCopyScriptId);
                 settings.outputStatisticsOkCopyScriptText = settings.outputStatisticsOkCopyScriptSpn.innerHTML;
-                settings.outputStatisticsSASWarningTitle = document.getElementById(outputStatisticsSASWarningPrefixId + "-Title");
-                settings.outputStatisticsSASWarningText = document.getElementById(outputStatisticsSASWarningPrefixId + "-Text");
                 settings.scriptPanel1 = document.getElementById(scriptPanel1Id);
                 settings.scriptPanel2 = document.getElementById(scriptPanel2Id);
                 settings.okScriptBtn = document.getElementById(okScriptBtnId);
                 settings.okScriptDataPath = document.getElementById(okScriptDataPathId);
                 settings.outputStatisticsOkCopyScriptInfoSpn = document.getElementById(outputStatisticsOkCopyScriptInfoId);
                 settings.outputStatisticsOkCopyScriptInfoText = settings.outputStatisticsOkCopyScriptInfoSpn.innerHTML;
-                settings.outputStatisticsRequiredPathTitle = document.getElementById(outputStatisticsRequiredPathId + "-Title");
-                settings.outputStatisticsRequiredPathText = document.getElementById(outputStatisticsRequiredPathId + "-Text");
                 settings.outputScriptRequiredFilesWarningTitle = document.getElementById(outputScriptRequiredFilesWarningPrefixId + "-Title");
                 settings.outputScriptRequiredFilesWarningText = document.getElementById(outputScriptRequiredFilesWarningPrefixId + "-Text");
                 settings.outputScriptOkSpn =  document.getElementById(outputScriptOkId);
@@ -513,8 +503,6 @@ function (n) {
                 settings.headerLinkTrin2 = document.getElementById(outputHeaderLinkTrin2);
                 settings.headerLinkTrin3 = document.getElementById(outputHeaderLinkTrin3);
                 settings.headerLinkInformation2 = document.getElementById(outputHeaderLinkInformation2);
-                settings.okConfirm = document.getElementById(outputOkConfirmId);
-                settings.cancelConfirm = document.getElementById(outputCancelConfirmId);
                 settings.outputStatisticsSASPopup = document.getElementById(outputStatisticsSASPopupId);
                 settings.variablesDropdown = document.getElementById(variablesId);
                 AddEvents();

@@ -28,9 +28,7 @@ function (n) {
             outputErrorText: null,
             outputExistsSpn: null,
             outputOkSpn: null,
-            outputOkText: null,
             outputStatisticsHeaderTrin1Spn: null,
-            outputStatisticsHeaderTrin1Text: null,
             outputStatisticsHeaderTrin2Spn: null,
             outputStatisticsHeaderTrin2Text: null,
             outputStatisticsHeaderTrin3Spn: null,
@@ -82,10 +80,9 @@ function (n) {
             settings.selectDeliveryPackage.innerHTML = "[{0}]".format(settings.selectedPath);
             settings.selectDeliveryPackage.hidden = false;
             settings.outputOkSpn.hidden = false;
-            settings.outputOkSpn.innerHTML = settings.outputOkText.format(folderName);
             
             var folder = folders[folders.length - 1];           
-            settings.outputStatisticsHeaderTrin1Spn.innerHTML = settings.outputStatisticsHeaderTrin1Text.format(folder);
+            settings.outputStatisticsHeaderTrin1Spn.innerHTML = Rigsarkiv.Language.callback().getValue("hybris-output-statistics-header-trin1").format(folder);
             settings.outputStatisticsHeaderTrin2Spn.innerHTML = settings.outputStatisticsHeaderTrin2Text.format(folder);
             settings.outputStatisticsHeaderTrin3Spn.innerHTML = settings.outputStatisticsHeaderTrin3Text.format(folder);
             settings.outputStatisticsHeaderInformation2Spn.innerHTML = settings.outputStatisticsHeaderInformation2Text.format(folder);
@@ -212,13 +209,11 @@ function (n) {
                 settings.outputErrorSpn =  document.getElementById(outputErrorId);
                 settings.outputErrorText = settings.outputErrorSpn.innerHTML;
                 settings.outputOkSpn =  document.getElementById(outputOkId);
-                settings.outputOkText = settings.outputOkSpn.innerHTML;
                 settings.selectDeliveryPackage = document.getElementById(selectDeliveryPackageId);
                 settings.structureTab = document.getElementById(structureTabId);
                 settings.statisticsTab = document.getElementById(statisticsTabId);
                 settings.indexfilesTab = document.getElementById(indexfilesTabId);
                 settings.outputStatisticsHeaderTrin1Spn = document.getElementById(outputStatisticsHeaderTrin1);
-                settings.outputStatisticsHeaderTrin1Text = settings.outputStatisticsHeaderTrin1Spn.innerHTML;
                 settings.outputStatisticsHeaderTrin2Spn = document.getElementById(outputStatisticsHeaderTrin2);
                 settings.outputStatisticsHeaderTrin2Text = settings.outputStatisticsHeaderTrin1Spn.innerHTML;
                 settings.outputStatisticsHeaderTrin3Spn = document.getElementById(outputStatisticsHeaderTrin3);

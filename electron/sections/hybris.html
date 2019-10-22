@@ -69,46 +69,27 @@
                         <div id="hybris-panel-script1">
                             <p>
                                 <div class="infoBox" id="hybris-reset-hide-box">
-                                    <span id="hybris-output-structure-Ok" hidden="true" class="confirmation"><i class="fas fa-check-circle ok"></i>Mappestrukturen er skabt</span>
+                                    <span id="hybris-output-structure-Ok" hidden="true" class="confirmation languages"></span>
                                 </div>
-                                <h2 class="boldfaced">Udtræk data fra statistikfilen <span id="hybris-output-statistics-header-trin1" class="trinHeader">{0}</span></h2>
+                                <h2 class="boldfaced" id="hybris-output-statistics-header-trin1"></h2>
                             </p>
-                            <p>
-                                Du kan her udtrække data og metadata fra dine statistikfiler til afleveringspakken  
-                                <br/>
-                                <br/> Udtrækket består af 3 trin for hver statistikfil: 
-                                <br/> TRIN 1: Vælg statistikfil
-                                <br/> TRIN 2: Kør export script i dit statistikprogram
-                                <br/> TRIN 3: Indtast informationer om statistikfilen
-                            </p>
-                                <span class="alert-warning"><strong>Information!</strong>  Du kan kun lave udtræk fra statistikfiler i formaterne SPSS, SAS og Stata.</span>
-                            <br/>
-                            <br>
-                            <br>
-                                <span class="boldfaced">TRIN 1: Vælg statistikfilen som udtræk skal laves fra:</span>
-                                <i id="hybris-message-statistics-filepath" class="far fa-question-circle"></i>
-                                <span id="hybris-message-statistics-filepath-Title" hidden="true">Vælg statistikfil</span>
-                                <span id="hybris-message-statistics-filepath-Text" hidden="true">Vælg den statistikfil, du ønsker at lave udtræk fra. Filen skal have et af følgende formater: .sas7bdat (SAS-fil), .dta (Stata-fil) eller .sav (SPSS-fil). Når der udtrækkes data for en SAS-fil med katalog, skal katalogfilen (.sas7bcat) placeres i samme mappe som den valgte SAS-datafil (.sas7bdat), der skal laves udtræk fra og navngives på samme måde som datafilen.  Du skal lave en kopi af katalogfilen og omdøbe denne.
-                                </span>
+                            <div class="languages" id="hybris-message-statistics-Description-DIV"></div>                            
+                            <br/> <br/> <br/>
+                            <span class="boldfaced languages" id="hybris-statistics-filepath-SPAN"></span>
+                            <i id="hybris-message-statistics-filepath" class="far fa-question-circle"></i>                                
                             <div>
-                                <input type="text" class="path" id="hybris-statistics-filepath" readonly="true" placeholder="Vælg sti med browse knappen">
-                                <button id="hybris-select-statistics-file">Browse</button>
+                                <input type="text" class="path languages" id="hybris-statistics-filepath" readonly="true">
+                                <button class="languages" id="hybris-select-statistics-file"></button>
                             </div>
-                            <button id="hybris-statistics-okBtn">Næste</button>
+                            <button class="languages" id="hybris-statistics-okBtn"></button>
                             <br>
                             <br>
                             <div>
-                            <span class="greyText">INFO: Mappestrukturen er skabt og placeret her: </span><a id="hybris-structure-select-delivery-package" hidden="true"></a>
+                            <span class="greyText languages" id="hybris-statistics-info-SPAN"></span><a id="hybris-structure-select-delivery-package" hidden="true"></a>
                             </div>
-                            <span id="hybris-output-statistics-RequiredPath-Title" hidden="true">Statistikfilen mangler</span>
-                            <span id="hybris-output-statistics-RequiredPath-Text" hidden="true">Vælg en statistikfil</span>
-                            <span id="hybris-output-statistics-SASCatalogPopup" hidden="true" class="error"><i class="fas fa-times error"></i>Du kan ikke gå videre til "Næste" før du besvarer popup vindue [SAS fil uden katalog]</span>
-                            <span id="hybris-output-statistics-Error" hidden="true"><br/>Error: {0}</span>
-                            <span id="hybris-output-statistics-OkConfirm" hidden="true">FORTSÆT</span>
-                            <span id="hybris-output-statistics-CancelConfirm" hidden="true">FORTRYD</span>   
-                            <span id="hybris-message-statistics-SASCatalogWarning-Title" hidden="true">SAS fil uden katalog</span>
-                            <span id="hybris-message-statistics-SASCatalogWarning-Text" hidden="true">Du er ved at udtrække data fra en SAS-datafil uden katalog (format-filen). Enten mangler SAS katalogfilen eller den er navngivet forkert. Når der udtrækkes data for en SAS-datafil med katalog, skal katalogfilen (.sas7bcat) placeres i samme mappe som den valgte SAS-datafil (.sas7bdat), der skal laves udtræk fra, og katalogfilen skal navngives på samme måde som SAS-datafilen. OBS: Det er vigtigt at du omdøber en kopi af katalogfilen, ellers kan du ikke åbne statistikfilen korrekt efterfølgende i dit statistikprogram. OBS: Katalogfilen må kun indeholde value labels (formats) som anvendes i den statistikfil, som udtrækket laves fra. Klik ”FORSÆT”, hvis du ønsker at fortsætte udtræk uden katalogfil. Klik ”FORTRYD” hvis du ønsker at vælge ny statistikfil med katalog.</span>
-                        </div>                        
+                            <span id="hybris-output-statistics-SASCatalogPopup" hidden="true" class="error languages"></span>
+                            <span id="hybris-output-statistics-Error" hidden="true"><br/>Error: {0}</span> 
+                       </div>                        
                         <div id="hybris-panel-script2" hidden="true">
                             <p>
                                 <div class="infoBox">
@@ -430,7 +411,7 @@
             Rigsarkiv.Panels.initialize(["hybris-tab-structure","hybris-tab-statistics","hybris-tab-metdata","hybris-tab-references","hybris-tab-indexfiles","hybris-tab-contextdocuments","hybris-tab-overview"]);
             Rigsarkiv.Messages.initialize(["hybris-message-structure-delivery-package","hybris-message-structure-edit-path","hybris-message-structure-new-path","hybris-message-statistics-filepath","hybris-message-metdata-fileName","hybris-message-metdata-fileDescription","hybris-message-metdata-keyVariable","hybris-message-references-foreignFile","hybris-message-references-foreignVariable","hybris-message-references-referencesTable","hybris-message-references-referenceVariable","hybris-message-indexfiles-archiveIndex","hybris-message-indexfiles-contextDocumentationIndex"]);
             Rigsarkiv.Hybris.Structure.initialize("hybris-section-title","hybris-section-title-New","hybris-section-title-Edit","hybris-select-structure-new-directory","hybris-select-structure-edit-directory","hybris-structure-new-path","hybris-structure-edit-path","hybris-structure-delivery-package","hybris-structure-new-okBtn","hybris-structure-edit-okBtn","hybris-output-structure-Error","hybris-output-structure-Ok","hybris-structure-select-delivery-package","hybris-tab-structure","hybris-tab-statistics","hybris-tab-indexfiles","hybris-output-statistics-header-trin1","hybris-output-statistics-header-trin2","hybris-output-statistics-header-trin3","hybris-output-statistics-header-information2","hybris-output-statistics-header-references","hybris-output-statistics-header-indexfiles","hybris-output-statistics-header-contextdocuments","hybris-output-statistics-header-overview","hybris-panel-structure","hybris-output-indexfiles-Description");          
-            Rigsarkiv.Hybris.DataExtraction.initialize("hybris-select-statistics-file","hybris-statistics-filepath","hybris-statistics-okBtn","hybris-output-statistics-Error","hybris-output-script-OKCopyScript","hybris-message-statistics-SASCatalogWarning","hybris-panel-script1","hybris-panel-script2","hybris-script-okBtn","hybris-output-script-dataPath","hybris-output-script-OKCopyScriptInfo","hybris-output-statistics-RequiredPath","hybris-output-script-RequiredFilesWarning","hybris-output-script-Ok","hybris-output-script-EncodingFileError","hybris-script-nextBtn","hybris-tab-metdata","hybris-output-script-CloseApplicationWarning","hybris-output-structure-Ok","hybris-structure-select-delivery-package","hybris-metdata-fileName","hybris-script-Spinner","hybris-output-script-dataPath-link","hybris-output-statistics-headerLink-trin2","hybris-output-statistics-headerLink-trin3","hybris-output-statistics-headerLink-information2","hybris-output-statistics-OkConfirm","hybris-output-statistics-CancelConfirm","hybris-output-statistics-SASCatalogPopup","hybris-metdata-Variables");
+            Rigsarkiv.Hybris.DataExtraction.initialize("hybris-select-statistics-file","hybris-statistics-filepath","hybris-statistics-okBtn","hybris-output-statistics-Error","hybris-output-script-OKCopyScript","hybris-panel-script1","hybris-panel-script2","hybris-script-okBtn","hybris-output-script-dataPath","hybris-output-script-OKCopyScriptInfo","hybris-output-script-RequiredFilesWarning","hybris-output-script-Ok","hybris-output-script-EncodingFileError","hybris-script-nextBtn","hybris-tab-metdata","hybris-output-script-CloseApplicationWarning","hybris-output-structure-Ok","hybris-structure-select-delivery-package","hybris-metdata-fileName","hybris-script-Spinner","hybris-output-script-dataPath-link","hybris-output-statistics-headerLink-trin2","hybris-output-statistics-headerLink-trin3","hybris-output-statistics-headerLink-information2","hybris-output-statistics-SASCatalogPopup","hybris-metdata-Variables");
             Rigsarkiv.Hybris.MetaData.initialize("hybris-metdata-fileName", "hybris-metdata-fileDescription", "hybris-metdata-okBtn", "hybris-output-metdata-fileNameRequired", "hybris-output-metdata-fileNameNumberFirst", "hybris-output-metdata-fileNameIllegalChar","hybris-output-metdata-Ok","hybris-output-metdata-path","hybris-output-metdata-Error","hybris-output-metdata-NewExtraction","hybris-metdata-NewExtractionBtn","hybris-tab-statistics","hybris-output-metdata-Next","hybris-metdata-NextBtn","hybris-tab-references","hybris-output-metdata-fileNameLength","hybris-output-metdata-fileNamereservedWord","hybris-output-metdata-fileDescrRequired","hybris-panel-information1","hybris-panel-information2","hybris-output-indexfiles-Description","hybris-output-metdata-CloseApplicationError","hybris-reset-hide-box","hybris-output-metdata-keyNumberFirst","hybris-output-metdata-keyIllegalChar","hybris-output-metdata-keyLength","hybris-output-metdata-keyReservedWord","hybris-metdata-Variables","hybris-metdata-addVarKeyBtn","hybris-metdata-varKeys","hybris-output-metdata-varKeyRequired","hybris-references-tables","hybris-references-foreignTables","hybris-metdata-cancelBtn","hybris-output-metdata-addKeyWarning","hybris-output-metdata-OkConfirm","hybris-output-metdata-CancelConfirm","hybris-tab-indexfiles","hybris-references-refVars","hybris-references-foreignVariables","hybris-output-metdata-newExtractionWarning");
             Rigsarkiv.Hybris.References.initialize("hybris-output-references-Error","hybris-references-okBtn","hybris-references-tables","hybris-references-foreignTables","hybris-references-refVars","hybris-references-foreignVariables","hybris-references-addReferenceBtn","hybris-output-references-referenceRequired","hybris-output-references-referenceNumberFirst","hybris-output-references-referenceIllegalChar","hybris-output-references-referenceLength","hybris-output-references-referenceReservedWord","hybris-output-references-referenceForeignVariable","hybris-output-references-referenceRefVar","hybris-references-dataTable","hybris-tab-indexfiles","hybris-references-addReferenceVariableBtn","hybris-references-referenceVariablesTable","hybris-references-addForeignVariableBtn","hybris-references-foreignVariablesTable","hybris-references-cancelBtn","hybris-output-references-addKeyWarning","hybris-output-references-OkConfirm","hybris-output-references-CancelConfirm");
             Rigsarkiv.Hybris.IndexFiles.initialize("hybris-indexfiles-archiveIndex-selectFile","hybris-indexfiles-archiveIndex","hybris-indexfiles-contextDocumentationIndex-selectFile","hybris-indexfiles-contextDocumentationIndex","hybris-indexfiles-okBtn","hybris-output-indexfiles-Error","hybris-output-indexfiles-RequiredPath","hybris-output-indexfiles-Ok","hybris-indexfiles-delivery-package","hybris-output-indexfiles-OkInformation","hybris-tab-contextdocuments","hybris-output-indexfiles-WrongFileName");
