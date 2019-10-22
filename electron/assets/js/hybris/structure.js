@@ -52,7 +52,6 @@ function (n) {
             editPanelDiv: null,
             indexFilesDescriptionSpn: null,
             indexFilesDescriptionText: null,
-            indexFilesEditDescriptionText: null,
             selectDeliveryPackage: null,
             indecesFolder: "Indices",
             contextDocumentationFolder: "ContextDocumentation",
@@ -97,7 +96,7 @@ function (n) {
             
             if(Rigsarkiv.Hybris.Base.callback().mode === "New") { settings.statisticsTab.click(); }
             if(Rigsarkiv.Hybris.Base.callback().mode === "Edit") { 
-                var description = "{0} {1}".format(folder,settings.indexFilesEditDescriptionText);
+                var description = "{0} {1}".format(folder,Rigsarkiv.Language.callback().getValue("hybris-structure-indexfiles-Description"));
                 settings.indexFilesDescriptionSpn.innerHTML = settings.indexFilesDescriptionText.format(description);
                 settings.indexfilesTab.click(); 
             }
@@ -199,7 +198,7 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Hybris.Structure = {        
-            initialize: function (sectionTitleId,titleNewId,titleEditId,selectNewDirectoryId,selectEditDirectoryId,newPathDirectoryId,editPathDirectoryId,deliveryPackageId,okNewId,okEditId,outputErrorId,outputOkId,selectDeliveryPackageId,structureTabId,statisticsTabId,indexfilesTabId,outputStatisticsHeaderTrin1,outputStatisticsHeaderTrin2,outputStatisticsHeaderTrin3,outputStatisticsHeaderInformation2,outputStatisticsHeaderReferences,outputStatisticsHeaderindexfiles,outputStatisticsHeadercontextdocuments,outputStatisticsHeaderOverview,modePanelId,requiredIndexFilesId,indexFilesDescriptionId,indexFilesEditDescriptionId) {            
+            initialize: function (sectionTitleId,titleNewId,titleEditId,selectNewDirectoryId,selectEditDirectoryId,newPathDirectoryId,editPathDirectoryId,deliveryPackageId,okNewId,okEditId,outputErrorId,outputOkId,selectDeliveryPackageId,structureTabId,statisticsTabId,indexfilesTabId,outputStatisticsHeaderTrin1,outputStatisticsHeaderTrin2,outputStatisticsHeaderTrin3,outputStatisticsHeaderInformation2,outputStatisticsHeaderReferences,outputStatisticsHeaderindexfiles,outputStatisticsHeadercontextdocuments,outputStatisticsHeaderOverview,modePanelId,indexFilesDescriptionId) {            
                 settings.sectionTitleH1 =  document.getElementById(sectionTitleId);
                 settings.titleNewSpn =  document.getElementById(titleNewId);
                 settings.titleEditSpn =  document.getElementById(titleEditId);
@@ -236,11 +235,8 @@ function (n) {
                 settings.outputStatisticsHeaderOverviewText = settings.outputStatisticsHeaderOverviewSpn.innerHTML;
                 settings.newPanelDiv = document.getElementById(modePanelId + "-New");
                 settings.editPanelDiv = document.getElementById(modePanelId + "-Edit");
-                settings.requiredIndexFilesTitle =  document.getElementById(requiredIndexFilesId + "-Title");
-                settings.requiredIndexFilesText =  document.getElementById(requiredIndexFilesId + "-Text");
                 settings.indexFilesDescriptionSpn = document.getElementById(indexFilesDescriptionId);
                 settings.indexFilesDescriptionText = settings.indexFilesDescriptionSpn.innerHTML;
-                settings.indexFilesEditDescriptionText = document.getElementById(indexFilesEditDescriptionId).innerHTML;
                 AddEvents();
             },
             callback: function () {
