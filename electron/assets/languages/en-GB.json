@@ -1,71 +1,283 @@
-[  
+[ 
     {
         "section": "index",
         "keys": [
             {
+                "key": "menu-welcome",
+                "value": "Frontpage"
+            },
+            {
+                "key": "menu-hybris-new",
+                "value": "Skab afleveringspakke"
+            },
+            {
+                "key": "menu-hybris-edit",
+                "value": "Rediger afleveringspakke"
+            },
+            {
+                "key": "menu-nemesis",
+                "value": "Test afleveringspakke"
+            },
+            {
+                "key": "menu-styx",
+                "value": "Skab udleveringsformat"
+            },
+            {
+                "key": "menu-instructions",
+                "value": "Instructions"
+            },
+            {
+                "key": "menu-about",
+                "value": "FAQ"
+            },
+            {
+                "key": "menu-help",
+                "value": "Help"
+            },
+            {
+                "key": "menu-profile",
+                "value": "Language"
+            },
+            {
                 "key": "app-close-dialog-title",
-                "value": "The program closes"
+                "value": "Programmet lukkes"
             },
             {
                 "key": "app-close-dialog-text",
-                "value": "You are closing the program. Are you sure?"
+                "value": "Du er ved at lukke programmet ned. Er du sikker?"
             },
             {
                 "key": "app-close-dialog-ok",
-                "value": "CLOSE"
+                "value": "LUK"
             },
             {
                 "key": "app-close-dialog-cancel",
-                "value": "CANCEL"
+                "value": "FORTRYD"
             },
             {
                 "key": "menu-reload",
-                "value": "Restart ASTA"
+                "value": "Genstart ASTA"
             },
             {
                 "key": "menu-reload-dialog-title",
-                "value": "Program restart"
+                "value": "Program genstart"
             },
             {
                 "key": "menu-reload-dialog-text",
-                "value": "You are about to restart the program. Are you sure?"
+                "value": "Du er ved at genstarte programmet. Er du sikker?"
             },
             {
                 "key": "menu-reload-dialog-ok",
-                "value": "RESTART"
+                "value": "GENSTART"
             },
             {
                 "key": "menu-reload-dialog-cancel",
-                "value": "CANCEL"
+                "value": "FORTRYD"
             }
         ]
-    }, 
+    },
+    {
+        "section": "welcome",
+        "keys": [
+            {
+                "key": "welcome-Title",
+                "value": "Forside"
+            },
+            {
+                "key": "welcome-title-H2",
+                "value": "ASTA - Aflevering af Statistikfiler Til Arkiv"
+            },
+            {
+                "key": "welcome-versionfooter",
+                "value": "&copy; 2019 <b>ASTA - Aflevering af Statistikfiler Til Arkiv</b> - Version: {0}"
+            },
+            {
+                "key": "welcome-imageText",
+                "value": "Afleveringspakkestruktur"
+            },
+            {
+                "key": "welcome-body-DIV",
+                "value": "<p>ASTA er Rigsarkivets værktøj til understøttelse af arbejdet med aflevering af data fra statistikfiler til arkiv.</p><p>Du kan downloade den nyeste version af ASTA fra Rigsarkivets hjemmeside.</p><p>Data fra statistikfiler skal afleveres i form af en afleveringspakke.</p><p>Med ASTA kan du lave udtræk fra statistikfiler i formaterne SAS, Stata og SPSS til en afleveringspakke og teste om den overholder de krav, som er specificeret for en afleveringspakke i bilag 9 i bekendtgørelsen om arkiveringsversioner.</p> <p>Bekendtgørelsen og nyttige vejledninger finder du under <a href=\"#\" id=\"menu-instructions\" data-section=\"instructions\">Vejledning</a></p>"
+            }
+        ]
+    },
     {
         "section": "profile",
         "keys": [
             {
                 "key": "profile-Title",
-                "value": "Profile"
+                "value": "Profil"
             },
             {
                 "key": "profile-title-H2",
-                "value": "Your profile"
+                "value": "Din profil"
             },
             {
                 "key": "profile-select-Language",
-                "value": "Select language"
+                "value": "Vægler sprog"
             },
             {
                 "key": "profile-save",
-                "value": "Save"
+                "value": "Gem"
             },
             {
                 "key": "profile-language-da-DK",
-                "value": "Danish"
+                "value": "Dansk"
             },
             {
                 "key": "profile-language-en-GB",
-                "value": "English"
+                "value": "Englesk"
+            }
+        ]
+    },
+    {
+        "section": "styx",
+        "keys": [
+            {
+                "key": "styx-Title",
+                "value": "Skab udleveringsformat"
+            },
+            {
+                "key": "styx-title-H2",
+                "value": "Skab udleveringsformat."
+            },
+            {
+                "key": "styx-body-DIV",
+                "value": "<p>Funktionen \"Skab udleveringsformat\" er valgt og er fremkommet i separat vindue.</p>"
+            }
+        ]
+    },
+    {
+        "section": "about",
+        "keys": [
+            {
+                "key": "about-Title",
+                "value": "FAQ"
+            },
+            {
+                "key": "about-title-H2",
+                "value": "FAQ - Ofte stillede spørgsmål"
+            },
+            {
+                "key": "about-Q1-H4-LeftContent",
+                "value": "Hvad er en afleveringspakke?"
+            },
+            {
+                "key": "about-Q1-SPAN-LeftContent",
+                "value": "Når du skal aflevere data fra statistikfiler til arkivet skal de afleveres i form af en afleveringspakke.<p>Mappestruktur og indhold i en afleveringspakke:</p><br/><div><img class=\"welcomeImg\" src=\"./assets/images/Afleveringspakke_struktur.png\" alt=\"Afleveringspakke struktur\"></div><br/><br/>"
+            },
+            {
+                "key": "about-Q2-H4-LeftContent",
+                "value": "Hvilke krav skal en afleveringspakke overholde?"
+            },
+            {
+                "key": "about-Q2-SPAN-LeftContent",
+                "value": "En afleveringspakke med data fra statistikfiler, skal overholde særlige krav til mappestruktur, navngivning af mapper og filer, datatyper, koder for missing values mm.<p>Alle krav til en afleveringspakke fremgår af bilag 9 i bekendtgørelse om aflevering af arkiveringsversioner.</p><p>En læsevenlig version af kravene  fra bilag 9 til datakvalitet og dokumentation af statistikfilen findes i <a id=\"about-link1\" href=\"#Quickguide.pdf\">Quickguide.pdf</a> under \"Sådan kvalitetssikrer du statistikfilen før du laver udtræk\".</p>"
+            },
+            {
+                "key": "about-Q3-H4-LeftContent",
+                "value": "Hvilke typer data kan afleveres til arkivet som en afleveringspakke?"
+            },
+            {
+                "key": "about-Q3-SPAN-LeftContent",
+                "value": "Data som er skabt i forbindelse med forskning med anvendelse af en videnskabelig metode, og som er skabt eller bearbejdet i statistikprogrammer eller lignende, kan afleveres som en afleveringspakke til arkivet efter reglerne i bilag 9 til bekendtgørelse om aflevering af arkiveringsversioner.<p>Det fremgår af afleveringsbestemmelsen, du har modtaget fra arkivet i forbindelse med afleveringssagen, om data skal afleveres som en afleveringspakke.</p><p>Data som er skabt eller lagret i databaser samt kvalitative interviews og andre dokumentsamlinger skal afleveres efter reglerne i bilag 1-8 i bekendtgørelse om aflevering af arkiveringsversioner.</p>"
+            },
+            {
+                "key": "about-Q4-H4-LeftContent",
+                "value": "Hvordan laver jeg en afleveringspakke?"
+            },
+            {
+                "key": "about-Q4-SPAN-LeftContent",
+                "value": "Du kan anvende funktionen \"Skab afleveringspakke\" i ASTA til at skabe dele af en afleveringspakke.<p> Du kan også selv skabe en afleveringspakke uden brug af ASTA, fx ved at lade en leverandør lave konverteringen af dine statistikfiler og dokumentation til en afleveringspakke.</p>"
+            },
+            {
+                "key": "about-Q5-H4-LeftContent",
+                "value": "Hvad gør funktionen \"Skab afleveringspakke\"?"
+            },
+            {
+                "key": "about-Q5-SPAN-LeftContent",
+                "value": "Funktionen \"Skab afleveringspakke\" er et udtræksværktøj, der kan anvendes til at skabe dele af en afleveringspakke.<p>Med dette udtræksværktøj kan du:</p><ul><li>Skabe en tom mappestruktur til afleveringspakken.</li><li>Lave udtræk af data og metadata fra dine statistikfiler, så de overholder kravene til struktur i data- og metadatafiler i en afleveringspakke.</li><li>Placere indekafilerne i afleveringspakken</li><li>Placere kontekstdokumenterne i afleveringspakken i overensstemmelse med rækkefølgen i indeksfilen contextDocumentationIndex.xml</li></ul>"
+            },
+            {
+                "key": "about-Q6-H4-LeftContent",
+                "value": "Hvad gør funktionen \"Test afleveringspakke\"?"
+            },
+            {
+                "key": "about-Q6-SPAN-LeftContent",
+                "value": "Funktionen \"Test afleveringspakke\" er en funktion, der kan anvendes til at teste om afleveringspakken overholder krav fra bilag 9 i bekendtgørelse om aflevering af arkiveringsversioner.<p>Når en afleveringspakke er testet med \"Test afleveringspakke\" funktionen gemmes automatisk en testlog på samme destination, hvor den testede afleveringspakke ligger.</p>"
+            },
+            {
+                "key": "about-Q7-H4-LeftContent",
+                "value": "Hvor kan jeg få hjælp og vejledning?"
+            },
+            {
+                "key": "about-Q7-SPAN-LeftContent",
+                "value": "Under <a href=\"#\" id=\"menu-instructions\" data-section=\"instructions\">Vejledning</a> findes en quickguide samt vejledninger til hvordan du procuderer en afleveringspakke.<p>Se desuden vejledning i hvordan du retter fejl vist i testloggen efter en test af afleveringspakken under <a href=\"#\" id=\"menu-help\" data-section=\"help\">Hjælp</a></p>"
+            }
+        ]
+    },
+    {
+        "section": "help",
+        "keys": [
+            {
+                "key": "help-Title",
+                "value": "Hjælp"
+            },
+            {
+                "key": "help-title-H2",
+                "value": "Hjælp til fejlidentifikation og fejlmelding"
+            },
+            {
+                "key": "help-Title1-H4-LeftContent",
+                "value": "Hjælp til forståelse af fejl i ASTA testloggen efter test af afleveringspakke"
+            },
+            {
+                "key": "help-Description1-P-LeftContent",
+                "value": "Når du tester en afleveringspakke med \"Test afleveringspakke\" funktionen i ASTA skabes en ASTA testlog.</br>I html-versionen af ASTA testloggen vises et fejl-ID, fx. 15700, ved hver fejlbesked.</br>Ved klik på dette fejl-ID fremkommer følgende:<ol><li>Vejledning i hvordan fejlen rettes</li><li>Eksempel der overholder krav i bilag 9</li><li>Angivelse af krav fra bilag 9 som fejlen omhandler</li></ol>"
+            },
+            {
+                "key": "help-Title2-H4-LeftContent",
+                "value": "Fejlmelding af ASTA"
+            },
+            {
+                "key": "help-Description2-DIV-LeftContent",
+                "value": "<p>Hvis ASTA lukker uventet ned med en systemteknisk fejlbesked, der forhindrer færdigskabelsen af afleveringspakken, kan du fejlmelde dette til Rigsarkivet. Tag et print screen af fejlbeskeden og indsend dette sammen med ASTA_systemlog filen og en præcis beskrivelse af, hvad der fremkaldte fejlen eller hvor i programmet den opstod.</p><p>Fejlmeldingen sendes til mailbox@sa.dk, att. datamanager for forskningsdata.</p><p><b>Systemlogfiler</b></p><span>ASTA danner systemlog filen [ASTA_systemlog.log] som er placeret i mappen </span>"
+            },
+            {
+                "key": "help-Description2-P-LeftContent",
+                "value": "Generel sti til systemlogfiler:<br/>macOS: ~/Library/Logs/asta/ASTA_systemlog.log<br/>Windows: Users\\%USERPROFILE%\\AppData\\Roaming\\asta\\ASTA_systemlog.log"
+            },
+            {
+                "key": "help-Title3-H4-LeftContent",
+                "value": "Systemtekniske krav til din computer med ASTA"
+            },
+            {
+                "key": "help-Description3-DIV-LeftContent",
+                "value": "<p>Fejl i ASTA kan også skyldes at din computer eller software ikke lever op til de systemtekniske krav til at køre ASTA.</p><p>Nedenfor kan du se hvilke styresystemer, internet browsere og versioner af statistikprogrammer, som ASTA er testet til at kunne fungere på.</br>Anvender du andre styresystemer, internetbrowsere eller statistikprogramversioner kan det ikke garanteres at ASTA virker.</p>"
+            },
+            {
+                "key": "help-SubDescription31-DIV-LeftContent",
+                "value": "<p><b>Styresystemer:</b><br/>ASTA er testet på følgende styresystemer:</p><ul><li>Windows 7 og 10</li><li>macOS High Sierra</li></ul>"
+            },
+            {
+                "key": "help-SubDescription32-DIV-LeftContent",
+                "value": "<p><b>Internetbrowsere:</b><br/>Testloggen med visning af vejledning under fejl-ID'er virker i følgende browsere:</p><ul><li>Google Chrome, Version 77.0.3865.90 (Officiel version) (64-bit)</li><li>Mozilla Firefox, version 69.0.2 (64-bit)</li><li>Microsoft Internet explorer 11 [Husk evt. at tillade blocked content for at se fejl-ID'erne]</li><li>Microsoft Edge, version 17.17134</li><li>Safari version 11.1.2 (13605.3.8)</li></ul>"
+            },
+            {
+                "key": "help-SubDescription33-DIV-LeftContent",
+                "value": "<p><b>Statistikprogrammer</b><br/>Export scripts til udtræk af sata og metadata fra statistikfilerne kan eksekveres i følgende versioner af statistikprogrammerne</p><ul><li>SAS v. 9.4</li><li>SPSS v. 24</li><li>Stata v. 14.2</li></ul>"
+            },
+            {
+                "key": "help-SubDescription34-DIV-LeftContent",
+                "value": "<p><b>Øvrige systemtekniske krav</b></p><ul><li>Optimal skærmopløsning er 1920 x 1080 eller 1920 x 1200. Anvendes en mindre opløsning kan nogle knapper være skjult i ASTA.</li><li>Da ASTA installeres på din computer, skal du have adminstrative rettigheder på din computer for at kunne køre programmet.</li></ul>"
+            },
+            {
+                "key": "help-Title4-H4-LeftContent",
+                "value": "Oprydning på din computer efter brug af ASTA"
+            },
+            {
+                "key": "help-Description4-P-LeftContent",
+                "value": "Når du arbejder med ASTA gemmes en række filer og programmer på din computer.<ul><li>ASTA installeres som et program på din computer. Slet programmet fra din computer.</li><br/><li>ASTA opretter automatisk en genvej til programmet på dit skrivebord, når du installerer programmet. Slet denne genvej.</li><br/><li>Ved brug af ASTA gemmes en række systemlogfiler og en profil på din computer. Du sletter disse ved at slette mappen \"asta\" på følgende lokation:</li><p>macOS: ~/Library/Logs/<br/>Windows: Users\\%USERPROFILE%\\AppData\\Roaming\\</p><li>Ved brug af ASTA gemmes en række testlogs, scripts og scriptslogs på din computer på samme destination, hvor den valgte originale statistikfil ligger. Det anbefales at du arbejder inde i en mappe, når du anvender ASTA. Du kan således rydde op efter brug af ASTA ved at slette hele denne mappe.</li><br/><span class=\"alert-warning\"><strong>Information!</strong> Slet først filer som ASTA har skabt, når afleveringen er godkendt af arkivet</span></ul>"
             }
         ]
     },
@@ -74,15 +286,15 @@
         "keys": [
             {
                 "key": "instructions-Title",
-                "value": "Instructions"
+                "value": "Vejledning"
             },
             {
                 "key": "instructions-title-H2",
-                "value": "Quick guide to producing and testing a delivery package"
+                "value": "Quick-guide til produktion og test af en afleveringspakke"
             },
             {
                 "key": "instructions-content1-Left",
-                "value": ""
+                "value": "<h4>Sådan kvalitetssikrer du statistikfilen før du laver udtræk</h4><span> Funktionen \"Skab afleveringspakke\" i ASTA udtrækker blot de data- og metadata der findes i statistikfilen. </br>Det er derfor vigtigt at du sikrer dig, at kvaliteten af data- og metadata i statistikfilen lever op til arkivets krav, før du laver udtræk med ASTA. </br></br>Krav til data- og metadatakvalitet er listet herunder. Du kan også finde quickguiden her: <a id=\"instructions-link1\" href=\"#Quickguide.pdf\">Quickguide.pdf</a>:<ul><li>Tegnsættet for statistikfilerne skal være indkodet som UTF-8. Se vejledning om UTF-8.</li><li>Der må ikke være linjeskift i indhold i variable.</li><li>Variabelnavne [Variable name] skal være angivet for alle variable.</li><li>Variabelnavne skal være unikke inden for statistikfilen.</li><li>Variabelnavne må aldrig begynde med et tal, men må godt være en blanding af bogstaver og tal.</li><li>Variabelnavne må max være 128 tegn lange.</li><li>Variabelbeskrivelser [Variable labels] skal være angivet for alle variable.</li><li>Datatyper for variable i statistikfilen skal overholde de tilladte datatyper i en afleveringspakke. Hvis dette ikke er tilfældet, skal du selv konvertere datatyperne til til ASTA</li><li>Hvis der kun er angivet kodeforklaringer [value labels] for nogle af koderne [values] der fremgår af en skala, skal dette beskrives i variabelbeskrivelsen for variablen.</li><li>Specialkoder for manglende værdier må kun antage værdier A-Z eller .a-.z.</li><li>Der må konsekvent kun anvendes enten specialkoder (.a-.z eller A-Z) eller brugerdefinerede koder for manglende værdier.</li><li>Specialkoder og brugerdefinerede koder for manglende værdier må kun anvendes for numeriske og kategoriske variable med datatyperne numerisk heltal og decimal.</li><li>Hvis brugerdefinerede koder for manglende værdier er anvendt for variable med datatypen dato eller tidstempel skal dette beskrives i et kontekstdokument i afleveringspakken.</li><li>Brugerdefinerede koder for manglende værdier i en variabel skal altid fremgå af kodelisten [Value labels] for denne variabel</li><li>Der skal være fuld overensstemmelse mellem datatype og længde for de variable, der indgår i en reference mellem flere statistikfiler i afleveringspakken.</li><li>Alle koderværdier i data [Value] skal være beskrevet med en kodeforklaring [Value labels]</li><li>Kodelister [Value labels] må kun være tilknyttet numeriske og kategoriske variable med datatyperne numerisk heltal, decimal og tekst.</li><li>Koder [Values] skal være unikke inden for samme kodeliste [Value labelsknyttet til en variabel]</li></ul></br>Læs <a id=\"instructions-link2\" href=\"#Bilag9Kravtilafleveringspakke.pdf\">Bilag 9_Krav til afleveringspakke.pdf</a> igennem, for en mere detaljeret beskrivelse af hvad en afleveringspakke er og hvilke krav der stilles til data- og metadatafilen.</br>Her findes hele <a id=\"instructions-link3\" href=\"#Bekendtgoerelse1007plusinklbilag9.pdf\">Bekendtgørelse 1007+ inkl bilag 9.pdf</a>.<br/><br/></span>"
             }
         ]
     },
@@ -91,19 +303,19 @@
         "keys": [
             {
                 "key": "nemesis-Title",
-                "value": "Test delivery package"
+                "value": "Test afleveringspakke"
             },
             {
                 "key": "nemesis-title-H2",
-                "value": "Test a delivery package"
+                "value": "Test en afleveringspakke"
             },
             {
                 "key": "nemesis-logFile-runDate",
-                "value": "Date of test run"
+                "value": "Dato for testkørsel"
             },
             {
                 "key": "nemesis-processing-CheckData-FileRow-ColumnsString-ValueBlankCharacters-WarningXXX",
-                "value": "<i class=\"fas fa-exclamation-triangle warning\"><div id=\"15811\" hidden=\"true\">yyyy</div></i>The value for the variable <i> {3} </i> in row <i> {2} </i> is contained in the data file <i> {0} </i> in the value before or after the blank. If these spaces are meaningful, they must be replaced by some allowed characters.<br/>"
+                "value": "<i class=\"fas fa-exclamation-triangle warning\"><div id=\"15811\" hidden=\"true\">xxxx</div></i>Der findes foran- eller efterstillede blanktegn i værdien for variablen <i>{3}</i> i række <i>{2}</i> i datafilen <i>{0}</i>. Hvis disse blanktegn er betydningsbærende skal de erstattes af nogle tilladte tegn.<br/>"
             }
         ]
     }
