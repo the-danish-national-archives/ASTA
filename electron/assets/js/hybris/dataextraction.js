@@ -34,9 +34,7 @@ function (n) {
             outputStatisticsErrorSpn: null,
             outputStatisticsErrorText: null,
             outputStatisticsOkCopyScriptSpn: null,
-            outputStatisticsOkCopyScriptText: null,
             outputStatisticsOkCopyScriptInfoSpn: null,
-            outputStatisticsOkCopyScriptInfoText: null,
             outputScriptRequiredFilesWarningTitle: null,
             outputScriptRequiredFilesWarningText: null,
             outputScriptEncodingFileErrorTitle: null,
@@ -45,7 +43,6 @@ function (n) {
             outputScriptCloseApplicationWarningText: null,
             selectedStatisticsFilePath: null,
             outputScriptOkSpn: null,
-            outputScriptOkText: null,
             metadataFileName: null,
             scriptPanel1: null,
             scriptPanel2: null,  
@@ -139,8 +136,8 @@ function (n) {
                         }
                         else {
                             var scriptFileName = GetScriptFileName();
-                            settings.outputStatisticsOkCopyScriptSpn.innerHTML = settings.outputStatisticsOkCopyScriptText.format(scriptFileName);
-                            settings.outputStatisticsOkCopyScriptInfoSpn.innerHTML = settings.outputStatisticsOkCopyScriptInfoText.format(settings.scriptApplication);
+                            settings.outputStatisticsOkCopyScriptSpn.innerHTML = Rigsarkiv.Language.callback().getValue("hybris-output-script-OKCopyScript").format(scriptFileName);
+                            settings.outputStatisticsOkCopyScriptInfoSpn.innerHTML = Rigsarkiv.Language.callback().getValue("hybris-output-script-OKCopyScriptInfo").format(settings.scriptApplication);
                             settings.scriptPathLink.innerHTML = "[{0}]".format(GetFolderPath());
                             settings.scriptPanel1.hidden = true;
                             settings.scriptPanel2.hidden = false;
@@ -380,7 +377,7 @@ function (n) {
         //Redirect to metadata tab
         var Redirect = function() {
             var fileName = GetFileName();
-            settings.outputScriptOkSpn.innerHTML = settings.outputScriptOkText.format(fileName);
+            settings.outputScriptOkSpn.innerHTML = Rigsarkiv.Language.callback().getValue("hybris-output-script-Ok").format(fileName);
             settings.outputScriptOkSpn.hidden = false;
             settings.metadataFileName.value = fileName.substring(0,fileName.indexOf("."));
             console.logInfo("initialize variables Dropdown","Rigsarkiv.Hybris.DataExtraction.Redirect"); 
@@ -476,17 +473,14 @@ function (n) {
                 settings.outputStatisticsErrorSpn = document.getElementById(outputStatisticsErrorId);
                 settings.outputStatisticsErrorText = settings.outputStatisticsErrorSpn.innerHTML;
                 settings.outputStatisticsOkCopyScriptSpn = document.getElementById(outputStatisticsOkCopyScriptId);
-                settings.outputStatisticsOkCopyScriptText = settings.outputStatisticsOkCopyScriptSpn.innerHTML;
                 settings.scriptPanel1 = document.getElementById(scriptPanel1Id);
                 settings.scriptPanel2 = document.getElementById(scriptPanel2Id);
                 settings.okScriptBtn = document.getElementById(okScriptBtnId);
                 settings.okScriptDataPath = document.getElementById(okScriptDataPathId);
                 settings.outputStatisticsOkCopyScriptInfoSpn = document.getElementById(outputStatisticsOkCopyScriptInfoId);
-                settings.outputStatisticsOkCopyScriptInfoText = settings.outputStatisticsOkCopyScriptInfoSpn.innerHTML;
                 settings.outputScriptRequiredFilesWarningTitle = document.getElementById(outputScriptRequiredFilesWarningPrefixId + "-Title");
                 settings.outputScriptRequiredFilesWarningText = document.getElementById(outputScriptRequiredFilesWarningPrefixId + "-Text");
                 settings.outputScriptOkSpn =  document.getElementById(outputScriptOkId);
-                settings.outputScriptOkText = settings.outputScriptOkSpn.innerHTML;
                 settings.outputScriptEncodingFileErrorTitle = document.getElementById(outputScriptEncodingFileErrorPrefixId + "-Title");
                 settings.outputScriptEncodingFileErrorText = document.getElementById(outputScriptEncodingFileErrorPrefixId + "-Text");
                 settings.nextBtn = document.getElementById(nextId);

@@ -71,7 +71,7 @@
                                 <div class="infoBox" id="hybris-reset-hide-box">
                                     <span id="hybris-output-structure-Ok" hidden="true" class="confirmation languages"></span>
                                 </div>
-                                <h2 class="boldfaced" id="hybris-output-statistics-header-trin1"></h2>
+                                <h2 class="boldfaced" id="hybris-output-statistics-header-trin1">{0}<span class="trinHeader">{1}</span></h2>
                             </p>
                             <div class="languages" id="hybris-message-statistics-Description-DIV"></div>                            
                             <br/> <br/> <br/>
@@ -95,24 +95,15 @@
                                 <div class="infoBox">
                                     <span class="confirmation"><i class="fas fa-check-circle ok"></i>Eksport script er dannet og ligger <a id="hybris-output-script-dataPath">her</a></span>
                                 </div>
-                                <h2 class="boldfaced">TRIN 2: Kør eksport script <div class="trinHeader"><span id="hybris-output-statistics-header-trin2">{0}</span> - <a id="hybris-output-statistics-headerLink-trin2"></a></div></h2>
+                                <h2 class="boldfaced" id="hybris-output-statistics-header-trin2">{0} <div class="trinHeader"><span>{1}</span> - <a id="hybris-output-statistics-headerLink-trin2"></a></div></h2>
                             </p>
-                            <span id="hybris-output-script-OKCopyScriptInfo">
-                                <p class="boldfaced">Sådan gør du: </p>
-                                <p>
-                                    <ol>
-                                        <li>Lad ASTA være åbent (luk ikke dette program ned!)</li>
-                                        <li>Åben eksport scriptet i {0} og kør scriptet uændret</li>
-                                        <li>Vend tilbage til ASTA, når scriptet er kørt færdigt og klik på knappen "Næste" nedenfor</li>
-                                    </ol>  
-                                </p>
-                            </span>
-                            <button id="hybris-script-okBtn">Næste</button> 
+                            <span id="hybris-output-script-OKCopyScriptInfo"></span>
+                            <button class="languages" id="hybris-script-okBtn"></button> 
                             <div id="hybris-script-Spinner" hidden="true" class="lds-ring"><div></div><div></div><div></div><div></div></div>
                             <br/>
                             <br/>
-                            <span id="hybris-output-script-OKCopyScript" class="greyText">INFO: Eksport scriptet {0} er dannet og ligger her: </span><a id="hybris-output-script-dataPath-link">{0}</a>                          
-                            <span id="hybris-output-script-Ok" hidden="true"><br/>Der er udtrukket data og metadata fra statistikfilen {0}.</span>
+                            <span id="hybris-output-script-OKCopyScript" class="greyText"></span> <a id="hybris-output-script-dataPath-link">{0}</a>                          
+                            <span id="hybris-output-script-Ok" hidden="true"></span>
                             <span id="hybris-output-script-Error" hidden="true"><br/>Error: {0}</span>
                             <span id="hybris-output-script-CloseApplicationWarning-Title" hidden="true">Statistikprogrammet</span>
                             <span id="hybris-output-script-CloseApplicationWarning-Text" hidden="true">Luk statistikfilen og export scriptet, før du klikker på knappen "Næste", for at gå til trin 3.</span>
@@ -121,7 +112,7 @@
                             <span id="hybris-output-script-EncodingFileError-Title" hidden="true">Tegnsæt skal være indkodet som UTF-8</span>
                             <span id="hybris-output-script-EncodingFileError-Text" hidden="true">Følgende filer udtrukket til afleveringspakken er muligvis ikke indkodet som UTF-8: {0}. Vil du fortsætte?</span>
                             <br /><br />
-                            <button id="hybris-script-nextBtn" hidden="true">Næste</button>
+                            <button class="languages" id="hybris-script-nextBtn" hidden="true"></button>
                         </div>
                     </div>
                     <div id="hybris-panel-metdata" class="formularContainer" hidden="true">
@@ -130,7 +121,7 @@
                                 <div class="infoBox">
                                     <span class="confirmation"><i class="fas fa-check-circle ok"></i>Der er udtrukket data- og metadata fra statistikfilen</span>
                                 </div>
-                                <h2 class="boldfaced">TRIN 3: Indtast informationer om statistikfilen <div class="trinHeader"><span id="hybris-output-statistics-header-trin3">{0}</span> - <a id="hybris-output-statistics-headerLink-trin3"></a></div></h2>
+                                <h2 class="boldfaced">TRIN 3: Indtast informationer om statistikfilen <div class="trinHeader"><span id="hybris-output-statistics-header-trin3"></span> - <a id="hybris-output-statistics-headerLink-trin3"></a></div></h2>
                                 <i>* Feltet skal udfyldes</i>
                             </p>
                             <div id="keyVarContainer">

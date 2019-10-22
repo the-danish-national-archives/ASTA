@@ -29,6 +29,7 @@ function (n) {
             outputExistsSpn: null,
             outputOkSpn: null,
             outputStatisticsHeaderTrin1Spn: null,
+            outputStatisticsHeaderTrin1Text: null,
             outputStatisticsHeaderTrin2Spn: null,
             outputStatisticsHeaderTrin2Text: null,
             outputStatisticsHeaderTrin3Spn: null,
@@ -82,8 +83,8 @@ function (n) {
             settings.outputOkSpn.hidden = false;
             
             var folder = folders[folders.length - 1];           
-            settings.outputStatisticsHeaderTrin1Spn.innerHTML = Rigsarkiv.Language.callback().getValue("hybris-output-statistics-header-trin1").format(folder);
-            settings.outputStatisticsHeaderTrin2Spn.innerHTML = settings.outputStatisticsHeaderTrin2Text.format(folder);
+            settings.outputStatisticsHeaderTrin1Spn.innerHTML = settings.outputStatisticsHeaderTrin1Text.format(Rigsarkiv.Language.callback().getValue("hybris-output-statistics-header-trin1"),folder);
+            settings.outputStatisticsHeaderTrin2Spn.innerHTML = settings.outputStatisticsHeaderTrin2Text.format(Rigsarkiv.Language.callback().getValue("hybris-output-statistics-header-trin2"),folder);
             settings.outputStatisticsHeaderTrin3Spn.innerHTML = settings.outputStatisticsHeaderTrin3Text.format(folder);
             settings.outputStatisticsHeaderInformation2Spn.innerHTML = settings.outputStatisticsHeaderInformation2Text.format(folder);
             settings.outputStatisticsHeaderReferencesSpn.innerHTML = settings.outputStatisticsHeaderReferencesText.format(folder);
@@ -214,10 +215,11 @@ function (n) {
                 settings.statisticsTab = document.getElementById(statisticsTabId);
                 settings.indexfilesTab = document.getElementById(indexfilesTabId);
                 settings.outputStatisticsHeaderTrin1Spn = document.getElementById(outputStatisticsHeaderTrin1);
+                settings.outputStatisticsHeaderTrin1Text = settings.outputStatisticsHeaderTrin1Spn.innerHTML;
                 settings.outputStatisticsHeaderTrin2Spn = document.getElementById(outputStatisticsHeaderTrin2);
-                settings.outputStatisticsHeaderTrin2Text = settings.outputStatisticsHeaderTrin1Spn.innerHTML;
+                settings.outputStatisticsHeaderTrin2Text = settings.outputStatisticsHeaderTrin2Spn.innerHTML;
                 settings.outputStatisticsHeaderTrin3Spn = document.getElementById(outputStatisticsHeaderTrin3);
-                settings.outputStatisticsHeaderTrin3Text = settings.outputStatisticsHeaderTrin1Spn.innerHTML;
+                settings.outputStatisticsHeaderTrin3Text = settings.outputStatisticsHeaderTrin3Spn.innerHTML;
                 settings.outputStatisticsHeaderInformation2Spn = document.getElementById(outputStatisticsHeaderInformation2);
                 settings.outputStatisticsHeaderInformation2Text = settings.outputStatisticsHeaderInformation2Spn.innerHTML;
                 settings.outputStatisticsHeaderReferencesSpn = document.getElementById(outputStatisticsHeaderReferences);

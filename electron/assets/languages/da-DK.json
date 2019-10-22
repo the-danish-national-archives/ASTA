@@ -511,7 +511,7 @@
             },
             {
                 "key": "hybris-output-statistics-header-trin1",
-                "value": "Udtræk data fra statistikfilen <span class=\"trinHeader\">{0}</span>"
+                "value": "Udtræk data fra statistikfilen"
             },
             {
                 "key": "hybris-message-statistics-Description-DIV",
@@ -572,6 +572,30 @@
             {
                 "key": "hybris-message-statistics-SASCatalogWarning-Text",
                 "value": "Du er ved at udtrække data fra en SAS-datafil uden katalog (format-filen). Enten mangler SAS katalogfilen eller den er navngivet forkert. Når der udtrækkes data for en SAS-datafil med katalog, skal katalogfilen (.sas7bcat) placeres i samme mappe som den valgte SAS-datafil (.sas7bdat), der skal laves udtræk fra, og katalogfilen skal navngives på samme måde som SAS-datafilen. OBS: Det er vigtigt at du omdøber en kopi af katalogfilen, ellers kan du ikke åbne statistikfilen korrekt efterfølgende i dit statistikprogram. OBS: Katalogfilen må kun indeholde value labels (formats) som anvendes i den statistikfil, som udtrækket laves fra. Klik ”FORSÆT”, hvis du ønsker at fortsætte udtræk uden katalogfil. Klik ”FORTRYD” hvis du ønsker at vælge ny statistikfil med katalog."
+            },
+            {
+                "key": "hybris-output-statistics-header-trin2",
+                "value": "TRIN 2: Kør eksport script"
+            },
+            {
+                "key": "hybris-output-script-OKCopyScriptInfo",
+                "value": "<p class=\"boldfaced\">Sådan gør du: </p><p><ol><li>Lad ASTA være åbent (luk ikke dette program ned!)</li><li>Åben eksport scriptet i {0} og kør scriptet uændret</li><li>Vend tilbage til ASTA, når scriptet er kørt færdigt og klik på knappen \"Næste\" nedenfor</li></ol></p>"
+            },
+            {
+                "key": "hybris-script-okBtn",
+                "value": "Næste"
+            },
+            {
+                "key": "hybris-output-script-OKCopyScript",
+                "value": "INFO: Eksport scriptet {0} er dannet og ligger her:"
+            },
+            {
+                "key": "hybris-output-script-Ok",
+                "value": "<br/>Der er udtrukket data og metadata fra statistikfilen {0}."
+            },
+            {
+                "key": "hybris-script-nextBtn",
+                "value": "Næste"
             }
         ]
     },
