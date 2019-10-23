@@ -163,78 +163,67 @@
                     </div>
                     <div id="hybris-panel-references" class="formularContainer" hidden="true">
                         <p>
-                            <h2 class="boldfaced">Tilføj relationer mellem datasæt i afleveringspakken<span id="hybris-output-statistics-header-references" class="trinHeader">{0}</span></h2>
-                            <p>Du kan her angive relationer mellem datasæt i afleveringspakken, hvis de findes. <br />Du skal kun angive de relationer, hvor sammenfletningen resulterer i, at variable tillægges datasættet (horisontal sammenfletning). Dvs. i det tilfælde hvor der er flere datasæt med forskellige variable, men samme individer, som over en fælles flettevariabel kan samles til et datasæt.</p>
-                            <span class="alert-warning"><strong>Information!</strong> Relationer til eventuelle nøglefiler skal også angives her</span><br/>
-                            <br />
+                            <h2 class="boldfaced"><span class="languages" id="hybris-output-statistics-header-references-SPAN"></span><span id="hybris-output-statistics-header-references" class="trinHeader"></span></h2>
+                            <p class="languages" id="hybris-panel-references-info-P"></p>
+                            <span class="alert-warning languages" id="hybris-panel-references-warning-SPAN"></span><br/>
+                            <br/>
                         </p>
                         <div id="referenceContainer">
                             <span>
-                                <label class="descriptionLabel boldfaced" for="hybrisreferencestable"><b></b>Datasæt 1</label>
+                                <label class="descriptionLabel boldfaced languages" id="hybris-references-tables-LABEL" for="hybrisreferencestable"></label>
                                 <select name="hybrisreferencestables" class="dropDownSizing" id="hybris-references-tables"></select>
                             </span>
                             <i id="hybris-message-references-referencesTable" class="far fa-question-circle"></i>
-                            <span id="hybris-message-references-referencesTable-Title" hidden="true">Datafilen som referencen laves fra</span>
-                            <span id="hybris-message-references-referencesTable-Text" hidden="true">Datafilen som referencen laves fra. Referencevariablen fra denne datafil skal altid referere en nøglevariabel (Flettevariabel 2) i fremmeddatafilen (Datasæt 2).</span>
-                            <br />
+                            <br/>
                             <span>
-                                <label class="descriptionLabel boldfaced" for="hybrisreferencesrefVar">Flettevariabel 1</label>
+                                <label class="descriptionLabel boldfaced languages" id="hybris-references-refVars-LABEL" for="hybrisreferencesrefVar"></label>
                                 <select name="hybrisreferencesrefVar" class="dropDownSizing" id="hybris-references-refVars"></select>
                             </span>
                             <i id="hybris-message-references-referenceVariable" class="far fa-question-circle"></i>
-                            <span id="hybris-message-references-referenceVariable-Title" hidden="true">REFERENCE (referencevariabel)</span>
-                            <span id="hybris-message-references-referenceVariable-Text" hidden="true">Variabelnavn(e) for variable fra den statistikfil som referencen laves fra (referencevariabel), som refererer til nøglevariablen (fremmedvariablen = flettevariabel 2) i den anden statistikfil i afleveringspakken (fremmeddatafilen = datasæt 2).</span>
-                            <br />
-                            <button id="hybris-references-addReferenceVariableBtn">Tilføj variabel</button>
-                            <br />
-                            <br>
+                            <br/>
+                            <button class="languages" id="hybris-references-addReferenceVariableBtn"></button>
+                            <br/><br/>
                             <table id="hybris-references-referenceVariablesTable" hidden="true">
                                 <tr>
-                                    <th>Flettevariabel 1</th>
+                                    <th class="languages" id="hybris-references-referenceVariablesTable-TH"></th>
                                 </tr>
                             </table>
                             <br>
                             <br>
                             <span>
-                                <label class="descriptionLabel boldfaced" for="hybrisreferencesforeigntable">Datasæt 2</label>
+                                <label class="descriptionLabel boldfaced languages" id="hybris-references-foreignTables-LABEL" for="hybrisreferencesforeigntable"></label>
                                 <select name="hybrisreferencestables" class="dropDownSizing" id="hybris-references-foreignTables"></select>
                             </span>
                             <i id="hybris-message-references-foreignFile" class="far fa-question-circle"></i>
-                            <span id="hybris-message-references-foreignFile-Title" hidden="true">REFERENCE (fremmeddatafil)</span>
-                            <span id="hybris-message-references-foreignFile-Text" hidden="true">Navn på den anden statistikfil i afleveringspakken, der refereres til (fremmeddatafil).</span>
-                            <br />
+                            <br/>
                             <span>
-                                <label class="descriptionLabel boldfaced" for="hybrisreferencesforeignVariable">Flettevariabel 2 (unik)</label>
+                                <label class="descriptionLabel boldfaced languages" id="hybris-references-foreignVariables-LABEL" for="hybrisreferencesforeignVariable"></label>
                                 <select name="hybrisreferencesforeignVariables" class="dropDownSizing" id="hybris-references-foreignVariables"></select>
                             </span>
                             <i id="hybris-message-references-foreignVariable" class="far fa-question-circle"></i>
-                            <span id="hybris-message-references-foreignVariable-Title" hidden="true">REFERENCE (fremmedvariabel)</span>
-                            <span id="hybris-message-references-foreignVariable-Text" hidden="true">Variabelnavn(e) for fremmeddatafilens (Datasæt 2) nøglevariabel.</span>
-                            <br />
-                            <button id="hybris-references-addForeignVariableBtn">Tilføj variabel</button>
-                            <br />
-                            <br />
+                            <br/>
+                            <button class="languages" id="hybris-references-addForeignVariableBtn"></button>
+                            <br/><br/>
                             <table id="hybris-references-foreignVariablesTable" hidden="true">
                                 <tr>
-                                    <th>Flettevariabel 2</th>
+                                    <th class="languages" id="hybris-references-foreignVariablesTable-TH"></th>
                                 </tr>
                             </table>                            
-                            <button id="hybris-references-addReferenceBtn" style="margin-left: 43%;">Tilføj reference</button>
-                            <br />
-                            <br>
+                            <button class="languages" id="hybris-references-addReferenceBtn" style="margin-left: 43%;"></button>
+                            <br/><br/>
                             <table id="hybris-references-dataTable" hidden="true">
                                 <tr>
-                                    <th>Datasæt 1</th>
-                                    <th>Flettevariabel 1</th>
-                                    <th>Datasæt 2</th>
-                                    <th>Flettevariabel 2</th>
+                                    <th class="languages" id="hybris-references-dataTable-TH1"></th>
+                                    <th class="languages" id="hybris-references-dataTable-TH2"></th>
+                                    <th class="languages" id="hybris-references-dataTable-TH3"></th>
+                                    <th class="languages" id="hybris-references-dataTable-TH4"></th>
                                 </tr>
                             </table>
-                            <br />
+                            <br/>
                         </div>
-                        <button id="hybris-references-cancelBtn">Fortryd alt</button>
+                        <button class="languages" id="hybris-references-cancelBtn"></button>
                         <br>
-                        <button id="hybris-references-okBtn">Næste</button>
+                        <button class="languages" id="hybris-references-okBtn"></button>
                         <br/>
                         <span id="hybris-output-references-Error" hidden="true"><br />Error: {0}</span>
                         <span id="hybris-output-references-referenceRequired-Title" hidden="true">Referencen</span>

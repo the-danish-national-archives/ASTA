@@ -832,6 +832,110 @@
             {
                 "key": "hybris-output-metdata-newExtractionWarning-Text",
                 "value": "Er du sikker på at du vil lave udtræk fra en ny statistikfil til afleveringspakken?"
+            },
+            {
+                "key": "hybris-output-statistics-header-references-SPAN",
+                "value": "Tilføj relationer mellem datasæt i afleveringspakken"
+            },
+            {
+                "key": "hybris-panel-references-info-P",
+                "value": "Du kan her angive relationer mellem datasæt i afleveringspakken, hvis de findes. <br />Du skal kun angive de relationer, hvor sammenfletningen resulterer i, at variable tillægges datasættet (horisontal sammenfletning). Dvs. i det tilfælde hvor der er flere datasæt med forskellige variable, men samme individer, som over en fælles flettevariabel kan samles til et datasæt."
+            },
+            {
+                "key": "hybris-panel-references-warning-SPAN",
+                "value": "<strong>Information!</strong> Relationer til eventuelle nøglefiler skal også angives her"
+            },
+            {
+                "key": "hybris-references-tables-LABEL",
+                "value": "Datasæt 1"
+            },
+            {
+                "key": "hybris-message-references-referencesTable-Title",
+                "value": "Datafilen som referencen laves fra"
+            },
+            {
+                "key": "hybris-message-references-referencesTable-Text",
+                "value": "Datafilen som referencen laves fra. Referencevariablen fra denne datafil skal altid referere en nøglevariabel (Flettevariabel 2) i fremmeddatafilen (Datasæt 2)."
+            },
+            {
+                "key": "hybris-references-refVars-LABEL",
+                "value": "Flettevariabel 1"
+            },
+            {
+                "key": "hybris-message-references-referenceVariable-Title",
+                "value": "REFERENCE (referencevariabel)"
+            },
+            {
+                "key": "hybris-message-references-referenceVariable-Text",
+                "value": "Variabelnavn(e) for variable fra den statistikfil som referencen laves fra (referencevariabel), som refererer til nøglevariablen (fremmedvariablen = flettevariabel 2) i den anden statistikfil i afleveringspakken (fremmeddatafilen = datasæt 2)."
+            },
+            {
+                "key": "hybris-references-addReferenceVariableBtn",
+                "value": "Tilføj variabel"
+            },
+            {
+                "key": "hybris-references-referenceVariablesTable-TH",
+                "value": "Flettevariabel 1"
+            },
+            {
+                "key": "hybris-references-foreignTables-LABEL",
+                "value": "Datasæt 2"
+            },
+            {
+                "key": "hybris-message-references-foreignFile-Title",
+                "value": "REFERENCE (fremmeddatafil)"
+            },
+            {
+                "key": "hybris-message-references-foreignFile-Text",
+                "value": "Navn på den anden statistikfil i afleveringspakken, der refereres til (fremmeddatafil)."
+            },
+            {
+                "key": "hybris-references-foreignVariables-LABEL",
+                "value": "Flettevariabel 2 (unik)"
+            },
+            {
+                "key": "hybris-message-references-foreignVariable-Title",
+                "value": "REFERENCE (fremmedvariabel)"
+            },
+            {
+                "key": "hybris-message-references-foreignVariable-Text",
+                "value": "Variabelnavn(e) for fremmeddatafilens (Datasæt 2) nøglevariabel."
+            },
+            {
+                "key": "hybris-references-addForeignVariableBtn",
+                "value": "Tilføj variabel"
+            },
+            {
+                "key": "hybris-references-foreignVariablesTable-TH",
+                "value": "Flettevariabel 2"
+            },
+            {
+                "key": "hybris-references-addReferenceBtn",
+                "value": "Tilføj reference"
+            },
+            {
+                "key": "hybris-references-dataTable-TH1",
+                "value": "Datasæt 1"
+            },
+            {
+                "key": "hybris-references-dataTable-TH2",
+                "value": "Flettevariabel 1"
+            },
+            {
+                "key": "hybris-references-dataTable-TH3",
+                "value": "Datasæt 2"
+            },
+            {
+                "key": "hybris-references-dataTable-TH4",
+                "value": "Flettevariabel 2"
+            },
+            {
+                "key": "hybris-references-cancelBtn",
+                "value": "Fortryd alt"
+            },
+            {
+                "key": "hybris-references-okBtn",
+                "value": "Næste"
             }
         ]
     },
