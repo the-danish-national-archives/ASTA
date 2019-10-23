@@ -31,7 +31,6 @@ function (n) {
             outputStatisticsHeaderTrin1Spn: null,
             outputStatisticsHeaderTrin2Spn: null,
             outputStatisticsHeaderTrin3Spn: null,
-            outputStatisticsHeaderTrin3Text: null,
             outputStatisticsHeaderInformation2Spn: null,
             outputStatisticsHeaderInformation2Text: null,
             outputStatisticsHeaderReferencesSpn: null,
@@ -83,7 +82,7 @@ function (n) {
             var folder = folders[folders.length - 1];           
             settings.outputStatisticsHeaderTrin1Spn.innerHTML = folder;
             settings.outputStatisticsHeaderTrin2Spn.innerHTML = folder;
-            settings.outputStatisticsHeaderTrin3Spn.innerHTML = settings.outputStatisticsHeaderTrin3Text.format(folder);
+            settings.outputStatisticsHeaderTrin3Spn.innerHTML = folder;
             settings.outputStatisticsHeaderInformation2Spn.innerHTML = settings.outputStatisticsHeaderInformation2Text.format(folder);
             settings.outputStatisticsHeaderReferencesSpn.innerHTML = settings.outputStatisticsHeaderReferencesText.format(folder);
             settings.outputStatisticsHeaderindexfilesSpn.innerHTML = settings.outputStatisticsHeaderindexfilesText.format(folder);
@@ -215,7 +214,6 @@ function (n) {
                 settings.outputStatisticsHeaderTrin1Spn = document.getElementById(outputStatisticsHeaderTrin1);
                 settings.outputStatisticsHeaderTrin2Spn = document.getElementById(outputStatisticsHeaderTrin2);
                 settings.outputStatisticsHeaderTrin3Spn = document.getElementById(outputStatisticsHeaderTrin3);
-                settings.outputStatisticsHeaderTrin3Text = settings.outputStatisticsHeaderTrin3Spn.innerHTML;
                 settings.outputStatisticsHeaderInformation2Spn = document.getElementById(outputStatisticsHeaderInformation2);
                 settings.outputStatisticsHeaderInformation2Text = settings.outputStatisticsHeaderInformation2Spn.innerHTML;
                 settings.outputStatisticsHeaderReferencesSpn = document.getElementById(outputStatisticsHeaderReferences);

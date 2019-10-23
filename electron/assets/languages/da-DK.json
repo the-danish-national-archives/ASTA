@@ -620,6 +620,186 @@
             {
                 "key": "hybris-output-script-EncodingFileError-Text",
                 "value": "Følgende filer udtrukket til afleveringspakken er muligvis ikke indkodet som UTF-8: {0}. Vil du fortsætte?"
+            },
+            {
+                "key": "hybris-panel-metdata-confirmation1-SPAN",
+                "value": "Der er udtrukket data- og metadata fra statistikfilen"
+            },
+            {
+                "key": "hybris-output-statistics-header-trin3-SPAN",
+                "value": "TRIN 3: Indtast informationer om statistikfilen"
+            },
+            {
+                "key": "hybris-panel-metdata-information1-I",
+                "value": "* Feltet skal udfyldes"
+            },
+            {
+                "key": "hybris-metdata-fileName-LABEL",
+                "value": "Datafilnavn* (uden extension)"
+            },
+            {
+                "key": "hybris-message-metdata-fileName-Title",
+                "value": "DATAFILNAVN"
+            },
+            {
+                "key": "hybris-message-metdata-fileName-Text",
+                "value": "Navn på statistikfilen, der laves udtræk fra, som den benævnes i brugssammenhæng."
+            },
+            {
+                "key": "hybris-metdata-fileDescription-LABEL",
+                "value": "Datafilbeskrivelse*"
+            },
+            {
+                "key": "hybris-metdata-fileDescription",
+                "value": "En kort beskrivelse af datafilen (4096 tegn)."
+            },
+            {
+                "key": "hybris-message-metdata-fileDescription-Title",
+                "value": "DATAFILBESKRIVELSE"
+            },
+            {
+                "key": "hybris-message-metdata-fileDescription-Text",
+                "value": "Beskrivelse af statistikfilens indhold. Fx den fulde titel for statistikfilen/studiet eller en eksisterende projektbeskrivelse, der præcist dækker statistikfilens indhold."
+            },
+            {
+                "key": "hybris-metdata-Variables-LABEL",
+                "value": "Nøglevariabel"
+            },
+            {
+                "key": "hybris-message-metdata-keyVariable-Title",
+                "value": "NØGLEVARIABEL"
+            },
+            {
+                "key": "hybris-message-metdata-keyVariable-Text",
+                "value": "Statistikfilens unikke nøglevariabel angivet med navne på den/de variable, som nøglevariablen består af. Flere variabelnavne adskilles med mellemrum."
+            },
+            {
+                "key": "hybris-metdata-addVarKeyBtn",
+                "value": "Tilføj variabel"
+            },
+            {
+                "key": "hybris-metdata-varKeys-TH",
+                "value": "Nøglevariabel"
+            },
+            {
+                "key": "hybris-metdata-cancelBtn",
+                "value": "Fortryd nøglevariabel"
+            },
+            {
+                "key": "hybris-metdata-okBtn",
+                "value": "Næste"
+            },
+            {
+                "key": "hybris-output-metdata-fileNameRequired-Title",
+                "value": "Datafilnavn"
+            },
+            {
+                "key": "hybris-output-metdata-fileNameRequired-Text",
+                "value": "Datafilnavn skal udfyldes"
+            },
+            {
+                "key": "hybris-output-metdata-fileDescrRequired-Title",
+                "value": "Datafilbeskrivelse"
+            },
+            {
+                "key": "hybris-output-metdata-fileDescrRequired-Text",
+                "value": "Datafilbeskrivelse skal udfyldes"
+            },
+            {
+                "key": "hybris-output-metdata-fileNameNumberFirst-Title",
+                "value": "Datafilnavn"
+            },
+            {
+                "key": "hybris-output-metdata-fileNameNumberFirst-Text",
+                "value": "Det angivne datafilnavn begynder med et tal. Dette er ikke lovligt."
+            },
+            {
+                "key": "hybris-output-metdata-fileNameIllegalChar-Title",
+                "value": "Datafilnavn"
+            },
+            {
+                "key": "hybris-output-metdata-fileNameIllegalChar-Text",
+                "value": "Det angivne datafilnavn indeholder ulovlige tegn. Kun tal, bogstaver og underscore er lovlige tegn for et datafilnavn"
+            },
+            {
+                "key": "hybris-output-metdata-fileNameLength-Title",
+                "value": "Datafilnavn"
+            },
+            {
+                "key": "hybris-output-metdata-fileNameLength-Text",
+                "value": "Det angivne datafilnavn er længere end den tilladte længde på 128 tegn. Forkort datafilnavnet."
+            },
+            {
+                "key": "hybris-output-metdata-fileNamereservedWord-Title",
+                "value": "Datafilnavn"
+            },
+            {
+                "key": "hybris-output-metdata-fileNamereservedWord-Text",
+                "value": "Det angivne datafilnavn er et reserveret ord i SQL 99 standarden. Omkrans datafilnavnet med dobbeltapostrof (fx \"select\") eller omdøb datafilnavnet."
+            },
+            {
+                "key": "hybris-output-metdata-varKeyRequired-Title",
+                "value": "Nøglen"
+            },
+            {
+                "key": "hybris-output-metdata-varKeyRequired-Text",
+                "value": "Nøglen skal vælges."
+            },
+            {
+                "key": "hybris-output-metdata-keyNumberFirst-Title",
+                "value": "Nøglevariabel"
+            },
+            {
+                "key": "hybris-output-metdata-keyNumberFirst-Text",
+                "value": "En angivet nøglevariabel begynder med et tal. Dette er ikke lovligt."
+            },
+            {
+                "key": "hybris-output-metdata-keyIllegalChar-Title",
+                "value": "Nøglevariabel"
+            },
+            {
+                "key": "hybris-output-metdata-keyIllegalChar-Text",
+                "value": "En angivet nøglevariabel indeholder ulovlige tegn. Kun tal, bogstaver og underscore er lovlige tegn for en Nøglevariabel"
+            },
+            {
+                "key": "hybris-output-metdata-keyLength-Title",
+                "value": "Nøglevariabel"
+            },
+            {
+                "key": "hybris-output-metdata-keyLength-Text",
+                "value": "En angivet nøglevariabel er længere end den tilladte længde på 128 tegn. Forkort nøglevariabel."
+            },
+            {
+                "key": "hybris-output-metdata-keyReservedWord-Title",
+                "value": "Nøglevariabel"
+            },
+            {
+                "key": "hybris-output-metdata-keyReservedWord-Text",
+                "value": "En angivet nøglevariabel er et reserveret ord i SQL 99 standarden. Omkrans nøglevariabel med dobbeltapostrof (fx \"select\") eller omdøb nøglevariabel."
+            },
+            {
+                "key": "hybris-output-metdata-addKeyWarning-Title",
+                "value": "Nøglevariabel er ikke tilføjet"
+            },
+            {
+                "key": "hybris-output-metdata-addKeyWarning-Text",
+                "value": "Du har valgt en nøglevariabel som ikke er tilføjet. Hvis du vælger FORTSÆT medtages variablen ikke som nøglevariabel."
+            },
+            {
+                "key": "hybris-output-metdata-OkConfirm",
+                "value": "FORTSÆT"
+            },
+            {
+                "key": "hybris-output-metdata-CancelConfirm",
+                "value": "FORTRYD"
+            },
+            {
+                "key": "hybris-output-metdata-CloseApplicationError-Title",
+                "value": "Statistikprogrammet"
+            },
+            {
+                "key": "hybris-output-metdata-CloseApplicationError-Text",
+                "value": "Export script og/eller statistikfilen er stadig åben i statistikprogrammet.  Hybris kan derfor ikke færdiggøre data- og metadataudtrækket.  Slet afleveringspakken og begynd forfra"
             }
         ]
     },
