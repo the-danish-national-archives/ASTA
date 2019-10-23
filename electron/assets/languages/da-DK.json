@@ -936,6 +936,54 @@
             {
                 "key": "hybris-references-okBtn",
                 "value": "Næste"
+            },
+            {
+                "key": "hybris-output-references-referenceRequired-Title",
+                "value": "Referencen"
+            },
+            {
+                "key": "hybris-output-references-referenceRequired-Text",
+                "value": "Alle informationer skal udfyldes for en reference."
+            },
+            {
+                "key": "hybris-output-references-referenceNumberFirst-Text",
+                "value": "Det angivne {0} begynder med et tal. Dette er ikke lovligt."
+            },
+            {
+                "key": "hybris-output-references-referenceIllegalChar-Text",
+                "value": "Det angivne {0} indeholder ulovlige tegn. Kun tal, bogstaver og underscore er lovlige tegn for et {0}"
+            },
+            {
+                "key": "hybris-output-references-referenceLength-Text",
+                "value": "Det angivne {0} er længere end den tilladte længde på 128 tegn. Forkort {0}."
+            },
+            {
+                "key": "hybris-output-references-referenceReservedWord-Text",
+                "value": "Det angivne {0} er et reserveret ord i SQL 99 standarden. Omkrans {0} med dobbeltapostrof (fx \"select\") eller omdøb {0}."
+            },
+            {
+                "key": "hybris-output-references-referenceForeignVariable-Title",
+                "value": "fremmedvariabelnavn"
+            },
+            {
+                "key": "hybris-output-references-referenceRefVar-Title",
+                "value": "referencevariabelnavn"
+            },
+            {
+                "key": "hybris-output-references-addKeyWarning-Title",
+                "value": "Referencevariabel er ikke tilføjet"
+            },
+            {
+                "key": "hybris-output-references-addKeyWarning-Text",
+                "value": "Du har valgt en referencevariabel som ikke er tilføjet. Hvis du vælger FORTSÆT medtages variablen ikke som referencevariabel."
+            },
+            {
+                "key": "hybris-output-references-OkConfirm",
+                "value": "FORTSÆT"
+            },
+            {
+                "key": "hybris-output-references-CancelConfirm",
+                "value": "FORTRYD"
             }
         ]
     },

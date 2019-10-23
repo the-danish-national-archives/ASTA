@@ -28,14 +28,6 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 refVarsDropdown: null,
                 foreignVariablesDropdown: null,
                 addReferenceBtn: null,
-                referenceReqTitle: null,
-                referenceReqText: null,
-                numberFirstReferenceText: null,
-                illegalCharReferenceText: null,
-                referenceLengthText: null,
-                referenceReservedWordText: null,
-                foreignVariableTitle: null,
-                referenceVariableTitle: null,
                 referencesTbl: null,
                 indexfilesTab: null,
                 addReferenceVariableBtn: null,
@@ -43,10 +35,6 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 addForeignVariableBtn: null,
                 foreignVariablesTbl: null,
                 cancelBtn: null,
-                addKeyWarningTitle: null,
-                addKeyWarningText: null,
-                okConfirm: null,
-                cancelConfirm: null,
                 foreignVariables: [],
                 referenceVariables: [],
                 dataPathPostfix: "Data",
@@ -135,25 +123,25 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 var result = true;
                 var referenceTypeTitle = "";
                 switch(referenceType) {
-                    case "foreignVariable" : referenceTypeTitle = settings.foreignVariableTitle.innerHTML ;break;
-                    case "referenceVariable" : referenceTypeTitle = settings.referenceVariableTitle.innerHTML ;break;
+                    case "foreignVariable" : referenceTypeTitle = Rigsarkiv.Language.callback().getValue("hybris-output-references-referenceForeignVariable-Title");break;
+                    case "referenceVariable" : referenceTypeTitle = Rigsarkiv.Language.callback().getValue("hybris-output-references-referenceRefVar-Title");break;
                 }
                 if (result && startNumberPattern.test(referenceValue)) {
-                    ipcRenderer.send('open-error-dialog',referenceTypeTitle,settings.numberFirstReferenceText.innerHTML.format(referenceTypeTitle));
+                    ipcRenderer.send('open-error-dialog',referenceTypeTitle,Rigsarkiv.Language.callback().getValue("hybris-output-references-referenceNumberFirst-Text").format(referenceTypeTitle));
                     result = false;
                 }
                 if (result && !validFileNamePattern.test(referenceValue)) {
                     if(!enclosedReservedWordPattern.test(referenceValue)) {
-                        ipcRenderer.send('open-error-dialog',referenceTypeTitle,settings.illegalCharReferenceText.innerHTML.format(referenceTypeTitle));
+                        ipcRenderer.send('open-error-dialog',referenceTypeTitle,Rigsarkiv.Language.callback().getValue("hybris-output-references-referenceIllegalChar-Text").format(referenceTypeTitle));
                         result = false;
                     }
                 }
                 if (result && referenceValue.length > strLength) {
-                    ipcRenderer.send('open-error-dialog',referenceTypeTitle,settings.referenceLengthText.innerHTML.format(referenceTypeTitle));
+                    ipcRenderer.send('open-error-dialog',referenceTypeTitle,Rigsarkiv.Language.callback().getValue("hybris-output-references-referenceLength-Text").format(referenceTypeTitle));
                     result = false;
                 }
                 if (result && reservedWordPattern.test(referenceValue)) {
-                    ipcRenderer.send('open-error-dialog',referenceTypeTitle,settings.referenceReservedWordText.innerHTML.format(referenceTypeTitle));
+                    ipcRenderer.send('open-error-dialog',referenceTypeTitle,Rigsarkiv.Language.callback().getValue("hybris-output-references-referenceReservedWord-Text").format(referenceTypeTitle));
                     result = false;
                 }
                 return result;
@@ -171,7 +159,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
             var AddEvents = function () {
                 settings.okBtn.addEventListener('click', function (event) {    
                     if(settings.foreignVariablesDropdown.selectedIndex > 0 || settings.refVarsDropdown.selectedIndex > 0 || settings.referenceVariables.length > 0 || settings.foreignVariables > 0) {
-                        ipcRenderer.send('open-confirm-dialog','references-addkey',settings.addKeyWarningTitle.innerHTML,settings.addKeyWarningText.innerHTML,settings.okConfirm.innerHTML,settings.cancelConfirm.innerHTML);
+                        ipcRenderer.send('open-confirm-dialog','references-addkey',Rigsarkiv.Language.callback().getValue("hybris-output-references-addKeyWarning-Title"),Rigsarkiv.Language.callback().getValue("hybris-output-references-addKeyWarning-Text"),Rigsarkiv.Language.callback().getValue("hybris-output-references-OkConfirm"),Rigsarkiv.Language.callback().getValue("hybris-output-references-CancelConfirm"));
                     }
                     else {
                         Redirect();
@@ -217,7 +205,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                             settings.foreignTablesDropdown.selectedIndex = 0;
                     }
                     else {
-                        ipcRenderer.send('open-error-dialog',settings.referenceReqTitle.innerHTML,settings.referenceReqText.innerHTML);
+                        ipcRenderer.send('open-error-dialog',Rigsarkiv.Language.callback().getValue("hybris-output-references-referenceRequired-Title"),Rigsarkiv.Language.callback().getValue("hybris-output-references-referenceRequired-Text"));
                     }               
                 });
                 settings.addReferenceVariableBtn.addEventListener('click', function (event) { 
@@ -246,7 +234,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
 
             //Model interfaces functions
             Rigsarkiv.Hybris.References = { 
-                initialize: function (outputErrorId,okId,tablesId,foreignTablesId,refVarsId,foreignVariablesId,addReferenceId,referenceReqId,numberFirstReference,illegalCharReference,referenceLength,referenceReservedWord,foreignVariableId,referenceVariableId,referencesId,indexfilesTabId,addReferenceVariableId,referenceVariablesId,addForeignVariableId,foreignVariablesTable,cancelId,addKeyWarningId,okConfirmId,cancelConfirmId) {
+                initialize: function (outputErrorId,okId,tablesId,foreignTablesId,refVarsId,foreignVariablesId,addReferenceId,referencesId,indexfilesTabId,addReferenceVariableId,referenceVariablesId,addForeignVariableId,foreignVariablesTable,cancelId) {
                     settings.outputErrorSpn = document.getElementById(outputErrorId);
                     settings.outputErrorText = settings.outputErrorSpn.innerHTML;
                     settings.okBtn = document.getElementById(okId);
@@ -255,14 +243,6 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                     settings.refVarsDropdown = document.getElementById(refVarsId);
                     settings.foreignVariablesDropdown = document.getElementById(foreignVariablesId);
                     settings.addReferenceBtn = document.getElementById(addReferenceId);
-                    settings.referenceReqTitle = document.getElementById(referenceReqId + "-Title");
-                    settings.referenceReqText = document.getElementById(referenceReqId + "-Text");
-                    settings.numberFirstReferenceText = document.getElementById(numberFirstReference + "-Text");
-                    settings.illegalCharReferenceText = document.getElementById(illegalCharReference + "-Text");
-                    settings.referenceLengthText = document.getElementById(referenceLength + "-Text");
-                    settings.referenceReservedWordText = document.getElementById(referenceReservedWord + "-Text");
-                    settings.foreignVariableTitle = document.getElementById(foreignVariableId + "-Title");
-                    settings.referenceVariableTitle = document.getElementById(referenceVariableId + "-Title");
                     settings.referencesTbl = document.getElementById(referencesId); 
                     settings.indexfilesTab = document.getElementById(indexfilesTabId);
                     settings.addReferenceVariableBtn = document.getElementById(addReferenceVariableId);
@@ -270,10 +250,6 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                     settings.addForeignVariableBtn = document.getElementById(addForeignVariableId);
                     settings.foreignVariablesTbl = document.getElementById(foreignVariablesTable);
                     settings.cancelBtn = document.getElementById(cancelId);
-                    settings.addKeyWarningTitle = document.getElementById(addKeyWarningId + "-Title");
-                    settings.addKeyWarningText = document.getElementById(addKeyWarningId + "-Text");
-                    settings.okConfirm = document.getElementById(okConfirmId);
-                    settings.cancelConfirm = document.getElementById(cancelConfirmId);
                     AddEvents();
                 },
                 callback: function () {
