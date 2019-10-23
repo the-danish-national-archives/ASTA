@@ -800,6 +800,38 @@
             {
                 "key": "hybris-output-metdata-CloseApplicationError-Text",
                 "value": "Export script og/eller statistikfilen er stadig åben i statistikprogrammet.  Hybris kan derfor ikke færdiggøre data- og metadataudtrækket.  Slet afleveringspakken og begynd forfra"
+            },
+            {
+                "key": "hybris-panel-metdata-confirmation2-SPAN",
+                "value": "Dataudtrækket er færdigt"
+            },
+            {
+                "key": "hybris-output-metdata-Ok",
+                "value": "<br />INFO: En datafil ({0}) og en metadatafil ({1}) med informationer fra statistikfilen {2} er nu udtrukket og placeret her:"
+            },
+            {
+                "key": "hybris-output-metdata-NewExtraction",
+                "value": "<br/><br/>Vælg \"Nyt udtræk\", hvis du skal lave udtræk fra flere statistikfiler til afleveringspakke {0}.<br/>"
+            },
+            {
+                "key": "hybris-metdata-NewExtractionBtn",
+                "value": "Nyt udtræk"
+            },
+            {
+                "key": "hybris-output-metdata-Next",
+                "value": "<br/><br/>Vælg \"Næste\" hvis du <b>ikke</b> skal lave flere udtræk til afleveringspakken.<br/>"
+            },
+            {
+                "key": "hybris-metdata-NextBtn",
+                "value": "Næste"
+            },
+            {
+                "key": "hybris-output-metdata-newExtractionWarning-Title",
+                "value": "Nyt dataudtræk"
+            },
+            {
+                "key": "hybris-output-metdata-newExtractionWarning-Text",
+                "value": "Er du sikker på at du vil lave udtræk fra en ny statistikfil til afleveringspakken?"
             }
         ]
     },

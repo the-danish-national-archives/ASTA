@@ -25,15 +25,12 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 fileDescr: null,
                 okBtn: null,
                 outputOkSpn: null,
-                outputOkText: null,
                 okDataPath: null,
                 outputErrorSpn: null,
                 outputErrorText: null,
-                outputNewExtractionSpn: null,
-                outputNewExtractionText: null,            
+                outputNewExtractionSpn: null,            
                 newExtractionBtn: null,
                 nextBtn: null,
-                outputNextSpn: null,
                 extractionTab: null,
                 referencesTab: null,
                 indexfilesTab: null,
@@ -47,8 +44,6 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 foreignTablesDropdown: null,
                 refVarsDropdown: null,
                 foreignVariablesDropdown: null,
-                newExtractionWarningTitle: null,
-                newExtractionWarningText: null,
                 contents: ["","","",""],
                 varKeys: [],
                 references: [],
@@ -129,10 +124,10 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                         }
                         else {
                             var folders = callback.selectedStatisticsFilePath.getFolders();                            
-                            settings.outputOkSpn.innerHTML = settings.outputOkText.format(settings.dataFileName.format(fileName),settings.metadataFileName.format(fileName),folders[folders.length - 1]);
+                            settings.outputOkSpn.innerHTML = Rigsarkiv.Language.callback().getValue("hybris-output-metdata-Ok").format(settings.dataFileName.format(fileName),settings.metadataFileName.format(fileName),folders[folders.length - 1]);
                             settings.okDataPath.innerHTML = callback.localFolderPath;
                             folders = dataFolderPath.getFolders();
-                            settings.outputNewExtractionSpn.innerHTML = settings.outputNewExtractionText.format(folders[folders.length - 3]);
+                            settings.outputNewExtractionSpn.innerHTML = Rigsarkiv.Language.callback().getValue("hybris-output-metdata-NewExtraction").format(folders[folders.length - 3]);
                             settings.indexFilesDescriptionSpn.innerHTML = settings.indexFilesDescriptionText.format(folders[folders.length - 3]);
                             EnsureVariables();
                             Rigsarkiv.Hybris.Base.callback().metadata.push({ "fileName":fileName, "name":settings.fileName.value, "variables":settings.variables, "keys":settings.varKeys, "references":[] });
@@ -385,7 +380,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                     Redirect();
                 });
                 settings.newExtractionBtn.addEventListener('click', (event) => {
-                    ipcRenderer.send('open-confirm-dialog','metadata-newextraction',settings.newExtractionWarningTitle.innerHTML,settings.newExtractionWarningText.innerHTML,Rigsarkiv.Language.callback().getValue("hybris-output-metdata-OkConfirm"),Rigsarkiv.Language.callback().getValue("hybris-output-metdata-CancelConfirm"));
+                    ipcRenderer.send('open-confirm-dialog','metadata-newextraction',Rigsarkiv.Language.callback().getValue("hybris-output-metdata-newExtractionWarning-Title"),Rigsarkiv.Language.callback().getValue("hybris-output-metdata-newExtractionWarning-Text"),Rigsarkiv.Language.callback().getValue("hybris-output-metdata-OkConfirm"),Rigsarkiv.Language.callback().getValue("hybris-output-metdata-CancelConfirm"));
                 });
                 settings.okDataPath.addEventListener('click', (event) => {
                     ipcRenderer.send('open-item',Rigsarkiv.Hybris.DataExtraction.callback().localFolderPath);
@@ -440,20 +435,17 @@ window.Rigsarkiv = window.Rigsarkiv || {},
 
             //Model interfaces functions
             Rigsarkiv.Hybris.MetaData = {
-                initialize: function (metadataFileName,metadataFileNameDescription,metdataOkBtn,outputOkId,okDataPathId,outputErrorId,outputNewExtractionId,newExtractionBtn,extractionTabId,outputNextId,nextBtn,referencesTabId,informationPanel1Id,informationPanel2Id,indexFilesDescriptionId,resetHideBox,variablesId,addVarKeyId,varKeysId,tablesId,foreignTablesId,cancelId,indexfilesTabId,refVarsId,foreignVariablesId,newExtractionWarningId) {
+                initialize: function (metadataFileName,metadataFileNameDescription,metdataOkBtn,outputOkId,okDataPathId,outputErrorId,outputNewExtractionId,newExtractionBtn,extractionTabId,nextBtn,referencesTabId,informationPanel1Id,informationPanel2Id,indexFilesDescriptionId,resetHideBox,variablesId,addVarKeyId,varKeysId,tablesId,foreignTablesId,cancelId,indexfilesTabId,refVarsId,foreignVariablesId) {
                     settings.fileName = document.getElementById(metadataFileName);
                     settings.fileDescr = document.getElementById(metadataFileNameDescription);
                     settings.okBtn = document.getElementById(metdataOkBtn);
                     settings.outputOkSpn = document.getElementById(outputOkId);
-                    settings.outputOkText = settings.outputOkSpn.innerHTML;
                     settings.okDataPath = document.getElementById(okDataPathId);
                     settings.outputErrorSpn = document.getElementById(outputErrorId);
                     settings.outputErrorText = settings.outputErrorSpn.innerHTML; 
                     settings.outputNewExtractionSpn = document.getElementById(outputNewExtractionId);
-                    settings.outputNewExtractionText = settings.outputNewExtractionSpn.innerHTML;
                     settings.newExtractionBtn = document.getElementById(newExtractionBtn);
                     settings.extractionTab = document.getElementById(extractionTabId);
-                    settings.outputNextSpn = document.getElementById(outputNextId); 
                     settings.nextBtn = document.getElementById(nextBtn);
                     settings.referencesTab = document.getElementById(referencesTabId);
                     settings.informationPanel1 = document.getElementById(informationPanel1Id);
@@ -470,9 +462,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                     settings.indexfilesTab = document.getElementById(indexfilesTabId);
                     settings.refVarsDropdown = document.getElementById(refVarsId);
                     settings.foreignVariablesDropdown = document.getElementById(foreignVariablesId);
-                    settings.newExtractionWarningTitle = document.getElementById(newExtractionWarningId + "-Title");
-                    settings.newExtractionWarningText = document.getElementById(newExtractionWarningId + "-Text");
-                    AddEvents();
+                   AddEvents();
                 },
                 callback: function () {
                     return { 

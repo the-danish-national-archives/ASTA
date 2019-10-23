@@ -32,7 +32,6 @@ function (n) {
             outputStatisticsHeaderTrin2Spn: null,
             outputStatisticsHeaderTrin3Spn: null,
             outputStatisticsHeaderInformation2Spn: null,
-            outputStatisticsHeaderInformation2Text: null,
             outputStatisticsHeaderReferencesSpn: null,
             outputStatisticsHeaderReferencesText: null,
             outputStatisticsHeaderindexfilesSpn: null,
@@ -83,7 +82,7 @@ function (n) {
             settings.outputStatisticsHeaderTrin1Spn.innerHTML = folder;
             settings.outputStatisticsHeaderTrin2Spn.innerHTML = folder;
             settings.outputStatisticsHeaderTrin3Spn.innerHTML = folder;
-            settings.outputStatisticsHeaderInformation2Spn.innerHTML = settings.outputStatisticsHeaderInformation2Text.format(folder);
+            settings.outputStatisticsHeaderInformation2Spn.innerHTML = folder;
             settings.outputStatisticsHeaderReferencesSpn.innerHTML = settings.outputStatisticsHeaderReferencesText.format(folder);
             settings.outputStatisticsHeaderindexfilesSpn.innerHTML = settings.outputStatisticsHeaderindexfilesText.format(folder);
             settings.outputStatisticsHeadercontextdocumentsSpn.innerHTML = settings.outputStatisticsHeadercontextdocumentsText.format(folder);
@@ -215,7 +214,6 @@ function (n) {
                 settings.outputStatisticsHeaderTrin2Spn = document.getElementById(outputStatisticsHeaderTrin2);
                 settings.outputStatisticsHeaderTrin3Spn = document.getElementById(outputStatisticsHeaderTrin3);
                 settings.outputStatisticsHeaderInformation2Spn = document.getElementById(outputStatisticsHeaderInformation2);
-                settings.outputStatisticsHeaderInformation2Text = settings.outputStatisticsHeaderInformation2Spn.innerHTML;
                 settings.outputStatisticsHeaderReferencesSpn = document.getElementById(outputStatisticsHeaderReferences);
                 settings.outputStatisticsHeaderReferencesText = settings.outputStatisticsHeaderReferencesSpn.innerHTML;
                 settings.outputStatisticsHeaderindexfilesSpn = document.getElementById(outputStatisticsHeaderindexfiles);
