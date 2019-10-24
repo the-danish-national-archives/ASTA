@@ -1235,6 +1235,10 @@
                 "value": "Start batchtest"
             },
             {
+                "key": "nemesis-output-logBtn",
+                "value": "Vis log"
+            },
+            {
                 "key": "nemesis-logFile-runDate",
                 "value": "Dato for testkørsel"
             },
