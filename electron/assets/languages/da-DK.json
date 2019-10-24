@@ -1016,6 +1016,46 @@
             {
                 "key": "hybris-indexfiles-archiveIndex-selectFile",
                 "value": "Browse"
+            },
+            {
+                "key": "hybris-indexfiles-contextDocumentationIndex-SPAN",
+                "value": "Vælg contextDocumentationIndex.xml filen:"
+            },
+            {
+                "key": "hybris-message-indexfiles-contextDocumentationIndex-Title",
+                "value": "contextDocumentationIndex.xml"
+            },
+            {
+                "key": "hybris-message-indexfiles-contextDocumentationIndex-Text",
+                "value": "Indeksfilen contextDocumentationIndex.xml indeholder oplysninger om kontekstdokumenterne i afleveringspakken, fx dokumenttitel, dokumentdato og opmærkning af dokumentkategori. Det er den godkendte contextDocumentationIndex.xml, som du har modtaget fra arkivet, du skal uploade til afleveringspakken."
+            },
+            {
+                "key": "hybris-indexfiles-contextDocumentationIndex",
+                "value": "Vælg sti med browse knappen"
+            },
+            {
+                "key": "hybris-indexfiles-contextDocumentationIndex-selectFile",
+                "value": "Browse"
+            },
+            {
+                "key": "hybris-indexfiles-okBtn",
+                "value": "Næste"
+            },
+            {
+                "key": "hybris-output-indexfiles-RequiredPath-Title",
+                "value": "Mangler fil"
+            },
+            {
+                "key": "hybris-output-indexfiles-RequiredPath-Text",
+                "value": "Vælg begge indeksfiler, før du klikker \"Næste\". Har du ikke indeksfilerne klar, kan du ikke fortsætte til upload af kontekstdokumenter. Du kan afslutte ASTA nu, uden at data mistes."
+            },
+            {
+                "key": "hybris-output-indexfiles-WrongFileName-Title",
+                "value": "Forkert filnavn"
+            },
+            {
+                "key": "hybris-output-indexfiles-WrongFileName-Text",
+                "value": "En eller flere af de valgte indeksfiler er navngivet forkert. Arkivbeskrivelsesfilen skal navngives \"archiveIndex.xml\" og kontekstdokumentationsfilen skal navngives \"contextDocumentationIndex.xml\""
             }
         ]
     },

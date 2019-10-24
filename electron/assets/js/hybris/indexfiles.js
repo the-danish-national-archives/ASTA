@@ -21,19 +21,13 @@ function (n) {
             okBtn: null,
             outputErrorSpn: null,
             outputErrorText: null,
-            outputRequiredPathTitle: null,
-            outputRequiredPathText: null,
             IndecesPostfix: "Indices",
             defaultIndicesFiles: ["archiveIndex.xml","contextDocumentationIndex.xml"],
             IndecesPath: null,
             outputOkSpn: null,
             outputOkText: null,
             selectDeliveryPackage: null,
-            outputOkInformationTitle: null,
-            outputOkInformationText: null,
-            contextDocumentsTab: null,
-            outputWrongFileNameTitle: null,
-            outputWrongFileNameText: null
+            contextDocumentsTab: null
         }
 
         //reset status & input fields
@@ -59,7 +53,6 @@ function (n) {
             settings.selectDeliveryPackage.innerHTML = "[{0}]".format(settings.IndecesPath);
             var filePath = (settings.IndecesPath.indexOf("\\") > -1) ? "{0}\\{1}".format(settings.IndecesPath,selectedContextDocumentationIndexFileName) : "{0}/{1}".format(settings.IndecesPath,selectedContextDocumentationIndexFileName);
             Rigsarkiv.Hybris.ContextDocuments.callback().load(fs.readFileSync(filePath));
-            //ipcRenderer.send('open-information-dialog',settings.outputOkInformationTitle.innerHTML,settings.outputOkInformationText.innerHTML);
             settings.contextDocumentsTab.click();
         }
 
@@ -102,7 +95,7 @@ function (n) {
             settings.okBtn.addEventListener('click', function (event) {
                 Reset();
                 if(settings.pathArchiveIndexFileTxt.value === "" || settings.pathContextDocumentationIndexFileTxt.value === "") {
-                    ipcRenderer.send('open-error-dialog',settings.outputRequiredPathTitle.innerHTML,settings.outputRequiredPathText.innerHTML);
+                    ipcRenderer.send('open-error-dialog',Rigsarkiv.Language.callback().getValue("hybris-output-indexfiles-RequiredPath-Title"),Rigsarkiv.Language.callback().getValue("hybris-output-indexfiles-RequiredPath-Text"));
                 }
                 if(settings.selectedArchiveIndexFilePath != null && settings.selectedContextDocumentationIndexFilePath != null && settings.pathArchiveIndexFileTxt.value !== "" && settings.pathContextDocumentationIndexFileTxt.value !== "") { 
                     if(GetFileName(settings.selectedArchiveIndexFilePath) === settings.defaultIndicesFiles[0] && GetFileName(settings.selectedContextDocumentationIndexFilePath) === settings.defaultIndicesFiles[1]) {
@@ -121,7 +114,7 @@ function (n) {
                         if(redirect) { NextTab(); }
                     }
                     else {
-                        ipcRenderer.send('open-error-dialog',settings.outputWrongFileNameTitle.innerHTML,settings.outputWrongFileNameText.innerHTML);    
+                        ipcRenderer.send('open-error-dialog',Rigsarkiv.Language.callback().getValue("hybris-output-indexfiles-WrongFileName-Title"),Rigsarkiv.Language.callback().getValue("hybris-output-indexfiles-WrongFileName-Text"));    
                     }
                 }
             })
@@ -132,7 +125,7 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Hybris.IndexFiles = {
-            initialize: function (selectArchiveIndexFileId,pathArchiveIndexFileId,selectContextDocumentationIndexFileId,pathContextDocumentationIndexFileId,indexFilesOkBtn,outputErrorId,outputRequiredPathId,outputOkId,selectDeliveryPackageId,outputOkInformationPrefixId,contextDocumentsTabId,outputWrongFileNameId) {
+            initialize: function (selectArchiveIndexFileId,pathArchiveIndexFileId,selectContextDocumentationIndexFileId,pathContextDocumentationIndexFileId,indexFilesOkBtn,outputErrorId,outputOkId,selectDeliveryPackageId,contextDocumentsTabId) {
                 settings.selectArchiveIndexFileBtn = document.getElementById(selectArchiveIndexFileId);
                 settings.pathArchiveIndexFileTxt = document.getElementById(pathArchiveIndexFileId);
                 settings.selectContextDocumentationIndexFileBtn = document.getElementById(selectContextDocumentationIndexFileId);
@@ -140,16 +133,10 @@ function (n) {
                 settings.okBtn = document.getElementById(indexFilesOkBtn);
                 settings.outputErrorSpn =  document.getElementById(outputErrorId);
                 settings.outputErrorText = settings.outputErrorSpn.innerHTML;
-                settings.outputRequiredPathTitle =  document.getElementById(outputRequiredPathId + "-Title");
-                settings.outputRequiredPathText =  document.getElementById(outputRequiredPathId + "-Text");
                 settings.outputOkSpn =  document.getElementById(outputOkId);
                 settings.outputOkText = settings.outputOkSpn.innerHTML;
                 settings.selectDeliveryPackage = document.getElementById(selectDeliveryPackageId);
-                settings.outputOkInformationTitle = document.getElementById(outputOkInformationPrefixId + "-Title");
-                settings.outputOkInformationText = document.getElementById(outputOkInformationPrefixId + "-Text");
                 settings.contextDocumentsTab = document.getElementById(contextDocumentsTabId);
-                settings.outputWrongFileNameTitle = document.getElementById(outputWrongFileNameId + "-Title");
-                settings.outputWrongFileNameText = document.getElementById(outputWrongFileNameId + "-Text");
                 AddEvents();
             },
             callback: function () {
