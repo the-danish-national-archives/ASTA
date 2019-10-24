@@ -255,28 +255,28 @@
                     <div id="hybris-panel-contextdocuments" class="formularContainer" hidden="true">
                         <p>
                             <div class="infoBox">
-                                <span class="confirmation"><i class="fas fa-check-circle ok"></i>Indeksfilerne er placeret</span>
+                                <span class="confirmation"><i class="fas fa-check-circle ok"></i><span class="languages" id="hybris-panel-contextdocuments-confirmation-SPAN"></span></span>
                             </div>    
-                            <h2 class="boldfaced">Placer kontekstdokumenter i afleveringspakken <span id="hybris-output-statistics-header-contextdocuments" class="trinHeader">{0}</span></h2>
-                            Du skal tilføje nedenstående kontekstdokumenter til afleveringspakken.
-                            <br/>Du kan kun placere en fil per dokumentmappe.
-                            <br/>Hvis et kontekstdokument ikke tilføjes, oprettes en tom dokumentmappe navngivet med mappenummeret.
-                            <br/>Hvis du ikke har kontekstdokumenterne klar, kan du udskrive dokumentlisten og tilføje dem manuelt senere.
+                            <h2 class="boldfaced"><span class="languages" id="hybris-output-statistics-header-contextdocuments-SPAN"></span> <span id="hybris-output-statistics-header-contextdocuments" class="trinHeader"></span></h2>
+                            <div class="languages" id="hybris-contextdocuments-Description-DIV"></div>                            
                         </p>
                         <br/>
-                        <span id="hybris-output-contextdocuments-Information2" class="alert-warning"><strong>Information!</strong> Kontekstdokumenter skal konverteres til bevaringsformat før de afleveres til arkiv, fx .tif eller .mp3</span>
+                        <span class="alert-warning languages" id="hybris-output-contextdocuments-Information2"></span>
                         <br/>
-                        <h2>Dokumentliste</h2>
+                        <h2 class="languages" id="hybris-contextdocuments-List-H2"></h2>
                         <table id="hybris-contextdocuments-uploads">
-                            <tr><th>Mappenummer</th><th>Dokumenttitel</th><th>Vælg dokument</th></tr>
+                            <tr>
+                                <th class="languages" id="hybris-contextdocuments-uploads-TH1"></th>
+                                <th class="languages" id="hybris-contextdocuments-uploads-TH1"></th>
+                                <th class="languages" id="hybris-contextdocuments-uploads-TH1"></th>
+                            </tr>
                          </table>
-                        <button id="hybris-contextdocuments-printBtn">Udskriv dokumentliste</button>
+                        <button class="languages" id="hybris-contextdocuments-printBtn"></button>
                         <br/>
-                        <button id="hybris-contextdocuments-nextBtn">Næste</button>
-                        <br/>
-                        <br/>
+                        <button class="languages" id="hybris-contextdocuments-nextBtn"></button>
+                        <br/><br/>
                         <div>
-                        <span id="hybris-output-indexfiles-Ok" class="greyText">INFO: Filerne {0}, {1} er kopieret til mappen "Indices" i afleveringspakken </span>
+                        <span class="greyText" id="hybris-output-indexfiles-Ok">INFO: Filerne {0}, {1} er kopieret til mappen "Indices" i afleveringspakken </span>
                         </div>
                         <span id="hybris-output-contextdocuments-Error" hidden="true"><br />Error: {0}</span>
                         <span id="hybris-output-contextdocuments-EmptyFile-Title" hidden="true">Indeksfilen</span>
@@ -296,7 +296,7 @@
                             </div>
                             <h2 class="boldfaced">Afleveringspakken er færdig <span id="hybris-output-statistics-header-overview" class="trinHeader">{0}</span></h2>
                         </p>
-                        <span id="hybris-output-indexfiles-Ok" class="alert-warning"><strong>Information!</strong> Test afleveringspakken med funktionen "Test afleveringspakke" i menuen til venstre.</span>
+                        <span id="hybris-output-overview-Ok" class="alert-warning"><strong>Information!</strong> Test afleveringspakken med funktionen "Test afleveringspakke" i menuen til venstre.</span>
                         <br/>
                         <br/>
                         <div>

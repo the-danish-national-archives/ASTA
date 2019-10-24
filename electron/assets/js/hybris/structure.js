@@ -35,7 +35,6 @@ function (n) {
             outputStatisticsHeaderReferencesSpn: null,
             outputStatisticsHeaderindexfilesSpn: null,
             outputStatisticsHeadercontextdocumentsSpn: null,
-            outputStatisticsHeadercontextdocumentsText: null,
             outputStatisticsHeaderOverviewSpn: null,
             outputStatisticsHeaderOverviewText: null,
             structureTab: null,
@@ -82,7 +81,7 @@ function (n) {
             settings.outputStatisticsHeaderInformation2Spn.innerHTML = folder;
             settings.outputStatisticsHeaderReferencesSpn.innerHTML = folder;
             settings.outputStatisticsHeaderindexfilesSpn.innerHTML = folder;
-            settings.outputStatisticsHeadercontextdocumentsSpn.innerHTML = settings.outputStatisticsHeadercontextdocumentsText.format(folder);
+            settings.outputStatisticsHeadercontextdocumentsSpn.innerHTML = folder;
             settings.outputStatisticsHeaderOverviewSpn.innerHTML = settings.outputStatisticsHeaderOverviewText.format(folder);
             
             if(Rigsarkiv.Hybris.Base.callback().mode === "New") { settings.statisticsTab.click(); }
@@ -214,7 +213,6 @@ function (n) {
                 settings.outputStatisticsHeaderReferencesSpn = document.getElementById(outputStatisticsHeaderReferences);
                 settings.outputStatisticsHeaderindexfilesSpn = document.getElementById(outputStatisticsHeaderindexfiles);
                 settings.outputStatisticsHeadercontextdocumentsSpn = document.getElementById(outputStatisticsHeadercontextdocuments);
-                settings.outputStatisticsHeadercontextdocumentsText = settings.outputStatisticsHeadercontextdocumentsSpn.innerHTML;
                 settings.outputStatisticsHeaderOverviewSpn = document.getElementById(outputStatisticsHeaderOverview);
                 settings.outputStatisticsHeaderOverviewText = settings.outputStatisticsHeaderOverviewSpn.innerHTML;
                 settings.newPanelDiv = document.getElementById(modePanelId + "-New");

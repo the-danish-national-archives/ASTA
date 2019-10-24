@@ -1056,6 +1056,50 @@
             {
                 "key": "hybris-output-indexfiles-WrongFileName-Text",
                 "value": "En eller flere af de valgte indeksfiler er navngivet forkert. Arkivbeskrivelsesfilen skal navngives \"archiveIndex.xml\" og kontekstdokumentationsfilen skal navngives \"contextDocumentationIndex.xml\""
+            },
+            {
+                "key": "hybris-output-indexfiles-Ok",
+                "value": "INFO: Filerne {0}, {1} er kopieret til mappen \"Indices\" i afleveringspakken"
+            },
+            {
+                "key": "hybris-panel-contextdocuments-confirmation-SPAN",
+                "value": "Indeksfilerne er placeret"
+            },
+            {
+                "key": "hybris-output-statistics-header-contextdocuments-SPAN",
+                "value": "Placer kontekstdokumenter i afleveringspakken"
+            },
+            {
+                "key": "hybris-contextdocuments-Description-DIV",
+                "value": "Du skal tilføje nedenstående kontekstdokumenter til afleveringspakken.<br/>Du kan kun placere en fil per dokumentmappe.<br/>Hvis et kontekstdokument ikke tilføjes, oprettes en tom dokumentmappe navngivet med mappenummeret.<br/>Hvis du ikke har kontekstdokumenterne klar, kan du udskrive dokumentlisten og tilføje dem manuelt senere."
+            },
+            {
+                "key": "hybris-output-contextdocuments-Information2",
+                "value": "<strong>Information!</strong> Kontekstdokumenter skal konverteres til bevaringsformat før de afleveres til arkiv, fx .tif eller .mp3"
+            },
+            {
+                "key": "hybris-contextdocuments-List-H2",
+                "value": "Dokumentliste"
+            },
+            {
+                "key": "hybris-contextdocuments-uploads-TH1",
+                "value": "Mappenummer"
+            },
+            {
+                "key": "hybris-contextdocuments-uploads-TH2",
+                "value": "Dokumenttitel"
+            },
+            {
+                "key": "hybris-contextdocuments-uploads-TH3",
+                "value": "Vælg dokument"
+            },
+            {
+                "key": "hybris-contextdocuments-printBtn",
+                "value": "Udskriv dokumentliste"
+            },
+            {
+                "key": "hybris-contextdocuments-nextBtn",
+                "value": "Næste"
             }
         ]
     },

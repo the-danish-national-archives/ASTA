@@ -25,7 +25,6 @@ function (n) {
             defaultIndicesFiles: ["archiveIndex.xml","contextDocumentationIndex.xml"],
             IndecesPath: null,
             outputOkSpn: null,
-            outputOkText: null,
             selectDeliveryPackage: null,
             contextDocumentsTab: null
         }
@@ -49,7 +48,7 @@ function (n) {
             settings.outputOkSpn.hidden = false;
             var selectedArchiveIndexFileName = GetFileName(settings.selectedArchiveIndexFilePath);
             var selectedContextDocumentationIndexFileName = GetFileName(settings.selectedContextDocumentationIndexFilePath);
-            settings.outputOkSpn.innerHTML =  settings.outputOkText.format(selectedArchiveIndexFileName,selectedContextDocumentationIndexFileName);
+            settings.outputOkSpn.innerHTML =  Rigsarkiv.Language.callback().getValue("hybris-output-indexfiles-Ok").format(selectedArchiveIndexFileName,selectedContextDocumentationIndexFileName);
             settings.selectDeliveryPackage.innerHTML = "[{0}]".format(settings.IndecesPath);
             var filePath = (settings.IndecesPath.indexOf("\\") > -1) ? "{0}\\{1}".format(settings.IndecesPath,selectedContextDocumentationIndexFileName) : "{0}/{1}".format(settings.IndecesPath,selectedContextDocumentationIndexFileName);
             Rigsarkiv.Hybris.ContextDocuments.callback().load(fs.readFileSync(filePath));
@@ -134,7 +133,6 @@ function (n) {
                 settings.outputErrorSpn =  document.getElementById(outputErrorId);
                 settings.outputErrorText = settings.outputErrorSpn.innerHTML;
                 settings.outputOkSpn =  document.getElementById(outputOkId);
-                settings.outputOkText = settings.outputOkSpn.innerHTML;
                 settings.selectDeliveryPackage = document.getElementById(selectDeliveryPackageId);
                 settings.contextDocumentsTab = document.getElementById(contextDocumentsTabId);
                 AddEvents();
