@@ -34,7 +34,6 @@ function (n) {
             outputStatisticsHeaderInformation2Spn: null,
             outputStatisticsHeaderReferencesSpn: null,
             outputStatisticsHeaderindexfilesSpn: null,
-            outputStatisticsHeaderindexfilesText: null,
             outputStatisticsHeadercontextdocumentsSpn: null,
             outputStatisticsHeadercontextdocumentsText: null,
             outputStatisticsHeaderOverviewSpn: null,
@@ -45,7 +44,6 @@ function (n) {
             newPanelDiv: null,
             editPanelDiv: null,
             indexFilesDescriptionSpn: null,
-            indexFilesDescriptionText: null,
             selectDeliveryPackage: null,
             indecesFolder: "Indices",
             contextDocumentationFolder: "ContextDocumentation",
@@ -83,14 +81,14 @@ function (n) {
             settings.outputStatisticsHeaderTrin3Spn.innerHTML = folder;
             settings.outputStatisticsHeaderInformation2Spn.innerHTML = folder;
             settings.outputStatisticsHeaderReferencesSpn.innerHTML = folder;
-            settings.outputStatisticsHeaderindexfilesSpn.innerHTML = settings.outputStatisticsHeaderindexfilesText.format(folder);
+            settings.outputStatisticsHeaderindexfilesSpn.innerHTML = folder;
             settings.outputStatisticsHeadercontextdocumentsSpn.innerHTML = settings.outputStatisticsHeadercontextdocumentsText.format(folder);
             settings.outputStatisticsHeaderOverviewSpn.innerHTML = settings.outputStatisticsHeaderOverviewText.format(folder);
             
             if(Rigsarkiv.Hybris.Base.callback().mode === "New") { settings.statisticsTab.click(); }
             if(Rigsarkiv.Hybris.Base.callback().mode === "Edit") { 
                 var description = "{0} {1}".format(folder,Rigsarkiv.Language.callback().getValue("hybris-structure-indexfiles-Description"));
-                settings.indexFilesDescriptionSpn.innerHTML = settings.indexFilesDescriptionText.format(description);
+                settings.indexFilesDescriptionSpn.innerHTML = Rigsarkiv.Language.callback().getValue("hybris-output-indexfiles-Description").format(description);
                 settings.indexfilesTab.click(); 
             }
         }
@@ -215,7 +213,6 @@ function (n) {
                 settings.outputStatisticsHeaderInformation2Spn = document.getElementById(outputStatisticsHeaderInformation2);
                 settings.outputStatisticsHeaderReferencesSpn = document.getElementById(outputStatisticsHeaderReferences);
                 settings.outputStatisticsHeaderindexfilesSpn = document.getElementById(outputStatisticsHeaderindexfiles);
-                settings.outputStatisticsHeaderindexfilesText = settings.outputStatisticsHeaderindexfilesSpn.innerHTML;
                 settings.outputStatisticsHeadercontextdocumentsSpn = document.getElementById(outputStatisticsHeadercontextdocuments);
                 settings.outputStatisticsHeadercontextdocumentsText = settings.outputStatisticsHeadercontextdocumentsSpn.innerHTML;
                 settings.outputStatisticsHeaderOverviewSpn = document.getElementById(outputStatisticsHeaderOverview);
@@ -223,7 +220,6 @@ function (n) {
                 settings.newPanelDiv = document.getElementById(modePanelId + "-New");
                 settings.editPanelDiv = document.getElementById(modePanelId + "-Edit");
                 settings.indexFilesDescriptionSpn = document.getElementById(indexFilesDescriptionId);
-                settings.indexFilesDescriptionText = settings.indexFilesDescriptionSpn.innerHTML;
                 AddEvents();
             },
             callback: function () {

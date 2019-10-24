@@ -37,7 +37,6 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 informationPanel1: null,
                 informationPanel2: null,
                 indexFilesDescriptionSpn: null,
-                indexFilesDescriptionText: null,
                 variablesDropdown: null,
                 cancelBtn: null,
                 tablesDropdown: null,
@@ -128,7 +127,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                             settings.okDataPath.innerHTML = callback.localFolderPath;
                             folders = dataFolderPath.getFolders();
                             settings.outputNewExtractionSpn.innerHTML = Rigsarkiv.Language.callback().getValue("hybris-output-metdata-NewExtraction").format(folders[folders.length - 3]);
-                            settings.indexFilesDescriptionSpn.innerHTML = settings.indexFilesDescriptionText.format(folders[folders.length - 3]);
+                            settings.indexFilesDescriptionSpn.innerHTML = Rigsarkiv.Language.callback().getValue("hybris-output-indexfiles-Description").format(folders[folders.length - 3]);
                             EnsureVariables();
                             Rigsarkiv.Hybris.Base.callback().metadata.push({ "fileName":fileName, "name":settings.fileName.value, "variables":settings.variables, "keys":settings.varKeys, "references":[] });
                             console.log("{0} data output: ".format(settings.fileName));
@@ -451,7 +450,6 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                     settings.informationPanel1 = document.getElementById(informationPanel1Id);
                     settings.informationPanel2 = document.getElementById(informationPanel2Id);
                     settings.indexFilesDescriptionSpn = document.getElementById(indexFilesDescriptionId);
-                    settings.indexFilesDescriptionText = settings.indexFilesDescriptionSpn.innerHTML;
                     settings.styleBox = document.getElementById(resetHideBox);
                     settings.variablesDropdown = document.getElementById(variablesId);
                     settings.addVarKeyBtn = document.getElementById(addVarKeyId);

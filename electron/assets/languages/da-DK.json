@@ -984,6 +984,38 @@
             {
                 "key": "hybris-output-references-CancelConfirm",
                 "value": "FORTRYD"
+            },
+            {
+                "key": "hybris-output-statistics-header-indexfiles-SPAN",
+                "value": "Placer indeksfiler i afleveringspakken"
+            },
+            {
+                "key": "hybris-output-indexfiles-Description",
+                "value": "Her kan du placere indeksfilerne archiveIndex.xml og contextDocumentationIndex.xml korrekt i afleveringspakke {0}"
+            },
+            {
+                "key": "hybris-output-indexfiles-Summary",
+                "value": "<strong>Information!</strong> Indeksfilerne skal være godkendt af arkivet og navngivet archiveIndex.xml og contextDocumentationIndex.xml"
+            },
+            {
+                "key": "hybris-indexfiles-archiveIndex-SPAN",
+                "value": "Vælg archiveIndex.xml filen:"
+            },
+            {
+                "key": "hybris-message-indexfiles-archiveIndex-Title",
+                "value": "archiveIndex.xml"
+            },
+            {
+                "key": "hybris-message-indexfiles-archiveIndex-Text",
+                "value": "Indeksfilen archiveIndex.xml er en arkivbeskrivelsesfil, der indeholder metadata om afleveringspakken, fx navne på de forskere eller den institution der har skabt data, perioden data dækker, beskrivelse af indhold osv. Det er den godkendte archiveIndex.xml som du har modtaget fra arkivet, som du skal uploade til afleveringspakken."
+            },
+            {
+                "key": "hybris-indexfiles-archiveIndex",
+                "value": "Vælg sti med browse knappen"
+            },
+            {
+                "key": "hybris-indexfiles-archiveIndex-selectFile",
+                "value": "Browse"
             }
         ]
     },
