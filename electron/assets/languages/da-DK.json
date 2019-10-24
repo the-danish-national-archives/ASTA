@@ -1195,6 +1195,46 @@
                 "value": "Test en afleveringspakke"
             },
             {
+                "key": "nemesis-path-SPAN",
+                "value": "Vælg afleveringspakke"
+            },
+            {
+                "key": "nemesis-path",
+                "value": "Vælg sti med browse knappen"
+            },
+            {
+                "key": "nemesis-select-directory",
+                "value": "Browse"
+            },
+            {
+                "key": "nemesis-validateBtn",
+                "value": "Start test"
+            },
+            {
+                "key": "nemesis-Athen-StartBtn",
+                "value": "Konverter til AV"
+            },
+            {
+                "key": "nemesis-batch-title-H2",
+                "value": "Batchkørsel af flere tests"
+            },
+            {
+                "key": "nemesis-batch-path-SPAN",
+                "value": "Vælg mappe med flere afleveringspakker"
+            },
+            {
+                "key": "nemesis-batch-path",
+                "value": "Vælg sti med browse knappen"
+            },
+            {
+                "key": "nemesis-select-batch-directory",
+                "value": "Browse"
+            },
+            {
+                "key": "nemesis-batch-validateBtn",
+                "value": "Start batchtest"
+            },
+            {
                 "key": "nemesis-logFile-runDate",
                 "value": "Dato for testkørsel"
             },
