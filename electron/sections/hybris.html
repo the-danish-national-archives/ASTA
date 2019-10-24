@@ -10,13 +10,13 @@
                     <span class="languages" id="hybris-section-title-New" hidden="true"></span>
                     <span class="languages" id="hybris-section-title-Edit" hidden="true"></span>
                     <div class="btnContaier" hidden="true"> 
-                        <button name="button" class="menuBtn" id="hybris-tab-structure">Skab Mappestruktur</button>
-                        <button name="button" class="menuBtn" id="hybris-tab-statistics">Skab Script Fil</button>
-                        <button name="button" class="menuBtn" id="hybris-tab-metdata">Skab Metadata</button>
-                        <button name="button" class="menuBtn" id="hybris-tab-references">Referencer</button>
-                        <button name="button" class="menuBtn" id="hybris-tab-indexfiles">Indeksfiler</button>
-                        <button name="button" class="menuBtn" id="hybris-tab-contextdocuments">Kontekstdokumenter</button>
-                        <button name="button" class="menuBtn" id="hybris-tab-overview">Oversigt</button>
+                        <button name="button" class="menuBtn languages" id="hybris-tab-structure"></button>
+                        <button name="button" class="menuBtn languages" id="hybris-tab-statistics"></button>
+                        <button name="button" class="menuBtn languages" id="hybris-tab-metdata"></button>
+                        <button name="button" class="menuBtn languages" id="hybris-tab-references"></button>
+                        <button name="button" class="menuBtn languages" id="hybris-tab-indexfiles"></button>
+                        <button name="button" class="menuBtn languages" id="hybris-tab-contextdocuments"></button>
+                        <button name="button" class="menuBtn languages" id="hybris-tab-overview"></button>
                     </div>
                     <div id="hybris-panel-structure" class="formularContainer">
                         <div id="hybris-panel-structure-New" hidden="true" class="box">
@@ -284,18 +284,17 @@
                     <div id="hybris-panel-overview" class="formularContainer" hidden="true">
                         <p>
                             <div class="infoBox">
-                                <span class="confirmation"><i class="fas fa-check-circle ok"></i>Kontekstdokumenterne er tilføjet</span>
+                                <span class="confirmation"><i class="fas fa-check-circle ok"></i><span class="languages" id="hybris-panel-overview-confirmation-SPAN"></span></span>
                             </div>
-                            <h2 class="boldfaced">Afleveringspakken er færdig <span id="hybris-output-statistics-header-overview" class="trinHeader">{0}</span></h2>
+                            <h2 class="boldfaced"><span class="languages" id="hybris-output-statistics-header-overview-SPAN"></span> <span id="hybris-output-statistics-header-overview" class="trinHeader"></span></h2>
                         </p>
-                        <span id="hybris-output-overview-Ok" class="alert-warning"><strong>Information!</strong> Test afleveringspakken med funktionen "Test afleveringspakke" i menuen til venstre.</span>
-                        <br/>
-                        <br/>
+                        <span class="alert-warning languages" id="hybris-output-overview-Ok"></span>
+                        <br/><br/>
                         <div>
-                            <span class="greyText">INFO: Afleveringspakken er skabt og placeret her: </span><a id="hybris-overview-deliveryPackage"></a>
+                            <span class="greyText languages" id="hybris-overview-deliveryPackage-SPAN"></span> <a id="hybris-overview-deliveryPackage"></a>
                         </div>
                         <br/>
-                        <button id="hybris-overview-validateBtn">Test {0}</button>
+                        <button id="hybris-overview-validateBtn"></button>
                     </div>                 
                 </section>
             </div>

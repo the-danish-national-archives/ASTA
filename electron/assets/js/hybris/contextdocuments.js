@@ -25,7 +25,6 @@ function (n) {
             spinnerClass: null,
             selectDeliveryPackage: null,
             validateBtn: null,
-            validateBtnText: null,
             documents: [],
             logs: [],
             hasSelected: false,
@@ -220,7 +219,7 @@ function (n) {
                     settings.selectDeliveryPackage.innerHTML = "[{0}]".format(Rigsarkiv.Hybris.Structure.callback().deliveryPackagePath);
                     var folders = Rigsarkiv.Hybris.Structure.callback().deliveryPackagePath.getFolders();
                     var folderName = folders[folders.length - 1];
-                    settings.validateBtn.innerText = settings.validateBtnText.format(folderName);
+                    settings.validateBtn.innerText = Rigsarkiv.Language.callback().getValue("hybris-overview-validateBtn").format(folderName);
                     settings.overviewTab.click();
                 }
             });
@@ -229,7 +228,7 @@ function (n) {
                     settings.selectDeliveryPackage.innerHTML = "[{0}]".format(Rigsarkiv.Hybris.Structure.callback().deliveryPackagePath);
                     var folders = Rigsarkiv.Hybris.Structure.callback().deliveryPackagePath.getFolders();
                     var folderName = folders[folders.length - 1]; 
-                    settings.validateBtn.innerText = settings.validateBtnText.format(folderName);
+                    settings.validateBtn.innerText = Rigsarkiv.Language.callback().getValue("hybris-overview-validateBtn").format(folderName);
                     settings.overviewTab.click();
                 }            
             });
@@ -264,7 +263,6 @@ function (n) {
                 settings.spinner.className = "";
                 settings.selectDeliveryPackage = document.getElementById(selectDeliveryPackageId);
                 settings.validateBtn = document.getElementById(validateId);
-                settings.validateBtnText = settings.validateBtn.innerText;
                 AddEvents();
             },
             callback: function () {

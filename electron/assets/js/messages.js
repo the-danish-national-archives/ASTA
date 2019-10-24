@@ -17,11 +17,7 @@ function (n) {
                     element.addEventListener('click', (event) => {
                         var srcElementId = event.srcElement.id;
                         var title = Rigsarkiv.Language.callback().getValue(srcElementId + "-Title"); 
-                        //TODO : remove
-                        if(title == null) { title = document.getElementById(srcElementId + "-Title").innerHTML; }                    
                         var text = Rigsarkiv.Language.callback().getValue(srcElementId + "-Text"); 
-                        //TODO : remove
-                        if(text == null) { text = document.getElementById(srcElementId + "-Text").innerHTML; } 
                         ipcRenderer.send('open-information-dialog',title,text);
                     });
                 }

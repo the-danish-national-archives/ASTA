@@ -1132,6 +1132,54 @@
             {
                 "key": "hybris-contextdocuments-document-upload-Button",
                 "value": "Browse"
+            },
+            {
+                "key": "hybris-panel-overview-confirmation-SPAN",
+                "value": "Kontekstdokumenterne er tilføjet"
+            },
+            {
+                "key": "hybris-output-statistics-header-overview-SPAN",
+                "value": "Afleveringspakken er færdig"
+            },
+            {
+                "key": "hybris-output-overview-Ok",
+                "value": "<strong>Information!</strong> Test afleveringspakken med funktionen \"Test afleveringspakke\" i menuen til venstre."
+            },
+            {
+                "key": "hybris-overview-deliveryPackage-SPAN",
+                "value": "INFO: Afleveringspakken er skabt og placeret her:"
+            },
+            {
+                "key": "hybris-overview-validateBtn",
+                "value": "Test {0}"
+            },
+            {
+                "key": "hybris-tab-structure",
+                "value": "Mappestruktur"
+            },
+            {
+                "key": "hybris-tab-statistics",
+                "value": "Script Fil"
+            },
+            {
+                "key": "hybris-tab-metdata",
+                "value": "Metadata"
+            },
+            {
+                "key": "hybris-tab-references",
+                "value": "Referencer"
+            },
+            {
+                "key": "hybris-tab-indexfiles",
+                "value": "Indeksfiler"
+            },
+            {
+                "key": "hybris-tab-contextdocuments",
+                "value": "Kontekstdokumenter"
+            },
+            {
+                "key": "hybris-tab-overview",
+                "value": "Oversigt"
             }
         ]
     },
