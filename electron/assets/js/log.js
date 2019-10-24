@@ -14,7 +14,6 @@ function (n) {
         outputErrorSpn: null,
         outputErrorText: null,
         outputOkSpn: null,
-        outputOkText: null,
         selectLogfile: null,
         outputSupplementSpn: null,
         filePath: null,
@@ -60,7 +59,7 @@ function (n) {
         var folders = settings.filePath.getFolders();
         var folderName = folders[folders.length - 1];
         settings.selectLogfile.innerHTML = settings.filePath;
-        settings.outputOkSpn.innerHTML = settings.outputOkText.format(folderName);
+        settings.outputOkSpn.innerHTML = Rigsarkiv.Language.callback().getValue("nemesis-output-Ok").format(folderName);
         settings.selectLogfile.hidden = false;
         settings.outputOkSpn.hidden = false;
         settings.outputSupplementSpn.hidden = false; 
@@ -118,7 +117,6 @@ function (n) {
             settings.outputErrorSpn = document.getElementById(outputErrorId);
             settings.outputErrorText = settings.outputErrorSpn.innerHTML;
             settings.outputOkSpn =  document.getElementById(outputOkId);
-            settings.outputOkText = settings.outputOkSpn.innerHTML;
             settings.selectLogfile = document.getElementById(selectLogfileId);
             settings.outputSupplementSpn =  document.getElementById(outputSupplementId);
             settings.spinner = document.getElementById(spinnerId);

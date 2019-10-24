@@ -34,9 +34,7 @@ function (n) {
             logEndWithErrorStopSpn:null,
             deliveryPackagePath: null,
             testSpn: null,
-            testText: null,
             confirmationSpn: null,
-            convertDisabledText: null,
             outputText: {},
             metadataFileName: "{0}.txt",
             dataFileName: "{0}.csv",
@@ -536,7 +534,7 @@ function (n) {
                     return settings.metadataCallback().validate(settings.deliveryPackagePath,settings.outputText,settings.errors,settings.convertStop); 
                 } 
                 else {
-                    settings.confirmationSpn.innerHTML = settings.convertDisabledText;
+                    settings.confirmationSpn.innerHTML = Rigsarkiv.Language.callback().getValue("nemesis-output-ConvertDisabled");
                     settings.selectDirBtn.disabled = false;
                     settings.validateBtn.disabled = false;
                     return settings.logCallback().commit(settings.deliveryPackagePath);
@@ -567,7 +565,7 @@ function (n) {
                 settings.selectDirBtn.disabled = true;
                 settings.validateBtn.disabled = true;
                 var folderName = GetFolderName();
-                settings.testSpn.innerText = settings.testText.format(folderName);
+                settings.testSpn.innerText = Rigsarkiv.Language.callback().getValue("nemesis-test-id").format(folderName);
                 settings.logCallback().section(settings.logType,folderName,settings.logStartSpn.innerHTML);
                 setTimeout(Validate, 1000);                          
             })
@@ -582,7 +580,7 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Nemesis.Structure = {        
-            initialize: function (logCallback,metadataCallback,outputErrorId,selectDirectoryId,pathDirectoryId,validateId,logStartId,logEndNoErrorId,logEndWithErrorId,logEndWithErrorStopId,outputPrefix,testId,confirmationId,convertDisabledId,convertId) {            
+            initialize: function (logCallback,metadataCallback,outputErrorId,selectDirectoryId,pathDirectoryId,validateId,logStartId,logEndNoErrorId,logEndWithErrorId,logEndWithErrorStopId,outputPrefix,testId,confirmationId,convertId) {            
                 settings.logCallback = logCallback;
                 settings.metadataCallback = metadataCallback;
                 settings.outputErrorSpn = document.getElementById(outputErrorId);
@@ -596,10 +594,7 @@ function (n) {
                 settings.logEndWithErrorStopSpn = document.getElementById(logEndWithErrorStopId);
                 settings.outputPrefix = outputPrefix;
                 settings.testSpn = document.getElementById(testId);
-                settings.testText = settings.testSpn.innerText;
-                settings.testSpn.innerText = settings.testText.format("");
                 settings.confirmationSpn = document.getElementById(confirmationId);
-                settings.convertDisabledText = document.getElementById(convertDisabledId).innerHTML;
                 settings.ConvertBtn = document.getElementById(convertId);
                 $("span[id^='" + settings.outputPrefix + "']").each(function() {
                     settings.outputText[this.id] = $(this).html();
@@ -617,7 +612,7 @@ function (n) {
                         settings.selectDirBtn.disabled = true;
                         settings.validateBtn.disabled = true;
                         var folderName = GetFolderName();
-                        settings.testSpn.innerText = settings.testText.format(folderName);
+                        settings.testSpn.innerText = Rigsarkiv.Language.callback().getValue("nemesis-test-id").format(folderName);
                         settings.logCallback().section(settings.logType,folderName,settings.logStartSpn.innerHTML);
                         return Validate();
                     },

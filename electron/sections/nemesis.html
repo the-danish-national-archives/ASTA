@@ -20,17 +20,13 @@
                                 <br/>                                
                                 <button class="languages" id="nemesis-validateBtn"></button>
                                 <span id="nemesis-output-Error" hidden="true"><br />Error: {0}</span>
-                                <span id="nemesis-output-Ok" hidden="true"><br/><strong>Bekræftelse!</strong> Log fil [{0}] er nu skabt og placeret i mappen [</span>
+                                <span id="nemesis-output-Ok" hidden="true"></span>
                                 <a id="nemesis-select-logFile" hidden="true"></a>
-                                <span id="nemesis-output-Supplement" hidden="true">]</span>                                
+                                <span class="languages" id="nemesis-output-Supplement" hidden="true"></span>                                
                                 <span id="nemesis-output-Confirmation"></span>
                                 <button class="languages" id="nemesis-Athen-StartBtn" hidden="true"></button>
                                 <br/>
-                                <span id="nemesis-output-ValidateRows" hidden="true"><br/><br/>{0} af {1} rækker i {2} er valideret.</span>
                                 <span id="nemesis-output-CheckEncoding" hidden="true"><br/><br/>Vent mens check {0} encoding</span>                                
-                                <span id="nemesis-output-ConvertEnabled" hidden="true"><br/><p class="ok">Afleveringspakken er gennemtestet uden fejl og kan nu afleveres til arkivet.</p></span>  
-                                <span id="nemesis-output-ConvertWarningEnabled" hidden="true"><br/><p class="warningWithError">Afleveringspakken er fuldt gennemtestet. Fejl vist i loggen skal rettes før aflevering til arkiv.</p></span>
-                                <span id="nemesis-output-ConvertDisabled" hidden="true"><br/><p class="error">Testen er afbrudt og afleveringspakken er ikke testet færdig. Fejl vist i loggen skal rettes før testen kan fortsætte.</p></span>
                                 <span id="nemesis-output-structure-logStart" hidden="true">Mappestruktur test startet<br/></span>
                                 <span id="nemesis-output-structure-logEndNoError" hidden="true">Mappestruktur test gennemført uden fejl<br/></span>
                                 <span id="nemesis-output-structure-logEndWithError" hidden="true">Mappestruktur test gennemført med fejl<br/></span>
@@ -52,9 +48,9 @@
                                     <button class="languages" id="nemesis-select-batch-directory"></button>
                                     <br/>
                                     <button class="languages" id="nemesis-batch-validateBtn"></button>
-                                    <span id="nemesis-batch-Ok" hidden="true"><br /><strong>Bekræftelse!</strong> Log fil [{0}] er nu skabt og placeret i mappen [</span>
+                                    <span id="nemesis-batch-Ok" hidden="true"></span>
                                     <a id="nemesis-batch-select-logFile" hidden="true"></a>
-                                    <span id="nemesis-batch-Supplement" hidden="true">]</span>
+                                    <span class="languages" id="nemesis-batch-Supplement" hidden="true"></span>
                                 </div>
                             </div><br>
                             <div id="nemesis-spinner-container">
@@ -64,7 +60,7 @@
                                                             
                             <div class="box-column">
                                 <div>
-                                    <h2 class="boldfaced" id="nemesis-test-id">Testlog: {0}</h2>
+                                    <h2 class="boldfaced" id="nemesis-test-id"></h2>
                                 </div>                                
                                 <div class="nemesisOutput">    
                                         <span id="nemesis-processing-CheckId-Error" hidden="true"><i class="fas fa-times error"><div id="15100" hidden="true"><h3>Vejledning</h3>Omdøb afleveringspakkens yderste mappe så mappenavnet starter med FD. efterfulgt af det udleverede løbenummer bestående udelukkende af cifre og uden foranstillede nuller.<h3>Eksempel</h3>FD.12345<h3>Krav i bilag 9</h3><b>9.B.1</b> I roden af filsystemet på afleveringsmediet, jf. bilag 7, skal der være placeret en mappe navngivet med afleveringspakkens navn. Afleveringspakkens navn består af præfikset »FD.« samt et unikt løbenummer for afleveringspakken. <br/><b>9.B.2</b> Løbenummeret for afleveringspakken udleveres af arkivet.</div></i>Den valgte afleveringspakke er ikke navngivet korrekt<br/></span>
@@ -226,9 +222,9 @@
 
             Rigsarkiv.Log.initialize("nemesis-output-Error","nemesis-output-Ok","nemesis-select-logFile","nemesis-output-Supplement", "nemesis-validate-Spinner","lds-ring","nemesis-output-logBtn");
             Rigsarkiv.Nemesis.Batch.initialize(Rigsarkiv.Rights.callback,Rigsarkiv.Nemesis.Structure.callback,"nemesis-output-Error","nemesis-select-batch-directory","nemesis-batch-path","nemesis-batch-validateBtn","nemesis-validate-Spinner","nemesis-batch-Ok","nemesis-batch-select-logFile","nemesis-batch-Supplement","nemesis-batch-test-panel","lds-ring");
-            Rigsarkiv.Nemesis.Structure.initialize(Rigsarkiv.Log.callback,Rigsarkiv.Nemesis.MetaData.callback,"nemesis-output-Error","nemesis-select-directory","nemesis-path","nemesis-validateBtn","nemesis-output-structure-logStart","nemesis-output-structure-logEndNoError","nemesis-output-structure-logEndWithError","nemesis-output-structure-logEndWithErrorStop","nemesis-processing", "nemesis-test-id","nemesis-output-Confirmation","nemesis-output-ConvertDisabled","nemesis-Athen-StartBtn");
-            Rigsarkiv.Nemesis.MetaData.initialize(Rigsarkiv.Log.callback,Rigsarkiv.Nemesis.Data.callback,"nemesis-output-Error","nemesis-output-metadata-logStart","nemesis-output-metadata-logEndNoError","nemesis-output-metadata-logEndWithError","nemesis-output-metadata-logEndWithErrorStop","nemesis-processing","nemesis-select-directory","nemesis-validateBtn","nemesis-output-Confirmation","nemesis-output-ConvertDisabled");
-            Rigsarkiv.Nemesis.Data.initialize(Rigsarkiv.Rights.callback,Rigsarkiv.Log.callback,"nemesis-output-Error","nemesis-output-data-logStart","nemesis-output-data-logEndNoError","nemesis-output-data-logEndWithError","nemesis-output-data-logEndWithErrorStop","nemesis-processing","nemesis-select-directory","nemesis-validateBtn","nemesis-output-Confirmation","nemesis-output-ValidateRows","nemesis-output-CheckEncoding","nemesis-output-ConvertDisabled","nemesis-output-ConvertEnabled","nemesis-output-ConvertWarningEnabled","nemesis-Athen-StartBtn"); 
+            Rigsarkiv.Nemesis.Structure.initialize(Rigsarkiv.Log.callback,Rigsarkiv.Nemesis.MetaData.callback,"nemesis-output-Error","nemesis-select-directory","nemesis-path","nemesis-validateBtn","nemesis-output-structure-logStart","nemesis-output-structure-logEndNoError","nemesis-output-structure-logEndWithError","nemesis-output-structure-logEndWithErrorStop","nemesis-processing", "nemesis-test-id","nemesis-output-Confirmation","nemesis-Athen-StartBtn");
+            Rigsarkiv.Nemesis.MetaData.initialize(Rigsarkiv.Log.callback,Rigsarkiv.Nemesis.Data.callback,"nemesis-output-Error","nemesis-output-metadata-logStart","nemesis-output-metadata-logEndNoError","nemesis-output-metadata-logEndWithError","nemesis-output-metadata-logEndWithErrorStop","nemesis-processing","nemesis-select-directory","nemesis-validateBtn","nemesis-output-Confirmation");
+            Rigsarkiv.Nemesis.Data.initialize(Rigsarkiv.Rights.callback,Rigsarkiv.Log.callback,"nemesis-output-Error","nemesis-output-data-logStart","nemesis-output-data-logEndNoError","nemesis-output-data-logEndWithError","nemesis-output-data-logEndWithErrorStop","nemesis-processing","nemesis-select-directory","nemesis-validateBtn","nemesis-output-Confirmation","nemesis-output-CheckEncoding","nemesis-Athen-StartBtn"); 
         </script>
     </section>
 </template>

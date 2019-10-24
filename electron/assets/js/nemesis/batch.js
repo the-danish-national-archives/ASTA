@@ -26,7 +26,6 @@ function (n) {
             rightsCallback: null,
             structureCallback: null,
             okSpn: null,
-            okText: null,
             selectLogfile: null,
             supplementSpn: null,
             filePath: null,
@@ -78,7 +77,7 @@ function (n) {
             var folders = settings.filePath.getFolders();
             var folderName = folders[folders.length - 1];
             settings.selectLogfile.innerHTML = settings.filePath;
-            settings.okSpn.innerHTML = settings.okText.format(folderName);
+            settings.okSpn.innerHTML = Rigsarkiv.Language.callback().getValue("nemesis-batch-Ok").format(folderName);
             settings.selectLogfile.hidden = false;
             settings.okSpn.hidden = false;
             settings.supplementSpn.hidden = false;                        
@@ -207,7 +206,6 @@ function (n) {
                 settings.spinnerClass = spinnerClassName;
                 settings.spinner.className = "";
                 settings.okSpn =  document.getElementById(okId);
-                settings.okText = settings.okSpn.innerHTML;
                 settings.selectLogfile = document.getElementById(selectLogfileId);
                 settings.supplementSpn =  document.getElementById(supplementId);
                 settings.panel =  document.getElementById(panelId);

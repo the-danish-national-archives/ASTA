@@ -44,9 +44,6 @@ function (n) {
             confirmationSpn: null,
             validateRowsText: null,
             checkEncodingText: null,
-            convertDisabledText: null,
-            convertWarningEnabledText: null,
-            convertEnabledText: null,
             deliveryPackagePath: null,
             outputText: {},
             ConvertBtn: null,
@@ -674,7 +671,11 @@ function (n) {
                     console.logInfo("None exist Data file path: {0}".format(dataFilePath),"Rigsarkiv.Nemesis.Data.ValidateData");
                 }                              
             });
-            if(settings.dataFiles.length > 0) { ProcessDataSet(); }            
+            if(settings.dataFiles.length > 0) 
+            { 
+                settings.validateRowsText = Rigsarkiv.Language.callback().getValue("nemesis-output-ValidateRows");
+                ProcessDataSet(); 
+            }            
         }
 
         //commit end all validation 
@@ -694,10 +695,10 @@ function (n) {
                     settings.logCallback().section(settings.logType,folderName,enableData ? settings.logEndWithErrorSpn.innerHTML : settings.logEndWithErrorStopSpn.innerHTML);
                 }                                
                 if(enableConvert) {
-                    settings.confirmationSpn.innerHTML = settings.totalErrors > 0 ? settings.convertWarningEnabledText : settings.convertEnabledText;
+                    settings.confirmationSpn.innerHTML = settings.totalErrors > 0 ? Rigsarkiv.Language.callback().getValue("nemesis-output-ConvertWarningEnabled") : Rigsarkiv.Language.callback().getValue("nemesis-output-ConvertEnabled");
                 }
                 else {
-                    settings.confirmationSpn.innerHTML = settings.convertDisabledText;
+                    settings.confirmationSpn.innerHTML = Rigsarkiv.Language.callback().getValue("nemesis-output-ConvertDisabled");
                 }
                 settings.logResult = settings.logCallback().commit(settings.deliveryPackagePath);
                 if(settings.rightsCallback().isAdmin && enableConvert) { 
@@ -759,7 +760,7 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Nemesis.Data = {
-            initialize: function (rightsCallback,logCallback,outputErrorId,logStartId,logEndNoErrorId,logEndWithErrorId,logEndWithErrorStopId,outputPrefix,selectDirectoryId,validateId,confirmationId,validateRowsId,checkEncodingId,convertDisabledId,convertEnabledId,convertWarningEnabledId,convertId) { 
+            initialize: function (rightsCallback,logCallback,outputErrorId,logStartId,logEndNoErrorId,logEndWithErrorId,logEndWithErrorStopId,outputPrefix,selectDirectoryId,validateId,confirmationId,checkEncodingId,convertId) { 
                 settings.rightsCallback = rightsCallback;
                 settings.logCallback = logCallback;
                 settings.outputErrorSpn = document.getElementById(outputErrorId);
@@ -773,11 +774,7 @@ function (n) {
                 settings.selectDirBtn = document.getElementById(selectDirectoryId);
                 settings.validateBtn = document.getElementById(validateId);
                 settings.confirmationSpn  = document.getElementById(confirmationId);
-                settings.validateRowsText = document.getElementById(validateRowsId).innerHTML;
                 settings.checkEncodingText = document.getElementById(checkEncodingId).innerHTML;
-                settings.convertDisabledText = document.getElementById(convertDisabledId).innerHTML;
-                settings.convertEnabledText = document.getElementById(convertEnabledId).innerHTML;
-                settings.convertWarningEnabledText = document.getElementById(convertWarningEnabledId).innerHTML;
                 settings.confirmationSpn.innerHTML = "";
                 AddEvents();
             },

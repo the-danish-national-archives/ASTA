@@ -1239,6 +1239,42 @@
                 "value": "Vis log"
             },
             {
+                "key": "nemesis-output-Ok",
+                "value": "<br/><strong>Bekræftelse!</strong> Log fil [{0}] er nu skabt og placeret i mappen ["
+            },
+            {
+                "key": "nemesis-output-Supplement",
+                "value": "]"
+            },
+            {
+                "key": "nemesis-batch-Ok",
+                "value": "<br/><strong>Bekræftelse!</strong> Log fil [{0}] er nu skabt og placeret i mappen ["
+            },
+            {
+                "key": "nemesis-batch-Supplement",
+                "value": "]"
+            },
+            {
+                "key": "nemesis-test-id",
+                "value": "Testlog: {0}"
+            },
+            {
+                "key": "nemesis-output-ValidateRows",
+                "value": "<br/><br/>{0} af {1} rækker i {2} er valideret."
+            },
+            {
+                "key": "nemesis-output-ConvertEnabled",
+                "value": "<br/><p class=\"ok\">Afleveringspakken er gennemtestet uden fejl og kan nu afleveres til arkivet.</p>"
+            },
+            {
+                "key": "nemesis-output-ConvertWarningEnabled",
+                "value": "<br/><p class=\"warningWithError\">Afleveringspakken er fuldt gennemtestet. Fejl vist i loggen skal rettes før aflevering til arkiv.</p>"
+            },
+            {
+                "key": "nemesis-output-ConvertDisabled",
+                "value": "<br/><p class=\"error\">Testen er afbrudt og afleveringspakken er ikke testet færdig. Fejl vist i loggen skal rettes før testen kan fortsætte.</p>"
+            },
+            {
                 "key": "nemesis-logFile-runDate",
                 "value": "Dato for testkørsel"
             },

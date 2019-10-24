@@ -43,7 +43,6 @@ function (n) {
             logEndNoErrorSpn: null,
             logEndWithErrorSpn: null,
             logEndWithErrorStopSpn: null,
-            convertDisabledText: null,
             selectDirBtn: null,
             validateBtn: null,
             confirmationSpn: null,
@@ -1027,7 +1026,7 @@ function (n) {
                     return settings.dataCallback().validate(settings.deliveryPackagePath,settings.outputText,settings.data,settings.totalErrors,settings.convertStop);
                 }
                 else {
-                    settings.confirmationSpn.innerHTML = settings.convertDisabledText;
+                    settings.confirmationSpn.innerHTML = Rigsarkiv.Language.callback().getValue("nemesis-output-ConvertDisabled");
                     settings.selectDirBtn.disabled = false;
                     settings.validateBtn.disabled = false;
                     return settings.logCallback().commit(settings.deliveryPackagePath);
@@ -1046,7 +1045,7 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Nemesis.MetaData = {        
-            initialize: function (logCallback,dataCallback,outputErrorId,logStartId,logEndNoErrorId,logEndWithErrorId,logEndWithErrorStopId,outputPrefix,selectDirectoryId,validateId,confirmationId,convertDisabledId) {            
+            initialize: function (logCallback,dataCallback,outputErrorId,logStartId,logEndNoErrorId,logEndWithErrorId,logEndWithErrorStopId,outputPrefix,selectDirectoryId,validateId,confirmationId) {            
                 settings.logCallback = logCallback;
                 settings.dataCallback = dataCallback;
                 settings.outputErrorSpn = document.getElementById(outputErrorId);
@@ -1058,7 +1057,6 @@ function (n) {
                 settings.selectDirBtn = document.getElementById(selectDirectoryId);
                 settings.validateBtn = document.getElementById(validateId);
                 settings.confirmationSpn = document.getElementById(confirmationId);
-                settings.convertDisabledText = document.getElementById(convertDisabledId).innerHTML;
                 settings.outputPrefix = outputPrefix;
                 AddEvents();
             },
