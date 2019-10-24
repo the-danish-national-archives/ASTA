@@ -20,18 +20,10 @@ function (n) {
             outputErrorSpn: null,
             outputErrorText: null,
             uploadsTbl: null,
-            outputEmptyFileTitle: null,
-            outputEmptyFileText: null,
             overviewTab: null,
-            outputOkInformationTitle: null,
-            outputOkInformationText: null,
             spinner: null,
             spinnerClass: null,
             selectDeliveryPackage: null,
-            okConfirm: null,
-            cancelConfirm: null,
-            outputNextConfirmTitle: null,
-            outputNextConfirmText: null,
             validateBtn: null,
             validateBtnText: null,
             documents: [],
@@ -100,16 +92,18 @@ function (n) {
                         settings.documents.push(upload);                         
                     }
                 }
+                var placeholder = Rigsarkiv.Language.callback().getValue("hybris-contextdocuments-document-upload-Placeholder");
+                var browse = Rigsarkiv.Language.callback().getValue("hybris-contextdocuments-document-upload-Button");
                 settings.documents.forEach(upload => {
                     if(Rigsarkiv.Hybris.Base.callback().mode === "Edit") { UpdatePath(upload); }
-                    $(settings.uploadsTbl).append("<tr><td>{0}</td><td>{1}</td><td><input type=\"text\" id=\"hybris-contextdocuments-document-{0}\" class=\"path\" value=\"{2}\" readonly=\"true\" placeholder=\"Vælg sti med knappen\"/><button class=\"docBtn\" id=\"hybris-contextdocuments-selectFile-{0}\">Browse</button></td></tr>".format(upload.id,upload.title,upload.path));
+                    $(settings.uploadsTbl).append("<tr><td>{0}</td><td>{1}</td><td><input type=\"text\" id=\"hybris-contextdocuments-document-{0}\" class=\"path\" value=\"{2}\" readonly=\"true\" placeholder=\"{3}\"/><button class=\"docBtn\" id=\"hybris-contextdocuments-selectFile-{0}\">{4}</button></td></tr>".format(upload.id,upload.title,upload.path,placeholder,browse));
                     document.getElementById("hybris-contextdocuments-selectFile-{0}".format(upload.id)).addEventListener('click', (event) => {
                         ipcRenderer.send('contextdocuments-open-file-dialog',upload.id);
                     })
                 }); 
             }
             else {
-                ipcRenderer.send('open-error-dialog',settings.outputEmptyFileTitle.innerHTML,settings.outputEmptyFileText.innerHTML);
+                ipcRenderer.send('open-error-dialog',Rigsarkiv.Language.callback().getValue("hybris-output-contextdocuments-EmptyFile-Title"),Rigsarkiv.Language.callback().getValue("hybris-output-contextdocuments-EmptyFile-Text"));
             }
         }
 
@@ -215,14 +209,13 @@ function (n) {
                     UpdateSpinner("");                    
                 }
                 if(!settings.hasSelected) {
-                    ipcRenderer.send('open-confirm-dialog','contextdocuments',settings.outputNextConfirmTitle.innerHTML,settings.outputNextConfirmText.innerHTML,settings.okConfirm.innerHTML,settings.cancelConfirm.innerHTML);
+                    ipcRenderer.send('open-confirm-dialog','contextdocuments',Rigsarkiv.Language.callback().getValue("hybris-output-contextdocuments-NextConfirm-Title"),Rigsarkiv.Language.callback().getValue("hybris-output-contextdocuments-NextConfirm-Text"),Rigsarkiv.Language.callback().getValue("hybris-output-contextdocuments-OkConfirm"),Rigsarkiv.Language.callback().getValue("hybris-output-contextdocuments-CancelConfirm"));
                 }
                 else {
                     if(settings.documents.length > 0) {                    
                         UpdateSpinner(settings.spinnerClass);
                         EnsureDocuments();
                         UpdateSpinner("");                    
-                        //ipcRenderer.send('open-information-dialog',settings.outputOkInformationTitle.innerHTML,settings.outputOkInformationText.innerHTML);
                     }
                     settings.selectDeliveryPackage.innerHTML = "[{0}]".format(Rigsarkiv.Hybris.Structure.callback().deliveryPackagePath);
                     var folders = Rigsarkiv.Hybris.Structure.callback().deliveryPackagePath.getFolders();
@@ -259,25 +252,17 @@ function (n) {
         
         //Model interfaces functions
         Rigsarkiv.Hybris.ContextDocuments = {
-            initialize: function (outputErrorId,uploadsId,printId,outputEmptyFileId,nextId,overviewTabId,outputOkInformationPrefixId,spinnerId,selectDeliveryPackageId,outputOkConfirmId,outputCancelConfirmId,outputNextConfirmId,validateId) {
+            initialize: function (outputErrorId,uploadsId,printId,nextId,overviewTabId,spinnerId,selectDeliveryPackageId,validateId) {
                 settings.outputErrorSpn =  document.getElementById(outputErrorId);
                 settings.outputErrorText = settings.outputErrorSpn.innerHTML;
                 settings.uploadsTbl = document.getElementById(uploadsId);
                 settings.printBtn = document.getElementById(printId);
-                settings.outputEmptyFileTitle = document.getElementById(outputEmptyFileId + "-Title");
-                settings.outputEmptyFileText = document.getElementById(outputEmptyFileId + "-Text");
                 settings.nextBtn = document.getElementById(nextId);
                 settings.overviewTab = document.getElementById(overviewTabId);
-                settings.outputOkInformationTitle = document.getElementById(outputOkInformationPrefixId + "-Title");
-                settings.outputOkInformationText = document.getElementById(outputOkInformationPrefixId + "-Text");
                 settings.spinner = document.getElementById(spinnerId);
                 settings.spinnerClass = settings.spinner.className;
                 settings.spinner.className = "";
                 settings.selectDeliveryPackage = document.getElementById(selectDeliveryPackageId);
-                settings.okConfirm = document.getElementById(outputOkConfirmId);
-                settings.cancelConfirm = document.getElementById(outputCancelConfirmId);
-                settings.outputNextConfirmTitle = document.getElementById(outputNextConfirmId + "-Title");
-                settings.outputNextConfirmText = document.getElementById(outputNextConfirmId + "-Text");
                 settings.validateBtn = document.getElementById(validateId);
                 settings.validateBtnText = settings.validateBtn.innerText;
                 AddEvents();

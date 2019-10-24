@@ -1100,6 +1100,38 @@
             {
                 "key": "hybris-contextdocuments-nextBtn",
                 "value": "Næste"
+            },
+            {
+                "key": "hybris-output-contextdocuments-EmptyFile-Title",
+                "value": "Indeksfilen"
+            },
+            {
+                "key": "hybris-output-contextdocuments-EmptyFile-Text",
+                "value": "Indeksfilen contextDocumentationIndex.xml er tom"
+            },
+            {
+                "key": "hybris-output-contextdocuments-OkConfirm",
+                "value": "Ja"
+            },
+            {
+                "key": "hybris-output-contextdocuments-CancelConfirm",
+                "value": "Nej"
+            },
+            {
+                "key": "hybris-output-contextdocuments-NextConfirm-Title",
+                "value": "Kontekstdokumenter"
+            },
+            {
+                "key": "hybris-output-contextdocuments-NextConfirm-Text",
+                "value": "Der er endnu ikke tilføjet dokumenter til afleveringspakken. Vil du fortsætte uden at tilføje dokumenter?"
+            },
+            {
+                "key": "hybris-contextdocuments-document-upload-Placeholder",
+                "value": "Vælg sti med knappen"
+            },
+            {
+                "key": "hybris-contextdocuments-document-upload-Button",
+                "value": "Browse"
             }
         ]
     },
