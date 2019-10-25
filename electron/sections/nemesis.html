@@ -26,20 +26,8 @@
                                 <span id="nemesis-output-Confirmation"></span>
                                 <button class="languages" id="nemesis-Athen-StartBtn" hidden="true"></button>
                                 <br/>
-                                <span id="nemesis-output-CheckEncoding" hidden="true"><br/><br/>Vent mens check {0} encoding</span>                                
-                                <span id="nemesis-output-structure-logStart" hidden="true">Mappestruktur test startet<br/></span>
-                                <span id="nemesis-output-structure-logEndNoError" hidden="true">Mappestruktur test gennemført uden fejl<br/></span>
-                                <span id="nemesis-output-structure-logEndWithError" hidden="true">Mappestruktur test gennemført med fejl<br/></span>
-                                <span id="nemesis-output-structure-logEndWithErrorStop" hidden="true">Mappestruktur test afbrudt (Metadatafiler og Datafiler tests ikke startet)<br/></span>
-                                <span id="nemesis-output-metadata-logStart" hidden="true">Metadatafiler test startet<br/></span>
-                                <span id="nemesis-output-metadata-logEndNoError" hidden="true">Metadatafiler test gennemført uden fejl<br/></span>
-                                <span id="nemesis-output-metadata-logEndWithError" hidden="true">Metadatafiler test gennemført med fejl<br/></span>
-                                <span id="nemesis-output-metadata-logEndWithErrorStop" hidden="true">Metadatafiler test afbrudt (Datafiler test ikke startet)<br/></span>
-                                <span id="nemesis-output-data-logStart" hidden="true">Datafiler test startet<br/></span>
-                                <span id="nemesis-output-data-logEndNoError" hidden="true">Datafiler test gennemført uden fejl<br/></span>
-                                <span id="nemesis-output-data-logEndWithError" hidden="true">Datafiler test gennemført med fejl<br/></span>
-                                <span id="nemesis-output-data-logEndWithErrorStop" hidden="true">Datafiler test afbrudt<br/></span>
-                                <br>
+                                <span id="nemesis-output-CheckEncoding" hidden="true"><br/><br/>Vent mens check {0} encoding</span>
+                                <br/>
                                 <div id="nemesis-batch-test-panel">
                                     <h2 class="boldfaced languages" id="nemesis-batch-title-H2"></h2>
                                     <span class="boldfaced languages" id="nemesis-batch-path-SPAN"></span>
@@ -222,9 +210,9 @@
 
             Rigsarkiv.Log.initialize("nemesis-output-Error","nemesis-output-Ok","nemesis-select-logFile","nemesis-output-Supplement", "nemesis-validate-Spinner","lds-ring","nemesis-output-logBtn");
             Rigsarkiv.Nemesis.Batch.initialize(Rigsarkiv.Rights.callback,Rigsarkiv.Nemesis.Structure.callback,"nemesis-output-Error","nemesis-select-batch-directory","nemesis-batch-path","nemesis-batch-validateBtn","nemesis-validate-Spinner","nemesis-batch-Ok","nemesis-batch-select-logFile","nemesis-batch-Supplement","nemesis-batch-test-panel","lds-ring");
-            Rigsarkiv.Nemesis.Structure.initialize(Rigsarkiv.Log.callback,Rigsarkiv.Nemesis.MetaData.callback,"nemesis-output-Error","nemesis-select-directory","nemesis-path","nemesis-validateBtn","nemesis-output-structure-logStart","nemesis-output-structure-logEndNoError","nemesis-output-structure-logEndWithError","nemesis-output-structure-logEndWithErrorStop","nemesis-processing", "nemesis-test-id","nemesis-output-Confirmation","nemesis-Athen-StartBtn");
-            Rigsarkiv.Nemesis.MetaData.initialize(Rigsarkiv.Log.callback,Rigsarkiv.Nemesis.Data.callback,"nemesis-output-Error","nemesis-output-metadata-logStart","nemesis-output-metadata-logEndNoError","nemesis-output-metadata-logEndWithError","nemesis-output-metadata-logEndWithErrorStop","nemesis-processing","nemesis-select-directory","nemesis-validateBtn","nemesis-output-Confirmation");
-            Rigsarkiv.Nemesis.Data.initialize(Rigsarkiv.Rights.callback,Rigsarkiv.Log.callback,"nemesis-output-Error","nemesis-output-data-logStart","nemesis-output-data-logEndNoError","nemesis-output-data-logEndWithError","nemesis-output-data-logEndWithErrorStop","nemesis-processing","nemesis-select-directory","nemesis-validateBtn","nemesis-output-Confirmation","nemesis-output-CheckEncoding","nemesis-Athen-StartBtn"); 
+            Rigsarkiv.Nemesis.Structure.initialize(Rigsarkiv.Log.callback,Rigsarkiv.Nemesis.MetaData.callback,"nemesis-output-Error","nemesis-select-directory","nemesis-path","nemesis-validateBtn","nemesis-processing", "nemesis-test-id","nemesis-output-Confirmation","nemesis-Athen-StartBtn");
+            Rigsarkiv.Nemesis.MetaData.initialize(Rigsarkiv.Log.callback,Rigsarkiv.Nemesis.Data.callback,"nemesis-output-Error","nemesis-processing","nemesis-select-directory","nemesis-validateBtn","nemesis-output-Confirmation");
+            Rigsarkiv.Nemesis.Data.initialize(Rigsarkiv.Rights.callback,Rigsarkiv.Log.callback,"nemesis-output-Error","nemesis-processing","nemesis-select-directory","nemesis-validateBtn","nemesis-output-Confirmation","nemesis-output-CheckEncoding","nemesis-Athen-StartBtn"); 
         </script>
     </section>
 </template>

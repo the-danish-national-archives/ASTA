@@ -1281,6 +1281,54 @@
             {
                 "key": "nemesis-processing-CheckData-FileRow-ColumnsString-ValueBlankCharacters-WarningXXX",
                 "value": "<i class=\"fas fa-exclamation-triangle warning\"><div id=\"15811\" hidden=\"true\">xxxx</div></i>Der findes foran- eller efterstillede blanktegn i værdien for variablen <i>{3}</i> i række <i>{2}</i> i datafilen <i>{0}</i>. Hvis disse blanktegn er betydningsbærende skal de erstattes af nogle tilladte tegn.<br/>"
+            },
+            {
+                "key": "nemesis-output-structure-logStart",
+                "value": "Mappestruktur test startet<br/>"
+            },
+            {
+                "key": "nemesis-output-structure-logEndNoError",
+                "value": "Mappestruktur test gennemført uden fejl<br/>"
+            },
+            {
+                "key": "nemesis-output-structure-logEndWithError",
+                "value": "Mappestruktur test gennemført med fejl<br/>"
+            },
+            {
+                "key": "nemesis-output-structure-logEndWithErrorStop",
+                "value": "Mappestruktur test afbrudt (Metadatafiler og Datafiler tests ikke startet)<br/>"
+            },
+            {
+                "key": "nemesis-output-metadata-logStart",
+                "value": "Metadatafiler test startet<br/>"
+            },
+            {
+                "key": "nemesis-output-metadata-logEndNoError",
+                "value": "Metadatafiler test gennemført uden fejl<br/>"
+            },
+            {
+                "key": "nemesis-output-metadata-logEndWithError",
+                "value": "Metadatafiler test gennemført med fejl<br/>"
+            },
+            {
+                "key": "nemesis-output-metadata-logEndWithErrorStop",
+                "value": "Metadatafiler test afbrudt (Datafiler test ikke startet)<br/>"
+            },
+            {
+                "key": "nemesis-output-data-logStart",
+                "value": "Datafiler test startet<br/>"
+            },
+            {
+                "key": "nemesis-output-data-logEndNoError",
+                "value": "Datafiler test gennemført uden fejl<br/>"
+            },
+            {
+                "key": "nemesis-output-data-logEndWithError",
+                "value": "Datafiler test gennemført med fejl<br/>"
+            },
+            {
+                "key": "nemesis-output-data-logEndWithErrorStop",
+                "value": "Datafiler test afbrudt<br/>"
             }
         ]
     }

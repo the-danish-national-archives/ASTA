@@ -28,10 +28,6 @@ function (n) {
             outputPrefix: null,
             logCallback: null,
             metadataCallback: null,
-            logStartSpn: null,
-            logEndNoErrorSpn: null,
-            logEndWithErrorSpn:null,
-            logEndWithErrorStopSpn:null,
             deliveryPackagePath: null,
             testSpn: null,
             confirmationSpn: null,
@@ -525,10 +521,10 @@ function (n) {
                 ValidateStructure();
                  if(settings.errors === 0) {
                     LogInfo("-CheckFolders-Ok",null);
-                    settings.logCallback().section(settings.logType,folderName,settings.logEndNoErrorSpn.innerHTML);
+                    settings.logCallback().section(settings.logType,folderName,Rigsarkiv.Language.callback().getValue("nemesis-output-structure-logEndNoError"));
                 } else {
                     LogInfo(!settings.errorStop ? "-CheckFolders-Warning" : "-CheckFolders-ErrorStop",null);
-                    settings.logCallback().section(settings.logType,folderName,!settings.errorStop ? settings.logEndWithErrorSpn.innerHTML : settings.logEndWithErrorStopSpn.innerHTML);                    
+                    settings.logCallback().section(settings.logType,folderName,!settings.errorStop ? Rigsarkiv.Language.callback().getValue("nemesis-output-structure-logEndWithError") : Rigsarkiv.Language.callback().getValue("nemesis-output-structure-logEndWithErrorStop"));                    
                 }
                 if(!settings.errorStop) { 
                     return settings.metadataCallback().validate(settings.deliveryPackagePath,settings.outputText,settings.errors,settings.convertStop); 
@@ -566,7 +562,7 @@ function (n) {
                 settings.validateBtn.disabled = true;
                 var folderName = GetFolderName();
                 settings.testSpn.innerText = Rigsarkiv.Language.callback().getValue("nemesis-test-id").format(folderName);
-                settings.logCallback().section(settings.logType,folderName,settings.logStartSpn.innerHTML);
+                settings.logCallback().section(settings.logType,folderName,Rigsarkiv.Language.callback().getValue("nemesis-output-structure-logStart"));
                 setTimeout(Validate, 1000);                          
             })
             settings.selectDirBtn.addEventListener('click', (event) => {
@@ -580,7 +576,7 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Nemesis.Structure = {        
-            initialize: function (logCallback,metadataCallback,outputErrorId,selectDirectoryId,pathDirectoryId,validateId,logStartId,logEndNoErrorId,logEndWithErrorId,logEndWithErrorStopId,outputPrefix,testId,confirmationId,convertId) {            
+            initialize: function (logCallback,metadataCallback,outputErrorId,selectDirectoryId,pathDirectoryId,validateId,outputPrefix,testId,confirmationId,convertId) {            
                 settings.logCallback = logCallback;
                 settings.metadataCallback = metadataCallback;
                 settings.outputErrorSpn = document.getElementById(outputErrorId);
@@ -588,10 +584,6 @@ function (n) {
                 settings.selectDirBtn = document.getElementById(selectDirectoryId);
                 settings.pathDirTxt = document.getElementById(pathDirectoryId);
                 settings.validateBtn = document.getElementById(validateId);
-                settings.logStartSpn = document.getElementById(logStartId);
-                settings.logEndNoErrorSpn = document.getElementById(logEndNoErrorId);  
-                settings.logEndWithErrorSpn = document.getElementById(logEndWithErrorId);
-                settings.logEndWithErrorStopSpn = document.getElementById(logEndWithErrorStopId);
                 settings.outputPrefix = outputPrefix;
                 settings.testSpn = document.getElementById(testId);
                 settings.confirmationSpn = document.getElementById(confirmationId);
@@ -613,7 +605,7 @@ function (n) {
                         settings.validateBtn.disabled = true;
                         var folderName = GetFolderName();
                         settings.testSpn.innerText = Rigsarkiv.Language.callback().getValue("nemesis-test-id").format(folderName);
-                        settings.logCallback().section(settings.logType,folderName,settings.logStartSpn.innerHTML);
+                        settings.logCallback().section(settings.logType,folderName,Rigsarkiv.Language.callback().getValue("nemesis-output-structure-logStart"));
                         return Validate();
                     },
                     update: function(path)

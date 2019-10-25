@@ -35,10 +35,6 @@ function (n) {
             outputPrefix: null,
             rightsCallback: null,
             logCallback: null,
-            logStartSpn: null,
-            logEndNoErrorSpn: null,
-            logEndWithErrorSpn: null,
-            logEndWithErrorStopSpn: null,
             selectDirBtn: null,
             validateBtn: null,
             confirmationSpn: null,
@@ -689,10 +685,10 @@ function (n) {
                 });
                 if(settings.errors === 0) {
                     LogInfo("-CheckData-Ok",null);
-                    settings.logCallback().section(settings.logType,folderName,settings.logEndNoErrorSpn.innerHTML);
+                    settings.logCallback().section(settings.logType,folderName,Rigsarkiv.Language.callback().getValue("nemesis-output-data-logEndNoError"));
                 } else {
                     LogInfo(enableData ? "-CheckData-Warning" : "-CheckData-ErrorStop",null);
-                    settings.logCallback().section(settings.logType,folderName,enableData ? settings.logEndWithErrorSpn.innerHTML : settings.logEndWithErrorStopSpn.innerHTML);
+                    settings.logCallback().section(settings.logType,folderName,enableData ? Rigsarkiv.Language.callback().getValue("nemesis-output-data-logEndWithError") : Rigsarkiv.Language.callback().getValue("nemesis-output-data-logEndWithErrorStop"));
                 }                                
                 if(enableConvert) {
                     settings.confirmationSpn.innerHTML = settings.totalErrors > 0 ? Rigsarkiv.Language.callback().getValue("nemesis-output-ConvertWarningEnabled") : Rigsarkiv.Language.callback().getValue("nemesis-output-ConvertEnabled");
@@ -717,7 +713,7 @@ function (n) {
             console.logInfo(`data selected path: ${settings.deliveryPackagePath}`,"Rigsarkiv.Nemesis.Data.Validate"); 
             try 
             {                
-                settings.logCallback().section(settings.logType,GetFolderName(),settings.logStartSpn.innerHTML);            
+                settings.logCallback().section(settings.logType,GetFolderName(),Rigsarkiv.Language.callback().getValue("nemesis-output-data-logStart"));            
                 ValidateData(); 
                 if(settings.dataFiles.length === 0) 
                 { 
@@ -760,15 +756,11 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Nemesis.Data = {
-            initialize: function (rightsCallback,logCallback,outputErrorId,logStartId,logEndNoErrorId,logEndWithErrorId,logEndWithErrorStopId,outputPrefix,selectDirectoryId,validateId,confirmationId,checkEncodingId,convertId) { 
+            initialize: function (rightsCallback,logCallback,outputErrorId,outputPrefix,selectDirectoryId,validateId,confirmationId,checkEncodingId,convertId) { 
                 settings.rightsCallback = rightsCallback;
                 settings.logCallback = logCallback;
                 settings.outputErrorSpn = document.getElementById(outputErrorId);
                 settings.outputErrorText = settings.outputErrorSpn.innerHTML;
-                settings.logStartSpn = document.getElementById(logStartId);
-                settings.logEndNoErrorSpn = document.getElementById(logEndNoErrorId);  
-                settings.logEndWithErrorSpn = document.getElementById(logEndWithErrorId);
-                settings.logEndWithErrorStopSpn = document.getElementById(logEndWithErrorStopId);
                 settings.outputPrefix = outputPrefix;
                 settings.ConvertBtn = document.getElementById(convertId);
                 settings.selectDirBtn = document.getElementById(selectDirectoryId);
