@@ -25,7 +25,7 @@ function (n) {
             pathDirTxt: null,
             selectedPath: null,
             validateBtn: null,
-            outputPrefix: null,
+            output: null,
             logCallback: null,
             metadataCallback: null,
             deliveryPackagePath: null,
@@ -53,10 +53,7 @@ function (n) {
             settings.errorStop = false;
             settings.convertStop = false;
             settings.documents = [];
-            $("span[id^='" + settings.outputPrefix + "']").hide();
-             $("span[id^='" + settings.outputPrefix + "']").each(function() {
-                $(this).html("");
-            });
+            settings.output.html("");
         }
 
         // get selected folder name 
@@ -67,9 +64,8 @@ function (n) {
 
         // View Element by id & return texts
         var ViewElement = function(id,formatText1,formatText2,formatText3,formatText4, formatText5, formatText6) {
-            var result = Rigsarkiv.Language.callback().getValue(id); 
-            //TODO : Remove
-            if(result == null) { result = settings.outputText[id]; }
+            var result = Rigsarkiv.Language.callback().getValue(id);
+            if(result == null) { return null; } 
             if(formatText1 != null) { 
                 if(formatText2 != null) {
                     if(formatText3 != null) {
@@ -98,20 +94,15 @@ function (n) {
                     result = result.format(formatText1);
                 } 
             }
-
-            var element = $("span#{0}".format(id));            
             if(result != null) {
-                element.html(element.html() + result);
+                settings.output.html(settings.output.html() + result.format(""));
             }
-            element.show();
-
             return result;
         }
 
         //handle error logging + HTML output
-        var LogError = function(postfixId) {
+        var LogError = function(id) {
             if(settings.errors < errorsMax) {
-                var id = "{0}{1}".format(settings.outputPrefix,postfixId);
                 var text = null;
                 if (arguments.length > 1) {                
                     if(arguments.length === 2) { text = ViewElement(id,arguments[1],null,null); }
@@ -121,15 +112,15 @@ function (n) {
                     if(arguments.length === 6) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5]); }
                     if(arguments.length === 7) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5],arguments[6]); }
                 }
-                settings.logCallback().error(settings.logType,GetFolderName(),text);
+                var textInfo = Rigsarkiv.Language.callback().getValue("{0}-I".format(id));
+                if(text != null) { settings.logCallback().error(settings.logType,GetFolderName(),textInfo != null ? text.format(textInfo) : text); }
             }
             settings.errors += 1;
             return false;
         }
 
         //Handle warn logging
-        var LogWarn = function(postfixId) {
-            var id = "{0}{1}".format(settings.outputPrefix,postfixId);
+        var LogWarn = function(id) {
             var text = null;
             if (arguments.length > 1) {                
                 if(arguments.length === 2) { text = ViewElement(id,arguments[1],null,null); }
@@ -139,14 +130,14 @@ function (n) {
                 if(arguments.length === 6) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5]); }
                 if(arguments.length === 7) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5],arguments[6]); }
             }
-            settings.logCallback().warn(settings.logType,GetFolderName(),text);
+            var textInfo = Rigsarkiv.Language.callback().getValue("{0}-I".format(id));
+            if(text != null) { settings.logCallback().warn(settings.logType,GetFolderName(),textInfo != null ? text.format(textInfo) : text); }
             return true;
         }
         
         //Handle info logging
-        var LogInfo = function(postfixId) {
-            var id = "{0}{1}".format(settings.outputPrefix,postfixId);
-            var text = null;
+        var LogInfo = function(id) {
+           var text = null;
             if (arguments.length > 1) {                
                 if(arguments.length === 2) { text = ViewElement(id,arguments[1],null,null); }
                 if(arguments.length === 3) { text = ViewElement(id,arguments[1],arguments[2],null); }
@@ -155,7 +146,8 @@ function (n) {
                 if(arguments.length === 6) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5]); }
                 if(arguments.length === 7) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5],arguments[6]); }
             }
-            settings.logCallback().info(settings.logType,GetFolderName(),text);
+            var textInfo = Rigsarkiv.Language.callback().getValue("{0}-I".format(id));
+            if(text != null) { settings.logCallback().info(settings.logType,GetFolderName(),textInfo != null ? text.format(textInfo) : text); }
             return true;
         }
 
@@ -502,11 +494,11 @@ function (n) {
             var result = true;
             var folderName = GetFolderName();
             if(!deliveryPackagePattern.test(folderName)) {
-                result = LogError("-CheckId-Error",null);
+                result = LogError("nemesis-processing-CheckId-Error",null);
             }
             else {
                 if(folderName === settings.defaultFolder) {
-                    LogWarn("-CheckId-Warning",null)
+                    LogWarn("nemesis-processing-CheckId-Warning",null)
                 }          
             }
             return result;    
@@ -520,13 +512,13 @@ function (n) {
                 ValidateName();
                 ValidateStructure();
                  if(settings.errors === 0) {
-                    LogInfo("-CheckFolders-Ok",null);
+                    LogInfo("nemesis-processing-CheckFolders-Ok",null);
                     settings.logCallback().section(settings.logType,folderName,Rigsarkiv.Language.callback().getValue("nemesis-output-structure-logEndNoError"));
                 } else {
-                    LogInfo(!settings.errorStop ? "-CheckFolders-Warning" : "-CheckFolders-ErrorStop",null);
+                    LogInfo(!settings.errorStop ? "nemesis-processing-CheckFolders-Warning" : "nemesis-processing-CheckFolders-ErrorStop",null);
                     settings.logCallback().section(settings.logType,folderName,!settings.errorStop ? Rigsarkiv.Language.callback().getValue("nemesis-output-structure-logEndWithError") : Rigsarkiv.Language.callback().getValue("nemesis-output-structure-logEndWithErrorStop"));                    
                 }
-                if(!settings.errorStop) { 
+                if(!settings.errorStop) { //TODO remove settings.outputText
                     return settings.metadataCallback().validate(settings.deliveryPackagePath,settings.outputText,settings.errors,settings.convertStop); 
                 } 
                 else {
@@ -576,7 +568,7 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Nemesis.Structure = {        
-            initialize: function (logCallback,metadataCallback,outputErrorId,selectDirectoryId,pathDirectoryId,validateId,outputPrefix,testId,confirmationId,convertId) {            
+            initialize: function (logCallback,metadataCallback,outputErrorId,selectDirectoryId,pathDirectoryId,validateId,outputId,testId,confirmationId,convertId) {            
                 settings.logCallback = logCallback;
                 settings.metadataCallback = metadataCallback;
                 settings.outputErrorSpn = document.getElementById(outputErrorId);
@@ -584,11 +576,12 @@ function (n) {
                 settings.selectDirBtn = document.getElementById(selectDirectoryId);
                 settings.pathDirTxt = document.getElementById(pathDirectoryId);
                 settings.validateBtn = document.getElementById(validateId);
-                settings.outputPrefix = outputPrefix;
+                settings.output = $("#" + outputId);
                 settings.testSpn = document.getElementById(testId);
                 settings.confirmationSpn = document.getElementById(confirmationId);
                 settings.ConvertBtn = document.getElementById(convertId);
-                $("span[id^='" + settings.outputPrefix + "']").each(function() {
+                //TODO remove
+                $("span[id^='nemesis-processing']").each(function() {
                     settings.outputText[this.id] = $(this).html();
                     $(this).html("");
                 });

@@ -1381,11 +1381,7 @@
             {
                 "key": "nemesis-batchFile-test-Errors",
                 "value": "fejl"
-            },
-            {
-                "key": "nemesis-processing-CheckData-FileRow-ColumnsString-ValueBlankCharacters-WarningXXX",
-                "value": "<i class=\"fas fa-exclamation-triangle warning\"><div id=\"15811\" hidden=\"true\">xxxx</div></i>Der findes foran- eller efterstillede blanktegn i værdien for variablen <i>{3}</i> i række <i>{2}</i> i datafilen <i>{0}</i>. Hvis disse blanktegn er betydningsbærende skal de erstattes af nogle tilladte tegn.<br/>"
-            },
+            },            
             {
                 "key": "nemesis-output-structure-logStart",
                 "value": "Mappestruktur test startet<br/>"
@@ -1433,6 +1429,30 @@
             {
                 "key": "nemesis-output-data-logEndWithErrorStop",
                 "value": "Datafiler test afbrudt<br/>"
+            },
+            {
+                "key": "nemesis-processing-CheckFolders-Ok",
+                "value": "<span><i class=\"fas fa-check-circle ok\"></i>Mappestruktur test gennemført uden fejl<br/></span>"
+            },
+            {
+                "key": "nemesis-processing-CheckFolders-Warning",
+                "value": "<span><i class=\"fas fa-exclamation-triangle warning\"></i>Mappestruktur test gennemført med fejl<br/></span>"
+            },
+            {
+                "key": "nemesis-processing-CheckFolders-ErrorStop",
+                "value": "<span><i class=\"fas fa-exclamation-triangle error\"></i>Mappestruktur test afbrudt (Metadatafiler og Datafiler tests ikke startet)<br/></span>"
+            },
+            {
+                "key": "nemesis-processing-CheckId-Error",
+                "value": "<span name=\"15100\"><i class=\"fas fa-times error\">{0}</i>Den valgte afleveringspakke er ikke navngivet korrekt<br/></span>"
+            },
+            {
+                "key": "nemesis-processing-CheckId-Error-I",
+                "value": "<div id=\"15100\"><h3>Vejledning</h3>Omdøb afleveringspakkens yderste mappe så mappenavnet starter med FD. efterfulgt af det udleverede løbenummer bestående udelukkende af cifre og uden foranstillede nuller.<h3>Eksempel</h3>FD.12345<h3>Krav i bilag 9</h3><b>9.B.1</b> I roden af filsystemet på afleveringsmediet, jf. bilag 7, skal der være placeret en mappe navngivet med afleveringspakkens navn. Afleveringspakkens navn består af præfikset »FD.« samt et unikt løbenummer for afleveringspakken. <br/><b>9.B.2</b> Løbenummeret for afleveringspakken udleveres af arkivet.</div>"
+            },
+            {
+                "key": "nemesis-processing-CheckId-Warning",
+                "value": "<span><i class=\"fas fa-exclamation-triangle warning\"></i>Test id advarsel<br/></span>"
             }
         ]
     }
