@@ -1327,6 +1327,62 @@
                 "value": "Test afsluttet med {0} fejl"
             },
             {
+                "key": "nemesis-batchFile-Title",
+                "value": "Test Log"
+            },
+            {
+                "key": "nemesis-batchFile-Title-H1",
+                "value": "Batch Test Log"
+            },
+            {
+                "key": "nemesis-batchFile-runDate-P",
+                "value": "Dato for testkørsel:"
+            },
+            {
+                "key": "nemesis-batchFile-filters-SPAN",
+                "value": "Filter:"
+            },
+            {
+                "key": "nemesis-batchFile-error-LABEL",
+                "value": "Fejl:"
+            },
+            {
+                "key": "nemesis-batchFile-warning-LABEL",
+                "value": "OBS:"
+            },
+            {
+                "key": "nemesis-batchFile-Selector-LABEL",
+                "value": "FD Pakke:"
+            },
+            {
+                "key": "nemesis-batchFile-Selector-OPTION",
+                "value": "--Alle FD Pakker--"
+            },
+            {
+                "key": "nemesis-batchFile-test-Title-H3",
+                "value": "Test af:"
+            },
+            {
+                "key": "nemesis-batchFile-test-Start-P",
+                "value": "Batch test startet"
+            },
+            {
+                "key": "nemesis-batchFile-test-End-P",
+                "value": "Test afsluttet med {0} fejl"
+            },
+            {
+                "key": "nemesis-batchFile-test-WholeContains",
+                "value": "Hele batch testen inderholder"
+            },
+            {
+                "key": "nemesis-batchFile-test-Contains",
+                "value": "indeholder"
+            },
+            {
+                "key": "nemesis-batchFile-test-Errors",
+                "value": "fejl"
+            },
+            {
                 "key": "nemesis-processing-CheckData-FileRow-ColumnsString-ValueBlankCharacters-WarningXXX",
                 "value": "<i class=\"fas fa-exclamation-triangle warning\"><div id=\"15811\" hidden=\"true\">xxxx</div></i>Der findes foran- eller efterstillede blanktegn i værdien for variablen <i>{3}</i> i række <i>{2}</i> i datafilen <i>{0}</i>. Hvis disse blanktegn er betydningsbærende skal de erstattes af nogle tilladte tegn.<br/>"
             },
