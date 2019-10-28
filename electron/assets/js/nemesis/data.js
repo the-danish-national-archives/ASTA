@@ -39,7 +39,6 @@ function (n) {
             validateBtn: null,
             confirmationSpn: null,
             validateRowsText: null,
-            checkEncodingText: null,
             deliveryPackagePath: null,
             outputText: {},
             ConvertBtn: null,
@@ -625,8 +624,6 @@ function (n) {
             if(settings.runIndex < settings.dataFiles.length) {
                 var dataFilePath = settings.dataFiles[settings.runIndex];
                 settings.fileName = GetFileName(dataFilePath);
-                //settings.confirmationSpn.innerHTML = settings.checkEncodingText.format(settings.fileName);
-                //setTimeout(ValidateEncoding, 1);
                 settings.metadataFileName =  "{0}.txt".format(settings.fileName.substring(0,settings.fileName.indexOf(".")));
                 settings.table = GetTableData();
                 settings.rowIndex = 0;
@@ -756,7 +753,7 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Nemesis.Data = {
-            initialize: function (rightsCallback,logCallback,outputErrorId,outputPrefix,selectDirectoryId,validateId,confirmationId,checkEncodingId,convertId) { 
+            initialize: function (rightsCallback,logCallback,outputErrorId,outputPrefix,selectDirectoryId,validateId,confirmationId,convertId) { 
                 settings.rightsCallback = rightsCallback;
                 settings.logCallback = logCallback;
                 settings.outputErrorSpn = document.getElementById(outputErrorId);
@@ -766,7 +763,6 @@ function (n) {
                 settings.selectDirBtn = document.getElementById(selectDirectoryId);
                 settings.validateBtn = document.getElementById(validateId);
                 settings.confirmationSpn  = document.getElementById(confirmationId);
-                settings.checkEncodingText = document.getElementById(checkEncodingId).innerHTML;
                 settings.confirmationSpn.innerHTML = "";
                 AddEvents();
             },
