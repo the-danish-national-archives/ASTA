@@ -1295,8 +1295,36 @@
                 "value": "<br/><p class=\"error\">Testen er afbrudt og afleveringspakken er ikke testet færdig. Fejl vist i loggen skal rettes før testen kan fortsætte.</p>"
             },
             {
-                "key": "nemesis-logFile-runDate",
+                "key": "nemesis-logFile-Title",
+                "value": "Test Log"
+            },
+            {
+                "key": "nemesis-logFile-runDate-P",
                 "value": "Dato for testkørsel"
+            },
+            {
+                "key": "nemesis-logFile-filters-SPAN",
+                "value": "Filter:"
+            },
+            {
+                "key": "nemesis-logFile-error-LABEL",
+                "value": "Fejl:"
+            },
+            {
+                "key": "nemesis-logFile-warning-LABEL",
+                "value": "OBS:"
+            },
+            {
+                "key": "nemesis-logFile-test-Title-H3",
+                "value": "Test af afleveringspakke ID:"
+            },
+            {
+                "key": "nemesis-logFile-test-Start-P",
+                "value": "Test startet"
+            },
+            {
+                "key": "nemesis-logFile-test-End-P",
+                "value": "Test afsluttet med {0} fejl"
             },
             {
                 "key": "nemesis-processing-CheckData-FileRow-ColumnsString-ValueBlankCharacters-WarningXXX",
