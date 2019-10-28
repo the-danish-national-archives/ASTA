@@ -95,7 +95,7 @@ function (n) {
                 } 
             }
             if(result != null) {
-                settings.output.html(settings.output.html() + result.format(""));
+                settings.output.html(settings.output.html() + "<span>{0}</span>".format(result));
             }
             return result;
         }
@@ -112,8 +112,7 @@ function (n) {
                     if(arguments.length === 6) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5]); }
                     if(arguments.length === 7) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5],arguments[6]); }
                 }
-                var textInfo = Rigsarkiv.Language.callback().getValue("{0}-I".format(id));
-                if(text != null) { settings.logCallback().error(settings.logType,GetFolderName(),textInfo != null ? text.format(textInfo) : text); }
+                if(text != null) { settings.logCallback().error(settings.logType,GetFolderName(),text); }
             }
             settings.errors += 1;
             return false;
@@ -130,8 +129,7 @@ function (n) {
                 if(arguments.length === 6) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5]); }
                 if(arguments.length === 7) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5],arguments[6]); }
             }
-            var textInfo = Rigsarkiv.Language.callback().getValue("{0}-I".format(id));
-            if(text != null) { settings.logCallback().warn(settings.logType,GetFolderName(),textInfo != null ? text.format(textInfo) : text); }
+            if(text != null) { settings.logCallback().warn(settings.logType,GetFolderName(),text); }
             return true;
         }
         
@@ -146,8 +144,7 @@ function (n) {
                 if(arguments.length === 6) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5]); }
                 if(arguments.length === 7) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5],arguments[6]); }
             }
-            var textInfo = Rigsarkiv.Language.callback().getValue("{0}-I".format(id));
-            if(text != null) { settings.logCallback().info(settings.logType,GetFolderName(),textInfo != null ? text.format(textInfo) : text); }
+            if(text != null) { settings.logCallback().info(settings.logType,GetFolderName(),text); }
             return true;
         }
 
@@ -170,7 +167,7 @@ function (n) {
                     }
                     documentIds.forEach(id => {
                         if(!settings.documents.includes(id)) {
-                            result = LogError("-CheckFolderIndices-ContextDocumentation-FileRequired-Error",fileName,id); 
+                            result = LogError("nemesis-processing-CheckFolderIndices-ContextDocumentation-FileRequired-Error",fileName,id); 
                         }
                     });
                     settings.documents.forEach(id => {
@@ -180,11 +177,11 @@ function (n) {
                     });
                 }
                 else {
-                    result = LogError("-CheckFolderIndices-FileEmpty-Error",fileName);
+                    result = LogError("nemesis-processing-CheckFolderIndices-FileEmpty-Error",fileName);
                 }
             }
             else {
-                result = LogError("-CheckFolderIndices-FileEmpty-Error",fileName);
+                result = LogError("nemesis-processing-CheckFolderIndices-FileEmpty-Error",fileName);
             }
             return result;
         }
@@ -197,13 +194,13 @@ function (n) {
             var subFiles = fs.readdirSync(destPath);
             settings.defaultIndicesFiles.forEach(file => {
                 if(!subFiles.includes(file)) { 
-                    result = LogError("-CheckFolderIndices-Error",file);
+                    result = LogError("nemesis-processing-CheckFolderIndices-Error",file);
                 }
             });
             if(result && subFiles.length > 2) {
                 subFiles.forEach(file => {
                     if(result && file !== settings.defaultIndicesFiles[0] && file !== settings.defaultIndicesFiles[1]) {
-                        result = LogError("-CheckFolderIndicesCount-Error",file);
+                        result = LogError("nemesis-processing-CheckFolderIndicesCount-Error",file);
                     }
                 });
             }
@@ -311,7 +308,7 @@ function (n) {
             }
             else {
                 settings.errorStop = true;
-                result = LogError("-CheckFolderDataEmpty-Error",null);
+                result = LogError("nemesis-processing-CheckFolderDataEmpty-Error",null);
             }
             return result;
         }
@@ -462,7 +459,7 @@ function (n) {
             var subFolders = fs.readdirSync(settings.deliveryPackagePath);
             settings.defaultSubFolders.forEach(folder => {
                 if(!subFolders.includes(folder)) {
-                   result = LogError("-CheckFolders-Error",folder);
+                   result = LogError("nemesis-processing-CheckFolders-Error",folder);
                    checkfolders = false; 
                    settings.convertStop = true;
                    if(folder === settings.defaultSubFolders[1]) { settings.errorStop = true; }
@@ -482,7 +479,7 @@ function (n) {
             if(checkfolders && subFolders.length > 3) {
                 subFolders.filter(junk.not).forEach(folder => {
                     if(checkfolders && folder !== settings.defaultSubFolders[0] && folder !== settings.defaultSubFolders[1] && folder !== settings.defaultSubFolders[2]) {
-                        result = LogError("-CheckFoldersCount-Error",folder);
+                        result = LogError("nemesis-processing-CheckFoldersCount-Error",folder);
                     }
                 });
             }
