@@ -163,7 +163,12 @@ function (n) {
             var data = fs.readFileSync(settings.filePath);        
             var folders = Rigsarkiv.Hybris.Structure.callback().deliveryPackagePath.getFolders();
             var folderName = folders[folders.length - 1];
-            var updatedData = data.toString().format(folderName,settings.logs.join("\r\n"));
+            var title = Rigsarkiv.Language.callback().getValue("hybris-contextdocuments-template-Title");
+            var documentsList = Rigsarkiv.Language.callback().getValue("hybris-contextdocuments-template-documentsList-H3");
+            var th1 = Rigsarkiv.Language.callback().getValue("hybris-contextdocuments-template-documentsList-TH1");
+            var th2 = Rigsarkiv.Language.callback().getValue("hybris-contextdocuments-template-documentsList-TH2");
+            var th3 = Rigsarkiv.Language.callback().getValue("hybris-contextdocuments-template-documentsList-TH3");
+            var updatedData = data.toString().format(folderName,settings.logs.join("\r\n"),title,documentsList,th1,th2,th3);
             fs.writeFileSync(settings.filePath, updatedData);                         
             settings.logs = [];                               
         }

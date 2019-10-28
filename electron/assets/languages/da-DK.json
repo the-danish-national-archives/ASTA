@@ -1134,6 +1134,26 @@
                 "value": "Browse"
             },
             {
+                "key": "hybris-contextdocuments-template-Title",
+                "value": "Kontekstdokumenter"
+            },
+            {
+                "key": "hybris-contextdocuments-template-documentsList-H3",
+                "value": "Liste over kontekstdokumenter registeret i contextDocumentationIndex.xml filen placeret i afleveringspakke:"
+            },
+            {
+                "key": "hybris-contextdocuments-template-documentsList-TH1",
+                "value": "Mappenummer"
+            },
+            {
+                "key": "hybris-contextdocuments-template-documentsList-TH2",
+                "value": "Dokumenttitel"
+            },
+            {
+                "key": "hybris-contextdocuments-template-documentsList-TH3",
+                "value": "Original dokumentsti for de placerede kontekstdokumenter"
+            },
+            {
                 "key": "hybris-panel-overview-confirmation-SPAN",
                 "value": "Kontekstdokumenterne er tilføjet"
             },
