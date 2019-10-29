@@ -172,7 +172,7 @@ function (n) {
                     });
                     settings.documents.forEach(id => {
                         if(!documentIds.includes(id)) {
-                            result = LogError("-CheckFolderContextDocumentation-ContextDocumentation-FileRequired-Error",fileName,id); 
+                            result = LogError("nemesis-processing-CheckFolderContextDocumentation-ContextDocumentation-FileRequired-Error",fileName,id); 
                         }
                     });
                 }
@@ -215,15 +215,15 @@ function (n) {
                 if(file !== settings.dataFileName.format(tableFolderName) && file !== settings.metadataFileName.format(tableFolderName)) {
                     var fileExt = file.substring(file.indexOf("."));
                     if(fileExt !== settings.dataFileName.format("") && fileExt !== settings.metadataFileName.format("")) {
-                        result = LogError("-CheckFolderData-TableFolderFileExt-Error",tableFolderName,file);
+                        result = LogError("nemesis-processing-CheckFolderData-TableFolderFileExt-Error",tableFolderName,file);
                     }
                     else {
                         if(dataFilePattern.test(file) || metadataFilePattern.test(file)) {
-                            result = LogError("-CheckFolderData-TableFolderFileOrder-Error",tableFolderName,file);
+                            result = LogError("nemesis-processing-CheckFolderData-TableFolderFileOrder-Error",tableFolderName,file);
                             settings.errorStop = true;
                         }
                         else {
-                            result = LogError("-CheckFolderData-TableFolderFile-Error",tableFolderName,file);
+                            result = LogError("nemesis-processing-CheckFolderData-TableFolderFile-Error",tableFolderName,file);
                         }
                     }
                 }
@@ -237,15 +237,15 @@ function (n) {
             if(subFiles != null && subFiles.length > 0) {
                 var fileName = settings.dataFileName.format(tableFolderName);
                 if(!subFiles.includes(fileName)) {
-                    result = LogError("-CheckFolderData-TableFolderDataFile-Error",tableFolderName);
+                    result = LogError("nemesis-processing-CheckFolderData-TableFolderDataFile-Error",tableFolderName);
                 }
                 fileName = settings.metadataFileName.format(tableFolderName);
                 if(!subFiles.includes(fileName)) {
-                    result = LogError("-CheckFolderData-TableFolderMetadataFile-Error",tableFolderName);
+                    result = LogError("nemesis-processing-CheckFolderData-TableFolderMetadataFile-Error",tableFolderName);
                 }
             }
             else {
-                result = LogError("-CheckFolderData-TableFolderEmpty-Error",tableFolderName);
+                result = LogError("nemesis-processing-CheckFolderData-TableFolderEmpty-Error",tableFolderName);
             }
             if(!result) { settings.errorStop = true; }
             return result;
@@ -260,7 +260,7 @@ function (n) {
             });
             tables.sort(function(a, b){return a-b});
             if(tables[0] !== 1) {
-                result = LogError("-CheckFolderData-TableFolders1-Error",null);
+                result = LogError("nemesis-processing-CheckFolderData-TableFolders1-Error",null);
             }
             var i;
             var orderResult = true;
@@ -271,7 +271,7 @@ function (n) {
                 }
             }
             if(!orderResult) {
-                result = LogError("-CheckFolderData-TableFoldersOrder-Error",null);
+                result = LogError("nemesis-processing-CheckFolderData-TableFoldersOrder-Error",null);
             }
             return result;
         }
@@ -285,7 +285,7 @@ function (n) {
                 var validTablesName = true;
                 subFolders.filter(junk.not).forEach(folder => {
                     if(!dataTablePattern.test(folder)) {
-                        result = LogError("-CheckFolderData-TableFolders-Error",folder);
+                        result = LogError("nemesis-processing-CheckFolderData-TableFolders-Error",folder);
                         validTablesName = false;
                     }
                     else 
@@ -322,7 +322,7 @@ function (n) {
             });
             files.sort(function(a, b){return a-b});
             if(files[0] !== 1) {
-                result = LogError("-CheckFolderContextDocumentation-DocCollectionDocumentFileName1-Error",documentFolderName);
+                result = LogError("nemesis-processing-CheckFolderContextDocumentation-DocCollectionDocumentFileName1-Error",documentFolderName);
             }
             var i;
             var orderResult = true;
@@ -333,7 +333,7 @@ function (n) {
                 }
             }
             if(!orderResult) {
-                result = LogError("-CheckFolderContextDocumentation-DocCollectionDocumentFilesOrder-Error",documentFolderName);
+                result = LogError("nemesis-processing-CheckFolderContextDocumentation-DocCollectionDocumentFilesOrder-Error",documentFolderName);
             }
             return result;
         }
@@ -347,13 +347,13 @@ function (n) {
                 subFiles.forEach(file => {                    
                     var fileName = file.substring(0,file.indexOf("."))
                     if(!docFolderPattern.test(fileName)) {
-                        result = LogError("-CheckFolderContextDocumentation-DocCollectionDocumentFileName-Error",documentFolderName,file);
+                        result = LogError("nemesis-processing-CheckFolderContextDocumentation-DocCollectionDocumentFileName-Error",documentFolderName,file);
                         validFilesName = false;
                     }
                     else {
                         var fileExt = file.substring(file.indexOf("."));
                         if(!settings.docFilesExt.includes(fileExt)) {
-                            result = LogError("-CheckFolderContextDocumentation-DocCollectionDocumentFileExt-Error",documentFolderName,fileExt);
+                            result = LogError("nemesis-processing-CheckFolderContextDocumentation-DocCollectionDocumentFileExt-Error",documentFolderName,fileExt);
                         } 
                         else {
                             if(!filesExt.includes(fileExt)) { filesExt.push(fileExt); }
@@ -361,12 +361,12 @@ function (n) {
                     }                    
                 });
                 if(filesExt.length > 1) {
-                    result = LogError("-CheckFolderContextDocumentation-DocCollectionDocumentFilesExt-Error",documentFolderName);
+                    result = LogError("nemesis-processing-CheckFolderContextDocumentation-DocCollectionDocumentFilesExt-Error",documentFolderName);
                 }
                 if(validFilesName && !ValidateDocumentFilesOrder(documentFolderName,subFiles)) { result = false; }
             }
             else {
-                result = LogError("-CheckFolderContextDocumentation-DocCollectionDocumentFolderEmpty-Error",documentFolderName);
+                result = LogError("nemesis-processing-CheckFolderContextDocumentation-DocCollectionDocumentFolderEmpty-Error",documentFolderName);
             }
             return result;   
         }
@@ -380,7 +380,7 @@ function (n) {
             });
             folders.sort(function(a, b){return a-b});
             if(folders[0] !== 1) {
-                result = LogError("-CheckFolderContextDocumentation-DocCollectionDocumentFolder1-Error",null);
+                result = LogError("nemesis-processing-CheckFolderContextDocumentation-DocCollectionDocumentFolder1-Error",null);
             }
             var i;
             var orderResult = true;
@@ -391,7 +391,7 @@ function (n) {
                 }
             }
             if(!orderResult) {
-                result = LogError("-CheckFolderContextDocumentation-DocCollectionDocumentFolderOrder-Error",null);
+                result = LogError("nemesis-processing-CheckFolderContextDocumentation-DocCollectionDocumentFolderOrder-Error",null);
             }
             return result;
         }
@@ -406,7 +406,7 @@ function (n) {
                 subFolders.filter(junk.not).forEach(folder => {
                     settings.documents.push(folder);
                     if(!docFolderPattern.test(folder)) {
-                        result = LogError("-CheckFolderContextDocumentation-DocCollectionDocumentFolder-Error",folder);
+                        result = LogError("nemesis-processing-CheckFolderContextDocumentation-DocCollectionDocumentFolder-Error",folder);
                         validFoldersName = false;
                     }
                     else { 
@@ -420,7 +420,7 @@ function (n) {
                 if(validFoldersName && !ValidateDocumentFoldersOrder(subFolders.filter(junk.not))) { result = false; }
             }
             else {
-                result = LogError("-CheckFolderContextDocumentation-DocCollectionEmpty-Error",null);
+                result = LogError("nemesis-processing-CheckFolderContextDocumentation-DocCollectionEmpty-Error",null);
             }
             return result;
         }
@@ -432,7 +432,7 @@ function (n) {
             var subFolders = fs.readdirSync(destPath);
             if(subFolders != null && subFolders.length > 0) {
                 if(!subFolders.includes(settings.docCollectionFolderName)) {
-                    result = LogError("-CheckFolderContextDocumentation-DocCollections-Error",null);
+                    result = LogError("nemesis-processing-CheckFolderContextDocumentation-DocCollections-Error",null);
                 }
                 else 
                 {
@@ -441,13 +441,13 @@ function (n) {
                     }
                     subFolders.filter(junk.not).forEach(folder => {
                         if(folder != settings.docCollectionFolderName) {
-                            result = LogError("-CheckFolderContextDocumentation-DocCollectionsCount-Error",folder);
+                            result = LogError("nemesis-processing-CheckFolderContextDocumentation-DocCollectionsCount-Error",folder);
                         }
                     });
                 }
             }
             else {
-                result = LogError("-CheckFolderContextDocumentationEmpty-Error",null);
+                result = LogError("nemesis-processing-CheckFolderContextDocumentationEmpty-Error",null);
             }
             return result;
         }
