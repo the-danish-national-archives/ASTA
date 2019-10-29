@@ -31,7 +31,6 @@ function (n) {
             deliveryPackagePath: null,
             testSpn: null,
             confirmationSpn: null,
-            outputText: {},
             metadataFileName: "{0}.txt",
             dataFileName: "{0}.csv",
             docCollectionFolderName: "docCollection1",
@@ -515,8 +514,8 @@ function (n) {
                     LogInfo(!settings.errorStop ? "nemesis-processing-CheckFolders-Warning" : "nemesis-processing-CheckFolders-ErrorStop",null);
                     settings.logCallback().section(settings.logType,folderName,!settings.errorStop ? Rigsarkiv.Language.callback().getValue("nemesis-output-structure-logEndWithError") : Rigsarkiv.Language.callback().getValue("nemesis-output-structure-logEndWithErrorStop"));                    
                 }
-                if(!settings.errorStop) { //TODO remove settings.outputText
-                    return settings.metadataCallback().validate(settings.deliveryPackagePath,settings.outputText,settings.errors,settings.convertStop); 
+                if(!settings.errorStop) { 
+                    return settings.metadataCallback().validate(settings.deliveryPackagePath,settings.errors,settings.convertStop); 
                 } 
                 else {
                     settings.confirmationSpn.innerHTML = Rigsarkiv.Language.callback().getValue("nemesis-output-ConvertDisabled");
@@ -576,12 +575,7 @@ function (n) {
                 settings.output = $("#" + outputId);
                 settings.testSpn = document.getElementById(testId);
                 settings.confirmationSpn = document.getElementById(confirmationId);
-                settings.ConvertBtn = document.getElementById(convertId);
-                //TODO remove
-                $("span[id^='nemesis-processing']").each(function() {
-                    settings.outputText[this.id] = $(this).html();
-                    $(this).html("");
-                });
+                settings.ConvertBtn = document.getElementById(convertId);                
                 AddEvents();
             },
             callback: function () {

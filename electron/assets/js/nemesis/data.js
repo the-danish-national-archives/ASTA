@@ -32,7 +32,7 @@ function (n) {
         var settings = { 
             outputErrorSpn: null,
             outputErrorText: null,
-            outputPrefix: null,
+            output: null,
             rightsCallback: null,
             logCallback: null,
             selectDirBtn: null,
@@ -40,7 +40,6 @@ function (n) {
             confirmationSpn: null,
             validateRowsText: null,
             deliveryPackagePath: null,
-            outputText: {},
             ConvertBtn: null,
             logType: "data",
             fileName: null,
@@ -70,9 +69,8 @@ function (n) {
 
         // View Element by id & return texts
         var ViewElement = function(id,formatText1,formatText2,formatText3,formatText4, formatText5, formatText6) {
-            var result = Rigsarkiv.Language.callback().getValue(id); 
-            //TODO : Remove
-            if(result == null) { result = settings.outputText[id]; }
+            var result = Rigsarkiv.Language.callback().getValue(id);
+            if(result == null) { return null; } 
             if(formatText1 != null) { 
                 if(formatText2 != null) {
                     if(formatText3 != null) {
@@ -101,19 +99,14 @@ function (n) {
                     result = result.format(formatText1);
                 } 
             }
-
-            var element = $(".nemesisOutput");            
             if(result != null) {
-                element.html(element.html() + result);
+                settings.output.html(settings.output.html() + "<span>{0}</span>".format(result));
             }
-            //element.show();
-
             return result;
         }
 
         //handle error logging + HTML output
-        var LogError = function(postfixId) {
-            var id = "{0}{1}".format(settings.outputPrefix,postfixId);
+        var LogError = function(id) {
             var text = null;
             if (arguments.length > 1) {                
                 if(arguments.length === 2) { text = ViewElement(id,arguments[1],null,null); }
@@ -123,7 +116,7 @@ function (n) {
                 if(arguments.length === 6) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5]); }
                 if(arguments.length === 7) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5],arguments[6]); }
             }
-            settings.logCallback().error(settings.logType,GetFolderName(),text);
+            if(text != null) { settings.logCallback().error(settings.logType,GetFolderName(),text); }
             settings.errors += 1;
             settings.totalErrors += 1;
             settings.tableErrors += 1;
@@ -131,12 +124,11 @@ function (n) {
         }
 
         //Handle warn logging
-        var LogWarn = function(postfixId) {
-            if(!settings.tableWarnings.hasOwnProperty(postfixId)) {
-                settings.tableWarnings[postfixId] = 0;
+        var LogWarn = function(id) {
+            if(!settings.tableWarnings.hasOwnProperty(id)) {
+                settings.tableWarnings[id] = 0;
             }
-            if(settings.tableWarnings[postfixId] < warningMax) {
-                var id = "{0}{1}".format(settings.outputPrefix,postfixId);
+            if(settings.tableWarnings[id] < warningMax) {
                 var text = null;
                 if (arguments.length > 1) {                
                     if(arguments.length === 2) { text = ViewElement(id,arguments[1],null,null); }
@@ -146,15 +138,14 @@ function (n) {
                     if(arguments.length === 6) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5]); }
                     if(arguments.length === 7) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5],arguments[6]); }
                 }
-                settings.logCallback().warn(settings.logType,GetFolderName(),text);
+                if(text != null) { settings.logCallback().warn(settings.logType,GetFolderName(),text); }
             }                
-            settings.tableWarnings[postfixId] += 1;
+            settings.tableWarnings[id] += 1;
             return true;
         }
         
         //Handle info logging
-        var LogInfo = function(postfixId) {
-            var id = "{0}{1}".format(settings.outputPrefix,postfixId);
+        var LogInfo = function(id) {
             var text = null;
             if (arguments.length > 1) {                
                 if(arguments.length === 2) { text = ViewElement(id,arguments[1],null,null); }
@@ -164,7 +155,7 @@ function (n) {
                 if(arguments.length === 6) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5]); }
                 if(arguments.length === 7) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5],arguments[6]); }
             }
-            settings.logCallback().info(settings.logType,GetFolderName(),text);
+            if(text != null) { settings.logCallback().info(settings.logType,GetFolderName(),text); }
             return true;
         }
 
@@ -753,12 +744,12 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Nemesis.Data = {
-            initialize: function (rightsCallback,logCallback,outputErrorId,outputPrefix,selectDirectoryId,validateId,confirmationId,convertId) { 
+            initialize: function (rightsCallback,logCallback,outputErrorId,outputId,selectDirectoryId,validateId,confirmationId,convertId) { 
                 settings.rightsCallback = rightsCallback;
                 settings.logCallback = logCallback;
                 settings.outputErrorSpn = document.getElementById(outputErrorId);
                 settings.outputErrorText = settings.outputErrorSpn.innerHTML;
-                settings.outputPrefix = outputPrefix;
+                settings.output = $("#" + outputId);
                 settings.ConvertBtn = document.getElementById(convertId);
                 settings.selectDirBtn = document.getElementById(selectDirectoryId);
                 settings.validateBtn = document.getElementById(validateId);
@@ -768,10 +759,9 @@ function (n) {
             },
             callback: function () {
                 return { 
-                    validate: function(path,outputText,metadata,errors,convertStop) 
+                    validate: function(path,metadata,errors,convertStop) 
                     { 
                         settings.deliveryPackagePath = path;
-                        settings.outputText = outputText;
                         settings.metadata = metadata;
                         settings.convertStop = convertStop;                        
                         settings.runIndex = -1;

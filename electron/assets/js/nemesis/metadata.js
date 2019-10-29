@@ -43,7 +43,6 @@ function (n) {
             validateBtn: null,
             confirmationSpn: null,
             deliveryPackagePath: null,
-            outputText: {},
             logType: "metadata",
             fileName: null,
             fileKeys: [],
@@ -1008,7 +1007,7 @@ function (n) {
                     settings.logCallback().section(settings.logType,folderName,enableData ? Rigsarkiv.Language.callback().getValue("nemesis-output-metadata-logEndWithError") : Rigsarkiv.Language.callback().getValue("nemesis-output-metadata-logEndWithErrorStop"));
                 } 
                 if(enableData) {
-                    return settings.dataCallback().validate(settings.deliveryPackagePath,settings.outputText,settings.data,settings.totalErrors,settings.convertStop);
+                    return settings.dataCallback().validate(settings.deliveryPackagePath,settings.data,settings.totalErrors,settings.convertStop);
                 }
                 else {
                     settings.confirmationSpn.innerHTML = Rigsarkiv.Language.callback().getValue("nemesis-output-ConvertDisabled");
@@ -1043,10 +1042,9 @@ function (n) {
             },
             callback: function () {
                 return { 
-                    validate: function(path,outputText,errors,convertStop) 
+                    validate: function(path,errors,convertStop) 
                     { 
                         settings.deliveryPackagePath = path;
-                        settings.outputText = outputText;
                         settings.data = [];
                         settings.convertStop = convertStop;
                         settings.errorStop = false;
