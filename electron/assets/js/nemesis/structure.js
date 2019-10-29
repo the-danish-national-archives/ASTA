@@ -297,7 +297,7 @@ function (n) {
                         }
                         else {
                             if(subFiles.filter(junk.not).length > 2) { 
-                                result = LogError("-CheckFolderData-TableFolderFilesCount-Error",folder);
+                                result = LogError("nemesis-processing-CheckFolderData-TableFolderFilesCount-Error",folder);
                                 settings.convertStop = true; 
                             }
                         }

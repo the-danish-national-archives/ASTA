@@ -36,7 +36,7 @@ function (n) {
         var settings = { 
             outputErrorSpn: null,
             outputErrorText: null,
-            outputPrefix: null,
+            output: null,
             logCallback: null,
             dataCallback: null,
             selectDirBtn: null,
@@ -66,9 +66,8 @@ function (n) {
 
         // View Element by id & return texts
         var ViewElement = function(id,formatText1,formatText2,formatText3,formatText4, formatText5, formatText6) {
-            var result = Rigsarkiv.Language.callback().getValue(id); 
-            //TODO : Remove
-            if(result == null) { result = settings.outputText[id]; }
+            var result = Rigsarkiv.Language.callback().getValue(id);
+            if(result == null) { return null; } 
             if(formatText1 != null) { 
                 if(formatText2 != null) {
                     if(formatText3 != null) {
@@ -97,20 +96,15 @@ function (n) {
                     result = result.format(formatText1);
                 } 
             }
-
-            var element = $("span#{0}".format(id));            
             if(result != null) {
-                element.html(element.html() + result);
+                settings.output.html(settings.output.html() + "<span>{0}</span>".format(result));
             }
-            element.show();
-
             return result;
         }
 
         //handle error logging + HTML output
-        var LogError = function(postfixId) {
+        var LogError = function(id) {
             if(settings.tableErrors < errorsMax) {
-                var id = "{0}{1}".format(settings.outputPrefix,postfixId);
                 var text = null;
                 if (arguments.length > 1) {                
                     if(arguments.length === 2) { text = ViewElement(id,arguments[1],null,null); }
@@ -120,7 +114,7 @@ function (n) {
                     if(arguments.length === 6) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5]); }
                     if(arguments.length === 7) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5],arguments[6]); }
                 }
-                settings.logCallback().error(settings.logType,GetFolderName(),text);
+                if(text != null) { settings.logCallback().error(settings.logType,GetFolderName(),text); }
             }            
             settings.errors += 1;
             settings.totalErrors += 1;
@@ -129,8 +123,7 @@ function (n) {
         }
 
         //Handle warn logging
-        var LogWarn = function(postfixId) {
-            var id = "{0}{1}".format(settings.outputPrefix,postfixId);
+        var LogWarn = function(id) {
             var text = null;
             if (arguments.length > 1) {                
                 if(arguments.length === 2) { text = ViewElement(id,arguments[1],null,null); }
@@ -140,13 +133,12 @@ function (n) {
                 if(arguments.length === 6) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5]); }
                 if(arguments.length === 7) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5],arguments[6]); }
             }
-            settings.logCallback().warn(settings.logType,GetFolderName(),text);
+            if(text != null) { settings.logCallback().warn(settings.logType,GetFolderName(),text); }
             return true;
         }
         
         //Handle info logging
-        var LogInfo = function(postfixId) {
-            var id = "{0}{1}".format(settings.outputPrefix,postfixId);
+        var LogInfo = function(id) {
             var text = null;
             if (arguments.length > 1) {                
                 if(arguments.length === 2) { text = ViewElement(id,arguments[1],null,null); }
@@ -156,7 +148,7 @@ function (n) {
                 if(arguments.length === 6) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5]); }
                 if(arguments.length === 7) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5],arguments[6]); }
             }
-            settings.logCallback().info(settings.logType,GetFolderName(),text);
+            if(text != null) { settings.logCallback().info(settings.logType,GetFolderName(),text); }
             return true;
         }
 
@@ -175,16 +167,16 @@ function (n) {
         var ValidateUserCodeName = function (codeName) {
             var result = true;
             if(result && startNumberPattern.test(codeName)) {
-                result = LogError("-CheckMetadata-FileUserCodes-NameNumber-Error",settings.fileName,codeName);
+                result = LogError("nemesis-processing-CheckMetadata-FileUserCodes-NameNumber-Error",settings.fileName,codeName);
             }
             if(result && !validFileNamePattern.test(codeName) && !enclosedReservedWordPattern.test(codeName)) {
-                result = LogError("-CheckMetadata-FileUserCodes-NameValidation-Error",settings.fileName,codeName);
+                result = LogError("nemesis-processing-CheckMetadata-FileUserCodes-NameValidation-Error",settings.fileName,codeName);
             }
             if(result && codeName.length > titleMaxLength) {
-                result = LogError("-CheckMetadata-FileUserCodes-NameLength-Error",settings.fileName,codeName);
+                result = LogError("nemesis-processing-CheckMetadata-FileUserCodes-NameLength-Error",settings.fileName,codeName);
             }
             if(result && reservedWordPattern.test(codeName)) {
-                result = LogError("-CheckMetadata-FileUserCodes-NameReservedWord-Error",settings.fileName,codeName);
+                result = LogError("nemesis-processing-CheckMetadata-FileUserCodes-NameReservedWord-Error",settings.fileName,codeName);
             }
             return result;
         }
@@ -222,7 +214,7 @@ function (n) {
             });
             info.codes.forEach(code => {
                 if(!userCodePattern.test(code)) {
-                    result = LogError("-CheckMetadata-FileUserCodes-CodeValidation-Error",settings.fileName,info.name,code);
+                    result = LogError("nemesis-processing-CheckMetadata-FileUserCodes-CodeValidation-Error",settings.fileName,info.name,code);
                 } 
                 else {
                     var codeValue = code.substring(1,code.length - 1);
@@ -233,9 +225,9 @@ function (n) {
                            exist = true; 
                         }                        
                     });
-                    if(!exist) { result = LogError("-CheckMetadata-FileUserCodes-CodeListRequired-Error",settings.fileName,info.name,codeValue); }
-                    if(codeVariable.type === "Int" && isNaN(parseInt(codeValue))) { result = LogError("-CheckMetadata-FileUserCodes-CodeIntType-Error",settings.fileName,info.name,codeValue,codeVariable.format); }
-                    if(codeVariable.type === "Decimal" && isNaN(parseFloat(codeValue.replace(",",".")))) { result = LogError("-CheckMetadata-FileUserCodes-CodeDecimalType-Error",settings.fileName,info.name,codeValue,codeVariable.format); }
+                    if(!exist) { result = LogError("nemesis-processing-CheckMetadata-FileUserCodes-CodeListRequired-Error",settings.fileName,info.name,codeValue); }
+                    if(codeVariable.type === "Int" && isNaN(parseInt(codeValue))) { result = LogError("nemesis-processing-CheckMetadata-FileUserCodes-CodeIntType-Error",settings.fileName,info.name,codeValue,codeVariable.format); }
+                    if(codeVariable.type === "Decimal" && isNaN(parseFloat(codeValue.replace(",",".")))) { result = LogError("nemesis-processing-CheckMetadata-FileUserCodes-CodeDecimalType-Error",settings.fileName,info.name,codeValue,codeVariable.format); }
                     missingValues = missingValues + 1;
                 }                               
             });
@@ -258,7 +250,7 @@ function (n) {
                     }
                     else {
                         if(!variables.includes(info.name)) {
-                            result = LogError("-CheckMetadata-FileUserCodes-KeyRequired-Error",settings.fileName,info.name);
+                            result = LogError("nemesis-processing-CheckMetadata-FileUserCodes-KeyRequired-Error",settings.fileName,info.name);
                         }
                         else {
                             if(!ValidateUserCodeValues(table,info)) { result = false; }
@@ -266,7 +258,7 @@ function (n) {
                     }               
                 }
                 else {
-                    result = LogError("-CheckMetadata-FileUserCodes-CodeRequired-Error",settings.fileName,(i + 1));                    
+                    result = LogError("nemesis-processing-CheckMetadata-FileUserCodes-CodeRequired-Error",settings.fileName,(i + 1));                    
                 }
                 if(!result) { settings.errorStop = true; }
                 i++;
@@ -279,16 +271,16 @@ function (n) {
         var ValidateCodeName = function (codeName) {
             var result = true;
             if(result && startNumberPattern.test(codeName)) {
-                result = LogError("-CheckMetadata-FileCodeList-NameNumber-Error",settings.fileName,codeName);
+                result = LogError("nemesis-processing-CheckMetadata-FileCodeList-NameNumber-Error",settings.fileName,codeName);
             }
             if(result && !validFileNamePattern.test(codeName) && !enclosedReservedWordPattern.test(codeName)) {
-                result = LogError("-CheckMetadata-FileCodeList-NameValidation-Error",settings.fileName,codeName);
+                result = LogError("nemesis-processing-CheckMetadata-FileCodeList-NameValidation-Error",settings.fileName,codeName);
             }
             if(result && codeName.length > titleMaxLength) {
-                result = LogError("-CheckMetadata-FileCodeList-NameLength-Error",settings.fileName,codeName);
+                result = LogError("nemesis-processing-CheckMetadata-FileCodeList-NameLength-Error",settings.fileName,codeName);
             }
             if(result && reservedWordPattern.test(codeName)) {
-                result = LogError("-CheckMetadata-FileCodeList-NameReservedWord-Error",settings.fileName,codeName);
+                result = LogError("nemesis-processing-CheckMetadata-FileCodeList-NameReservedWord-Error",settings.fileName,codeName);
             }
             return result;
         }
@@ -297,7 +289,7 @@ function (n) {
         var ValidateCodeListOptions = function(lines,i,codeName,table) {
             var result = true;
             if(!codePattern.test(lines[i].trim().reduceWhiteSpace())) { 
-                result = LogError("-CheckMetadata-FileCodeList-CodeValidation-Error",settings.fileName,codeName,(i + 1));
+                result = LogError("nemesis-processing-CheckMetadata-FileCodeList-CodeValidation-Error",settings.fileName,codeName,(i + 1));
                 settings.errorStop = true;
             }
             else {
@@ -307,7 +299,7 @@ function (n) {
                 var description = text.substring(index + 3);
                 description = description.substring(0,description.length - 1);
                 if(description.reduceWhiteSpace() === "" || description === " ") {
-                    result = LogError("-CheckMetadata-FileCodeList-CodeValidationEmpty-Error",settings.fileName,codeName,options[0].substring(1));                      
+                    result = LogError("nemesis-processing-CheckMetadata-FileCodeList-CodeValidationEmpty-Error",settings.fileName,codeName,options[0].substring(1));                      
                 }
                 table.variables.forEach(variable => {
                     if(variable.codeListKey === codeName) {
@@ -323,7 +315,7 @@ function (n) {
             var result = true;
             if(line.indexOf("'") > -1)
             {
-                result = LogError("-CheckMetadata-FileCodeList-CodeValidation-Error",settings.fileName,codeName,(index + 1));
+                result = LogError("nemesis-processing-CheckMetadata-FileCodeList-CodeValidation-Error",settings.fileName,codeName,(index + 1));
             }
             else 
             {
@@ -338,13 +330,13 @@ function (n) {
                     }
                     else {
                         if(!codeListKeys.includes(codeName)) {
-                            result = LogError("-CheckMetadata-FileCodeList-KeyRequired-Error",settings.fileName,codeName);
+                            result = LogError("nemesis-processing-CheckMetadata-FileCodeList-KeyRequired-Error",settings.fileName,codeName);
                             codeName = null;
                         }
                     }
                 }
                 else {
-                    result = LogError("-CheckMetadata-FileCodeList-Name-Error",settings.fileName,expressions[0],(index + 1));
+                    result = LogError("nemesis-processing-CheckMetadata-FileCodeList-Name-Error",settings.fileName,expressions[0],(index + 1));
                     codeName = expressions[0];
                 }
             }
@@ -362,7 +354,7 @@ function (n) {
                     options.push(optionName);
                 }
                 else {
-                    result = LogError("-CheckMetadata-FileVariable-CodeUnique-Error",settings.fileName,variable.codeListKey,optionName);
+                    result = LogError("nemesis-processing-CheckMetadata-FileVariable-CodeUnique-Error",settings.fileName,variable.codeListKey,optionName);
                 }
             });
             return result;
@@ -394,7 +386,7 @@ function (n) {
             table.variables.forEach(variable => {
                 if(variable.codeListKey !== "") {
                     if(!validKeys.includes(variable.codeListKey)) {
-                        result = LogError("-CheckMetadata-FileVariable-CodeListRequired-Error",settings.fileName,variable.name,variable.codeListKey);    
+                        result = LogError("nemesis-processing-CheckMetadata-FileVariable-CodeListRequired-Error",settings.fileName,variable.name,variable.codeListKey);    
                         settings.errorStop = true;
                     }
                     else {
@@ -419,11 +411,11 @@ function (n) {
                 if(descriptionTemp[0] === "'" && descriptionTemp[descriptionTemp.length - 1] === "'") {
                     description = descriptionTemp.substring(1,descriptionTemp.length - 1);
                     if(description.reduceWhiteSpace() === "" || description === "<none>" || description === "n.a." || description === " ") {
-                        LogError("-CheckMetadata-FileVariable-DescriptionEmpty-Error",settings.fileName,name);
+                        LogError("nemesis-processing-CheckMetadata-FileVariable-DescriptionEmpty-Error",settings.fileName,name);
                     }
                 }
                 else {
-                    LogError("-CheckMetadata-FileVariable-DescriptionFormat-Error",settings.fileName,name);
+                    LogError("nemesis-processing-CheckMetadata-FileVariable-DescriptionFormat-Error",settings.fileName,name);
                     description = "";
                     settings.errorStop = true;
                 }
@@ -450,20 +442,20 @@ function (n) {
                                 variable.description = info.description;  
                             }
                             else {
-                                result = LogError("-CheckMetadata-FileVariable-DescriptionTextRequired-Error",settings.fileName,info.name);
+                                result = LogError("nemesis-processing-CheckMetadata-FileVariable-DescriptionTextRequired-Error",settings.fileName,info.name);
                             }                         
                         }
                     });
                 } 
                 if(exitsCounter === 0) {
-                    result = LogError("-CheckMetadata-FileVariable-DescriptionRequired-Error",settings.fileName,info.name);
+                    result = LogError("nemesis-processing-CheckMetadata-FileVariable-DescriptionRequired-Error",settings.fileName,info.name);
                 }                             
                 i++;
             }
             while (lines[i] !== undefined && lines[i].trim() !== "");
             if(variableDescriptions.length > 0) {
                 variableDescriptions.forEach(variable => {
-                    result = LogError("-CheckMetadata-FileVariable-DescriptionExists-Error",settings.fileName,variable);
+                    result = LogError("nemesis-processing-CheckMetadata-FileVariable-DescriptionExists-Error",settings.fileName,variable);
                 });                
             }
             if(!result) { settings.errorStop = true; }  
@@ -474,19 +466,19 @@ function (n) {
         var ValidateVariableName = function (variableName) {
             var result = true;
             if(result && startNumberPattern.test(variableName)) {
-                result = LogError("-CheckMetadata-FileVariable-NameNumber-Error",settings.fileName,variableName);
+                result = LogError("nemesis-processing-CheckMetadata-FileVariable-NameNumber-Error",settings.fileName,variableName);
             }
             if(result && !validFileNamePattern.test(variableName) && !enclosedReservedWordPattern.test(variableName)) {
-                result = LogError("-CheckMetadata-FileVariable-NameValidation-Error",settings.fileName,variableName);
+                result = LogError("nemesis-processing-CheckMetadata-FileVariable-NameValidation-Error",settings.fileName,variableName);
             }
             if(result && variableName.length > titleMaxLength) {
-                result = LogError("-CheckMetadata-FileVariable-NameLength-Error",settings.fileName,variableName);
+                result = LogError("nemesis-processing-CheckMetadata-FileVariable-NameLength-Error",settings.fileName,variableName);
             }
             if(result && reservedWordPattern.test(variableName)) {
-                result = LogError("-CheckMetadata-FileVariable-NameReservedWord-Error",settings.fileName,variableName);
+                result = LogError("nemesis-processing-CheckMetadata-FileVariable-NameReservedWord-Error",settings.fileName,variableName);
             }
             if(result && settings.metadataLabels.includes(variableName.toUpperCase())) {
-                result = LogError("-CheckMetadata-FileVariable-LabelReservedWord-Error",settings.fileName,variableName.toUpperCase());
+                result = LogError("nemesis-processing-CheckMetadata-FileVariable-LabelReservedWord-Error",settings.fileName,variableName.toUpperCase());
             }
             return result;
         }
@@ -497,14 +489,14 @@ function (n) {
             var table = GetTableData(settings.fileName);
             settings.fileKeys.forEach(key => {
                 if(!variables.includes(key)) {
-                    result = LogError("-CheckMetadata-FileVariables-KeyRequired-Error",settings.fileName,key);
+                    result = LogError("nemesis-processing-CheckMetadata-FileVariables-KeyRequired-Error",settings.fileName,key);
                 }
             });
             settings.fileReferences.forEach(ref => {
                 var addRef = true;
                 ref.refKeys.forEach(key => {
                     if(!variables.includes(key)) {
-                        result = LogError("-CheckMetadata-FileReferences-KeyRequired-Error",settings.fileName,key);
+                        result = LogError("nemesis-processing-CheckMetadata-FileReferences-KeyRequired-Error",settings.fileName,key);
                         addRef = false;
                     }
                 });                
@@ -523,7 +515,7 @@ function (n) {
                     result = expressions[2].match(codeListPattern)[1];
                 }
                 else {
-                    LogError("-CheckMetadata-FileVariable-CodeList-Error",settings.fileName,expressions[0]);
+                    LogError("nemesis-processing-CheckMetadata-FileVariable-CodeList-Error",settings.fileName,expressions[0]);
                     result = null;
                     settings.errorStop = true; 
                 }
@@ -556,14 +548,14 @@ function (n) {
                         }                       
                     }
                     else {
-                        result = LogError("-CheckMetadata-FileVariables-RowDouble-Error",settings.fileName,variableName,(i + 1));
+                        result = LogError("nemesis-processing-CheckMetadata-FileVariables-RowDouble-Error",settings.fileName,variableName,(i + 1));
                     }
                     if(expressions.length > 3) {
-                        result = LogError("-CheckMetadata-FileVariables-RowMax-Error",settings.fileName,(i + 1));
+                        result = LogError("nemesis-processing-CheckMetadata-FileVariables-RowMax-Error",settings.fileName,(i + 1));
                     }
                 }
                 else {
-                    result = LogError("-CheckMetadata-FileVariables-RowRequiredInfo-Error",settings.fileName,(i + 1));                    
+                    result = LogError("nemesis-processing-CheckMetadata-FileVariables-RowRequiredInfo-Error",settings.fileName,(i + 1));                    
                 }
                 i++;
             }
@@ -576,16 +568,16 @@ function (n) {
         var ValidateKey  = function (key) {
             var result = true;
             if(startNumberPattern.test(key)) {
-                result = LogError("-CheckMetadata-FileLabel-KeyNumber-Error",settings.fileName,key);
+                result = LogError("nemesis-processing-CheckMetadata-FileLabel-KeyNumber-Error",settings.fileName,key);
             }
             if(result && !validFileNamePattern.test(key) && !enclosedReservedWordPattern.test(key)) {                   
-                result = LogError("-CheckMetadata-FileLabel-KeyValidation-Error",settings.fileName,key); 
+                result = LogError("nemesis-processing-CheckMetadata-FileLabel-KeyValidation-Error",settings.fileName,key); 
             }
             if(result && key.length > titleMaxLength) {
-                result = LogError("-CheckMetadata-FileLabel-KeyLength-Error",settings.fileName,key);
+                result = LogError("nemesis-processing-CheckMetadata-FileLabel-KeyLength-Error",settings.fileName,key);
             }
             if(result && reservedWordPattern.test(key)) {
-                result = LogError("-CheckMetadata-FileLabel-KeyReservedWord-Error",settings.fileName,key);
+                result = LogError("nemesis-processing-CheckMetadata-FileLabel-KeyReservedWord-Error",settings.fileName,key);
             }
             if(result) {
                 settings.fileKeys.push(key);
@@ -603,7 +595,7 @@ function (n) {
                 if(!ValidateKey(key)) { result = false; }
             });
             if(lines[startIndex + 1].trim() !== "") {
-                result = LogError("-CheckMetadata-FileLabel-ValueMax-Error",settings.fileName,label);
+                result = LogError("nemesis-processing-CheckMetadata-FileLabel-ValueMax-Error",settings.fileName,label);
             }
             return result;
         }
@@ -612,16 +604,16 @@ function (n) {
         var ValidateReferenceName = function (referenceName) {
             var result = true;
             if(result && startNumberPattern.test(referenceName)) {
-                result = LogError("-CheckMetadata-FileReference-NameNumber-Error",settings.fileName,referenceName);
+                result = LogError("nemesis-processing-CheckMetadata-FileReference-NameNumber-Error",settings.fileName,referenceName);
             }
             if(result && !validFileNamePattern.test(referenceName) && !enclosedReservedWordPattern.test(referenceName)) {
-                result = LogError("-CheckMetadata-FileReference-NameValidation-Error",settings.fileName,referenceName);
+                result = LogError("nemesis-processing-CheckMetadata-FileReference-NameValidation-Error",settings.fileName,referenceName);
             }
             if(result && referenceName.length > titleMaxLength) {
-                result = LogError("-CheckMetadata-FileReference-NameLength-Error",settings.fileName,referenceName);
+                result = LogError("nemesis-processing-CheckMetadata-FileReference-NameLength-Error",settings.fileName,referenceName);
             }
             if(result && reservedWordPattern.test(referenceName)) {
-                result = LogError("-CheckMetadata-FileReference-NameReservedWord-Error",settings.fileName,referenceName);
+                result = LogError("nemesis-processing-CheckMetadata-FileReference-NameReservedWord-Error",settings.fileName,referenceName);
             }
             return result;
         }
@@ -640,7 +632,7 @@ function (n) {
                     descriptionMultiPattern.lastIndex = 0;
                     var matches = descriptionTemp.match(descriptionMultiPattern)
                     if(matches != null) {
-                        if(matches.length > 2) {  result = LogError("-CheckMetadata-FileReferences-RowMax-Error",settings.fileName,i + 1); }
+                        if(matches.length > 2) {  result = LogError("nemesis-processing-CheckMetadata-FileReferences-RowMax-Error",settings.fileName,i + 1); }
                         if(matches.length < 2) {  requiredInfo = true; }
                         if(matches.length === 2) {
                             var tableKeys = matches[0].substring(1,matches[0].length - 1).split(" ");
@@ -657,7 +649,7 @@ function (n) {
                         requiredInfo = true;
                     }
                 }
-                if(requiredInfo) { result = LogError("-CheckMetadata-FileReferences-RowRequiredInfo-Error",settings.fileName,i + 1); }
+                if(requiredInfo) { result = LogError("nemesis-processing-CheckMetadata-FileReferences-RowRequiredInfo-Error",settings.fileName,i + 1); }
                 i++;
             }
             while (lines[i] !== undefined && lines[i].trim() !== "");
@@ -669,16 +661,16 @@ function (n) {
         var ValidateTitle = function (title) {
             var result = true;
             if(result && startNumberPattern.test(title)) {
-                result = LogError("-CheckMetadata-FileLabel-TitleNumber-Error",settings.fileName,title);
+                result = LogError("nemesis-processing-CheckMetadata-FileLabel-TitleNumber-Error",settings.fileName,title);
             }
             if(result && !validFileNamePattern.test(title) && !enclosedReservedWordPattern.test(title)) {
-                result = LogError("-CheckMetadata-FileLabel-TitleValidation-Error",settings.fileName,title);
+                result = LogError("nemesis-processing-CheckMetadata-FileLabel-TitleValidation-Error",settings.fileName,title);
             }
             if(result && title.length > titleMaxLength) {
-                result = LogError("-CheckMetadata-FileLabel-TitleLength-Error",settings.fileName,title);
+                result = LogError("nemesis-processing-CheckMetadata-FileLabel-TitleLength-Error",settings.fileName,title);
             }
             if(result && reservedWordPattern.test(title)) {
-                result = LogError("-CheckMetadata-FileLabel-TitleReservedWord-Error",settings.fileName,title);
+                result = LogError("nemesis-processing-CheckMetadata-FileLabel-TitleReservedWord-Error",settings.fileName,title);
             }
             return result;
         }
@@ -688,7 +680,7 @@ function (n) {
             var result = true;
             var table = GetTableData(settings.fileName);
             if(lines[index].trim() === "") {
-                result = LogError("-CheckMetadata-FileLabel-ValueRequired-Error",settings.fileName,label);
+                result = LogError("nemesis-processing-CheckMetadata-FileLabel-ValueRequired-Error",settings.fileName,label);
             }
             else {
                 if(label === settings.metadataLabels[0]) 
@@ -709,7 +701,7 @@ function (n) {
                     table.description = lines[index].trim(); 
                 }
                 if(lines[index + 1].trim() !== "") {
-                    result = LogError("-CheckMetadata-FileLabel-ValueMax-Error",settings.fileName,label);
+                    result = LogError("nemesis-processing-CheckMetadata-FileLabel-ValueMax-Error",settings.fileName,label);
                     settings.errorStop = true;
                 }
             }   
@@ -735,7 +727,7 @@ function (n) {
                 }
                 if(label === settings.metadataLabels[5]) {
                     if(lines[index].trim() === "") {
-                        result = LogError("-CheckMetadata-FileLabel-ValueRequired-Error",settings.fileName,label);
+                        result = LogError("nemesis-processing-CheckMetadata-FileLabel-ValueRequired-Error",settings.fileName,label);
                         settings.errorStop = true;
                     }
                     else {
@@ -749,7 +741,7 @@ function (n) {
                 if(label === settings.metadataLabels[6] && !settings.errorStop && !ValidateVariablesDescription(lines,index)) { result = false; }
                 if(label === settings.metadataLabels[7] && !settings.errorStop) {
                     if(lines[index].trim() === "") {
-                        result = LogWarn("-CheckMetadata-FileCodeList-Empty-Warning",settings.fileName);
+                        result = LogWarn("nemesis-processing-CheckMetadata-FileCodeList-Empty-Warning",settings.fileName);
                     } else {
                         if(!ValidateCodeList(lines,index)) { result = false; }
                     }                    
@@ -769,24 +761,24 @@ function (n) {
             settings.metadataLabels.forEach(label => {
                 var index = lines.indexOf(label);
                 if(index < 0) {
-                    result = LogError("-CheckMetadata-FileLabelRequired-Error",settings.fileName,label);
+                    result = LogError("nemesis-processing-CheckMetadata-FileLabelRequired-Error",settings.fileName,label);
                 }
                 else {
                     if(prevIndex > index) { orderError = true; }
                     prevIndex = index;
                     index += 1;
                     if(lines.indexOf(label,index) > -1) {
-                        result = LogError("-CheckMetadata-FileLabelMax-Error",settings.fileName,label);
+                        result = LogError("nemesis-processing-CheckMetadata-FileLabelMax-Error",settings.fileName,label);
                     }
                 }
             });
             for(var i = 0;i < lines.length;i++) {
                if(lines[i].trim() === ""  && i < (lines.length -1) && lines[i + 1].trim() != "" && !settings.metadataLabels.includes(lines[i + 1].trim())) {
-                    result = LogError("-CheckMetadata-FileLabel-NameValidation-Error",settings.fileName,lines[i + 1].trim());
+                    result = LogError("nemesis-processing-CheckMetadata-FileLabel-NameValidation-Error",settings.fileName,lines[i + 1].trim());
                } 
             }
             if(orderError) {
-                result = LogError("-CheckMetadata-FileLabelsOrder-Error",settings.fileName);
+                result = LogError("nemesis-processing-CheckMetadata-FileLabelsOrder-Error",settings.fileName);
             }
             return result;
         }
@@ -798,7 +790,7 @@ function (n) {
             var matches = variable.format.match(regExp);
             if(matches != null && matches.length > 2) {
                 if(parseInt(matches[2]) > stringMaxLength) { 
-                    result = LogError("-CheckMetadata-FileVariable-DataFormat-StringLength-Error",settings.fileName,variable.name,variable.format);
+                    result = LogError("nemesis-processing-CheckMetadata-FileVariable-DataFormat-StringLength-Error",settings.fileName,variable.name,variable.format);
                 }
             }
             variable.regExps.push("^[\\w\\W\\s]{0," + maxLength + "}$");
@@ -895,7 +887,7 @@ function (n) {
             if(!isValid) { isValid = ValidateFormat("Time",datatypeTime,variable); }
             if(!isValid) { isValid = ValidateFormat("DateTime",datatypeDateTime,variable); }
             if(!isValid) {
-                result = LogError("-CheckMetadata-FileVariable-DataFormat-Error",settings.fileName,variable.name,variable.format);
+                result = LogError("nemesis-processing-CheckMetadata-FileVariable-DataFormat-Error",settings.fileName,variable.name,variable.format);
             }
             return result;
         }
@@ -922,12 +914,12 @@ function (n) {
                     }
                 }
                 else {
-                    result = LogError("-CheckMetadata-FileEmpty-Error",settings.fileName);
+                    result = LogError("nemesis-processing-CheckMetadata-FileEmpty-Error",settings.fileName);
                     settings.errorStop = true;
                 }
             }
             else {
-                result = LogError("-CheckMetadata-FileEmpty-Error",settings.fileName);
+                result = LogError("nemesis-processing-CheckMetadata-FileEmpty-Error",settings.fileName);
                 settings.errorStop = true;
             }
             return result;
@@ -940,7 +932,7 @@ function (n) {
             var dataTableFiles = [];
             settings.data.forEach(table => { 
                 if(dataTableNames.includes(table.name)) {
-                    result = LogError("-CheckMetadata-DataFile-NameUnique-Error",table.fileName,table.name);
+                    result = LogError("nemesis-processing-CheckMetadata-DataFile-NameUnique-Error",table.fileName,table.name);
                 }
                 dataTableNames.push(table.name);                
                 dataTableFiles.push(table.fileName);
@@ -950,7 +942,7 @@ function (n) {
                     if(reference.refTable !== "") {
                         var index = dataTableNames.indexOf(reference.refTable);
                         if(index < 0) {
-                            result = LogError("-CheckMetadata-FileReferences-RowDataReference-Error",table.fileName,reference.refTable);
+                            result = LogError("nemesis-processing-CheckMetadata-FileReferences-RowDataReference-Error",table.fileName,reference.refTable);
                         }
                         else {
                             if(reference.refVariables.length > 0) {                               
@@ -960,7 +952,7 @@ function (n) {
                                         if(refVariable.name === key) { exist = true; }
                                     });
                                     if(!exist) {
-                                        result = LogError("-CheckMetadata-FileReferences-RowVariableReference-Error",table.fileName,reference.refTable,key,dataTableFiles[index]);    
+                                        result = LogError("nemesis-processing-CheckMetadata-FileReferences-RowVariableReference-Error",table.fileName,reference.refTable,key,dataTableFiles[index]);    
                                     }
                                 });
                             }                            
@@ -983,9 +975,6 @@ function (n) {
                     //var charsetMatch = chardet.detectFileSync(metadataFilePath);
                     var folders = metadataFilePath.getFolders();
                     settings.fileName = folders[folders.length - 1];
-                    /*if(charsetMatch !== "UTF-8") {
-                        result = LogWarn("-CheckMetadata-FileEncoding-Error",settings.fileName);
-                    }*/                 
                     settings.data.push({ "fileName":settings.fileName,"errorStop":false, "system":"", "name":"", "variables":[], "references":[], "description":"", rows:0 })
                     if(!ValidateMetadata(metadataFilePath)) { result = false; }
                     GetTableData(settings.fileName).errorStop = settings.errorStop;
@@ -1012,10 +1001,10 @@ function (n) {
                     if(!table.errorStop) { enableData = true; }
                 });
                 if(settings.errors === 0) {
-                    LogInfo("-CheckMetadata-Ok",null);
+                    LogInfo("nemesis-processing-CheckMetadata-Ok",null);
                     settings.logCallback().section(settings.logType,folderName,Rigsarkiv.Language.callback().getValue("nemesis-output-metadata-logEndNoError"));
                 } else {
-                    LogInfo(enableData ? "-CheckMetadata-Warning" : "-CheckMetadata-ErrorStop",null);
+                    LogInfo(enableData ? "nemesis-processing-CheckMetadata-Warning" : "nemesis-processing-CheckMetadata-ErrorStop",null);
                     settings.logCallback().section(settings.logType,folderName,enableData ? Rigsarkiv.Language.callback().getValue("nemesis-output-metadata-logEndWithError") : Rigsarkiv.Language.callback().getValue("nemesis-output-metadata-logEndWithErrorStop"));
                 } 
                 if(enableData) {
@@ -1041,7 +1030,7 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Nemesis.MetaData = {        
-            initialize: function (logCallback,dataCallback,outputErrorId,outputPrefix,selectDirectoryId,validateId,confirmationId) {            
+            initialize: function (logCallback,dataCallback,outputErrorId,outputId,selectDirectoryId,validateId,confirmationId) {            
                 settings.logCallback = logCallback;
                 settings.dataCallback = dataCallback;
                 settings.outputErrorSpn = document.getElementById(outputErrorId);
@@ -1049,7 +1038,7 @@ function (n) {
                 settings.selectDirBtn = document.getElementById(selectDirectoryId);
                 settings.validateBtn = document.getElementById(validateId);
                 settings.confirmationSpn = document.getElementById(confirmationId);
-                settings.outputPrefix = outputPrefix;
+                settings.output = $("#" + outputId);
                 AddEvents();
             },
             callback: function () {
