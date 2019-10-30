@@ -188,7 +188,7 @@ function (n) {
             var matches = dataValue.match(regExp);
             var date = new Date(2019,01,01,parseInt(matches[1]),parseInt(matches[2]),parseInt(matches[3]));
             if(date.getFullYear() !== 2019 || date.getMonth() !== 1 || date.getDate() !== 1 || date.getHours() !== parseInt(matches[1]) || date.getMinutes() !== parseInt(matches[2]) || date.getSeconds() !== parseInt(matches[3])) {
-                result = LogError("-CheckData-FileRow-ColumnsTimeValue-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
+                result = LogError("nemesis-processing-CheckData-FileRow-ColumnsTimeValue-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
             }
             return result;
         }
@@ -199,21 +199,21 @@ function (n) {
             var matches = dataValue.match(regExp);
             var parsedValue = parseInt(matches[0]);
             if(isNaN(parsedValue)){
-                result = LogError("-CheckData-FileRow-ColumnsIntValue-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);  
+                result = LogError("nemesis-processing-CheckData-FileRow-ColumnsIntValue-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);  
             }
             else {
                 if(parsedValue > maxInt || parsedValue < minInt) {
-                    result = LogError("-CheckData-FileRow-ColumnsInt-ValueRange-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
+                    result = LogError("nemesis-processing-CheckData-FileRow-ColumnsInt-ValueRange-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
                 }
                 else {
                     if (matches[0].length > 1) {
                         if (matches[0].charAt(0) === '-' || matches[0].charAt(0) === '+') {
                             if (matches[1] === '0') {
-                                result = LogWarn("-CheckData-FileRow-ColumnsIntValue-Warning", settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, variable.format);
+                                result = LogWarn("nemesis-processing-CheckData-FileRow-ColumnsIntValue-Warning", settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, variable.format);
                             }
                         } else {
                             if (matches[0].charAt(0) === '0') {
-                                result = LogWarn("-CheckData-FileRow-ColumnsIntValue-Warning", settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, variable.format);
+                                result = LogWarn("nemesis-processing-CheckData-FileRow-ColumnsIntValue-Warning", settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, variable.format);
                             }
                         }
                     }
@@ -228,15 +228,15 @@ function (n) {
             var matches = dataValue.match(regExp);
             var parsedValue = parseFloat(matches[0].replace(",","."));
             if(isNaN(parsedValue)){
-                result = LogError("-CheckData-FileRow-ColumnsDecimalValue-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);  
+                result = LogError("nemesis-processing-CheckData-FileRow-ColumnsDecimalValue-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);  
             }
             else {
                 if(parsedValue > maxDecimal || parsedValue < minDecimal) {
-                    result = LogError("-CheckData-FileRow-ColumnsDecimal-ValueRange-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
+                    result = LogError("nemesis-processing-CheckData-FileRow-ColumnsDecimal-ValueRange-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
                 }
                 else {
                     if(variable.appliedRegExp !== settings.appliedRegExp && variable.appliedRegExp < 2 && settings.appliedRegExp < 2) {
-                        result = LogError("-CheckData-FileRow-ColumnsDecimal-InexpedientValue-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
+                        result = LogError("nemesis-processing-CheckData-FileRow-ColumnsDecimal-InexpedientValue-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
                     }
                 }                
             }
@@ -249,11 +249,11 @@ function (n) {
             var matches = dataValue.match(regExp);
             var date = new Date(parseInt(matches[1]),parseInt(matches[2]) - 1,parseInt(matches[3]));
             if(date.getFullYear() !== parseInt(matches[1]) || date.getMonth() !== (parseInt(matches[2]) - 1) || date.getDate() !== parseInt(matches[3])) {
-                result = LogError("-CheckData-FileRow-ColumnsDateValue-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
+                result = LogError("nemesis-processing-CheckData-FileRow-ColumnsDateValue-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
             }
             else {
                 if(variable.appliedRegExp !== settings.appliedRegExp) {
-                    result = LogError("-CheckData-FileRow-ColumnsDate-InexpedientValue-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
+                    result = LogError("nemesis-processing-CheckData-FileRow-ColumnsDate-InexpedientValue-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
                 }
             }
             return result;
@@ -297,11 +297,11 @@ function (n) {
             }            
             var date = new Date(year,month,day,hour,minute,second);
             if(date.getFullYear() !== year || date.getMonth() !== month || date.getDate() !== day || date.getHours() !== hour || date.getMinutes() !== minute || date.getSeconds() !== second) {
-                result = LogError("-CheckData-FileRow-ColumnsDateTimeValue-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
+                result = LogError("nemesis-processing-CheckData-FileRow-ColumnsDateTimeValue-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
             }
             else {
                 if(variable.appliedRegExp !== settings.appliedRegExp) {
-                    result = LogError("-CheckData-FileRow-ColumnsDateTime-InexpedientValue-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
+                    result = LogError("nemesis-processing-CheckData-FileRow-ColumnsDateTime-InexpedientValue-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
                 }
             }
             return result;
@@ -320,10 +320,10 @@ function (n) {
                     if(reference.refKeys.includes(variable.name)) { isReferenced = true; }
                 });
                 if(variable.isKey || isReferenced) {
-                    result = LogError("-CheckData-FileRow-ColumnsString-ValueBlankCharacters-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name);
+                    result = LogError("nemesis-processing-CheckData-FileRow-ColumnsString-ValueBlankCharacters-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name);
                 }
                 else {
-                    result = LogWarn("-CheckData-FileRow-ColumnsString-ValueBlankCharacters-Warning",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name);
+                    result = LogWarn("nemesis-processing-CheckData-FileRow-ColumnsString-ValueBlankCharacters-Warning",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name);
                 }                
             }
             return result;
@@ -353,7 +353,7 @@ function (n) {
                 }
                 if(!result) {
                     settings.errorStop = true;
-                    result = LogError("-CheckData-FileRow-ColumnsString-ValueApostrophe-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name,dataValue);
+                    result = LogError("nemesis-processing-CheckData-FileRow-ColumnsString-ValueApostrophe-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name,dataValue);
                 }
             }
             else {
@@ -370,7 +370,7 @@ function (n) {
                     {
                         result = ValidateString(dataValue, regExp, variable);
                         if(result) { result = ValidateOptions(ApostropheNormalizer(dataValue,null),variable); }
-                        if(result && emptyPattern.test(dataValue)) { LogWarn("-CheckData-FileRow-ColumnsStringEmpty-Warning",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name,dataValue.replace("<","&lt;").replace(">","&gt;")); }
+                        if(result && emptyPattern.test(dataValue)) { LogWarn("nemesis-processing-CheckData-FileRow-ColumnsStringEmpty-Warning",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name,dataValue.replace("<","&lt;").replace(">","&gt;")); }
                     };break;
                 case 'Int':
                     {
@@ -405,7 +405,7 @@ function (n) {
                     if(option.name === dataValue) { exist = true; }
                 });
                 if(!exist) {
-                    result = LogWarn("-CheckData-FileRow-ColumnsOptions-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue); 
+                    result = LogWarn("nemesis-processing-CheckData-FileRow-ColumnsOptions-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue); 
                 }
             }
             return result;
@@ -419,42 +419,42 @@ function (n) {
                     {
                         var regExSplit = variable.regExps[0].split(','); 
                         var length = regExSplit[1].split('}');
-                        result = LogError("-CheckData-FileRow-ColumnsStringType-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, variable.format,dataValue);
+                        result = LogError("nemesis-processing-CheckData-FileRow-ColumnsStringType-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, variable.format,dataValue);
                     };break;
                 case 'Int':
                     {
                         if(!codeListPattern.test(dataValue)) {
-                            result = LogError("-CheckData-FileRow-ColumnsIntType-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, variable.format,dataValue);
+                            result = LogError("nemesis-processing-CheckData-FileRow-ColumnsIntType-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, variable.format,dataValue);
                         }
                         else 
                         {
                             result = ValidateOptions(dataValue,variable);
                             if(result && (variable.options == null || (variable.options != null && variable.options.length === 0))) {
-                                result = LogWarn("-CheckData-FileRow-ColumnsOptions-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
+                                result = LogWarn("nemesis-processing-CheckData-FileRow-ColumnsOptions-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
                             }
                         }
                     };break;
                 case 'Decimal':
                     {
                         if(!codeListPattern.test(dataValue)) {
-                            result = LogError("-CheckData-FileRow-ColumnsDecimalType-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, variable.format,dataValue);
+                            result = LogError("nemesis-processing-CheckData-FileRow-ColumnsDecimalType-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, variable.format,dataValue);
                         }
                         else 
                         {
                             result = ValidateOptions(dataValue,variable);
                             if(result && (variable.options == null || (variable.options != null && variable.options.length === 0))) {
-                                result = LogWarn("-CheckData-FileRow-ColumnsOptions-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
+                                result = LogWarn("nemesis-processing-CheckData-FileRow-ColumnsOptions-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, dataValue);
                             }
                         }
                     };break;
                 case 'Date':
-                    result = LogError("-CheckData-FileRow-ColumnsDateType-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, variable.format,dataValue);
+                    result = LogError("nemesis-processing-CheckData-FileRow-ColumnsDateType-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, variable.format,dataValue);
                 break;
                 case 'DateTime':
-                    result = LogError("-CheckData-FileRow-ColumnsDateTimeType-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, variable.format,dataValue);
+                    result = LogError("nemesis-processing-CheckData-FileRow-ColumnsDateTimeType-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, variable.format,dataValue);
                 break;
                 case 'Time':
-                    result = LogError("-CheckData-FileRow-ColumnsTimeType-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, variable.format,dataValue);
+                    result = LogError("nemesis-processing-CheckData-FileRow-ColumnsTimeType-Error",settings.fileName,settings.metadataFileName, settings.rowIndex, variable.name, variable.format,dataValue);
                 break;
                 default: break;
             }
@@ -496,11 +496,11 @@ function (n) {
             console.logInfo(`CSV headers: ${data.length}`,"Rigsarkiv.Nemesis.Data.ValidateHeader");
             var result = true;
             var variables = [];
-            if(data.length === 1) { result = LogError("-CheckData-FileSeprator-Error",settings.fileName); }
+            if(data.length === 1) { result = LogError("nemesis-processing-CheckData-FileSeprator-Error",settings.fileName); }
             else {                    
                 settings.table.variables.forEach(variable => variables.push(variable.name));
                 if(variables.length !== data.length) {
-                    result = LogError("-CheckData-FileHeaders-MatchColumns-Error",settings.fileName,settings.metadataFileName);
+                    result = LogError("nemesis-processing-CheckData-FileHeaders-MatchColumns-Error",settings.fileName,settings.metadataFileName);
                 }
                 else {
                     var notExists = 0;
@@ -508,16 +508,16 @@ function (n) {
                         if(!variables.includes(header.trim())) { notExists++; }
                     });
                     if(notExists === data.length) {
-                        result = LogError("-CheckData-FileHeaders-MatchAll-Error",settings.fileName,settings.metadataFileName);
+                        result = LogError("nemesis-processing-CheckData-FileHeaders-MatchAll-Error",settings.fileName,settings.metadataFileName);
                     }
                     else {
                         data.forEach(header => {
-                            if(!variables.includes(header.trim())) { result = LogError("-CheckData-FileHeaders-MatchColumn-Error",settings.fileName,settings.metadataFileName,header); }
+                            if(!variables.includes(header.trim())) { result = LogError("nemesis-processing-CheckData-FileHeaders-MatchColumn-Error",settings.fileName,settings.metadataFileName,header); }
                         });  
                     }
                     if(result) {
                         for(var i = 0;i < data.length;i++) {
-                            if(data[i].trim() !== variables[i]) { result = LogError("-CheckData-FileHeaders-ColumnsOrder-Error",settings.fileName,settings.metadataFileName,data[i]);  }
+                            if(data[i].trim() !== variables[i]) { result = LogError("nemesis-processing-CheckData-FileHeaders-ColumnsOrder-Error",settings.fileName,settings.metadataFileName,data[i]);  }
                         }
                     }
                 }
@@ -557,7 +557,7 @@ function (n) {
                 }                                 
             }
             if(!result) { //less or more separators
-                result = LogError("-CheckData-FileRows-MatchLength-Error",settings.fileName,settings.rowIndex);
+                result = LogError("nemesis-processing-CheckData-FileRows-MatchLength-Error",settings.fileName,settings.rowIndex);
                 settings.errorStop = true;
             }
             else {
@@ -604,7 +604,7 @@ function (n) {
             var dataFilePath = settings.dataFiles[settings.runIndex];
             var charsetMatch = chardet.detectFileSync(dataFilePath);
             if(charsetMatch !== "UTF-8") {
-                result = LogWarn("-CheckData-FileEncoding-Error",settings.fileName);
+               
             }
             settings.confirmationSpn.innerHTML = "";
         }
@@ -672,10 +672,10 @@ function (n) {
                     else { enableData = true; }
                 });
                 if(settings.errors === 0) {
-                    LogInfo("-CheckData-Ok",null);
+                    LogInfo("nemesis-processing-CheckData-Ok",null);
                     settings.logCallback().section(settings.logType,folderName,Rigsarkiv.Language.callback().getValue("nemesis-output-data-logEndNoError"));
                 } else {
-                    LogInfo(enableData ? "-CheckData-Warning" : "-CheckData-ErrorStop",null);
+                    LogInfo(enableData ? "nemesis-processing-CheckData-Warning" : "nemesis-processing-CheckData-ErrorStop",null);
                     settings.logCallback().section(settings.logType,folderName,enableData ? Rigsarkiv.Language.callback().getValue("nemesis-output-data-logEndWithError") : Rigsarkiv.Language.callback().getValue("nemesis-output-data-logEndWithErrorStop"));
                 }                                
                 if(enableConvert) {
