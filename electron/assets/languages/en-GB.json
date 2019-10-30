@@ -106,27 +106,27 @@
         "keys": [
             {
                 "key": "profile-Title",
-                "value": "Profil"
+                "value": "Profile"
             },
             {
                 "key": "profile-title-H2",
-                "value": "Din profil"
+                "value": "Your profile"
             },
             {
                 "key": "profile-select-Language",
-                "value": "Vægler sprog"
+                "value": "Select Language"
             },
             {
                 "key": "profile-save",
-                "value": "Gem"
+                "value": "Save"
             },
             {
                 "key": "profile-language-da-DK",
-                "value": "Dansk"
+                "value": "Danish"
             },
             {
                 "key": "profile-language-en-GB",
-                "value": "Englesk"
+                "value": "English"
             }
         ]
     },
