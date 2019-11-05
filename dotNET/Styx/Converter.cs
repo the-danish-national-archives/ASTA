@@ -203,12 +203,28 @@ namespace Rigsarkiv.Styx
         private string GetTimeStampType(Column column)
         {
             var result = column.TypeOriginal;
-            switch (_report.ScriptType)
+            var index = column.Type.IndexOf(".");
+            if (index == -1)
             {
-                case ScriptType.SPSS: result = "datetime20"; break;
-                case ScriptType.SAS: result = "e8601dt."; break;
-                case ScriptType.Stata: result = "%tcCCYY-NN-DD!THH:MM:SS"; break;
-                case ScriptType.Xml: result = "datetime"; break;
+                switch (_report.ScriptType)
+                {
+                    case ScriptType.SPSS: result = "datetime20"; break;
+                    case ScriptType.SAS: result = "e8601dt."; break;
+                    case ScriptType.Stata: result = "%tcCCYY-NN-DD!THH:MM:SS"; break;
+                    case ScriptType.Xml: result = "datetime"; break;
+                }                
+            }
+            else
+            {
+                var length = 0;
+                if(!int.TryParse(column.Type.Substring(index + 1), out length)) { length = column.Type.Length - (index + 1); }
+                switch (_report.ScriptType)
+                {
+                    case ScriptType.SPSS: result = string.Format("ymdhms{0}.{1}",(20 + length),length); break;
+                    case ScriptType.SAS: result = string.Format("e8601dt{0}.{1}", (19 + length), length); ; break;
+                    case ScriptType.Stata: result = string.Format("%tcCCYY-NN-DD!THH:MM:SS.{0}",new string('s', length)); break;
+                    case ScriptType.Xml: result = "datetime"; break;
+                }
             }
             return result;
         }
@@ -312,13 +328,20 @@ namespace Rigsarkiv.Styx
                 var groups = regex.Match(value).Groups;
                 if (_report.ScriptType == ScriptType.SPSS)
                 {
-                    if (groups.Count > 8 && !string.IsNullOrEmpty(groups[8].Value))
+                    if(column.Type.IndexOf(".") == -1)
                     {
-                        result = string.Format("{0}-{1}-{2} {3}:{4}:{5}.{6}", groups[3].Value, GetMonth(groups[2].Value), groups[1].Value, groups[4].Value, groups[5].Value, groups[6].Value, groups[8].Value);
+                        result = string.Format("{0}-{1}-{2} {3}:{4}:{5}", groups[3].Value, GetMonth(groups[2].Value), groups[1].Value, groups[4].Value, groups[5].Value, groups[6].Value);
                     }
                     else
                     {
-                        result = string.Format("{0}-{1}-{2} {3}:{4}:{5}", groups[3].Value, GetMonth(groups[2].Value), groups[1].Value, groups[4].Value, groups[5].Value, groups[6].Value);
+                        if (groups.Count > 8 && !string.IsNullOrEmpty(groups[8].Value))
+                        {
+                            result = string.Format("{0}-{1}-{2} {3}:{4}:{5}.{6}", groups[1].Value, groups[2].Value, groups[3].Value, groups[4].Value, groups[5].Value, groups[6].Value, groups[8].Value);
+                        }
+                        else
+                        {
+                            result = string.Format("{0}-{1}-{2} {3}:{4}:{5}", groups[1].Value, groups[2].Value, groups[3].Value, groups[4].Value, groups[5].Value, groups[6].Value);
+                        }
                     }
                 }
             }
