@@ -24,7 +24,7 @@ function (n) {
         const datatypeDecimal = [/^(decimal)$/,/^(\%([0-9]+)\.([0-9]+)f)$/,/^(\%([0-9]+)\.([0-9]+)g)$/,/^(f([0-9]+)\.([0-9]+))$/,/^(f([0-9]+)\.([0-9]+))$/];
         const datatypeDate = [/^(date)$/,/^(\%tdCCYY-NN-DD)$/,/^((yymmdd\.)|(yymmdd10\.))$/,/^(sdate10)$/];
         const datatypeTime = [/^(time)$/,/^(\%tcHH:MM:SS)$/,/^((time\.)|(time8\.))$/,/^(time8)$/];
-        const datatypeDateTime = [/^(datetime)$/,/^(\%tcCCYY-NN-DD\!THH:MM:SS)$/,/^((e8601dt\.)|(e8601dt19\.))$/,/^(datetime20)$/];
+        const datatypeDateTime = [/^(datetime)$/,/^((\%tcCCYY-NN-DD\!THH:MM:SS)|(\%tcCCYY-NN-DD\!THH:MM:SS\.s)|(\%tcCCYY-NN-DD\!THH:MM:SS\.ss)|(\%tcCCYY-NN-DD\!THH:MM:SS\.sss)|(\%tcCCYY-NN-DD\!THH:MM:SS\.ssss)|(\%tcCCYY-NN-DD\!THH:MM:SS\.sssss)|(\%tcCCYY-NN-DD\!THH:MM:SS\.ssssss))$/,/^((e8601dt\.)|(e8601dt19\.)|(e8601dt20\.1)|(e8601dt21\.2)|(e8601dt22\.3)|(e8601dt23\.4)|(e8601dt24\.5)|(e8601dt25\.6))$/,/^((datetime20)|(ymdms19)|(ymdhms21\.1)|(ymdhms22\.2)|(ymdhms23\.3)|(ymdhms24\.4)|(ymdhms25\.5)|(ymdhms25\.5))$/];
         const titleMaxLength = 128;
         const stringMaxLength = 2147483648;
         const errorsMax = 40;
@@ -833,18 +833,14 @@ function (n) {
         //Validate DateTime Format type
         var ValidateDateTimeFormat = function (variable,regExp) {
             var result = true;
-            variable.regExps.push("^([0-9]{4,4})-([0-9]{2,2})-([0-9]{2,2})T([0-9]{2,2}):([0-9]{2,2}):([0-9]{2,2})$");
-            variable.regExps.push("^([0-9]{4,4})\\/([0-9]{2,2})\\/([0-9]{2,2})T\\s([0-9]{2,2}):([0-9]{2,2}):([0-9]{2,2})$");
+            variable.regExps.push("^([0-9]{4,4})-([0-9]{2,2})-([0-9]{2,2})T([0-9]{2,2}):([0-9]{2,2}):([0-9]{2,2})(\.([0-9]{1,6})){0,1}$");
+            variable.regExps.push("^([0-9]{4,4})-([0-9]{2,2})-([0-9]{2,2})\\s([0-9]{2,2}):([0-9]{2,2}):([0-9]{2,2})(\.([0-9]{1,6})){0,1}$");
+            //variable.regExps.push("^([0-9]{4,4})\\/([0-9]{2,2})\\/([0-9]{2,2})T\\s([0-9]{2,2}):([0-9]{2,2}):([0-9]{2,2})$");
             variable.regExps.push("^([0-9]{2,2})-([a-zA-Z]{3,3})-([0-9]{4,4})\\s([0-9]{2,2}):([0-9]{2,2}):([0-9]{2,2})$");
             return result;
         }
 
         //Validate variable Format by regExp set
-        /*
-            var patt = new RegExp("^[\\w\\W\\s]{0,9}$");
-            var res = patt.test(str);
-            https://regex101.com/
-        */
         var ValidateFormat = function (variableType,regExps,variable) {
             var result = false;
             for(var i = 0;i < regExps.length;i++) {

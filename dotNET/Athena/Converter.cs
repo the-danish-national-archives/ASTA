@@ -446,7 +446,14 @@ namespace Rigsarkiv.Athena
                 }
                 else
                 {
-                    result = string.Format("{0}-{1}-{2}T{3}:{4}:{5}", groups[1].Value, groups[2].Value, groups[3].Value, groups[4].Value, groups[5].Value, groups[6].Value);
+                    if(groups.Count > 8 && !string.IsNullOrEmpty(groups[8].Value))
+                    {
+                        result = string.Format("{0}-{1}-{2}T{3}:{4}:{5}.{6}", groups[1].Value, groups[2].Value, groups[3].Value, groups[4].Value, groups[5].Value, groups[6].Value, groups[8].Value);
+                    }
+                    else
+                    {
+                        result = string.Format("{0}-{1}-{2}T{3}:{4}:{5}", groups[1].Value, groups[2].Value, groups[3].Value, groups[4].Value, groups[5].Value, groups[6].Value);
+                    }
                 }
                 isDifferent = result != value;
             }
