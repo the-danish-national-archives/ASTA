@@ -1,6 +1,7 @@
 ﻿using Rigsarkiv.Asta.Logging;
 using Rigsarkiv.Athena.Entities;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
@@ -184,7 +185,7 @@ namespace Rigsarkiv.Athena
                     _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("{0} rows added", counter - 1) });
                 }                
                 EndWriter();
-                UpdateColumns(table, tableNode);
+                UpdateColumns(table.Columns, tableNode);
                 _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Table {0} has {1} total Differences", table.Folder, table.Columns.Sum(c => c.Differences)) });
             }
             catch (Exception ex)
@@ -284,15 +285,35 @@ namespace Rigsarkiv.Athena
             
         }
 
-        private void UpdateColumns(Table table, XElement tableNode)
+        private void UpdateColumns(List<Column> columns, XElement tableNode)
         {
-            table.Columns.Where(c => c.Type.StartsWith(VarCharPrefix.Substring(0, 7))).ToList().ForEach(column => {
+            columns.Where(c => c.Type.StartsWith(VarCharPrefix.Substring(0, 7))).ToList().ForEach(column => {
                 column.Type = string.Format(VarCharPrefix, column.MaxLength);
                 column.Modified = true;
                 _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Update column {0} type: {1}", column.Name, column.Type) });
 
                 var columnNode = tableNode.Element(_tableIndexXNS + "columns").Elements().Where(e => e.Element(_tableIndexXNS + "columnID").Value == column.Id).FirstOrDefault();
                 columnNode.Element(_tableIndexXNS + "type").Value = column.Type;
+
+                var foreignKeyNode = tableNode.Element(_tableIndexXNS + "foreignKeys").Elements().Where(e => e.Element(_tableIndexXNS + "reference").Element(_tableIndexXNS + "column").Value == column.Name).FirstOrDefault();
+                if (foreignKeyNode != null)
+                {
+                    var codeListTableName = foreignKeyNode.Element(_tableIndexXNS + "referencedTable").Value;
+                    var codeListNode = tableNode.Parent.Elements().Where(e => e.Element(_tableIndexXNS + "name").Value == codeListTableName).FirstOrDefault();
+                    columnNode = codeListNode.Element(_tableIndexXNS + "columns").Elements().Where(e => e.Element(_tableIndexXNS + "columnID").Value == C1).FirstOrDefault();
+                    columnNode.Element(_tableIndexXNS + "type").Value = column.Type;
+                    _report.Tables.ForEach(table => {
+                        if (table.CodeList != null)
+                        {
+                            var refTable = table.CodeList.Where(subTable => subTable.Name == codeListTableName).FirstOrDefault();
+                            if (refTable != null)
+                            {
+                                refTable.Columns[0].Type = column.Type;
+                                refTable.Columns[0].Modified = true;
+                            }
+                        }
+                    });
+                }
                 _updateDocuments = true;
             });
         }

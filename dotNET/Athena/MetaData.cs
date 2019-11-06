@@ -250,7 +250,8 @@ namespace Rigsarkiv.Athena
                 var description = code["description"].ToString();
                 var isMissing = false;                
                 if (description.Length > result) { result = description.Length; }
-                if((bool)code["isMissing"]) {
+                if (column.MaxLength < value.Length) { column.MaxLength = value.Length; }
+                if ((bool)code["isMissing"]) {
                     isMissing = true;
                 }
                 codeList.Options.Add(new string[3] { value, description, isMissing.ToString() });

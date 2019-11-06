@@ -192,9 +192,13 @@ function (n) {
                 name = line.trim().reduceWhiteSpace().substring(0,index);
                 var codesTemp = line.trim().reduceWhiteSpace().substring(index + 1);
                 codes = [];
-                codesTemp.reduceWhiteSpace().split(" ").forEach(code => {                    
-                    codes.push(code);
-                });
+                descriptionMultiPattern.lastIndex = 0;
+                var matches = codesTemp.match(descriptionMultiPattern);
+                if(matches != null) {
+                    for(var i = 0;i < matches.length;i++) {
+                        codes.push(matches[i]);
+                    }
+                }
             }
             return { "name":name, "codes":codes}
         }
@@ -629,7 +633,7 @@ function (n) {
                     if(!ValidateReferenceName(tableName)) { result = false; }
                     var descriptionTemp = lines[i].trim().reduceWhiteSpace().substring(index + 1);
                     descriptionMultiPattern.lastIndex = 0;
-                    var matches = descriptionTemp.match(descriptionMultiPattern)
+                    var matches = descriptionTemp.match(descriptionMultiPattern);
                     if(matches != null) {
                         if(matches.length > 2) {  result = LogError("nemesis-processing-CheckMetadata-FileReferences-RowMax-Error",settings.fileName,i + 1); }
                         if(matches.length < 2) {  requiredInfo = true; }
