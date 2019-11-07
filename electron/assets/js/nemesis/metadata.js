@@ -37,6 +37,7 @@ function (n) {
             outputErrorSpn: null,
             outputErrorText: null,
             output: null,
+            extraInfo: null,
             logCallback: null,
             dataCallback: null,
             selectDirBtn: null,
@@ -54,13 +55,35 @@ function (n) {
             convertStop: false,
             dataPathPostfix: "Data",
             metadataLabels: ["SYSTEMNAVN","DATAFILNAVN","DATAFILBESKRIVELSE","NØGLEVARIABEL","REFERENCE","VARIABEL","VARIABELBESKRIVELSE","KODELISTE","BRUGERKODE"],
-            data: []
+            data: [],
+            linkId: "nemesis-output-link-{0}",
+            linkElement: "<a id=\"{0}\" href=\"#{1}\">{1}</a>",
+            links: 0
         }
 
         // get selected folder name 
         var GetFolderName = function() {
             var folders = settings.deliveryPackagePath.getFolders();
             return folders[folders.length - 1];
+        }
+
+         // Render element's text
+         var RenderElement = function(text) {
+            var linkId = null;
+                var element = document.createElement('span');
+                $(element).html(text);
+                if(element.firstChild != null && element.firstChild.firstChild != null) {
+                    linkId = settings.linkId.format(settings.links);
+                    settings.links += 1;
+                    element.firstChild.insertAdjacentHTML("afterbegin", settings.linkElement.format(linkId,element.firstChild.firstChild.id));
+                }
+                settings.output.append($(element).html());
+                if(linkId != null) {
+                    document.getElementById(linkId).addEventListener('click', (event) => {
+                        var content =  document.getElementById(event.srcElement.href.split("#")[1]);
+                        settings.extraInfo.html($(content).html());
+                    })
+                }      
         }
 
         // View Element by id & return texts
@@ -96,7 +119,7 @@ function (n) {
                 } 
             }
             if(result != null) {
-                settings.output.html(settings.output.html() + "<span>{0}</span>".format(result));
+                RenderElement(result);
             }
             return result;
         }
@@ -1035,7 +1058,7 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Nemesis.MetaData = {        
-            initialize: function (logCallback,dataCallback,outputErrorId,outputId,selectDirectoryId,validateId,confirmationId) {            
+            initialize: function (logCallback,dataCallback,outputErrorId,outputId,selectDirectoryId,validateId,confirmationId,extraInfoId) {            
                 settings.logCallback = logCallback;
                 settings.dataCallback = dataCallback;
                 settings.outputErrorSpn = document.getElementById(outputErrorId);
@@ -1044,6 +1067,7 @@ function (n) {
                 settings.validateBtn = document.getElementById(validateId);
                 settings.confirmationSpn = document.getElementById(confirmationId);
                 settings.output = $("#" + outputId);
+                settings.extraInfo = $("#" + extraInfoId);
                 AddEvents();
             },
             callback: function () {
@@ -1056,6 +1080,7 @@ function (n) {
                         settings.errorStop = false;
                         settings.errors = 0;
                         settings.totalErrors = errors;
+                        settings.links = 0;
                         return Validate();
                     }  
                 };

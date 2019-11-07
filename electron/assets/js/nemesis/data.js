@@ -33,6 +33,7 @@ function (n) {
             outputErrorSpn: null,
             outputErrorText: null,
             output: null,
+            extraInfo: null,
             rightsCallback: null,
             logCallback: null,
             selectDirBtn: null,
@@ -64,7 +65,29 @@ function (n) {
             scriptPath: "./assets/scripts/{0}",
             resourceWinPath: "resources\\{0}",
             converterFileName: "AthenaForm.exe",
-            metadataFilePostfix: "{0}.json"
+            metadataFilePostfix: "{0}.json",
+            linkId: "nemesis-output-link-{0}",
+            linkElement: "<a id=\"{0}\" href=\"#{1}\">{1}</a>",
+            links: 0
+        }
+
+        // Render element's text
+        var RenderElement = function(text) {
+            var linkId = null;
+                var element = document.createElement('span');
+                $(element).html(text);
+                if(element.firstChild != null && element.firstChild.firstChild != null) {
+                    linkId = settings.linkId.format(settings.links);
+                    settings.links += 1;
+                    element.firstChild.insertAdjacentHTML("afterbegin", settings.linkElement.format(linkId,element.firstChild.firstChild.id));
+                }
+                settings.output.append($(element).html());
+                if(linkId != null) {
+                    document.getElementById(linkId).addEventListener('click', (event) => {
+                        var content =  document.getElementById(event.srcElement.href.split("#")[1]);
+                        settings.extraInfo.html($(content).html());
+                    })
+                }      
         }
 
         // View Element by id & return texts
@@ -100,7 +123,7 @@ function (n) {
                 } 
             }
             if(result != null) {
-                settings.output.html(settings.output.html() + "<span>{0}</span>".format(result));
+                RenderElement(result);              
             }
             return result;
         }
@@ -744,7 +767,7 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Nemesis.Data = {
-            initialize: function (rightsCallback,logCallback,outputErrorId,outputId,selectDirectoryId,validateId,confirmationId,convertId) { 
+            initialize: function (rightsCallback,logCallback,outputErrorId,outputId,selectDirectoryId,validateId,confirmationId,convertId,extraInfoId) { 
                 settings.rightsCallback = rightsCallback;
                 settings.logCallback = logCallback;
                 settings.outputErrorSpn = document.getElementById(outputErrorId);
@@ -755,6 +778,7 @@ function (n) {
                 settings.validateBtn = document.getElementById(validateId);
                 settings.confirmationSpn  = document.getElementById(confirmationId);
                 settings.confirmationSpn.innerHTML = "";
+                settings.extraInfo = $("#" + extraInfoId);
                 AddEvents();
             },
             callback: function () {
@@ -767,8 +791,9 @@ function (n) {
                         settings.runIndex = -1;
                         settings.dataFiles = [];
                         settings.ConvertBtn.hidden = true;
-                        settings.errors = 0;
+                        settings.errors = 0;                        
                         settings.totalErrors = errors;
+                        settings.links = 0;
                         return Validate();
                     }  
                 };

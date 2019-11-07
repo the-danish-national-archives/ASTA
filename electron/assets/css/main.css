@@ -421,6 +421,15 @@ a.selected:hover {
     word-wrap: break-word;
 }
 
+.nemesisExtraInfo {
+    height: 200px;
+    width: 100%;
+    border: 1px solid #000;    
+    overflow-y: auto;
+    box-sizing: border-box;
+    padding: 0px 10px;
+}
+
 .box {
     display: flex;
     justify-content: space-between;

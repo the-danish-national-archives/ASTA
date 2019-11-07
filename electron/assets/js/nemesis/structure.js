@@ -26,6 +26,7 @@ function (n) {
             selectedPath: null,
             validateBtn: null,
             output: null,
+            extraInfo: null,
             logCallback: null,
             metadataCallback: null,
             deliveryPackagePath: null,
@@ -42,7 +43,10 @@ function (n) {
             errors: 0,
             errorStop: false,
             convertStop: false,
-            documents: []            
+            documents: [],
+            linkId: "nemesis-output-link-{0}",
+            linkElement: "<a id=\"{0}\" href=\"#{1}\">{1}</a>",
+            links: 0            
         }
 
         //reset status & input fields
@@ -52,13 +56,34 @@ function (n) {
             settings.errorStop = false;
             settings.convertStop = false;
             settings.documents = [];
+            settings.links = 0;
             settings.output.html("");
+            settings.extraInfo.html("");
         }
 
         // get selected folder name 
         var GetFolderName = function() {
             var folders = settings.deliveryPackagePath.getFolders();
             return folders[folders.length - 1];
+        }
+
+         // Render element's text
+         var RenderElement = function(text) {
+            var linkId = null;
+                var element = document.createElement('span');
+                $(element).html(text);
+                if(element.firstChild != null && element.firstChild.firstChild != null) {
+                    linkId = settings.linkId.format(settings.links);
+                    settings.links += 1;
+                    element.firstChild.insertAdjacentHTML("afterbegin", settings.linkElement.format(linkId,element.firstChild.firstChild.id));
+                }
+                settings.output.append($(element).html());
+                if(linkId != null) {
+                    document.getElementById(linkId).addEventListener('click', (event) => {
+                        var content =  document.getElementById(event.srcElement.href.split("#")[1]);
+                        settings.extraInfo.html($(content).html());
+                    })
+                }      
         }
 
         // View Element by id & return texts
@@ -94,7 +119,7 @@ function (n) {
                 } 
             }
             if(result != null) {
-                settings.output.html(settings.output.html() + "<span>{0}</span>".format(result));
+                RenderElement(result);
             }
             return result;
         }
@@ -564,7 +589,7 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Nemesis.Structure = {        
-            initialize: function (logCallback,metadataCallback,outputErrorId,selectDirectoryId,pathDirectoryId,validateId,outputId,testId,confirmationId,convertId) {            
+            initialize: function (logCallback,metadataCallback,outputErrorId,selectDirectoryId,pathDirectoryId,validateId,outputId,testId,confirmationId,convertId,extraInfoId) {            
                 settings.logCallback = logCallback;
                 settings.metadataCallback = metadataCallback;
                 settings.outputErrorSpn = document.getElementById(outputErrorId);
@@ -575,7 +600,8 @@ function (n) {
                 settings.output = $("#" + outputId);
                 settings.testSpn = document.getElementById(testId);
                 settings.confirmationSpn = document.getElementById(confirmationId);
-                settings.ConvertBtn = document.getElementById(convertId);                
+                settings.ConvertBtn = document.getElementById(convertId); 
+                settings.extraInfo = $("#" + extraInfoId);               
                 AddEvents();
             },
             callback: function () {
