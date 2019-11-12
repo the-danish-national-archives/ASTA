@@ -67,12 +67,12 @@ function (n) {
             converterFileName: "AthenaForm.exe",
             metadataFilePostfix: "{0}.json",
             linkId: "nemesis-output-link-{0}",
-            linkElement: "<a id=\"{0}\" href=\"#{1}\">{1}</a>",
+            linkElement: "<a id=\"{0}\" href=\"#{1}\" class=\"nemesisLink\">{1}</a>",
             links: 0
         }
 
-        // Render element's text
-        var RenderElement = function(text) {
+         // Render element's text
+         var RenderElement = function(text) {
             var linkId = null;
                 var element = document.createElement('span');
                 $(element).html(text);
@@ -84,7 +84,9 @@ function (n) {
                 settings.output.append($(element).html());
                 if(linkId != null) {
                     document.getElementById(linkId).addEventListener('click', (event) => {
+                        $("a[id^='{0}']".format(settings.linkId.format(""))).removeClass("nemesisLinkBold");
                         var content =  document.getElementById(event.srcElement.href.split("#")[1]);
+                        $(event.srcElement).toggleClass("nemesisLinkBold");
                         settings.extraInfo.html($(content).html());
                     })
                 }      

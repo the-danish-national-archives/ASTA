@@ -430,6 +430,14 @@ a.selected:hover {
     padding: 0px 10px;
 }
 
+.nemesisLink {
+    font-weight: 100;
+}
+
+.nemesisLinkBold {
+    font-weight: bold;
+}
+
 .box {
     display: flex;
     justify-content: space-between;

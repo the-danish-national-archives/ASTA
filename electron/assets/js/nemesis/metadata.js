@@ -57,7 +57,7 @@ function (n) {
             metadataLabels: ["SYSTEMNAVN","DATAFILNAVN","DATAFILBESKRIVELSE","NØGLEVARIABEL","REFERENCE","VARIABEL","VARIABELBESKRIVELSE","KODELISTE","BRUGERKODE"],
             data: [],
             linkId: "nemesis-output-link-{0}",
-            linkElement: "<a id=\"{0}\" href=\"#{1}\">{1}</a>",
+            linkElement: "<a id=\"{0}\" href=\"#{1}\" class=\"nemesisLink\">{1}</a>",
             links: 0
         }
 
@@ -80,7 +80,9 @@ function (n) {
                 settings.output.append($(element).html());
                 if(linkId != null) {
                     document.getElementById(linkId).addEventListener('click', (event) => {
+                        $("a[id^='{0}']".format(settings.linkId.format(""))).removeClass("nemesisLinkBold");
                         var content =  document.getElementById(event.srcElement.href.split("#")[1]);
+                        $(event.srcElement).toggleClass("nemesisLinkBold");
                         settings.extraInfo.html($(content).html());
                     })
                 }      
