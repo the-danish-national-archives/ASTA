@@ -1961,6 +1961,10 @@
             {
                 "key": "nemesis-processing-CheckData-Ok",
                 "value": "<i class=\"fas fa-check-circle ok\"></i>Datafiler test gennemført uden fejl<br/>"
+            },
+            {
+                "key": "nemesis-extraInfo-SPAN",
+                "value": "Detalje"
             }
         ]
     }
