@@ -49,15 +49,12 @@ namespace Rigsarkiv.Styx
             _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = message });
             if (EnsureRootFolder())
             {
-                result = true;
-                if (File.Exists(string.Format(ResearchIndexPath, _srcPath)))
+                _hasResearchIndex = File.Exists(string.Format(ResearchIndexPath, _srcPath));
+                if (!_hasResearchIndex) { _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = "No Research Index file found" }); }
+                result = EnsureTables();
+                if (_hasResearchIndex && result)
                 {
-                    _hasResearchIndex = true;
-                    result = EnsureTables() && EnsureScripts() && CopyFiles();
-                } 
-                else
-                {
-                    _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = "No Research Index file found" });
+                    result = EnsureScripts() && CopyFiles();
                 }
             }
             message = result ? "End Converting structure" : "End Converting structure with errors";
@@ -152,6 +149,27 @@ namespace Rigsarkiv.Styx
             return result;
         }
 
+        private List<XElement> GetTablesNodes()
+        {
+            var result = new List<XElement>();
+            _tableIndexXDocument = XDocument.Load(string.Format(TableIndexPath, _srcPath));
+
+            if (_hasResearchIndex)
+            {
+                _researchIndexXDocument = XDocument.Load(string.Format(ResearchIndexPath, _srcPath));
+                _researchIndexXDocument.Element(_tableIndexXNS + "researchIndex").Element(_tableIndexXNS + "mainTables").Elements().ToList().ForEach(tableNode => {
+                    var srcFolder = tableNode.Element(_tableIndexXNS + "tableID").Value;
+                    var tableIndexNode = _tableIndexXDocument.Element(_tableIndexXNS + "siardDiark").Element(_tableIndexXNS + "tables").Elements().Where(e => e.Element(_tableIndexXNS + "folder").Value == srcFolder).FirstOrDefault();
+                    result.Add(tableIndexNode);
+                });
+            }
+            else
+            {
+               result =  _tableIndexXDocument.Element(_tableIndexXNS + "siardDiark").Element(_tableIndexXNS + "tables").Elements().ToList();
+            }
+            return result;
+        }
+
         private bool EnsureTables()
         {
             var result = true;
@@ -159,19 +177,19 @@ namespace Rigsarkiv.Styx
             {
                 var path = string.Format(DataPath, _destFolderPath);
                 _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Ensure Tables: {0}", path) });
-                Directory.CreateDirectory(path);
-                _researchIndexXDocument = XDocument.Load(string.Format(ResearchIndexPath, _srcPath));
-                _tableIndexXDocument = XDocument.Load(string.Format(TableIndexPath, _srcPath));
-                foreach (var tableNode in _researchIndexXDocument.Element(_tableIndexXNS + "researchIndex").Element(_tableIndexXNS + "mainTables").Elements())
+                Directory.CreateDirectory(path);                
+                foreach (var tableIndexNode in GetTablesNodes())
                 {
-                     var srcFolder = tableNode.Element(_tableIndexXNS + "tableID").Value;
-                    var tableIndexNode = _tableIndexXDocument.Element(_tableIndexXNS + "siardDiark").Element(_tableIndexXNS + "tables").Elements().Where(e => e.Element(_tableIndexXNS + "folder").Value == srcFolder).FirstOrDefault();
+                    var srcFolder = tableIndexNode.Element(_tableIndexXNS + "folder").Value;
                     var tableName = tableIndexNode.Element(_tableIndexXNS + "name").Value;
                     var tableRows = int.Parse(tableIndexNode.Element(_tableIndexXNS + "rows").Value);
                     var folder = string.Format(TableFolderPrefix, _report.ScriptType.ToString().ToLower(), NormalizeName(tableName));
-                    var folderPath = string.Format("{0}\\{1}", path,folder);
-                    _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Ensure Table: {0}", folderPath) });
-                    Directory.CreateDirectory(folderPath);                                        
+                    if (_hasResearchIndex)
+                    {
+                        var folderPath = string.Format("{0}\\{1}", path, folder);
+                        _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Ensure Table: {0}", folderPath) });
+                        Directory.CreateDirectory(folderPath);
+                    }                                                            
                     _report.Tables.Add(new Table() { Folder = folder, SrcFolder = srcFolder, Name = tableName, Rows = tableRows, RowsCounter = 0, Columns = new List<Column>() });                    
                 }
             }

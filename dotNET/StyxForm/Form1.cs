@@ -138,7 +138,7 @@ namespace Rigsarkiv.StyxForm
             return result;
         }
 
-        private void convert(string srcPath,string destPath, string destFolder, ScriptType scriptType)
+        private void Convert(string srcPath,string destPath, string destFolder, ScriptType scriptType)
         {
             _converter = new Structure(_logManager, srcPath, destPath, destFolder, scriptType);
             if (_converter.Run() && _converter.HasResearchIndex)
@@ -170,14 +170,14 @@ namespace Rigsarkiv.StyxForm
             _logManager = new LogManager();
             _logManager.LogAdded += OnLogAdded;
             var scriptType = (ScriptType)Enum.Parse(typeof(ScriptType), scriptTypeComboBox.SelectedItem.ToString(), true);
-            convert(aipTextBox.Text, sipTextBox.Text, sipNameTextBox.Text, scriptType);
+            Convert(aipTextBox.Text, sipTextBox.Text, sipNameTextBox.Text, scriptType);
             var path = string.Format(LogPath, sipTextBox.Text, sipNameTextBox.Text);
             if (_logManager.Flush(path, sipNameTextBox.Text, _converter.GetLogTemplate()))
             {
                 logButton.Enabled = true;
             }
             nextForm.Enabled = !_converter.HasResearchIndex;
-            if(nextForm.Enabled) { _form = new Form2(aipTextBox.Text, sipTextBox.Text, _logManager); }
+            if(nextForm.Enabled) { _form = new Form2(aipTextBox.Text, sipTextBox.Text, sipNameTextBox.Text, _logManager, _converter.Report); }
             Cursor.Current = Cursors.Default;            
         }
 
