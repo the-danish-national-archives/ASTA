@@ -38,10 +38,11 @@ namespace Rigsarkiv.Styx
         /// <param name="srcPath"></param>
         /// <param name="destPath"></param>
         /// <param name="destFolder"></param>
-        public Data(LogManager logManager, string srcPath, string destPath, string destFolder, Report report) : base(logManager, srcPath, destPath, destFolder)
+        public Data(LogManager logManager, string srcPath, string destPath, string destFolder, Report report, bool hasResearchIndex) : base(logManager, srcPath, destPath, destFolder)
         {
             _logSection = "Data";
             _report = report;
+            _hasResearchIndex = hasResearchIndex;
             _codeLists = new List<string>();
             _sasSpecialNumerics = new List<string>();
             _stataSpecialNumerics = new List<string>();

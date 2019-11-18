@@ -22,14 +22,15 @@ namespace Rigsarkiv.Styx
         private StringBuilder _codeList = null;
         private StringBuilder _usercodes = null;
 
-        public MetaData(LogManager logManager, string srcPath, string destPath, string destFolder, Report report) : base(logManager, srcPath, destPath, destFolder)
+        public MetaData(LogManager logManager, string srcPath, string destPath, string destFolder, Report report, bool hasResearchIndex) : base(logManager, srcPath, destPath, destFolder)
         {
             _logSection = "Metadata";
             _report = report;
+            _hasResearchIndex = hasResearchIndex;
             _variables = new StringBuilder();
             _descriptions = new StringBuilder();
             _codeList = new StringBuilder();
-            _usercodes = new StringBuilder();
+            _usercodes = new StringBuilder();            
         }
 
         /// <summary>

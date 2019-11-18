@@ -47,6 +47,7 @@ namespace Rigsarkiv.Styx
         protected string _logSection = "";
         protected string _destFolderPath = null;
         protected string _srcFolder = null;
+        protected bool _hasResearchIndex = false;
 
         /// <summary>
         /// Constructore
@@ -77,6 +78,14 @@ namespace Rigsarkiv.Styx
         public virtual bool Run()
         {
             return true;
+        }
+
+        /// <summary>
+        /// Has Research Index
+        /// </summary>
+        public bool HasResearchIndex
+        {
+            get { return _hasResearchIndex; }
         }
 
         /// <summary>

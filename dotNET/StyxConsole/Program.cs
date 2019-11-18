@@ -31,10 +31,10 @@ namespace Rigsarkiv.StyxConsole
                 {
                     var tableIndexXDocument = _converter.TableIndexXDocument;
                     var researchIndexXDocument = _converter.ResearchIndexXDocument;
-                    _converter = new MetaData(_logManager, srcPath, destPath, destFolder, _converter.Report) { TableIndexXDocument = tableIndexXDocument, ResearchIndexXDocument = researchIndexXDocument };
+                    _converter = new MetaData(_logManager, srcPath, destPath, destFolder, _converter.Report, _converter.HasResearchIndex) { TableIndexXDocument = tableIndexXDocument, ResearchIndexXDocument = researchIndexXDocument };
                     if (_converter.Run())
                     {
-                        _converter = new Data(_logManager, srcPath, destPath, destFolder, _converter.Report);
+                        _converter = new Data(_logManager, srcPath, destPath, destFolder, _converter.Report, _converter.HasResearchIndex);
                         if (_converter.Run())
                         {
                             var path = string.Format("{0}\\{1}_ASTA_konverteringslog.html", destPath, destFolder);

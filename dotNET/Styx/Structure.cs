@@ -47,9 +47,18 @@ namespace Rigsarkiv.Styx
             var message = string.Format("Start Converting structure {0} -> {1}", _srcFolder, _destFolder);
             _log.Info(message);
             _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = message });
-            if (EnsureRootFolder() && EnsureTables() && EnsureScripts() && CopyFiles())
+            if (EnsureRootFolder())
             {
                 result = true;
+                if (File.Exists(string.Format(ResearchIndexPath, _srcPath)))
+                {
+                    _hasResearchIndex = true;
+                    result = EnsureTables() && EnsureScripts() && CopyFiles();
+                } 
+                else
+                {
+                    _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = "No Research Index file found" });
+                }
             }
             message = result ? "End Converting structure" : "End Converting structure with errors";
             _log.Info(message);
