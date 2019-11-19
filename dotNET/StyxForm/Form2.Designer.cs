@@ -30,12 +30,11 @@
         {
             this.label4 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.removeButton = new System.Windows.Forms.Button();
             this.codeTablesListBox = new System.Windows.Forms.ListBox();
             this.mainTablesListBox = new System.Windows.Forms.ListBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.addButton = new System.Windows.Forms.Button();
-            this.removeButton = new System.Windows.Forms.Button();
             this.tableInfoLabel = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -53,18 +52,28 @@
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.removeButton);
-            this.groupBox1.Controls.Add(this.addButton);
             this.groupBox1.Controls.Add(this.codeTablesListBox);
             this.groupBox1.Controls.Add(this.mainTablesListBox);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox1.Location = new System.Drawing.Point(21, 70);
+            this.groupBox1.Location = new System.Drawing.Point(21, 108);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(546, 552);
+            this.groupBox1.Size = new System.Drawing.Size(674, 552);
             this.groupBox1.TabIndex = 31;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "TABELLER";
+            // 
+            // removeButton
+            // 
+            this.removeButton.Enabled = false;
+            this.removeButton.Location = new System.Drawing.Point(313, 267);
+            this.removeButton.Name = "removeButton";
+            this.removeButton.Size = new System.Drawing.Size(51, 30);
+            this.removeButton.TabIndex = 32;
+            this.removeButton.Text = "<<";
+            this.removeButton.UseVisualStyleBackColor = true;
+            this.removeButton.Click += new System.EventHandler(this.removeButton_Click);
             // 
             // codeTablesListBox
             // 
@@ -73,10 +82,11 @@
             this.codeTablesListBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.codeTablesListBox.FormattingEnabled = true;
             this.codeTablesListBox.ItemHeight = 20;
-            this.codeTablesListBox.Location = new System.Drawing.Point(303, 80);
+            this.codeTablesListBox.Location = new System.Drawing.Point(387, 80);
             this.codeTablesListBox.Name = "codeTablesListBox";
-            this.codeTablesListBox.Size = new System.Drawing.Size(218, 444);
+            this.codeTablesListBox.Size = new System.Drawing.Size(271, 444);
             this.codeTablesListBox.TabIndex = 17;
+            this.codeTablesListBox.SelectedIndexChanged += new System.EventHandler(this.codeTablesListBox_SelectedIndexChanged);
             // 
             // mainTablesListBox
             // 
@@ -88,7 +98,7 @@
             this.mainTablesListBox.Location = new System.Drawing.Point(16, 80);
             this.mainTablesListBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.mainTablesListBox.Name = "mainTablesListBox";
-            this.mainTablesListBox.Size = new System.Drawing.Size(223, 444);
+            this.mainTablesListBox.Size = new System.Drawing.Size(273, 444);
             this.mainTablesListBox.TabIndex = 3;
             this.mainTablesListBox.SelectedIndexChanged += new System.EventHandler(this.mainTablesListBox_SelectedIndexChanged);
             // 
@@ -104,37 +114,17 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(254, 43);
+            this.label5.Location = new System.Drawing.Point(436, 43);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(110, 20);
             this.label5.TabIndex = 16;
             this.label5.Text = "Kodetabeller";
             // 
-            // addButton
-            // 
-            this.addButton.Location = new System.Drawing.Point(246, 242);
-            this.addButton.Name = "addButton";
-            this.addButton.Size = new System.Drawing.Size(51, 30);
-            this.addButton.TabIndex = 18;
-            this.addButton.Text = ">>";
-            this.addButton.UseVisualStyleBackColor = true;
-            this.addButton.Click += new System.EventHandler(this.addButton_Click);
-            // 
-            // removeButton
-            // 
-            this.removeButton.Location = new System.Drawing.Point(246, 292);
-            this.removeButton.Name = "removeButton";
-            this.removeButton.Size = new System.Drawing.Size(51, 30);
-            this.removeButton.TabIndex = 32;
-            this.removeButton.Text = "<<";
-            this.removeButton.UseVisualStyleBackColor = true;
-            this.removeButton.Click += new System.EventHandler(this.removeButton_Click);
-            // 
             // tableInfoLabel
             // 
             this.tableInfoLabel.AutoSize = true;
             this.tableInfoLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tableInfoLabel.Location = new System.Drawing.Point(597, 54);
+            this.tableInfoLabel.Location = new System.Drawing.Point(16, 55);
             this.tableInfoLabel.Name = "tableInfoLabel";
             this.tableInfoLabel.Size = new System.Drawing.Size(165, 29);
             this.tableInfoLabel.TabIndex = 32;
@@ -144,7 +134,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1200, 692);
+            this.ClientSize = new System.Drawing.Size(732, 747);
             this.Controls.Add(this.tableInfoLabel);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.label4);
@@ -167,7 +157,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button removeButton;
-        private System.Windows.Forms.Button addButton;
         private System.Windows.Forms.Label tableInfoLabel;
     }
 }

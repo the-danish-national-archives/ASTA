@@ -141,14 +141,14 @@ namespace Rigsarkiv.StyxForm
         private void Convert(string srcPath,string destPath, string destFolder, ScriptType scriptType)
         {
             _converter = new Structure(_logManager, srcPath, destPath, destFolder, scriptType);
-            if (_converter.Run() && _converter.HasResearchIndex)
+            if (_converter.Run())
             {
                 var tableIndexXDocument = _converter.TableIndexXDocument;
                 var researchIndexXDocument = _converter.ResearchIndexXDocument;
-                _converter = new MetaData(_logManager, srcPath, destPath, destFolder, _converter.Report, _converter.HasResearchIndex) { TableIndexXDocument = tableIndexXDocument, ResearchIndexXDocument = researchIndexXDocument };
-                if (_converter.Run())
+                _converter = new MetaData(_logManager, srcPath, destPath, destFolder, _converter.Report, _converter.State) { TableIndexXDocument = tableIndexXDocument, ResearchIndexXDocument = researchIndexXDocument };
+                if (_converter.Run() && (_converter.State == FlowState.Running || _converter.State == FlowState.Completed))
                 {
-                    _converter = new Data(_logManager, srcPath, destPath, destFolder, _converter.Report, _converter.HasResearchIndex);
+                    _converter = new Data(_logManager, srcPath, destPath, destFolder, _converter.Report);
                     if (_converter.Run() && ((Data)_converter).Flush(string.Format(ReportPath, destPath, destFolder), destFolder))
                     {
                         reportButton.Enabled = true;
@@ -176,7 +176,7 @@ namespace Rigsarkiv.StyxForm
             {
                 logButton.Enabled = true;
             }
-            nextForm.Enabled = !_converter.HasResearchIndex;
+            nextForm.Enabled = (_converter.State == FlowState.Suspended);
             if(nextForm.Enabled) { _form = new Form2(aipTextBox.Text, sipTextBox.Text, sipNameTextBox.Text, _logManager, _converter.Report); }
             Cursor.Current = Cursors.Default;            
         }

@@ -22,11 +22,11 @@ namespace Rigsarkiv.Styx
         private StringBuilder _codeList = null;
         private StringBuilder _usercodes = null;
 
-        public MetaData(LogManager logManager, string srcPath, string destPath, string destFolder, Report report, bool hasResearchIndex) : base(logManager, srcPath, destPath, destFolder)
+        public MetaData(LogManager logManager, string srcPath, string destPath, string destFolder, Report report, FlowState state) : base(logManager, srcPath, destPath, destFolder)
         {
             _logSection = "Metadata";
             _report = report;
-            _hasResearchIndex = hasResearchIndex;
+            _state = state;
             _variables = new StringBuilder();
             _descriptions = new StringBuilder();
             _codeList = new StringBuilder();
@@ -42,9 +42,10 @@ namespace Rigsarkiv.Styx
             var message = string.Format("Start Converting Metadata {0} -> {1}", _srcFolder, _destFolder);
             _log.Info(message);
             _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = message });
-            if (EnsureTables() && EnsureFiles())
+            result = EnsureTables();
+            if ((_state == FlowState.Running || _state == FlowState.Completed) && result)
             {
-                result = true;
+                result = EnsureFiles();
             }
             message = result ? "End Converting Metadata" : "End Converting Metadata with errors";
             _log.Info(message);
@@ -129,13 +130,13 @@ namespace Rigsarkiv.Styx
             var result = true;
             try
             {
-                if (_researchIndexXDocument == null) { throw new Exception("ResearchIndexXDocument property not setet"); }
+                if (_state == FlowState.Running && _researchIndexXDocument == null) { throw new Exception("ResearchIndexXDocument property not setet"); }
                 var path = string.Format(DataPath, _destFolderPath);
                 _report.Tables.ForEach(table =>
                 {
                     _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Build {0} metadata", table.Folder) });
                     var tableNode = _tableIndexXDocument.Element(_tableIndexXNS + "siardDiark").Element(_tableIndexXNS + "tables").Elements().Where(e => e.Element(_tableIndexXNS + "folder").Value == table.SrcFolder).FirstOrDefault();
-                    var researchNode = _researchIndexXDocument.Element(_tableIndexXNS + "researchIndex").Element(_tableIndexXNS + "mainTables").Elements().Where(e => e.Element(_tableIndexXNS + "tableID").Value == table.SrcFolder).FirstOrDefault();
+                    XElement researchNode = _state == FlowState.Running ? _researchIndexXDocument.Element(_tableIndexXNS + "researchIndex").Element(_tableIndexXNS + "mainTables").Elements().Where(e => e.Element(_tableIndexXNS + "tableID").Value == table.SrcFolder).FirstOrDefault() : null;
                     foreach (var columnNode in tableNode.Element(_tableIndexXNS + "columns").Elements())
                     {
                         var column = new Column() { Id = columnNode.Element(_tableIndexXNS + "columnID").Value, Name = columnNode.Element(_tableIndexXNS + "name").Value, Description = columnNode.Element(_tableIndexXNS + "description").Value, Type = columnNode.Element(_tableIndexXNS + "typeOriginal").Value, TypeOriginal = columnNode.Element(_tableIndexXNS + "type").Value };
@@ -145,7 +146,7 @@ namespace Rigsarkiv.Styx
                             var foreignKeyNode = tableNode.Element(_tableIndexXNS + "foreignKeys").Elements().Where(e => e.Element(_tableIndexXNS + "reference").Element(_tableIndexXNS + "column").Value == column.Name).FirstOrDefault();
                             column.CodeList = GetCodeList(foreignKeyNode, table, column);
                         }
-                        column.MissingValues = GetMissingValues(researchNode, table, column);
+                        if (_state == FlowState.Running) { column.MissingValues = GetMissingValues(researchNode, table, column); }
                         table.Columns.Add(column);
                     }
                 });

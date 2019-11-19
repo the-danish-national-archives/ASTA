@@ -49,6 +49,7 @@
     <Compile Include="Converter.cs" />
     <Compile Include="Data.cs" />
     <Compile Include="Entities\Column.cs" />
+    <Compile Include="Entities\FlowState.cs" />
     <Compile Include="Entities\Report.cs" />
     <Compile Include="Entities\ScriptType.cs" />
     <Compile Include="Entities\Table.cs" />

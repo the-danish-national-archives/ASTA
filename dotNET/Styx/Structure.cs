@@ -49,10 +49,10 @@ namespace Rigsarkiv.Styx
             _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = message });
             if (EnsureRootFolder())
             {
-                _hasResearchIndex = File.Exists(string.Format(ResearchIndexPath, _srcPath));
-                if (!_hasResearchIndex) { _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = "No Research Index file found" }); }
+                if (_state == FlowState.Created) { _state = File.Exists(string.Format(ResearchIndexPath, _srcPath)) ? FlowState.Running : FlowState.Suspended; }
+                if (_state == FlowState.Suspended) { _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = "No Research Index file found" }); }
                 result = EnsureTables();
-                if (_hasResearchIndex && result)
+                if ((_state == FlowState.Running || _state == FlowState.Completed) && result)
                 {
                     result = EnsureScripts() && CopyFiles();
                 }
@@ -154,7 +154,7 @@ namespace Rigsarkiv.Styx
             var result = new List<XElement>();
             _tableIndexXDocument = XDocument.Load(string.Format(TableIndexPath, _srcPath));
 
-            if (_hasResearchIndex)
+            if (_state == FlowState.Running)
             {
                 _researchIndexXDocument = XDocument.Load(string.Format(ResearchIndexPath, _srcPath));
                 _researchIndexXDocument.Element(_tableIndexXNS + "researchIndex").Element(_tableIndexXNS + "mainTables").Elements().ToList().ForEach(tableNode => {
@@ -165,7 +165,12 @@ namespace Rigsarkiv.Styx
             }
             else
             {
-               result =  _tableIndexXDocument.Element(_tableIndexXNS + "siardDiark").Element(_tableIndexXNS + "tables").Elements().ToList();
+               _tableIndexXDocument.Element(_tableIndexXNS + "siardDiark").Element(_tableIndexXNS + "tables").Elements().ToList().ForEach(tableNode => {
+                if(tableNode.Element(_tableIndexXNS + "foreignKeys") != null)
+                {
+                    result.Add(tableNode);
+                }
+               });
             }
             return result;
         }
@@ -177,20 +182,25 @@ namespace Rigsarkiv.Styx
             {
                 var path = string.Format(DataPath, _destFolderPath);
                 _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Ensure Tables: {0}", path) });
-                Directory.CreateDirectory(path);                
-                foreach (var tableIndexNode in GetTablesNodes())
-                {
-                    var srcFolder = tableIndexNode.Element(_tableIndexXNS + "folder").Value;
-                    var tableName = tableIndexNode.Element(_tableIndexXNS + "name").Value;
-                    var tableRows = int.Parse(tableIndexNode.Element(_tableIndexXNS + "rows").Value);
-                    var folder = string.Format(TableFolderPrefix, _report.ScriptType.ToString().ToLower(), NormalizeName(tableName));
-                    if (_hasResearchIndex)
+                if (_state == FlowState.Running || _state == FlowState.Suspended) {
+                    Directory.CreateDirectory(path);
+                    foreach (var tableIndexNode in GetTablesNodes())
                     {
-                        var folderPath = string.Format("{0}\\{1}", path, folder);
+                        var srcFolder = tableIndexNode.Element(_tableIndexXNS + "folder").Value;
+                        var tableName = tableIndexNode.Element(_tableIndexXNS + "name").Value;
+                        var tableRows = int.Parse(tableIndexNode.Element(_tableIndexXNS + "rows").Value);
+                        var folder = string.Format(TableFolderPrefix, _report.ScriptType.ToString().ToLower(), NormalizeName(tableName));
+                        _report.Tables.Add(new Table() { Folder = folder, SrcFolder = srcFolder, Name = tableName, Rows = tableRows, RowsCounter = 0, Columns = new List<Column>() });
+                    }
+                }               
+                
+                if (_state == FlowState.Running || _state == FlowState.Completed)
+                {
+                    _report.Tables.ForEach(table => {
+                        var folderPath = string.Format("{0}\\{1}", path, table.Folder);
                         _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Ensure Table: {0}", folderPath) });
                         Directory.CreateDirectory(folderPath);
-                    }                                                            
-                    _report.Tables.Add(new Table() { Folder = folder, SrcFolder = srcFolder, Name = tableName, Rows = tableRows, RowsCounter = 0, Columns = new List<Column>() });                    
+                    });
                 }
             }
             catch (Exception ex)

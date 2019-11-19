@@ -22,6 +22,8 @@ namespace Rigsarkiv.StyxForm
         private string _destPath = null;
         private string _destFolder = null;
         private Report _report = null;
+        private Table _mainTable = null;
+        private Table _codeTable = null;
 
         /// <summary>
         /// 
@@ -42,11 +44,6 @@ namespace Rigsarkiv.StyxForm
             mainTablesListBox.Items.AddRange(_report.Tables.Select(t => t.Name).ToArray());
         }
 
-        private void addButton_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void removeButton_Click(object sender, EventArgs e)
         {
 
@@ -54,13 +51,23 @@ namespace Rigsarkiv.StyxForm
 
         private void mainTablesListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var mainTable = _report.Tables[mainTablesListBox.SelectedIndex];
-            
-            if (mainTable.Columns != null && mainTable.Columns.Count > 0 && mainTable.Columns.Any(c => c.CodeList != null))
+            if (mainTablesListBox.SelectedIndex == -1) { return; }
+            _codeTable = null;
+            codeTablesListBox.Items.Clear();
+            _mainTable = _report.Tables[mainTablesListBox.SelectedIndex];            
+            if (_mainTable.Columns != null && _mainTable.Columns.Count > 0 && _mainTable.Columns.Any(c => c.CodeList != null))
             {
-                codeTablesListBox.Items.AddRange(mainTable.Columns.Select(t => t.CodeList.Name).ToArray());
+                codeTablesListBox.Items.AddRange(_mainTable.Columns.Where(c => c.CodeList != null).Select(t => t.CodeList.Name).ToArray());
             }
-            tableInfoLabel.Text = string.Format(MainTableLabel, mainTable.Name);
+            tableInfoLabel.Text = string.Format(MainTableLabel, _mainTable.Name);
+        }
+
+        private void codeTablesListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (codeTablesListBox.SelectedIndex == -1) { return; }
+            removeButton.Enabled = true;
+            _codeTable = _mainTable.Columns.Where(c => c.CodeList != null).Select(t => t.CodeList).ToList()[codeTablesListBox.SelectedIndex];
+            tableInfoLabel.Text = string.Format(CodeTableLabel, _codeTable.Name);
         }
     }
 }

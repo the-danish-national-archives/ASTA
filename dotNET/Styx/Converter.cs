@@ -47,7 +47,7 @@ namespace Rigsarkiv.Styx
         protected string _logSection = "";
         protected string _destFolderPath = null;
         protected string _srcFolder = null;
-        protected bool _hasResearchIndex = false;
+        protected FlowState _state = FlowState.Created;
 
         /// <summary>
         /// Constructore
@@ -81,11 +81,11 @@ namespace Rigsarkiv.Styx
         }
 
         /// <summary>
-        /// Has Research Index
+        /// Flow State
         /// </summary>
-        public bool HasResearchIndex
+        public FlowState State
         {
-            get { return _hasResearchIndex; }
+            get { return _state; }
         }
 
         /// <summary>
