@@ -36,6 +36,10 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.tableInfoLabel = new System.Windows.Forms.Label();
+            this.convertButton = new System.Windows.Forms.Button();
+            this.outputRichTextBox = new System.Windows.Forms.RichTextBox();
+            this.reportButton = new System.Windows.Forms.Button();
+            this.logButton = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -57,9 +61,9 @@
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox1.Location = new System.Drawing.Point(21, 108);
+            this.groupBox1.Location = new System.Drawing.Point(21, 102);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(674, 552);
+            this.groupBox1.Size = new System.Drawing.Size(674, 514);
             this.groupBox1.TabIndex = 31;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "TABELLER";
@@ -84,7 +88,7 @@
             this.codeTablesListBox.ItemHeight = 20;
             this.codeTablesListBox.Location = new System.Drawing.Point(387, 80);
             this.codeTablesListBox.Name = "codeTablesListBox";
-            this.codeTablesListBox.Size = new System.Drawing.Size(271, 444);
+            this.codeTablesListBox.Size = new System.Drawing.Size(271, 404);
             this.codeTablesListBox.TabIndex = 17;
             this.codeTablesListBox.SelectedIndexChanged += new System.EventHandler(this.codeTablesListBox_SelectedIndexChanged);
             // 
@@ -98,7 +102,7 @@
             this.mainTablesListBox.Location = new System.Drawing.Point(16, 80);
             this.mainTablesListBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.mainTablesListBox.Name = "mainTablesListBox";
-            this.mainTablesListBox.Size = new System.Drawing.Size(273, 444);
+            this.mainTablesListBox.Size = new System.Drawing.Size(273, 404);
             this.mainTablesListBox.TabIndex = 3;
             this.mainTablesListBox.SelectedIndexChanged += new System.EventHandler(this.mainTablesListBox_SelectedIndexChanged);
             // 
@@ -130,17 +134,66 @@
             this.tableInfoLabel.TabIndex = 32;
             this.tableInfoLabel.Text = "tableInfoLabel";
             // 
+            // convertButton
+            // 
+            this.convertButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.convertButton.Location = new System.Drawing.Point(551, 631);
+            this.convertButton.Name = "convertButton";
+            this.convertButton.Size = new System.Drawing.Size(144, 32);
+            this.convertButton.TabIndex = 33;
+            this.convertButton.Text = "Konverter til DIP";
+            this.convertButton.UseVisualStyleBackColor = true;
+            this.convertButton.Click += new System.EventHandler(this.convertButton_Click);
+            // 
+            // outputRichTextBox
+            // 
+            this.outputRichTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.outputRichTextBox.Location = new System.Drawing.Point(21, 679);
+            this.outputRichTextBox.Name = "outputRichTextBox";
+            this.outputRichTextBox.Size = new System.Drawing.Size(674, 180);
+            this.outputRichTextBox.TabIndex = 34;
+            this.outputRichTextBox.Text = "";
+            // 
+            // reportButton
+            // 
+            this.reportButton.Enabled = false;
+            this.reportButton.Location = new System.Drawing.Point(572, 870);
+            this.reportButton.Name = "reportButton";
+            this.reportButton.Size = new System.Drawing.Size(123, 32);
+            this.reportButton.TabIndex = 36;
+            this.reportButton.Text = "Vis Rapport";
+            this.reportButton.UseVisualStyleBackColor = true;
+            this.reportButton.Click += new System.EventHandler(this.reportButton_Click);
+            // 
+            // logButton
+            // 
+            this.logButton.Enabled = false;
+            this.logButton.Location = new System.Drawing.Point(456, 870);
+            this.logButton.Name = "logButton";
+            this.logButton.Size = new System.Drawing.Size(110, 32);
+            this.logButton.TabIndex = 35;
+            this.logButton.Text = "Vis Log";
+            this.logButton.UseVisualStyleBackColor = true;
+            this.logButton.Click += new System.EventHandler(this.logButton_Click);
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(732, 747);
+            this.ClientSize = new System.Drawing.Size(717, 907);
+            this.Controls.Add(this.reportButton);
+            this.Controls.Add(this.logButton);
+            this.Controls.Add(this.outputRichTextBox);
+            this.Controls.Add(this.convertButton);
             this.Controls.Add(this.tableInfoLabel);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.label4);
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "Form2";
             this.Text = "ASTA";
+            this.Shown += new System.EventHandler(this.Form2_Shown);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
@@ -158,5 +211,9 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button removeButton;
         private System.Windows.Forms.Label tableInfoLabel;
+        private System.Windows.Forms.Button convertButton;
+        private System.Windows.Forms.RichTextBox outputRichTextBox;
+        private System.Windows.Forms.Button reportButton;
+        private System.Windows.Forms.Button logButton;
     }
 }

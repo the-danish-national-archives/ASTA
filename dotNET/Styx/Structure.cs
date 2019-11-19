@@ -31,10 +31,11 @@ namespace Rigsarkiv.Styx
         /// <param name="srcPath"></param>
         /// <param name="destPath"></param>
         /// <param name="destFolder"></param>
-        public Structure(LogManager logManager, string srcPath, string destPath, string destFolder, ScriptType scriptType) : base(logManager, srcPath, destPath, destFolder)
+        public Structure(LogManager logManager, string srcPath, string destPath, string destFolder, Report report, FlowState state) : base(logManager, srcPath, destPath, destFolder)
         {
             _logSection = "Structure";
-            _report.ScriptType = scriptType;
+            if (report != null) { _report = report; }
+            _state = state;
             _contextDocumentationRegex = new Regex(ContextDocumentationPattern, RegexOptions.Compiled | RegexOptions.IgnoreCase);            
         }
 
@@ -94,6 +95,7 @@ namespace Rigsarkiv.Styx
             {
                 _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("create folder: {0}", destPath) });
                 Directory.CreateDirectory(destPath);
+                _report.ContextDocuments.Clear();
                 var files = Getfiles();
                 _contextDocumentationIndexXDocument = XDocument.Load(string.Format(ContextDocumentationIndexPath, _srcPath));
                 foreach (var documentNode in _contextDocumentationIndexXDocument.Element(_tableIndexXNS + "contextDocumentationIndex").Elements())
@@ -182,21 +184,21 @@ namespace Rigsarkiv.Styx
             {
                 var path = string.Format(DataPath, _destFolderPath);
                 _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Ensure Tables: {0}", path) });
+                Directory.CreateDirectory(path);
                 if (_state == FlowState.Running || _state == FlowState.Suspended) {
-                    Directory.CreateDirectory(path);
                     foreach (var tableIndexNode in GetTablesNodes())
                     {
                         var srcFolder = tableIndexNode.Element(_tableIndexXNS + "folder").Value;
                         var tableName = tableIndexNode.Element(_tableIndexXNS + "name").Value;
                         var tableRows = int.Parse(tableIndexNode.Element(_tableIndexXNS + "rows").Value);
                         var folder = string.Format(TableFolderPrefix, _report.ScriptType.ToString().ToLower(), NormalizeName(tableName));
-                        _report.Tables.Add(new Table() { Folder = folder, SrcFolder = srcFolder, Name = tableName, Rows = tableRows, RowsCounter = 0, Columns = new List<Column>() });
+                        _report.Tables.Add(new Table() { Folder = folder, SrcFolder = srcFolder, Name = tableName, Title = tableName, Rows = tableRows, RowsCounter = 0, Columns = new List<Column>() });
                     }
-                }               
-                
+                }
                 if (_state == FlowState.Running || _state == FlowState.Completed)
                 {
                     _report.Tables.ForEach(table => {
+                        if(string.IsNullOrEmpty(table.Folder)) { table.Folder = string.Format(TableFolderPrefix, _report.ScriptType.ToString().ToLower(), NormalizeName(table.Title)); }
                         var folderPath = string.Format("{0}\\{1}", path, table.Folder);
                         _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Ensure Table: {0}", folderPath) });
                         Directory.CreateDirectory(folderPath);

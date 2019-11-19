@@ -3,6 +3,7 @@ using Rigsarkiv.Asta.Logging;
 using Rigsarkiv.Styx;
 using Rigsarkiv.Styx.Entities;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Rigsarkiv.StyxConsole
@@ -26,7 +27,8 @@ namespace Rigsarkiv.StyxConsole
                 var scriptTypeText = args[3];
                 var scriptType = (ScriptType)Enum.Parse(typeof(ScriptType), scriptTypeText, true);
                 _stopWatch.Start();
-                _converter = new Structure(_logManager, srcPath, destPath, destFolder, scriptType);
+                var report = new Report() { Tables = new List<Table>(), ContextDocuments = new Dictionary<string, string>(), ScriptType = scriptType, TablesCounter = 0, CodeListsCounter = 0 };
+                _converter = new Structure(_logManager, srcPath, destPath, destFolder, report,FlowState.Created);
                 if (_converter.Run())
                 {
                     var tableIndexXDocument = _converter.TableIndexXDocument;

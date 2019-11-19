@@ -3,6 +3,7 @@ using Rigsarkiv.Styx;
 using Rigsarkiv.Styx.Entities;
 using Rigsarkiv.StyxForm.Extensions;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
@@ -140,7 +141,8 @@ namespace Rigsarkiv.StyxForm
 
         private void Convert(string srcPath,string destPath, string destFolder, ScriptType scriptType)
         {
-            _converter = new Structure(_logManager, srcPath, destPath, destFolder, scriptType);
+            var report = new Report() { Tables = new List<Table>(), ContextDocuments = new Dictionary<string, string>(), ScriptType = scriptType, TablesCounter = 0, CodeListsCounter = 0 };
+            _converter = new Structure(_logManager, srcPath, destPath, destFolder, report, FlowState.Created);
             if (_converter.Run())
             {
                 var tableIndexXDocument = _converter.TableIndexXDocument;
@@ -177,7 +179,8 @@ namespace Rigsarkiv.StyxForm
                 logButton.Enabled = true;
             }
             nextForm.Enabled = (_converter.State == FlowState.Suspended);
-            if(nextForm.Enabled) { _form = new Form2(aipTextBox.Text, sipTextBox.Text, sipNameTextBox.Text, _logManager, _converter.Report); }
+            convertButton.Enabled = !nextForm.Enabled;
+            if (nextForm.Enabled) { _form = new Form2(aipTextBox.Text, sipTextBox.Text, sipNameTextBox.Text, _logManager, _converter.Report); }
             Cursor.Current = Cursors.Default;            
         }
 
