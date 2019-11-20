@@ -83,12 +83,12 @@
             UpdateTable("tablesBefore", "tablesAfter", report.Tables.length, report.TablesCounter);
             var codeLists = 0;
             for (var i = 0; i < report.Tables.length; i++) {{
-                UpdateRow(report.Tables[i]);
+                UpdateRow(report.Tables[i],true);
                 for (var k = 0; k < report.Tables[i].Columns.length; k++) {{
                     var column = report.Tables[i].Columns[k];
                     if (column.CodeList != null) {{
                         codeLists = codeLists + 1;
-                        UpdateRow(column.CodeList);
+                        UpdateRow(column.CodeList,false);
                     }}
                     if (column.CodeList != null && column.MissingValues != null) {{                         
                         Object.keys(column.MissingValues).forEach(function (key, index) {{
@@ -150,9 +150,9 @@
             }}
             return result;
         }}
-        function UpdateRow(table) {{
+        function UpdateRow(table,isMain) {{
                 var className = (table.Rows !== table.RowsCounter) ? " class=\"Error\"" : "";
-            rowsTable.insertAdjacentHTML("beforeend", rowHtml.format(table.Name, table.Columns.length, table.Rows, table.RowsCounter, className));
+            rowsTable.insertAdjacentHTML("beforeend", rowHtml.format(isMain ? table.Title : table.Name, table.Columns.length, table.Rows, table.RowsCounter, className));
         }}
         function UpdateTable(beforeId, afterId, beforeValue, afterValue) {{
             var before = document.getElementById(beforeId);

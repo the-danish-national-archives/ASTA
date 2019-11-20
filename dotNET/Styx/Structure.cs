@@ -51,7 +51,7 @@ namespace Rigsarkiv.Styx
             if (EnsureRootFolder())
             {
                 if (_state == FlowState.Created) { _state = File.Exists(string.Format(ResearchIndexPath, _srcPath)) ? FlowState.Running : FlowState.Suspended; }
-                if (_state == FlowState.Suspended) { _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = "No Research Index file found" }); }
+                if (_state == FlowState.Suspended) { _logManager.Add(new LogEntity() { Level = LogLevel.Warning, Section = _logSection, Message = "No Research Index file found" }); }
                 result = EnsureTables();
                 if ((_state == FlowState.Running || _state == FlowState.Completed) && result)
                 {
