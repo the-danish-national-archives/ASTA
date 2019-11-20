@@ -166,6 +166,9 @@ namespace Rigsarkiv.StyxForm
         private void convertButton_Click(object sender, EventArgs e)
         {
             reportButton.Enabled = false;
+            scriptLabel1.Visible = false;
+            scriptLabel2.Visible = false;
+            scriptLabel3.Visible = false;
             if (!ValidateInputs()) { return; }
             Cursor.Current = Cursors.WaitCursor;
             outputRichTextBox.Clear();

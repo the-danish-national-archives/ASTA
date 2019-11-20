@@ -40,6 +40,9 @@
             this.outputRichTextBox = new System.Windows.Forms.RichTextBox();
             this.reportButton = new System.Windows.Forms.Button();
             this.logButton = new System.Windows.Forms.Button();
+            this.scriptLabel3 = new System.Windows.Forms.Label();
+            this.scriptLabel2 = new System.Windows.Forms.Label();
+            this.scriptLabel1 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -61,9 +64,9 @@
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox1.Location = new System.Drawing.Point(21, 102);
+            this.groupBox1.Location = new System.Drawing.Point(21, 100);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(674, 514);
+            this.groupBox1.Size = new System.Drawing.Size(674, 507);
             this.groupBox1.TabIndex = 31;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "TABELLER";
@@ -88,7 +91,7 @@
             this.codeTablesListBox.ItemHeight = 20;
             this.codeTablesListBox.Location = new System.Drawing.Point(387, 80);
             this.codeTablesListBox.Name = "codeTablesListBox";
-            this.codeTablesListBox.Size = new System.Drawing.Size(271, 404);
+            this.codeTablesListBox.Size = new System.Drawing.Size(271, 384);
             this.codeTablesListBox.TabIndex = 17;
             this.codeTablesListBox.SelectedIndexChanged += new System.EventHandler(this.codeTablesListBox_SelectedIndexChanged);
             // 
@@ -102,7 +105,7 @@
             this.mainTablesListBox.Location = new System.Drawing.Point(16, 80);
             this.mainTablesListBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.mainTablesListBox.Name = "mainTablesListBox";
-            this.mainTablesListBox.Size = new System.Drawing.Size(273, 404);
+            this.mainTablesListBox.Size = new System.Drawing.Size(273, 384);
             this.mainTablesListBox.TabIndex = 3;
             this.mainTablesListBox.SelectedIndexChanged += new System.EventHandler(this.mainTablesListBox_SelectedIndexChanged);
             // 
@@ -137,7 +140,7 @@
             // convertButton
             // 
             this.convertButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.convertButton.Location = new System.Drawing.Point(551, 631);
+            this.convertButton.Location = new System.Drawing.Point(551, 613);
             this.convertButton.Name = "convertButton";
             this.convertButton.Size = new System.Drawing.Size(144, 32);
             this.convertButton.TabIndex = 33;
@@ -150,16 +153,16 @@
             this.outputRichTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.outputRichTextBox.Location = new System.Drawing.Point(21, 679);
+            this.outputRichTextBox.Location = new System.Drawing.Point(21, 660);
             this.outputRichTextBox.Name = "outputRichTextBox";
-            this.outputRichTextBox.Size = new System.Drawing.Size(674, 180);
+            this.outputRichTextBox.Size = new System.Drawing.Size(674, 150);
             this.outputRichTextBox.TabIndex = 34;
             this.outputRichTextBox.Text = "";
             // 
             // reportButton
             // 
             this.reportButton.Enabled = false;
-            this.reportButton.Location = new System.Drawing.Point(572, 870);
+            this.reportButton.Location = new System.Drawing.Point(572, 846);
             this.reportButton.Name = "reportButton";
             this.reportButton.Size = new System.Drawing.Size(123, 32);
             this.reportButton.TabIndex = 36;
@@ -170,7 +173,7 @@
             // logButton
             // 
             this.logButton.Enabled = false;
-            this.logButton.Location = new System.Drawing.Point(456, 870);
+            this.logButton.Location = new System.Drawing.Point(456, 846);
             this.logButton.Name = "logButton";
             this.logButton.Size = new System.Drawing.Size(110, 32);
             this.logButton.TabIndex = 35;
@@ -178,11 +181,45 @@
             this.logButton.UseVisualStyleBackColor = true;
             this.logButton.Click += new System.EventHandler(this.logButton_Click);
             // 
+            // scriptLabel3
+            // 
+            this.scriptLabel3.AutoSize = true;
+            this.scriptLabel3.Location = new System.Drawing.Point(17, 958);
+            this.scriptLabel3.Name = "scriptLabel3";
+            this.scriptLabel3.Size = new System.Drawing.Size(478, 20);
+            this.scriptLabel3.TabIndex = 39;
+            this.scriptLabel3.Text = "Import scripts har følgende extensions: .sps (SPSS) og .sas (SAS).";
+            this.scriptLabel3.Visible = false;
+            // 
+            // scriptLabel2
+            // 
+            this.scriptLabel2.AutoSize = true;
+            this.scriptLabel2.Location = new System.Drawing.Point(17, 928);
+            this.scriptLabel2.Name = "scriptLabel2";
+            this.scriptLabel2.Size = new System.Drawing.Size(468, 20);
+            this.scriptLabel2.TabIndex = 38;
+            this.scriptLabel2.Text = "Kør scriptet i statistikprogrammet og gem den dannede statistikfil.";
+            this.scriptLabel2.Visible = false;
+            // 
+            // scriptLabel1
+            // 
+            this.scriptLabel1.AutoSize = true;
+            this.scriptLabel1.Location = new System.Drawing.Point(17, 897);
+            this.scriptLabel1.Name = "scriptLabel1";
+            this.scriptLabel1.Size = new System.Drawing.Size(614, 20);
+            this.scriptLabel1.TabIndex = 37;
+            this.scriptLabel1.Text = "Import script(s) til dannelse af statistikfil(er) er skabt og placeret i \"Data\" m" +
+    "appen i {0}\".";
+            this.scriptLabel1.Visible = false;
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(717, 907);
+            this.ClientSize = new System.Drawing.Size(717, 1001);
+            this.Controls.Add(this.scriptLabel3);
+            this.Controls.Add(this.scriptLabel2);
+            this.Controls.Add(this.scriptLabel1);
             this.Controls.Add(this.reportButton);
             this.Controls.Add(this.logButton);
             this.Controls.Add(this.outputRichTextBox);
@@ -215,5 +252,8 @@
         private System.Windows.Forms.RichTextBox outputRichTextBox;
         private System.Windows.Forms.Button reportButton;
         private System.Windows.Forms.Button logButton;
+        private System.Windows.Forms.Label scriptLabel3;
+        private System.Windows.Forms.Label scriptLabel2;
+        private System.Windows.Forms.Label scriptLabel1;
     }
 }

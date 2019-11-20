@@ -88,6 +88,9 @@ namespace Rigsarkiv.StyxForm
         private void convertButton_Click(object sender, EventArgs e)
         {
             reportButton.Enabled = false;
+            scriptLabel1.Visible = false;
+            scriptLabel2.Visible = false;
+            scriptLabel3.Visible = false;
             Cursor.Current = Cursors.WaitCursor;
             outputRichTextBox.Clear();
             _logManager = new LogManager();
@@ -104,14 +107,15 @@ namespace Rigsarkiv.StyxForm
                     if (_converter.Run() && ((Data)_converter).Flush(string.Format(ReportPath, _destPath, _destFolder), _destFolder))
                     {
                         reportButton.Enabled = true;
+                        scriptLabel1.Text = string.Format(scriptLabel1.Text, _destFolder);
+                        scriptLabel1.Visible = true;
+                        scriptLabel2.Visible = true;
+                        scriptLabel3.Visible = true;
                     }
                 }
             }
             var path = string.Format(LogPath, _destPath, _destFolder);
-            if (_logManager.Flush(path, _destFolder, _converter.GetLogTemplate()))
-            {
-                logButton.Enabled = true;
-            }
+            if (_logManager.Flush(path, _destFolder, _converter.GetLogTemplate())) { logButton.Enabled = true; }
             Cursor.Current = Cursors.Default;
         }
 
