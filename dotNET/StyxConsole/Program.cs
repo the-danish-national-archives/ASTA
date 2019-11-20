@@ -36,7 +36,7 @@ namespace Rigsarkiv.StyxConsole
                     _converter = new MetaData(_logManager, srcPath, destPath, destFolder, _converter.Report, _converter.State) { TableIndexXDocument = tableIndexXDocument, ResearchIndexXDocument = researchIndexXDocument };
                     if (_converter.Run())
                     {
-                        _converter = new Data(_logManager, srcPath, destPath, destFolder, _converter.Report);
+                        _converter = new Data(_logManager, srcPath, destPath, destFolder, _converter.Report, _converter.State);
                         if (_converter.Run())
                         {
                             var path = string.Format("{0}\\{1}_ASTA_konverteringslog.html", destPath, destFolder);

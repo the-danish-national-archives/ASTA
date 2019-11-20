@@ -208,7 +208,7 @@ namespace Rigsarkiv.Styx
             var tableName = NormalizeName(table.Name);
             var codelistName = foreignKeyNode.Element(_tableIndexXNS + "name").Value;
             result.Title = codelistName;
-            result.Title = result.Title.Substring(4);
+            result.Title = result.Title.Substring(3);
             result.Title = result.Title.Substring(0, result.Title.LastIndexOf("_"));
             codelistName = codelistName.Substring(3 + tableName.Length + 1);
             codelistName = codelistName.Substring(0, codelistName.LastIndexOf("_"));

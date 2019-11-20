@@ -38,11 +38,12 @@ namespace Rigsarkiv.Styx
         /// <param name="srcPath"></param>
         /// <param name="destPath"></param>
         /// <param name="destFolder"></param>
-        public Data(LogManager logManager, string srcPath, string destPath, string destFolder, Report report) : base(logManager, srcPath, destPath, destFolder)
+        public Data(LogManager logManager, string srcPath, string destPath, string destFolder, Report report, FlowState state) : base(logManager, srcPath, destPath, destFolder)
         {
             _logSection = "Data";
             _report = report;
-             _codeLists = new List<string>();
+            _state = state;
+            _codeLists = new List<string>();
             _sasSpecialNumerics = new List<string>();
             _stataSpecialNumerics = new List<string>();
             foreach (char c in Alphabet)
@@ -105,7 +106,7 @@ namespace Rigsarkiv.Styx
                  _report.Tables.ForEach(table =>
                 {
                     XNamespace tableNS = string.Format(TableXmlNs, table.SrcFolder);
-                    path = string.Format(TableDataPath, _destFolderPath, _report.ScriptType.ToString().ToLower(), NormalizeName(table.Name));
+                    path = string.Format(TableDataPath, _destFolderPath, _report.ScriptType.ToString().ToLower(), _state == FlowState.Completed ? NormalizeName(table.Title) : NormalizeName(table.Name));
                     _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add file: {0}", path) });
                     using (TextWriter sw = new StreamWriter(path))
                     {

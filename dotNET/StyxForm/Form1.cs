@@ -150,7 +150,7 @@ namespace Rigsarkiv.StyxForm
                 _converter = new MetaData(_logManager, srcPath, destPath, destFolder, _converter.Report, _converter.State) { TableIndexXDocument = tableIndexXDocument, ResearchIndexXDocument = researchIndexXDocument };
                 if (_converter.Run() && (_converter.State == FlowState.Running || _converter.State == FlowState.Completed))
                 {
-                    _converter = new Data(_logManager, srcPath, destPath, destFolder, _converter.Report);
+                    _converter = new Data(_logManager, srcPath, destPath, destFolder, _converter.Report, _converter.State);
                     if (_converter.Run() && ((Data)_converter).Flush(string.Format(ReportPath, destPath, destFolder), destFolder))
                     {
                         reportButton.Enabled = true;
