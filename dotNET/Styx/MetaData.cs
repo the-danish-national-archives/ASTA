@@ -17,6 +17,13 @@ namespace Rigsarkiv.Styx
     {
         const string VariablesPath = "{0}\\Data\\{1}_{2}\\{1}_{2}_VARIABEL.txt";
         const string DescriptionsPath = "{0}\\Data\\{1}_{2}\\{1}_{2}_VARIABELBESKRIVELSE.txt";
+        const string OldTypeStringPattern = "^(CHAR|CHARACTER|CHAR VARYING|CHARACTER VARYING|VARCHAR|NATIONAL CHARACTER|NATIONAL CHAR|NCHAR|NATIONAL CHARACTER VARYING|NATIONAL CHAR VARYING|NCHAR VARYING)$";
+        const string OldTypeIntPattern = "^(INTEGER|INT|SMALLINT)$";
+        const string OldTypeDecimalPattern = "^(NUMERIC|DECIMAL|DEC|FLOAT|REAL|DOUBLE PRECISION)$";
+        const string OldTypeBooleanPattern = "^(BOOLEAN)$";
+        const string OldTypeDatePattern = "^(DATE)$";
+        const string OldTypeTimePattern = "^(TIME|TIME\\[WITH TIME ZONE\\])$";
+        const string OldTypeDateTimePattern = "^(TIMESTAMP|TIMESTAMP\\[WITH TIME ZONE\\])$";
         private StringBuilder _variables = null;
         private StringBuilder _descriptions = null;
         private StringBuilder _codeList = null;
@@ -162,6 +169,7 @@ namespace Rigsarkiv.Styx
 
         private void EnsureType(Column column)
         {
+            if(_state == FlowState.Suspended) { UpdateOldType(column); }
             if(column.TypeOriginal.StartsWith(VarCharPrefix))
             {
                 var regex = GetRegex(DataTypeIntPattern);
@@ -178,6 +186,30 @@ namespace Rigsarkiv.Styx
                     column.Modified = true;
                     return;
                 }
+            }
+        }
+
+        private void UpdateOldType(Column column)
+        {
+            var result = string.Empty;
+            var regex = GetRegex(OldTypeStringPattern);
+            if (regex.IsMatch(column.TypeOriginal)) { result = string.Format("VARCHAR({0})", StringMaxLength); }
+            regex = GetRegex(OldTypeIntPattern);
+            if (regex.IsMatch(column.TypeOriginal)) { result = "INTEGER"; }
+            regex = GetRegex(OldTypeDecimalPattern);
+            if (regex.IsMatch(column.TypeOriginal)) { result = "DECIMAL"; }
+            regex = GetRegex(OldTypeBooleanPattern);
+            if (regex.IsMatch(column.TypeOriginal)) { result = "VARCHAR(5)"; }
+            regex = GetRegex(OldTypeDatePattern);
+            if (regex.IsMatch(column.TypeOriginal)) { result = "DATE"; }
+            regex = GetRegex(OldTypeTimePattern);
+            if (regex.IsMatch(column.TypeOriginal)) { result = "TIME"; }
+            regex = GetRegex(OldTypeDateTimePattern);
+            if (regex.IsMatch(column.TypeOriginal)) { result = "TIMESTAMP"; }
+            if (!string.IsNullOrEmpty(result) && column.TypeOriginal != result)
+            {
+                column.TypeOriginal = result;
+                column.Modified = true;
             }
         }
 
