@@ -9,6 +9,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -28,7 +29,6 @@ namespace Rigsarkiv.StyxForm
         private string _destPath = null;
         private string _destFolder = null;
         private Report _report = null;
-        private RichTextBox _outputRichTextBox = null;
         private Table _mainTable = null;
         private Table _codeTable = null;
 
@@ -43,18 +43,20 @@ namespace Rigsarkiv.StyxForm
         public Form2(string srcPath, string destPath, string destFolder, LogManager logManager,Report report)
         {
             InitializeComponent();
-            _logManager = logManager;
+            typeof(DataGridView).InvokeMember("DoubleBuffered", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.SetProperty, null, dataValues, new object[] { true });
+            _logManager = new LogManager();
+            _logManager.LogAdded += OnLogAdded;
             _srcPath = srcPath;
             _destPath = destPath;
             _destFolder = destFolder;
             _report = report;
-            
             mainTablesListBox.Items.AddRange(_report.Tables.Select(t => t.Title).ToArray());
         }
 
         private void removeButton_Click(object sender, EventArgs e)
         {
             if (codeTablesListBox.SelectedIndex == -1) { return; }
+            _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = "Restructure", Message = string.Format("Move code table '{0}' to main tables", _codeTable.Name) });
             _report.Tables.Add(_codeTable);
             var column = _mainTable.Columns.Where(c => c.CodeList != null).ToList()[codeTablesListBox.SelectedIndex];
             column.CodeList = null;
@@ -75,6 +77,7 @@ namespace Rigsarkiv.StyxForm
                 codeTablesListBox.Items.AddRange(_mainTable.Columns.Where(c => c.CodeList != null).Select(t => t.CodeList.Title).ToArray());
             }
             tableInfoLabel.Text = string.Format(MainTableLabel, _mainTable.Title);
+            UpdateRow();
         }
 
         private void codeTablesListBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -83,6 +86,28 @@ namespace Rigsarkiv.StyxForm
             removeButton.Enabled = true;
             _codeTable = _mainTable.Columns.Where(c => c.CodeList != null).Select(t => t.CodeList).ToList()[codeTablesListBox.SelectedIndex];
             tableInfoLabel.Text = string.Format(CodeTableLabel, _codeTable.Title);
+            UpdateRow();
+        }
+
+        private void UpdateRow()
+        {
+            deleteButton.Enabled = false;
+            upButton.Enabled = false;
+            downButton.Enabled = false;
+            var table = _codeTable != null ? _codeTable : _mainTable;
+            Cursor.Current = Cursors.WaitCursor;
+            dataValues.Rows.Clear();
+            dataValues.Rows.Add(table.Columns.Count);
+            for (int i = 0; i < table.Columns.Count; i++)
+            {
+                var column = table.Columns[i];
+                dataValues[0, i].Value = column.IsKey ? "X" : string.Empty;
+                dataValues[1, i].Value = column.Name;
+                dataValues[2, i].Value = column.Description;
+                dataValues[3, i].Value = column.TypeOriginal;
+            }
+            dataValues.ClearSelection();
+            Cursor.Current = Cursors.Default;            
         }
 
         private void convertButton_Click(object sender, EventArgs e)
@@ -92,9 +117,7 @@ namespace Rigsarkiv.StyxForm
             scriptLabel2.Visible = false;
             scriptLabel3.Visible = false;
             Cursor.Current = Cursors.WaitCursor;
-            outputRichTextBox.Clear();
-            _logManager = new LogManager();
-            _logManager.LogAdded += OnLogAdded;
+            outputRichTextBox.Clear();            
             _converter = new Structure(_logManager, _srcPath, _destPath, _destFolder, _report, FlowState.Completed);
             if (_converter.Run())
             {
@@ -165,6 +188,29 @@ namespace Rigsarkiv.StyxForm
                 _log.Error(string.Format("Start Process {0} Failed", path), ex);
             }
             return result;
+        }
+
+        private void dataValues_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex == -1) { return; }
+            deleteButton.Enabled = true;
+            upButton.Enabled = true;
+            downButton.Enabled = true;
+        }
+
+        private void deleteButton_Click(object sender, EventArgs e)
+        {
+            var table = _codeTable != null ? _codeTable : _mainTable;
+        }
+
+        private void upButton_Click(object sender, EventArgs e)
+        {
+            var table = _codeTable != null ? _codeTable : _mainTable;
+        }
+
+        private void downButton_Click(object sender, EventArgs e)
+        {
+            var table = _codeTable != null ? _codeTable : _mainTable;
         }
     }
 }

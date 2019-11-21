@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.label4 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.removeButton = new System.Windows.Forms.Button();
@@ -43,7 +44,16 @@
             this.scriptLabel3 = new System.Windows.Forms.Label();
             this.scriptLabel2 = new System.Windows.Forms.Label();
             this.scriptLabel1 = new System.Windows.Forms.Label();
+            this.dataValues = new System.Windows.Forms.DataGridView();
+            this.deleteButton = new System.Windows.Forms.Button();
+            this.downButton = new System.Windows.Forms.Button();
+            this.upButton = new System.Windows.Forms.Button();
+            this.Key = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.variableName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Description = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.columnType = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataValues)).BeginInit();
             this.SuspendLayout();
             // 
             // label4
@@ -66,7 +76,7 @@
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox1.Location = new System.Drawing.Point(21, 100);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(674, 507);
+            this.groupBox1.Size = new System.Drawing.Size(674, 545);
             this.groupBox1.TabIndex = 31;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "TABELLER";
@@ -91,7 +101,7 @@
             this.codeTablesListBox.ItemHeight = 20;
             this.codeTablesListBox.Location = new System.Drawing.Point(387, 80);
             this.codeTablesListBox.Name = "codeTablesListBox";
-            this.codeTablesListBox.Size = new System.Drawing.Size(271, 384);
+            this.codeTablesListBox.Size = new System.Drawing.Size(271, 424);
             this.codeTablesListBox.TabIndex = 17;
             this.codeTablesListBox.SelectedIndexChanged += new System.EventHandler(this.codeTablesListBox_SelectedIndexChanged);
             // 
@@ -105,7 +115,7 @@
             this.mainTablesListBox.Location = new System.Drawing.Point(16, 80);
             this.mainTablesListBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.mainTablesListBox.Name = "mainTablesListBox";
-            this.mainTablesListBox.Size = new System.Drawing.Size(273, 384);
+            this.mainTablesListBox.Size = new System.Drawing.Size(273, 424);
             this.mainTablesListBox.TabIndex = 3;
             this.mainTablesListBox.SelectedIndexChanged += new System.EventHandler(this.mainTablesListBox_SelectedIndexChanged);
             // 
@@ -140,7 +150,7 @@
             // convertButton
             // 
             this.convertButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.convertButton.Location = new System.Drawing.Point(551, 613);
+            this.convertButton.Location = new System.Drawing.Point(1293, 613);
             this.convertButton.Name = "convertButton";
             this.convertButton.Size = new System.Drawing.Size(144, 32);
             this.convertButton.TabIndex = 33;
@@ -155,14 +165,14 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.outputRichTextBox.Location = new System.Drawing.Point(21, 660);
             this.outputRichTextBox.Name = "outputRichTextBox";
-            this.outputRichTextBox.Size = new System.Drawing.Size(674, 150);
+            this.outputRichTextBox.Size = new System.Drawing.Size(1416, 160);
             this.outputRichTextBox.TabIndex = 34;
             this.outputRichTextBox.Text = "";
             // 
             // reportButton
             // 
             this.reportButton.Enabled = false;
-            this.reportButton.Location = new System.Drawing.Point(572, 846);
+            this.reportButton.Location = new System.Drawing.Point(1314, 839);
             this.reportButton.Name = "reportButton";
             this.reportButton.Size = new System.Drawing.Size(123, 32);
             this.reportButton.TabIndex = 36;
@@ -173,7 +183,7 @@
             // logButton
             // 
             this.logButton.Enabled = false;
-            this.logButton.Location = new System.Drawing.Point(456, 846);
+            this.logButton.Location = new System.Drawing.Point(1198, 839);
             this.logButton.Name = "logButton";
             this.logButton.Size = new System.Drawing.Size(110, 32);
             this.logButton.TabIndex = 35;
@@ -184,7 +194,7 @@
             // scriptLabel3
             // 
             this.scriptLabel3.AutoSize = true;
-            this.scriptLabel3.Location = new System.Drawing.Point(17, 958);
+            this.scriptLabel3.Location = new System.Drawing.Point(17, 943);
             this.scriptLabel3.Name = "scriptLabel3";
             this.scriptLabel3.Size = new System.Drawing.Size(478, 20);
             this.scriptLabel3.TabIndex = 39;
@@ -194,7 +204,7 @@
             // scriptLabel2
             // 
             this.scriptLabel2.AutoSize = true;
-            this.scriptLabel2.Location = new System.Drawing.Point(17, 928);
+            this.scriptLabel2.Location = new System.Drawing.Point(17, 913);
             this.scriptLabel2.Name = "scriptLabel2";
             this.scriptLabel2.Size = new System.Drawing.Size(468, 20);
             this.scriptLabel2.TabIndex = 38;
@@ -204,7 +214,7 @@
             // scriptLabel1
             // 
             this.scriptLabel1.AutoSize = true;
-            this.scriptLabel1.Location = new System.Drawing.Point(17, 897);
+            this.scriptLabel1.Location = new System.Drawing.Point(17, 882);
             this.scriptLabel1.Name = "scriptLabel1";
             this.scriptLabel1.Size = new System.Drawing.Size(614, 20);
             this.scriptLabel1.TabIndex = 37;
@@ -212,11 +222,116 @@
     "appen i {0}\".";
             this.scriptLabel1.Visible = false;
             // 
+            // dataValues
+            // 
+            this.dataValues.AllowUserToAddRows = false;
+            this.dataValues.AllowUserToDeleteRows = false;
+            this.dataValues.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dataValues.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataValues.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataValues.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Key,
+            this.variableName,
+            this.Description,
+            this.columnType});
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataValues.DefaultCellStyle = dataGridViewCellStyle1;
+            this.dataValues.Location = new System.Drawing.Point(716, 180);
+            this.dataValues.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.dataValues.Name = "dataValues";
+            this.dataValues.RowHeadersVisible = false;
+            this.dataValues.RowTemplate.ReadOnly = true;
+            this.dataValues.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dataValues.Size = new System.Drawing.Size(721, 422);
+            this.dataValues.TabIndex = 40;
+            this.dataValues.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataValues_CellClick);
+            // 
+            // deleteButton
+            // 
+            this.deleteButton.Enabled = false;
+            this.deleteButton.Location = new System.Drawing.Point(716, 128);
+            this.deleteButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.deleteButton.Name = "deleteButton";
+            this.deleteButton.Size = new System.Drawing.Size(70, 35);
+            this.deleteButton.TabIndex = 41;
+            this.deleteButton.Text = "Slet";
+            this.deleteButton.UseVisualStyleBackColor = true;
+            this.deleteButton.Click += new System.EventHandler(this.deleteButton_Click);
+            // 
+            // downButton
+            // 
+            this.downButton.Enabled = false;
+            this.downButton.Location = new System.Drawing.Point(1367, 128);
+            this.downButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.downButton.Name = "downButton";
+            this.downButton.Size = new System.Drawing.Size(70, 35);
+            this.downButton.TabIndex = 42;
+            this.downButton.Text = "Ned";
+            this.downButton.UseVisualStyleBackColor = true;
+            this.downButton.Click += new System.EventHandler(this.downButton_Click);
+            // 
+            // upButton
+            // 
+            this.upButton.Enabled = false;
+            this.upButton.Location = new System.Drawing.Point(1289, 128);
+            this.upButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.upButton.Name = "upButton";
+            this.upButton.Size = new System.Drawing.Size(70, 35);
+            this.upButton.TabIndex = 43;
+            this.upButton.Text = "Op";
+            this.upButton.UseVisualStyleBackColor = true;
+            this.upButton.Click += new System.EventHandler(this.upButton_Click);
+            // 
+            // Key
+            // 
+            this.Key.FillWeight = 12F;
+            this.Key.HeaderText = "Nøgle";
+            this.Key.MaxInputLength = 1;
+            this.Key.Name = "Key";
+            this.Key.ReadOnly = true;
+            this.Key.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // variableName
+            // 
+            this.variableName.FillWeight = 38F;
+            this.variableName.HeaderText = "Variabelnavn";
+            this.variableName.Name = "variableName";
+            this.variableName.ReadOnly = true;
+            this.variableName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Description
+            // 
+            this.Description.FillWeight = 50F;
+            this.Description.HeaderText = "Beskrivelse";
+            this.Description.Name = "Description";
+            this.Description.ReadOnly = true;
+            this.Description.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // columnType
+            // 
+            this.columnType.FillWeight = 20F;
+            this.columnType.HeaderText = "Datatype AIP";
+            this.columnType.Name = "columnType";
+            this.columnType.ReadOnly = true;
+            this.columnType.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(717, 1001);
+            this.ClientSize = new System.Drawing.Size(1459, 977);
+            this.Controls.Add(this.upButton);
+            this.Controls.Add(this.downButton);
+            this.Controls.Add(this.deleteButton);
+            this.Controls.Add(this.dataValues);
             this.Controls.Add(this.scriptLabel3);
             this.Controls.Add(this.scriptLabel2);
             this.Controls.Add(this.scriptLabel1);
@@ -233,6 +348,7 @@
             this.Shown += new System.EventHandler(this.Form2_Shown);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataValues)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -255,5 +371,13 @@
         private System.Windows.Forms.Label scriptLabel3;
         private System.Windows.Forms.Label scriptLabel2;
         private System.Windows.Forms.Label scriptLabel1;
+        private System.Windows.Forms.DataGridView dataValues;
+        private System.Windows.Forms.Button deleteButton;
+        private System.Windows.Forms.Button downButton;
+        private System.Windows.Forms.Button upButton;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Key;
+        private System.Windows.Forms.DataGridViewTextBoxColumn variableName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Description;
+        private System.Windows.Forms.DataGridViewTextBoxColumn columnType;
     }
 }

@@ -147,6 +147,7 @@ namespace Rigsarkiv.Styx
                     foreach (var columnNode in tableNode.Element(_tableIndexXNS + "columns").Elements())
                     {
                         var column = new Column() { Id = columnNode.Element(_tableIndexXNS + "columnID").Value, Name = columnNode.Element(_tableIndexXNS + "name").Value, Description = columnNode.Element(_tableIndexXNS + "description").Value, Type = columnNode.Element(_tableIndexXNS + "typeOriginal").Value, TypeOriginal = columnNode.Element(_tableIndexXNS + "type").Value };
+                        column.IsKey = tableNode.Element(_tableIndexXNS + "primaryKey").Element(_tableIndexXNS + "column").Value == column.Name;
                         EnsureType(column);
                         if (tableNode.Element(_tableIndexXNS + "foreignKeys").Elements().Any(e => e.Element(_tableIndexXNS + "reference").Element(_tableIndexXNS + "column").Value == column.Name))
                         {
@@ -251,7 +252,9 @@ namespace Rigsarkiv.Styx
             result.Rows = int.Parse(tableNode.Element(_tableIndexXNS + "rows").Value);
             foreach (var columnNode in tableNode.Element(_tableIndexXNS + "columns").Elements())
             {
-                result.Columns.Add(new Column() { Id = columnNode.Element(_tableIndexXNS + "columnID").Value, Name = columnNode.Element(_tableIndexXNS + "name").Value, Description = columnNode.Element(_tableIndexXNS + "description").Value, Type = columnNode.Element(_tableIndexXNS + "typeOriginal").Value, TypeOriginal = columnNode.Element(_tableIndexXNS + "type").Value });
+                var codeListColumn = new Column() { Id = columnNode.Element(_tableIndexXNS + "columnID").Value, Name = columnNode.Element(_tableIndexXNS + "name").Value, Description = columnNode.Element(_tableIndexXNS + "description").Value, Type = columnNode.Element(_tableIndexXNS + "typeOriginal").Value, TypeOriginal = columnNode.Element(_tableIndexXNS + "type").Value };
+                codeListColumn.IsKey = tableNode.Element(_tableIndexXNS + "primaryKey").Element(_tableIndexXNS + "column").Value == codeListColumn.Name;
+                result.Columns.Add(codeListColumn);
             }
             return result;
         }
