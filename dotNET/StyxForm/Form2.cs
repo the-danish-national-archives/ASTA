@@ -3,15 +3,11 @@ using Rigsarkiv.Styx;
 using Rigsarkiv.Styx.Entities;
 using Rigsarkiv.StyxForm.Extensions;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Rigsarkiv.StyxForm
@@ -23,6 +19,8 @@ namespace Rigsarkiv.StyxForm
         const string MainTableLabel = "Hovedtabel: {0}";
         const string LogPath = "{0}\\{1}_ASTA_konverteringslog.html";
         const string ReportPath = "{0}\\{1}_ASTA_konverteringsrapport.html";
+        const string PrimaryKey = "P";
+        const string ForeignKey = "F";
         private LogManager _logManager = null;
         private Converter _converter = null;
         private string _srcPath = null;
@@ -31,6 +29,7 @@ namespace Rigsarkiv.StyxForm
         private Report _report = null;
         private Table _mainTable = null;
         private Table _codeTable = null;
+        private int _rowIndex = -1;
 
         /// <summary>
         /// 
@@ -61,7 +60,7 @@ namespace Rigsarkiv.StyxForm
             var column = _mainTable.Columns.Where(c => c.CodeList != null).ToList()[codeTablesListBox.SelectedIndex];
             column.CodeList = null;
             codeTablesListBox.Items.RemoveAt(codeTablesListBox.SelectedIndex);
-            mainTablesListBox.Items.Add(_codeTable.Title);
+            mainTablesListBox.SelectedIndex = mainTablesListBox.Items.Add(_codeTable.Title);
             _codeTable = null;            
             codeTablesListBox.ClearSelected();
         }
@@ -91,9 +90,8 @@ namespace Rigsarkiv.StyxForm
 
         private void UpdateRow()
         {
+            _rowIndex = -1;
             deleteButton.Enabled = false;
-            upButton.Enabled = false;
-            downButton.Enabled = false;
             var table = _codeTable != null ? _codeTable : _mainTable;
             Cursor.Current = Cursors.WaitCursor;
             dataValues.Rows.Clear();
@@ -101,7 +99,9 @@ namespace Rigsarkiv.StyxForm
             for (int i = 0; i < table.Columns.Count; i++)
             {
                 var column = table.Columns[i];
-                dataValues[0, i].Value = column.IsKey ? "X" : string.Empty;
+                var keyType = column.IsKey ? PrimaryKey : string.Empty;
+                if(string.IsNullOrEmpty(keyType) && column.CodeList != null) { keyType = ForeignKey;  }
+                dataValues[0, i].Value = keyType;
                 dataValues[1, i].Value = column.Name;
                 dataValues[2, i].Value = column.Description;
                 dataValues[3, i].Value = column.TypeOriginal;
@@ -193,24 +193,19 @@ namespace Rigsarkiv.StyxForm
         private void dataValues_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex == -1) { return; }
-            deleteButton.Enabled = true;
-            upButton.Enabled = true;
-            downButton.Enabled = true;
+            _rowIndex = e.RowIndex;
+            var table = _codeTable != null ? _codeTable : _mainTable;
+            var column = table.Columns[_rowIndex];
+            deleteButton.Enabled = !column.IsKey && (column.CodeList == null);           
         }
 
         private void deleteButton_Click(object sender, EventArgs e)
         {
             var table = _codeTable != null ? _codeTable : _mainTable;
-        }
-
-        private void upButton_Click(object sender, EventArgs e)
-        {
-            var table = _codeTable != null ? _codeTable : _mainTable;
-        }
-
-        private void downButton_Click(object sender, EventArgs e)
-        {
-            var table = _codeTable != null ? _codeTable : _mainTable;
+            var column = table.Columns[_rowIndex];
+            _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = "Restructure", Message = string.Format("Delete column '{0}' from table '{1}'", column.Name, table.Name) });
+            table.Columns.RemoveAt(_rowIndex);
+            UpdateRow();
         }
     }
 }

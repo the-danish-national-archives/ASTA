@@ -204,8 +204,9 @@ namespace Rigsarkiv.Styx
                 _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Ensure Missing Values for codelist: {0}", column.CodeList.Name) });
                 XNamespace tableNS = string.Format(TableXmlNs, column.CodeList.SrcFolder);
                 path = string.Format(TablePath, _srcPath, column.CodeList.SrcFolder);
+                var columnId = column.CodeList.Columns.Where(c => c.IsKey).Select(c => c.Id).FirstOrDefault();
                 StreamElement(delegate (XElement row) {
-                    var content = row.Element(tableNS + C1).Value;
+                    var content = row.Element(tableNS + columnId).Value;
                     UpdateRange(column, content);
                 }, path);
             });
@@ -449,13 +450,15 @@ namespace Rigsarkiv.Styx
                 _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add {0} code list", column.CodeList.Name) });
                 XNamespace tableNS = string.Format(TableXmlNs, column.CodeList.SrcFolder);
                 path = string.Format(TablePath, _srcPath, column.CodeList.SrcFolder);
+                var columnKeyId = column.CodeList.Columns.Where(c => c.IsKey).Select(c => c.Id).FirstOrDefault();
+                var columnId = column.CodeList.Columns.Where(c => !c.IsKey).Select(c => c.Id).FirstOrDefault();
                 StreamElement(delegate (XElement row) {
-                    var code = row.Element(tableNS + C1).Value;
+                    var code = row.Element(tableNS + columnKeyId).Value;
                     if (column.MissingValues != null && column.MissingValues.ContainsKey(code))
                     {
                         code = column.MissingValues[code];
                     }
-                    codeList.AppendLine(string.Format(CodeFormat, code, row.Element(tableNS + C2).Value));
+                    codeList.AppendLine(string.Format(CodeFormat, code, row.Element(tableNS + columnId).Value));
                     column.CodeList.RowsCounter++;
                 }, path);
                 var codeListContent = codeList.ToString();                

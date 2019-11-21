@@ -24,8 +24,6 @@ namespace Rigsarkiv.Styx
         protected const string CodeListPath = "{0}\\Data\\{1}_{2}\\{1}_{2}_KODELISTE.txt";
         protected const string UserCodesPath = "{0}\\Data\\{1}_{2}\\{1}_{2}_BRUGERKODE.txt";
         protected const string TableDataPath = "{0}\\Data\\{1}_{2}\\{1}_{2}.csv";
-        protected const string C1 = "c1";
-        protected const string C2 = "c2";
         protected const string VarCharPrefix = "VARCHAR(";
         protected const string DataTypeStringPattern = "^(string)$|^(\\%([0-9]+)s)$|^(\\$([0-9]+)\\.)$|^(a([0-9]+))$";
         protected const string DataTypeIntPattern = "^(int)$|^(\\%([0-9]+)\\.0f)$|^(f([0-9]+)\\.)$|^(f([0-9]+))$";

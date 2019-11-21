@@ -45,13 +45,11 @@
             this.scriptLabel2 = new System.Windows.Forms.Label();
             this.scriptLabel1 = new System.Windows.Forms.Label();
             this.dataValues = new System.Windows.Forms.DataGridView();
-            this.deleteButton = new System.Windows.Forms.Button();
-            this.downButton = new System.Windows.Forms.Button();
-            this.upButton = new System.Windows.Forms.Button();
             this.Key = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.variableName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Description = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.columnType = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.deleteButton = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataValues)).BeginInit();
             this.SuspendLayout();
@@ -226,9 +224,7 @@
             // 
             this.dataValues.AllowUserToAddRows = false;
             this.dataValues.AllowUserToDeleteRows = false;
-            this.dataValues.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dataValues.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.dataValues.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataValues.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataValues.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -253,42 +249,6 @@
             this.dataValues.Size = new System.Drawing.Size(721, 422);
             this.dataValues.TabIndex = 40;
             this.dataValues.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataValues_CellClick);
-            // 
-            // deleteButton
-            // 
-            this.deleteButton.Enabled = false;
-            this.deleteButton.Location = new System.Drawing.Point(716, 128);
-            this.deleteButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.deleteButton.Name = "deleteButton";
-            this.deleteButton.Size = new System.Drawing.Size(70, 35);
-            this.deleteButton.TabIndex = 41;
-            this.deleteButton.Text = "Slet";
-            this.deleteButton.UseVisualStyleBackColor = true;
-            this.deleteButton.Click += new System.EventHandler(this.deleteButton_Click);
-            // 
-            // downButton
-            // 
-            this.downButton.Enabled = false;
-            this.downButton.Location = new System.Drawing.Point(1367, 128);
-            this.downButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.downButton.Name = "downButton";
-            this.downButton.Size = new System.Drawing.Size(70, 35);
-            this.downButton.TabIndex = 42;
-            this.downButton.Text = "Ned";
-            this.downButton.UseVisualStyleBackColor = true;
-            this.downButton.Click += new System.EventHandler(this.downButton_Click);
-            // 
-            // upButton
-            // 
-            this.upButton.Enabled = false;
-            this.upButton.Location = new System.Drawing.Point(1289, 128);
-            this.upButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.upButton.Name = "upButton";
-            this.upButton.Size = new System.Drawing.Size(70, 35);
-            this.upButton.TabIndex = 43;
-            this.upButton.Text = "Op";
-            this.upButton.UseVisualStyleBackColor = true;
-            this.upButton.Click += new System.EventHandler(this.upButton_Click);
             // 
             // Key
             // 
@@ -323,13 +283,23 @@
             this.columnType.ReadOnly = true;
             this.columnType.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
+            // deleteButton
+            // 
+            this.deleteButton.Enabled = false;
+            this.deleteButton.Location = new System.Drawing.Point(716, 128);
+            this.deleteButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.deleteButton.Name = "deleteButton";
+            this.deleteButton.Size = new System.Drawing.Size(70, 35);
+            this.deleteButton.TabIndex = 41;
+            this.deleteButton.Text = "Slet";
+            this.deleteButton.UseVisualStyleBackColor = true;
+            this.deleteButton.Click += new System.EventHandler(this.deleteButton_Click);
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1459, 977);
-            this.Controls.Add(this.upButton);
-            this.Controls.Add(this.downButton);
             this.Controls.Add(this.deleteButton);
             this.Controls.Add(this.dataValues);
             this.Controls.Add(this.scriptLabel3);
@@ -373,8 +343,6 @@
         private System.Windows.Forms.Label scriptLabel1;
         private System.Windows.Forms.DataGridView dataValues;
         private System.Windows.Forms.Button deleteButton;
-        private System.Windows.Forms.Button downButton;
-        private System.Windows.Forms.Button upButton;
         private System.Windows.Forms.DataGridViewTextBoxColumn Key;
         private System.Windows.Forms.DataGridViewTextBoxColumn variableName;
         private System.Windows.Forms.DataGridViewTextBoxColumn Description;
