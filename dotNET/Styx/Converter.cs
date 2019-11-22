@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Linq;
 using System.Linq;
+using System;
 
 namespace Rigsarkiv.Styx
 {
@@ -160,6 +161,24 @@ namespace Rigsarkiv.Styx
             {
                 var groups = _enclosedReservedWord.Match(name).Groups;
                 result = groups[2].Value;
+            }
+            return result;
+        }
+
+        protected string NormalizeDescription(string description)
+        {
+            var result = description;
+            if (result.IndexOf(Environment.NewLine) > -1)
+            {
+                result = result.Replace(Environment.NewLine," ");
+            }
+            if (result.IndexOf("\r") > -1)
+            {
+                result = result.Replace("\r", " ");
+            }
+            if (result.IndexOf("\n") > -1)
+            {
+                result = result.Replace("\n", " ");
             }
             return result;
         }

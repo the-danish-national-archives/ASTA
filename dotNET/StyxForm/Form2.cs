@@ -49,7 +49,7 @@ namespace Rigsarkiv.StyxForm
             _destPath = destPath;
             _destFolder = destFolder;
             _report = report;
-            mainTablesListBox.Items.AddRange(_report.Tables.Select(t => t.Title).ToArray());
+            mainTablesListBox.Items.AddRange(_report.Tables.Select(t => t.Name).ToArray());
         }
 
         private void removeButton_Click(object sender, EventArgs e)
@@ -60,7 +60,7 @@ namespace Rigsarkiv.StyxForm
             var column = _mainTable.Columns.Where(c => c.CodeList != null).ToList()[codeTablesListBox.SelectedIndex];
             column.CodeList = null;
             codeTablesListBox.Items.RemoveAt(codeTablesListBox.SelectedIndex);
-            mainTablesListBox.SelectedIndex = mainTablesListBox.Items.Add(_codeTable.Title);
+            mainTablesListBox.SelectedIndex = mainTablesListBox.Items.Add(_codeTable.Name);
             _codeTable = null;            
             codeTablesListBox.ClearSelected();
         }
@@ -73,9 +73,9 @@ namespace Rigsarkiv.StyxForm
             _mainTable = _report.Tables[mainTablesListBox.SelectedIndex];            
             if (_mainTable.Columns != null && _mainTable.Columns.Count > 0 && _mainTable.Columns.Any(c => c.CodeList != null))
             {
-                codeTablesListBox.Items.AddRange(_mainTable.Columns.Where(c => c.CodeList != null).Select(t => t.CodeList.Title).ToArray());
+                codeTablesListBox.Items.AddRange(_mainTable.Columns.Where(c => c.CodeList != null).Select(t => t.CodeList.Name).ToArray());
             }
-            tableInfoLabel.Text = string.Format(MainTableLabel, _mainTable.Title);
+            tableInfoLabel.Text = string.Format(MainTableLabel, _mainTable.Name);
             UpdateRow();
         }
 
@@ -84,7 +84,7 @@ namespace Rigsarkiv.StyxForm
             if (codeTablesListBox.SelectedIndex == -1) { return; }
             removeButton.Enabled = true;
             _codeTable = _mainTable.Columns.Where(c => c.CodeList != null).Select(t => t.CodeList).ToList()[codeTablesListBox.SelectedIndex];
-            tableInfoLabel.Text = string.Format(CodeTableLabel, _codeTable.Title);
+            tableInfoLabel.Text = string.Format(CodeTableLabel, _codeTable.Name);
             UpdateRow();
         }
 

@@ -106,7 +106,7 @@ namespace Rigsarkiv.Styx
                  _report.Tables.ForEach(table =>
                 {
                     XNamespace tableNS = string.Format(TableXmlNs, table.SrcFolder);
-                    path = string.Format(TableDataPath, _destFolderPath, _report.ScriptType.ToString().ToLower(), _state == FlowState.Completed ? NormalizeName(table.Title) : NormalizeName(table.Name));
+                    path = string.Format(TableDataPath, _destFolderPath, _report.ScriptType.ToString().ToLower(), NormalizeName(table.Name));
                     _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add file: {0}", path) });
                     using (TextWriter sw = new StreamWriter(path))
                     {
@@ -458,7 +458,7 @@ namespace Rigsarkiv.Styx
                     {
                         code = column.MissingValues[code];
                     }
-                    codeList.AppendLine(string.Format(CodeFormat, code, row.Element(tableNS + columnId).Value));
+                    codeList.AppendLine(string.Format(CodeFormat, code, NormalizeDescription(row.Element(tableNS + columnId).Value)));
                     column.CodeList.RowsCounter++;
                 }, path);
                 var codeListContent = codeList.ToString();                

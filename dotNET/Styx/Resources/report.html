@@ -152,7 +152,7 @@
         }}
         function UpdateRow(table,isMain) {{
                 var className = (table.Rows !== table.RowsCounter) ? " class=\"Error\"" : "";
-            rowsTable.insertAdjacentHTML("beforeend", rowHtml.format(isMain ? table.Title : table.Name, table.Columns.length, table.Rows, table.RowsCounter, className));
+            rowsTable.insertAdjacentHTML("beforeend", rowHtml.format(isMain ? "<b>" + table.Name + "</b>" : table.Name, table.Columns.length, table.Rows, table.RowsCounter, className));
         }}
         function UpdateTable(beforeId, afterId, beforeValue, afterValue) {{
             var before = document.getElementById(beforeId);

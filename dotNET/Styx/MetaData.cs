@@ -16,7 +16,7 @@ namespace Rigsarkiv.Styx
     {
         const string VariablesPath = "{0}\\Data\\{1}_{2}\\{1}_{2}_VARIABEL.txt";
         const string DescriptionsPath = "{0}\\Data\\{1}_{2}\\{1}_{2}_VARIABELBESKRIVELSE.txt";
-        const string OldTypeStringPattern = "^(CHAR|CHARACTER|CHAR VARYING|CHARACTER VARYING|VARCHAR|NATIONAL CHARACTER|NATIONAL CHAR|NCHAR|NATIONAL CHARACTER VARYING|NATIONAL CHAR VARYING|NCHAR VARYING)$";
+        const string OldTypeStringPattern = "^(CHAR|CHARACTER|CHAR VARYING|CHARACTER VARYING|VARCHAR|NATIONAL CHARACTER|NATIONAL CHAR|NCHAR|NATIONAL CHARACTER VARYING|NATIONAL CHAR VARYING|NCHAR VARYING)[\\w\\W]*$";
         const string OldTypeIntPattern = "^(INTEGER|INT|SMALLINT)$";
         const string OldTypeDecimalPattern = "^(NUMERIC|DECIMAL|DEC|FLOAT|REAL|DOUBLE PRECISION)$";
         const string OldTypeBooleanPattern = "^(BOOLEAN)$";
@@ -114,7 +114,7 @@ namespace Rigsarkiv.Styx
                     index++;
                 }
                 _variables.AppendLine(string.Format("{0} {1} {2}", NormalizeName(column.Name), GetColumnType(column), codeList));
-                _descriptions.AppendLine(string.Format("{0} '{1}'", NormalizeName(column.Name), column.Description));
+                _descriptions.AppendLine(string.Format("{0} '{1}'", NormalizeName(column.Name), NormalizeDescription(column.Description)));
             });
             EnsureFile(table, VariablesPath, _variables.ToString());
             EnsureFile(table, DescriptionsPath, _descriptions.ToString());
@@ -123,7 +123,7 @@ namespace Rigsarkiv.Styx
 
         private void EnsureFile(Table table,string filePath,string content)
         {
-            var path = string.Format(filePath, _destFolderPath, _report.ScriptType.ToString().ToLower(), _state == FlowState.Completed ? NormalizeName(table.Title) : NormalizeName(table.Name));
+            var path = string.Format(filePath, _destFolderPath, _report.ScriptType.ToString().ToLower(), _state == FlowState.Completed ? NormalizeName(table.Name) : NormalizeName(table.Name));
             _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add file: {0}", path) });
             using (var sw = new StreamWriter(path, true, Encoding.UTF8))
             {
@@ -206,8 +206,9 @@ namespace Rigsarkiv.Styx
             if (regex.IsMatch(column.TypeOriginal)) { result = "TIME"; }
             regex = GetRegex(OldTypeDateTimePattern);
             if (regex.IsMatch(column.TypeOriginal)) { result = "TIMESTAMP"; }
-            if (!string.IsNullOrEmpty(result) && column.TypeOriginal != result)
+            if (!string.IsNullOrEmpty(result))
             {
+                column.Type = string.Empty;
                 column.TypeOriginal = result;
                 column.Modified = true;
             }
@@ -236,16 +237,8 @@ namespace Rigsarkiv.Styx
             {
                 return null;
             }
-            var result = new Table() { Columns = new List<Column>(), RowsCounter = 0 };
-            var tableName = NormalizeName(table.Name);
-            var codelistName = foreignKeyNode.Element(_tableIndexXNS + "name").Value;
-            result.Title = codelistName;
-            result.Title = result.Title.Substring(3);
-            result.Title = result.Title.Substring(0, result.Title.LastIndexOf("_"));
-            codelistName = codelistName.Substring(3 + tableName.Length + 1);
-            codelistName = codelistName.Substring(0, codelistName.LastIndexOf("_"));
-            result.Name = codelistName;
-
+            var result = new Table() { Name = NormalizeName(referencedTable), Columns = new List<Column>(), RowsCounter = 0 };
+           
             var tableNode = _tableIndexXDocument.Element(_tableIndexXNS + "siardDiark").Element(_tableIndexXNS + "tables").Elements().Where(e => e.Element(_tableIndexXNS + "name").Value == referencedTable).FirstOrDefault();
             result.SrcFolder = tableNode.Element(_tableIndexXNS + "folder").Value;
             result.Rows = int.Parse(tableNode.Element(_tableIndexXNS + "rows").Value);
@@ -253,6 +246,7 @@ namespace Rigsarkiv.Styx
             {
                 var codeListColumn = new Column() { Id = columnNode.Element(_tableIndexXNS + "columnID").Value, Name = columnNode.Element(_tableIndexXNS + "name").Value, Description = columnNode.Element(_tableIndexXNS + "description").Value, Type = columnNode.Element(_tableIndexXNS + "typeOriginal").Value, TypeOriginal = columnNode.Element(_tableIndexXNS + "type").Value };
                 codeListColumn.IsKey = tableNode.Element(_tableIndexXNS + "primaryKey").Element(_tableIndexXNS + "column").Value == codeListColumn.Name;
+                if (_state == FlowState.Suspended) { UpdateOldType(codeListColumn); }
                 result.Columns.Add(codeListColumn);
             }
             return result;

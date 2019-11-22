@@ -192,13 +192,13 @@ namespace Rigsarkiv.Styx
                         var tableName = tableIndexNode.Element(_tableIndexXNS + "name").Value;
                         var tableRows = int.Parse(tableIndexNode.Element(_tableIndexXNS + "rows").Value);
                         var folder = string.Format(TableFolderPrefix, _report.ScriptType.ToString().ToLower(), NormalizeName(tableName));
-                        _report.Tables.Add(new Table() { Folder = folder, SrcFolder = srcFolder, Name = tableName, Title = tableName, Rows = tableRows, RowsCounter = 0, Columns = new List<Column>() });
+                        _report.Tables.Add(new Table() { Folder = folder, SrcFolder = srcFolder, Name = tableName, Rows = tableRows, RowsCounter = 0, Columns = new List<Column>() });
                     }
                 }
                 if (_state == FlowState.Running || _state == FlowState.Completed)
                 {
                     _report.Tables.ForEach(table => {
-                        if(string.IsNullOrEmpty(table.Folder)) { table.Folder = string.Format(TableFolderPrefix, _report.ScriptType.ToString().ToLower(), NormalizeName(table.Title)); }
+                        if(string.IsNullOrEmpty(table.Folder)) { table.Folder = string.Format(TableFolderPrefix, _report.ScriptType.ToString().ToLower(), NormalizeName(table.Name)); }
                         var folderPath = string.Format("{0}\\{1}", path, table.Folder);
                         _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Ensure Table: {0}", folderPath) });
                         Directory.CreateDirectory(folderPath);
