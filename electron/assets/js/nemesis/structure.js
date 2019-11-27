@@ -548,7 +548,7 @@ function (n) {
                     settings.confirmationSpn.innerHTML = Rigsarkiv.Language.callback().getValue("nemesis-output-ConvertDisabled");
                     settings.selectDirBtn.disabled = false;
                     settings.validateBtn.disabled = false;
-                    return settings.logCallback().commit(settings.deliveryPackagePath);
+                    return settings.logCallback().commit(settings.deliveryPackagePath,settings.confirmationSpn.innerHTML);
                 }               
             }
             catch(err) 
@@ -577,6 +577,7 @@ function (n) {
                 settings.validateBtn.disabled = true;
                 var folderName = GetFolderName();
                 settings.testSpn.innerText = Rigsarkiv.Language.callback().getValue("nemesis-test-id").format(folderName);
+                LogInfo("nemesis-processing-CheckFolders-Start",null);
                 settings.logCallback().section(settings.logType,folderName,Rigsarkiv.Language.callback().getValue("nemesis-output-structure-logStart"));
                 setTimeout(Validate, 1000);                          
             })

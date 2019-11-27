@@ -994,7 +994,7 @@ function (n) {
         }
 
         //loop Data folder's table & Metadata files
-        var ValidateData = function () {
+        var ValidateData = function (folderName) {
             var result = true;
             var destPath = (settings.deliveryPackagePath.indexOf("\\") > -1) ? "{0}\\{1}".format(settings.deliveryPackagePath,settings.dataPathPostfix) : "{0}/{1}".format(settings.deliveryPackagePath,settings.dataPathPostfix); 
             fs.readdirSync(destPath).forEach(folder => {
@@ -1005,6 +1005,9 @@ function (n) {
                     //var charsetMatch = chardet.detectFileSync(metadataFilePath);
                     var folders = metadataFilePath.getFolders();
                     settings.fileName = folders[folders.length - 1];
+                    var logTableText = Rigsarkiv.Language.callback().getValue("nemesis-output-metadata-logTable").format(folder);
+                    settings.output.append(logTableText);
+                    settings.logCallback().section(settings.logType,folderName,logTableText);
                     settings.data.push({ "fileName":settings.fileName,"errorStop":false, "system":"", "name":"", "variables":[], "references":[], "description":"", rows:0 })
                     if(!ValidateMetadata(metadataFilePath)) { result = false; }
                     GetTableData(settings.fileName).errorStop = settings.errorStop;
@@ -1024,8 +1027,9 @@ function (n) {
             try 
             {
                 var folderName = GetFolderName();
+                LogInfo("nemesis-processing-CheckMetadata-Start",null);
                 settings.logCallback().section(settings.logType,folderName,Rigsarkiv.Language.callback().getValue("nemesis-output-metadata-logStart"));            
-                ValidateData();
+                ValidateData(folderName);
                 var enableData = false;
                 settings.data.forEach(table => {
                     if(!table.errorStop) { enableData = true; }
@@ -1044,7 +1048,7 @@ function (n) {
                     settings.confirmationSpn.innerHTML = Rigsarkiv.Language.callback().getValue("nemesis-output-ConvertDisabled");
                     settings.selectDirBtn.disabled = false;
                     settings.validateBtn.disabled = false;
-                    return settings.logCallback().commit(settings.deliveryPackagePath);
+                    return settings.logCallback().commit(settings.deliveryPackagePath,settings.confirmationSpn.innerHTML);
                 }               
             }
             catch(err) 

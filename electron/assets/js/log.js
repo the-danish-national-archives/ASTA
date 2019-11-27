@@ -31,7 +31,8 @@ function (n) {
         spinner: null,
         spinnerClass: null,
         spinnerEnable: true,
-        outputShowBtn: null
+        outputShowBtn: null,
+        confirmation: null
     }
 
     //reset status & input fields
@@ -57,7 +58,7 @@ function (n) {
         var testTitle = Rigsarkiv.Language.callback().getValue("nemesis-logFile-test-Title-H3");
         var testStart = Rigsarkiv.Language.callback().getValue("nemesis-logFile-test-Start-P");
         var testEnd = Rigsarkiv.Language.callback().getValue("nemesis-logFile-test-End-P").format(settings.errorsCounter);
-        var updatedData = data.toString().format(settings.logsDate.getFromFormat("dd-MM-yyyy hh:mm:ss"),folderName,settings.logs.join("\r\n"),testEnd,title,runDate,filters,error,warning,testTitle,testStart);
+        var updatedData = data.toString().format(settings.logsDate.getFromFormat("dd-MM-yyyy hh:mm:ss"),folderName,settings.logs.join("\r\n"),testEnd,title,runDate,filters,error,warning,testTitle,testStart,settings.confirmation);
         fs.writeFileSync(settings.filePath, updatedData);                         
         settings.logs = [];
         settings.errorsCounter = 0;
@@ -171,11 +172,12 @@ function (n) {
                     settings.logs.push(settings.sectionElement.format(logType,(new Date()).getFromFormat("yyyyMMddhhmmss"),folderName,text));
                     if(settings.spinnerEnable && settings.spinner.className === "") { settings.spinner.className = settings.spinnerClass; }
                 },
-                commit: function(selectedFolderPath)
+                commit: function(selectedFolderPath,confirmation)
                 {
                     Reset(); 
                     try
                     {
+                        settings.confirmation = confirmation;
                         settings.filePath = settings.filePostfix.format(selectedFolderPath);
                         if(fs.existsSync(settings.filePath)) {                        
                             console.logInfo(`Delete exists log: ${settings.filePath}`,"Rigsarkiv.Log.callback.commit");
