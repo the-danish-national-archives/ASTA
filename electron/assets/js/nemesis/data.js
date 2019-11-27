@@ -207,6 +207,12 @@ function (n) {
             return folders[folders.length - 1];
         } 
 
+        // get table folder name by path
+        var GetTableFolderName = function(filePath) {
+            var folders = filePath.getFolders();
+            return folders[folders.length - 2];
+        } 
+
         //Validate Time value
         var ValidateTime = function (dataValue, regExp, variable) {
             var result = true;
@@ -639,6 +645,9 @@ function (n) {
             settings.runIndex = settings.runIndex + 1;
             if(settings.runIndex < settings.dataFiles.length) {
                 var dataFilePath = settings.dataFiles[settings.runIndex];
+                var logTableText = Rigsarkiv.Language.callback().getValue("nemesis-output-metadata-logTable").format(GetTableFolderName(dataFilePath));
+                settings.output.append(logTableText);
+                settings.logCallback().section(settings.logType,GetFolderName(),logTableText);
                 settings.fileName = GetFileName(dataFilePath);
                 settings.metadataFileName =  "{0}.txt".format(settings.fileName.substring(0,settings.fileName.indexOf(".")));
                 settings.table = GetTableData();
@@ -709,7 +718,7 @@ function (n) {
                 else {
                     settings.confirmationSpn.innerHTML = Rigsarkiv.Language.callback().getValue("nemesis-output-ConvertDisabled");
                 }
-                settings.logResult = settings.logCallback().commit(settings.deliveryPackagePath);
+                settings.logResult = settings.logCallback().commit(settings.deliveryPackagePath,settings.confirmationSpn.innerHTML);
                 if(settings.rightsCallback().isAdmin && enableConvert) { 
                     fs.writeFileSync(settings.metadataFilePostfix.format(settings.deliveryPackagePath), JSON.stringify(settings.metadata)); 
                         settings.ConvertBtn.hidden = false; 
@@ -725,7 +734,8 @@ function (n) {
         var Validate = function () {
             console.logInfo(`data selected path: ${settings.deliveryPackagePath}`,"Rigsarkiv.Nemesis.Data.Validate"); 
             try 
-            {                
+            {         
+                LogInfo("nemesis-processing-CheckData-Start",null);       
                 settings.logCallback().section(settings.logType,GetFolderName(),Rigsarkiv.Language.callback().getValue("nemesis-output-data-logStart"));            
                 ValidateData(); 
                 if(settings.dataFiles.length === 0) 

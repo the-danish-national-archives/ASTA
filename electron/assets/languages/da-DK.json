@@ -1284,15 +1284,15 @@
             },
             {
                 "key": "nemesis-output-ConvertEnabled",
-                "value": "<br/><p class=\"ok\">Afleveringspakken er gennemtestet uden fejl og kan nu afleveres til arkivet.</p>"
+                "value": "<p class=\"ok\">Afleveringspakken er gennemtestet uden fejl og kan nu afleveres til arkivet.</p>"
             },
             {
                 "key": "nemesis-output-ConvertWarningEnabled",
-                "value": "<br/><p class=\"warningWithError\">Afleveringspakken er fuldt gennemtestet. Fejl vist i loggen skal rettes før aflevering til arkiv.</p>"
+                "value": "<p class=\"warningWithError\">Afleveringspakken er fuldt gennemtestet. Fejl vist i loggen skal rettes før aflevering til arkiv.</p>"
             },
             {
                 "key": "nemesis-output-ConvertDisabled",
-                "value": "<br/><p class=\"error\">Testen er afbrudt og afleveringspakken er ikke testet færdig. Fejl vist i loggen skal rettes før testen kan fortsætte.</p>"
+                "value": "<p class=\"error\">Testen er afbrudt og afleveringspakken er ikke testet færdig. Fejl vist i loggen skal rettes før testen kan fortsætte.</p>"
             },
             {
                 "key": "nemesis-logFile-Title",
@@ -1400,7 +1400,7 @@
             },
             {
                 "key": "nemesis-output-metadata-logStart",
-                "value": "Metadatafiler test startet<br/>"
+                "value": "<br/>Metadatafiler test startet<br/>"
             },
             {
                 "key": "nemesis-output-metadata-logEndNoError",
@@ -1415,8 +1415,12 @@
                 "value": "Metadatafiler test afbrudt (Datafiler test ikke startet)<br/>"
             },
             {
+                "key": "nemesis-output-metadata-logTable",
+                "value": "<b>{0}</b><br/>"
+            },
+            {
                 "key": "nemesis-output-data-logStart",
-                "value": "Datafiler test startet<br/>"
+                "value": "<br/>Datafiler test startet<br/>"
             },
             {
                 "key": "nemesis-output-data-logEndNoError",
@@ -1429,6 +1433,10 @@
             {
                 "key": "nemesis-output-data-logEndWithErrorStop",
                 "value": "Datafiler test afbrudt<br/>"
+            },
+            {
+                "key": "nemesis-processing-CheckFolders-Start",
+                "value": "<i class=\"fas fa-check-circle ok\"></i>Mappestruktur test startet<br/>"
             },
             {
                 "key": "nemesis-processing-CheckFolders-Ok",
@@ -1835,6 +1843,10 @@
                 "value": "<i class=\"fas fa-exclamation-triangle warning\"></i>Metadatafiler test gennemført med fejl<br/>"
             },
             {
+                "key": "nemesis-processing-CheckMetadata-Start",
+                "value": "<br/><i class=\"fas fa-check-circle ok\"></i>Metadatafiler test startet<br/>"
+            },
+            {
                 "key": "nemesis-processing-CheckMetadata-Ok",
                 "value": "<i class=\"fas fa-check-circle ok\"></i>Metadatafiler test gennemført uden fejl<br/>"
             },
@@ -1957,6 +1969,10 @@
             {
                 "key": "nemesis-processing-CheckData-Warning",
                 "value": "<i class=\"fas fa-exclamation-triangle warning\"></i>Datafiler test gennemført med fejl<br/>"
+            },
+            {
+                "key": "nemesis-processing-CheckData-Start",
+                "value": "<br/><i class=\"fas fa-check-circle ok\"></i>Datafiler test startet<br/>"
             },
             {
                 "key": "nemesis-processing-CheckData-Ok",
