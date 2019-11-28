@@ -719,8 +719,9 @@ function (n) {
                     settings.confirmationSpn.innerHTML = Rigsarkiv.Language.callback().getValue("nemesis-output-ConvertDisabled");
                 }
                 settings.logResult = settings.logCallback().commit(settings.deliveryPackagePath,settings.confirmationSpn.innerHTML);
-                if(settings.rightsCallback().isAdmin && enableConvert) { 
-                    fs.writeFileSync(settings.metadataFilePostfix.format(settings.deliveryPackagePath), JSON.stringify(settings.metadata)); 
+                if(settings.rightsCallback().isAdmin && enableConvert) {
+                    var destPath = (settings.logResult.filePath.indexOf("\\") > -1) ? "{0}\\{1}".format(settings.logResult.filePath,settings.metadataFilePostfix.format(folderName)) : "{0}/{1}".format(settings.logResult.filePath,settings.metadataFilePostfix.format(folderName)); 
+                    fs.writeFileSync(destPath, JSON.stringify(settings.metadata)); 
                         settings.ConvertBtn.hidden = false; 
                 }
                 settings.selectDirBtn.disabled = false;
@@ -769,8 +770,10 @@ function (n) {
                         rootPath = folders.slice(0,folders.length - 3).join("/");
                         converterFilePath = "{0}/{1}".format(rootPath,settings.converterFileName);
                     }
-                }   
-                var converter = spawn(converterFilePath, [settings.metadataFilePostfix.format(settings.deliveryPackagePath) ]);
+                }
+                var folderName = GetFolderName();   
+                var destPath = (settings.logResult.filePath.indexOf("\\") > -1) ? "{0}\\{1}".format(settings.logResult.filePath,settings.metadataFilePostfix.format(folderName)) : "{0}/{1}".format(settings.logResult.filePath,settings.metadataFilePostfix.format(folderName)); 
+                var converter = spawn(converterFilePath, [destPath]);
                 converter.stdout.on('data', (data) => console.logInfo(`stdout: ${data}`,"Rigsarkiv.Nemesis.Data.AddEvents"));                  
                 converter.stderr.on('data', (data) => (new Error(data).Handle(settings.outputErrorSpn,settings.outputErrorText,"Rigsarkiv.Nemesis.Data.AddEvents")));
                 converter.on('close', (code) => console.logInfo(`converter process exited with code ${code}`,"Rigsarkiv.Nemesis.Data.AddEvents"));

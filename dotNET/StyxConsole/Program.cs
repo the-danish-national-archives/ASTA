@@ -5,6 +5,7 @@ using Rigsarkiv.Styx.Entities;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 
 namespace Rigsarkiv.StyxConsole
 {
@@ -39,14 +40,17 @@ namespace Rigsarkiv.StyxConsole
                         _converter = new Data(_logManager, srcPath, destPath, destFolder, _converter.Report, _converter.State);
                         if (_converter.Run())
                         {
-                            var path = string.Format("{0}\\{1}_ASTA_konverteringslog.html", destPath, destFolder);
+                            var destFolderPath = string.Format("{0}\\ASTA_konverteringslog_{1}", destPath, destFolder);
+                            if (Directory.Exists(destFolderPath)) { Directory.Delete(destFolderPath, true); }
+                            Directory.CreateDirectory(destFolderPath);
+                            var path = string.Format("{0}\\{1}_ASTA_konverteringslog.html", destFolderPath, destFolder);
                             if (_logManager.Flush(path, destFolder, _converter.GetLogTemplate()))
                             {
                                 Console.ForegroundColor = ConsoleColor.Green;
                                 Console.WriteLine("Log file at: {0}", path);
                                 Console.ResetColor();
                             }
-                            path = string.Format("{0}\\{1}_ASTA_konverteringsrapport.html", destPath, destFolder);
+                            path = string.Format("{0}\\{1}_ASTA_konverteringsrapport.html", destFolderPath, destFolder);
                             if (((Data)_converter).Flush(path, destFolder))
                             {
                                 Console.ForegroundColor = ConsoleColor.Green;

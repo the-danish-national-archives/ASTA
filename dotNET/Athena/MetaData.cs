@@ -312,8 +312,10 @@ namespace Rigsarkiv.Athena
             var result = true;
             try
             {
-                _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Load metadata from: {0}", _srcPath) });
-                var json = File.ReadAllText(_srcPath);
+                var parentPath = _srcPath.Substring(0, _srcPath.LastIndexOf("\\"));
+                var path = string.Format("{0}\\{1}{2}\\{2}.json", parentPath, LogPrefix, _srcFolder);
+                _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Load metadata from: {0}", path) });
+                var json = File.ReadAllText(path);
                 JavaScriptSerializer jss = new JavaScriptSerializer();
                 _metadata = jss.Deserialize<object>(json);
             }

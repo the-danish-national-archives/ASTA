@@ -21,6 +21,7 @@ namespace Rigsarkiv.Athena
         protected static readonly ILog _log = log4net.LogManager.GetLogger(typeof(Converter));
         protected const int MaxErrorsRows = 10;
         protected const char Separator = ';';
+        protected const string LogPrefix = "ASTA_testlog_";
         protected const string TablesPath = "{0}\\Tables";
         protected const string IndicesPath = "{0}\\Indices";
         protected const string ResourcePrefix = "Rigsarkiv.Athena.Resources.{0}";
@@ -66,12 +67,16 @@ namespace Rigsarkiv.Athena
             _logManager = logManager;
             _report = new Report() { TablesCounter = 0, CodeListsCounter = 0, Tables = new List<Table>() };
             _regExps = new Dictionary<string, Regex>();
-            _srcPath = srcPath;
+           
             _destPath = destPath;
             _destFolder = destFolder;
             _destFolderPath = string.Format("{0}\\{1}", _destPath, _destFolder);
-            var folderName = _srcPath.Substring(_srcPath.LastIndexOf("\\") + 1);
+            var folderName = srcPath.Substring(srcPath.LastIndexOf("\\") + 1);
             _srcFolder = folderName.Substring(0, folderName.LastIndexOf("."));
+
+            _srcPath = srcPath.Substring(0,srcPath.LastIndexOf("\\"));
+            _srcPath = _srcPath.Substring(0, _srcPath.LastIndexOf("\\"));
+            _srcPath = string.Format("{0}\\{1}", _srcPath, _srcFolder);
         }
 
         /// <summary>
@@ -119,7 +124,7 @@ namespace Rigsarkiv.Athena
         {
             Row result = null;
             var xmlPath = string.Format(TablePath, _destFolderPath, string.Format("{0}\\{0}.xml", table.Folder));
-            var csvPath = string.Format("{0}\\Data\\{1}\\{1}.csv", _srcPath.Substring(0, _srcPath.LastIndexOf(".")), table.SrcFolder);
+            var csvPath = string.Format("{0}\\Data\\{1}\\{1}.csv", _srcPath, table.SrcFolder);
             if (File.Exists(xmlPath))
             {
                 XNamespace tableNS = string.Format(TableXmlNs, table.Folder);
