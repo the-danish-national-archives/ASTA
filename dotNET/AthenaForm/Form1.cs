@@ -173,7 +173,7 @@ namespace Rigsarkiv.AthenaForm
             string result = null;
             try
             {
-                var destFolderPath = string.Format("{0}\\ASTA_konverterings_{1}", aipTextBox.Text, aipNameTextBox.Text);
+                var destFolderPath = string.Format("{0}\\ASTA_konverteringslog_{1}", aipTextBox.Text, aipNameTextBox.Text);
                 if (Directory.Exists(destFolderPath)) { Directory.Delete(destFolderPath, true); }
                 Directory.CreateDirectory(destFolderPath);
                 result = destFolderPath;

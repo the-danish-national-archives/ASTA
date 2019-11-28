@@ -61,7 +61,7 @@ namespace Rigsarkiv.AthenaForm
             string result = null;
             try
             {
-                var destFolderPath = string.Format("{0}\\ASTA_konverterings_{1}", _destPath, _destFolder);
+                var destFolderPath = string.Format("{0}\\ASTA_konverteringslog_{1}", _destPath, _destFolder);
                 if (Directory.Exists(destFolderPath)) { Directory.Delete(destFolderPath, true); }
                 Directory.CreateDirectory(destFolderPath);
                 result = destFolderPath;

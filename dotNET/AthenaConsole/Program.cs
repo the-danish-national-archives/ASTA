@@ -38,7 +38,7 @@ namespace Rigsarkiv.AthenaConsole
                             _converter = new Index(_logManager, srcPath, destPath, destFolder, _converter.Report);
                             if (_converter.Run())
                             {
-                                var destFolderPath = string.Format("{0}\\ASTA_konverterings_{1}", destPath, destFolder);
+                                var destFolderPath = string.Format("{0}\\ASTA_konverteringslog_{1}", destPath, destFolder);
                                 if (Directory.Exists(destFolderPath)) { Directory.Delete(destFolderPath, true); }
                                 Directory.CreateDirectory(destFolderPath);
                                 var path = string.Format("{0}\\{1}_ASTA_konverteringslog.html", destFolderPath, destFolder);
