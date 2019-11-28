@@ -171,7 +171,7 @@ namespace Rigsarkiv.Athena
                 var path = string.Format(TablePath, _destFolderPath, string.Format("{0}\\{0}.xml", table.Folder));
                 _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add file: {0} ", path) });
                 StartWriter(table.Folder);
-                path = string.Format("{0}\\Data\\{1}\\{1}.csv", _srcPath.Substring(0, _srcPath.LastIndexOf(".")), table.SrcFolder);
+                path = string.Format("{0}\\Data\\{1}\\{1}.csv", _srcPath, table.SrcFolder);
                 _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Loop file: {0} ", path) });
                 using (var reader = new StreamReader(path))
                 {                    

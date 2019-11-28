@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
+using System.IO;
 
 namespace Rigsarkiv.AthenaForm
 {
@@ -18,6 +19,7 @@ namespace Rigsarkiv.AthenaForm
         private Converter _converter = null;
         private Regex _srcPackage = null;
         private Form2 _form;
+        private string _logPath = null;
 
         /// <summary>
         /// Constructors
@@ -30,7 +32,7 @@ namespace Rigsarkiv.AthenaForm
             _srcPackage = new Regex(SrcPackagePattern, RegexOptions.Compiled | RegexOptions.IgnoreCase);
             sipTextBox.Text = srcPath;
             aipTextBox.Text = destPath;
-            UpdateFolderName(srcPath);
+            UpdateFolderName(srcPath);                        
         }
 
         private void sipButton_Click(object sender, EventArgs e)
@@ -68,6 +70,7 @@ namespace Rigsarkiv.AthenaForm
         {
             if (!ValidateInputs()) { return; }
             Cursor.Current = Cursors.WaitCursor;
+            _logPath = GetLogPath();
             sipButton.Enabled = false;
             aipButton.Enabled = false;
             convertButton.Enabled = false;
@@ -165,10 +168,27 @@ namespace Rigsarkiv.AthenaForm
             this.Hide();
         }
 
+        private string GetLogPath()
+        {
+            string result = null;
+            try
+            {
+                var destFolderPath = string.Format("{0}\\ASTA_konverterings_{1}", aipTextBox.Text, aipNameTextBox.Text);
+                if (Directory.Exists(destFolderPath)) { Directory.Delete(destFolderPath, true); }
+                Directory.CreateDirectory(destFolderPath);
+                result = destFolderPath;
+            }
+            catch (Exception ex)
+            {
+                _log.Error("Failed to get log path", ex);
+            }
+            return result;
+        }
+
         private void logButton_Click(object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
-            var path = string.Format("{0}\\{1}_ASTA_konverteringslog.html", aipTextBox.Text, aipNameTextBox.Text);
+            var path = string.Format("{0}\\{1}_ASTA_konverteringslog.html", _logPath, aipNameTextBox.Text);
             if (_logManager.Flush(path, aipNameTextBox.Text, _converter.GetLogTemplate()))
             {
                 try

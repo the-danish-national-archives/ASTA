@@ -150,15 +150,14 @@ namespace Rigsarkiv.Athena
         private bool CopyFolders()
         {
             var result = true;
-            var srcRootPath = _srcPath.Substring(0, _srcPath.LastIndexOf("."));
-
-            var srcPath = string.Format(ContextDocumentationPath, srcRootPath);
+            
+            var srcPath = string.Format(ContextDocumentationPath, _srcPath);
             var destPath = string.Format(ContextDocumentationPath, _destFolderPath);            
             result = CopyFolder(srcPath, destPath, _contextDocumentationRegex);
 
             if(result)
             {
-                srcPath = string.Format(IndicesPath, srcRootPath);
+                srcPath = string.Format(IndicesPath, _srcPath);
                 destPath = string.Format(IndicesPath, _destFolderPath);
                 result = CopyFolder(srcPath, destPath, _indicesRegex);
             }

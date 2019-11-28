@@ -8,6 +8,7 @@ using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Web.Script.Serialization;
+using System.IO;
 
 namespace Rigsarkiv.AthenaForm
 {
@@ -42,8 +43,9 @@ namespace Rigsarkiv.AthenaForm
             _destPath = destPath;
             _destFolder = destFolder;
             _report = report;
-            _logPath = string.Format("{0}\\{1}_ASTA_konverteringslog.html", _destPath, _destFolder);
-            _reportPath = string.Format("{0}\\{1}_ASTA_konverteringsrapport.html", _destPath, _destFolder);
+            var logPath = GetLogPath();
+            _logPath = string.Format("{0}\\{1}_ASTA_konverteringslog.html", logPath, _destFolder);
+            _reportPath = string.Format("{0}\\{1}_ASTA_konverteringsrapport.html", logPath, _destFolder);
             _outputRichTextBox = outputRichTextBox;
             _outputRichTextBox.Location = new Point(8,480);
             _outputRichTextBox.Size = new Size(610,139);
@@ -52,6 +54,23 @@ namespace Rigsarkiv.AthenaForm
             var result = Convert();
             titlelabel.Text = string.Format(titlelabel.Text, destFolder);
             Render();
+        }
+
+        private string GetLogPath()
+        {
+            string result = null;
+            try
+            {
+                var destFolderPath = string.Format("{0}\\ASTA_konverterings_{1}", _destPath, _destFolder);
+                if (Directory.Exists(destFolderPath)) { Directory.Delete(destFolderPath, true); }
+                Directory.CreateDirectory(destFolderPath);
+                result = destFolderPath;
+            }
+            catch (Exception ex)
+            {
+                _log.Error("Failed to get log path", ex);
+            }
+            return result;
         }
 
         private async Task Convert()
