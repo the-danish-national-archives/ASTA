@@ -6,6 +6,7 @@ using System;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
@@ -30,6 +31,7 @@ namespace Rigsarkiv.StyxForm
         private Table _mainTable = null;
         private Table _codeTable = null;
         private int _rowIndex = -1;
+        private string _logPath = null;
 
         /// <summary>
         /// 
@@ -49,7 +51,24 @@ namespace Rigsarkiv.StyxForm
             _destPath = destPath;
             _destFolder = destFolder;
             _report = report;
-            mainTablesListBox.Items.AddRange(_report.Tables.Select(t => t.Name).ToArray());
+            mainTablesListBox.Items.AddRange(_report.Tables.Select(t => t.Name).ToArray());            
+        }
+
+        private string GetLogPath()
+        {
+            string result = null;
+            try
+            {
+                var destFolderPath = string.Format("{0}\\ASTA_konverteringslog_{1}", _destPath, _destFolder);
+                if (Directory.Exists(destFolderPath)) { Directory.Delete(destFolderPath, true); }
+                Directory.CreateDirectory(destFolderPath);
+                result = destFolderPath;
+            }
+            catch (Exception ex)
+            {
+                _log.Error("Failed to get log path", ex);
+            }
+            return result;
         }
 
         private void removeButton_Click(object sender, EventArgs e)
@@ -117,6 +136,7 @@ namespace Rigsarkiv.StyxForm
             scriptLabel2.Visible = false;
             scriptLabel3.Visible = false;
             Cursor.Current = Cursors.WaitCursor;
+            _logPath = GetLogPath();
             outputRichTextBox.Clear();            
             _converter = new Structure(_logManager, _srcPath, _destPath, _destFolder, _report, FlowState.Completed);
             if (_converter.Run())
@@ -127,7 +147,7 @@ namespace Rigsarkiv.StyxForm
                 if (_converter.Run() && (_converter.State == FlowState.Running || _converter.State == FlowState.Completed))
                 {
                     _converter = new Data(_logManager, _srcPath, _destPath, _destFolder, _converter.Report, _converter.State);
-                    if (_converter.Run() && ((Data)_converter).Flush(string.Format(ReportPath, _destPath, _destFolder), _destFolder))
+                    if (_converter.Run() && ((Data)_converter).Flush(string.Format(ReportPath, _logPath, _destFolder), _destFolder))
                     {
                         reportButton.Enabled = true;
                         scriptLabel1.Text = string.Format(scriptLabel1.Text, _destFolder);
@@ -137,7 +157,7 @@ namespace Rigsarkiv.StyxForm
                     }
                 }
             }
-            var path = string.Format(LogPath, _destPath, _destFolder);
+            var path = string.Format(LogPath, _logPath, _destFolder);
             if (_logManager.Flush(path, _destFolder, _converter.GetLogTemplate())) { logButton.Enabled = true; }
             Cursor.Current = Cursors.Default;
         }
@@ -161,7 +181,7 @@ namespace Rigsarkiv.StyxForm
 
         private void reportButton_Click(object sender, EventArgs e)
         {
-            var path = string.Format(ReportPath, _destPath, _destFolder);
+            var path = string.Format(ReportPath, _logPath, _destFolder);
             Cursor.Current = Cursors.WaitCursor;
             OpenFile(path);
             Cursor.Current = Cursors.Default;
@@ -170,7 +190,7 @@ namespace Rigsarkiv.StyxForm
         private void logButton_Click(object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
-            var path = string.Format(LogPath, _destPath, _destFolder);
+            var path = string.Format(LogPath, _logPath, _destFolder);
             OpenFile(path);
             Cursor.Current = Cursors.Default;
         }

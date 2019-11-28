@@ -169,7 +169,7 @@ namespace Rigsarkiv.StyxForm
                 if (_converter.Run() && (_converter.State == FlowState.Running || _converter.State == FlowState.Completed))
                 {
                     _converter = new Data(_logManager, srcPath, destPath, destFolder, _converter.Report, _converter.State);
-                    if (_converter.Run() && ((Data)_converter).Flush(string.Format(ReportPath, destPath, destFolder), destFolder))
+                    if (_converter.Run() && ((Data)_converter).Flush(string.Format(ReportPath, _logPath, destFolder), destFolder))
                     {
                         reportButton.Enabled = true;
                         scriptLabel1.Text = string.Format(scriptLabel1.Text, destFolder);
@@ -189,12 +189,13 @@ namespace Rigsarkiv.StyxForm
             scriptLabel3.Visible = false;
             if (!ValidateInputs()) { return; }
             Cursor.Current = Cursors.WaitCursor;
+            _logPath = GetLogPath();
             outputRichTextBox.Clear();
             _logManager = new LogManager();
             _logManager.LogAdded += OnLogAdded;
             var scriptType = (ScriptType)Enum.Parse(typeof(ScriptType), scriptTypeComboBox.SelectedItem.ToString(), true);
             Convert(aipTextBox.Text, sipTextBox.Text, sipNameTextBox.Text, scriptType);
-            var path = string.Format(LogPath, sipTextBox.Text, sipNameTextBox.Text);
+            var path = string.Format(LogPath, _logPath, sipNameTextBox.Text);
             if (_logManager.Flush(path, sipNameTextBox.Text, _converter.GetLogTemplate()))
             {
                 logButton.Enabled = true;
