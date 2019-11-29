@@ -1190,6 +1190,10 @@
                 "value": "Referencer"
             },
             {
+                "key": "hybris-tab-backup",
+                "value": "Sikkerhedskopier"
+            },
+            {
                 "key": "hybris-tab-indexfiles",
                 "value": "Indeksfiler"
             },

@@ -14,6 +14,7 @@
                         <button name="button" class="menuBtn languages" id="hybris-tab-statistics"></button>
                         <button name="button" class="menuBtn languages" id="hybris-tab-metdata"></button>
                         <button name="button" class="menuBtn languages" id="hybris-tab-references"></button>
+                        <button name="button" class="menuBtn languages" id="hybris-tab-backup"></button>
                         <button name="button" class="menuBtn languages" id="hybris-tab-indexfiles"></button>
                         <button name="button" class="menuBtn languages" id="hybris-tab-contextdocuments"></button>
                         <button name="button" class="menuBtn languages" id="hybris-tab-overview"></button>
@@ -227,6 +228,15 @@
                         <br/>
                         <span id="hybris-output-references-Error" hidden="true"><br />Error: {0}</span>
                     </div>
+                    <div id="hybris-panel-backup" class="formularContainer" hidden="true">
+                        <p>
+                            <h2 class="boldfaced"><span class="languages" id="hybris-output-statistics-header-backup-SPAN"></span> <span id="hybris-output-statistics-header-backup" class="trinHeader"></span></h2>
+                        </p>
+                        <span id="hybris-output-backup-Description"></span>
+                        <br/><br/>
+                        <span class="alert-warning languages" id="hybris-output-backup-Summary"></span>
+                        <br/><br/><br/>
+                    </div>
                     <div id="hybris-panel-indexfiles" class="formularContainer" hidden="true">
                         <p>
                             <h2 class="boldfaced"><span class="languages" id="hybris-output-statistics-header-indexfiles-SPAN"></span> <span id="hybris-output-statistics-header-indexfiles" class="trinHeader"></span></h2>
@@ -308,6 +318,7 @@
             require('./assets/js/hybris/dataextraction');
             require('./assets/js/hybris/metadata');
             require('./assets/js/hybris/references');
+            require('./assets/js/hybris/backup');
             require('./assets/js/hybris/indexfiles');
             require('./assets/js/hybris/contextdocuments');
             require('./assets/js/hybris/overview');

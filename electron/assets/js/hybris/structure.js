@@ -62,6 +62,7 @@ function (n) {
             Rigsarkiv.Hybris.DataExtraction.callback().reset();
             Rigsarkiv.Hybris.MetaData.callback().reset();
             Rigsarkiv.Hybris.References.callback().reset();
+            Rigsarkiv.Hybris.Backup.callback().reset();
             Rigsarkiv.Hybris.IndexFiles.callback().reset();
         }
 

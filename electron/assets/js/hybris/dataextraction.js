@@ -368,6 +368,27 @@ function (n) {
             return result;
         }
 
+        //Add Backup information
+        var AddBackup = function() {           
+            fs.readdir(GetFolderPath(), (err, files) => {
+                if (err) {
+                    err.Handle(settings.outputStatisticsErrorSpn,settings.outputStatisticsErrorText,"Rigsarkiv.Hybris.DataExtraction.AddBackup");
+                }
+                else {
+                    var totalSize = 0;
+                    var path = GetFolderPath();
+                    var folders = settings.dataFolderPath.getFolders();
+                    var folderName =  folders[folders.length - 1];
+                    files.forEach(fileName => {                        
+                        var filePath = (path.indexOf("\\") > -1) ? "{0}\\{1}".format(path,fileName) : "{0}/{1}".format(path,fileName);
+                        totalSize += fs.statSync(filePath).size
+                    });
+                    Rigsarkiv.Hybris.Base.callback().backup.push({ "path":path, "name":folderName, "size":totalSize });
+                    settings.metdataTab.click();
+                }
+            }); 
+        }
+
         //Redirect to metadata tab
         var Redirect = function() {
             var fileName = GetFileName();
@@ -392,7 +413,7 @@ function (n) {
                     i++;
                 }
                 while (lines[i] !== undefined && lines[i].trim() !== "");
-                settings.metdataTab.click();
+                AddBackup();                
             }
             catch(err) 
             {
