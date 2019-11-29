@@ -12,13 +12,23 @@ function (n) {
 
         //private data memebers
         var settings = { 
-
+            okBtn: null,
+            indexfilesTab: null
         }
+
+         //add Event Listener to HTML elmenets
+         var AddEvents = function () {
+            settings.okBtn.addEventListener('click', function (event) {
+                settings.indexfilesTab.click();
+            });
+         }
 
         //Model interfaces functions
         Rigsarkiv.Hybris.Backup = {
-            initialize: function () {
-
+            initialize: function (okId,indexfilesTabId) {
+                settings.okBtn = document.getElementById(okId);
+                settings.indexfilesTab = document.getElementById(indexfilesTabId);
+                AddEvents();
             },
                 callback: function () {
                     return { 

@@ -33,7 +33,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 nextBtn: null,
                 extractionTab: null,
                 referencesTab: null,
-                indexfilesTab: null,
+                backupTab: null,
                 informationPanel1: null,
                 informationPanel2: null,
                 indexFilesDescriptionSpn: null,
@@ -366,7 +366,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                     settings.foreignTablesDropdown.appendChild(CreateOption(table.name, "{0} ({1})".format(table.name,table.fileName)));
                 });
                 if(tablesCounter === 1 && Rigsarkiv.Hybris.References.callback().updateFile(Rigsarkiv.Hybris.Base.callback().metadata[0])) {
-                    settings.indexfilesTab.click();
+                    settings.backupTab.click();
                 } 
                 else {
                     settings.referencesTab.click(); 
@@ -434,7 +434,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
 
             //Model interfaces functions
             Rigsarkiv.Hybris.MetaData = {
-                initialize: function (metadataFileName,metadataFileNameDescription,metdataOkBtn,outputOkId,okDataPathId,outputErrorId,outputNewExtractionId,newExtractionBtn,extractionTabId,nextBtn,referencesTabId,informationPanel1Id,informationPanel2Id,indexFilesDescriptionId,resetHideBox,variablesId,addVarKeyId,varKeysId,tablesId,foreignTablesId,cancelId,indexfilesTabId,refVarsId,foreignVariablesId) {
+                initialize: function (metadataFileName,metadataFileNameDescription,metdataOkBtn,outputOkId,okDataPathId,outputErrorId,outputNewExtractionId,newExtractionBtn,extractionTabId,nextBtn,referencesTabId,informationPanel1Id,informationPanel2Id,indexFilesDescriptionId,resetHideBox,variablesId,addVarKeyId,varKeysId,tablesId,foreignTablesId,cancelId,backupTabId,refVarsId,foreignVariablesId) {
                     settings.fileName = document.getElementById(metadataFileName);
                     settings.fileDescr = document.getElementById(metadataFileNameDescription);
                     settings.okBtn = document.getElementById(metdataOkBtn);
@@ -457,7 +457,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                     settings.tablesDropdown = document.getElementById(tablesId);
                     settings.foreignTablesDropdown = document.getElementById(foreignTablesId);
                     settings.cancelBtn = document.getElementById(cancelId);
-                    settings.indexfilesTab = document.getElementById(indexfilesTabId);
+                    settings.backupTab = document.getElementById(backupTabId);
                     settings.refVarsDropdown = document.getElementById(refVarsId);
                     settings.foreignVariablesDropdown = document.getElementById(foreignVariablesId);
                    AddEvents();

@@ -986,6 +986,22 @@
                 "value": "FORTRYD"
             },
             {
+                "key": "hybris-output-statistics-header-backup-SPAN",
+                "value": "Sikkerhedskopier af original statistikfiler"
+            },
+            {
+                "key": "hybris-output-backup-Description",
+                "value": "kopiere original statistikfil, export-script anvendt, SPSS - Outputfil, SPSS- Exportscriptlog (compare) til mappe ved siden af FD-pakke"
+            },
+            {
+                "key": "hybris-output-backup-Summary",
+                "value": "<strong>Information!</strong> "
+            },
+            {
+                "key": "hybris-backup-nextBtn",
+                "value": "Næste"
+            },
+            {
                 "key": "hybris-output-statistics-header-indexfiles-SPAN",
                 "value": "Placer indeksfiler i afleveringspakken"
             },

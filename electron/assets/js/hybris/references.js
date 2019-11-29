@@ -29,7 +29,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 foreignVariablesDropdown: null,
                 addReferenceBtn: null,
                 referencesTbl: null,
-                indexfilesTab: null,
+                backupTab: null,
                 addReferenceVariableBtn: null,
                 referenceVariablesTbl: null,
                 addForeignVariableBtn: null,
@@ -115,7 +115,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 Rigsarkiv.Hybris.Base.callback().metadata.forEach(table => {
                     if(!UpdateFile(dataFolderPath,table)) { result = false; }
                 });
-                if(result) { settings.indexfilesTab.click(); }
+                if(result) { settings.backupTab.click(); }
             }
 
             // Validate refernces inputs
@@ -234,7 +234,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
 
             //Model interfaces functions
             Rigsarkiv.Hybris.References = { 
-                initialize: function (outputErrorId,okId,tablesId,foreignTablesId,refVarsId,foreignVariablesId,addReferenceId,referencesId,indexfilesTabId,addReferenceVariableId,referenceVariablesId,addForeignVariableId,foreignVariablesTable,cancelId) {
+                initialize: function (outputErrorId,okId,tablesId,foreignTablesId,refVarsId,foreignVariablesId,addReferenceId,referencesId,backupTabId,addReferenceVariableId,referenceVariablesId,addForeignVariableId,foreignVariablesTable,cancelId) {
                     settings.outputErrorSpn = document.getElementById(outputErrorId);
                     settings.outputErrorText = settings.outputErrorSpn.innerHTML;
                     settings.okBtn = document.getElementById(okId);
@@ -244,7 +244,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                     settings.foreignVariablesDropdown = document.getElementById(foreignVariablesId);
                     settings.addReferenceBtn = document.getElementById(addReferenceId);
                     settings.referencesTbl = document.getElementById(referencesId); 
-                    settings.indexfilesTab = document.getElementById(indexfilesTabId);
+                    settings.backupTab = document.getElementById(backupTabId);
                     settings.addReferenceVariableBtn = document.getElementById(addReferenceVariableId);
                     settings.referenceVariablesTbl = document.getElementById(referenceVariablesId);
                     settings.addForeignVariableBtn = document.getElementById(addForeignVariableId);
