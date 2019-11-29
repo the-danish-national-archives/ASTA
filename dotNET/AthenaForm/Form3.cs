@@ -43,7 +43,7 @@ namespace Rigsarkiv.AthenaForm
             _destPath = destPath;
             _destFolder = destFolder;
             _report = report;
-            var logPath = GetLogPath();
+            var logPath = string.Format("{0}\\ASTA_konverteringslog_{1}", _destPath, _destFolder); ;
             _logPath = string.Format("{0}\\{1}_ASTA_konverteringslog.html", logPath, _destFolder);
             _reportPath = string.Format("{0}\\{1}_ASTA_konverteringsrapport.html", logPath, _destFolder);
             _outputRichTextBox = outputRichTextBox;
@@ -54,23 +54,6 @@ namespace Rigsarkiv.AthenaForm
             var result = Convert();
             titlelabel.Text = string.Format(titlelabel.Text, destFolder);
             Render();
-        }
-
-        private string GetLogPath()
-        {
-            string result = null;
-            try
-            {
-                var destFolderPath = string.Format("{0}\\ASTA_konverteringslog_{1}", _destPath, _destFolder);
-                if (Directory.Exists(destFolderPath)) { Directory.Delete(destFolderPath, true); }
-                Directory.CreateDirectory(destFolderPath);
-                result = destFolderPath;
-            }
-            catch (Exception ex)
-            {
-                _log.Error("Failed to get log path", ex);
-            }
-            return result;
         }
 
         private async Task Convert()
