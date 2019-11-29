@@ -54,23 +54,6 @@ namespace Rigsarkiv.StyxForm
             mainTablesListBox.Items.AddRange(_report.Tables.Select(t => t.Name).ToArray());            
         }
 
-        private string GetLogPath()
-        {
-            string result = null;
-            try
-            {
-                var destFolderPath = string.Format("{0}\\ASTA_konverteringslog_{1}", _destPath, _destFolder);
-                if (Directory.Exists(destFolderPath)) { Directory.Delete(destFolderPath, true); }
-                Directory.CreateDirectory(destFolderPath);
-                result = destFolderPath;
-            }
-            catch (Exception ex)
-            {
-                _log.Error("Failed to get log path", ex);
-            }
-            return result;
-        }
-
         private void removeButton_Click(object sender, EventArgs e)
         {
             if (codeTablesListBox.SelectedIndex == -1) { return; }
@@ -136,7 +119,7 @@ namespace Rigsarkiv.StyxForm
             scriptLabel2.Visible = false;
             scriptLabel3.Visible = false;
             Cursor.Current = Cursors.WaitCursor;
-            _logPath = GetLogPath();
+            _logPath = string.Format("{0}\\ASTA_konverteringslog_{1}", _destPath, _destFolder);
             outputRichTextBox.Clear();            
             _converter = new Structure(_logManager, _srcPath, _destPath, _destFolder, _report, FlowState.Completed);
             if (_converter.Run())
