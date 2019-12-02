@@ -31,6 +31,7 @@ function (n) {
             documentsPath: null,
             filePath: null,
             filePostfix: "{0}_ASTA_contextdocuments.html",
+            pathPostfix: "{0}ASTA_udtrækslog_{1}",
             templateFileName: "contextdocuments.html",
             scriptPath: "./assets/scripts/{0}",
             resourceWinPath: "resources\\{0}",
@@ -238,7 +239,15 @@ function (n) {
                 }            
             });
             settings.printBtn.addEventListener('click', function (event) {
-                settings.filePath = settings.filePostfix.format(Rigsarkiv.Hybris.Structure.callback().deliveryPackagePath);
+                selectedFolderPath = Rigsarkiv.Hybris.Structure.callback().deliveryPackagePath;
+                var folders = selectedFolderPath.getFolders();
+                var fileName = folders[folders.length - 1];
+                settings.filePath = settings.pathPostfix.format(selectedFolderPath.substring(0,selectedFolderPath.lastIndexOf((selectedFolderPath.indexOf("\\") > -1) ? "\\" : "/") + 1),fileName);
+                if(!fs.existsSync(settings.filePath)) {                        
+                    console.logInfo(`Create log folder: ${settings.filePath}`,"Rigsarkiv.Hybris.ContextDocuments.AddEvents");
+                    fs.mkdirSync(settings.filePath);
+                }
+                settings.filePath += selectedFolderPath.indexOf("\\") > -1 ? "\\{0}".format(settings.filePostfix.format(fileName)) : "/{0}".format(settings.filePostfix.format(fileName));
                 settings.documents.forEach(upload => {
                     settings.logs.push("<tr><td>{0}</td><td>{1}</td><td>{2}</td></tr>".format(upload.id,upload.title,upload.path));
                 });
