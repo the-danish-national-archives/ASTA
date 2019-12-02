@@ -998,8 +998,68 @@
                 "value": "<strong>Information!</strong> "
             },
             {
+                "key": "hybris-backup-printBtn",
+                "value": "Udskriv backupliste"
+            },
+            {
                 "key": "hybris-backup-nextBtn",
                 "value": "Næste"
+            },
+            {
+                "key": "hybris-backup-cancelBtn",
+                "value": "Fortryd alt"
+            },
+            {
+                "key": "hybris-backup-folders-TH1",
+                "value": "Vægle"
+            },
+            {
+                "key": "hybris-backup-folders-TH2",
+                "value": "Mappe"
+            },
+            {
+                "key": "hybris-backup-folders-TH3",
+                "value": "Tabel"
+            },
+            {
+                "key": "hybris-backup-folders-TH4",
+                "value": "Størrelse (Bytes)"
+            },
+            {
+                "key": "hybris-output-backup-OkConfirm",
+                "value": "Ja"
+            },
+            {
+                "key": "hybris-output-backup-CancelConfirm",
+                "value": "Nej"
+            },
+            {
+                "key": "hybris-output-backup-NextConfirm-Title",
+                "value": "Backup"
+            },
+            {
+                "key": "hybris-output-backup-NextConfirm-Text",
+                "value": "Der er endnu ikke tilføjet mappe til backup. Vil du fortsætte uden at tilføje mapper?"
+            },
+            {
+                "key": "hybris-backup-template-Title",
+                "value": "Backup mapper"
+            },
+            {
+                "key": "hybris-backup-template-foldersList-H3",
+                "value": "Liste over mapper placeret i backup"
+            },
+            {
+                "key": "hybris-backup-template-foldersList-TH1",
+                "value": "Mappe"
+            },
+            {
+                "key": "hybris-backup-template-foldersList-TH2",
+                "value": "Tabel"
+            },
+            {
+                "key": "hybris-backup-template-foldersList-TH3",
+                "value": "Størrelse (Bytes)"
             },
             {
                 "key": "hybris-output-statistics-header-indexfiles-SPAN",

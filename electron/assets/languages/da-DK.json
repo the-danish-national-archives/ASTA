@@ -1042,6 +1042,26 @@
                 "value": "Der er endnu ikke tilføjet mappe til backup. Vil du fortsætte uden at tilføje mapper?"
             },
             {
+                "key": "hybris-backup-template-Title",
+                "value": "Backup mapper"
+            },
+            {
+                "key": "hybris-backup-template-foldersList-H3",
+                "value": "Liste over mapper placeret i backup"
+            },
+            {
+                "key": "hybris-backup-template-foldersList-TH1",
+                "value": "Mappe"
+            },
+            {
+                "key": "hybris-backup-template-foldersList-TH2",
+                "value": "Tabel"
+            },
+            {
+                "key": "hybris-backup-template-foldersList-TH3",
+                "value": "Størrelse (Bytes)"
+            },
+            {
                 "key": "hybris-output-statistics-header-indexfiles-SPAN",
                 "value": "Placer indeksfiler i afleveringspakken"
             },
