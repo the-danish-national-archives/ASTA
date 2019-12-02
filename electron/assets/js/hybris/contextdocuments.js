@@ -239,7 +239,7 @@ function (n) {
                 }            
             });
             settings.printBtn.addEventListener('click', function (event) {
-                selectedFolderPath = Rigsarkiv.Hybris.Structure.callback().deliveryPackagePath;
+                var selectedFolderPath = Rigsarkiv.Hybris.Structure.callback().deliveryPackagePath;
                 var folders = selectedFolderPath.getFolders();
                 var fileName = folders[folders.length - 1];
                 settings.filePath = settings.pathPostfix.format(selectedFolderPath.substring(0,selectedFolderPath.lastIndexOf((selectedFolderPath.indexOf("\\") > -1) ? "\\" : "/") + 1),fileName);
