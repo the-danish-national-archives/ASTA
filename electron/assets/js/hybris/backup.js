@@ -13,6 +13,7 @@ function (n) {
         //private data memebers
         var settings = { 
             okBtn: null,
+            printBtn: null,
             indexfilesTab: null
         }
 
@@ -25,8 +26,9 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Hybris.Backup = {
-            initialize: function (okId,indexfilesTabId) {
+            initialize: function (okId,printId,indexfilesTabId) {
                 settings.okBtn = document.getElementById(okId);
+                settings.printBtn = document.getElementById(printId);
                 settings.indexfilesTab = document.getElementById(indexfilesTabId);
                 AddEvents();
             },

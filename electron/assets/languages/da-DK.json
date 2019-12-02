@@ -1002,6 +1002,18 @@
                 "value": "Næste"
             },
             {
+                "key": "hybris-backup-folders-TH1",
+                "value": "Vægle backup"
+            },
+            {
+                "key": "hybris-backup-folders-TH2",
+                "value": "Mappe"
+            },
+            {
+                "key": "hybris-backup-folders-TH3",
+                "value": "Tabel"
+            },
+            {
                 "key": "hybris-output-statistics-header-indexfiles-SPAN",
                 "value": "Placer indeksfiler i afleveringspakken"
             },
