@@ -115,7 +115,10 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 Rigsarkiv.Hybris.Base.callback().metadata.forEach(table => {
                     if(!UpdateFile(dataFolderPath,table)) { result = false; }
                 });
-                if(result) { settings.backupTab.click(); }
+                if(result) { 
+                    Rigsarkiv.Hybris.Backup.callback().load();
+                    settings.backupTab.click();
+                }
             }
 
             // Validate refernces inputs

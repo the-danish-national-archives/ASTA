@@ -366,6 +366,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                     settings.foreignTablesDropdown.appendChild(CreateOption(table.name, "{0} ({1})".format(table.name,table.fileName)));
                 });
                 if(tablesCounter === 1 && Rigsarkiv.Hybris.References.callback().updateFile(Rigsarkiv.Hybris.Base.callback().metadata[0])) {
+                    Rigsarkiv.Hybris.Backup.callback().load();
                     settings.backupTab.click();
                 } 
                 else {
