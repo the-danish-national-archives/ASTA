@@ -1055,15 +1055,15 @@
             },
             {
                 "key": "hybris-backup-template-foldersList-TH1",
-                "value": "Filens originale placering og titel"
+                "value": "Filer"
             },
             {
                 "key": "hybris-backup-template-foldersList-TH2",
-                "value": "Placering af udtræk"
+                "value": "Filens originale placering og titel"
             },
             {
                 "key": "hybris-backup-template-foldersList-TH3",
-                "value": "Størrelse (Bytes)"
+                "value": "Placering af udtræk"
             },
             {
                 "key": "hybris-output-statistics-header-indexfiles-SPAN",

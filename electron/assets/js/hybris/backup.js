@@ -48,10 +48,18 @@ function (n) {
         var RenderFolders = function() {
             var folders = Rigsarkiv.Hybris.Base.callback().backup;
             if(folders != null && folders.length > 0) {
-                var index = 0;
+                var folderIndex = 0;
                 folders.forEach(folder => {
-                    $(settings.foldersTbl).append("<tr><td><input type=\"checkbox\" id=\"{0}{1}\" value=\"{1}\" checked/></td><td>{2}</td><td>{3}</td><td>{4}</td></tr>".format(settings.checkboxPrefixId,index,folder.path,folder.name,folder.size));
-                    index = index + 1;
+                    var filesHtml = "";
+                    var index = 0;
+                    if(folder.files.length > 0) {
+                        folder.files.forEach(file => {
+                            filesHtml += "<input type=\"checkbox\" id=\"{0}_{1}_{2}\" value=\"{1}_{2}\" checked>{3}</input><br/>".format(settings.checkboxPrefixId,folderIndex,index,file);
+                            index = index + 1;
+                        });
+                        $(settings.foldersTbl).append("<tr><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td></tr>".format(filesHtml,folder.path,folder.name,folder.size));
+                    }
+                    folderIndex = folderIndex + 1;
                 });
             }
         }
@@ -74,20 +82,47 @@ function (n) {
             }
         }
 
+        //get checked files
+        var GetSelectedData = function() {
+            var keys = [];
+            var values = [];
+            $("input:checkbox[id^=" + settings.checkboxPrefixId + "]").each(function(index) {
+                if(this.checked) {
+                    var pair = this.value.split("_");
+                    var folderIndex = parseInt(pair[0]);  
+                    var fileIndex = parseInt(pair[1]);
+                    var folder = Rigsarkiv.Hybris.Base.callback().backup[folderIndex];
+                    if(!keys.includes(folder.name)) {
+                        keys.push(folder.name);
+                        values.push([]);
+                    }
+                    values[keys.indexOf(folder.name)].push(folder.files[fileIndex]);
+                 }
+            });
+            return { "keys":keys, "values":values }
+        }
+
         //copy backups
         var EnsureStructure = function() {
             EnsurePath();
             try 
             {
-                var folders = Rigsarkiv.Hybris.Base.callback().backup;
-                $("input:checkbox[id^=" + settings.checkboxPrefixId + "]").each(function(index) {
-                    if(this.checked) {
-                        var folder = folders[index];
-                        console.logInfo(`backup folder: ${folder.path}`,"Rigsarkiv.Hybris.Backup.EnsureStructure");
-                        var destPath = settings.folderPath.indexOf("\\") > -1 ? "{0}\\{1}".format(settings.folderPath,folder.name) : "{0}/{1}".format(settings.folderPath,folder.name);
-                        fse.copySync(folder.path,destPath); 
+                var selectedData = GetSelectedData();
+                Rigsarkiv.Hybris.Base.callback().backup.forEach(folder => {
+                    if(selectedData.keys.includes(folder.name)) {
+                        var destPath = settings.folderPath.indexOf("\\") > -1 ? "{0}\\{1}".format(settings.folderPath,folder.name) : "{0}/{1}".format(settings.folderPath,folder.name);                        
+                        if(!fs.existsSync(destPath)) {                        
+                            console.logInfo(`Create folder: ${destPath}`,"Rigsarkiv.Hybris.Backup.EnsurePath");                     
+                            fs.mkdirSync(destPath);
+                        }
+                        selectedData.values[selectedData.keys.indexOf(folder.name)].forEach(file => {
+                            var srcFilePath = settings.folderPath.indexOf("\\") > -1 ? "{0}\\{1}".format(folder.path,file) : "{0}/{1}".format(folder.path,file);
+                            var destFilePath = settings.folderPath.indexOf("\\") > -1 ? "{0}\\{1}".format(destPath,file) : "{0}/{1}".format(destPath,file);
+                            console.logInfo(`backup file: ${srcFilePath}`,"Rigsarkiv.Hybris.Backup.EnsureStructure");
+                            fs.copyFileSync(srcFilePath, destFilePath);
+                        });
                     }
-                  });
+                });
             }
             catch(err) {
                 err.Handle(settings.outputErrorSpn,settings.outputErrorText,"Rigsarkiv.Hybris.Backup.EnsureStructure");
@@ -168,12 +203,13 @@ function (n) {
                 var folders = Rigsarkiv.Hybris.Structure.callback().deliveryPackagePath.getFolders();
                 var fileName = folders[folders.length - 1];
                 settings.filePath = settings.folderPath.indexOf("\\") > -1 ? "{0}\\{1}".format(settings.folderPath,settings.filePostfix.format(fileName)) : "{0}/{1}".format(settings.folderPath,settings.filePostfix.format(fileName));
-                $("input:checkbox[id^=" + settings.checkboxPrefixId + "]").each(function(index) {
-                    if(this.checked) {  
-                        var folder = Rigsarkiv.Hybris.Base.callback().backup[index];
-                        settings.logs.push("<tr><td>{0}</td><td>{1}</td><td>{2}</td></tr>".format(folder.path,folder.name,folder.size));
-                     }
-                }); 
+                
+                var selectedData = GetSelectedData();
+                Rigsarkiv.Hybris.Base.callback().backup.forEach(folder => {
+                    if(selectedData.keys.includes(folder.name)) {                        
+                        settings.logs.push("<tr><td>{0}</td><td>{1}</td><td>{2}</td></tr>".format(selectedData.values[selectedData.keys.indexOf(folder.name)].join("<br/>"),folder.path,folder.name));
+                    }
+                });
                 CopyFile();
                 shell.openItem(settings.filePath);
             });
