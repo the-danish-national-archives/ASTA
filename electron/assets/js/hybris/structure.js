@@ -33,6 +33,7 @@ function (n) {
             outputStatisticsHeaderTrin3Spn: null,
             outputStatisticsHeaderInformation2Spn: null,
             outputStatisticsHeaderReferencesSpn: null,
+            outputStatisticsHeaderBackupSpn: null,
             outputStatisticsHeaderindexfilesSpn: null,
             outputStatisticsHeadercontextdocumentsSpn: null,
             outputStatisticsHeaderOverviewSpn: null,
@@ -80,6 +81,7 @@ function (n) {
             settings.outputStatisticsHeaderTrin3Spn.innerHTML = folder;
             settings.outputStatisticsHeaderInformation2Spn.innerHTML = folder;
             settings.outputStatisticsHeaderReferencesSpn.innerHTML = folder;
+            settings.outputStatisticsHeaderBackupSpn.innerHTML = folder;
             settings.outputStatisticsHeaderindexfilesSpn.innerHTML = folder;
             settings.outputStatisticsHeadercontextdocumentsSpn.innerHTML = folder;
             settings.outputStatisticsHeaderOverviewSpn.innerHTML = folder;
@@ -188,7 +190,7 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Hybris.Structure = {        
-            initialize: function (sectionTitleId,titleNewId,titleEditId,selectNewDirectoryId,selectEditDirectoryId,newPathDirectoryId,editPathDirectoryId,deliveryPackageId,okNewId,okEditId,outputErrorId,outputOkId,selectDeliveryPackageId,structureTabId,statisticsTabId,indexfilesTabId,outputStatisticsHeaderTrin1,outputStatisticsHeaderTrin2,outputStatisticsHeaderTrin3,outputStatisticsHeaderInformation2,outputStatisticsHeaderReferences,outputStatisticsHeaderindexfiles,outputStatisticsHeadercontextdocuments,outputStatisticsHeaderOverview,modePanelId,indexFilesDescriptionId) {            
+            initialize: function (sectionTitleId,titleNewId,titleEditId,selectNewDirectoryId,selectEditDirectoryId,newPathDirectoryId,editPathDirectoryId,deliveryPackageId,okNewId,okEditId,outputErrorId,outputOkId,selectDeliveryPackageId,structureTabId,statisticsTabId,indexfilesTabId,outputStatisticsHeaderTrin1,outputStatisticsHeaderTrin2,outputStatisticsHeaderTrin3,outputStatisticsHeaderInformation2,outputStatisticsHeaderReferences,outputStatisticsHeaderBackup,outputStatisticsHeaderindexfiles,outputStatisticsHeadercontextdocuments,outputStatisticsHeaderOverview,modePanelId,indexFilesDescriptionId) {            
                 settings.sectionTitleH1 =  document.getElementById(sectionTitleId);
                 settings.titleNewSpn =  document.getElementById(titleNewId);
                 settings.titleEditSpn =  document.getElementById(titleEditId);
@@ -211,6 +213,7 @@ function (n) {
                 settings.outputStatisticsHeaderTrin3Spn = document.getElementById(outputStatisticsHeaderTrin3);
                 settings.outputStatisticsHeaderInformation2Spn = document.getElementById(outputStatisticsHeaderInformation2);
                 settings.outputStatisticsHeaderReferencesSpn = document.getElementById(outputStatisticsHeaderReferences);
+                settings.outputStatisticsHeaderBackupSpn = document.getElementById(outputStatisticsHeaderBackup);
                 settings.outputStatisticsHeaderindexfilesSpn = document.getElementById(outputStatisticsHeaderindexfiles);
                 settings.outputStatisticsHeadercontextdocumentsSpn = document.getElementById(outputStatisticsHeadercontextdocuments);
                 settings.outputStatisticsHeaderOverviewSpn = document.getElementById(outputStatisticsHeaderOverview);
