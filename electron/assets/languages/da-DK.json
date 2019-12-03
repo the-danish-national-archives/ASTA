@@ -987,19 +987,23 @@
             },
             {
                 "key": "hybris-output-statistics-header-backup-SPAN",
-                "value": "Sikkerhedskopier af original statistikfiler"
+                "value": "Ønsker du at lave en kopi af filer der kan anvendes til kontrol af udtræk med ASTA?"
             },
             {
                 "key": "hybris-output-backup-Description",
-                "value": "kopiere original statistikfil, export-script anvendt, SPSS - Outputfil, SPSS- Exportscriptlog (compare) til mappe ved siden af FD-pakke"
+                "value": "Du kan her lave en kopi af følgende filer: <ol type=\"a\"><li>Original(e) statistikfil(er) udtræk er lavet fra</li><li>Eksport-script anvendt under udtræk</li><li>Eventuel outputfil fra udtræk (kun SPSS)</li><li>Filen Exportscriptlog.spv som indeholder resultatet af den sammenligningen (compare) af den valgte originale statistikfil og outputfil fra SPSS (kun SPSS) Filerne kopieres til mappen ASTA_udtrækslogs_FD.XXXXX, som placeres ved siden af den skabte afleveringspakke.</li></ol><br/>Filerne kan anvendes til din kontrol af om udtræk med ASTA er tabsfrit samt understøtte arkivets arbejde med test og godkendelse af afleveringspakken"
             },
             {
-                "key": "hybris-output-backup-Summary",
-                "value": "<strong>Information!</strong> "
+                "key": "hybris-output-backup-Summary1",
+                "value": "<strong>Information! Mappen med disse udtrækslogs inkl. original(e) statistikfil(er) kan med fordel afleveres til arkivet sammen med afleveringspakken</strong>"
+            },
+            {
+                "key": "hybris-output-backup-Summary2",
+                "value": "<strong>Information! Kopiering af meget store filer kan tage lang tid!</strong>"
             },
             {
                 "key": "hybris-backup-printBtn",
-                "value": "Udskriv backupliste"
+                "value": "Udskriv filliste"
             },
             {
                 "key": "hybris-backup-nextBtn",
@@ -1007,19 +1011,19 @@
             },
             {
                 "key": "hybris-backup-cancelBtn",
-                "value": "Fortryd alt"
+                "value": "Fravælg alle filer"
             },
             {
                 "key": "hybris-backup-folders-TH1",
-                "value": "Vægle"
+                "value": "Vælg filer"
             },
             {
                 "key": "hybris-backup-folders-TH2",
-                "value": "Mappe"
+                "value": "Filens originale placering og titel"
             },
             {
                 "key": "hybris-backup-folders-TH3",
-                "value": "Tabel"
+                "value": "Placering af udtræk"
             },
             {
                 "key": "hybris-backup-folders-TH4",
@@ -1035,11 +1039,11 @@
             },
             {
                 "key": "hybris-output-backup-NextConfirm-Title",
-                "value": "Backup"
+                "value": "Kopier filer"
             },
             {
                 "key": "hybris-output-backup-NextConfirm-Text",
-                "value": "Der er endnu ikke tilføjet mappe til backup. Vil du fortsætte uden at tilføje mapper?"
+                "value": "Ingen filer er valgt. Vil du fortsætte uden at kopiere filer?"
             },
             {
                 "key": "hybris-backup-template-Title",
@@ -1051,11 +1055,11 @@
             },
             {
                 "key": "hybris-backup-template-foldersList-TH1",
-                "value": "Mappe"
+                "value": "Filens originale placering og titel"
             },
             {
                 "key": "hybris-backup-template-foldersList-TH2",
-                "value": "Tabel"
+                "value": "Placering af udtræk"
             },
             {
                 "key": "hybris-backup-template-foldersList-TH3",

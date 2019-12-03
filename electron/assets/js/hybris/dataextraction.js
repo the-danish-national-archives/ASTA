@@ -379,11 +379,16 @@ function (n) {
                     var path = GetFolderPath();
                     var folders = settings.dataFolderPath.getFolders();
                     var folderName =  folders[folders.length - 1];
+                    var names = [];
                     files.forEach(fileName => {                        
                         var filePath = (path.indexOf("\\") > -1) ? "{0}\\{1}".format(path,fileName) : "{0}/{1}".format(path,fileName);
-                        totalSize += fs.statSync(filePath).size
+                        var fileState = fs.lstatSync(filePath);
+                        if(fileState.isFile()) {
+                            names.push(fileName);
+                            totalSize += fileState.size;
+                        }                        
                     });
-                    Rigsarkiv.Hybris.Base.callback().backup.push({ "path":path, "name":folderName, "size":totalSize });
+                    Rigsarkiv.Hybris.Base.callback().backup.push({ "path":path, "name":folderName, "size":totalSize, "files":names });
                     settings.metdataTab.click();
                 }
             }); 
