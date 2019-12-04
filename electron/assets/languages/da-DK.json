@@ -987,19 +987,19 @@
             },
             {
                 "key": "hybris-output-statistics-header-backup-SPAN",
-                "value": "Ønsker du at lave en kopi af filer der kan anvendes til kontrol af udtræk med ASTA?"
+                "value": "Kopiering af filer til kontrol af udtræk"
             },
             {
                 "key": "hybris-output-backup-Description",
-                "value": "Du kan her lave en kopi af følgende filer: <ol type=\"a\"><li>Original(e) statistikfil(er) udtræk er lavet fra</li><li>Eksport-script anvendt under udtræk</li><li>Eventuel outputfil fra udtræk (kun SPSS)</li><li>Filen Exportscriptlog.spv som indeholder resultatet af den sammenligningen (compare) af den valgte originale statistikfil og outputfil fra SPSS (kun SPSS) Filerne kopieres til mappen ASTA_udtrækslogs_FD.XXXXX, som placeres ved siden af den skabte afleveringspakke.</li></ol><br/>Filerne kan anvendes til din kontrol af om udtræk med ASTA er tabsfrit samt understøtte arkivets arbejde med test og godkendelse af afleveringspakken"
+                "value": "Du kan her lave en kopi af filer, der kan anvendes til din kontrol af om udtræk med ASTA er tabsfrit samt understøtte arkivets arbejde med test og godkendelse af afleveringspakken. <br/> Filerne kopieres til mappen ASTA_udtrækslogs_FD.XXXXX, som placeres ved siden af den skabte afleveringspakke.<br/><br/> Du kan lave en kopi af følgende filer: <ol type=\"a\"><li>Din originale statistikfil</li><li>Eksport-script anvendt til udtræk</li><li>Eventuel outputfil fra udtræk (kun SPSS)</li><li>Filen statistikfilnavn_Exportscriptlog.spv (kun SPSS). Filen indeholder resultatet af sammenligningen (compare) af den valgte originale statistikfil og outputfil fra udtræk i SPSS.</li></ol>"
             },
             {
                 "key": "hybris-output-backup-Summary1",
-                "value": "<strong>Information! Mappen med disse udtrækslogs inkl. original(e) statistikfil(er) kan med fordel afleveres til arkivet sammen med afleveringspakken</strong>"
+                "value": "<strong>Information!</strong> Mappen ASTA_udtrækslogs_FD.XXXXX kan med fordel afleveres til arkivet sammen med afleveringspakken"
             },
             {
                 "key": "hybris-output-backup-Summary2",
-                "value": "<strong>Information! Kopiering af meget store filer kan tage lang tid!</strong>"
+                "value": "<strong>Information!</strong> Kopiering af meget store filer kan tage lang tid!"
             },
             {
                 "key": "hybris-backup-printBtn",
@@ -1019,7 +1019,7 @@
             },
             {
                 "key": "hybris-backup-folders-TH2",
-                "value": "Filens originale placering og titel"
+                "value": "Filernes originale placering"
             },
             {
                 "key": "hybris-backup-folders-TH3",

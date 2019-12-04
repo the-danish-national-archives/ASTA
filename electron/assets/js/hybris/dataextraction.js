@@ -59,7 +59,9 @@ function (n) {
             sasCatalogFileExt: "{0}.sas7bcat",
             dataPathPostfix: "Data",
             dataTablePathPostfix: "table{0}",
-            backupExtentions: ["sav","sps","spv","sas7bdat","sas7bcat","sas","dta","do"],
+            backupSPSSExtentions: ["sav","sps","spv"],
+            backupSASExtentions: ["sas7bdat","sas7bcat","sas"],
+            backupStataExtentions: ["dta","do"],
             variableFileName: null,
             scriptPathLink: null            
         }
@@ -385,7 +387,15 @@ function (n) {
                         var filePath = (path.indexOf("\\") > -1) ? "{0}\\{1}".format(path,fileName) : "{0}/{1}".format(path,fileName);
                         var fileExt = fileName.indexOf(".") > -1 ? fileName.substring(fileName.indexOf(".") + 1).toLowerCase() : null;
                         var fileState = fs.lstatSync(filePath);
-                        if(fileState.isFile() && fileExt != null && settings.backupExtentions.includes(fileExt)) {
+                        var backupExtentions = [];
+                        if(fileExt != null) {
+                            switch(settings.scriptType) {
+                                case "SPSS": backupExtentions = settings.backupSPSSExtentions; break;
+                                case "SAS": backupExtentions = settings.backupSASExtentions; break;
+                                case "Stata": backupExtentions = settings.backupStataExtentions; break;
+                            }
+                        }
+                        if(fileState.isFile() && backupExtentions.includes(fileExt)) {
                             names.push(fileName);
                             totalSize += fileState.size;
                         }                        
