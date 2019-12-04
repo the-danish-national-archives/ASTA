@@ -82,9 +82,9 @@ function (n) {
                 settings.output.append($(element).html());
                 if(linkId != null) {
                     document.getElementById(linkId).addEventListener('click', (event) => {
-                        $("a[id^='{0}']".format(settings.linkId.format(""))).removeClass("nemesisLinkBold");
+                        $("a[id^='nemesis-output-link-']").removeClass("nemesisLinkBold");
                         var contentId = event.srcElement.href.split("#")[1];
-                        settings.extraInfoTitleSpn.innerHTML = contentId;
+                        settings.extraInfoTitleSpn.innerHTML = Rigsarkiv.Language.callback().getValue("nemesis-extraInfo-SPAN").format(contentId);
                         var content =  document.getElementById(contentId);
                         $(event.srcElement).toggleClass("nemesisLinkBold");
                         settings.extraInfo.html($(content).html());
