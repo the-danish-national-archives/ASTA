@@ -1980,7 +1980,7 @@
             },
             {
                 "key": "nemesis-extraInfo-SPAN",
-                "value": "Detalje"
+                "value": "<strong>'{0}' Vejledning</strong> (ved klik på et fejlID i testloggen vises vejledning til fejlen her)"
             }
         ]
     }
