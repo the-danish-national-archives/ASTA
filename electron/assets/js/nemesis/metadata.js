@@ -43,6 +43,7 @@ function (n) {
             selectDirBtn: null,
             validateBtn: null,
             confirmationSpn: null,
+            extraInfoTitleSpn: null,
             deliveryPackagePath: null,
             logType: "metadata",
             fileName: null,
@@ -56,7 +57,7 @@ function (n) {
             dataPathPostfix: "Data",
             metadataLabels: ["SYSTEMNAVN","DATAFILNAVN","DATAFILBESKRIVELSE","NØGLEVARIABEL","REFERENCE","VARIABEL","VARIABELBESKRIVELSE","KODELISTE","BRUGERKODE"],
             data: [],
-            linkId: "nemesis-output-link-{0}",
+            linkId: "nemesis-output-link-metadata-{0}",
             linkElement: "<a id=\"{0}\" href=\"#{1}\" class=\"nemesisLink\">{1}</a>",
             links: 0
         }
@@ -81,7 +82,9 @@ function (n) {
                 if(linkId != null) {
                     document.getElementById(linkId).addEventListener('click', (event) => {
                         $("a[id^='{0}']".format(settings.linkId.format(""))).removeClass("nemesisLinkBold");
-                        var content =  document.getElementById(event.srcElement.href.split("#")[1]);
+                        var contentId = event.srcElement.href.split("#")[1];
+                        settings.extraInfoTitleSpn.innerHTML = contentId;
+                        var content =  document.getElementById(contentId);
                         $(event.srcElement).toggleClass("nemesisLinkBold");
                         settings.extraInfo.html($(content).html());
                     })
@@ -1064,7 +1067,7 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Nemesis.MetaData = {        
-            initialize: function (logCallback,dataCallback,outputErrorId,outputId,selectDirectoryId,validateId,confirmationId,extraInfoId) {            
+            initialize: function (logCallback,dataCallback,outputErrorId,outputId,selectDirectoryId,validateId,confirmationId,extraInfoId,extraInfoTitleId) {            
                 settings.logCallback = logCallback;
                 settings.dataCallback = dataCallback;
                 settings.outputErrorSpn = document.getElementById(outputErrorId);
@@ -1072,6 +1075,7 @@ function (n) {
                 settings.selectDirBtn = document.getElementById(selectDirectoryId);
                 settings.validateBtn = document.getElementById(validateId);
                 settings.confirmationSpn = document.getElementById(confirmationId);
+                settings.extraInfoTitleSpn = document.getElementById(extraInfoTitleId);
                 settings.output = $("#" + outputId);
                 settings.extraInfo = $("#" + extraInfoId);
                 AddEvents();

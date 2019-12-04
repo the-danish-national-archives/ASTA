@@ -55,7 +55,7 @@
                                     <br/>
                                 </div>
                                 <div>
-                                    <span class="boldfaced languages" id="nemesis-extraInfo-SPAN"></span>
+                                    <span class="boldfaced" id="nemesis-extraInfo-title"></span> <span class="languages" id="nemesis-extraInfo-SPAN"></span>
                                 </div>
                                 <div id="nemesis-extraInfo" class="nemesisExtraInfo"></div>
                             </div>
@@ -77,9 +77,9 @@
 
             Rigsarkiv.Log.initialize("nemesis-output-Error","nemesis-output-Ok","nemesis-select-logFile","nemesis-output-Supplement", "nemesis-validate-Spinner","lds-ring","nemesis-output-logBtn");
             Rigsarkiv.Nemesis.Batch.initialize(Rigsarkiv.Rights.callback,Rigsarkiv.Nemesis.Structure.callback,"nemesis-output-Error","nemesis-select-batch-directory","nemesis-batch-path","nemesis-batch-validateBtn","nemesis-validate-Spinner","nemesis-batch-Ok","nemesis-batch-select-logFile","nemesis-batch-Supplement","nemesis-batch-test-panel","lds-ring");
-            Rigsarkiv.Nemesis.Structure.initialize(Rigsarkiv.Log.callback,Rigsarkiv.Nemesis.MetaData.callback,"nemesis-output-Error","nemesis-select-directory","nemesis-path","nemesis-validateBtn","nemesis-output", "nemesis-test-id","nemesis-output-Confirmation","nemesis-Athen-StartBtn","nemesis-extraInfo");
-            Rigsarkiv.Nemesis.MetaData.initialize(Rigsarkiv.Log.callback,Rigsarkiv.Nemesis.Data.callback,"nemesis-output-Error","nemesis-output","nemesis-select-directory","nemesis-validateBtn","nemesis-output-Confirmation","nemesis-extraInfo");
-            Rigsarkiv.Nemesis.Data.initialize(Rigsarkiv.Rights.callback,Rigsarkiv.Log.callback,"nemesis-output-Error","nemesis-output","nemesis-select-directory","nemesis-validateBtn","nemesis-output-Confirmation","nemesis-Athen-StartBtn","nemesis-extraInfo"); 
+            Rigsarkiv.Nemesis.Structure.initialize(Rigsarkiv.Log.callback,Rigsarkiv.Nemesis.MetaData.callback,"nemesis-output-Error","nemesis-select-directory","nemesis-path","nemesis-validateBtn","nemesis-output", "nemesis-test-id","nemesis-output-Confirmation","nemesis-Athen-StartBtn","nemesis-extraInfo","nemesis-extraInfo-title");
+            Rigsarkiv.Nemesis.MetaData.initialize(Rigsarkiv.Log.callback,Rigsarkiv.Nemesis.Data.callback,"nemesis-output-Error","nemesis-output","nemesis-select-directory","nemesis-validateBtn","nemesis-output-Confirmation","nemesis-extraInfo","nemesis-extraInfo-title");
+            Rigsarkiv.Nemesis.Data.initialize(Rigsarkiv.Rights.callback,Rigsarkiv.Log.callback,"nemesis-output-Error","nemesis-output","nemesis-select-directory","nemesis-validateBtn","nemesis-output-Confirmation","nemesis-Athen-StartBtn","nemesis-extraInfo","nemesis-extraInfo-title"); 
         </script>
     </section>
 </template>
