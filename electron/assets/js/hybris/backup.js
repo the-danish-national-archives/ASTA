@@ -135,7 +135,7 @@ function (n) {
             var folders = Rigsarkiv.Hybris.Structure.callback().deliveryPackagePath.getFolders();
             var folderName = folders[folders.length - 1];
             var title = Rigsarkiv.Language.callback().getValue("hybris-backup-template-Title");
-            var foldersList = Rigsarkiv.Language.callback().getValue("hybris-backup-template-foldersList-H3");
+            var foldersList = Rigsarkiv.Language.callback().getValue("hybris-backup-template-foldersList-H3").format(folderName);
             var th1 = Rigsarkiv.Language.callback().getValue("hybris-backup-template-foldersList-TH1");
             var th2 = Rigsarkiv.Language.callback().getValue("hybris-backup-template-foldersList-TH2");
             var th3 = Rigsarkiv.Language.callback().getValue("hybris-backup-template-foldersList-TH3");

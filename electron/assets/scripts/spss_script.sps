@@ -1,6 +1,6 @@
 ﻿* Encoding: UTF-8.
  */
-                      Version: 12,0
+                      Version: 13,0
                       Encoding: UTF-8 with byte order mark
                       Note: The working directory must contain the data file (sav)
                       */
@@ -364,6 +364,6 @@ SAVE OUTFILE='OutputSpss'
 
 OUTPUT SAVE NAME=Document1
  OUTFILE=
-    'DataDir{0}Exportscriptlog.spv'
+    'DataDir{0}{2}_Exportscriptlog.spv'
  LOCK=NO.
 

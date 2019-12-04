@@ -1047,11 +1047,11 @@
             },
             {
                 "key": "hybris-backup-template-Title",
-                "value": "Backup mapper"
+                "value": "filliste over udtrækslogs"
             },
             {
                 "key": "hybris-backup-template-foldersList-H3",
-                "value": "Liste over mapper placeret i backup"
+                "value": "Liste over filer til kontrol af om data- og metadataudtræk med ASTA til afleveringspakke {0} er tabsfrit"
             },
             {
                 "key": "hybris-backup-template-foldersList-TH1",
