@@ -67,7 +67,7 @@ function (n) {
             resourceWinPath: "resources\\{0}",
             converterFileName: "AthenaForm.exe",
             metadataFilePostfix: "{0}.json",
-            linkId: "nemesis-output-link-{0}",
+            linkId: "nemesis-output-link-data-{0}",
             linkElement: "<a id=\"{0}\" href=\"#{1}\" class=\"nemesisLink\">{1}</a>",
             links: 0
         }
@@ -85,8 +85,10 @@ function (n) {
                 settings.output.append($(element).html());
                 if(linkId != null) {
                     document.getElementById(linkId).addEventListener('click', (event) => {
-                        $("a[id^='{0}']".format(settings.linkId.format(""))).removeClass("nemesisLinkBold");
-                        var content =  document.getElementById(event.srcElement.href.split("#")[1]);
+                        $("a[id^='nemesis-output-link-']").removeClass("nemesisLinkBold");
+                        var contentId = event.srcElement.href.split("#")[1];
+                        settings.extraInfoTitleSpn.innerHTML = Rigsarkiv.Language.callback().getValue("nemesis-extraInfo-SPAN").format(contentId);
+                        var content =  document.getElementById(contentId);
                         $(event.srcElement).toggleClass("nemesisLinkBold");
                         settings.extraInfo.html($(content).html());
                     })

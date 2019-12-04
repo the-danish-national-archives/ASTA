@@ -44,8 +44,8 @@ function (n) {
             errors: 0,
             errorStop: false,
             convertStop: false,
-            documents: [],
-            linkId: "nemesis-output-link-{0}",
+            documents: [],            
+            linkId: "nemesis-output-link-structure-{0}",
             linkElement: "<a id=\"{0}\" href=\"#{1}\" class=\"nemesisLink\">{1}</a>",
             links: 0            
         }
@@ -58,6 +58,7 @@ function (n) {
             settings.convertStop = false;
             settings.documents = [];
             settings.links = 0;
+            settings.extraInfoTitleSpn.innerHTML = "";
             settings.output.html("");
             settings.extraInfo.html("");
         }
@@ -81,8 +82,10 @@ function (n) {
                 settings.output.append($(element).html());
                 if(linkId != null) {
                     document.getElementById(linkId).addEventListener('click', (event) => {
-                        $("a[id^='{0}']".format(settings.linkId.format(""))).removeClass("nemesisLinkBold");
-                        var content =  document.getElementById(event.srcElement.href.split("#")[1]);
+                        $("a[id^='nemesis-output-link-']").removeClass("nemesisLinkBold");
+                        var contentId = event.srcElement.href.split("#")[1];
+                        settings.extraInfoTitleSpn.innerHTML = Rigsarkiv.Language.callback().getValue("nemesis-extraInfo-SPAN").format(contentId);
+                        var content =  document.getElementById(contentId);
                         $(event.srcElement).toggleClass("nemesisLinkBold");
                         settings.extraInfo.html($(content).html());
                     })
