@@ -32,6 +32,7 @@ function (n) {
             deliveryPackagePath: null,
             testSpn: null,
             confirmationSpn: null,
+            extraInfoTitleSpn: null,
             metadataFileName: "{0}.txt",
             dataFileName: "{0}.csv",
             docCollectionFolderName: "docCollection1",
@@ -592,7 +593,7 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Nemesis.Structure = {        
-            initialize: function (logCallback,metadataCallback,outputErrorId,selectDirectoryId,pathDirectoryId,validateId,outputId,testId,confirmationId,convertId,extraInfoId) {            
+            initialize: function (logCallback,metadataCallback,outputErrorId,selectDirectoryId,pathDirectoryId,validateId,outputId,testId,confirmationId,convertId,extraInfoId,extraInfoTitleId) {            
                 settings.logCallback = logCallback;
                 settings.metadataCallback = metadataCallback;
                 settings.outputErrorSpn = document.getElementById(outputErrorId);
@@ -603,6 +604,7 @@ function (n) {
                 settings.output = $("#" + outputId);
                 settings.testSpn = document.getElementById(testId);
                 settings.confirmationSpn = document.getElementById(confirmationId);
+                settings.extraInfoTitleSpn = document.getElementById(extraInfoTitleId);
                 settings.ConvertBtn = document.getElementById(convertId); 
                 settings.extraInfo = $("#" + extraInfoId);               
                 AddEvents();

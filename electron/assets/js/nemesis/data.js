@@ -39,6 +39,7 @@ function (n) {
             selectDirBtn: null,
             validateBtn: null,
             confirmationSpn: null,
+            extraInfoTitleSpn: null,
             validateRowsText: null,
             deliveryPackagePath: null,
             ConvertBtn: null,
@@ -782,7 +783,7 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Nemesis.Data = {
-            initialize: function (rightsCallback,logCallback,outputErrorId,outputId,selectDirectoryId,validateId,confirmationId,convertId,extraInfoId) { 
+            initialize: function (rightsCallback,logCallback,outputErrorId,outputId,selectDirectoryId,validateId,confirmationId,convertId,extraInfoId,extraInfoTitleId) { 
                 settings.rightsCallback = rightsCallback;
                 settings.logCallback = logCallback;
                 settings.outputErrorSpn = document.getElementById(outputErrorId);
@@ -792,6 +793,7 @@ function (n) {
                 settings.selectDirBtn = document.getElementById(selectDirectoryId);
                 settings.validateBtn = document.getElementById(validateId);
                 settings.confirmationSpn  = document.getElementById(confirmationId);
+                settings.extraInfoTitleSpn = document.getElementById(extraInfoTitleId);
                 settings.confirmationSpn.innerHTML = "";
                 settings.extraInfo = $("#" + extraInfoId);
                 AddEvents();

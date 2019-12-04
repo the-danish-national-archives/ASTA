@@ -43,6 +43,7 @@ function (n) {
             selectDirBtn: null,
             validateBtn: null,
             confirmationSpn: null,
+            extraInfoTitleSpn: null,
             deliveryPackagePath: null,
             logType: "metadata",
             fileName: null,
@@ -1064,7 +1065,7 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Nemesis.MetaData = {        
-            initialize: function (logCallback,dataCallback,outputErrorId,outputId,selectDirectoryId,validateId,confirmationId,extraInfoId) {            
+            initialize: function (logCallback,dataCallback,outputErrorId,outputId,selectDirectoryId,validateId,confirmationId,extraInfoId,extraInfoTitleId) {            
                 settings.logCallback = logCallback;
                 settings.dataCallback = dataCallback;
                 settings.outputErrorSpn = document.getElementById(outputErrorId);
@@ -1072,6 +1073,7 @@ function (n) {
                 settings.selectDirBtn = document.getElementById(selectDirectoryId);
                 settings.validateBtn = document.getElementById(validateId);
                 settings.confirmationSpn = document.getElementById(confirmationId);
+                settings.extraInfoTitleSpn = document.getElementById(extraInfoTitleId);
                 settings.output = $("#" + outputId);
                 settings.extraInfo = $("#" + extraInfoId);
                 AddEvents();
