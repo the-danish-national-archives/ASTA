@@ -172,6 +172,35 @@ function (n) {
             settings.okBtn.disabled = disabled;
         }
 
+         //ensure print file
+         var EnsurePrintFile = function() {
+            try 
+            {
+                EnsurePath();
+                var folders = Rigsarkiv.Hybris.Structure.callback().deliveryPackagePath.getFolders();
+                var fileName = folders[folders.length - 1];
+                settings.filePath = settings.folderPath.indexOf("\\") > -1 ? "{0}\\{1}".format(settings.folderPath,settings.filePostfix.format(fileName)) : "{0}/{1}".format(settings.folderPath,settings.filePostfix.format(fileName));
+                
+                var selectedData = GetSelectedData();
+                Rigsarkiv.Hybris.Base.callback().backup.forEach(folder => {
+                    var files = [];
+                    folder.files.forEach(file => {
+                        if(selectedData.keys.includes(folder.name) && selectedData.values[selectedData.keys.indexOf(folder.name)].includes(file)) {
+                            files.push("<b>{0}</b>".format(file));
+                        }
+                        else {
+                            files.push(file);
+                        }
+                    });
+                   settings.logs.push("<tr><td>{0}</td><td>{1}</td><td>{2}</td></tr>".format(files.join("<br/>"),folder.path,folder.name));
+                });
+                CopyFile();
+            }
+            catch(err) {
+                err.Handle(settings.outputErrorSpn,settings.outputErrorText,"Rigsarkiv.Hybris.Backup.EnsurePrintFile");
+            }            
+        }
+
          //add Event Listener to HTML elmenets
          var AddEvents = function () {
             settings.okBtn.addEventListener('click', function (event) {                
@@ -182,7 +211,8 @@ function (n) {
                     ipcRenderer.send('open-confirm-dialog','backup',Rigsarkiv.Language.callback().getValue("hybris-output-backup-NextConfirm-Title"),Rigsarkiv.Language.callback().getValue("hybris-output-backup-NextConfirm-Text"),Rigsarkiv.Language.callback().getValue("hybris-output-backup-OkConfirm"),Rigsarkiv.Language.callback().getValue("hybris-output-backup-CancelConfirm"));
                 }
                 else {             
-                    UpdateSpinner(settings.spinnerClass); 
+                    UpdateSpinner(settings.spinnerClass);
+                    EnsurePrintFile();
                     EnsureStructure();
                     UpdateSpinner("");
                     settings.indexfilesTab.click();
@@ -190,6 +220,7 @@ function (n) {
             });
             ipcRenderer.on('confirm-dialog-selection-backup', (event, index) => {
                 if(index === 0) {
+                    EnsurePrintFile();
                     settings.indexfilesTab.click();
                 }            
             });
@@ -198,19 +229,8 @@ function (n) {
                     this.checked = false; 
                 }); 
             });
-            settings.printBtn.addEventListener('click', function (event) {
-                EnsurePath();
-                var folders = Rigsarkiv.Hybris.Structure.callback().deliveryPackagePath.getFolders();
-                var fileName = folders[folders.length - 1];
-                settings.filePath = settings.folderPath.indexOf("\\") > -1 ? "{0}\\{1}".format(settings.folderPath,settings.filePostfix.format(fileName)) : "{0}/{1}".format(settings.folderPath,settings.filePostfix.format(fileName));
-                
-                var selectedData = GetSelectedData();
-                Rigsarkiv.Hybris.Base.callback().backup.forEach(folder => {
-                    if(selectedData.keys.includes(folder.name)) {                        
-                        settings.logs.push("<tr><td>{0}</td><td>{1}</td><td>{2}</td></tr>".format(selectedData.values[selectedData.keys.indexOf(folder.name)].join("<br/>"),folder.path,folder.name));
-                    }
-                });
-                CopyFile();
+            settings.printBtn.addEventListener('click', function (event) {                
+                EnsurePrintFile();
                 shell.openItem(settings.filePath);
             });
          }

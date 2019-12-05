@@ -382,7 +382,7 @@ function (n) {
                     var path = GetFolderPath();
                     var folders = settings.dataFolderPath.getFolders();
                     var folderName =  folders[folders.length - 1];
-                    var names = [];
+                    var names = [];                   
                     files.forEach(fileName => {                        
                         var filePath = (path.indexOf("\\") > -1) ? "{0}\\{1}".format(path,fileName) : "{0}/{1}".format(path,fileName);
                         var fileExt = fileName.indexOf(".") > -1 ? fileName.substring(fileName.indexOf(".") + 1).toLowerCase() : null;
@@ -395,7 +395,7 @@ function (n) {
                                 case "Stata": backupExtentions = settings.backupStataExtentions; break;
                             }
                         }
-                        if(fileState.isFile() && backupExtentions.includes(fileExt)) {
+                        if(fileState.isFile() && backupExtentions.includes(fileExt) && fileName.startsWith(settings.metadataFileName.value)) {
                             names.push(fileName);
                             totalSize += fileState.size;
                         }                        

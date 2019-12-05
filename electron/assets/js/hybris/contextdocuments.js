@@ -214,7 +214,7 @@ function (n) {
                 var fileName = folders[folders.length - 1];
                 settings.filePath = settings.pathPostfix.format(selectedFolderPath.substring(0,selectedFolderPath.lastIndexOf((selectedFolderPath.indexOf("\\") > -1) ? "\\" : "/") + 1),fileName);
                 if(!fs.existsSync(settings.filePath)) {                        
-                    console.logInfo(`Create log folder: ${settings.filePath}`,"Rigsarkiv.Hybris.ContextDocuments.EnsurePath");
+                    console.logInfo(`Create log folder: ${settings.filePath}`,"Rigsarkiv.Hybris.ContextDocuments.EnsurePrintFile");
                     fs.mkdirSync(settings.filePath);
                 }
                 settings.filePath += selectedFolderPath.indexOf("\\") > -1 ? "\\{0}".format(settings.filePostfix.format(fileName)) : "/{0}".format(settings.filePostfix.format(fileName));
@@ -224,7 +224,7 @@ function (n) {
                 CopyFile();
             }
             catch(err) {
-                err.Handle(settings.outputErrorSpn,settings.outputErrorText,"Rigsarkiv.Hybris.Backup.EnsurePath");
+                err.Handle(settings.outputErrorSpn,settings.outputErrorText,"Rigsarkiv.Hybris.Backup.EnsurePrintFile");
             }            
         }
 
