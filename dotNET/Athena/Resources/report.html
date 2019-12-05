@@ -20,9 +20,9 @@
             }}
     </style>
     <script type="text/javascript">
-        var report = {2}
+        var report = { 2}
     </script>
-    </head>
+</head>
 <body>
     <div class="header">
         <h1 class="title">ASTA konverteringsrapport - bevaringsformat</h1>
@@ -33,15 +33,16 @@
         <div class="results" id="testContent">
             <p>Antal tabeller</p>
             <table>
-                <tr><th></th><th>Før</th><th>Efter</th></tr>
-                <tr><td>Antal tabeller</td><td id="tablesBefore">0</td><td id="tablesAfter">0</td></tr>
-                <tr><td>Antal kodetabeller</td><td id="codeListsBefore">0</td><td id="codeListsAfter">0</td></tr>
+                <tr><th></th><th>Antal</th></tr>
+                <tr><td>Hovedtabeller</td><td id="tablesAfter">0</td></tr>
+                <tr><td>Kodetabeller</td><td id="codeListsAfter">0</td></tr>
             </table>
             <br />
             <p>Antal rækker</p>
             <table id="rowsTable">
-                <tr><th>Tabel</th><th>Før</th><th>Efter</th></tr>
+                <tr><th>Tabel</th><th>Antal</th></tr>
             </table>
+            <br />
             <p>Optælling af brugerkoder forskelle</p>
             <table id="missingValuesTable">
                 <tr><th>Tabel</th><th>Variabel</th><th>Før</th><th>Efter</th></tr>
@@ -74,12 +75,12 @@
         var missingValuesTable = document.getElementById("missingValuesTable");
         var columnsTable = document.getElementById("columnsTable");
         var errorsTable = document.getElementById("errorsTable");
-        var rowHtml = "<tr><td>{{0}} ({{1}})</td><td{{4}}>{{2}}</td><td{{4}}>{{3}}</td></tr>";
+        var rowHtml = "<tr><td>{{0}} ({{1}})</td><td{{3}}>{{2}}</td></tr>";
         var missingValueHtml = "<tr><td>{{0}} ({{1}})</td><td>{{2}}</td><td{{5}}>{{3}}</td><td{{5}}>{{4}}</td></tr>";
         var columnHtml = "<tr><td>{{0}} ({{1}})</td><td>{{2}}</td><td>{{3}}</td><td class=\"Error\">{{4}}</td></tr>";
         var errorHtml = "<tr><td>{{0}} ({{1}})</td><td>{{2}}</td><td>{{3}}</td><td class=\"Error\">{{4}}</td><td class=\"Error\">{{5}}</td></tr>";
         (function () {{
-            UpdateTable("tablesBefore", "tablesAfter", report.Tables.length, report.TablesCounter);
+            UpdateTable("tablesAfter", report.Tables.length, report.TablesCounter);
             var codeLists = 0;
             for (var i = 0; i < report.Tables.length; i++) {{
                 UpdateRow(report.Tables[i]);
@@ -87,7 +88,7 @@
                 for (var k = 0; k < report.Tables[i].Columns.length; k++) {{
                     UpdateMissingValue(report.Tables[i], report.Tables[i].Columns[k]);
                     UpdateColumn(report.Tables[i], report.Tables[i].Columns[k]);
-                }}                
+                }}
                 for (var j = 0; j < report.Tables[i].CodeList.length; j++) {{
                     UpdateRow(report.Tables[i].CodeList[j]);
                     for (var l = 0; l < report.Tables[i].CodeList[j].Columns.length; l++) {{
@@ -95,7 +96,7 @@
                     }}
                 }}
             }}
-            UpdateTable("codeListsBefore", "codeListsAfter", codeLists, report.CodeListsCounter);
+            UpdateTable("codeListsAfter", codeLists, report.CodeListsCounter);
         }})();
         function UpdateErrors(table, column) {{
             for (var i = 0; i < column.ErrorsRows.length; i++) {{
@@ -119,18 +120,15 @@
         }}
         function UpdateRow(table) {{
                 var className = (table.Rows !== table.RowsCounter) ? " class=\"Error\"" : "";
-                rowsTable.insertAdjacentHTML("beforeend", rowHtml.format(table.Folder, table.Name, table.Rows, table.RowsCounter, className));
+                rowsTable.insertAdjacentHTML("beforeend", rowHtml.format(table.Folder, table.Name, table.RowsCounter, className));
         }}
-        function UpdateTable(beforeId, afterId, beforeValue, afterValue) {{
-            var before = document.getElementById(beforeId);
+        function UpdateTable(afterId, beforeValue, afterValue) {{
             var after = document.getElementById(afterId);
-            before.innerText = beforeValue;
             after.innerText = afterValue;
             if (beforeValue !== afterValue) {{
-                before.className = "Error";
                 after.className = "Error";
             }}
-        }}        
+        }}
     </script>
 </body>
 </html>
