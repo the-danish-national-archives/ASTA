@@ -155,7 +155,7 @@ function (n) {
                 }
                 if(os.platform() == "darwin") {
                     var folders =  __dirname.split("/");
-                    rootPath = folders.slice(0,folders.length - 3).join("/");
+                    rootPath = folders.slice(0,folders.length - 4).join("/");
                     filePath = "{0}/{1}".format(rootPath,settings.templateFileName);
                 }
             }        
