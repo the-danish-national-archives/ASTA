@@ -12,7 +12,6 @@ function (n) {
         const path = require('path');
         const os = require('os');
         const fs = require('fs');
-        const fse = require('fs-extra');
 
         //private data memebers
         var settings = {
