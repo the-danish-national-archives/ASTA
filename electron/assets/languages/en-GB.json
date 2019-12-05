@@ -1054,6 +1054,10 @@
                 "value": "Liste over filer til kontrol af om data- og metadataudtræk med ASTA til afleveringspakke {0} er tabsfrit"
             },
             {
+                "key": "hybris-backup-template-foldersList-P",
+                "value": "Filer markeret med fed er kopieret til mappen."
+            },
+            {
                 "key": "hybris-backup-template-foldersList-TH1",
                 "value": "Filer"
             },
