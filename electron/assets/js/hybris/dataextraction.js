@@ -62,6 +62,7 @@ function (n) {
             backupSPSSExtentions: ["sav","sps","spv"],
             backupSASExtentions: ["sas7bdat","sas7bcat","sas"],
             backupStataExtentions: ["dta","do"],
+            logSPSSPostfix: "{0}_Exportscriptlog",
             variableFileName: null,
             scriptPathLink: null            
         }
@@ -395,7 +396,8 @@ function (n) {
                                 case "Stata": backupExtentions = settings.backupStataExtentions; break;
                             }
                         }
-                        if(fileState.isFile() && backupExtentions.includes(fileExt) && fileName.startsWith(settings.metadataFileName.value)) {
+                        var fileExactName = fileName.indexOf(".") > -1 ? fileName.substring(0,fileName.indexOf(".")) : "";
+                        if(fileState.isFile() && backupExtentions.includes(fileExt) && (fileExactName === settings.metadataFileName.value || fileExactName === settings.logSPSSPostfix.format(settings.metadataFileName.value))) {
                             names.push(fileName);
                             totalSize += fileState.size;
                         }                        
