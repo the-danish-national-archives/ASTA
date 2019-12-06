@@ -24,7 +24,7 @@ function (n) {
         const datatypeDecimal = [/^(decimal)$/,/^(\%([0-9]+)\.([0-9]+)f)$/,/^(\%([0-9]+)\.([0-9]+)g)$/,/^(f([0-9]+)\.([0-9]+))$/,/^(f([0-9]+)\.([0-9]+))$/];
         const datatypeDate = [/^(date)$/,/^(\%tdCCYY-NN-DD)$/,/^((yymmdd\.)|(yymmdd10\.))$/,/^(sdate10)$/];
         const datatypeTime = [/^(time)$/,/^(\%tcHH:MM:SS)$/,/^((time\.)|(time8\.))$/,/^(time8)$/];
-        const datatypeDateTime = [/^(datetime)$/,/^((\%tcCCYY-NN-DD\!THH:MM:SS)|(\%tcCCYY-NN-DD\!THH:MM:SS\.s)|(\%tcCCYY-NN-DD\!THH:MM:SS\.ss)|(\%tcCCYY-NN-DD\!THH:MM:SS\.sss)|(\%tcCCYY-NN-DD\!THH:MM:SS\.ssss)|(\%tcCCYY-NN-DD\!THH:MM:SS\.sssss)|(\%tcCCYY-NN-DD\!THH:MM:SS\.ssssss))$/,/^((e8601dt\.)|(e8601dt19\.)|(e8601dt20\.1)|(e8601dt21\.2)|(e8601dt22\.3)|(e8601dt23\.4)|(e8601dt24\.5)|(e8601dt25\.6))$/,/^((datetime20)|(ymdhms19)|(ymdhms21\.1)|(ymdhms22\.2)|(ymdhms23\.3)|(ymdhms24\.4)|(ymdhms25\.5)|(ymdhms25\.5))$/];
+        const datatypeDateTime = [/^(datetime)$/,/^((\%tcCCYY-NN-DD\!THH:MM:SS)|(\%tcCCYY-NN-DD\!THH:MM:SS\.s)|(\%tcCCYY-NN-DD\!THH:MM:SS\.ss)|(\%tcCCYY-NN-DD\!THH:MM:SS\.sss)|(\%tcCCYY-NN-DD\!THH:MM:SS\.ssss)|(\%tcCCYY-NN-DD\!THH:MM:SS\.sssss)|(\%tcCCYY-NN-DD\!THH:MM:SS\.ssssss))$/,/^((e8601dt\.)|(e8601dt19\.)|(e8601dt20\.1)|(e8601dt21\.2)|(e8601dt22\.3)|(e8601dt23\.4)|(e8601dt24\.5)|(e8601dt25\.6))$/,/^((datetime20)|(ymdhms19)|(ymdhms21\.1)|(ymdhms22\.2)|(ymdhms23\.3)|(ymdhms24\.4)|(ymdhms25\.5)|(ymdhms26\.6))$/];
         const titleMaxLength = 128;
         const stringMaxLength = 2147483648;
         const errorsMax = 40;
