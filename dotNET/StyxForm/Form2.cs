@@ -79,12 +79,14 @@ namespace Rigsarkiv.StyxForm
                 codeTablesListBox.Items.AddRange(_mainTable.Columns.Where(c => c.CodeList != null).Select(t => t.CodeList.Name).ToArray());
             }
             tableInfoLabel.Text = string.Format(MainTableLabel, _mainTable.Name);
+            deleteTableButton.Enabled = true;
             UpdateRow();
         }
 
         private void codeTablesListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (codeTablesListBox.SelectedIndex == -1) { return; }
+            deleteTableButton.Enabled = false;
             removeButton.Enabled = true;
             _codeTable = _mainTable.Columns.Where(c => c.CodeList != null).Select(t => t.CodeList).ToList()[codeTablesListBox.SelectedIndex];
             tableInfoLabel.Text = string.Format(CodeTableLabel, _codeTable.Name);
@@ -94,7 +96,7 @@ namespace Rigsarkiv.StyxForm
         private void UpdateRow()
         {
             _rowIndex = -1;
-            deleteButton.Enabled = false;
+            deleteColumnButton.Enabled = false;
             var table = _codeTable != null ? _codeTable : _mainTable;
             Cursor.Current = Cursors.WaitCursor;
             dataValues.Rows.Clear();
@@ -200,16 +202,30 @@ namespace Rigsarkiv.StyxForm
             _rowIndex = e.RowIndex;
             var table = _codeTable != null ? _codeTable : _mainTable;
             var column = table.Columns[_rowIndex];
-            deleteButton.Enabled = !column.IsKey && (column.CodeList == null);           
+            deleteColumnButton.Enabled = !column.IsKey && (column.CodeList == null);           
         }
 
-        private void deleteButton_Click(object sender, EventArgs e)
+        private void deleteColumnButton_Click(object sender, EventArgs e)
         {
             var table = _codeTable != null ? _codeTable : _mainTable;
             var column = table.Columns[_rowIndex];
             _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = "Restructure", Message = string.Format("Delete column '{0}' from table '{1}'", column.Name, table.Name) });
             table.Columns.RemoveAt(_rowIndex);
             UpdateRow();
+        }
+
+        private void deleteTableButton_Click(object sender, EventArgs e)
+        {
+            if(_codeTable == null && mainTablesListBox.SelectedIndex > -1)
+            {
+                _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = "Restructure", Message = string.Format("Delete table '{0}'", _mainTable.Name) });
+                codeTablesListBox.Items.Clear();
+                _codeTable = null;
+                _mainTable = null;
+                _report.Tables.RemoveAt(mainTablesListBox.SelectedIndex);
+                mainTablesListBox.Items.RemoveAt(mainTablesListBox.SelectedIndex);
+                mainTablesListBox.ClearSelected();
+            }
         }
     }
 }

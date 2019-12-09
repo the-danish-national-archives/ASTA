@@ -28,9 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.label4 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.deleteTableButton = new System.Windows.Forms.Button();
             this.removeButton = new System.Windows.Forms.Button();
             this.codeTablesListBox = new System.Windows.Forms.ListBox();
             this.mainTablesListBox = new System.Windows.Forms.ListBox();
@@ -49,7 +50,7 @@
             this.variableName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Description = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.columnType = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.deleteButton = new System.Windows.Forms.Button();
+            this.deleteColumnButton = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataValues)).BeginInit();
             this.SuspendLayout();
@@ -66,6 +67,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.deleteTableButton);
             this.groupBox1.Controls.Add(this.removeButton);
             this.groupBox1.Controls.Add(this.codeTablesListBox);
             this.groupBox1.Controls.Add(this.mainTablesListBox);
@@ -74,10 +76,22 @@
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox1.Location = new System.Drawing.Point(21, 100);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(674, 545);
+            this.groupBox1.Size = new System.Drawing.Size(674, 554);
             this.groupBox1.TabIndex = 31;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "TABELLER";
+            // 
+            // deleteTableButton
+            // 
+            this.deleteTableButton.Enabled = false;
+            this.deleteTableButton.Location = new System.Drawing.Point(16, 510);
+            this.deleteTableButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.deleteTableButton.Name = "deleteTableButton";
+            this.deleteTableButton.Size = new System.Drawing.Size(70, 35);
+            this.deleteTableButton.TabIndex = 42;
+            this.deleteTableButton.Text = "Slet";
+            this.deleteTableButton.UseVisualStyleBackColor = true;
+            this.deleteTableButton.Click += new System.EventHandler(this.deleteTableButton_Click);
             // 
             // removeButton
             // 
@@ -232,14 +246,14 @@
             this.variableName,
             this.Description,
             this.columnType});
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataValues.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataValues.DefaultCellStyle = dataGridViewCellStyle3;
             this.dataValues.Location = new System.Drawing.Point(716, 180);
             this.dataValues.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.dataValues.Name = "dataValues";
@@ -283,24 +297,24 @@
             this.columnType.ReadOnly = true;
             this.columnType.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
-            // deleteButton
+            // deleteColumnButton
             // 
-            this.deleteButton.Enabled = false;
-            this.deleteButton.Location = new System.Drawing.Point(716, 128);
-            this.deleteButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.deleteButton.Name = "deleteButton";
-            this.deleteButton.Size = new System.Drawing.Size(70, 35);
-            this.deleteButton.TabIndex = 41;
-            this.deleteButton.Text = "Slet";
-            this.deleteButton.UseVisualStyleBackColor = true;
-            this.deleteButton.Click += new System.EventHandler(this.deleteButton_Click);
+            this.deleteColumnButton.Enabled = false;
+            this.deleteColumnButton.Location = new System.Drawing.Point(716, 128);
+            this.deleteColumnButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.deleteColumnButton.Name = "deleteColumnButton";
+            this.deleteColumnButton.Size = new System.Drawing.Size(70, 35);
+            this.deleteColumnButton.TabIndex = 41;
+            this.deleteColumnButton.Text = "Slet";
+            this.deleteColumnButton.UseVisualStyleBackColor = true;
+            this.deleteColumnButton.Click += new System.EventHandler(this.deleteColumnButton_Click);
             // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1459, 977);
-            this.Controls.Add(this.deleteButton);
+            this.Controls.Add(this.deleteColumnButton);
             this.Controls.Add(this.dataValues);
             this.Controls.Add(this.scriptLabel3);
             this.Controls.Add(this.scriptLabel2);
@@ -342,10 +356,11 @@
         private System.Windows.Forms.Label scriptLabel2;
         private System.Windows.Forms.Label scriptLabel1;
         private System.Windows.Forms.DataGridView dataValues;
-        private System.Windows.Forms.Button deleteButton;
+        private System.Windows.Forms.Button deleteColumnButton;
         private System.Windows.Forms.DataGridViewTextBoxColumn Key;
         private System.Windows.Forms.DataGridViewTextBoxColumn variableName;
         private System.Windows.Forms.DataGridViewTextBoxColumn Description;
         private System.Windows.Forms.DataGridViewTextBoxColumn columnType;
+        private System.Windows.Forms.Button deleteTableButton;
     }
 }
