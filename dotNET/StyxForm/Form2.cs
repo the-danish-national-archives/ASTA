@@ -52,7 +52,8 @@ namespace Rigsarkiv.StyxForm
             _destPath = destPath;
             _destFolder = destFolder;
             _report = report;
-            mainTablesListBox.Items.AddRange(_report.Tables.Select(t => t.Name).ToArray());            
+            mainTablesListBox.Items.AddRange(_report.Tables.Select(t => t.Name).ToArray());
+            tableInfoLabel.Text = string.Empty;
         }
 
         private void removeButton_Click(object sender, EventArgs e)

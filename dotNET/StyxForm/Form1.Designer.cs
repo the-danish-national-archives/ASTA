@@ -62,10 +62,9 @@
             this.outputRichTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.outputRichTextBox.Location = new System.Drawing.Point(19, 230);
-            this.outputRichTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.outputRichTextBox.Location = new System.Drawing.Point(28, 354);
             this.outputRichTextBox.Name = "outputRichTextBox";
-            this.outputRichTextBox.Size = new System.Drawing.Size(642, 142);
+            this.outputRichTextBox.Size = new System.Drawing.Size(961, 216);
             this.outputRichTextBox.TabIndex = 0;
             this.outputRichTextBox.Text = "";
             // 
@@ -73,10 +72,9 @@
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(15, 6);
-            this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label4.Location = new System.Drawing.Point(22, 9);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(176, 20);
+            this.label4.Size = new System.Drawing.Size(266, 29);
             this.label4.TabIndex = 16;
             this.label4.Text = "Skab udleveringsformat";
             // 
@@ -84,19 +82,17 @@
             // 
             this.sipTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.sipTextBox.Location = new System.Drawing.Point(18, 141);
-            this.sipTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.sipTextBox.Location = new System.Drawing.Point(27, 217);
             this.sipTextBox.Name = "sipTextBox";
-            this.sipTextBox.Size = new System.Drawing.Size(566, 20);
+            this.sipTextBox.Size = new System.Drawing.Size(847, 26);
             this.sipTextBox.TabIndex = 22;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(15, 126);
-            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label3.Location = new System.Drawing.Point(22, 194);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(197, 13);
+            this.label3.Size = new System.Drawing.Size(294, 20);
             this.label3.TabIndex = 21;
             this.label3.Text = "Vælg DIP destination (drev eller mappe):";
             // 
@@ -104,19 +100,17 @@
             // 
             this.sipNameTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.sipNameTextBox.Location = new System.Drawing.Point(18, 94);
-            this.sipNameTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.sipNameTextBox.Location = new System.Drawing.Point(27, 145);
             this.sipNameTextBox.Name = "sipNameTextBox";
-            this.sipNameTextBox.Size = new System.Drawing.Size(566, 20);
+            this.sipNameTextBox.Size = new System.Drawing.Size(847, 26);
             this.sipNameTextBox.TabIndex = 20;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(17, 79);
-            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label2.Location = new System.Drawing.Point(26, 122);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(167, 13);
+            this.label2.Size = new System.Drawing.Size(246, 20);
             this.label2.TabIndex = 19;
             this.label2.Text = "Angiv DIP-ID, fx. DIP.12345 (DIP)";
             // 
@@ -124,29 +118,26 @@
             // 
             this.aipTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.aipTextBox.Location = new System.Drawing.Point(18, 48);
-            this.aipTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.aipTextBox.Location = new System.Drawing.Point(27, 74);
             this.aipTextBox.Name = "aipTextBox";
-            this.aipTextBox.Size = new System.Drawing.Size(566, 20);
+            this.aipTextBox.Size = new System.Drawing.Size(847, 26);
             this.aipTextBox.TabIndex = 18;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(15, 33);
-            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label1.Location = new System.Drawing.Point(22, 51);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(256, 13);
+            this.label1.Size = new System.Drawing.Size(380, 20);
             this.label1.TabIndex = 17;
             this.label1.Text = "Vælg arkiveringsversion - fx. AVID.SA.12345.1 (AIP):";
             // 
             // sipButton
             // 
             this.sipButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.sipButton.Location = new System.Drawing.Point(588, 141);
-            this.sipButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.sipButton.Location = new System.Drawing.Point(882, 217);
             this.sipButton.Name = "sipButton";
-            this.sipButton.Size = new System.Drawing.Size(73, 21);
+            this.sipButton.Size = new System.Drawing.Size(110, 32);
             this.sipButton.TabIndex = 24;
             this.sipButton.Text = "Browse";
             this.sipButton.UseVisualStyleBackColor = true;
@@ -155,10 +146,9 @@
             // aipButton
             // 
             this.aipButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.aipButton.Location = new System.Drawing.Point(588, 48);
-            this.aipButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.aipButton.Location = new System.Drawing.Point(882, 74);
             this.aipButton.Name = "aipButton";
-            this.aipButton.Size = new System.Drawing.Size(73, 21);
+            this.aipButton.Size = new System.Drawing.Size(110, 32);
             this.aipButton.TabIndex = 23;
             this.aipButton.Text = "Browse";
             this.aipButton.UseVisualStyleBackColor = true;
@@ -167,10 +157,9 @@
             // logButton
             // 
             this.logButton.Enabled = false;
-            this.logButton.Location = new System.Drawing.Point(497, 386);
-            this.logButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.logButton.Location = new System.Drawing.Point(746, 594);
             this.logButton.Name = "logButton";
-            this.logButton.Size = new System.Drawing.Size(73, 21);
+            this.logButton.Size = new System.Drawing.Size(110, 32);
             this.logButton.TabIndex = 26;
             this.logButton.Text = "Vis Log";
             this.logButton.UseVisualStyleBackColor = true;
@@ -179,10 +168,9 @@
             // convertButton
             // 
             this.convertButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.convertButton.Location = new System.Drawing.Point(563, 200);
-            this.convertButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.convertButton.Location = new System.Drawing.Point(844, 308);
             this.convertButton.Name = "convertButton";
-            this.convertButton.Size = new System.Drawing.Size(96, 21);
+            this.convertButton.Size = new System.Drawing.Size(144, 32);
             this.convertButton.TabIndex = 25;
             this.convertButton.Text = "Konverter til DIP";
             this.convertButton.UseVisualStyleBackColor = true;
@@ -203,29 +191,27 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(15, 180);
-            this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label5.Location = new System.Drawing.Point(22, 277);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(121, 13);
+            this.label5.Size = new System.Drawing.Size(181, 20);
             this.label5.TabIndex = 27;
             this.label5.Text = "Vælg udleveringsformat:";
             // 
             // scriptTypeComboBox
             // 
+            this.scriptTypeComboBox.Enabled = false;
             this.scriptTypeComboBox.FormattingEnabled = true;
-            this.scriptTypeComboBox.Location = new System.Drawing.Point(133, 178);
-            this.scriptTypeComboBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.scriptTypeComboBox.Location = new System.Drawing.Point(200, 274);
             this.scriptTypeComboBox.Name = "scriptTypeComboBox";
-            this.scriptTypeComboBox.Size = new System.Drawing.Size(73, 21);
+            this.scriptTypeComboBox.Size = new System.Drawing.Size(108, 28);
             this.scriptTypeComboBox.TabIndex = 28;
             // 
             // reportButton
             // 
             this.reportButton.Enabled = false;
-            this.reportButton.Location = new System.Drawing.Point(577, 386);
-            this.reportButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.reportButton.Location = new System.Drawing.Point(866, 594);
             this.reportButton.Name = "reportButton";
-            this.reportButton.Size = new System.Drawing.Size(82, 21);
+            this.reportButton.Size = new System.Drawing.Size(123, 32);
             this.reportButton.TabIndex = 29;
             this.reportButton.Text = "Vis Rapport";
             this.reportButton.UseVisualStyleBackColor = true;
@@ -234,10 +220,9 @@
             // scriptLabel1
             // 
             this.scriptLabel1.AutoSize = true;
-            this.scriptLabel1.Location = new System.Drawing.Point(17, 386);
-            this.scriptLabel1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.scriptLabel1.Location = new System.Drawing.Point(26, 594);
             this.scriptLabel1.Name = "scriptLabel1";
-            this.scriptLabel1.Size = new System.Drawing.Size(412, 13);
+            this.scriptLabel1.Size = new System.Drawing.Size(614, 20);
             this.scriptLabel1.TabIndex = 30;
             this.scriptLabel1.Text = "Import script(s) til dannelse af statistikfil(er) er skabt og placeret i \"Data\" m" +
     "appen i {0}\".";
@@ -246,20 +231,18 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(17, 208);
-            this.label7.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label7.Location = new System.Drawing.Point(26, 320);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(89, 13);
+            this.label7.Size = new System.Drawing.Size(131, 20);
             this.label7.TabIndex = 31;
             this.label7.Text = "Konverteringslog:";
             // 
             // scriptLabel2
             // 
             this.scriptLabel2.AutoSize = true;
-            this.scriptLabel2.Location = new System.Drawing.Point(17, 406);
-            this.scriptLabel2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.scriptLabel2.Location = new System.Drawing.Point(26, 625);
             this.scriptLabel2.Name = "scriptLabel2";
-            this.scriptLabel2.Size = new System.Drawing.Size(310, 13);
+            this.scriptLabel2.Size = new System.Drawing.Size(468, 20);
             this.scriptLabel2.TabIndex = 32;
             this.scriptLabel2.Text = "Kør scriptet i statistikprogrammet og gem den dannede statistikfil.";
             this.scriptLabel2.Visible = false;
@@ -267,10 +250,9 @@
             // scriptLabel3
             // 
             this.scriptLabel3.AutoSize = true;
-            this.scriptLabel3.Location = new System.Drawing.Point(17, 426);
-            this.scriptLabel3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.scriptLabel3.Location = new System.Drawing.Point(26, 655);
             this.scriptLabel3.Name = "scriptLabel3";
-            this.scriptLabel3.Size = new System.Drawing.Size(316, 13);
+            this.scriptLabel3.Size = new System.Drawing.Size(478, 20);
             this.scriptLabel3.TabIndex = 33;
             this.scriptLabel3.Text = "Import scripts har følgende extensions: .sps (SPSS) og .sas (SAS).";
             this.scriptLabel3.Visible = false;
@@ -278,20 +260,19 @@
             // nextForm
             // 
             this.nextForm.Enabled = false;
-            this.nextForm.Location = new System.Drawing.Point(577, 418);
-            this.nextForm.Margin = new System.Windows.Forms.Padding(2);
+            this.nextForm.Location = new System.Drawing.Point(866, 643);
             this.nextForm.Name = "nextForm";
-            this.nextForm.Size = new System.Drawing.Size(82, 21);
+            this.nextForm.Size = new System.Drawing.Size(123, 32);
             this.nextForm.TabIndex = 34;
-            this.nextForm.Text = "Byg relationer";
+            this.nextForm.Text = "1007 udtræk";
             this.nextForm.UseVisualStyleBackColor = true;
             this.nextForm.Click += new System.EventHandler(this.nextForm_Click);
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(684, 473);
+            this.ClientSize = new System.Drawing.Size(1026, 728);
             this.Controls.Add(this.nextForm);
             this.Controls.Add(this.scriptLabel3);
             this.Controls.Add(this.scriptLabel2);
@@ -312,8 +293,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.outputRichTextBox);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.MinimumSize = new System.Drawing.Size(498, 394);
+            this.MinimumSize = new System.Drawing.Size(736, 576);
             this.Name = "Form1";
             this.Text = "ASTA";
             this.Shown += new System.EventHandler(this.Form1_Shown);

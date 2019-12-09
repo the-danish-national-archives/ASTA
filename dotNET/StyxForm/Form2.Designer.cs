@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.label4 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.deleteTableButton = new System.Windows.Forms.Button();
@@ -51,6 +51,8 @@
             this.Description = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.columnType = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.deleteColumnButton = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataValues)).BeginInit();
             this.SuspendLayout();
@@ -61,9 +63,9 @@
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.Location = new System.Drawing.Point(16, 14);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(162, 29);
+            this.label4.Size = new System.Drawing.Size(667, 29);
             this.label4.TabIndex = 17;
-            this.label4.Text = "Byg relationer";
+            this.label4.Text = "Definer 1007 udtræk - vælg tabeller og kodetabeller til udtræk";
             // 
             // groupBox1
             // 
@@ -74,7 +76,7 @@
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox1.Location = new System.Drawing.Point(21, 100);
+            this.groupBox1.Location = new System.Drawing.Point(21, 169);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(674, 554);
             this.groupBox1.TabIndex = 31;
@@ -84,10 +86,10 @@
             // deleteTableButton
             // 
             this.deleteTableButton.Enabled = false;
-            this.deleteTableButton.Location = new System.Drawing.Point(16, 510);
+            this.deleteTableButton.Location = new System.Drawing.Point(16, 522);
             this.deleteTableButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.deleteTableButton.Name = "deleteTableButton";
-            this.deleteTableButton.Size = new System.Drawing.Size(70, 35);
+            this.deleteTableButton.Size = new System.Drawing.Size(70, 32);
             this.deleteTableButton.TabIndex = 42;
             this.deleteTableButton.Text = "Slet";
             this.deleteTableButton.UseVisualStyleBackColor = true;
@@ -153,7 +155,7 @@
             // 
             this.tableInfoLabel.AutoSize = true;
             this.tableInfoLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tableInfoLabel.Location = new System.Drawing.Point(16, 55);
+            this.tableInfoLabel.Location = new System.Drawing.Point(17, 125);
             this.tableInfoLabel.Name = "tableInfoLabel";
             this.tableInfoLabel.Size = new System.Drawing.Size(165, 29);
             this.tableInfoLabel.TabIndex = 32;
@@ -162,7 +164,7 @@
             // convertButton
             // 
             this.convertButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.convertButton.Location = new System.Drawing.Point(1293, 613);
+            this.convertButton.Location = new System.Drawing.Point(1293, 691);
             this.convertButton.Name = "convertButton";
             this.convertButton.Size = new System.Drawing.Size(144, 32);
             this.convertButton.TabIndex = 33;
@@ -175,16 +177,16 @@
             this.outputRichTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.outputRichTextBox.Location = new System.Drawing.Point(21, 660);
+            this.outputRichTextBox.Location = new System.Drawing.Point(21, 730);
             this.outputRichTextBox.Name = "outputRichTextBox";
-            this.outputRichTextBox.Size = new System.Drawing.Size(1416, 160);
+            this.outputRichTextBox.Size = new System.Drawing.Size(1416, 211);
             this.outputRichTextBox.TabIndex = 34;
             this.outputRichTextBox.Text = "";
             // 
             // reportButton
             // 
             this.reportButton.Enabled = false;
-            this.reportButton.Location = new System.Drawing.Point(1314, 839);
+            this.reportButton.Location = new System.Drawing.Point(1314, 947);
             this.reportButton.Name = "reportButton";
             this.reportButton.Size = new System.Drawing.Size(123, 32);
             this.reportButton.TabIndex = 36;
@@ -195,7 +197,7 @@
             // logButton
             // 
             this.logButton.Enabled = false;
-            this.logButton.Location = new System.Drawing.Point(1198, 839);
+            this.logButton.Location = new System.Drawing.Point(1198, 947);
             this.logButton.Name = "logButton";
             this.logButton.Size = new System.Drawing.Size(110, 32);
             this.logButton.TabIndex = 35;
@@ -206,17 +208,17 @@
             // scriptLabel3
             // 
             this.scriptLabel3.AutoSize = true;
-            this.scriptLabel3.Location = new System.Drawing.Point(17, 943);
+            this.scriptLabel3.Location = new System.Drawing.Point(18, 1008);
             this.scriptLabel3.Name = "scriptLabel3";
-            this.scriptLabel3.Size = new System.Drawing.Size(478, 20);
+            this.scriptLabel3.Size = new System.Drawing.Size(376, 20);
             this.scriptLabel3.TabIndex = 39;
-            this.scriptLabel3.Text = "Import scripts har følgende extensions: .sps (SPSS) og .sas (SAS).";
+            this.scriptLabel3.Text = "Import scripts har følgende extensions: .sps (SPSS).";
             this.scriptLabel3.Visible = false;
             // 
             // scriptLabel2
             // 
             this.scriptLabel2.AutoSize = true;
-            this.scriptLabel2.Location = new System.Drawing.Point(17, 913);
+            this.scriptLabel2.Location = new System.Drawing.Point(18, 978);
             this.scriptLabel2.Name = "scriptLabel2";
             this.scriptLabel2.Size = new System.Drawing.Size(468, 20);
             this.scriptLabel2.TabIndex = 38;
@@ -226,7 +228,7 @@
             // scriptLabel1
             // 
             this.scriptLabel1.AutoSize = true;
-            this.scriptLabel1.Location = new System.Drawing.Point(17, 882);
+            this.scriptLabel1.Location = new System.Drawing.Point(18, 947);
             this.scriptLabel1.Name = "scriptLabel1";
             this.scriptLabel1.Size = new System.Drawing.Size(614, 20);
             this.scriptLabel1.TabIndex = 37;
@@ -246,21 +248,21 @@
             this.variableName,
             this.Description,
             this.columnType});
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataValues.DefaultCellStyle = dataGridViewCellStyle3;
-            this.dataValues.Location = new System.Drawing.Point(716, 180);
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataValues.DefaultCellStyle = dataGridViewCellStyle2;
+            this.dataValues.Location = new System.Drawing.Point(716, 223);
             this.dataValues.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.dataValues.Name = "dataValues";
             this.dataValues.RowHeadersVisible = false;
             this.dataValues.RowTemplate.ReadOnly = true;
             this.dataValues.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataValues.Size = new System.Drawing.Size(721, 422);
+            this.dataValues.Size = new System.Drawing.Size(721, 460);
             this.dataValues.TabIndex = 40;
             this.dataValues.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataValues_CellClick);
             // 
@@ -300,20 +302,44 @@
             // deleteColumnButton
             // 
             this.deleteColumnButton.Enabled = false;
-            this.deleteColumnButton.Location = new System.Drawing.Point(716, 128);
+            this.deleteColumnButton.Location = new System.Drawing.Point(716, 184);
             this.deleteColumnButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.deleteColumnButton.Name = "deleteColumnButton";
-            this.deleteColumnButton.Size = new System.Drawing.Size(70, 35);
+            this.deleteColumnButton.Size = new System.Drawing.Size(70, 32);
             this.deleteColumnButton.TabIndex = 41;
             this.deleteColumnButton.Text = "Slet";
             this.deleteColumnButton.UseVisualStyleBackColor = true;
             this.deleteColumnButton.Click += new System.EventHandler(this.deleteColumnButton_Click);
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(17, 59);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(1133, 25);
+            this.label2.TabIndex = 42;
+            this.label2.Text = "Marker en hovedtabel for at se hvilke kodelister der er knyttet til denne tabel. " +
+    "Tabeller uden fremmednøgler vises som kodetabeller.";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(17, 84);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(1230, 25);
+            this.label3.TabIndex = 43;
+            this.label3.Text = "Flyt en kodetabel tilbage til hovedtabel ved brug af pileknappen, hvis den ikke s" +
+    "kal udtrækkes som kodetabel til hovedtabellen den er tilknyttet.";
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1459, 977);
+            this.ClientSize = new System.Drawing.Size(1459, 1044);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.deleteColumnButton);
             this.Controls.Add(this.dataValues);
             this.Controls.Add(this.scriptLabel3);
@@ -362,5 +388,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Description;
         private System.Windows.Forms.DataGridViewTextBoxColumn columnType;
         private System.Windows.Forms.Button deleteTableButton;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
     }
 }
