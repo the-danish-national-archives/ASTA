@@ -22,6 +22,7 @@ namespace Rigsarkiv.StyxForm
         const string ReportPath = "{0}\\{1}_ASTA_konverteringsrapport.html";
         const string PrimaryKey = "P";
         const string ForeignKey = "F";
+        const string CodeKey = "K";
         private LogManager _logManager = null;
         private Converter _converter = null;
         private string _srcPath = null;
@@ -101,7 +102,7 @@ namespace Rigsarkiv.StyxForm
             for (int i = 0; i < table.Columns.Count; i++)
             {
                 var column = table.Columns[i];
-                var keyType = column.IsKey ? PrimaryKey : string.Empty;
+                var keyType = column.IsKey ? (_codeTable != null ? CodeKey : PrimaryKey) : string.Empty;
                 if(string.IsNullOrEmpty(keyType) && column.CodeList != null) { keyType = ForeignKey;  }
                 dataValues[0, i].Value = keyType;
                 dataValues[1, i].Value = column.Name;
