@@ -134,6 +134,7 @@ namespace Rigsarkiv.Styx
         {
             var result = new Dictionary<string, List<string>>();
             var srcPath = string.Format(ContextDocumentationPath, _srcPath);
+            _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Loop through files at: {0}", srcPath) });
             foreach (string filePath in Directory.GetFiles(srcPath, "*.*", SearchOption.AllDirectories))
             {
                 var fileName = filePath.Substring(filePath.LastIndexOf("\\") + 1);
