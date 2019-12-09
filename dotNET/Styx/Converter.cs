@@ -165,9 +165,9 @@ namespace Rigsarkiv.Styx
             return result;
         }
 
-        protected string NormalizeDescription(string description)
+        protected string EnsureNewLines(string text)
         {
-            var result = description;
+            var result = text;
             if (result.IndexOf(Environment.NewLine) > -1)
             {
                 result = result.Replace(Environment.NewLine," ");
@@ -492,7 +492,8 @@ namespace Rigsarkiv.Styx
                 result = string.Format("\"{0}\"", result);
                 isDifferent = true;
             }
-                result = result.Trim();
+            result = result.Trim();
+            result = EnsureNewLines(result);
             if (!isDifferent) { isDifferent = result != value; }
             return result;
         }

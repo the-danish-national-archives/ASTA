@@ -458,7 +458,7 @@ namespace Rigsarkiv.Styx
                     {
                         code = column.MissingValues[code];
                     }
-                    codeList.AppendLine(string.Format(CodeFormat, code, NormalizeDescription(row.Element(tableNS + columnId).Value)));
+                    codeList.AppendLine(string.Format(CodeFormat, code, EnsureNewLines(row.Element(tableNS + columnId).Value)));
                     column.CodeList.RowsCounter++;
                 }, path);
                 var codeListContent = codeList.ToString();                
