@@ -233,9 +233,7 @@
                             <h2 class="boldfaced"><span class="languages" id="hybris-output-statistics-header-backup-SPAN"></span> <span id="hybris-output-statistics-header-backup" class="trinHeader"></span></h2>
                         </p>
                         <span class="languages" id="hybris-output-backup-Description"></span>
-                        <br/>
                         <span class="alert-warning languages" id="hybris-output-backup-Summary1"></span>
-                        <br/>
                         <span class="alert-warning languages" id="hybris-output-backup-Summary2"></span>
                         <br/>
                         <table id="hybris-backup-folders">
@@ -256,6 +254,9 @@
                     </div>
                     <div id="hybris-panel-indexfiles" class="formularContainer" hidden="true">
                         <p>
+                            <div class="infoBox" id="hybris-panel-indexfiles-confirmation">
+                                <span class="confirmation"><i class="fas fa-check-circle ok"></i><span class="languages" id="hybris-panel-indexfiles-confirmation-SPAN"></span></span>
+                            </div>
                             <h2 class="boldfaced"><span class="languages" id="hybris-output-statistics-header-indexfiles-SPAN"></span> <span id="hybris-output-statistics-header-indexfiles" class="trinHeader"></span></h2>
                         </p>
                         <span id="hybris-output-indexfiles-Description"></span>
@@ -347,7 +348,7 @@
             Rigsarkiv.Hybris.DataExtraction.initialize("hybris-select-statistics-file","hybris-statistics-filepath","hybris-statistics-okBtn","hybris-output-statistics-Error","hybris-output-script-OKCopyScript","hybris-panel-script1","hybris-panel-script2","hybris-script-okBtn","hybris-output-script-dataPath","hybris-output-script-OKCopyScriptInfo","hybris-output-script-Ok","hybris-script-nextBtn","hybris-tab-metdata","hybris-output-structure-Ok","hybris-structure-select-delivery-package","hybris-metdata-fileName","hybris-script-Spinner","hybris-output-script-dataPath-link","hybris-output-statistics-headerLink-trin2","hybris-output-statistics-headerLink-trin3","hybris-output-statistics-headerLink-information2","hybris-output-statistics-SASCatalogPopup","hybris-metdata-Variables");
             Rigsarkiv.Hybris.MetaData.initialize("hybris-metdata-fileName", "hybris-metdata-fileDescription", "hybris-metdata-okBtn","hybris-output-metdata-Ok","hybris-output-metdata-path","hybris-output-metdata-Error","hybris-output-metdata-NewExtraction","hybris-metdata-NewExtractionBtn","hybris-tab-statistics","hybris-metdata-NextBtn","hybris-tab-references","hybris-panel-information1","hybris-panel-information2","hybris-output-indexfiles-Description","hybris-reset-hide-box","hybris-metdata-Variables","hybris-metdata-addVarKeyBtn","hybris-metdata-varKeys","hybris-references-tables","hybris-references-foreignTables","hybris-metdata-cancelBtn","hybris-tab-backup","hybris-references-refVars","hybris-references-foreignVariables");
             Rigsarkiv.Hybris.References.initialize("hybris-output-references-Error","hybris-references-okBtn","hybris-references-tables","hybris-references-foreignTables","hybris-references-refVars","hybris-references-foreignVariables","hybris-references-addReferenceBtn","hybris-references-dataTable","hybris-tab-backup","hybris-references-addReferenceVariableBtn","hybris-references-referenceVariablesTable","hybris-references-addForeignVariableBtn","hybris-references-foreignVariablesTable","hybris-references-cancelBtn");
-            Rigsarkiv.Hybris.Backup.initialize("hybris-output-backup-Error","hybris-backup-folders","hybris-backup-nextBtn","hybris-backup-printBtn","hybris-backup-cancelBtn","hybris-backup-Spinner","hybris-tab-indexfiles");
+            Rigsarkiv.Hybris.Backup.initialize("hybris-output-backup-Error","hybris-backup-folders","hybris-backup-nextBtn","hybris-backup-printBtn","hybris-backup-cancelBtn","hybris-backup-Spinner","hybris-tab-indexfiles","hybris-panel-indexfiles-confirmation");
             Rigsarkiv.Hybris.IndexFiles.initialize("hybris-indexfiles-archiveIndex-selectFile","hybris-indexfiles-archiveIndex","hybris-indexfiles-contextDocumentationIndex-selectFile","hybris-indexfiles-contextDocumentationIndex","hybris-indexfiles-okBtn","hybris-output-indexfiles-Error","hybris-output-indexfiles-Ok","hybris-indexfiles-delivery-package","hybris-tab-contextdocuments");
             Rigsarkiv.Hybris.ContextDocuments.initialize("hybris-output-contextdocuments-Error","hybris-contextdocuments-uploads","hybris-contextdocuments-printBtn","hybris-contextdocuments-nextBtn","hybris-tab-overview","hybris-contextdocuments-Spinner","hybris-overview-deliveryPackage","hybris-overview-validateBtn");
             Rigsarkiv.Hybris.Overview.initialize("hybris-overview-deliveryPackage","hybris-overview-validateBtn","menu-nemesis");

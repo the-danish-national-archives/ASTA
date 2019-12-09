@@ -31,7 +31,7 @@ function (n) {
             documentsPath: null,
             filePath: null,
             filePostfix: "{0}_ASTA_contextdocuments.html",
-            pathPostfix: "{0}ASTA_udtrækslog_{1}",
+            pathPostfix: "{0}ASTA_kontrolfiler_{1}",
             templateFileName: "contextdocuments.html",
             scriptPath: "./assets/scripts/{0}",
             resourceWinPath: "resources\\{0}",

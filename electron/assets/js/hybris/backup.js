@@ -26,8 +26,8 @@ function (n) {
             indexfilesTab: null,
             hasSelected: false,
             checkboxPrefixId: "hybris-backup-folder-",
-            filePostfix: "{0}_ASTA_backup.html",
-            pathPostfix: "{0}ASTA_udtrækslog_{1}",
+            filePostfix: "{0}_ASTA_kontrolfiler.html",
+            pathPostfix: "{0}ASTA_kontrolfiler_{1}",
             templateFileName: "backup.html",
             scriptPath: "./assets/scripts/{0}",
             resourceWinPath: "resources\\{0}",
@@ -135,7 +135,8 @@ function (n) {
             var folderName = folders[folders.length - 1];
             var title = Rigsarkiv.Language.callback().getValue("hybris-backup-template-Title");
             var foldersList = Rigsarkiv.Language.callback().getValue("hybris-backup-template-foldersList-H3").format(folderName);
-            var extraText = Rigsarkiv.Language.callback().getValue("hybris-backup-template-foldersList-P");
+            var logFolders =settings.filePath.getFolders();
+            var extraText = Rigsarkiv.Language.callback().getValue("hybris-backup-template-foldersList-P").format(logFolders[logFolders.length - 2]);
             var th1 = Rigsarkiv.Language.callback().getValue("hybris-backup-template-foldersList-TH1");
             var th2 = Rigsarkiv.Language.callback().getValue("hybris-backup-template-foldersList-TH2");
             var th3 = Rigsarkiv.Language.callback().getValue("hybris-backup-template-foldersList-TH3");
@@ -210,7 +211,8 @@ function (n) {
                 if(!settings.hasSelected) {
                     ipcRenderer.send('open-confirm-dialog','backup',Rigsarkiv.Language.callback().getValue("hybris-output-backup-NextConfirm-Title"),Rigsarkiv.Language.callback().getValue("hybris-output-backup-NextConfirm-Text"),Rigsarkiv.Language.callback().getValue("hybris-output-backup-OkConfirm"),Rigsarkiv.Language.callback().getValue("hybris-output-backup-CancelConfirm"));
                 }
-                else {             
+                else {    
+                    settings.indexfilesConfirmation.hidden = false;         
                     UpdateSpinner(settings.spinnerClass);
                     EnsurePrintFile();
                     EnsureStructure();
@@ -220,6 +222,7 @@ function (n) {
             });
             ipcRenderer.on('confirm-dialog-selection-backup', (event, index) => {
                 if(index === 0) {
+                    settings.indexfilesConfirmation.hidden = true;
                     EnsurePrintFile();
                     settings.indexfilesTab.click();
                 }            
@@ -237,7 +240,7 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Hybris.Backup = {
-            initialize: function (outputErrorId,foldersId,okId,printId,cancelId,spinnerId,indexfilesTabId) {
+            initialize: function (outputErrorId,foldersId,okId,printId,cancelId,spinnerId,indexfilesTabId,indexfilesConfirmationId) {
                 settings.outputErrorSpn =  document.getElementById(outputErrorId);
                 settings.outputErrorText = settings.outputErrorSpn.innerHTML;
                 settings.foldersTbl = document.getElementById(foldersId);
@@ -248,6 +251,7 @@ function (n) {
                 settings.spinnerClass = settings.spinner.className;
                 settings.spinner.className = "";
                 settings.indexfilesTab = document.getElementById(indexfilesTabId);
+                settings.indexfilesConfirmation = document.getElementById(indexfilesConfirmationId);
                 AddEvents();
             },
                 callback: function () {

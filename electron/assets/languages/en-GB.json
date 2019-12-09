@@ -991,11 +991,11 @@
             },
             {
                 "key": "hybris-output-backup-Description",
-                "value": "Du kan her lave en kopi af filer, der kan anvendes til din kontrol af om udtræk med ASTA er tabsfrit samt understøtte arkivets arbejde med test og godkendelse af afleveringspakken. <br/> Filerne kopieres til mappen ASTA_udtrækslogs_FD.XXXXX, som placeres ved siden af den skabte afleveringspakke.<br/><br/> Du kan lave en kopi af følgende filer: <ol type=\"a\"><li>Din originale statistikfil</li><li>Eksport-script anvendt til udtræk</li><li>Eventuel outputfil fra udtræk (kun SPSS)</li><li>Filen statistikfilnavn_Exportscriptlog.spv (kun SPSS). Filen indeholder resultatet af sammenligningen (compare) af den valgte originale statistikfil og outputfil fra udtræk i SPSS.</li></ol>"
+                "value": "Du kan her lave en kopi af filer, der kan anvendes til din kontrol af om udtræk med ASTA er tabsfrit samt understøtte arkivets arbejde med test og godkendelse af afleveringspakken. <br/> Filerne kopieres til mappen ASTA_kontrolfiler_FD.XXXXX, som placeres ved siden af den skabte afleveringspakke.<br/><br/> Du kan lave en kopi af følgende filer: <ol type=\"a\"><li>Din originale statistikfil</li><li>Eksport-script anvendt til udtræk</li><li>Eventuel outputfil fra udtræk (kun SPSS)</li><li>Filen statistikfilnavn_Exportscriptlog.spv (kun SPSS). Filen indeholder resultatet af sammenligningen (compare) af den valgte originale statistikfil og outputfil fra udtræk i SPSS.</li></ol>"
             },
             {
                 "key": "hybris-output-backup-Summary1",
-                "value": "<strong>Information!</strong> Mappen ASTA_udtrækslogs_FD.XXXXX kan med fordel afleveres til arkivet sammen med afleveringspakken"
+                "value": "<strong>Information!</strong> Mappen ASTA_kontrolfiler_FD.XXXXX kan med fordel afleveres til arkivet sammen med afleveringspakken"
             },
             {
                 "key": "hybris-output-backup-Summary2",
@@ -1047,7 +1047,7 @@
             },
             {
                 "key": "hybris-backup-template-Title",
-                "value": "filliste over udtrækslogs"
+                "value": "kontrolfiler"
             },
             {
                 "key": "hybris-backup-template-foldersList-H3",
@@ -1055,7 +1055,7 @@
             },
             {
                 "key": "hybris-backup-template-foldersList-P",
-                "value": "Filer markeret med fed er kopieret til mappen."
+                "value": "Filer markeret med fed er kopieret til mappen {0}"
             },
             {
                 "key": "hybris-backup-template-foldersList-TH1",
@@ -1068,6 +1068,10 @@
             {
                 "key": "hybris-backup-template-foldersList-TH3",
                 "value": "Placering af udtræk"
+            },
+            {
+                "key": "hybris-panel-indexfiles-confirmation-SPAN",
+                "value": "De valgte kontrolfiler er kopieret til mappen"
             },
             {
                 "key": "hybris-output-statistics-header-indexfiles-SPAN",
