@@ -98,6 +98,7 @@ namespace Rigsarkiv.StyxForm
         {
             _rowIndex = -1;
             deleteColumnButton.Enabled = false;
+            setKeyColumnButton.Enabled = false;
             var table = _codeTable != null ? _codeTable : _mainTable;
             Cursor.Current = Cursors.WaitCursor;
             dataValues.Rows.Clear();
@@ -203,7 +204,12 @@ namespace Rigsarkiv.StyxForm
             _rowIndex = e.RowIndex;
             var table = _codeTable != null ? _codeTable : _mainTable;
             var column = table.Columns[_rowIndex];
-            deleteColumnButton.Enabled = !column.IsKey && (column.CodeList == null);           
+            deleteColumnButton.Enabled = !column.IsKey && (column.CodeList == null);
+            setKeyColumnButton.Enabled = _codeTable != null && !column.IsKey && (column.CodeList == null);
+            if(_codeTable != null && table.Columns.Count <= 2)
+            {
+                deleteColumnButton.Enabled = false;
+            }
         }
 
         private void deleteColumnButton_Click(object sender, EventArgs e)
@@ -226,6 +232,22 @@ namespace Rigsarkiv.StyxForm
                 _report.Tables.RemoveAt(mainTablesListBox.SelectedIndex);
                 mainTablesListBox.Items.RemoveAt(mainTablesListBox.SelectedIndex);
                 mainTablesListBox.ClearSelected();
+            }
+        }
+
+        private void setKeyColumnButton_Click(object sender, EventArgs e)
+        {
+            if (_codeTable != null && _rowIndex > -1)
+            {
+                _codeTable.Columns.ForEach(c =>
+                {
+                    c.IsKey = false;
+                });
+                var column = _codeTable.Columns[_rowIndex];
+                _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = "Restructure", Message = string.Format("Set column '{0}' key in table '{1}'", column.Name, _codeTable.Name) });
+
+                column.IsKey = true;
+                UpdateRow();
             }
         }
     }
