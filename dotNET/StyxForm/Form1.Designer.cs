@@ -252,9 +252,9 @@
             this.scriptLabel3.AutoSize = true;
             this.scriptLabel3.Location = new System.Drawing.Point(26, 655);
             this.scriptLabel3.Name = "scriptLabel3";
-            this.scriptLabel3.Size = new System.Drawing.Size(478, 20);
+            this.scriptLabel3.Size = new System.Drawing.Size(376, 20);
             this.scriptLabel3.TabIndex = 33;
-            this.scriptLabel3.Text = "Import scripts har følgende extensions: .sps (SPSS) og .sas (SAS).";
+            this.scriptLabel3.Text = "Import scripts har følgende extensions: .sps (SPSS).";
             this.scriptLabel3.Visible = false;
             // 
             // nextForm
