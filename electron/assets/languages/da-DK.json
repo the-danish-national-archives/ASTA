@@ -986,6 +986,94 @@
                 "value": "FORTRYD"
             },
             {
+                "key": "hybris-output-statistics-header-backup-SPAN",
+                "value": "Kopiering af filer til kontrol af udtræk"
+            },
+            {
+                "key": "hybris-output-backup-Description",
+                "value": "Du kan her lave en kopi af filer, der kan anvendes til din kontrol af om udtræk med ASTA er tabsfrit samt understøtte arkivets arbejde med test og godkendelse af afleveringspakken. <br/> Filerne kopieres til mappen ASTA_kontrolfiler_FD.XXXXX, som placeres ved siden af den skabte afleveringspakke.<br/><br/> Du kan lave en kopi af følgende filer: <ol type=\"a\"><li>Din originale statistikfil</li><li>Eksport-script anvendt til udtræk</li><li>Eventuel outputfil fra udtræk (kun SPSS)</li><li>Filen statistikfilnavn_Exportscriptlog.spv (kun SPSS). Filen indeholder resultatet af sammenligningen (compare) af den valgte originale statistikfil og outputfil fra udtræk i SPSS.</li></ol>"
+            },
+            {
+                "key": "hybris-output-backup-Summary1",
+                "value": "<strong>Information!</strong> Mappen ASTA_kontrolfiler_FD.XXXXX kan med fordel afleveres til arkivet sammen med afleveringspakken"
+            },
+            {
+                "key": "hybris-output-backup-Summary2",
+                "value": "<strong>Information!</strong> Kopiering af meget store filer kan tage lang tid!"
+            },
+            {
+                "key": "hybris-backup-printBtn",
+                "value": "Udskriv filliste"
+            },
+            {
+                "key": "hybris-backup-nextBtn",
+                "value": "Næste"
+            },
+            {
+                "key": "hybris-backup-cancelBtn",
+                "value": "Fravælg alle filer"
+            },
+            {
+                "key": "hybris-backup-folders-TH1",
+                "value": "Vælg filer"
+            },
+            {
+                "key": "hybris-backup-folders-TH2",
+                "value": "Filernes originale placering"
+            },
+            {
+                "key": "hybris-backup-folders-TH3",
+                "value": "Placering af udtræk"
+            },
+            {
+                "key": "hybris-backup-folders-TH4",
+                "value": "Størrelse (Bytes)"
+            },
+            {
+                "key": "hybris-output-backup-OkConfirm",
+                "value": "Ja"
+            },
+            {
+                "key": "hybris-output-backup-CancelConfirm",
+                "value": "Nej"
+            },
+            {
+                "key": "hybris-output-backup-NextConfirm-Title",
+                "value": "Kopier filer"
+            },
+            {
+                "key": "hybris-output-backup-NextConfirm-Text",
+                "value": "Ingen filer er valgt. Vil du fortsætte uden at kopiere filer?"
+            },
+            {
+                "key": "hybris-backup-template-Title",
+                "value": "kontrolfiler"
+            },
+            {
+                "key": "hybris-backup-template-foldersList-H3",
+                "value": "Liste over filer til kontrol af om data- og metadataudtræk med ASTA til afleveringspakke {0} er tabsfrit"
+            },
+            {
+                "key": "hybris-backup-template-foldersList-P",
+                "value": "Filer markeret med fed er kopieret til mappen {0}"
+            },
+            {
+                "key": "hybris-backup-template-foldersList-TH1",
+                "value": "Filer"
+            },
+            {
+                "key": "hybris-backup-template-foldersList-TH2",
+                "value": "Filens originale placering og titel"
+            },
+            {
+                "key": "hybris-backup-template-foldersList-TH3",
+                "value": "Placering af udtræk"
+            },
+            {
+                "key": "hybris-panel-indexfiles-confirmation-SPAN",
+                "value": "De valgte kontrolfiler er kopieret til mappen"
+            },
+            {
                 "key": "hybris-output-statistics-header-indexfiles-SPAN",
                 "value": "Placer indeksfiler i afleveringspakken"
             },
@@ -1188,6 +1276,10 @@
             {
                 "key": "hybris-tab-references",
                 "value": "Referencer"
+            },
+            {
+                "key": "hybris-tab-backup",
+                "value": "Sikkerhedskopier"
             },
             {
                 "key": "hybris-tab-indexfiles",

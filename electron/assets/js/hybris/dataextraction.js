@@ -59,6 +59,11 @@ function (n) {
             sasCatalogFileExt: "{0}.sas7bcat",
             dataPathPostfix: "Data",
             dataTablePathPostfix: "table{0}",
+            backupSPSSExtentions: ["sav","sps","spv"],
+            backupSASExtentions: ["sas7bdat","sas7bcat","sas"],
+            backupStataExtentions: ["dta","do"],
+            logSPSSPostfix: "{0}_Exportscriptlog",
+            outputSPSSPostfix: "{0}_output",
             variableFileName: null,
             scriptPathLink: null            
         }
@@ -368,6 +373,42 @@ function (n) {
             return result;
         }
 
+        //Add Backup information
+        var AddBackup = function() {           
+            fs.readdir(GetFolderPath(), (err, files) => {
+                if (err) {
+                    err.Handle(settings.outputStatisticsErrorSpn,settings.outputStatisticsErrorText,"Rigsarkiv.Hybris.DataExtraction.AddBackup");
+                }
+                else {
+                    var totalSize = 0;
+                    var path = GetFolderPath();
+                    var folders = settings.dataFolderPath.getFolders();
+                    var folderName =  folders[folders.length - 1];
+                    var names = [];                   
+                    files.forEach(fileName => {                        
+                        var filePath = (path.indexOf("\\") > -1) ? "{0}\\{1}".format(path,fileName) : "{0}/{1}".format(path,fileName);
+                        var fileExt = fileName.indexOf(".") > -1 ? fileName.substring(fileName.indexOf(".") + 1).toLowerCase() : null;
+                        var fileState = fs.lstatSync(filePath);
+                        var backupExtentions = [];
+                        if(fileExt != null) {
+                            switch(settings.scriptType) {
+                                case "SPSS": backupExtentions = settings.backupSPSSExtentions; break;
+                                case "SAS": backupExtentions = settings.backupSASExtentions; break;
+                                case "Stata": backupExtentions = settings.backupStataExtentions; break;
+                            }
+                        }
+                        var fileExactName = fileName.indexOf(".") > -1 ? fileName.substring(0,fileName.indexOf(".")) : "";
+                        if(fileState.isFile() && backupExtentions.includes(fileExt) && (fileExactName === settings.metadataFileName.value || fileExactName === settings.logSPSSPostfix.format(settings.metadataFileName.value) || fileExactName === settings.outputSPSSPostfix.format(settings.metadataFileName.value))) {
+                            names.push(fileName);
+                            totalSize += fileState.size;
+                        }                        
+                    });
+                    Rigsarkiv.Hybris.Base.callback().backup.push({ "path":path, "name":folderName, "size":totalSize, "files":names });
+                    settings.metdataTab.click();
+                }
+            }); 
+        }
+
         //Redirect to metadata tab
         var Redirect = function() {
             var fileName = GetFileName();
@@ -392,7 +433,7 @@ function (n) {
                     i++;
                 }
                 while (lines[i] !== undefined && lines[i].trim() !== "");
-                settings.metdataTab.click();
+                AddBackup();                
             }
             catch(err) 
             {

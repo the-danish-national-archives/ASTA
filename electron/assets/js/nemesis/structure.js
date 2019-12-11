@@ -44,7 +44,7 @@ function (n) {
             errors: 0,
             errorStop: false,
             convertStop: false,
-            documents: [],
+            documents: [],            
             linkId: "nemesis-output-link-structure-{0}",
             linkElement: "<a id=\"{0}\" href=\"#{1}\" class=\"nemesisLink\">{1}</a>",
             links: 0            

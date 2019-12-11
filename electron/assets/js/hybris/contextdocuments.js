@@ -205,6 +205,29 @@ function (n) {
             });                    
         }
 
+        //ensure print file
+        var EnsurePrintFile = function() {
+            try 
+            {
+                var selectedFolderPath = Rigsarkiv.Hybris.Structure.callback().deliveryPackagePath;
+                var folders = selectedFolderPath.getFolders();
+                var fileName = folders[folders.length - 1];
+                settings.filePath = settings.pathPostfix.format(selectedFolderPath.substring(0,selectedFolderPath.lastIndexOf((selectedFolderPath.indexOf("\\") > -1) ? "\\" : "/") + 1),fileName);
+                if(!fs.existsSync(settings.filePath)) {                        
+                    console.logInfo(`Create log folder: ${settings.filePath}`,"Rigsarkiv.Hybris.ContextDocuments.EnsurePrintFile");
+                    fs.mkdirSync(settings.filePath);
+                }
+                settings.filePath += selectedFolderPath.indexOf("\\") > -1 ? "\\{0}".format(settings.filePostfix.format(fileName)) : "/{0}".format(settings.filePostfix.format(fileName));
+                settings.documents.forEach(upload => {
+                    settings.logs.push("<tr><td>{0}</td><td>{1}</td><td>{2}</td></tr>".format(upload.id,upload.title,upload.path));
+                });
+                CopyFile();
+            }
+            catch(err) {
+                err.Handle(settings.outputErrorSpn,settings.outputErrorText,"Rigsarkiv.Hybris.Backup.EnsurePrintFile");
+            }            
+        }
+
         //add Event Listener to HTML elmenets
         var AddEvents = function () {
             settings.nextBtn.addEventListener('click', function (event) {
@@ -219,6 +242,7 @@ function (n) {
                 else {
                     if(settings.documents.length > 0) {                    
                         UpdateSpinner(settings.spinnerClass);
+                        EnsurePrintFile();
                         EnsureDocuments();
                         UpdateSpinner("");                    
                     }
@@ -239,19 +263,7 @@ function (n) {
                 }            
             });
             settings.printBtn.addEventListener('click', function (event) {
-                var selectedFolderPath = Rigsarkiv.Hybris.Structure.callback().deliveryPackagePath;
-                var folders = selectedFolderPath.getFolders();
-                var fileName = folders[folders.length - 1];
-                settings.filePath = settings.pathPostfix.format(selectedFolderPath.substring(0,selectedFolderPath.lastIndexOf((selectedFolderPath.indexOf("\\") > -1) ? "\\" : "/") + 1),fileName);
-                if(!fs.existsSync(settings.filePath)) {                        
-                    console.logInfo(`Create log folder: ${settings.filePath}`,"Rigsarkiv.Hybris.ContextDocuments.AddEvents");
-                    fs.mkdirSync(settings.filePath);
-                }
-                settings.filePath += selectedFolderPath.indexOf("\\") > -1 ? "\\{0}".format(settings.filePostfix.format(fileName)) : "/{0}".format(settings.filePostfix.format(fileName));
-                settings.documents.forEach(upload => {
-                    settings.logs.push("<tr><td>{0}</td><td>{1}</td><td>{2}</td></tr>".format(upload.id,upload.title,upload.path));
-                });
-                CopyFile();
+                EnsurePrintFile();
                 shell.openItem(settings.filePath);
             });
             ipcRenderer.on('contextdocuments-selected-file', (event, path, id) => {
@@ -261,7 +273,7 @@ function (n) {
                 document.getElementById("hybris-contextdocuments-document-{0}".format(upload.id)).value = upload.path; 
                 settings.hasSelected = true;         
             })
-        }
+        }       
         
         //Model interfaces functions
         Rigsarkiv.Hybris.ContextDocuments = {

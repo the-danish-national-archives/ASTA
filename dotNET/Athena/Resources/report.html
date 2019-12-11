@@ -22,7 +22,7 @@
     <script type="text/javascript">
         var report = {2}
     </script>
-    </head>
+</head>
 <body>
     <div class="header">
         <h1 class="title">ASTA konverteringsrapport - bevaringsformat</h1>
@@ -88,7 +88,7 @@
                 for (var k = 0; k < report.Tables[i].Columns.length; k++) {{
                     UpdateMissingValue(report.Tables[i], report.Tables[i].Columns[k]);
                     UpdateColumn(report.Tables[i], report.Tables[i].Columns[k]);
-                }}                
+                }}
                 for (var j = 0; j < report.Tables[i].CodeList.length; j++) {{
                     UpdateRow(report.Tables[i].CodeList[j]);
                     for (var l = 0; l < report.Tables[i].CodeList[j].Columns.length; l++) {{
@@ -128,7 +128,7 @@
             if (beforeValue !== afterValue) {{
                 after.className = "Error";
             }}
-        }}        
+        }}
     </script>
 </body>
 </html>
