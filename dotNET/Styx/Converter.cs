@@ -487,11 +487,15 @@ namespace Rigsarkiv.Styx
             using (var rdr = XmlReader.Create(filePath))
             {
                 rdr.MoveToContent();
-                while (rdr.Read())
+                while (!rdr.EOF)
                 {
                     if ((rdr.NodeType == XmlNodeType.Element) && (rdr.Name == "row"))
                     {
                         operation(XNode.ReadFrom(rdr) as XElement);
+                    }
+                    else
+                    {
+                        rdr.Read();
                     }
                 }
                 rdr.Close();

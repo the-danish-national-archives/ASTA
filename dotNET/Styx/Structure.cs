@@ -70,7 +70,7 @@ namespace Rigsarkiv.Styx
                 _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Create path: {0}", _destFolderPath) });
                 Directory.CreateDirectory(_destFolderPath);
             }
-            catch (IOException ex)
+            catch (Exception ex)
             {
                 result = false;
                 _log.Error("EnsureRootFolder Failed", ex);
