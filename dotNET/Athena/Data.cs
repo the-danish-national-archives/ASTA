@@ -268,7 +268,7 @@ namespace Rigsarkiv.Athena
 
         private void AddValue(Column column, string convertedValue)
         {
-            if(string.IsNullOrEmpty(convertedValue) && !column.Type.StartsWith(VarCharPrefix.Substring(0,7)))
+            if(string.IsNullOrEmpty(convertedValue))
             {
                 _writer.WriteStartElement(column.Id);
                 _writer.WriteAttributeString("xsi","nil", null, "true");
