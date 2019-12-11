@@ -105,6 +105,7 @@ namespace Rigsarkiv.Styx
             {
                  _report.Tables.ForEach(table =>
                 {
+                    table.RowsCounter = 0;
                     XNamespace tableNS = string.Format(TableXmlNs, table.SrcFolder);
                     path = string.Format(TableDataPath, _destFolderPath, _report.ScriptType.ToString().ToLower(), NormalizeName(table.Name));
                     _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add file: {0}", path) });
@@ -447,6 +448,7 @@ namespace Rigsarkiv.Styx
             var codeList = new StringBuilder();
             table.Columns.Where(c => c.CodeList != null).ToList().ForEach(column =>
             {
+                column.CodeList.RowsCounter = 0;
                 _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add {0} code list", column.CodeList.Name) });
                 XNamespace tableNS = string.Format(TableXmlNs, column.CodeList.SrcFolder);
                 path = string.Format(TablePath, _srcPath, column.CodeList.SrcFolder);

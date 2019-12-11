@@ -125,7 +125,8 @@ namespace Rigsarkiv.StyxForm
             scriptLabel3.Visible = false;
             Cursor.Current = Cursors.WaitCursor;
             _logPath = string.Format("{0}\\ASTA_konverteringslog_{1}", _destPath, _destFolder);
-            outputRichTextBox.Clear();            
+            outputRichTextBox.Clear();
+            _report.TablesCounter = _report.CodeListsCounter = 0;
             _converter = new Structure(_logManager, _srcPath, _destPath, _destFolder, _report, FlowState.Completed);
             if (_converter.Run())
             {
