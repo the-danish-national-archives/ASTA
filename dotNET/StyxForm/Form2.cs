@@ -204,7 +204,7 @@ namespace Rigsarkiv.StyxForm
             _rowIndex = e.RowIndex;
             var table = _codeTable != null ? _codeTable : _mainTable;
             var column = table.Columns[_rowIndex];
-            deleteColumnButton.Enabled = !column.IsKey && (column.CodeList == null);
+            deleteColumnButton.Enabled = true;
             setKeyColumnButton.Enabled = _codeTable != null && !column.IsKey && (column.CodeList == null);
             if(_codeTable != null && table.Columns.Count <= 2)
             {
@@ -217,8 +217,18 @@ namespace Rigsarkiv.StyxForm
             var table = _codeTable != null ? _codeTable : _mainTable;
             var column = table.Columns[_rowIndex];
             _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = "Restructure", Message = string.Format("Delete column '{0}' from table '{1}'", column.Name, table.Name) });
+            var codeListTable = column.CodeList;            
             table.Columns.RemoveAt(_rowIndex);
-            UpdateRow();
+            if (codeListTable != null)
+            {
+                _codeTable = null;
+                codeTablesListBox.Items.Clear();
+                if (_mainTable.Columns != null && _mainTable.Columns.Count > 0 && _mainTable.Columns.Any(c => c.CodeList != null))
+                {
+                    codeTablesListBox.Items.AddRange(_mainTable.Columns.Where(c => c.CodeList != null).Select(t => t.CodeList.Name).ToArray());
+                }
+            }
+            UpdateRow();            
         }
 
         private void deleteTableButton_Click(object sender, EventArgs e)
