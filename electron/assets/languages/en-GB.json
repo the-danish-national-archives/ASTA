@@ -2072,7 +2072,7 @@
             },
             {
                 "key": "nemesis-extraInfo-SPAN",
-                "value": "<strong>'{0}' Vejledning</strong> (ved klik på et fejlID i testloggen vises vejledning til fejlen her)"
+                "value": "<strong>{0} vejledning</strong> (ved klik på et fejlID i testloggen vises vejledning til fejlen her)"
             }
         ]
     }

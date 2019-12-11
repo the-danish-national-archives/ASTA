@@ -95,14 +95,18 @@ namespace Rigsarkiv.Styx
                     var id = documentNode.Element(_tableIndexXNS + "documentID").Value;
                     var documentTitle = documentNode.Element(_tableIndexXNS + "documentTitle").Value;
                     var title = ReplaceInvalidChars(documentTitle);
-                    if(files.ContainsKey(id))
+                    if(files.ContainsKey(id) && files[id].Count > 0)
                     {
-                        var srcFilePath = files[id];
-                        var fileExt = srcFilePath.Substring(srcFilePath.LastIndexOf(".") + 1);
-                        _report.ContextDocuments.Add(string.Format("{0}_{1}.{2}", id, documentTitle, fileExt), string.Format("{0}_{1}.{2}", id, title, fileExt));
-                        var destFilePath = string.Format("{0}\\{1}_{2}.{3}", destPath, id, title, fileExt);
-                        _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("copy file {0} -> {1}", srcFilePath, destFilePath) });
-                        File.Copy(srcFilePath, destFilePath, true);
+                        var docFolderPath = string.Format("{0}\\{1}", destPath, title);
+                        _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("create folder: {0}", docFolderPath) });
+                        Directory.CreateDirectory(docFolderPath);
+                        _report.ContextDocuments.Add(string.Format("{0}", documentTitle), string.Format("{0}",title));
+                        files[id].ForEach(srcFilePath => {
+                            var fileExt = srcFilePath.Substring(srcFilePath.LastIndexOf(".") + 1);
+                            var destFilePath = string.Format("{0}\\{1}", docFolderPath, srcFilePath.Substring(srcFilePath.LastIndexOf("\\") + 1));
+                            _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("copy file {0} -> {1}", srcFilePath, destFilePath) });
+                            File.Copy(srcFilePath, destFilePath, true);
+                        });                        
                     }                    
                 }
                 
@@ -126,10 +130,11 @@ namespace Rigsarkiv.Styx
             return result;
         }
 
-        private Dictionary<string,string> Getfiles()
+        private Dictionary<string,List<string>> Getfiles()
         {
-            var result = new Dictionary<string, string>();
+            var result = new Dictionary<string, List<string>>();
             var srcPath = string.Format(ContextDocumentationPath, _srcPath);
+            _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Loop through files at: {0}", srcPath) });
             foreach (string filePath in Directory.GetFiles(srcPath, "*.*", SearchOption.AllDirectories))
             {
                 var fileName = filePath.Substring(filePath.LastIndexOf("\\") + 1);
@@ -137,7 +142,11 @@ namespace Rigsarkiv.Styx
                 {
                     var id = filePath.Substring(0, filePath.Length - (fileName.Length + 1));
                     id = id.Substring(id.LastIndexOf("\\") + 1);
-                    result.Add(id, filePath);
+                    if(!result.ContainsKey(id))
+                    {
+                        result.Add(id, new List<string>());
+                    }
+                    result[id].Add(filePath);
                 }
             }
             return result;
