@@ -164,7 +164,7 @@
             },
             {
                 "key": "about-Q1-SPAN-LeftContent",
-                "value": "Når du skal aflevere data fra statistikfiler til arkivet skal de afleveres i form af en afleveringspakke.<p>Mappestruktur og indhold i en afleveringspakke:</p><br/><div><img class=\"welcomeImg\" src=\"./assets/images/Afleveringspakke_struktur.png\" alt=\"Afleveringspakke struktur\"></div><br/><br/>"
+                "value": "Når du skal aflevere data fra statistikfiler til arkivet skal de afleveres i form af en afleveringspakke.<p>Mappestruktur og indhold i en afleveringspakke:</p><br/><div><img class=\"aboutImg\" src=\"./assets/images/Afleveringspakke_struktur.png\" alt=\"Afleveringspakke struktur\"></div><br/><br/>"
             },
             {
                 "key": "about-Q2-H4-LeftContent",
