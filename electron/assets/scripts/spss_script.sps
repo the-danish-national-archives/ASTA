@@ -1,6 +1,6 @@
 ﻿* Encoding: UTF-8.
  */
-                      Version: 13,0
+                      Version: 14,0
                       Encoding: UTF-8 with byte order mark
                       Note: The working directory must contain the data file (sav)
                       */
@@ -360,6 +360,12 @@ COMPARE DATASETS
 
 SAVE OUTFILE='OutputSpss'
   /COMPRESSED.
+
+
+
+TEXT "SPSS IS FINISHED RUNNING THIS SCRIPT"
+/OUTLINE HEADING="Comment"
+TITLE="COMMENT".
 
 
 OUTPUT SAVE NAME=Document1

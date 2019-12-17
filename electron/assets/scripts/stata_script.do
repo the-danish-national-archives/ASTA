@@ -1,5 +1,5 @@
 /*
-Version: 7.0
+Version: 8.0
 Encoding: UTF-8 without byte order mark
 Note: The working directory must contain the data file (dta)
 */
@@ -9,6 +9,8 @@ global fileDir "{1}"
 global astaDir "{3}"
 global inputStata $fileDir{0}{2}
 global inputStata_ "{2}"
+
+log using  $inputStata.log
 
 * Set options
 set scrollbufsize 2048000
@@ -177,3 +179,4 @@ Note: Special codes for missing values are written as lowercase letters with a p
 use $inputStata, clear
 export delimited using $astaDir{0}{2}.csv, delimiter(";") nolabel replace
 
+log close
