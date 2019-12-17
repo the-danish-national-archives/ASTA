@@ -11,10 +11,6 @@ Note: The working directory must contain the data file (sas7bdat)
 libname mylib "&outDir";
 
 
-Proc printto log= "mylib&inputSas..Log";
-run;
-
-
 * Set options;
 options locale=da_DK replace=yes;
 options nofmterr;

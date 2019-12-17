@@ -14,10 +14,6 @@ NB: The values in the catalog file must be explicitly specified (ranges are inva
                                   %let inputSas=%str({2});
                                   libname mylib "&outDir";
 
-								  
-Proc printto log= "mylib&inputSas..Log";
-run;
-
 
                                   * Set options;
                                   options locale=da_DK replace=yes;
