@@ -1,6 +1,6 @@
 ﻿* Encoding: UTF-8.
  */
-                      Version: 14,0
+                      Version: 15,0
                       Encoding: UTF-8 with byte order mark
                       Note: The working directory must contain the data file (sav)
                       */
@@ -285,7 +285,7 @@ select if keep=1.
 * Format user-defined missing values.
 select if char.length(missing) gt 0.
 compute missing=replace(missing, '"', '').
-*compute missing=replace(missing, ',', '').
+compute missing=replace(missing, ',', '').
 *!clean var=missing.
 alter type missing(amin).
 string varMissing(a32767).
