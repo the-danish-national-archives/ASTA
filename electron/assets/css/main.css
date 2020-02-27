@@ -149,6 +149,11 @@ i {
     margin-left: 100px;
 }
 
+.aboutImg {
+    width: 50%;
+    height: 50%;
+    margin-left: 100px;
+}
 .welcomeTextContainer {
     display: flex;
     justify-content: space-evenly;
@@ -346,7 +351,7 @@ a.selected:hover {
     color: #6db1a7;
 }
 
-#logo {
+#menu-logo {
     width: 130px;
     height: 70px;
     margin: 0px 0px 0px 35px;
@@ -419,6 +424,23 @@ a.selected:hover {
 
 .nemesisOutput i {
     word-wrap: break-word;
+}
+
+.nemesisExtraInfo {
+    height: 200px;
+    width: 100%;
+    border: 1px solid #000;    
+    overflow-y: auto;
+    box-sizing: border-box;
+    padding: 0px 10px;
+}
+
+.nemesisLink {
+    font-weight: 100;
+}
+
+.nemesisLinkBold {
+    font-weight: bold;
 }
 
 .box {

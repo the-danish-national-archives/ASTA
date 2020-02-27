@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Xml.Linq;
 
 namespace Rigsarkiv.Styx
@@ -17,19 +16,27 @@ namespace Rigsarkiv.Styx
     {
         const string VariablesPath = "{0}\\Data\\{1}_{2}\\{1}_{2}_VARIABEL.txt";
         const string DescriptionsPath = "{0}\\Data\\{1}_{2}\\{1}_{2}_VARIABELBESKRIVELSE.txt";
+        const string OldTypeStringPattern = "^(CHAR|CHARACTER|CHAR VARYING|CHARACTER VARYING|VARCHAR|NATIONAL CHARACTER|NATIONAL CHAR|NCHAR|NATIONAL CHARACTER VARYING|NATIONAL CHAR VARYING|NCHAR VARYING)[\\w\\W]*$";
+        const string OldTypeIntPattern = "^(INTEGER|INT|SMALLINT)$";
+        const string OldTypeDecimalPattern = "^(NUMERIC|DECIMAL|DEC|FLOAT|REAL|DOUBLE PRECISION)$";
+        const string OldTypeBooleanPattern = "^(BOOLEAN)$";
+        const string OldTypeDatePattern = "^(DATE)$";
+        const string OldTypeTimePattern = "^(TIME|TIME\\[WITH TIME ZONE\\])$";
+        const string OldTypeDateTimePattern = "^(TIMESTAMP|TIMESTAMP\\[WITH TIME ZONE\\])$";
         private StringBuilder _variables = null;
         private StringBuilder _descriptions = null;
         private StringBuilder _codeList = null;
         private StringBuilder _usercodes = null;
 
-        public MetaData(LogManager logManager, string srcPath, string destPath, string destFolder, Report report) : base(logManager, srcPath, destPath, destFolder)
+        public MetaData(LogManager logManager, string srcPath, string destPath, string destFolder, Report report, FlowState state) : base(logManager, srcPath, destPath, destFolder)
         {
             _logSection = "Metadata";
             _report = report;
+            _state = state;
             _variables = new StringBuilder();
             _descriptions = new StringBuilder();
             _codeList = new StringBuilder();
-            _usercodes = new StringBuilder();
+            _usercodes = new StringBuilder();            
         }
 
         /// <summary>
@@ -41,9 +48,10 @@ namespace Rigsarkiv.Styx
             var message = string.Format("Start Converting Metadata {0} -> {1}", _srcFolder, _destFolder);
             _log.Info(message);
             _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = message });
-            if (EnsureTables() && EnsureFiles())
+            result = (_state == FlowState.Running || _state == FlowState.Suspended) ? EnsureTables() : true;
+            if ((_state == FlowState.Running || _state == FlowState.Completed) && result)
             {
-                result = true;
+                result = EnsureFiles();
             }
             message = result ? "End Converting Metadata" : "End Converting Metadata with errors";
             _log.Info(message);
@@ -106,7 +114,7 @@ namespace Rigsarkiv.Styx
                     index++;
                 }
                 _variables.AppendLine(string.Format("{0} {1} {2}", NormalizeName(column.Name), GetColumnType(column), codeList));
-                _descriptions.AppendLine(string.Format("{0} '{1}'", NormalizeName(column.Name), column.Description));
+                _descriptions.AppendLine(string.Format("{0} '{1}'", NormalizeName(column.Name), EnsureNewLines(column.Description)));
             });
             EnsureFile(table, VariablesPath, _variables.ToString());
             EnsureFile(table, DescriptionsPath, _descriptions.ToString());
@@ -115,7 +123,7 @@ namespace Rigsarkiv.Styx
 
         private void EnsureFile(Table table,string filePath,string content)
         {
-            var path = string.Format(filePath, _destFolderPath, _report.ScriptType.ToString().ToLower(), NormalizeName(table.Name));
+            var path = string.Format(filePath, _destFolderPath, _report.ScriptType.ToString().ToLower(), _state == FlowState.Completed ? NormalizeName(table.Name) : NormalizeName(table.Name));
             _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add file: {0}", path) });
             using (var sw = new StreamWriter(path, true, Encoding.UTF8))
             {
@@ -128,23 +136,24 @@ namespace Rigsarkiv.Styx
             var result = true;
             try
             {
-                if (_researchIndexXDocument == null) { throw new Exception("ResearchIndexXDocument property not setet"); }
+                if (_state == FlowState.Running && _researchIndexXDocument == null) { throw new Exception("ResearchIndexXDocument property not setet"); }
                 var path = string.Format(DataPath, _destFolderPath);
                 _report.Tables.ForEach(table =>
                 {
                     _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Build {0} metadata", table.Folder) });
                     var tableNode = _tableIndexXDocument.Element(_tableIndexXNS + "siardDiark").Element(_tableIndexXNS + "tables").Elements().Where(e => e.Element(_tableIndexXNS + "folder").Value == table.SrcFolder).FirstOrDefault();
-                    var researchNode = _researchIndexXDocument.Element(_tableIndexXNS + "researchIndex").Element(_tableIndexXNS + "mainTables").Elements().Where(e => e.Element(_tableIndexXNS + "tableID").Value == table.SrcFolder).FirstOrDefault();
+                    XElement researchNode = _state == FlowState.Running ? _researchIndexXDocument.Element(_tableIndexXNS + "researchIndex").Element(_tableIndexXNS + "mainTables").Elements().Where(e => e.Element(_tableIndexXNS + "tableID").Value == table.SrcFolder).FirstOrDefault() : null;
                     foreach (var columnNode in tableNode.Element(_tableIndexXNS + "columns").Elements())
                     {
                         var column = new Column() { Id = columnNode.Element(_tableIndexXNS + "columnID").Value, Name = columnNode.Element(_tableIndexXNS + "name").Value, Description = columnNode.Element(_tableIndexXNS + "description").Value, Type = columnNode.Element(_tableIndexXNS + "typeOriginal").Value, TypeOriginal = columnNode.Element(_tableIndexXNS + "type").Value };
+                        column.IsKey = tableNode.Element(_tableIndexXNS + "primaryKey").Element(_tableIndexXNS + "column").Value == column.Name;
                         EnsureType(column);
                         if (tableNode.Element(_tableIndexXNS + "foreignKeys").Elements().Any(e => e.Element(_tableIndexXNS + "reference").Element(_tableIndexXNS + "column").Value == column.Name))
                         {
                             var foreignKeyNode = tableNode.Element(_tableIndexXNS + "foreignKeys").Elements().Where(e => e.Element(_tableIndexXNS + "reference").Element(_tableIndexXNS + "column").Value == column.Name).FirstOrDefault();
                             column.CodeList = GetCodeList(foreignKeyNode, table, column);
                         }
-                        column.MissingValues = GetMissingValues(researchNode, table, column);
+                        if (_state == FlowState.Running) { column.MissingValues = GetMissingValues(researchNode, table, column); }
                         table.Columns.Add(column);
                     }
                 });
@@ -160,6 +169,7 @@ namespace Rigsarkiv.Styx
 
         private void EnsureType(Column column)
         {
+            if(_state == FlowState.Suspended) { UpdateOldType(column); }
             if(column.TypeOriginal.StartsWith(VarCharPrefix))
             {
                 var regex = GetRegex(DataTypeIntPattern);
@@ -176,6 +186,31 @@ namespace Rigsarkiv.Styx
                     column.Modified = true;
                     return;
                 }
+            }
+        }
+
+        private void UpdateOldType(Column column)
+        {
+            var result = string.Empty;
+            var regex = GetRegex(OldTypeStringPattern);
+            if (regex.IsMatch(column.TypeOriginal)) { result = string.Format("VARCHAR({0})", StringMaxLength); }
+            regex = GetRegex(OldTypeIntPattern);
+            if (regex.IsMatch(column.TypeOriginal)) { result = "INTEGER"; }
+            regex = GetRegex(OldTypeDecimalPattern);
+            if (regex.IsMatch(column.TypeOriginal)) { result = "DECIMAL"; }
+            regex = GetRegex(OldTypeBooleanPattern);
+            if (regex.IsMatch(column.TypeOriginal)) { result = "VARCHAR(5)"; }
+            regex = GetRegex(OldTypeDatePattern);
+            if (regex.IsMatch(column.TypeOriginal)) { result = "DATE"; }
+            regex = GetRegex(OldTypeTimePattern);
+            if (regex.IsMatch(column.TypeOriginal)) { result = "TIME"; }
+            regex = GetRegex(OldTypeDateTimePattern);
+            if (regex.IsMatch(column.TypeOriginal)) { result = "TIMESTAMP"; }
+            if (!string.IsNullOrEmpty(result))
+            {
+                column.Type = string.Empty;
+                column.TypeOriginal = result;
+                column.Modified = true;
             }
         }
 
@@ -202,19 +237,18 @@ namespace Rigsarkiv.Styx
             {
                 return null;
             }
-            var result = new Table() { Columns = new List<Column>(), RowsCounter = 0 };
-            var tableName = NormalizeName(table.Name);
-            var codelistName = foreignKeyNode.Element(_tableIndexXNS + "name").Value;
-            codelistName = codelistName.Substring(3 + tableName.Length + 1);
-            codelistName = codelistName.Substring(0, codelistName.LastIndexOf("_"));
-            result.Name = codelistName;
-
+            var result = new Table() { Name = NormalizeName(referencedTable), Columns = new List<Column>(), RowsCounter = 0 };
+           
             var tableNode = _tableIndexXDocument.Element(_tableIndexXNS + "siardDiark").Element(_tableIndexXNS + "tables").Elements().Where(e => e.Element(_tableIndexXNS + "name").Value == referencedTable).FirstOrDefault();
             result.SrcFolder = tableNode.Element(_tableIndexXNS + "folder").Value;
             result.Rows = int.Parse(tableNode.Element(_tableIndexXNS + "rows").Value);
-            result.Columns.Add(new Column() { Name = column.Name, Id = C1, Type = column.Type });
-            result.Columns.Add(new Column() { Name = column.Name, Id = C2, Type = column.Type });
-
+            foreach (var columnNode in tableNode.Element(_tableIndexXNS + "columns").Elements())
+            {
+                var codeListColumn = new Column() { Id = columnNode.Element(_tableIndexXNS + "columnID").Value, Name = columnNode.Element(_tableIndexXNS + "name").Value, Description = columnNode.Element(_tableIndexXNS + "description").Value, Type = columnNode.Element(_tableIndexXNS + "typeOriginal").Value, TypeOriginal = columnNode.Element(_tableIndexXNS + "type").Value };
+                codeListColumn.IsKey = tableNode.Element(_tableIndexXNS + "primaryKey").Element(_tableIndexXNS + "column").Value == codeListColumn.Name;
+                if (_state == FlowState.Suspended) { UpdateOldType(codeListColumn); }
+                result.Columns.Add(codeListColumn);
+            }
             return result;
         }
     }

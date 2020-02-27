@@ -10,6 +10,7 @@ Note: The working directory must contain the data file (sas7bdat)
 %let inputSas=%str({2});
 libname mylib "&outDir";
 
+
 * Set options;
 options locale=da_DK replace=yes;
 options nofmterr;
@@ -173,3 +174,6 @@ proc export data=&datafile outfile=&outFile dbms=dlm replace;
 delimiter=';';
 putnames=yes;
 run;
+
+
+%Put NOTICE: SAS IS FINISHED RUNNING THIS SCRIPT;

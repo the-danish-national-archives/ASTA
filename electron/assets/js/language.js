@@ -75,7 +75,12 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                     var id = this.id;
                     if(id !== undefined) {
                         var tagName = $(this).get(0).tagName;
-                        this.innerHTML = getValue(id);
+                        if(tagName === "INPUT" || tagName === "TEXTAREA") {
+                            this.placeholder = getValue(id);
+                        }
+                        else {
+                            this.innerHTML = getValue(id);
+                        }                        
                     }                        
                 });
             }

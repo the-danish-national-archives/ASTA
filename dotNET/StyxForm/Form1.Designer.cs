@@ -51,6 +51,7 @@
             this.label7 = new System.Windows.Forms.Label();
             this.scriptLabel2 = new System.Windows.Forms.Label();
             this.scriptLabel3 = new System.Windows.Forms.Label();
+            this.nextForm = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.aipPathRequired)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sipPathRequired)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sipNameRequired)).BeginInit();
@@ -167,7 +168,7 @@
             // convertButton
             // 
             this.convertButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.convertButton.Location = new System.Drawing.Point(845, 308);
+            this.convertButton.Location = new System.Drawing.Point(844, 308);
             this.convertButton.Name = "convertButton";
             this.convertButton.Size = new System.Drawing.Size(144, 32);
             this.convertButton.TabIndex = 25;
@@ -198,8 +199,9 @@
             // 
             // scriptTypeComboBox
             // 
+            this.scriptTypeComboBox.Enabled = false;
             this.scriptTypeComboBox.FormattingEnabled = true;
-            this.scriptTypeComboBox.Location = new System.Drawing.Point(199, 274);
+            this.scriptTypeComboBox.Location = new System.Drawing.Point(200, 274);
             this.scriptTypeComboBox.Name = "scriptTypeComboBox";
             this.scriptTypeComboBox.Size = new System.Drawing.Size(108, 28);
             this.scriptTypeComboBox.TabIndex = 28;
@@ -207,9 +209,9 @@
             // reportButton
             // 
             this.reportButton.Enabled = false;
-            this.reportButton.Location = new System.Drawing.Point(879, 594);
+            this.reportButton.Location = new System.Drawing.Point(866, 594);
             this.reportButton.Name = "reportButton";
-            this.reportButton.Size = new System.Drawing.Size(110, 32);
+            this.reportButton.Size = new System.Drawing.Size(123, 32);
             this.reportButton.TabIndex = 29;
             this.reportButton.Text = "Vis Rapport";
             this.reportButton.UseVisualStyleBackColor = true;
@@ -248,18 +250,30 @@
             // scriptLabel3
             // 
             this.scriptLabel3.AutoSize = true;
-            this.scriptLabel3.Location = new System.Drawing.Point(26, 656);
+            this.scriptLabel3.Location = new System.Drawing.Point(26, 655);
             this.scriptLabel3.Name = "scriptLabel3";
-            this.scriptLabel3.Size = new System.Drawing.Size(478, 20);
+            this.scriptLabel3.Size = new System.Drawing.Size(376, 20);
             this.scriptLabel3.TabIndex = 33;
-            this.scriptLabel3.Text = "Import scripts har følgende extensions: .sps (SPSS) og .sas (SAS).";
+            this.scriptLabel3.Text = "Import scripts har følgende extensions: .sps (SPSS).";
             this.scriptLabel3.Visible = false;
+            // 
+            // nextForm
+            // 
+            this.nextForm.Enabled = false;
+            this.nextForm.Location = new System.Drawing.Point(866, 643);
+            this.nextForm.Name = "nextForm";
+            this.nextForm.Size = new System.Drawing.Size(123, 32);
+            this.nextForm.TabIndex = 34;
+            this.nextForm.Text = "1007 udtræk";
+            this.nextForm.UseVisualStyleBackColor = true;
+            this.nextForm.Click += new System.EventHandler(this.nextForm_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1026, 728);
+            this.Controls.Add(this.nextForm);
             this.Controls.Add(this.scriptLabel3);
             this.Controls.Add(this.scriptLabel2);
             this.Controls.Add(this.label7);
@@ -279,7 +293,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.outputRichTextBox);
-            this.MinimumSize = new System.Drawing.Size(739, 585);
+            this.MinimumSize = new System.Drawing.Size(736, 576);
             this.Name = "Form1";
             this.Text = "ASTA";
             this.Shown += new System.EventHandler(this.Form1_Shown);
@@ -315,6 +329,7 @@
         private System.Windows.Forms.Label scriptLabel1;
         private System.Windows.Forms.Label scriptLabel2;
         private System.Windows.Forms.Label scriptLabel3;
+        private System.Windows.Forms.Button nextForm;
     }
 }
 

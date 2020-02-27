@@ -8,6 +8,7 @@ using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Web.Script.Serialization;
+using System.IO;
 
 namespace Rigsarkiv.AthenaForm
 {
@@ -42,8 +43,9 @@ namespace Rigsarkiv.AthenaForm
             _destPath = destPath;
             _destFolder = destFolder;
             _report = report;
-            _logPath = string.Format("{0}\\{1}_ASTA_konverteringslog.html", _destPath, _destFolder);
-            _reportPath = string.Format("{0}\\{1}_ASTA_konverteringsrapport.html", _destPath, _destFolder);
+            var logPath = string.Format("{0}\\ASTA_konverteringslog_{1}", _destPath, _destFolder); ;
+            _logPath = string.Format("{0}\\{1}_ASTA_konverteringslog.html", logPath, _destFolder);
+            _reportPath = string.Format("{0}\\{1}_ASTA_konverteringsrapport.html", logPath, _destFolder);
             _outputRichTextBox = outputRichTextBox;
             _outputRichTextBox.Location = new Point(8,480);
             _outputRichTextBox.Size = new Size(610,139);

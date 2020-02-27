@@ -12,6 +12,7 @@ namespace Rigsarkiv.Styx.Entities
         public string Name { get; set; }
         public string Type { get; set; }
         public string TypeOriginal { get; set; }
+        public bool IsKey { get; set; }
         public bool Modified { get; set; }
         public string Highest { get; set; }
         public string Lowest { get; set; }

@@ -1,6 +1,7 @@
 ﻿using Rigsarkiv.Asta.Logging;
 using Rigsarkiv.Athena.Entities;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
@@ -170,7 +171,7 @@ namespace Rigsarkiv.Athena
                 var path = string.Format(TablePath, _destFolderPath, string.Format("{0}\\{0}.xml", table.Folder));
                 _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add file: {0} ", path) });
                 StartWriter(table.Folder);
-                path = string.Format("{0}\\Data\\{1}\\{1}.csv", _srcPath.Substring(0, _srcPath.LastIndexOf(".")), table.SrcFolder);
+                path = string.Format("{0}\\Data\\{1}\\{1}.csv", _srcPath, table.SrcFolder);
                 _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Loop file: {0} ", path) });
                 using (var reader = new StreamReader(path))
                 {                    
@@ -184,7 +185,7 @@ namespace Rigsarkiv.Athena
                     _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("{0} rows added", counter - 1) });
                 }                
                 EndWriter();
-                UpdateColumns(table, tableNode);
+                UpdateColumns(table.Columns, tableNode);
                 _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Table {0} has {1} total Differences", table.Folder, table.Columns.Sum(c => c.Differences)) });
             }
             catch (Exception ex)
@@ -217,44 +218,57 @@ namespace Rigsarkiv.Athena
             var rowError = false;
             var row = line.Split(Separator).ToList();
             if(line.IndexOf("\"") > -1) { row = ParseRow(line); }
-            if (table.Columns.Count == (row.Count + 1)) { row.Add(""); }
+            if (!table.HasKey) { row.Add(""); }
+            if (table.Columns.Count == (row.Count + 1)) { row.Add(""); }            
             for (int i = 0; i < table.Columns.Count; i++)
             {                
                 var column = table.Columns[i];
                 var value = row[i];
-                string convertedValue = null;
-                if (string.IsNullOrEmpty(value.Trim()) && column.Nullable)
+                var isSerialNumber = !table.HasKey && i == (table.Columns.Count - 1);
+                string convertedValue = AddColumn(tableNode, researchIndexNode, column, value, index, isSerialNumber);
+                if(column.Errors < 0) { rowError = true; }
+                if (isSerialNumber)
                 {
-                    convertedValue = string.Empty;
+                    convertedValue = (index - 1).ToString();
+                    column.Differences++;
                 }
-                else
-                {
-                    var hasError = false;
-                    var isDifferent = false;
-                    EnsureSpecialNumeric(tableNode, researchIndexNode, column, value);
-                    convertedValue = GetConvertedValue(column, value, out hasError,out isDifferent);
-                    if (isDifferent) { column.Differences++; }
-                    if (hasError)
-                    {
-                        rowError = true;
-                        column.Errors++;
-                        if (MaxErrorsRows > column.ErrorsRows.Count)
-                        {
-                            column.ErrorsRows.Add(index - 2);
-                            _logManager.Add(new LogEntity() { Level = LogLevel.Warning, Section = _logSection, Message = string.Format("Convert column {0} of type {1} with value {2} has error", column.Name, column.Type, value) });
-                        }
-                    }
-                }
-                AddColumn(column, convertedValue);
+                AddValue(column, convertedValue);
             }
             if (rowError) { table.Errors++; }
             table.RowsCounter++;
             _writer.WriteEndElement();
         }
 
-        private void AddColumn(Column column, string convertedValue)
+        private string AddColumn(XElement tableNode, XElement researchIndexNode,Column column,string value, int index, bool isSerialNumber)
         {
-            if(string.IsNullOrEmpty(convertedValue) && !column.Type.StartsWith(VarCharPrefix.Substring(0,7)))
+            string result = null;
+            if (string.IsNullOrEmpty(value.Trim()) && column.Nullable)
+            {
+                result = string.Empty;
+            }
+            else
+            {
+                var hasError = false;
+                var isDifferent = false;
+                EnsureSpecialNumeric(tableNode, researchIndexNode, column, value);
+                result = GetConvertedValue(column, value, out hasError, out isDifferent);
+                if (isDifferent) { column.Differences++; }
+                if (hasError && !isSerialNumber)
+                {
+                    column.Errors++;
+                    if (MaxErrorsRows > column.ErrorsRows.Count)
+                    {
+                        column.ErrorsRows.Add(index - 2);
+                        _logManager.Add(new LogEntity() { Level = LogLevel.Warning, Section = _logSection, Message = string.Format("Convert column {0} of type {1} with value {2} has error", column.Name, column.Type, value) });
+                    }
+                }
+            }
+            return result;
+        }
+
+        private void AddValue(Column column, string convertedValue)
+        {
+            if(string.IsNullOrEmpty(convertedValue))
             {
                 _writer.WriteStartElement(column.Id);
                 _writer.WriteAttributeString("xsi","nil", null, "true");
@@ -271,15 +285,35 @@ namespace Rigsarkiv.Athena
             
         }
 
-        private void UpdateColumns(Table table, XElement tableNode)
+        private void UpdateColumns(List<Column> columns, XElement tableNode)
         {
-            table.Columns.Where(c => c.Type.StartsWith(VarCharPrefix.Substring(0, 7))).ToList().ForEach(column => {
+            columns.Where(c => c.Type.StartsWith(VarCharPrefix.Substring(0, 7))).ToList().ForEach(column => {
                 column.Type = string.Format(VarCharPrefix, column.MaxLength);
                 column.Modified = true;
                 _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Update column {0} type: {1}", column.Name, column.Type) });
 
                 var columnNode = tableNode.Element(_tableIndexXNS + "columns").Elements().Where(e => e.Element(_tableIndexXNS + "columnID").Value == column.Id).FirstOrDefault();
                 columnNode.Element(_tableIndexXNS + "type").Value = column.Type;
+
+                var foreignKeyNode = tableNode.Element(_tableIndexXNS + "foreignKeys").Elements().Where(e => e.Element(_tableIndexXNS + "reference").Element(_tableIndexXNS + "column").Value == column.Name).FirstOrDefault();
+                if (foreignKeyNode != null)
+                {
+                    var codeListTableName = foreignKeyNode.Element(_tableIndexXNS + "referencedTable").Value;
+                    var codeListNode = tableNode.Parent.Elements().Where(e => e.Element(_tableIndexXNS + "name").Value == codeListTableName).FirstOrDefault();
+                    columnNode = codeListNode.Element(_tableIndexXNS + "columns").Elements().Where(e => e.Element(_tableIndexXNS + "columnID").Value == C1).FirstOrDefault();
+                    columnNode.Element(_tableIndexXNS + "type").Value = column.Type;
+                    _report.Tables.ForEach(table => {
+                        if (table.CodeList != null)
+                        {
+                            var refTable = table.CodeList.Where(subTable => subTable.Name == codeListTableName).FirstOrDefault();
+                            if (refTable != null)
+                            {
+                                refTable.Columns[0].Type = column.Type;
+                                refTable.Columns[0].Modified = true;
+                            }
+                        }
+                    });
+                }
                 _updateDocuments = true;
             });
         }

@@ -25,19 +25,14 @@ function (n) {
             pathDirTxt: null,
             selectedPath: null,
             validateBtn: null,
-            outputPrefix: null,
+            output: null,
+            extraInfo: null,
             logCallback: null,
             metadataCallback: null,
-            logStartSpn: null,
-            logEndNoErrorSpn: null,
-            logEndWithErrorSpn:null,
-            logEndWithErrorStopSpn:null,
             deliveryPackagePath: null,
             testSpn: null,
-            testText: null,
             confirmationSpn: null,
-            convertDisabledText: null,
-            outputText: {},
+            extraInfoTitleSpn: null,
             metadataFileName: "{0}.txt",
             dataFileName: "{0}.csv",
             docCollectionFolderName: "docCollection1",
@@ -49,7 +44,10 @@ function (n) {
             errors: 0,
             errorStop: false,
             convertStop: false,
-            documents: []            
+            documents: [],            
+            linkId: "nemesis-output-link-structure-{0}",
+            linkElement: "<a id=\"{0}\" href=\"#{1}\" class=\"nemesisLink\">{1}</a>",
+            links: 0            
         }
 
         //reset status & input fields
@@ -59,10 +57,10 @@ function (n) {
             settings.errorStop = false;
             settings.convertStop = false;
             settings.documents = [];
-            $("span[id^='" + settings.outputPrefix + "']").hide();
-             $("span[id^='" + settings.outputPrefix + "']").each(function() {
-                $(this).html("");
-            });
+            settings.links = 0;
+            settings.extraInfoTitleSpn.innerHTML = "";
+            settings.output.html("");
+            settings.extraInfo.html("");
         }
 
         // get selected folder name 
@@ -71,11 +69,33 @@ function (n) {
             return folders[folders.length - 1];
         }
 
+         // Render element's text
+         var RenderElement = function(text) {
+            var linkId = null;
+                var element = document.createElement('span');
+                $(element).html(text);
+                if(element.firstChild != null && element.firstChild.firstChild != null) {
+                    linkId = settings.linkId.format(settings.links);
+                    settings.links += 1;
+                    element.firstChild.insertAdjacentHTML("afterbegin", settings.linkElement.format(linkId,element.firstChild.firstChild.id));
+                }
+                settings.output.append($(element).html());
+                if(linkId != null) {
+                    document.getElementById(linkId).addEventListener('click', (event) => {
+                        $("a[id^='nemesis-output-link-']").removeClass("nemesisLinkBold");
+                        var contentId = event.srcElement.href.split("#")[1];
+                        settings.extraInfoTitleSpn.innerHTML = Rigsarkiv.Language.callback().getValue("nemesis-extraInfo-SPAN").format(contentId);
+                        var content =  document.getElementById(contentId);
+                        $(event.srcElement).toggleClass("nemesisLinkBold");
+                        settings.extraInfo.html($(content).html());
+                    })
+                }      
+        }
+
         // View Element by id & return texts
         var ViewElement = function(id,formatText1,formatText2,formatText3,formatText4, formatText5, formatText6) {
-            var result = Rigsarkiv.Language.callback().getValue(id); 
-            //TODO : Remove
-            if(result == null) { result = settings.outputText[id]; }
+            var result = Rigsarkiv.Language.callback().getValue(id);
+            if(result == null) { return null; } 
             if(formatText1 != null) { 
                 if(formatText2 != null) {
                     if(formatText3 != null) {
@@ -104,20 +124,15 @@ function (n) {
                     result = result.format(formatText1);
                 } 
             }
-
-            var element = $("span#{0}".format(id));            
             if(result != null) {
-                element.html(element.html() + result);
+                RenderElement(result);
             }
-            element.show();
-
             return result;
         }
 
         //handle error logging + HTML output
-        var LogError = function(postfixId) {
+        var LogError = function(id) {
             if(settings.errors < errorsMax) {
-                var id = "{0}{1}".format(settings.outputPrefix,postfixId);
                 var text = null;
                 if (arguments.length > 1) {                
                     if(arguments.length === 2) { text = ViewElement(id,arguments[1],null,null); }
@@ -127,15 +142,14 @@ function (n) {
                     if(arguments.length === 6) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5]); }
                     if(arguments.length === 7) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5],arguments[6]); }
                 }
-                settings.logCallback().error(settings.logType,GetFolderName(),text);
+                if(text != null) { settings.logCallback().error(settings.logType,GetFolderName(),text); }
             }
             settings.errors += 1;
             return false;
         }
 
         //Handle warn logging
-        var LogWarn = function(postfixId) {
-            var id = "{0}{1}".format(settings.outputPrefix,postfixId);
+        var LogWarn = function(id) {
             var text = null;
             if (arguments.length > 1) {                
                 if(arguments.length === 2) { text = ViewElement(id,arguments[1],null,null); }
@@ -145,14 +159,13 @@ function (n) {
                 if(arguments.length === 6) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5]); }
                 if(arguments.length === 7) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5],arguments[6]); }
             }
-            settings.logCallback().warn(settings.logType,GetFolderName(),text);
+            if(text != null) { settings.logCallback().warn(settings.logType,GetFolderName(),text); }
             return true;
         }
         
         //Handle info logging
-        var LogInfo = function(postfixId) {
-            var id = "{0}{1}".format(settings.outputPrefix,postfixId);
-            var text = null;
+        var LogInfo = function(id) {
+           var text = null;
             if (arguments.length > 1) {                
                 if(arguments.length === 2) { text = ViewElement(id,arguments[1],null,null); }
                 if(arguments.length === 3) { text = ViewElement(id,arguments[1],arguments[2],null); }
@@ -161,7 +174,7 @@ function (n) {
                 if(arguments.length === 6) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5]); }
                 if(arguments.length === 7) { text = ViewElement(id,arguments[1],arguments[2],arguments[3],arguments[4],arguments[5],arguments[6]); }
             }
-            settings.logCallback().info(settings.logType,GetFolderName(),text);
+            if(text != null) { settings.logCallback().info(settings.logType,GetFolderName(),text); }
             return true;
         }
 
@@ -184,21 +197,21 @@ function (n) {
                     }
                     documentIds.forEach(id => {
                         if(!settings.documents.includes(id)) {
-                            result = LogError("-CheckFolderIndices-ContextDocumentation-FileRequired-Error",fileName,id); 
+                            result = LogError("nemesis-processing-CheckFolderIndices-ContextDocumentation-FileRequired-Error",fileName,id); 
                         }
                     });
                     settings.documents.forEach(id => {
                         if(!documentIds.includes(id)) {
-                            result = LogError("-CheckFolderContextDocumentation-ContextDocumentation-FileRequired-Error",fileName,id); 
+                            result = LogError("nemesis-processing-CheckFolderContextDocumentation-ContextDocumentation-FileRequired-Error",fileName,id); 
                         }
                     });
                 }
                 else {
-                    result = LogError("-CheckFolderIndices-FileEmpty-Error",fileName);
+                    result = LogError("nemesis-processing-CheckFolderIndices-FileEmpty-Error",fileName);
                 }
             }
             else {
-                result = LogError("-CheckFolderIndices-FileEmpty-Error",fileName);
+                result = LogError("nemesis-processing-CheckFolderIndices-FileEmpty-Error",fileName);
             }
             return result;
         }
@@ -211,13 +224,13 @@ function (n) {
             var subFiles = fs.readdirSync(destPath);
             settings.defaultIndicesFiles.forEach(file => {
                 if(!subFiles.includes(file)) { 
-                    result = LogError("-CheckFolderIndices-Error",file);
+                    result = LogError("nemesis-processing-CheckFolderIndices-Error",file);
                 }
             });
             if(result && subFiles.length > 2) {
                 subFiles.forEach(file => {
                     if(result && file !== settings.defaultIndicesFiles[0] && file !== settings.defaultIndicesFiles[1]) {
-                        result = LogError("-CheckFolderIndicesCount-Error",file);
+                        result = LogError("nemesis-processing-CheckFolderIndicesCount-Error",file);
                     }
                 });
             }
@@ -232,15 +245,15 @@ function (n) {
                 if(file !== settings.dataFileName.format(tableFolderName) && file !== settings.metadataFileName.format(tableFolderName)) {
                     var fileExt = file.substring(file.indexOf("."));
                     if(fileExt !== settings.dataFileName.format("") && fileExt !== settings.metadataFileName.format("")) {
-                        result = LogError("-CheckFolderData-TableFolderFileExt-Error",tableFolderName,file);
+                        result = LogError("nemesis-processing-CheckFolderData-TableFolderFileExt-Error",tableFolderName,file);
                     }
                     else {
                         if(dataFilePattern.test(file) || metadataFilePattern.test(file)) {
-                            result = LogError("-CheckFolderData-TableFolderFileOrder-Error",tableFolderName,file);
+                            result = LogError("nemesis-processing-CheckFolderData-TableFolderFileOrder-Error",tableFolderName,file);
                             settings.errorStop = true;
                         }
                         else {
-                            result = LogError("-CheckFolderData-TableFolderFile-Error",tableFolderName,file);
+                            result = LogError("nemesis-processing-CheckFolderData-TableFolderFile-Error",tableFolderName,file);
                         }
                     }
                 }
@@ -254,15 +267,15 @@ function (n) {
             if(subFiles != null && subFiles.length > 0) {
                 var fileName = settings.dataFileName.format(tableFolderName);
                 if(!subFiles.includes(fileName)) {
-                    result = LogError("-CheckFolderData-TableFolderDataFile-Error",tableFolderName);
+                    result = LogError("nemesis-processing-CheckFolderData-TableFolderDataFile-Error",tableFolderName);
                 }
                 fileName = settings.metadataFileName.format(tableFolderName);
                 if(!subFiles.includes(fileName)) {
-                    result = LogError("-CheckFolderData-TableFolderMetadataFile-Error",tableFolderName);
+                    result = LogError("nemesis-processing-CheckFolderData-TableFolderMetadataFile-Error",tableFolderName);
                 }
             }
             else {
-                result = LogError("-CheckFolderData-TableFolderEmpty-Error",tableFolderName);
+                result = LogError("nemesis-processing-CheckFolderData-TableFolderEmpty-Error",tableFolderName);
             }
             if(!result) { settings.errorStop = true; }
             return result;
@@ -277,7 +290,7 @@ function (n) {
             });
             tables.sort(function(a, b){return a-b});
             if(tables[0] !== 1) {
-                result = LogError("-CheckFolderData-TableFolders1-Error",null);
+                result = LogError("nemesis-processing-CheckFolderData-TableFolders1-Error",null);
             }
             var i;
             var orderResult = true;
@@ -288,7 +301,7 @@ function (n) {
                 }
             }
             if(!orderResult) {
-                result = LogError("-CheckFolderData-TableFoldersOrder-Error",null);
+                result = LogError("nemesis-processing-CheckFolderData-TableFoldersOrder-Error",null);
             }
             return result;
         }
@@ -302,7 +315,7 @@ function (n) {
                 var validTablesName = true;
                 subFolders.filter(junk.not).forEach(folder => {
                     if(!dataTablePattern.test(folder)) {
-                        result = LogError("-CheckFolderData-TableFolders-Error",folder);
+                        result = LogError("nemesis-processing-CheckFolderData-TableFolders-Error",folder);
                         validTablesName = false;
                     }
                     else 
@@ -314,7 +327,7 @@ function (n) {
                         }
                         else {
                             if(subFiles.filter(junk.not).length > 2) { 
-                                result = LogError("-CheckFolderData-TableFolderFilesCount-Error",folder);
+                                result = LogError("nemesis-processing-CheckFolderData-TableFolderFilesCount-Error",folder);
                                 settings.convertStop = true; 
                             }
                         }
@@ -325,7 +338,7 @@ function (n) {
             }
             else {
                 settings.errorStop = true;
-                result = LogError("-CheckFolderDataEmpty-Error",null);
+                result = LogError("nemesis-processing-CheckFolderDataEmpty-Error",null);
             }
             return result;
         }
@@ -339,7 +352,7 @@ function (n) {
             });
             files.sort(function(a, b){return a-b});
             if(files[0] !== 1) {
-                result = LogError("-CheckFolderContextDocumentation-DocCollectionDocumentFileName1-Error",documentFolderName);
+                result = LogError("nemesis-processing-CheckFolderContextDocumentation-DocCollectionDocumentFileName1-Error",documentFolderName);
             }
             var i;
             var orderResult = true;
@@ -350,7 +363,7 @@ function (n) {
                 }
             }
             if(!orderResult) {
-                result = LogError("-CheckFolderContextDocumentation-DocCollectionDocumentFilesOrder-Error",documentFolderName);
+                result = LogError("nemesis-processing-CheckFolderContextDocumentation-DocCollectionDocumentFilesOrder-Error",documentFolderName);
             }
             return result;
         }
@@ -364,13 +377,13 @@ function (n) {
                 subFiles.forEach(file => {                    
                     var fileName = file.substring(0,file.indexOf("."))
                     if(!docFolderPattern.test(fileName)) {
-                        result = LogError("-CheckFolderContextDocumentation-DocCollectionDocumentFileName-Error",documentFolderName,file);
+                        result = LogError("nemesis-processing-CheckFolderContextDocumentation-DocCollectionDocumentFileName-Error",documentFolderName,file);
                         validFilesName = false;
                     }
                     else {
                         var fileExt = file.substring(file.indexOf("."));
                         if(!settings.docFilesExt.includes(fileExt)) {
-                            result = LogError("-CheckFolderContextDocumentation-DocCollectionDocumentFileExt-Error",documentFolderName,fileExt);
+                            result = LogError("nemesis-processing-CheckFolderContextDocumentation-DocCollectionDocumentFileExt-Error",documentFolderName,fileExt);
                         } 
                         else {
                             if(!filesExt.includes(fileExt)) { filesExt.push(fileExt); }
@@ -378,12 +391,12 @@ function (n) {
                     }                    
                 });
                 if(filesExt.length > 1) {
-                    result = LogError("-CheckFolderContextDocumentation-DocCollectionDocumentFilesExt-Error",documentFolderName);
+                    result = LogError("nemesis-processing-CheckFolderContextDocumentation-DocCollectionDocumentFilesExt-Error",documentFolderName);
                 }
                 if(validFilesName && !ValidateDocumentFilesOrder(documentFolderName,subFiles)) { result = false; }
             }
             else {
-                result = LogError("-CheckFolderContextDocumentation-DocCollectionDocumentFolderEmpty-Error",documentFolderName);
+                result = LogError("nemesis-processing-CheckFolderContextDocumentation-DocCollectionDocumentFolderEmpty-Error",documentFolderName);
             }
             return result;   
         }
@@ -397,7 +410,7 @@ function (n) {
             });
             folders.sort(function(a, b){return a-b});
             if(folders[0] !== 1) {
-                result = LogError("-CheckFolderContextDocumentation-DocCollectionDocumentFolder1-Error",null);
+                result = LogError("nemesis-processing-CheckFolderContextDocumentation-DocCollectionDocumentFolder1-Error",null);
             }
             var i;
             var orderResult = true;
@@ -408,7 +421,7 @@ function (n) {
                 }
             }
             if(!orderResult) {
-                result = LogError("-CheckFolderContextDocumentation-DocCollectionDocumentFolderOrder-Error",null);
+                result = LogError("nemesis-processing-CheckFolderContextDocumentation-DocCollectionDocumentFolderOrder-Error",null);
             }
             return result;
         }
@@ -423,7 +436,7 @@ function (n) {
                 subFolders.filter(junk.not).forEach(folder => {
                     settings.documents.push(folder);
                     if(!docFolderPattern.test(folder)) {
-                        result = LogError("-CheckFolderContextDocumentation-DocCollectionDocumentFolder-Error",folder);
+                        result = LogError("nemesis-processing-CheckFolderContextDocumentation-DocCollectionDocumentFolder-Error",folder);
                         validFoldersName = false;
                     }
                     else { 
@@ -437,7 +450,7 @@ function (n) {
                 if(validFoldersName && !ValidateDocumentFoldersOrder(subFolders.filter(junk.not))) { result = false; }
             }
             else {
-                result = LogError("-CheckFolderContextDocumentation-DocCollectionEmpty-Error",null);
+                result = LogError("nemesis-processing-CheckFolderContextDocumentation-DocCollectionEmpty-Error",null);
             }
             return result;
         }
@@ -449,7 +462,7 @@ function (n) {
             var subFolders = fs.readdirSync(destPath);
             if(subFolders != null && subFolders.length > 0) {
                 if(!subFolders.includes(settings.docCollectionFolderName)) {
-                    result = LogError("-CheckFolderContextDocumentation-DocCollections-Error",null);
+                    result = LogError("nemesis-processing-CheckFolderContextDocumentation-DocCollections-Error",null);
                 }
                 else 
                 {
@@ -458,13 +471,13 @@ function (n) {
                     }
                     subFolders.filter(junk.not).forEach(folder => {
                         if(folder != settings.docCollectionFolderName) {
-                            result = LogError("-CheckFolderContextDocumentation-DocCollectionsCount-Error",folder);
+                            result = LogError("nemesis-processing-CheckFolderContextDocumentation-DocCollectionsCount-Error",folder);
                         }
                     });
                 }
             }
             else {
-                result = LogError("-CheckFolderContextDocumentationEmpty-Error",null);
+                result = LogError("nemesis-processing-CheckFolderContextDocumentationEmpty-Error",null);
             }
             return result;
         }
@@ -476,7 +489,7 @@ function (n) {
             var subFolders = fs.readdirSync(settings.deliveryPackagePath);
             settings.defaultSubFolders.forEach(folder => {
                 if(!subFolders.includes(folder)) {
-                   result = LogError("-CheckFolders-Error",folder);
+                   result = LogError("nemesis-processing-CheckFolders-Error",folder);
                    checkfolders = false; 
                    settings.convertStop = true;
                    if(folder === settings.defaultSubFolders[1]) { settings.errorStop = true; }
@@ -496,7 +509,7 @@ function (n) {
             if(checkfolders && subFolders.length > 3) {
                 subFolders.filter(junk.not).forEach(folder => {
                     if(checkfolders && folder !== settings.defaultSubFolders[0] && folder !== settings.defaultSubFolders[1] && folder !== settings.defaultSubFolders[2]) {
-                        result = LogError("-CheckFoldersCount-Error",folder);
+                        result = LogError("nemesis-processing-CheckFoldersCount-Error",folder);
                     }
                 });
             }
@@ -508,11 +521,11 @@ function (n) {
             var result = true;
             var folderName = GetFolderName();
             if(!deliveryPackagePattern.test(folderName)) {
-                result = LogError("-CheckId-Error",null);
+                result = LogError("nemesis-processing-CheckId-Error",null);
             }
             else {
                 if(folderName === settings.defaultFolder) {
-                    LogWarn("-CheckId-Warning",null)
+                    LogWarn("nemesis-processing-CheckId-Warning",null)
                 }          
             }
             return result;    
@@ -526,20 +539,20 @@ function (n) {
                 ValidateName();
                 ValidateStructure();
                  if(settings.errors === 0) {
-                    LogInfo("-CheckFolders-Ok",null);
-                    settings.logCallback().section(settings.logType,folderName,settings.logEndNoErrorSpn.innerHTML);
+                    LogInfo("nemesis-processing-CheckFolders-Ok",null);
+                    settings.logCallback().section(settings.logType,folderName,Rigsarkiv.Language.callback().getValue("nemesis-output-structure-logEndNoError"));
                 } else {
-                    LogInfo(!settings.errorStop ? "-CheckFolders-Warning" : "-CheckFolders-ErrorStop",null);
-                    settings.logCallback().section(settings.logType,folderName,!settings.errorStop ? settings.logEndWithErrorSpn.innerHTML : settings.logEndWithErrorStopSpn.innerHTML);                    
+                    LogInfo(!settings.errorStop ? "nemesis-processing-CheckFolders-Warning" : "nemesis-processing-CheckFolders-ErrorStop",null);
+                    settings.logCallback().section(settings.logType,folderName,!settings.errorStop ? Rigsarkiv.Language.callback().getValue("nemesis-output-structure-logEndWithError") : Rigsarkiv.Language.callback().getValue("nemesis-output-structure-logEndWithErrorStop"));                    
                 }
                 if(!settings.errorStop) { 
-                    return settings.metadataCallback().validate(settings.deliveryPackagePath,settings.outputText,settings.errors,settings.convertStop); 
+                    return settings.metadataCallback().validate(settings.deliveryPackagePath,settings.errors,settings.convertStop); 
                 } 
                 else {
-                    settings.confirmationSpn.innerHTML = settings.convertDisabledText;
+                    settings.confirmationSpn.innerHTML = Rigsarkiv.Language.callback().getValue("nemesis-output-ConvertDisabled");
                     settings.selectDirBtn.disabled = false;
                     settings.validateBtn.disabled = false;
-                    return settings.logCallback().commit(settings.deliveryPackagePath);
+                    return settings.logCallback().commit(settings.deliveryPackagePath,settings.confirmationSpn.innerHTML);
                 }               
             }
             catch(err) 
@@ -567,8 +580,9 @@ function (n) {
                 settings.selectDirBtn.disabled = true;
                 settings.validateBtn.disabled = true;
                 var folderName = GetFolderName();
-                settings.testSpn.innerText = settings.testText.format(folderName);
-                settings.logCallback().section(settings.logType,folderName,settings.logStartSpn.innerHTML);
+                settings.testSpn.innerText = Rigsarkiv.Language.callback().getValue("nemesis-test-id").format(folderName);
+                LogInfo("nemesis-processing-CheckFolders-Start",null);
+                settings.logCallback().section(settings.logType,folderName,Rigsarkiv.Language.callback().getValue("nemesis-output-structure-logStart"));
                 setTimeout(Validate, 1000);                          
             })
             settings.selectDirBtn.addEventListener('click', (event) => {
@@ -582,7 +596,7 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Nemesis.Structure = {        
-            initialize: function (logCallback,metadataCallback,outputErrorId,selectDirectoryId,pathDirectoryId,validateId,logStartId,logEndNoErrorId,logEndWithErrorId,logEndWithErrorStopId,outputPrefix,testId,confirmationId,convertDisabledId,convertId) {            
+            initialize: function (logCallback,metadataCallback,outputErrorId,selectDirectoryId,pathDirectoryId,validateId,outputId,testId,confirmationId,convertId,extraInfoId,extraInfoTitleId) {            
                 settings.logCallback = logCallback;
                 settings.metadataCallback = metadataCallback;
                 settings.outputErrorSpn = document.getElementById(outputErrorId);
@@ -590,21 +604,12 @@ function (n) {
                 settings.selectDirBtn = document.getElementById(selectDirectoryId);
                 settings.pathDirTxt = document.getElementById(pathDirectoryId);
                 settings.validateBtn = document.getElementById(validateId);
-                settings.logStartSpn = document.getElementById(logStartId);
-                settings.logEndNoErrorSpn = document.getElementById(logEndNoErrorId);  
-                settings.logEndWithErrorSpn = document.getElementById(logEndWithErrorId);
-                settings.logEndWithErrorStopSpn = document.getElementById(logEndWithErrorStopId);
-                settings.outputPrefix = outputPrefix;
+                settings.output = $("#" + outputId);
                 settings.testSpn = document.getElementById(testId);
-                settings.testText = settings.testSpn.innerText;
-                settings.testSpn.innerText = settings.testText.format("");
                 settings.confirmationSpn = document.getElementById(confirmationId);
-                settings.convertDisabledText = document.getElementById(convertDisabledId).innerHTML;
-                settings.ConvertBtn = document.getElementById(convertId);
-                $("span[id^='" + settings.outputPrefix + "']").each(function() {
-                    settings.outputText[this.id] = $(this).html();
-                    $(this).html("");
-                });
+                settings.extraInfoTitleSpn = document.getElementById(extraInfoTitleId);
+                settings.ConvertBtn = document.getElementById(convertId); 
+                settings.extraInfo = $("#" + extraInfoId);               
                 AddEvents();
             },
             callback: function () {
@@ -617,8 +622,8 @@ function (n) {
                         settings.selectDirBtn.disabled = true;
                         settings.validateBtn.disabled = true;
                         var folderName = GetFolderName();
-                        settings.testSpn.innerText = settings.testText.format(folderName);
-                        settings.logCallback().section(settings.logType,folderName,settings.logStartSpn.innerHTML);
+                        settings.testSpn.innerText = Rigsarkiv.Language.callback().getValue("nemesis-test-id").format(folderName);
+                        settings.logCallback().section(settings.logType,folderName,Rigsarkiv.Language.callback().getValue("nemesis-output-structure-logStart"));
                         return Validate();
                     },
                     update: function(path)

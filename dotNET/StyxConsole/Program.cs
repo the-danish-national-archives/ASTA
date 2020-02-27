@@ -3,7 +3,9 @@ using Rigsarkiv.Asta.Logging;
 using Rigsarkiv.Styx;
 using Rigsarkiv.Styx.Entities;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 
 namespace Rigsarkiv.StyxConsole
 {
@@ -26,25 +28,29 @@ namespace Rigsarkiv.StyxConsole
                 var scriptTypeText = args[3];
                 var scriptType = (ScriptType)Enum.Parse(typeof(ScriptType), scriptTypeText, true);
                 _stopWatch.Start();
-                _converter = new Structure(_logManager, srcPath, destPath, destFolder, scriptType);
+                var report = new Report() { Tables = new List<Table>(), ContextDocuments = new Dictionary<string, string>(), ScriptType = scriptType, TablesCounter = 0, CodeListsCounter = 0 };
+                _converter = new Structure(_logManager, srcPath, destPath, destFolder, report,FlowState.Created);
                 if (_converter.Run())
                 {
                     var tableIndexXDocument = _converter.TableIndexXDocument;
                     var researchIndexXDocument = _converter.ResearchIndexXDocument;
-                    _converter = new MetaData(_logManager, srcPath, destPath, destFolder, _converter.Report) { TableIndexXDocument = tableIndexXDocument, ResearchIndexXDocument = researchIndexXDocument };
+                    _converter = new MetaData(_logManager, srcPath, destPath, destFolder, _converter.Report, _converter.State) { TableIndexXDocument = tableIndexXDocument, ResearchIndexXDocument = researchIndexXDocument };
                     if (_converter.Run())
                     {
-                        _converter = new Data(_logManager, srcPath, destPath, destFolder, _converter.Report);
+                        _converter = new Data(_logManager, srcPath, destPath, destFolder, _converter.Report, _converter.State);
                         if (_converter.Run())
                         {
-                            var path = string.Format("{0}\\{1}_ASTA_konverteringslog.html", destPath, destFolder);
+                            var destFolderPath = string.Format("{0}\\ASTA_konverteringslog_{1}", destPath, destFolder);
+                            if (Directory.Exists(destFolderPath)) { Directory.Delete(destFolderPath, true); }
+                            Directory.CreateDirectory(destFolderPath);
+                            var path = string.Format("{0}\\{1}_ASTA_konverteringslog.html", destFolderPath, destFolder);
                             if (_logManager.Flush(path, destFolder, _converter.GetLogTemplate()))
                             {
                                 Console.ForegroundColor = ConsoleColor.Green;
                                 Console.WriteLine("Log file at: {0}", path);
                                 Console.ResetColor();
                             }
-                            path = string.Format("{0}\\{1}_ASTA_konverteringsrapport.html", destPath, destFolder);
+                            path = string.Format("{0}\\{1}_ASTA_konverteringsrapport.html", destFolderPath, destFolder);
                             if (((Data)_converter).Flush(path, destFolder))
                             {
                                 Console.ForegroundColor = ConsoleColor.Green;

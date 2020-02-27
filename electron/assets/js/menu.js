@@ -16,7 +16,7 @@ window.navigation = window.navigation || {},
             constants: {
                 sectionTemplate: '.section-template',
                 contentContainer: '#content',
-                startSectionMenuItem: "#welcome-menu",
+                startSectionMenuItem: "#menu-welcome",
                 startSection: "#welcome",
                 scriptPath: "./assets/scripts/{0}",
                 resourceWinPath: "resources\\{0}",
@@ -35,15 +35,15 @@ window.navigation = window.navigation || {},
             setMenuOnClickEvent: function () {
                 document.body.addEventListener('click', function (event) {
                     if (event.target.dataset.section) {
-                        if(event.target.id === "hybris-edit-menu") {
+                        if(event.target.id === "menu-hybris-edit") {
                             Rigsarkiv.Hybris.Base.callback().setMode("Edit");
                             Rigsarkiv.Hybris.Structure.callback().reset();
                         }
-                        if(event.target.id === "hybris-new-menu") {
+                        if(event.target.id === "menu-hybris-new") {
                             Rigsarkiv.Hybris.Base.callback().setMode("New");
                             Rigsarkiv.Hybris.Structure.callback().reset();
                         }
-                        $('#side-menu').find('.selected').removeClass('selected');
+                        $('#menu-side').find('.selected').removeClass('selected');
                         navigation.menu.hideAllSections();
                         navigation.menu.showSection(event);
                     }
@@ -85,14 +85,12 @@ window.navigation = window.navigation || {},
             Rigsarkiv.Language.initialize("menu-output-Error");
             var languageCallback = Rigsarkiv.Language.callback();
             languageCallback.setLanguage(Rigsarkiv.Profile.callback().data.lcid);
-            Rigsarkiv.Links.callback().updateLinks(["instructions-link1","instructions-link2","instructions-link3","instructions-link4","instructions-link5","instructions-link6","instructions-link7","instructions-link8","instructions-link9","instructions-link10","instructions-link11","instructions-link12","hypres-link1","about-link1"]);
-            //TODO :remove
-            var profileLink  = document.getElementById("menu-profile");
-            $(profileLink).hide();
+            Rigsarkiv.Links.callback().updateLinks(["instructions-link1","instructions-link2","instructions-link3","instructions-link4","instructions-link5","instructions-link6","instructions-link7","instructions-link8","instructions-link9","instructions-link10","instructions-link11","instructions-link12","instructions-link15","instructions-link16","instructions-link17","instructions-link18","instructions-link19","hypres-link1","about-link1"]);
+            Rigsarkiv.Version.callback().updateLinks(["welcome-versionfooter"]);
             document.getElementById("menu-reload").addEventListener('click', function (event) {
                 ipcRenderer.send('open-confirm-dialog','menu-reload',languageCallback.getValue("menu-reload-dialog-title"),languageCallback.getValue("menu-reload-dialog-text"),languageCallback.getValue("menu-reload-dialog-ok"),languageCallback.getValue("menu-reload-dialog-cancel"));
             });
-            styxLink = document.getElementById("styx-menu");
+            var styxLink = document.getElementById("menu-styx");
             styxLink.addEventListener('click', function (event) {
                 var converterFilePath = navigation.menu.constants.scriptPath.format(navigation.menu.constants.converterFileName);    
                 $('#side-menu').find('.selected').removeClass('selected');

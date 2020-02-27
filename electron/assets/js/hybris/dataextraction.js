@@ -34,22 +34,9 @@ function (n) {
             outputStatisticsErrorSpn: null,
             outputStatisticsErrorText: null,
             outputStatisticsOkCopyScriptSpn: null,
-            outputStatisticsOkCopyScriptText: null,
             outputStatisticsOkCopyScriptInfoSpn: null,
-            outputStatisticsOkCopyScriptInfoText: null,        
-            outputStatisticsSASWarningTitle: null,
-            outputStatisticsSASWarningText: null,
-            outputScriptRequiredFilesWarningTitle: null,
-            outputScriptRequiredFilesWarningText: null,
-            outputStatisticsRequiredPathTitle: null,
-            outputStatisticsRequiredPathText: null,
-            outputScriptEncodingFileErrorTitle: null,
-            outputScriptEncodingFileErrorText: null,
-            outputScriptCloseApplicationWarningTitle: null,
-            outputScriptCloseApplicationWarningText: null,
             selectedStatisticsFilePath: null,
             outputScriptOkSpn: null,
-            outputScriptOkText: null,
             metadataFileName: null,
             scriptPanel1: null,
             scriptPanel2: null,  
@@ -61,8 +48,6 @@ function (n) {
             headerLinkTrin2: null,
             headerLinkTrin3: null,
             headerLinkInformation2: null,
-            okConfirm: null,
-            cancelConfirm: null,
             outputStatisticsSASPopup: null,
             okScriptDataPath: null,
             variablesDropdown: null,   
@@ -74,6 +59,11 @@ function (n) {
             sasCatalogFileExt: "{0}.sas7bcat",
             dataPathPostfix: "Data",
             dataTablePathPostfix: "table{0}",
+            backupSPSSExtentions: ["sav","sps","spv"],
+            backupSASExtentions: ["sas7bdat","sas7bcat","sas","Log"],
+            backupStataExtentions: ["dta","do","log"],
+            logSPSSPostfix: "{0}_Exportscriptlog",
+            outputSPSSPostfix: "{0}_output",
             variableFileName: null,
             scriptPathLink: null            
         }
@@ -145,8 +135,8 @@ function (n) {
                         }
                         else {
                             var scriptFileName = GetScriptFileName();
-                            settings.outputStatisticsOkCopyScriptSpn.innerHTML = settings.outputStatisticsOkCopyScriptText.format(scriptFileName);
-                            settings.outputStatisticsOkCopyScriptInfoSpn.innerHTML = settings.outputStatisticsOkCopyScriptInfoText.format(settings.scriptApplication);
+                            settings.outputStatisticsOkCopyScriptSpn.innerHTML = Rigsarkiv.Language.callback().getValue("hybris-output-script-OKCopyScript").format(scriptFileName);
+                            settings.outputStatisticsOkCopyScriptInfoSpn.innerHTML = Rigsarkiv.Language.callback().getValue("hybris-output-script-OKCopyScriptInfo").format(settings.scriptApplication);
                             settings.scriptPathLink.innerHTML = "[{0}]".format(GetFolderPath());
                             settings.scriptPanel1.hidden = true;
                             settings.scriptPanel2.hidden = false;
@@ -225,7 +215,7 @@ function (n) {
                         }; break;
                     }
                     if(!sasCatalogExists && fileExt === "sas7bdat") {
-                        ipcRenderer.send('open-confirm-dialog','dataextraction-catalogexists',settings.outputStatisticsSASWarningTitle.innerHTML,settings.outputStatisticsSASWarningText.innerHTML,settings.okConfirm.innerHTML,settings.cancelConfirm.innerHTML);
+                        ipcRenderer.send('open-confirm-dialog','dataextraction-catalogexists',Rigsarkiv.Language.callback().getValue("hybris-message-statistics-SASCatalogWarning-Title"),Rigsarkiv.Language.callback().getValue("hybris-message-statistics-SASCatalogWarning-Text"),Rigsarkiv.Language.callback().getValue("hybris-output-statistics-OkConfirm"),Rigsarkiv.Language.callback().getValue("hybris-output-statistics-CancelConfirm"));
                         settings.selectStatisticsFileBtn.disabled = true;
                         settings.okStatisticsBtn.disabled = true;
                         settings.outputStatisticsSASPopup.hidden = false;
@@ -343,13 +333,13 @@ function (n) {
                     settings.okScriptBtn.disabled = false;
                     settings.spinner.className = "";
                     if(counter < 3) {
-                        ipcRenderer.send('open-warning-dialog',settings.outputScriptRequiredFilesWarningTitle.innerHTML,settings.outputScriptRequiredFilesWarningText.innerHTML);
+                        ipcRenderer.send('open-warning-dialog',Rigsarkiv.Language.callback().getValue("hybris-output-script-RequiredFilesWarning-Title"),Rigsarkiv.Language.callback().getValue("hybris-output-script-RequiredFilesWarning-Text"));
                     }
                     else {
                         if(unvalidFiles.length > 0) 
                         { 
                             var filesText = unvalidFiles.join(",");
-                            ipcRenderer.send('open-confirm-dialog','dataextraction-encodingfile',settings.outputScriptEncodingFileErrorTitle.innerHTML,settings.outputScriptEncodingFileErrorText.innerHTML.format(filesText),settings.okConfirm.innerHTML,settings.cancelConfirm.innerHTML); 
+                            ipcRenderer.send('open-confirm-dialog','dataextraction-encodingfile',Rigsarkiv.Language.callback().getValue("hybris-output-script-EncodingFileError-Title"),Rigsarkiv.Language.callback().getValue("hybris-output-script-EncodingFileError-Text").format(filesText),Rigsarkiv.Language.callback().getValue("hybris-output-statistics-OkConfirm"),Rigsarkiv.Language.callback().getValue("hybris-output-statistics-CancelConfirm")); 
                         }
                         else {
                             Redirect();
@@ -383,10 +373,46 @@ function (n) {
             return result;
         }
 
+        //Add Backup information
+        var AddBackup = function() {           
+            fs.readdir(GetFolderPath(), (err, files) => {
+                if (err) {
+                    err.Handle(settings.outputStatisticsErrorSpn,settings.outputStatisticsErrorText,"Rigsarkiv.Hybris.DataExtraction.AddBackup");
+                }
+                else {
+                    var totalSize = 0;
+                    var path = GetFolderPath();
+                    var folders = settings.dataFolderPath.getFolders();
+                    var folderName =  folders[folders.length - 1];
+                    var names = [];                   
+                    files.forEach(fileName => {                        
+                        var filePath = (path.indexOf("\\") > -1) ? "{0}\\{1}".format(path,fileName) : "{0}/{1}".format(path,fileName);
+                        var fileExt = fileName.indexOf(".") > -1 ? fileName.substring(fileName.indexOf(".") + 1).toLowerCase() : null;
+                        var fileState = fs.lstatSync(filePath);
+                        var backupExtentions = [];
+                        if(fileExt != null) {
+                            switch(settings.scriptType) {
+                                case "SPSS": backupExtentions = settings.backupSPSSExtentions; break;
+                                case "SAS": backupExtentions = settings.backupSASExtentions; break;
+                                case "Stata": backupExtentions = settings.backupStataExtentions; break;
+                            }
+                        }
+                        var fileExactName = fileName.indexOf(".") > -1 ? fileName.substring(0,fileName.indexOf(".")) : "";
+                        if(fileState.isFile() && backupExtentions.includes(fileExt) && (fileExactName === settings.metadataFileName.value || fileExactName === settings.logSPSSPostfix.format(settings.metadataFileName.value) || fileExactName === settings.outputSPSSPostfix.format(settings.metadataFileName.value))) {
+                            names.push(fileName);
+                            totalSize += fileState.size;
+                        }                        
+                    });
+                    Rigsarkiv.Hybris.Base.callback().backup.push({ "path":path, "name":folderName, "size":totalSize, "files":names });
+                    settings.metdataTab.click();
+                }
+            }); 
+        }
+
         //Redirect to metadata tab
         var Redirect = function() {
             var fileName = GetFileName();
-            settings.outputScriptOkSpn.innerHTML = settings.outputScriptOkText.format(fileName);
+            settings.outputScriptOkSpn.innerHTML = Rigsarkiv.Language.callback().getValue("hybris-output-script-Ok").format(fileName);
             settings.outputScriptOkSpn.hidden = false;
             settings.metadataFileName.value = fileName.substring(0,fileName.indexOf("."));
             console.logInfo("initialize variables Dropdown","Rigsarkiv.Hybris.DataExtraction.Redirect"); 
@@ -407,7 +433,7 @@ function (n) {
                     i++;
                 }
                 while (lines[i] !== undefined && lines[i].trim() !== "");
-                settings.metdataTab.click();
+                AddBackup();                
             }
             catch(err) 
             {
@@ -442,7 +468,7 @@ function (n) {
             settings.okStatisticsBtn.addEventListener('click', (event) => {
                 Reset();
                 if(settings.pathStatisticsFileTxt.value === "") {
-                    ipcRenderer.send('open-error-dialog',settings.outputStatisticsRequiredPathTitle.innerHTML,settings.outputStatisticsRequiredPathText.innerHTML);
+                    ipcRenderer.send('open-error-dialog',Rigsarkiv.Language.callback().getValue("hybris-output-statistics-RequiredPath-Title"),Rigsarkiv.Language.callback().getValue("hybris-output-statistics-RequiredPath-Text"));
                 }
                 if(settings.pathStatisticsFileTxt.value !== "" && Rigsarkiv.Hybris.Structure.callback().deliveryPackagePath != null) {
                     EnsureData();
@@ -475,34 +501,21 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Hybris.DataExtraction = {        
-            initialize: function (selectStatisticsFileId,pathStatisticsFileId,okStatisticsId,outputStatisticsErrorId,outputStatisticsOkCopyScriptId,outputStatisticsSASWarningPrefixId,scriptPanel1Id,scriptPanel2Id,okScriptBtnId,okScriptDataPathId,outputStatisticsOkCopyScriptInfoId,outputStatisticsRequiredPathId,outputScriptRequiredFilesWarningPrefixId,outputScriptOkId,outputScriptEncodingFileErrorPrefixId,nextId,metdataTabId,outputScriptCloseApplicationWarningPrefixId,outputStructureOkId,selectStructureDeliveryPackageId,metadataFileName,spinnerId,outputScriptPath,outputHeaderLinkTrin2,outputHeaderLinkTrin3,outputHeaderLinkInformation2,outputOkConfirmId,outputCancelConfirmId,outputStatisticsSASPopupId,variablesId) {
+            initialize: function (selectStatisticsFileId,pathStatisticsFileId,okStatisticsId,outputStatisticsErrorId,outputStatisticsOkCopyScriptId,scriptPanel1Id,scriptPanel2Id,okScriptBtnId,okScriptDataPathId,outputStatisticsOkCopyScriptInfoId,outputScriptOkId,nextId,metdataTabId,outputStructureOkId,selectStructureDeliveryPackageId,metadataFileName,spinnerId,outputScriptPath,outputHeaderLinkTrin2,outputHeaderLinkTrin3,outputHeaderLinkInformation2,outputStatisticsSASPopupId,variablesId) {
                 settings.selectStatisticsFileBtn = document.getElementById(selectStatisticsFileId);
                 settings.pathStatisticsFileTxt = document.getElementById(pathStatisticsFileId);
                 settings.okStatisticsBtn = document.getElementById(okStatisticsId);
                 settings.outputStatisticsErrorSpn = document.getElementById(outputStatisticsErrorId);
                 settings.outputStatisticsErrorText = settings.outputStatisticsErrorSpn.innerHTML;
                 settings.outputStatisticsOkCopyScriptSpn = document.getElementById(outputStatisticsOkCopyScriptId);
-                settings.outputStatisticsOkCopyScriptText = settings.outputStatisticsOkCopyScriptSpn.innerHTML;
-                settings.outputStatisticsSASWarningTitle = document.getElementById(outputStatisticsSASWarningPrefixId + "-Title");
-                settings.outputStatisticsSASWarningText = document.getElementById(outputStatisticsSASWarningPrefixId + "-Text");
                 settings.scriptPanel1 = document.getElementById(scriptPanel1Id);
                 settings.scriptPanel2 = document.getElementById(scriptPanel2Id);
                 settings.okScriptBtn = document.getElementById(okScriptBtnId);
                 settings.okScriptDataPath = document.getElementById(okScriptDataPathId);
                 settings.outputStatisticsOkCopyScriptInfoSpn = document.getElementById(outputStatisticsOkCopyScriptInfoId);
-                settings.outputStatisticsOkCopyScriptInfoText = settings.outputStatisticsOkCopyScriptInfoSpn.innerHTML;
-                settings.outputStatisticsRequiredPathTitle = document.getElementById(outputStatisticsRequiredPathId + "-Title");
-                settings.outputStatisticsRequiredPathText = document.getElementById(outputStatisticsRequiredPathId + "-Text");
-                settings.outputScriptRequiredFilesWarningTitle = document.getElementById(outputScriptRequiredFilesWarningPrefixId + "-Title");
-                settings.outputScriptRequiredFilesWarningText = document.getElementById(outputScriptRequiredFilesWarningPrefixId + "-Text");
                 settings.outputScriptOkSpn =  document.getElementById(outputScriptOkId);
-                settings.outputScriptOkText = settings.outputScriptOkSpn.innerHTML;
-                settings.outputScriptEncodingFileErrorTitle = document.getElementById(outputScriptEncodingFileErrorPrefixId + "-Title");
-                settings.outputScriptEncodingFileErrorText = document.getElementById(outputScriptEncodingFileErrorPrefixId + "-Text");
                 settings.nextBtn = document.getElementById(nextId);
                 settings.metdataTab = document.getElementById(metdataTabId);
-                settings.outputScriptCloseApplicationWarningTitle = document.getElementById(outputScriptCloseApplicationWarningPrefixId + "-Title");
-                settings.outputScriptCloseApplicationWarningText = document.getElementById(outputScriptCloseApplicationWarningPrefixId + "-Text");
                 settings.outputStructureOkSpn =  document.getElementById(outputStructureOkId);
                 settings.selectStructureDeliveryPackage = document.getElementById(selectStructureDeliveryPackageId);
                 settings.metadataFileName = document.getElementById(metadataFileName);
@@ -513,8 +526,6 @@ function (n) {
                 settings.headerLinkTrin2 = document.getElementById(outputHeaderLinkTrin2);
                 settings.headerLinkTrin3 = document.getElementById(outputHeaderLinkTrin3);
                 settings.headerLinkInformation2 = document.getElementById(outputHeaderLinkInformation2);
-                settings.okConfirm = document.getElementById(outputOkConfirmId);
-                settings.cancelConfirm = document.getElementById(outputCancelConfirmId);
                 settings.outputStatisticsSASPopup = document.getElementById(outputStatisticsSASPopupId);
                 settings.variablesDropdown = document.getElementById(variablesId);
                 AddEvents();

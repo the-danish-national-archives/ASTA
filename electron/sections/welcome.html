@@ -3,27 +3,21 @@
         <header class="section-header">
             <div class="section-wrapper">
                 <div class="header">
-                    <h1 class="title">Forside</h1>
+                    <h1 class="title languages" id="welcome-Title"></h1>
                     <h1 class="title right">ASTA</h1>
                 </div>
                 <section>
                     <div class="formularContainer">
                         <div class="welcomeTextContainer">
                             <div>
-                                <h2 class="boldfaced">ASTA - Aflevering af Statistikfiler Til Arkiv</h2>
-                                
-                                <p>ASTA er Rigsarkivets værktøj til understøttelse af arbejdet med aflevering af data fra statistikfiler til arkiv.</p> 
-                                <p>Du kan downloade den nyeste version af ASTA fra Rigsarkivets hjemmeside.</p> 
-                                <p>Data fra statistikfiler skal afleveres i form af en afleveringspakke.</p>
-                                <p>Med ASTA kan du lave udtræk fra statistikfiler i formaterne SAS, Stata og SPSS til en afleveringspakke og teste om den overholder de
-                                    krav, som er specificeret for en afleveringspakke i bilag 9 i bekendtgørelsen om arkiveringsversioner.</p>
-                                <p>Bekendtgørelsen og nyttige vejledninger finder du under <a href="#" id="instructions-menu" data-section="instructions">Vejledning</a></p>
+                                <h2 class="boldfaced languages" id="welcome-title-H2"></h2> 
+                                <div class="languages" id="welcome-body-DIV"></div>
                                 <span id="welcome-Error" hidden="true"><br />Error: {0}</span>
-                                <p id="welcome-versionfooter">&copy; 2019 <b>ASTA - Aflevering af Statistikfiler Til Arkiv</b> - Version: {0}</p>                                
+                                <p id="welcome-versionfooter"></p>                        
                             </div>
                             <div>
                                 <img class="welcomeImg" src="./assets/images/Afleveringspakke_struktur.png" alt="Afleveringspakke struktur">
-                                <span class="imageText">Afleveringspakkestruktur</span>
+                                <span class="imageText languages" id="welcome-imageText"></span>
                             </div>
                         </div>
                     </div>
@@ -33,7 +27,7 @@
         <script type="text/javascript">
             require('./assets/js/utilities');
             require('./assets/js/version.js');
-            Rigsarkiv.Version.initialize("welcome-Error","welcome-versionfooter");
+            Rigsarkiv.Version.initialize("welcome-Error");
           </script>
     </section>
 </template>

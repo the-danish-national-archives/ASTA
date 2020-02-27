@@ -31,10 +31,11 @@ namespace Rigsarkiv.Styx
         /// <param name="srcPath"></param>
         /// <param name="destPath"></param>
         /// <param name="destFolder"></param>
-        public Structure(LogManager logManager, string srcPath, string destPath, string destFolder, ScriptType scriptType) : base(logManager, srcPath, destPath, destFolder)
+        public Structure(LogManager logManager, string srcPath, string destPath, string destFolder, Report report, FlowState state) : base(logManager, srcPath, destPath, destFolder)
         {
             _logSection = "Structure";
-            _report.ScriptType = scriptType;
+            if (report != null) { _report = report; }
+            _state = state;
             _contextDocumentationRegex = new Regex(ContextDocumentationPattern, RegexOptions.Compiled | RegexOptions.IgnoreCase);            
         }
 
@@ -47,9 +48,15 @@ namespace Rigsarkiv.Styx
             var message = string.Format("Start Converting structure {0} -> {1}", _srcFolder, _destFolder);
             _log.Info(message);
             _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = message });
-            if (EnsureRootFolder() && EnsureTables() && EnsureScripts() && CopyFiles())
+            if (EnsureRootFolder())
             {
-                result = true;
+                if (_state == FlowState.Created) { _state = File.Exists(string.Format(ResearchIndexPath, _srcPath)) ? FlowState.Running : FlowState.Suspended; }
+                if (_state == FlowState.Suspended) { _logManager.Add(new LogEntity() { Level = LogLevel.Warning, Section = _logSection, Message = "No Research Index file found" }); }
+                result = EnsureTables();
+                if ((_state == FlowState.Running || _state == FlowState.Completed) && result)
+                {
+                    result = EnsureScripts() && CopyFiles();
+                }
             }
             message = result ? "End Converting structure" : "End Converting structure with errors";
             _log.Info(message);
@@ -70,7 +77,7 @@ namespace Rigsarkiv.Styx
                 _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Create path: {0}", _destFolderPath) });
                 Directory.CreateDirectory(_destFolderPath);
             }
-            catch (IOException ex)
+            catch (Exception ex)
             {
                 result = false;
                 _log.Error("EnsureRootFolder Failed", ex);
@@ -88,6 +95,7 @@ namespace Rigsarkiv.Styx
             {
                 _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("create folder: {0}", destPath) });
                 Directory.CreateDirectory(destPath);
+                _report.ContextDocuments.Clear();
                 var files = Getfiles();
                 _contextDocumentationIndexXDocument = XDocument.Load(string.Format(ContextDocumentationIndexPath, _srcPath));
                 foreach (var documentNode in _contextDocumentationIndexXDocument.Element(_tableIndexXNS + "contextDocumentationIndex").Elements())
@@ -95,14 +103,18 @@ namespace Rigsarkiv.Styx
                     var id = documentNode.Element(_tableIndexXNS + "documentID").Value;
                     var documentTitle = documentNode.Element(_tableIndexXNS + "documentTitle").Value;
                     var title = ReplaceInvalidChars(documentTitle);
-                    if(files.ContainsKey(id))
+                    if(files.ContainsKey(id) && files[id].Count > 0)
                     {
-                        var srcFilePath = files[id];
-                        var fileExt = srcFilePath.Substring(srcFilePath.LastIndexOf(".") + 1);
-                        _report.ContextDocuments.Add(string.Format("{0}_{1}.{2}", id, documentTitle, fileExt), string.Format("{0}_{1}.{2}", id, title, fileExt));
-                        var destFilePath = string.Format("{0}\\{1}_{2}.{3}", destPath, id, title, fileExt);
-                        _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("copy file {0} -> {1}", srcFilePath, destFilePath) });
-                        File.Copy(srcFilePath, destFilePath, true);
+                        var docFolderPath = string.Format("{0}\\{1}", destPath, title);
+                        _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("create folder: {0}", docFolderPath) });
+                        Directory.CreateDirectory(docFolderPath);
+                        _report.ContextDocuments.Add(string.Format("{0}", documentTitle), string.Format("{0}",title));
+                        files[id].ForEach(srcFilePath => {
+                            var fileExt = srcFilePath.Substring(srcFilePath.LastIndexOf(".") + 1);
+                            var destFilePath = string.Format("{0}\\{1}", docFolderPath, srcFilePath.Substring(srcFilePath.LastIndexOf("\\") + 1));
+                            _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("copy file {0} -> {1}", srcFilePath, destFilePath) });
+                            File.Copy(srcFilePath, destFilePath, true);
+                        });                        
                     }                    
                 }
                 
@@ -126,10 +138,11 @@ namespace Rigsarkiv.Styx
             return result;
         }
 
-        private Dictionary<string,string> Getfiles()
+        private Dictionary<string,List<string>> Getfiles()
         {
-            var result = new Dictionary<string, string>();
+            var result = new Dictionary<string, List<string>>();
             var srcPath = string.Format(ContextDocumentationPath, _srcPath);
+            _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Loop through files at: {0}", srcPath) });
             foreach (string filePath in Directory.GetFiles(srcPath, "*.*", SearchOption.AllDirectories))
             {
                 var fileName = filePath.Substring(filePath.LastIndexOf("\\") + 1);
@@ -137,8 +150,38 @@ namespace Rigsarkiv.Styx
                 {
                     var id = filePath.Substring(0, filePath.Length - (fileName.Length + 1));
                     id = id.Substring(id.LastIndexOf("\\") + 1);
-                    result.Add(id, filePath);
+                    if(!result.ContainsKey(id))
+                    {
+                        result.Add(id, new List<string>());
+                    }
+                    result[id].Add(filePath);
                 }
+            }
+            return result;
+        }
+
+        private List<XElement> GetTablesNodes()
+        {
+            var result = new List<XElement>();
+            _tableIndexXDocument = XDocument.Load(string.Format(TableIndexPath, _srcPath));
+
+            if (_state == FlowState.Running)
+            {
+                _researchIndexXDocument = XDocument.Load(string.Format(ResearchIndexPath, _srcPath));
+                _researchIndexXDocument.Element(_tableIndexXNS + "researchIndex").Element(_tableIndexXNS + "mainTables").Elements().ToList().ForEach(tableNode => {
+                    var srcFolder = tableNode.Element(_tableIndexXNS + "tableID").Value;
+                    var tableIndexNode = _tableIndexXDocument.Element(_tableIndexXNS + "siardDiark").Element(_tableIndexXNS + "tables").Elements().Where(e => e.Element(_tableIndexXNS + "folder").Value == srcFolder).FirstOrDefault();
+                    result.Add(tableIndexNode);
+                });
+            }
+            else
+            {
+               _tableIndexXDocument.Element(_tableIndexXNS + "siardDiark").Element(_tableIndexXNS + "tables").Elements().ToList().ForEach(tableNode => {
+                if(tableNode.Element(_tableIndexXNS + "foreignKeys") != null)
+                {
+                    result.Add(tableNode);
+                }
+               });
             }
             return result;
         }
@@ -151,19 +194,24 @@ namespace Rigsarkiv.Styx
                 var path = string.Format(DataPath, _destFolderPath);
                 _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Ensure Tables: {0}", path) });
                 Directory.CreateDirectory(path);
-                _researchIndexXDocument = XDocument.Load(string.Format(ResearchIndexPath, _srcPath));
-                _tableIndexXDocument = XDocument.Load(string.Format(TableIndexPath, _srcPath));
-                foreach (var tableNode in _researchIndexXDocument.Element(_tableIndexXNS + "researchIndex").Element(_tableIndexXNS + "mainTables").Elements())
+                if (_state == FlowState.Running || _state == FlowState.Suspended) {
+                    foreach (var tableIndexNode in GetTablesNodes())
+                    {
+                        var srcFolder = tableIndexNode.Element(_tableIndexXNS + "folder").Value;
+                        var tableName = tableIndexNode.Element(_tableIndexXNS + "name").Value;
+                        var tableRows = int.Parse(tableIndexNode.Element(_tableIndexXNS + "rows").Value);
+                        var folder = string.Format(TableFolderPrefix, _report.ScriptType.ToString().ToLower(), NormalizeName(tableName));
+                        _report.Tables.Add(new Table() { Folder = folder, SrcFolder = srcFolder, Name = tableName, Rows = tableRows, RowsCounter = 0, Columns = new List<Column>() });
+                    }
+                }
+                if (_state == FlowState.Running || _state == FlowState.Completed)
                 {
-                     var srcFolder = tableNode.Element(_tableIndexXNS + "tableID").Value;
-                    var tableIndexNode = _tableIndexXDocument.Element(_tableIndexXNS + "siardDiark").Element(_tableIndexXNS + "tables").Elements().Where(e => e.Element(_tableIndexXNS + "folder").Value == srcFolder).FirstOrDefault();
-                    var tableName = tableIndexNode.Element(_tableIndexXNS + "name").Value;
-                    var tableRows = int.Parse(tableIndexNode.Element(_tableIndexXNS + "rows").Value);
-                    var folder = string.Format(TableFolderPrefix, _report.ScriptType.ToString().ToLower(), NormalizeName(tableName));
-                    var folderPath = string.Format("{0}\\{1}", path,folder);
-                    _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Ensure Table: {0}", folderPath) });
-                    Directory.CreateDirectory(folderPath);                                        
-                    _report.Tables.Add(new Table() { Folder = folder, SrcFolder = srcFolder, Name = tableName, Rows = tableRows, RowsCounter = 0, Columns = new List<Column>() });                    
+                    _report.Tables.ForEach(table => {
+                        if(string.IsNullOrEmpty(table.Folder)) { table.Folder = string.Format(TableFolderPrefix, _report.ScriptType.ToString().ToLower(), NormalizeName(table.Name)); }
+                        var folderPath = string.Format("{0}\\{1}", path, table.Folder);
+                        _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Ensure Table: {0}", folderPath) });
+                        Directory.CreateDirectory(folderPath);
+                    });
                 }
             }
             catch (Exception ex)

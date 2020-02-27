@@ -26,6 +26,9 @@ namespace Rigsarkiv.Athena
         const string CodeValue = "Kodeforklaring";
         const string CodeDescription = "Forklaring af kodens betydning";
         const string EnclosedReservedWordPattern = "^(\")(ABSOLUTE|ACTION|ADD|ADMIN|AFTER|AGGREGATE|ALIAS|ALL|ALLOCATE|ALTER|AND|ANY|ARE|ARRAY|AS|ASC|ASSERTION|AT|AUTHORIZATION|BEFORE|BEGIN|BINARY|BIT|BLOB|BOOLEAN|BOTH|BREADTH|BY|CALL|CASCADE|CASCADED|CASE|CAST|CATALOG|CHAR|CHARACTER|CHECK|CLASS|CLOB|CLOSE|COLLATE|COLLATION|COLUMN|COMMIT|COMPLETION|CONNECT|CONNECTION|CONSTRAINT|CONSTRAINTS ||CONSTRUCTOR|CONTINUE|CORRESPONDING|CREATE|CROSS|CUBE|CURRENT|CURRENT_DATE|CURRENT_PATH|CURRENT_ROLE|CURRENT_TIME|CURRENT_TIMESTAMP|CURRENT_USER|CURSOR|CYCLE|DATA|DATE|DAY|DEALLOCATE|DEC|DECIMAL|DECLARE|DEFAULT|DEFERRABLE|DEFERRED|DELETE|DEPTH|DEREF|DESC|DESCRIBE|DESCRIPTOR|DESTROY|DESTRUCTOR|DETERMINISTIC|DICTIONARY|DIAGNOSTICS|DISCONNECT|DISTINCT|DOMAIN|DOUBLE|DROP|DYNAMIC|EACH|ELSE|END|END-EXEC|EQUALS|ESCAPE|EVERY|EXCEPT|EXCEPTION|EXEC|EXECUTE|EXTERNAL|FALSE|FETCH|FIRST|FLOAT|FOR|FOREIGN|FOUND|FROM|FREE|FULL|FUNCTION|GENERAL|GET|GLOBAL|GO|GOTO|GRANT|GROUP|GROUPING|HAVING|HOST|HOUR|IDENTITY|IGNORE|IMMEDIATE|IN|INDICATOR|INITIALIZE|INITIALLY|INNER|INOUT|INPUT|INSERT|INT|INTEGER|INTERSECT|INTERVAL|INTO|IS|ISOLATION|ITERATE|JOIN|KEY|LANGUAGE|LARGE|LAST|LATERAL|LEADING|LEFT|LESS|LEVEL|LIKE|LIMIT|LOCAL|LOCALTIME|LOCALTIMESTAMP|LOCATOR|MAP|MATCH|MINUTE|MODIFIES|MODIFY|MODULE|MONTH|NAMES|NATIONAL|NATURAL|NCHAR|NCLOB|NEW|NEXT|NO|NONE|NOT|NULL|NUMERIC|OBJECT|OF|OFF|OLD|ON|ONLY|OPEN|OPERATION|OPTION|OR|ORDER|ORDINALITY|OUT|OUTER|OUTPUT|PAD|PARAMETER|PARAMETERS|PARTIAL|PATH|POSTFIX|PRECISION|PREFIX|PREORDER|PREPARE|PRESERVE|PRIMARY|PRIOR|PRIVILEGES|PROCEDURE|PUBLIC|READ|READS|REAL|RECURSIVE|REF|REFERENCES|REFERENCING|RELATIVE|RESTRICT|RESULT|RETURN|RETURNS|REVOKE|RIGHT|ROLE|ROLLBACK|ROLLUP|ROUTINE|ROW|ROWS|SAVEPOINT|SCHEMA|SCROLL|SCOPE|SEARCH|SECOND|SECTION|SELECT|SEQUENCE|SESSION|SESSION_USER|SET|SETS|SIZE|SMALLINT|SOME|SPACE|SPECIFIC|SPECIFICTYPE|SQL|SQLEXCEPTION|SQLSTATE|SQLWARNING|START|STATE|STATEMENT|STATIC|STRUCTURE|SYSTEM_USER|TABLE|TEMPORARY|TERMINATE|THAN|THEN|TIME|TIMESTAMP|TIMEZONE_HOUR|TIMEZONE_MINUTE|TO|TRAILING|TRANSACTION|TRANSLATION|TREAT|TRIGGER|TRUE|UNDER|UNION|UNIQUE|UNKNOWN|UNNEST|UPDATE|USAGE|USER|USING|VALUE|VALUES|VARCHAR|VARIABLE|VARYING|VIEW|WHEN|WHENEVER|WHERE|WITH|WITHOUT|WORK|WRITE|YEAR|ZONE)(\")$";
+        const string SerialNumberColumnType = "INTEGER";
+        const string SerialNumberColumnName = "Løbenummer";
+        const string SerialNumberColumnDescription = "Ikke betydningsbærende unikt løbenummer skabt under aflevering til arkiv";
         private dynamic _metadata = null;        
         private int _tablesCounter = 0;
         private Regex _enclosedReservedWord = null;
@@ -104,19 +107,9 @@ namespace Rigsarkiv.Athena
             Directory.CreateDirectory(string.Format(TablePath, _destFolderPath, folder));
             var tableName = tableInfo["name"].ToString();
             var rows = tableInfo["rows"].ToString();
-            var researchIndexNode = new XElement(_tableIndexXNS + "table",
-                new XElement(_tableIndexXNS + "tableID", folder),
-                new XElement(_tableIndexXNS + "source", tableInfo["system"].ToString()),
-                new XElement(_tableIndexXNS + "specialNumeric", false.ToString().ToLower()));
+            var researchIndexNode = new XElement(_tableIndexXNS + "table", new XElement(_tableIndexXNS + "tableID", folder), new XElement(_tableIndexXNS + "source", tableInfo["system"].ToString()), new XElement(_tableIndexXNS + "specialNumeric", false.ToString().ToLower()));
             _researchIndexXDocument.Element(_tableIndexXNS + "researchIndex").Element(_tableIndexXNS + "mainTables").Add(researchIndexNode);
-            var tableNode = new XElement(_tableIndexXNS + "table",
-                new XElement(_tableIndexXNS + "name", tableName),
-                new XElement(_tableIndexXNS + "folder", folder),
-                new XElement(_tableIndexXNS + "description", tableInfo["description"].ToString()),
-                new XElement(_tableIndexXNS + "columns"),
-                new XElement(_tableIndexXNS + "primaryKey", new XElement(_tableIndexXNS + "name", string.Format(PrimaryKeyPrefix, NormalizeName(tableName)))),
-                new XElement(_tableIndexXNS + "foreignKeys"),
-                new XElement(_tableIndexXNS + "rows", rows));
+            var tableNode = new XElement(_tableIndexXNS + "table", new XElement(_tableIndexXNS + "name", tableName), new XElement(_tableIndexXNS + "folder", folder), new XElement(_tableIndexXNS + "description", tableInfo["description"].ToString()), new XElement(_tableIndexXNS + "columns"), new XElement(_tableIndexXNS + "primaryKey", new XElement(_tableIndexXNS + "name", string.Format(PrimaryKeyPrefix, NormalizeName(tableName)))), new XElement(_tableIndexXNS + "foreignKeys"), new XElement(_tableIndexXNS + "rows", rows));
             _tableIndexXDocument.Element(_tableIndexXNS + "siardDiark").Element(_tableIndexXNS + "tables").Add(tableNode);
             var srcFolder = tableInfo["fileName"].ToString();
             srcFolder = srcFolder.Substring(0, srcFolder.LastIndexOf("."));
@@ -128,12 +121,21 @@ namespace Rigsarkiv.Athena
             }
             if (tableInfo["references"] != null && ((object[])tableInfo["references"]).Length > 0)
             {
+                var referencesIndex = 1;
                 foreach (var reference in (object[])tableInfo["references"])
                 {
-                    AddReferenceNode((Dictionary<string, object>)reference, tableNode, table, index++);
+                    AddReferenceNode((Dictionary<string, object>)reference, tableNode, table, referencesIndex++);
                 }
             }
-            if (!table.HasKey) { tableNode.Element(_tableIndexXNS + "primaryKey").Remove(); }
+            if (!table.HasKey)
+            {
+               var column = new Column() { Name = SerialNumberColumnName, Id = string.Format(ColumnIDPrefix, index), Description = SerialNumberColumnDescription, Type = SerialNumberColumnType, TypeOriginal = string.Empty, Nullable = false, HasSpecialNumeric = false, HasMissingValues = false, MissingValuesCounter = 0, MaxLength = 0, Differences = 0, Errors = 0, ErrorsRows = new List<int>() };
+                var columnNode = new XElement(_tableIndexXNS + "column", new XElement(_tableIndexXNS + "name", SerialNumberColumnName), new XElement(_tableIndexXNS + "columnID", column.Id), new XElement(_tableIndexXNS + "type", SerialNumberColumnType), new XElement(_tableIndexXNS + "typeOriginal", string.Empty), new XElement(_tableIndexXNS + "nullable", false.ToString().ToLower()), new XElement(_tableIndexXNS + "description", SerialNumberColumnDescription));
+                table.Columns.Add(column);
+                tableNode.Element(_tableIndexXNS + "columns").Add(columnNode);
+                _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Add Serial Number primary Key for table: {0} ", folder) });
+                tableNode.Element(_tableIndexXNS + "primaryKey").Add(new XElement(_tableIndexXNS + "column", column.Name));
+            }
         }
 
         private void AddReferenceNode(Dictionary<string, object> referenceInfo, XElement tableNode, Table table, int index)
@@ -164,13 +166,7 @@ namespace Rigsarkiv.Athena
             var missingValues = variableInfo["missingValues"].ToString();
             var appliedRegExp = GetRegExp(variableInfo);
             var column = new Column() { Name = columnName, Id = columnId, Description = columnDescription, Type = columnType, TypeOriginal = columnTypeOriginal, Nullable = (bool)variableInfo["nullable"], HasSpecialNumeric = false, HasMissingValues = false, MissingValues= int.Parse(missingValues), MissingValuesCounter = 0, RegExp = appliedRegExp, MaxLength =0, Differences = 0, Errors = 0, ErrorsRows = new List<int>() };
-            var columnNode = new XElement(_tableIndexXNS + "column",
-                 new XElement(_tableIndexXNS + "name", columnName),
-                 new XElement(_tableIndexXNS + "columnID", columnId),
-                 new XElement(_tableIndexXNS + "type", columnType),
-                 new XElement(_tableIndexXNS + "typeOriginal", columnTypeOriginal),
-                 new XElement(_tableIndexXNS + "nullable", variableInfo["nullable"].ToString().ToLower()),
-                 new XElement(_tableIndexXNS + "description", columnDescription));
+            var columnNode = new XElement(_tableIndexXNS + "column", new XElement(_tableIndexXNS + "name", columnName), new XElement(_tableIndexXNS + "columnID", columnId), new XElement(_tableIndexXNS + "type", columnType), new XElement(_tableIndexXNS + "typeOriginal", columnTypeOriginal), new XElement(_tableIndexXNS + "nullable", variableInfo["nullable"].ToString().ToLower()), new XElement(_tableIndexXNS + "description", columnDescription));
             tableNode.Element(_tableIndexXNS + "columns").Add(columnNode);
             table.Columns.Add(column);            
             AddKeys(variableInfo, tableNode, researchIndexNode, table, column, index);
@@ -254,7 +250,8 @@ namespace Rigsarkiv.Athena
                 var description = code["description"].ToString();
                 var isMissing = false;                
                 if (description.Length > result) { result = description.Length; }
-                if((bool)code["isMissing"]) {
+                if (column.MaxLength < value.Length) { column.MaxLength = value.Length; }
+                if ((bool)code["isMissing"]) {
                     isMissing = true;
                 }
                 codeList.Options.Add(new string[3] { value, description, isMissing.ToString() });
@@ -315,8 +312,10 @@ namespace Rigsarkiv.Athena
             var result = true;
             try
             {
-                _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Load metadata from: {0}", _srcPath) });
-                var json = File.ReadAllText(_srcPath);
+                var parentPath = _srcPath.Substring(0, _srcPath.LastIndexOf("\\"));
+                var path = string.Format("{0}\\{1}{2}\\{2}.json", parentPath, LogPrefix, _srcFolder);
+                _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("Load metadata from: {0}", path) });
+                var json = File.ReadAllText(path);
                 JavaScriptSerializer jss = new JavaScriptSerializer();
                 _metadata = jss.Deserialize<object>(json);
             }

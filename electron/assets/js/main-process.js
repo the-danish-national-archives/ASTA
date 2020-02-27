@@ -123,6 +123,7 @@ ipcMain.on('open-warning-dialog', (event,title,text) => {
 })
 
 ipcMain.on('open-confirm-dialog', (event,callbackId,title,text,okTest,cancelText) => {
+  preventClose = false;
   const options = {
     type: 'warning',
     title: title,

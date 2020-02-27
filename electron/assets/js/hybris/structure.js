@@ -27,38 +27,22 @@ function (n) {
             outputErrorSpn: null,
             outputErrorText: null,
             outputExistsSpn: null,
-            outputExistsTitle:null,
-            outputExistsText: null,
-            outputRequiredPathTitle: null,
-            outputRequiredPathText: null,
-            outputUnvalidDeliveryPackageTitle: null,
-            outputUnvalidDeliveryPackageText: null,
             outputOkSpn: null,
-            outputOkText: null,
             outputStatisticsHeaderTrin1Spn: null,
-            outputStatisticsHeaderTrin1Text: null,
             outputStatisticsHeaderTrin2Spn: null,
-            outputStatisticsHeaderTrin2Text: null,
             outputStatisticsHeaderTrin3Spn: null,
-            outputStatisticsHeaderTrin3Text: null,
             outputStatisticsHeaderInformation2Spn: null,
-            outputStatisticsHeaderInformation2Text: null,
             outputStatisticsHeaderReferencesSpn: null,
-            outputStatisticsHeaderReferencesText: null,
+            outputStatisticsHeaderBackupSpn: null,
             outputStatisticsHeaderindexfilesSpn: null,
-            outputStatisticsHeaderindexfilesText: null,
             outputStatisticsHeadercontextdocumentsSpn: null,
-            outputStatisticsHeadercontextdocumentsText: null,
             outputStatisticsHeaderOverviewSpn: null,
-            outputStatisticsHeaderOverviewText: null,
             structureTab: null,
             statisticsTab: null,
             indexfilesTab: null,
             newPanelDiv: null,
             editPanelDiv: null,
             indexFilesDescriptionSpn: null,
-            indexFilesDescriptionText: null,
-            indexFilesEditDescriptionText: null,
             selectDeliveryPackage: null,
             indecesFolder: "Indices",
             contextDocumentationFolder: "ContextDocumentation",
@@ -79,6 +63,7 @@ function (n) {
             Rigsarkiv.Hybris.DataExtraction.callback().reset();
             Rigsarkiv.Hybris.MetaData.callback().reset();
             Rigsarkiv.Hybris.References.callback().reset();
+            Rigsarkiv.Hybris.Backup.callback().reset();
             Rigsarkiv.Hybris.IndexFiles.callback().reset();
         }
 
@@ -89,22 +74,22 @@ function (n) {
             settings.selectDeliveryPackage.innerHTML = "[{0}]".format(settings.selectedPath);
             settings.selectDeliveryPackage.hidden = false;
             settings.outputOkSpn.hidden = false;
-            settings.outputOkSpn.innerHTML = settings.outputOkText.format(folderName);
             
             var folder = folders[folders.length - 1];           
-            settings.outputStatisticsHeaderTrin1Spn.innerHTML = settings.outputStatisticsHeaderTrin1Text.format(folder);
-            settings.outputStatisticsHeaderTrin2Spn.innerHTML = settings.outputStatisticsHeaderTrin2Text.format(folder);
-            settings.outputStatisticsHeaderTrin3Spn.innerHTML = settings.outputStatisticsHeaderTrin3Text.format(folder);
-            settings.outputStatisticsHeaderInformation2Spn.innerHTML = settings.outputStatisticsHeaderInformation2Text.format(folder);
-            settings.outputStatisticsHeaderReferencesSpn.innerHTML = settings.outputStatisticsHeaderReferencesText.format(folder);
-            settings.outputStatisticsHeaderindexfilesSpn.innerHTML = settings.outputStatisticsHeaderindexfilesText.format(folder);
-            settings.outputStatisticsHeadercontextdocumentsSpn.innerHTML = settings.outputStatisticsHeadercontextdocumentsText.format(folder);
-            settings.outputStatisticsHeaderOverviewSpn.innerHTML = settings.outputStatisticsHeaderOverviewText.format(folder);
+            settings.outputStatisticsHeaderTrin1Spn.innerHTML = folder;
+            settings.outputStatisticsHeaderTrin2Spn.innerHTML = folder;
+            settings.outputStatisticsHeaderTrin3Spn.innerHTML = folder;
+            settings.outputStatisticsHeaderInformation2Spn.innerHTML = folder;
+            settings.outputStatisticsHeaderReferencesSpn.innerHTML = folder;
+            settings.outputStatisticsHeaderBackupSpn.innerHTML = folder;
+            settings.outputStatisticsHeaderindexfilesSpn.innerHTML = folder;
+            settings.outputStatisticsHeadercontextdocumentsSpn.innerHTML = folder;
+            settings.outputStatisticsHeaderOverviewSpn.innerHTML = folder;
             
             if(Rigsarkiv.Hybris.Base.callback().mode === "New") { settings.statisticsTab.click(); }
             if(Rigsarkiv.Hybris.Base.callback().mode === "Edit") { 
-                var description = "{0} {1}".format(folder,settings.indexFilesEditDescriptionText);
-                settings.indexFilesDescriptionSpn.innerHTML = settings.indexFilesDescriptionText.format(description);
+                var description = "{0} {1}".format(folder,Rigsarkiv.Language.callback().getValue("hybris-structure-indexfiles-Description"));
+                settings.indexFilesDescriptionSpn.innerHTML = Rigsarkiv.Language.callback().getValue("hybris-output-indexfiles-Description").format(description);
                 settings.indexfilesTab.click(); 
             }
         }
@@ -143,7 +128,7 @@ function (n) {
                     });
                 }
                 else  {
-                    ipcRenderer.send('open-warning-dialog',settings.outputExistsTitle.innerHTML,settings.outputExistsText.format(folderName));
+                    ipcRenderer.send('open-warning-dialog',Rigsarkiv.Language.callback().getValue("hybris-output-structure-Exists-Title"),Rigsarkiv.Language.callback().getValue("hybris-output-structure-Exists-Text").format(folderName));
                 }
             });
         }
@@ -153,10 +138,10 @@ function (n) {
             settings.okNewBtn.addEventListener('click', (event) => {
                 Reset();
                 if(settings.newPathDirTxt.value === "") {
-                    ipcRenderer.send('open-error-dialog',settings.outputRequiredPathTitle.innerHTML,settings.outputRequiredPathText.innerHTML);
+                    ipcRenderer.send('open-error-dialog',Rigsarkiv.Language.callback().getValue("hybris-output-structure-RequiredPath-Title"),Rigsarkiv.Language.callback().getValue("hybris-output-structure-RequiredPath-Text"));
                 }
                 if(settings.deliveryPackageTxt.value !== "" && !pattern.test(settings.deliveryPackageTxt.value)) {
-                    ipcRenderer.send('open-error-dialog',settings.outputUnvalidDeliveryPackageTitle.innerHTML,settings.outputUnvalidDeliveryPackageText.innerHTML);
+                    ipcRenderer.send('open-error-dialog',Rigsarkiv.Language.callback().getValue("hybris-output-structure-UnvalidDeliveryPackage-Title"),Rigsarkiv.Language.callback().getValue("hybris-output-structure-UnvalidDeliveryPackage-Text"));
                 }
                 if(settings.selectedPath != null && settings.newPathDirTxt.value !== "" && (settings.deliveryPackageTxt.value === "" || (settings.deliveryPackageTxt.value !== "" && pattern.test(settings.deliveryPackageTxt.value)))) {
                     EnsureStructure();
@@ -165,7 +150,7 @@ function (n) {
             settings.okEditBtn.addEventListener('click', (event) => {
                 Reset(); 
                 if(settings.editPathDirTxt.value === "") {
-                    ipcRenderer.send('open-error-dialog',settings.outputRequiredPathTitle.innerHTML,settings.outputRequiredPathText.innerHTML);
+                    ipcRenderer.send('open-error-dialog',Rigsarkiv.Language.callback().getValue("hybris-output-structure-RequiredPath-Title"),Rigsarkiv.Language.callback().getValue("hybris-output-structure-RequiredPath-Text"));
                 }
                 else {
                     settings.deliveryPackagePath = settings.selectedPath[0];
@@ -205,7 +190,7 @@ function (n) {
 
         //Model interfaces functions
         Rigsarkiv.Hybris.Structure = {        
-            initialize: function (sectionTitleId,titleNewId,titleEditId,selectNewDirectoryId,selectEditDirectoryId,newPathDirectoryId,editPathDirectoryId,deliveryPackageId,okNewId,okEditId,outputErrorId,outputExistsId,outputRequiredPathId,outputUnvalidDeliveryPackageId,outputOkId,selectDeliveryPackageId,structureTabId,statisticsTabId,indexfilesTabId,outputStatisticsHeaderTrin1,outputStatisticsHeaderTrin2,outputStatisticsHeaderTrin3,outputStatisticsHeaderInformation2,outputStatisticsHeaderReferences,outputStatisticsHeaderindexfiles,outputStatisticsHeadercontextdocuments,outputStatisticsHeaderOverview,modePanelId,requiredIndexFilesId,indexFilesDescriptionId,indexFilesEditDescriptionId) {            
+            initialize: function (sectionTitleId,titleNewId,titleEditId,selectNewDirectoryId,selectEditDirectoryId,newPathDirectoryId,editPathDirectoryId,deliveryPackageId,okNewId,okEditId,outputErrorId,outputOkId,selectDeliveryPackageId,structureTabId,statisticsTabId,indexfilesTabId,outputStatisticsHeaderTrin1,outputStatisticsHeaderTrin2,outputStatisticsHeaderTrin3,outputStatisticsHeaderInformation2,outputStatisticsHeaderReferences,outputStatisticsHeaderBackup,outputStatisticsHeaderindexfiles,outputStatisticsHeadercontextdocuments,outputStatisticsHeaderOverview,modePanelId,indexFilesDescriptionId) {            
                 settings.sectionTitleH1 =  document.getElementById(sectionTitleId);
                 settings.titleNewSpn =  document.getElementById(titleNewId);
                 settings.titleEditSpn =  document.getElementById(titleEditId);
@@ -218,41 +203,23 @@ function (n) {
                 settings.okEditBtn =  document.getElementById(okEditId);
                 settings.outputErrorSpn =  document.getElementById(outputErrorId);
                 settings.outputErrorText = settings.outputErrorSpn.innerHTML;
-                settings.outputExistsTitle =  document.getElementById(outputExistsId + "-Title");
-                settings.outputExistsText = document.getElementById(outputExistsId + "-Text").innerHTML;
-                settings.outputRequiredPathTitle =  document.getElementById(outputRequiredPathId + "-Title");
-                settings.outputRequiredPathText =  document.getElementById(outputRequiredPathId + "-Text");
-                settings.outputUnvalidDeliveryPackageTitle =  document.getElementById(outputUnvalidDeliveryPackageId + "-Title");
-                settings.outputUnvalidDeliveryPackageText =  document.getElementById(outputUnvalidDeliveryPackageId + "-Text");
                 settings.outputOkSpn =  document.getElementById(outputOkId);
-                settings.outputOkText = settings.outputOkSpn.innerHTML;
                 settings.selectDeliveryPackage = document.getElementById(selectDeliveryPackageId);
                 settings.structureTab = document.getElementById(structureTabId);
                 settings.statisticsTab = document.getElementById(statisticsTabId);
                 settings.indexfilesTab = document.getElementById(indexfilesTabId);
                 settings.outputStatisticsHeaderTrin1Spn = document.getElementById(outputStatisticsHeaderTrin1);
-                settings.outputStatisticsHeaderTrin1Text = settings.outputStatisticsHeaderTrin1Spn.innerHTML;
                 settings.outputStatisticsHeaderTrin2Spn = document.getElementById(outputStatisticsHeaderTrin2);
-                settings.outputStatisticsHeaderTrin2Text = settings.outputStatisticsHeaderTrin1Spn.innerHTML;
                 settings.outputStatisticsHeaderTrin3Spn = document.getElementById(outputStatisticsHeaderTrin3);
-                settings.outputStatisticsHeaderTrin3Text = settings.outputStatisticsHeaderTrin1Spn.innerHTML;
                 settings.outputStatisticsHeaderInformation2Spn = document.getElementById(outputStatisticsHeaderInformation2);
-                settings.outputStatisticsHeaderInformation2Text = settings.outputStatisticsHeaderInformation2Spn.innerHTML;
                 settings.outputStatisticsHeaderReferencesSpn = document.getElementById(outputStatisticsHeaderReferences);
-                settings.outputStatisticsHeaderReferencesText = settings.outputStatisticsHeaderReferencesSpn.innerHTML;
+                settings.outputStatisticsHeaderBackupSpn = document.getElementById(outputStatisticsHeaderBackup);
                 settings.outputStatisticsHeaderindexfilesSpn = document.getElementById(outputStatisticsHeaderindexfiles);
-                settings.outputStatisticsHeaderindexfilesText = settings.outputStatisticsHeaderindexfilesSpn.innerHTML;
                 settings.outputStatisticsHeadercontextdocumentsSpn = document.getElementById(outputStatisticsHeadercontextdocuments);
-                settings.outputStatisticsHeadercontextdocumentsText = settings.outputStatisticsHeadercontextdocumentsSpn.innerHTML;
                 settings.outputStatisticsHeaderOverviewSpn = document.getElementById(outputStatisticsHeaderOverview);
-                settings.outputStatisticsHeaderOverviewText = settings.outputStatisticsHeaderOverviewSpn.innerHTML;
                 settings.newPanelDiv = document.getElementById(modePanelId + "-New");
                 settings.editPanelDiv = document.getElementById(modePanelId + "-Edit");
-                settings.requiredIndexFilesTitle =  document.getElementById(requiredIndexFilesId + "-Title");
-                settings.requiredIndexFilesText =  document.getElementById(requiredIndexFilesId + "-Text");
                 settings.indexFilesDescriptionSpn = document.getElementById(indexFilesDescriptionId);
-                settings.indexFilesDescriptionText = settings.indexFilesDescriptionSpn.innerHTML;
-                settings.indexFilesEditDescriptionText = document.getElementById(indexFilesEditDescriptionId).innerHTML;
                 AddEvents();
             },
             callback: function () {

@@ -1,5 +1,5 @@
 /*
-Version: 8.0
+Version: 9.0
 Encoding: UTF-8 without byte order mark
 Note: The working directory must contain the data file (sas7bdat) and catalog file (sas7bcat)
 NB: The data and catalog files must have the same name
@@ -13,6 +13,7 @@ NB: The values in the catalog file must be explicitly specified (ranges are inva
                                   %let outDir=%str({1}{0});
                                   %let inputSas=%str({2});
                                   libname mylib "&outDir";
+
 
                                   * Set options;
                                   options locale=da_DK replace=yes;
@@ -258,3 +259,6 @@ proc sort data=mylib.odsout;by num;run;
                                   run;
 
     
+
+
+%Put NOTICE: SAS IS FINISHED RUNNING THIS SCRIPT;

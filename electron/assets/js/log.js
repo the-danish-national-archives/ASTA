@@ -6,6 +6,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
 function (n) {
     const {shell} = require('electron');
     const fs = require('fs');
+    const fse = require('fs-extra');
     const path = require('path');
     const os = require('os');
 
@@ -14,10 +15,10 @@ function (n) {
         outputErrorSpn: null,
         outputErrorText: null,
         outputOkSpn: null,
-        outputOkText: null,
         selectLogfile: null,
         outputSupplementSpn: null,
         filePath: null,
+        fileName: null,
         logs: [],
         logsDate: null,
         errorsCounter: 0,
@@ -25,6 +26,7 @@ function (n) {
         scriptPath: "./assets/scripts/{0}",
         resourceWinPath: "resources\\{0}",
         filePostfix: "{0}_ASTA_testlog.html",
+        pathPostfix: "{0}ASTA_testlog_{1}",
         errorElement: "<span id=\"{0}_{1}\" name=\"{2}\" class=\"error\">{3}</span>",
         warnElement: "<span id=\"{0}_{1}\" name=\"{2}\" class=\"warning\">{3}</span>",
         infoElement: "<span id=\"{0}_{1}\" name=\"{2}\" class=\"ok\" hidden=\"true\">{3}</span>",
@@ -32,7 +34,13 @@ function (n) {
         spinner: null,
         spinnerClass: null,
         spinnerEnable: true,
-        outputShowBtn: null
+        outputShowBtn: null,
+        confirmation: null
+    }
+
+    //get log file full path
+    var GetDestPath = function () {
+        return (settings.filePath.indexOf("\\") > -1) ? "{0}\\{1}".format(settings.filePath,settings.fileName) : "{0}/{1}".format(settings.filePath, settings.fileName);
     }
 
     //reset status & input fields
@@ -46,20 +54,27 @@ function (n) {
 
     //commit log data
     var EnsureData = function() {
-        var data = fs.readFileSync(settings.filePath);        
-        var folders = settings.filePath.getFolders();
+        var destPath = GetDestPath();
+        var data = fs.readFileSync(destPath);        
+        var folders = destPath.getFolders();
         var folderName = folders[folders.length - 1];
         folderName = folderName.substring(0,folderName.indexOf("_ASTA_testlog.html"));
-        var updatedData = data.toString().format(settings.logsDate.getFromFormat("dd-MM-yyyy hh:mm:ss"),folderName,settings.logs.join("\r\n"),settings.errorsCounter);
-        fs.writeFileSync(settings.filePath, updatedData);                         
+        var title = Rigsarkiv.Language.callback().getValue("nemesis-logFile-Title");
+        var runDate = Rigsarkiv.Language.callback().getValue("nemesis-logFile-runDate-P");
+        var filters = Rigsarkiv.Language.callback().getValue("nemesis-logFile-filters-SPAN");
+        var error = Rigsarkiv.Language.callback().getValue("nemesis-logFile-error-LABEL");
+        var warning = Rigsarkiv.Language.callback().getValue("nemesis-logFile-warning-LABEL");
+        var testTitle = Rigsarkiv.Language.callback().getValue("nemesis-logFile-test-Title-H3");
+        var testStart = Rigsarkiv.Language.callback().getValue("nemesis-logFile-test-Start-P");
+        var testEnd = Rigsarkiv.Language.callback().getValue("nemesis-logFile-test-End-P").format(settings.errorsCounter);
+        var updatedData = data.toString().format(settings.logsDate.getFromFormat("dd-MM-yyyy hh:mm:ss"),folderName,settings.logs.join("\r\n"),testEnd,title,runDate,filters,error,warning,testTitle,testStart,settings.confirmation);
+        fs.writeFileSync(destPath, updatedData);                         
         settings.logs = [];
         settings.errorsCounter = 0;
         settings.logsDate = null;                        
-        console.logInfo("Log is updated at: {0}".format(settings.filePath),"Rigsarkiv.Log.EnsureData");
-        var folders = settings.filePath.getFolders();
-        var folderName = folders[folders.length - 1];
-        settings.selectLogfile.innerHTML = settings.filePath;
-        settings.outputOkSpn.innerHTML = settings.outputOkText.format(folderName);
+        console.logInfo("Log is updated at: {0}".format(destPath),"Rigsarkiv.Log.EnsureData");
+        settings.selectLogfile.innerHTML = destPath;
+        settings.outputOkSpn.innerHTML = Rigsarkiv.Language.callback().getValue("nemesis-output-Ok").format(folders[folders.length - 1]);
         settings.selectLogfile.hidden = false;
         settings.outputOkSpn.hidden = false;
         settings.outputSupplementSpn.hidden = false; 
@@ -80,9 +95,11 @@ function (n) {
                 rootPath = folders.slice(0,folders.length - 3).join("/");
                 logFilePath = "{0}/{1}".format(rootPath,settings.templateFileName);
             }
-        }        
-        console.logInfo(`copy ${settings.templateFileName} file to: ${settings.filePath}`,"Rigsarkiv.Log.CopyFile");
-        fs.copyFileSync(logFilePath, settings.filePath);
+        }
+        fs.mkdirSync(settings.filePath);        
+        var destPath = GetDestPath();
+        console.logInfo(`copy ${settings.templateFileName} file to: ${destPath}`,"Rigsarkiv.Log.CopyFile");
+        fs.copyFileSync(logFilePath, destPath);
         EnsureData();        
     }
 
@@ -104,10 +121,10 @@ function (n) {
     //add Event Listener to HTML elmenets
     var AddEvents = function () {
         settings.selectLogfile.addEventListener('click', (event) => {
-            shell.openItem(settings.filePath);
+            shell.openItem(GetDestPath());
         }); 
         settings.outputShowBtn.addEventListener('click', (event) => {
-            shell.openItem(settings.filePath);
+            shell.openItem(GetDestPath());
         }); 
     }
 
@@ -117,7 +134,6 @@ function (n) {
             settings.outputErrorSpn = document.getElementById(outputErrorId);
             settings.outputErrorText = settings.outputErrorSpn.innerHTML;
             settings.outputOkSpn =  document.getElementById(outputOkId);
-            settings.outputOkText = settings.outputOkSpn.innerHTML;
             settings.selectLogfile = document.getElementById(selectLogfileId);
             settings.outputSupplementSpn =  document.getElementById(outputSupplementId);
             settings.spinner = document.getElementById(spinnerId);
@@ -165,15 +181,19 @@ function (n) {
                     settings.logs.push(settings.sectionElement.format(logType,(new Date()).getFromFormat("yyyyMMddhhmmss"),folderName,text));
                     if(settings.spinnerEnable && settings.spinner.className === "") { settings.spinner.className = settings.spinnerClass; }
                 },
-                commit: function(selectedFolderPath)
+                commit: function(selectedFolderPath,confirmation)
                 {
                     Reset(); 
                     try
                     {
-                        settings.filePath = settings.filePostfix.format(selectedFolderPath);
+                        var folders = selectedFolderPath.getFolders();
+                        var fileName = folders[folders.length - 1];
+                        settings.fileName = settings.filePostfix.format(fileName);
+                        settings.confirmation = confirmation;
+                        settings.filePath = settings.pathPostfix.format(selectedFolderPath.substring(0,selectedFolderPath.lastIndexOf((selectedFolderPath.indexOf("\\") > -1) ? "\\" : "/") + 1),fileName);
                         if(fs.existsSync(settings.filePath)) {                        
                             console.logInfo(`Delete exists log: ${settings.filePath}`,"Rigsarkiv.Log.callback.commit");
-                            fs.unlinkSync(settings.filePath);
+                            fse.removeSync(settings.filePath);
                         }
                         var errorsCounter = settings.errorsCounter;
                         CopyFile();

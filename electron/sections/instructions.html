@@ -3,102 +3,29 @@
         <header class="section-header">
             <div class="section-wrapper">
                 <div class="header">
-                    <h1 class="title">Vejledning</h1>
+                    <h1 class="title languages" id="instructions-Title"></h1>
                     <h1 class="title right">ASTA</h1>
                 </div>
                 <section>
-                    <!--<hr class="button-divider">-->
                     <div class="formularContainer">
-                        <h2 class="boldfaced">Quickguide <br/> - til produktion og test af en afleveringspakke med ASTA</h2>
+                        <h2 class="boldfaced languages" id="instructions-title-H2"></h2>
                         <table>
                                 <td class="bottomBorderTd">
                                     <div class="tdContent">
                                         <div class="tdLeftContent">
-                                                <h4>Sådan kvalitetssikrer du statistikfilen før du laver udtræk</h4>
-                                                    <span> Når du skaber en afleveringspakke med ASTA med funktionen ”Skab afleveringspakke”, sikrer programmet at afleveringspakken overholder de strukturelle krav til mappestruktur og data- og metadatafiler. Du skal derimod selv sikre at data og metadataindhold i statistikfilerne overholder de krav til afleveringspakken, som fremgår af bilag 9 i bekendtgørelsen om arkiveringsversioner før udtræk med ASTA. Bekendtgørelsen finder du på Rigsarkivets hjemmeside www.sa.dk.  
-                                                            </br></br>Se denne quickguide som pdf: <a id="instructions-link1"
-                                                            href="#Quickguide.pdf">Quickguide.pdf</a>
-                                                            </br></br>Krav til data- og metadatakvalitet er listet herunder:
-                                                                
-                                                                <p><b>Datafil</b></p>
-                                                                <ul>
-                                                                    <li>Tegnsættet for statistikfilen skal være indkodet som UTF-8. Se vejledning om UTF-8.</li>
-                                                                </ul>
-                                                                
-                                                                <p><b>Variable</b></p>
-                                                                <ul> 
-                                                                    <li>Der må ikke være linjeskift i indhold i variable.</li>
-                                                                    <li>Variabelnavne [Variable name] skal være angivet for alle variable.</li>
-                                                                    <li>Variabelnavne må aldrig begynde med et tal, men må godt være en blanding af bogstaver og tal.</li>
-                                                                    <li>Variabelnavne må max være 128 tegn lange.</li>
-                                                                    <li>Variabelbeskrivelser [Variable labels] skal være angivet for alle variable.</li>
-                                                                </ul>
-                                                                
-                                                                <p><b>Datatyper (Formats)</b></p>
-                                                                <ul>
-                                                                    <li>Datatyper for variable i statistikfilen skal overholde de tilladte
-                                                                    datatyper i en afleveringspakke angivet i figur 9.3 i bilag 9 i bekendtgørelse om arkiveringsversioner. 
-                                                                    Hvis dette ikke er tilfældet, skal du selv konvertere datatyperne til tilladte formater 
-                                                                    før udtræk laves med ASTA</li>
-                                                                </ul>
-
-                                                                <p><b>Value labels/Formats</b></p>
-                                                                <ul>
-                                                                    <li>Alle koderværdier i data [Value] skal være beskrevet med en
-                                                                        kodeforklaring [Value labels]</li>
-                                                                    <li>Kodelister [Value labels] må kun være tilknyttet numeriske og
-                                                                        kategoriske variable med datatyperne numerisk heltal, decimal og tekst.</li>
-                                                                    <li>Koder [Values] skal være unikke inden for samme kodeliste [Value labels
-                                                                        knyttet til en variabel]</li>
-                                                                </ul>
-
-                                                                <p><b>Koder for manglende værdier (missing values)</b></p>
-                                                                <ul>
-                                                                    <li>Specialkoder for manglende værdier (SAS og Stata) må kun antage værdier A-Z eller .a-.z.</li>
-                                                                    <li>Specialkoder (SAS og Stata) for manglende værdier må kun
-                                                                        anvendes for numeriske og kategoriske variable med datatyperne numerisk
-                                                                        heltal og decimal</li>
-                                                                    <li>Brugerdefinerede koder (SPSS) for manglende værdier må kun anvendes for numeriske og kategoriske 
-                                                                        variable med datatyperne numerisk heltal, decimal og tekst</li>
-                                                                    <li>Der må konsekvent kun anvendes enten specialkoder (.a-.z eller A-Z)
-                                                                        eller brugerdefinerede koder for manglende værdier</li>    
-                                                                    <li>Hvis brugerdefinerede koder (SPSS) for manglende værdier er anvendt for
-                                                                        variable med datatypen dato eller tidsstempel skal dette beskrives i et
-                                                                        kontekstdokument i afleveringspakken.</li>
-                                                                    <li>Både specialkoder og brugerdefinerede koder for manglende værdier i en variabel skal altid fremgå af
-                                                                        kodelisten [Value labels] for denne variabel</li>
-                                                                    <li>Hvis der kun er angivet kodeforklaringer [value labels] for nogle af
-                                                                        koderne [values] der fremgår af en skala, skal dette beskrives i
-                                                                        variabelbeskrivelsen for variablen.</li>
-                                                                </ul>
-
-                                                                <p><b>Flettevariable (referencer)</b></p>
-                                                                <ul>
-                                                                    <li>Der skal være fuld overensstemmelse mellem datatype og længde for de
-                                                                    flettevariable, der indgår i en reference mellem flere statistikfiler i
-                                                                    afleveringspakken</li>
-                                                                </ul>
-                                                                
-                                                        </br>Læs <a id="instructions-link2"
-                                                                href="#Bilag9Kravtilafleveringspakke.pdf">Vejledning til bilag 9.pdf</a> igennem, for en mere detaljeret beskrivelse af hvad en 
-                                                                afleveringspakke er og hvilke krav der stilles til data- og metadatafilen.
-                                                        <!--<p>Her findes hele <a id="instructions-link3"
-                                                            href="#Bekendtgoerelse1007plusinklbilag9.pdf">Bekendtgørelse 1007+ inkl
-                                                            bilag 9.pdf</a>.-->
-                                                        </p>
-                                                    </span>
+                                            <h4 class="languages" id="instructions-Title1-H4-LeftContent"></h4>
+                                            <span>
+                                                <div class="languages" id="instructions-Description1-DIV-LeftContent"></div>
+                                                <div class="languages" id="instructions-SubDescription11-DIV-LeftContent"></div>
+                                                <div class="languages" id="instructions-SubDescription12-DIV-LeftContent"></div>        
+                                                <div class="languages" id="instructions-SubDescription13-DIV-LeftContent"></div>        
+                                                <div class="languages" id="instructions-SubDescription14-DIV-LeftContent"></div>      
+                                                <div class="languages" id="instructions-SubDescription15-DIV-LeftContent"></div>        
+                                                <div class="languages" id="instructions-SubDescription16-DIV-LeftContent"></div>
+                                                <div class="languages" id="instructions-SubDescription17-DIV-LeftContent"></div>
+                                            </span>
                                         </div>
-                                        <div class="tdRightContent">
-                                            <ul>
-                                                <li><a id="instructions-link6" href="#Quickguide.pdf">Quickguide.pdf</a></li>
-                                                <li><a id="instructions-link7"
-                                                    href="#Bilag9Kravtilafleveringspakke.pdf">Vejledning til bilag 9.pdf</a></li>
-                                                <li><a id="instructions-link8"
-                                                    href="#Bekendtgoerelse1007plusinklbilag9.pdf">Brugervejledning til ASTA.pdf</a></li>
-                                                <li><a id="instructions-link4" href="#SkabarchiveIndexvejledning.pdf">Skab archiveIndex vejledning.pdf</a></li>
-                                                <li><a id="instructions-link5" href="#SkabcontextDocumentationIndexvejledning.pdf">Skab contextDocumentationIndex vejledning.pdf</a></li>
-                                            </ul>
-                                        </div>
+                                        <div class="tdRightContent languages" id="instructions-Description1-DIV-RightContent"></div>
                                     </div>
                                 </td>
                             </tr>
@@ -106,26 +33,10 @@
                                 <td class="bottomBorderTd">
                                     <div class="tdContent">
                                         <div class="tdLeftContent">
-                                            <h4>Dette skal du have klar før du skaber en afleveringspakke med ASTA</h4>
-                                            <span>
-                                                Da det ikke er muligt at fortryde eller gå tilbage i ASTA, bør du have nedenstående filer og informationer klar, før du skaber en afleveringspakke med ASTA.
-                                                <p>Du kan tilføje eller erstatte eksisterende indeksfiler og kontekstdokumenter i en afleveringspakke efterfølgende med funktionen "Rediger afleveringspakke".</p> 
-                                                <ul>
-                                                    <li><b>Fremfind de statistikfiler</b> der skal afleveres til arkivet. </li>
-                                                    <span class="alert-warning"><strong>Information!</strong> Hvis personfølsomme oplysninger er adskilt fra statistikfilen i en nøglefil, skal både statistikfilen og nøglefilen indgå i afleveringspakken</span><br/>
-                                                    <li><b>Fremfind løbenummer</b> for afleveringspakken. Løbenummere er udleveret af arkivet og fremgår af afleveringsbestemmelsen.</li><br/>
-                                                    <li><b>Udfyld indeksfilerne</b> archiveIndex.xml og contextDocumentationIndex.xml. Arkivet har udviklet indtastningsværktøjer til udfyldning af indeksfilerne. Se vejledningerne <a id="instructions-link10" href="#SkabarchiveIndexvejledning.pdf">Skab archiveIndex vejledning.pdf</a> og <a id="instructions-link11" href="#SkabcontextDocumentationIndexvejledning.pdf">Skab contextDocumentationIndex vejledning.pdf</a> på Rigsarkivets hjemmeside www.sa.dk. </li>
-                                                    <span class="alert-warning"><strong>Information!</strong> Arkivet skal godkende de udfyldte indeksfiler, før du placerer dem i afleveringspakken</span><br/>
-                                                    <li><b>Fremfind de kontekstdokumenter</b>, der skal indgå i afleveringspakken. Disse fremgår af afleveringsbestemmelsen.</li><br/>
-                                                    <li><b>Konverter kontekstdokumenterne</b> til bevaringsformat, fx .tif (dokumenter og billeder), .mp3 (lydfiler) og .mpg (video). Se vejledning om "TIFF-konvertering" på Rigsarkivets hjemmeside www.sa.dk.</li>
-                                                    <span class="alert-warning"><strong>Information!</strong> Du kan også konvertere kontekstdokumenterne efter afleveringspakken er skabt med ASTA</span><br/>
-                                                    <li><b>Afklar om der findes unikke variable</b> i statistikfilene som skal angives som nøglevariable under udtræk med ASTA.</li><br/>
-                                                    <li><b>Afklar om der er flettevariable</b> på tværs af flere statistikfiler i afleveringspakken, som skal angives i en opmærkning af en reference under udtræk med ASTA, samt over hvilke variable disse referencer skal dannes.</li>
-                                                </ul>
-                                            </span>
+                                            <h4 class="languages" id="instructions-Title2-H4-LeftContent"></h4>
+                                            <span class="languages" id="instructions-Description2-SPAN-LeftContent"></span>
                                         </div>
-                                        <div class="tdRightContent">
-                                        </div>
+                                        <div class="tdRightContent"></div>
                                     </div>
                                 </td>
                             </tr>
@@ -133,21 +44,10 @@
                                 <td class="bottomBorderTd">
                                     <div class="tdContent">
                                         <div class="tdLeftContent">
-                                            <h4>Disse dele af afleveringspakken kan du skabe med ASTA</h4>
-                                            <span>
-                                                Anvend funktionen "Skab afleveringspakke" til at gøre følgende:<ul>
-                                                    <li>Navngive afleveringspakken med korrekt løbenummer.</li>
-                                                    <li>Danne en tom mappestruktur til afleveringspakken med struktur og navngivning af mapper, der overholder krav i bilag 9.</li>
-                                                    <li>Lave udtræk af data og metadata fra dine originale statistikfiler til data- og metadatafiler, der overholder de strukturelle krav til disse filer i  bilag 9.</li>
-                                                    <li>Tilføje archiveIndex.xml og contextDocumentationIndex.xml til afleveringspakken. Læs <a id="instructions-link9" href="#SkabarchiveIndexvejledning.pdf">Skab archiveIndex_vejledning.pdf</a> og <a id="instructions-link12" href="#SkabcontextDocumentationIndexvejledning.pdf"> Skab contextDocumentationIndex_vejledning.pdf</a> for vejledning i udfyldning af disse indexfiler.</li>
-                                                    <li>Tilføje kontekstdokumenter til afleveringspakken.</li>
-                                                </ul>
-                                            </span>
+                                            <h4 class="languages" id="instructions-Title3-H4-LeftContent"></h4>
+                                            <span class="languages" id="instructions-Description3-SPAN-LeftContent"></span>
                                         </div>
-                                        <div class="tdRightContent">
-                                            <ul>
-                                            </ul>
-                                        </div>
+                                        <div class="tdRightContent"></div>
                                     </div>
                                 </td>
                             </tr>
@@ -155,18 +55,10 @@
                                 <td class="bottomBorderTd">
                                     <div class="tdContent">
                                         <div class="tdLeftContent">
-                                            <h4>Disse dele af afleveringspakken skal du selv lave</h4>
-                                            <span>
-                                                I ASTA kan du ikke følgende:
-                                                <ul>
-                                                    <li>Udfylde indeksfilerne</li>
-                                                    <li>Konvertere kontekstdokumenterne til bevaringsformat, fx .tif eller .mp3</li>
-                                                </ul>
-                                            </span>
+                                            <h4 class="languages" id="instructions-Title4-H4-LeftContent"></h4>
+                                            <span class="languages" id="instructions-Description4-SPAN-LeftContent"></span>
                                         </div>
-                                        <div class="tdRightContent">
-
-                                        </div>
+                                        <div class="tdRightContent"></div>
                                     </div>
                                 </td>
                             </tr>
@@ -174,17 +66,10 @@
                                     <td class="bottomBorderTd">
                                         <div class="tdContent">
                                             <div class="tdLeftContent">
-                                                <h4>Sådan kontrollerer du om udtræk med ASTA er tabsfrit</h4>
-                                                <span>
-                                                    <p>Det er vigtigt at de data der afleveres til Rigsarkivet er autentiske og svarer til indholdet i de originale statistikfiler. Det er den afleverende myndigheds ansvar at sikre, at det udtræk der laves med ASTA eller andre værktøjer er tabsfrit. Dette kan gøres på mange måder både automatisk og visuelt.</p>
-                                                    <p>Denne kvalitetskontrol kan i SPSS udføres ved at køre en compare-syntaks i statistikprogrammet, der sammenligner den originale statistikfil med den output statistikfil, som ASTA skaber. Compare-syntaksen til SPSS er indarbejdet i det export-script til SPSS, som ASTA danner. Ved kørsel af dette export-script udføres således automatisk en kvalitetskontrol af udtræk fra SPSS lavet med ASTA. Resultatet af denne sammenligning gemmes automatisk i en logfil, navngivet Exportscriptlog.spv, på samme destination, hvor den valgte originale statistikfil ligger. Du bør åbne denne logfil i SPSS og kontrollere om der er forskelle mellem originalfilen og outputfilen. Resultatet af sammenligningen fremgår nederst i logfilen under overskriften ”Compare datasets”. </p>
-                                                    <p>Compare-syntakser til SAS og Stata er ikke indarbejdet i exports-scriptene i ASTA.</p>
-                                                    <p>Ud over automatiske kontroller, bør du også foretage visuel kontrol af data før og efter konvertering, samt tjekke om metadata i metadatafilen (fx table1.txt) er udtrukket korrekt og tabsfrit fra datafilen.</p>
-                                                </span>
+                                                <h4 class="languages" id="instructions-Title5-H4-LeftContent"></h4>
+                                                <span class="languages" id="instructions-Description5-SPAN-LeftContent"></span>
                                             </div>
-                                            <div class="tdRightContent">
-    
-                                            </div>
+                                            <div class="tdRightContent"></div>
                                         </div>
                                     </td>
                                 </tr>
@@ -192,21 +77,10 @@
                                 <td class="bottomBorderTd">
                                     <div class="tdContent">
                                         <div class="tdLeftContent">
-                                            <h4>Sådan tester du en afleveringspakke</h4>
-                                            <span>
-                                                Anvend funktionen "Test afleveringspakke":
-                                                <ul>
-                                                    <li>Vælg den afleveringspakke, du vil teste og klik på knappen "Start test"</li>
-                                                    <li>Læs eventuelle fejlbeskeder vist i testloggen</li>
-                                                    <li>Klik på fejl-ID'et i html-versionen af testloggen som fremkommer ved klik på knappen "Vis log", for at se vejledning om hvordan fejlen rettes</li>
-                                                    <li>Ret fejlene vist i testloggen og test afleveringspakken på ny</li>
-                                                    <li>Når afleveringspakken er testet helt fejlfri kan den afleveres til arkivet, efter de regler for aflevering, som fremgår på Rigsarkivets hjemmeside www.sa.dk.</li>
-                                                </ul>
-                                            </span>
+                                            <h4 class="languages" id="instructions-Title6-H4-LeftContent"></h4>
+                                            <span class="languages" id="instructions-Description6-SPAN-LeftContent"></span>
                                         </div>
-                                        <div class="tdRightContent">
-
-                                        </div>
+                                        <div class="tdRightContent"></div>
                                     </div>
                                 </td>
                             </tr>
@@ -214,21 +88,10 @@
                                 <td class="bottomBorderTd">
                                     <div class="tdContent">
                                         <div class="tdLeftContent">
-                                            <h4>Sådan retter du fejl i en eksisterende afleveringspakke</h4>
-                                            <span>
-                                                <ul>
-                                                    <li><b>Fejl i data- og metadatafilerne</b> rettes direkte i statistikfilen, hvorefter der laves et nyt udtræk med ASTA.</li>
-                                                    <p>Kan fejlen ikke rettes i statistikfilen er det tilladt at rette direkte i datafilen (fx table1.csv) og metadatafilen (fx table1.txt) udtrukket fra statistikfilen. Disse fejl bør dog rettes som noget af det aller sidste, når man er sikker på, at der ikke er flere fejl, der skal rettes ved at lave nyt udtræk fra statistikfilen. </p>
-                                                    <li><b>Fejl i indeksfilerne</b> kan rettes i Rigsarkivets indtastningsværktøjer til disse. Værktøjerne validerer om filerne overholder krav til indeksfiler. Ændringer i indeksfilerne skal godkendes af arkivet.</li><br/>
-                                                    <li><b>Fejl i kontekstdokumenter</b> rettes ved at erstatte det eksisterende kontekstdokument med et tilrettet. </li><br/>
-                                                    <span class="alert-warning"><strong>Information!</strong> Tilføjes nye kontekstdokumenter til afleveringspakken som ikke fremgår af afleveringsbestemmelsen, skal denne opdateres med disse dokumenter og godkendes af arkivet</span><br/>
-                                                    
-                                                </ul>  
-                                            </span>
+                                            <h4 class="languages" id="instructions-Title7-H4-LeftContent"></h4>
+                                            <span class="languages" id="instructions-Description7-SPAN-LeftContent"></span>
                                         </div>
-                                        <div class="tdRightContent">
-
-                                        </div>
+                                        <div class="tdRightContent"></div>
                                     </div>
                                 </td>
                             </tr>

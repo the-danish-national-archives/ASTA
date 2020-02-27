@@ -7,86 +7,61 @@
                     <h1 class="title right">ASTA</h1>
                 </div>
                 <section>
-                    <span id="hybris-section-title-New" hidden="true">Skab afleveringspakke</span>
-                    <span id="hybris-section-title-Edit" hidden="true">Rediger afleveringspakke</span>
+                    <span class="languages" id="hybris-section-title-New" hidden="true"></span>
+                    <span class="languages" id="hybris-section-title-Edit" hidden="true"></span>
                     <div class="btnContaier" hidden="true"> 
-                        <button name="button" class="menuBtn" id="hybris-tab-structure">Skab Mappestruktur</button>
-                        <button name="button" class="menuBtn" id="hybris-tab-statistics">Skab Script Fil</button>
-                        <button name="button" class="menuBtn" id="hybris-tab-metdata">Skab Metadata</button>
-                        <button name="button" class="menuBtn" id="hybris-tab-references">Referencer</button>
-                        <button name="button" class="menuBtn" id="hybris-tab-indexfiles">Indeksfiler</button>
-                        <button name="button" class="menuBtn" id="hybris-tab-contextdocuments">Kontekstdokumenter</button>
-                        <button name="button" class="menuBtn" id="hybris-tab-overview">Oversigt</button>
+                        <button name="button" class="menuBtn languages" id="hybris-tab-structure"></button>
+                        <button name="button" class="menuBtn languages" id="hybris-tab-statistics"></button>
+                        <button name="button" class="menuBtn languages" id="hybris-tab-metdata"></button>
+                        <button name="button" class="menuBtn languages" id="hybris-tab-references"></button>
+                        <button name="button" class="menuBtn languages" id="hybris-tab-backup"></button>
+                        <button name="button" class="menuBtn languages" id="hybris-tab-indexfiles"></button>
+                        <button name="button" class="menuBtn languages" id="hybris-tab-contextdocuments"></button>
+                        <button name="button" class="menuBtn languages" id="hybris-tab-overview"></button>
                     </div>
                     <div id="hybris-panel-structure" class="formularContainer">
                         <div id="hybris-panel-structure-New" hidden="true" class="box">
                             <div class="leftContent">
                                 <p>
-                                    <h2 class="boldfaced">Mappestruktur</h2>
+                                    <h2 class="boldfaced languages" id="hybris-panel-structure-New-Title-H2"></h2>
                                 </p>
-                                <p>Du kan her skabe en tom mappestruktur til afleveringspakken</p>
-                                <span class="boldfaced">Indtast løbenummer for afleveringspakken</span>
+                                <p class="languages" id="hybris-panel-structure-New-Description-P"></p>
+                                <span class="boldfaced languages" id="hybris-structure-delivery-package-SPAN"></span>
                                 <i id="hybris-message-structure-delivery-package" class="far fa-question-circle"></i>
                                 <br/>
-                                <span id="hybris-message-structure-delivery-package-Title" hidden="true">Løbenummer</span>
-                                <span id="hybris-message-structure-delivery-package-Text" hidden="true">Indtast det løbenummer for afleveringspakken, du har fået udleveret af arkivet. Det udleverede løbenummer fremgår af afleveringsbestemmelsen og arkivbeskrivelsesfilen (archiveIndex.xml). Løbenummeret består af minimum 5 cifre uden foranstillede nuller. Indtastes løbenummer ikke, får afleveringspakken midlertidigt løbenummeret 99999. Løbenummer kan ændres senere ved at omdøbe mappenavnet i en stifinder.</span>
                                 <input type="text" id="hybris-structure-delivery-package">
                                 <br/>
                                 <br/>
-                                <span class="boldfaced">Vælg destination for afleveringspakken</span>
+                                <span class="boldfaced languages" id="hybris-structure-new-path-SPAN"></span>
                                 <i id="hybris-message-structure-new-path" class="far fa-question-circle"></i>
-                                <br>
-                                <span id="hybris-message-structure-new-path-Title" hidden="true">Destination</span>
-                                <span id="hybris-message-structure-new-path-Text" hidden="true">Vælg den mappe på computeren eller mediet (fx USB, harddisk, SSD), som afleveringspakken skal placeres på.</span>
+                                <br/>
                                 <div>
-                                    <input type="text" class="path" id="hybris-structure-new-path" readonly="true" placeholder="Vælg sti med browse knappen">
-                                    <button id="hybris-select-structure-new-directory">Browse</button>
+                                    <input type="text" class="path languages" id="hybris-structure-new-path" readonly="true">
+                                    <button class="languages" id="hybris-select-structure-new-directory"></button>
                                 </div>
-                                <button id="hybris-structure-new-okBtn">Skab mappestruktur</button><br><br>
-                                <span id="hybris-output-structure-RequiredPath-Title" hidden="true">Afleveringspakken mangler</span>
-                                <span id="hybris-output-structure-RequiredPath-Text" hidden="true">Destination for afleveringspakken mangler</span>
-                                <span id="hybris-output-structure-UnvalidDeliveryPackage-Title" hidden="true">Det angivne løbenummer er ugyldigt</span>
-                                <span id="hybris-output-structure-UnvalidDeliveryPackage-Text" hidden="true">Det angivne løbenummer er ugyldigt. Løbenummer kan kun bestå af tal sammensat af minimum 5 cifre uden foranstillede nuller. Foranstillede og efterstillede blanktegn er ikke tilladt.</span>
-                                <span id="hybris-output-structure-Exists-Title" hidden="true">Afleveringspakken eksisterer</span>
-                                <span id="hybris-output-structure-Exists-Text" hidden="true">Afleveringspakken {0} eksisterer allerede på destinationen. Vælg en anden destination eller fjern/slet den eksisterende afleveringspakke fra den valgte destination.</span>
+                                <button class="languages" id="hybris-structure-new-okBtn"></button><br/><br/>
                             </div>
                             <div class="rightContent">
-                                <h3>Checkliste</h3>
-                                <p>Du bør have følgende klar, før du skaber en afleveringspakke:</p>
-                                <ol>
-                                    <li><b>Løbenummer for afleveringspakken</b> - løbenummeret er udleveret af arkivet og fremgår af afleveringsbestemmelsen</li><br/>
-                                    <li><b>Statistikfilerne</b> der skal indgå i afleveringspakken og afleveres til arkivet - husk at kvalitetssikre statistikfilerne før udtræk </li>
-                                    <span class="alert-warning"><strong>Advarsel!</strong> Anvend altid en KOPI af din originale statistikfil!</span><br/>
-                                    <li><b>Indeksfilerne</b> archiveIndex.xml og contextDocumentationIndex.xml </li><br/>
-                                    <li><b>Kontekstdokumenterne</b> der skal indgå i afleveringspakken. Kontekstdokumenterne skal konverteres til TIFF, JPEG-2000, MP3, WAVE eller MPEG inden de afleveres til arkivet</li><br/>
-                                    <li><b>Beskrivelse af statistikfilernes indhold</b></li><br/>
-                                    <li><b>Afklar nøglevariable</b> - hvilke unikke variable i statistikfilerne skal angives som nøglevariable? </li><br/>
-                                    <li><b>Afklar referencer</b> - over hvilke variable dannes referencer mellem hvilke statistikfiler i afleveringspakken?</li>
-                                </ol>
-                                Se <a id="hypres-link1" href="#Quickguide.pdf">Quickguide.pdf</a> for mere vejledning i hvordan du kvalitetssikrer statistikfilen og gør øvrige dokumenter klar før udtræk med ASTA.
+                                <h3 class="languages" id="hybris-panel-structure-New-Title-H3-RightContent"></h3>
+                                <div class="languages" id="hybris-panel-structure-New-Description-DIV-RightContent"></div>
                             </div>
                             <span id="hybris-output-structure-Error" hidden="true"><br />Error: {0}</span>
                         </div>
                         <div id="hybris-panel-structure-Edit" hidden="true" class="box">
                                 <div class="leftContent">
                                     <p>
-                                        <h2 class="boldfaced">Tilføj indeksfiler og kontekstdokumenter</h2>
+                                        <h2 class="boldfaced languages" id="hybris-panel-structure-Edit-Title-H2"></h2>
                                     </p>
-                                    <p>Du kan her redigere en afleveringspakke ved at tilføje eller erstatte eksisterende indeksfiler og kontekstdokumenter</p>
+                                    <p class="languages" id="hybris-panel-structure-Edit-Description-P"></p>
                                     <br/>
-                                    <span class="boldfaced">Vælg afleveringspakke</span>
+                                    <span class="boldfaced languages" id="hybris-structure-edit-path-SPAN"></span>
                                     <i id="hybris-message-structure-edit-path" class="far fa-question-circle"></i>
                                     <br>
-                                    <span id="hybris-message-structure-edit-path-Title" hidden="true">Vælg afleveringspakken</span>
-                                    <span id="hybris-message-structure-edit-path-Text" hidden="true">Vælg den afleveringspakke der skal redigeres, fx FD.12345</span>
                                     <div>
-                                        <input type="text" class="path" id="hybris-structure-edit-path" readonly="true" placeholder="Vælg sti med browse knappen">
-                                        <button id="hybris-select-structure-edit-directory">Browse</button>
+                                        <input type="text" class="path languages" id="hybris-structure-edit-path" readonly="true">
+                                        <button class="languages" id="hybris-select-structure-edit-directory"></button>
                                     </div>
-                                    <button id="hybris-structure-edit-okBtn">Næste</button><br><br>
-                                    <span id="hybris-structure-indexfiles-RequiredPath-Title" hidden="true">Manglende undermappe</span>
-                                    <span id="hybris-structure-indexfiles-RequiredPath-Text" hidden="true">Mapperne Indices eller ContextDocumentation findes ikke i afleveringspakken.</span>
-                                    <span id="hybris-structure-indexfiles-Description" hidden="true">hvis de mangler</span>
+                                    <button class="languages" id="hybris-structure-edit-okBtn"></button><br><br>
                                 </div>
                                 <div class="rightContent"></div>
                         </div>
@@ -95,346 +70,259 @@
                         <div id="hybris-panel-script1">
                             <p>
                                 <div class="infoBox" id="hybris-reset-hide-box">
-                                    <span id="hybris-output-structure-Ok" hidden="true" class="confirmation"><i class="fas fa-check-circle ok"></i>Mappestrukturen er skabt</span>
+                                    <span id="hybris-output-structure-Ok" hidden="true" class="confirmation languages"></span>
                                 </div>
-                                <h2 class="boldfaced">Udtræk data fra statistikfilen <span id="hybris-output-statistics-header-trin1" class="trinHeader">{0}</span></h2>
+                                <h2 class="boldfaced"><span class="languages" id="hybris-output-statistics-header-trin1-SPAN"></span> <span class="trinHeader" id="hybris-output-statistics-header-trin1">{1}</span></h2>
                             </p>
-                            <p>
-                                Du kan her udtrække data og metadata fra dine statistikfiler til afleveringspakken  
-                                <br/>
-                                <br/> Udtrækket består af 3 trin for hver statistikfil: 
-                                <br/> TRIN 1: Vælg statistikfil
-                                <br/> TRIN 2: Kør export script i dit statistikprogram
-                                <br/> TRIN 3: Indtast informationer om statistikfilen
-                            </p>
-                                <span class="alert-warning"><strong>Information!</strong>  Du kan kun lave udtræk fra statistikfiler i formaterne SPSS, SAS og Stata.</span>
-                            <br/>
-                            <br>
-                            <br>
-                                <span class="boldfaced">TRIN 1: Vælg statistikfilen som udtræk skal laves fra:</span>
-                                <i id="hybris-message-statistics-filepath" class="far fa-question-circle"></i>
-                                <span id="hybris-message-statistics-filepath-Title" hidden="true">Vælg statistikfil</span>
-                                <span id="hybris-message-statistics-filepath-Text" hidden="true">Vælg den statistikfil, du ønsker at lave udtræk fra. Filen skal have et af følgende formater: .sas7bdat (SAS-fil), .dta (Stata-fil) eller .sav (SPSS-fil). Når der udtrækkes data for en SAS-fil med katalog, skal katalogfilen (.sas7bcat) placeres i samme mappe som den valgte SAS-datafil (.sas7bdat), der skal laves udtræk fra og navngives på samme måde som datafilen.  Du skal lave en kopi af katalogfilen og omdøbe denne.
-                                </span>
+                            <div class="languages" id="hybris-message-statistics-Description-DIV"></div>                            
+                            <br/> <br/> <br/>
+                            <span class="boldfaced languages" id="hybris-statistics-filepath-SPAN"></span>
+                            <i id="hybris-message-statistics-filepath" class="far fa-question-circle"></i>                                
                             <div>
-                                <input type="text" class="path" id="hybris-statistics-filepath" readonly="true" placeholder="Vælg sti med browse knappen">
-                                <button id="hybris-select-statistics-file">Browse</button>
+                                <input type="text" class="path languages" id="hybris-statistics-filepath" readonly="true">
+                                <button class="languages" id="hybris-select-statistics-file"></button>
                             </div>
-                            <button id="hybris-statistics-okBtn">Næste</button>
+                            <button class="languages" id="hybris-statistics-okBtn"></button>
                             <br>
                             <br>
                             <div>
-                            <span class="greyText">INFO: Mappestrukturen er skabt og placeret her: </span><a id="hybris-structure-select-delivery-package" hidden="true"></a>
+                            <span class="greyText languages" id="hybris-statistics-info-SPAN"></span><a id="hybris-structure-select-delivery-package" hidden="true"></a>
                             </div>
-                            <span id="hybris-output-statistics-RequiredPath-Title" hidden="true">Statistikfilen mangler</span>
-                            <span id="hybris-output-statistics-RequiredPath-Text" hidden="true">Vælg en statistikfil</span>
-                            <span id="hybris-output-statistics-SASCatalogPopup" hidden="true" class="error"><i class="fas fa-times error"></i>Du kan ikke gå videre til "Næste" før du besvarer popup vindue [SAS fil uden katalog]</span>
-                            <span id="hybris-output-statistics-Error" hidden="true"><br/>Error: {0}</span>
-                            <span id="hybris-output-statistics-OkConfirm" hidden="true">FORTSÆT</span>
-                            <span id="hybris-output-statistics-CancelConfirm" hidden="true">FORTRYD</span>   
-                            <span id="hybris-message-statistics-SASCatalogWarning-Title" hidden="true">SAS fil uden katalog</span>
-                            <span id="hybris-message-statistics-SASCatalogWarning-Text" hidden="true">Du er ved at udtrække data fra en SAS-datafil uden katalog (format-filen). Enten mangler SAS katalogfilen eller den er navngivet forkert. Når der udtrækkes data for en SAS-datafil med katalog, skal katalogfilen (.sas7bcat) placeres i samme mappe som den valgte SAS-datafil (.sas7bdat), der skal laves udtræk fra, og katalogfilen skal navngives på samme måde som SAS-datafilen. OBS: Det er vigtigt at du omdøber en kopi af katalogfilen, ellers kan du ikke åbne statistikfilen korrekt efterfølgende i dit statistikprogram. OBS: Katalogfilen må kun indeholde value labels (formats) som anvendes i den statistikfil, som udtrækket laves fra. Klik ”FORSÆT”, hvis du ønsker at fortsætte udtræk uden katalogfil. Klik ”FORTRYD” hvis du ønsker at vælge ny statistikfil med katalog.</span>
-                        </div>                        
+                            <span id="hybris-output-statistics-SASCatalogPopup" hidden="true" class="error languages"></span>
+                            <span id="hybris-output-statistics-Error" hidden="true"><br/>Error: {0}</span> 
+                       </div>                        
                         <div id="hybris-panel-script2" hidden="true">
                             <p>
                                 <div class="infoBox">
-                                    <span class="confirmation"><i class="fas fa-check-circle ok"></i>Eksport script er dannet og ligger <a id="hybris-output-script-dataPath">her</a></span>
+                                    <span class="confirmation"><i class="fas fa-check-circle ok"></i><span class="languages" id="hybris-output-script-dataPath-SPAN"></span> <a class="languages" id="hybris-output-script-dataPath"></a></span>
                                 </div>
-                                <h2 class="boldfaced">TRIN 2: Kør eksport script <div class="trinHeader"><span id="hybris-output-statistics-header-trin2">{0}</span> - <a id="hybris-output-statistics-headerLink-trin2"></a></div></h2>
+                                <h2 class="boldfaced"><span class="languages" id="hybris-output-statistics-header-trin2-SPAN"></span> <div class="trinHeader"><span id="hybris-output-statistics-header-trin2"></span> - <a id="hybris-output-statistics-headerLink-trin2"></a></div></h2>
                             </p>
-                            <span id="hybris-output-script-OKCopyScriptInfo">
-                                <p class="boldfaced">Sådan gør du: </p>
-                                <p>
-                                    <ol>
-                                        <li>Lad ASTA være åbent (luk ikke dette program ned!)</li>
-                                        <li>Åben eksport scriptet i {0} og kør scriptet uændret</li>
-                                        <li>Vend tilbage til ASTA, når scriptet er kørt færdigt og klik på knappen "Næste" nedenfor</li>
-                                    </ol>  
-                                </p>
-                            </span>
-                            <button id="hybris-script-okBtn">Næste</button> 
+                            <span id="hybris-output-script-OKCopyScriptInfo"></span>
+                            <button class="languages" id="hybris-script-okBtn"></button> 
                             <div id="hybris-script-Spinner" hidden="true" class="lds-ring"><div></div><div></div><div></div><div></div></div>
                             <br/>
                             <br/>
-                            <span id="hybris-output-script-OKCopyScript" class="greyText">INFO: Eksport scriptet {0} er dannet og ligger her: </span><a id="hybris-output-script-dataPath-link">{0}</a>                          
-                            <span id="hybris-output-script-Ok" hidden="true"><br/>Der er udtrukket data og metadata fra statistikfilen {0}.</span>
+                            <span id="hybris-output-script-OKCopyScript" class="greyText"></span> <a id="hybris-output-script-dataPath-link">{0}</a>                          
+                            <span id="hybris-output-script-Ok" hidden="true"></span>
                             <span id="hybris-output-script-Error" hidden="true"><br/>Error: {0}</span>
-                            <span id="hybris-output-script-CloseApplicationWarning-Title" hidden="true">Statistikprogrammet</span>
-                            <span id="hybris-output-script-CloseApplicationWarning-Text" hidden="true">Luk statistikfilen og export scriptet, før du klikker på knappen "Næste", for at gå til trin 3.</span>
-                            <span id="hybris-output-script-RequiredFilesWarning-Title" hidden="true">Data og metadata fra statistikfilen</span>
-                            <span id="hybris-output-script-RequiredFilesWarning-Text" hidden="true">Der er ikke udtrukket data og metadata fra statistikfilen. Kør export scriptet i dit statistikprogram før du klikker på knappen "Næste".</span>
-                            <span id="hybris-output-script-EncodingFileError-Title" hidden="true">Tegnsæt skal være indkodet som UTF-8</span>
-                            <span id="hybris-output-script-EncodingFileError-Text" hidden="true">Følgende filer udtrukket til afleveringspakken er muligvis ikke indkodet som UTF-8: {0}. Vil du fortsætte?</span>
                             <br /><br />
-                            <button id="hybris-script-nextBtn" hidden="true">Næste</button>
+                            <button class="languages" id="hybris-script-nextBtn" hidden="true"></button>
                         </div>
                     </div>
                     <div id="hybris-panel-metdata" class="formularContainer" hidden="true">
                         <div id="hybris-panel-information1">
                             <p>
                                 <div class="infoBox">
-                                    <span class="confirmation"><i class="fas fa-check-circle ok"></i>Der er udtrukket data- og metadata fra statistikfilen</span>
+                                    <span class="confirmation"><i class="fas fa-check-circle ok"></i><span class="languages" id="hybris-panel-metdata-confirmation1-SPAN"></span></span>
                                 </div>
-                                <h2 class="boldfaced">TRIN 3: Indtast informationer om statistikfilen <div class="trinHeader"><span id="hybris-output-statistics-header-trin3">{0}</span> - <a id="hybris-output-statistics-headerLink-trin3"></a></div></h2>
-                                <i>* Feltet skal udfyldes</i>
+                                <h2 class="boldfaced"><span class="languages" id="hybris-output-statistics-header-trin3-SPAN"></span> <div class="trinHeader"><span id="hybris-output-statistics-header-trin3"></span> - <a id="hybris-output-statistics-headerLink-trin3"></a></div></h2>
+                                <i class="languages" id="hybris-panel-metdata-information1-I"></i>
                             </p>
                             <div id="keyVarContainer">
                                 <span>
-                                    <label class="descriptionLabel" for="hybrismetdatafileName">Datafilnavn* (uden extension)</label>
+                                    <label class="descriptionLabel languages" id="hybris-metdata-fileName-LABEL" for="hybrismetdatafileName"></label>
                                     <input type="text" name="hybrismetdatafileName" id="hybris-metdata-fileName">
                                 </span>
                                 <i id="hybris-message-metdata-fileName" class="far fa-question-circle"></i>
-                                <span id="hybris-message-metdata-fileName-Title" hidden="true">DATAFILNAVN</span>
-                                <span id="hybris-message-metdata-fileName-Text" hidden="true">Navn på statistikfilen, der laves udtræk fra, som den benævnes i brugssammenhæng.</span>
-                                <br>
+                                <br/>
                                 <span>
-                                    <label class="descriptionLabel" for="hybrismetdatafileDescription">Datafilbeskrivelse*</label>
-                                    <textarea maxlength="4096" rows="8" placeholder="En kort beskrivelse af datafilen (4096 tegn)." name="hybrismetdatafileDescription" id="hybris-metdata-fileDescription"></textarea>
+                                    <label class="descriptionLabel languages" id="hybris-metdata-fileDescription-LABEL" for="hybrismetdatafileDescription"></label>
+                                    <textarea class="languages" maxlength="4096" rows="8" name="hybrismetdatafileDescription" id="hybris-metdata-fileDescription"></textarea>
                                 </span>
                                 <i id="hybris-message-metdata-fileDescription" class="far fa-question-circle" style="vertical-align: top"></i>
-                                <span id="hybris-message-metdata-fileDescription-Title" hidden="true">DATAFILBESKRIVELSE</span>
-                                <span id="hybris-message-metdata-fileDescription-Text" hidden="true">Beskrivelse af statistikfilens indhold. Fx den fulde titel for statistikfilen/studiet eller en eksisterende projektbeskrivelse, der præcist dækker statistikfilens indhold.</span>
-                                <br>
+                                <br/>
                                 <span>
-                                    <label class="descriptionLabel" for="hybrismetdatakeyVar">Nøglevariabel</label>
+                                    <label class="descriptionLabel languages" id="hybris-metdata-Variables-LABEL" for="hybrismetdatakeyVar"></label>
                                     <select id="hybris-metdata-Variables" class="dropDownSizing"></select>
                                 </span>
                                 <i id="hybris-message-metdata-keyVariable" class="far fa-question-circle"></i>
-                                <span id="hybris-message-metdata-keyVariable-Title" hidden="true">NØGLEVARIABEL</span>
-                                <span id="hybris-message-metdata-keyVariable-Text" hidden="true">Statistikfilens unikke nøglevariabel angivet med navne på den/de variable, som nøglevariablen består af. Flere variabelnavne adskilles med mellemrum.</span>
-                                <br />
-                                <button id="hybris-metdata-addVarKeyBtn" class="right-align">Tilføj variabel</button>
-                                <br />
+                                <br/>
+                                <button class="right-align languages" id="hybris-metdata-addVarKeyBtn"></button>
+                                <br/>
                                 <table id="hybris-metdata-varKeys" class="right-align" hidden="true">
                                     <tr>
-                                        <th>Nøglevariabel</th>
+                                        <th class="languages" id="hybris-metdata-varKeys-TH"></th>
                                     </tr>
                                 </table>
-                                <button id="hybris-metdata-cancelBtn" class="right-align">Fortryd nøglevariabel</button>
+                                <button class="right-align languages" id="hybris-metdata-cancelBtn"></button>
                             </div>
-                            <button id="hybris-metdata-okBtn">Næste</button>
-                            <span id="hybris-output-metdata-Error" hidden="true"><br/>Error: {0}</span>
-                            <span id="hybris-output-metdata-fileNameRequired-Title" hidden="true">Datafilnavn</span>
-                            <span id="hybris-output-metdata-fileNameRequired-Text" hidden="true">Datafilnavn skal udfyldes</span>                            
-                            <span id="hybris-output-metdata-fileDescrRequired-Title" hidden="true">Datafilbeskrivelse</span>
-                            <span id="hybris-output-metdata-fileDescrRequired-Text" hidden="true">Datafilbeskrivelse skal udfyldes</span>
-                            <span id="hybris-output-metdata-fileNameNumberFirst-Title" hidden="true">Datafilnavn</span>
-                            <span id="hybris-output-metdata-fileNameNumberFirst-Text" hidden="true">Det angivne datafilnavn begynder med et tal. Dette er ikke lovligt.</span>
-                            <span id="hybris-output-metdata-fileNameIllegalChar-Title" hidden="true">Datafilnavn</span>
-                            <span id="hybris-output-metdata-fileNameIllegalChar-Text" hidden="true">Det angivne datafilnavn indeholder ulovlige tegn. Kun tal, bogstaver og underscore er lovlige tegn for et datafilnavn</span>
-                            <span id="hybris-output-metdata-fileNameLength-Title" hidden="true">Datafilnavn</span>
-                            <span id="hybris-output-metdata-fileNameLength-Text" hidden="true">Det angivne datafilnavn er længere end den tilladte længde på 128 tegn. Forkort datafilnavnet.</span>
-                            <span id="hybris-output-metdata-fileNamereservedWord-Title" hidden="true">Datafilnavn</span>
-                            <span id="hybris-output-metdata-fileNamereservedWord-Text" hidden="true">Det angivne datafilnavn er et reserveret ord i SQL 99 standarden. Omkrans datafilnavnet med dobbeltapostrof (fx "select") eller omdøb datafilnavnet.</span>
-                            <span id="hybris-output-metdata-CloseApplicationError-Title" hidden="true">Statistikprogrammet</span>
-                            <span id="hybris-output-metdata-CloseApplicationError-Text" hidden="true">Export script og/eller statistikfilen er stadig åben i statistikprogrammet.  Hybris kan derfor ikke færdiggøre data- og metadataudtrækket.  Slet afleveringspakken og begynd forfra</span>
-                            <span id="hybris-output-metdata-varKeyRequired-Title" hidden="true">Nøglen</span>
-                            <span id="hybris-output-metdata-varKeyRequired-Text" hidden="true">Nøglen skal vælges.</span>                            
-                            <span id="hybris-output-metdata-keyNumberFirst-Title" hidden="true">Nøglevariabel</span>
-                            <span id="hybris-output-metdata-keyNumberFirst-Text" hidden="true">En angivet nøglevariabel begynder med et tal. Dette er ikke lovligt.</span>                            
-                            <span id="hybris-output-metdata-keyIllegalChar-Title" hidden="true">Nøglevariabel</span>
-                            <span id="hybris-output-metdata-keyIllegalChar-Text" hidden="true">En angivet nøglevariabel indeholder ulovlige tegn. Kun tal, bogstaver og underscore er lovlige tegn for en Nøglevariabel</span>
-                            <span id="hybris-output-metdata-keyLength-Title" hidden="true">Nøglevariabel</span>
-                            <span id="hybris-output-metdata-keyLength-Text" hidden="true">En angivet nøglevariabel er længere end den tilladte længde på 128 tegn. Forkort nøglevariabel.</span>
-                            <span id="hybris-output-metdata-keyReservedWord-Title" hidden="true">Nøglevariabel</span>
-                            <span id="hybris-output-metdata-keyReservedWord-Text" hidden="true">En angivet nøglevariabel er et reserveret ord i SQL 99 standarden. Omkrans nøglevariabel med dobbeltapostrof (fx "select") eller omdøb nøglevariabel.</span>
-                            <span id="hybris-output-metdata-addKeyWarning-Title" hidden="true">Nøglevariabel er ikke tilføjet</span>
-                            <span id="hybris-output-metdata-addKeyWarning-Text" hidden="true">Du har valgt en nøglevariabel som ikke er tilføjet. Hvis du vælger FORTSÆT medtages variablen ikke som nøglevariabel.</span>
-                            <span id="hybris-output-metdata-OkConfirm" hidden="true">FORTSÆT</span>
-                            <span id="hybris-output-metdata-CancelConfirm" hidden="true">FORTRYD</span>  
+                            <button class="languages" id="hybris-metdata-okBtn"></button>
+                            <span id="hybris-output-metdata-Error" hidden="true"><br/>Error: {0}</span>                            
                         </div>
                         <div id="hybris-panel-information2" hidden="true">    
-                            <h2 class="boldfaced"><div  class="trinHeader"><span id="hybris-output-statistics-header-information2">{0}</span> - <a id="hybris-output-statistics-headerLink-information2"></a></div></h2>
+                            <h2 class="boldfaced"><div class="trinHeader"><span id="hybris-output-statistics-header-information2"></span> - <a id="hybris-output-statistics-headerLink-information2"></a></div></h2>
                             <div class="infoBox">
-                                <span class="confirmation"><i class="fas fa-check-circle ok"></i>Dataudtrækket er færdigt</span>
+                                <span class="confirmation"><i class="fas fa-check-circle ok"></i><span class="languages" id="hybris-panel-metdata-confirmation2-SPAN"></span></span>
                             </div>
-                            <span id="hybris-output-metdata-Ok" class="greyText"><br />INFO: En datafil ({0}) og en metadatafil ({1}) med informationer fra statistikfilen {2} er nu udtrukket og placeret her: </span><a id="hybris-output-metdata-path"></a>
-                            <span id="hybris-output-metdata-NewExtraction"><br /><br />Vælg "Nyt udtræk", hvis du skal lave udtræk fra flere statistikfiler til afleveringspakke {0}.<br /></span>
-                            <button id="hybris-metdata-NewExtractionBtn">Nyt udtræk</button>
-                            <span id="hybris-output-metdata-Next"><br /><br />Vælg "Næste" hvis du <b>ikke</b> skal lave flere udtræk til afleveringspakken.<br /></span>
-                            <button id="hybris-metdata-NextBtn" hidden="true">Næste</button>
-                            <span id="hybris-output-metdata-newExtractionWarning-Title" hidden="true">Nyt dataudtræk</span>
-                            <span id="hybris-output-metdata-newExtractionWarning-Text" hidden="true">Er du sikker på at du vil lave udtræk fra en ny statistikfil til afleveringspakken?</span>
+                            <span id="hybris-output-metdata-Ok" class="greyText"></span> <a id="hybris-output-metdata-path"></a>
+                            <span id="hybris-output-metdata-NewExtraction"></span>
+                            <button class="languages" id="hybris-metdata-NewExtractionBtn"></button>
+                            <span class="languages" id="hybris-output-metdata-Next"></span>
+                            <button class="languages" id="hybris-metdata-NextBtn" hidden="true"></button>
                         </div>
                     </div>
                     <div id="hybris-panel-references" class="formularContainer" hidden="true">
                         <p>
-                            <h2 class="boldfaced">Tilføj relationer mellem datasæt i afleveringspakken<span id="hybris-output-statistics-header-references" class="trinHeader">{0}</span></h2>
-                            <p>Du kan her angive relationer mellem datasæt i afleveringspakken, hvis de findes. <br />Du skal kun angive de relationer, hvor sammenfletningen resulterer i, at variable tillægges datasættet (horisontal sammenfletning). Dvs. i det tilfælde hvor der er flere datasæt med forskellige variable, men samme individer, som over en fælles flettevariabel kan samles til et datasæt.</p>
-                            <span class="alert-warning"><strong>Information!</strong> Relationer til eventuelle nøglefiler skal også angives her</span><br/>
-                            <br />
+                            <h2 class="boldfaced"><span class="languages" id="hybris-output-statistics-header-references-SPAN"></span><span id="hybris-output-statistics-header-references" class="trinHeader"></span></h2>
+                            <p class="languages" id="hybris-panel-references-info-P"></p>
+                            <span class="alert-warning languages" id="hybris-panel-references-warning-SPAN"></span><br/>
+                            <br/>
                         </p>
                         <div id="referenceContainer">
                             <span>
-                                <label class="descriptionLabel boldfaced" for="hybrisreferencestable"><b></b>Datasæt 1</label>
+                                <label class="descriptionLabel boldfaced languages" id="hybris-references-tables-LABEL" for="hybrisreferencestable"></label>
                                 <select name="hybrisreferencestables" class="dropDownSizing" id="hybris-references-tables"></select>
                             </span>
                             <i id="hybris-message-references-referencesTable" class="far fa-question-circle"></i>
-                            <span id="hybris-message-references-referencesTable-Title" hidden="true">Datafilen som referencen laves fra</span>
-                            <span id="hybris-message-references-referencesTable-Text" hidden="true">Datafilen som referencen laves fra. Referencevariablen fra denne datafil skal altid referere en nøglevariabel (Flettevariabel 2) i fremmeddatafilen (Datasæt 2).</span>
-                            <br />
+                            <br/>
                             <span>
-                                <label class="descriptionLabel boldfaced" for="hybrisreferencesrefVar">Flettevariabel 1</label>
+                                <label class="descriptionLabel boldfaced languages" id="hybris-references-refVars-LABEL" for="hybrisreferencesrefVar"></label>
                                 <select name="hybrisreferencesrefVar" class="dropDownSizing" id="hybris-references-refVars"></select>
                             </span>
                             <i id="hybris-message-references-referenceVariable" class="far fa-question-circle"></i>
-                            <span id="hybris-message-references-referenceVariable-Title" hidden="true">REFERENCE (referencevariabel)</span>
-                            <span id="hybris-message-references-referenceVariable-Text" hidden="true">Variabelnavn(e) for variable fra den statistikfil som referencen laves fra (referencevariabel), som refererer til nøglevariablen (fremmedvariablen = flettevariabel 2) i den anden statistikfil i afleveringspakken (fremmeddatafilen = datasæt 2).</span>
-                            <br />
-                            <button id="hybris-references-addReferenceVariableBtn">Tilføj variabel</button>
-                            <br />
-                            <br>
+                            <br/>
+                            <button class="languages" id="hybris-references-addReferenceVariableBtn"></button>
+                            <br/><br/>
                             <table id="hybris-references-referenceVariablesTable" hidden="true">
                                 <tr>
-                                    <th>Flettevariabel 1</th>
+                                    <th class="languages" id="hybris-references-referenceVariablesTable-TH"></th>
                                 </tr>
                             </table>
                             <br>
                             <br>
                             <span>
-                                <label class="descriptionLabel boldfaced" for="hybrisreferencesforeigntable">Datasæt 2</label>
+                                <label class="descriptionLabel boldfaced languages" id="hybris-references-foreignTables-LABEL" for="hybrisreferencesforeigntable"></label>
                                 <select name="hybrisreferencestables" class="dropDownSizing" id="hybris-references-foreignTables"></select>
                             </span>
                             <i id="hybris-message-references-foreignFile" class="far fa-question-circle"></i>
-                            <span id="hybris-message-references-foreignFile-Title" hidden="true">REFERENCE (fremmeddatafil)</span>
-                            <span id="hybris-message-references-foreignFile-Text" hidden="true">Navn på den anden statistikfil i afleveringspakken, der refereres til (fremmeddatafil).</span>
-                            <br />
+                            <br/>
                             <span>
-                                <label class="descriptionLabel boldfaced" for="hybrisreferencesforeignVariable">Flettevariabel 2 (unik)</label>
+                                <label class="descriptionLabel boldfaced languages" id="hybris-references-foreignVariables-LABEL" for="hybrisreferencesforeignVariable"></label>
                                 <select name="hybrisreferencesforeignVariables" class="dropDownSizing" id="hybris-references-foreignVariables"></select>
                             </span>
                             <i id="hybris-message-references-foreignVariable" class="far fa-question-circle"></i>
-                            <span id="hybris-message-references-foreignVariable-Title" hidden="true">REFERENCE (fremmedvariabel)</span>
-                            <span id="hybris-message-references-foreignVariable-Text" hidden="true">Variabelnavn(e) for fremmeddatafilens (Datasæt 2) nøglevariabel.</span>
-                            <br />
-                            <button id="hybris-references-addForeignVariableBtn">Tilføj variabel</button>
-                            <br />
-                            <br />
+                            <br/>
+                            <button class="languages" id="hybris-references-addForeignVariableBtn"></button>
+                            <br/><br/>
                             <table id="hybris-references-foreignVariablesTable" hidden="true">
                                 <tr>
-                                    <th>Flettevariabel 2</th>
+                                    <th class="languages" id="hybris-references-foreignVariablesTable-TH"></th>
                                 </tr>
                             </table>                            
-                            <button id="hybris-references-addReferenceBtn" style="margin-left: 43%;">Tilføj reference</button>
-                            <br />
-                            <br>
+                            <button class="languages" id="hybris-references-addReferenceBtn" style="margin-left: 43%;"></button>
+                            <br/><br/>
                             <table id="hybris-references-dataTable" hidden="true">
                                 <tr>
-                                    <th>Datasæt 1</th>
-                                    <th>Flettevariabel 1</th>
-                                    <th>Datasæt 2</th>
-                                    <th>Flettevariabel 2</th>
+                                    <th class="languages" id="hybris-references-dataTable-TH1"></th>
+                                    <th class="languages" id="hybris-references-dataTable-TH2"></th>
+                                    <th class="languages" id="hybris-references-dataTable-TH3"></th>
+                                    <th class="languages" id="hybris-references-dataTable-TH4"></th>
                                 </tr>
                             </table>
-                            <br />
+                            <br/>
                         </div>
-                        <button id="hybris-references-cancelBtn">Fortryd alt</button>
-                        <br>
-                        <button id="hybris-references-okBtn">Næste</button>
+                        <button class="languages" id="hybris-references-cancelBtn"></button>
+                        <br/>
+                        <button class="languages" id="hybris-references-okBtn"></button>
                         <br/>
                         <span id="hybris-output-references-Error" hidden="true"><br />Error: {0}</span>
-                        <span id="hybris-output-references-referenceRequired-Title" hidden="true">Referencen</span>
-                        <span id="hybris-output-references-referenceRequired-Text" hidden="true">Alle informationer skal udfyldes for en reference.</span>
-                        <span id="hybris-output-references-referenceNumberFirst-Text" hidden="true">Det angivne {0} begynder med et tal. Dette er ikke lovligt.</span>
-                        <span id="hybris-output-references-referenceIllegalChar-Text" hidden="true">Det angivne {0} indeholder ulovlige tegn. Kun tal, bogstaver og underscore er lovlige tegn for et {0}</span>
-                        <span id="hybris-output-references-referenceLength-Text" hidden="true">Det angivne {0} er længere end den tilladte længde på 128 tegn. Forkort {0}.</span>
-                        <span id="hybris-output-references-referenceReservedWord-Text" hidden="true">Det angivne {0} er et reserveret ord i SQL 99 standarden. Omkrans {0} med dobbeltapostrof (fx "select") eller omdøb {0}.</span>
-                        <span id="hybris-output-references-referenceForeignVariable-Title" hidden="true">fremmedvariabelnavn</span>
-                        <span id="hybris-output-references-referenceRefVar-Title" hidden="true">referencevariabelnavn</span>
-                        <span id="hybris-output-references-addKeyWarning-Title" hidden="true">Referencevariabel er ikke tilføjet</span>
-                        <span id="hybris-output-references-addKeyWarning-Text" hidden="true">Du har valgt en referencevariabel som ikke er tilføjet. Hvis du vælger FORTSÆT medtages variablen ikke som referencevariabel.</span>
-                        <span id="hybris-output-references-OkConfirm" hidden="true">FORTSÆT</span>
-                        <span id="hybris-output-references-CancelConfirm" hidden="true">FORTRYD</span>
+                    </div>
+                    <div id="hybris-panel-backup" class="formularContainer" hidden="true">
+                        <p>
+                            <h2 class="boldfaced"><span class="languages" id="hybris-output-statistics-header-backup-SPAN"></span> <span id="hybris-output-statistics-header-backup" class="trinHeader"></span></h2>
+                        </p>
+                        <span class="languages" id="hybris-output-backup-Description"></span>
+                        <span class="alert-warning languages" id="hybris-output-backup-Summary1"></span>
+                        <span class="alert-warning languages" id="hybris-output-backup-Summary2"></span>
+                        <br/>
+                        <table id="hybris-backup-folders">
+                            <tr>
+                                <th class="languages" id="hybris-backup-folders-TH1"></th>
+                                <th class="languages" id="hybris-backup-folders-TH2"></th>
+                                <th class="languages" id="hybris-backup-folders-TH3"></th>
+                                <th class="languages" id="hybris-backup-folders-TH4"></th>
+                            </tr>
+                         </table>
+                        <br/>
+                        <button class="languages" id="hybris-backup-cancelBtn"></button> <button class="right-align languages" id="hybris-backup-printBtn"></button>
+                        <br/>
+                        <button class="languages" id="hybris-backup-nextBtn"></button>
+                        <br/><br/>
+                        <span id="hybris-output-backup-Error" hidden="true"><br />Error: {0}</span>
+                        <div id="hybris-backup-Spinner" hidden="true" class="lds-ring"><div></div><div></div><div></div><div></div></div>
                     </div>
                     <div id="hybris-panel-indexfiles" class="formularContainer" hidden="true">
                         <p>
-                            <h2 class="boldfaced">Placer indeksfiler i afleveringspakken <span id="hybris-output-statistics-header-indexfiles" class="trinHeader">{0}</span></h2>
+                            <div class="infoBox" id="hybris-panel-indexfiles-confirmation">
+                                <span class="confirmation"><i class="fas fa-check-circle ok"></i><span class="languages" id="hybris-panel-indexfiles-confirmation-SPAN"></span></span>
+                            </div>
+                            <h2 class="boldfaced"><span class="languages" id="hybris-output-statistics-header-indexfiles-SPAN"></span> <span id="hybris-output-statistics-header-indexfiles" class="trinHeader"></span></h2>
                         </p>
-                        <span id="hybris-output-indexfiles-Description">Her kan du placere indeksfilerne archiveIndex.xml og contextDocumentationIndex.xml korrekt i afleveringspakke {0}</span>
+                        <span id="hybris-output-indexfiles-Description"></span>
                         <br/><br/>
-                        <span id="hybris-output-indexfiles-Summary" class="alert-warning"><strong>Information!</strong> Indeksfilerne skal være godkendt af arkivet og navngivet archiveIndex.xml og contextDocumentationIndex.xml</span>
-                        <br/>
-                        <br/>
-                        <br/>
-                        <span class="boldfaced">Vælg archiveIndex.xml filen:</span>
+                        <span class="alert-warning languages" id="hybris-output-indexfiles-Summary"></span>
+                        <br/><br/><br/>
+                        <span class="boldfaced languages" id="hybris-indexfiles-archiveIndex-SPAN"></span>
                         <i id="hybris-message-indexfiles-archiveIndex" class="far fa-question-circle"></i>
-                        <span id="hybris-message-indexfiles-archiveIndex-Title" hidden="true">archiveIndex.xml</span>
-                        <span id="hybris-message-indexfiles-archiveIndex-Text" hidden="true">Indeksfilen archiveIndex.xml er en arkivbeskrivelsesfil, der indeholder metadata om afleveringspakken, fx navne på de forskere eller den institution der har skabt data, perioden data dækker, beskrivelse af indhold osv. Det er den godkendte archiveIndex.xml som du har modtaget fra arkivet, som du skal uploade til afleveringspakken.</span>
                         <div>
-                            <input type="text" id="hybris-indexfiles-archiveIndex" class="path" readonly="true" placeholder="Vælg sti med browse knappen">
-                            <button id="hybris-indexfiles-archiveIndex-selectFile">Browse</button>
+                            <input type="text" class="path languages" id="hybris-indexfiles-archiveIndex" readonly="true">
+                            <button class="languages" id="hybris-indexfiles-archiveIndex-selectFile"></button>
                         </div>
                         <br/>
-                        <span class="boldfaced">Vælg contextDocumentationIndex.xml filen:</span>
+                        <span class="boldfaced languages" id="hybris-indexfiles-contextDocumentationIndex-SPAN"></span>
                         <i id="hybris-message-indexfiles-contextDocumentationIndex" class="far fa-question-circle"></i>
-                        <span id="hybris-message-indexfiles-contextDocumentationIndex-Title" hidden="true">contextDocumentationIndex.xml</span>
-                        <span id="hybris-message-indexfiles-contextDocumentationIndex-Text" hidden="true">Indeksfilen contextDocumentationIndex.xml indeholder oplysninger om kontekstdokumenterne i afleveringspakken, fx dokumenttitel, dokumentdato og opmærkning af dokumentkategori. Det er den godkendte contextDocumentationIndex.xml, som du har modtaget fra arkivet, du skal uploade til afleveringspakken.</span>
                         <div>
-                            <input type="text" id="hybris-indexfiles-contextDocumentationIndex" class="path" readonly="true" placeholder="Vælg sti med browse knappen">
-                            <button id="hybris-indexfiles-contextDocumentationIndex-selectFile">Browse</button>
+                            <input type="text" class="path languages" id="hybris-indexfiles-contextDocumentationIndex" readonly="true">
+                            <button class="languages" id="hybris-indexfiles-contextDocumentationIndex-selectFile"></button>
                         </div>
-                        <button id="hybris-indexfiles-okBtn">Næste</button>
+                        <button class="languages" id="hybris-indexfiles-okBtn"></button>
                         <span id="hybris-output-indexfiles-Error" hidden="true"><br />Error: {0}</span>
-                        <span id="hybris-output-indexfiles-RequiredPath-Title" hidden="true">Mangler fil</span>
-                        <span id="hybris-output-indexfiles-RequiredPath-Text" hidden="true">Vælg begge indeksfiler, før du klikker "Næste". Har du ikke indeksfilerne klar, kan du ikke fortsætte til upload af kontekstdokumenter. Du kan afslutte ASTA nu, uden at data mistes.</span>
-                        <span id="hybris-output-indexfiles-WrongFileName-Title" hidden="true">Forkert filnavn</span>
-                        <span id="hybris-output-indexfiles-WrongFileName-Text" hidden="true">En eller flere af de valgte indeksfiler er navngivet forkert. Arkivbeskrivelsesfilen skal navngives "archiveIndex.xml" og kontekstdokumentationsfilen skal navngives "contextDocumentationIndex.xml"  </span>
-                        <span id="hybris-output-indexfiles-OkInformation-Title" hidden="true">Indeksfiler</span>
-                        <span id="hybris-output-indexfiles-OkInformation-Text" hidden="true">De valgte filer blev kopieret til mappen "Indices" i afleveringspakken</span>
                         <a id="hybris-indexfiles-delivery-package" hidden="true"></a>
                     </div>
                     <div id="hybris-panel-contextdocuments" class="formularContainer" hidden="true">
                         <p>
                             <div class="infoBox">
-                                <span class="confirmation"><i class="fas fa-check-circle ok"></i>Indeksfilerne er placeret</span>
+                                <span class="confirmation"><i class="fas fa-check-circle ok"></i><span class="languages" id="hybris-panel-contextdocuments-confirmation-SPAN"></span></span>
                             </div>    
-                            <h2 class="boldfaced">Placer kontekstdokumenter i afleveringspakken <span id="hybris-output-statistics-header-contextdocuments" class="trinHeader">{0}</span></h2>
-                            Du skal tilføje nedenstående kontekstdokumenter til afleveringspakken.
-                            <br/>Du kan kun placere en fil per dokumentmappe.
-                            <br/>Hvis et kontekstdokument ikke tilføjes, oprettes en tom dokumentmappe navngivet med mappenummeret.
-                            <br/>Hvis du ikke har kontekstdokumenterne klar, kan du udskrive dokumentlisten og tilføje dem manuelt senere.
+                            <h2 class="boldfaced"><span class="languages" id="hybris-output-statistics-header-contextdocuments-SPAN"></span> <span id="hybris-output-statistics-header-contextdocuments" class="trinHeader"></span></h2>
+                            <div class="languages" id="hybris-contextdocuments-Description-DIV"></div>                            
                         </p>
                         <br/>
-                        <span id="hybris-output-contextdocuments-Information2" class="alert-warning"><strong>Information!</strong> Kontekstdokumenter skal konverteres til bevaringsformat før de afleveres til arkiv, fx .tif eller .mp3</span>
+                        <span class="alert-warning languages" id="hybris-output-contextdocuments-Information2"></span>
                         <br/>
-                        <h2>Dokumentliste</h2>
+                        <h2 class="languages" id="hybris-contextdocuments-List-H2"></h2>
                         <table id="hybris-contextdocuments-uploads">
-                            <tr><th>Mappenummer</th><th>Dokumenttitel</th><th>Vælg dokument</th></tr>
+                            <tr>
+                                <th class="languages" id="hybris-contextdocuments-uploads-TH1"></th>
+                                <th class="languages" id="hybris-contextdocuments-uploads-TH2"></th>
+                                <th class="languages" id="hybris-contextdocuments-uploads-TH3"></th>
+                            </tr>
                          </table>
-                        <button id="hybris-contextdocuments-printBtn">Udskriv dokumentliste</button>
+                        <button class="languages" id="hybris-contextdocuments-printBtn"></button>
                         <br/>
-                        <button id="hybris-contextdocuments-nextBtn">Næste</button>
-                        <br/>
-                        <br/>
+                        <button class="languages" id="hybris-contextdocuments-nextBtn"></button>
+                        <br/><br/>
                         <div>
-                        <span id="hybris-output-indexfiles-Ok" class="greyText">INFO: Filerne {0}, {1} er kopieret til mappen "Indices" i afleveringspakken </span>
+                        <span class="greyText" id="hybris-output-indexfiles-Ok"></span>
                         </div>
                         <span id="hybris-output-contextdocuments-Error" hidden="true"><br />Error: {0}</span>
-                        <span id="hybris-output-contextdocuments-EmptyFile-Title" hidden="true">Indeksfilen</span>
-                        <span id="hybris-output-contextdocuments-EmptyFile-Text" hidden="true">Indeksfilen contextDocumentationIndex.xml er tom</span>
-                        <span id="hybris-output-contextdocuments-OkInformation-Title" hidden="true">Kontekstdokumenter</span>
-                        <span id="hybris-output-contextdocuments-OkInformation-Text" hidden="true">De valgte filer blev uploadet til mappen "ContextDocumentation" i afleveringspakken</span>
-                        <span id="hybris-output-contextdocuments-OkConfirm" hidden="true">Ja</span>
-                        <span id="hybris-output-contextdocuments-CancelConfirm" hidden="true">Nej</span>
-                        <span id="hybris-output-contextdocuments-NextConfirm-Title" hidden="true">Kontekstdokumenter</span>
-                        <span id="hybris-output-contextdocuments-NextConfirm-Text" hidden="true">Der er endnu ikke tilføjet dokumenter til afleveringspakken. Vil du fortsætte uden at tilføje dokumenter?</span>
                         <div id="hybris-contextdocuments-Spinner" hidden="true" class="lds-ring"><div></div><div></div><div></div><div></div></div>
                     </div>
                     <div id="hybris-panel-overview" class="formularContainer" hidden="true">
                         <p>
                             <div class="infoBox">
-                                <span class="confirmation"><i class="fas fa-check-circle ok"></i>Kontekstdokumenterne er tilføjet</span>
+                                <span class="confirmation"><i class="fas fa-check-circle ok"></i><span class="languages" id="hybris-panel-overview-confirmation-SPAN"></span></span>
                             </div>
-                            <h2 class="boldfaced">Afleveringspakken er færdig <span id="hybris-output-statistics-header-overview" class="trinHeader">{0}</span></h2>
+                            <h2 class="boldfaced"><span class="languages" id="hybris-output-statistics-header-overview-SPAN"></span> <span id="hybris-output-statistics-header-overview" class="trinHeader"></span></h2>
                         </p>
-                        <span id="hybris-output-indexfiles-Ok" class="alert-warning"><strong>Information!</strong> Test afleveringspakken med funktionen "Test afleveringspakke" i menuen til venstre.</span>
-                        <br/>
-                        <br/>
+                        <span class="alert-warning languages" id="hybris-output-overview-Ok"></span>
+                        <br/><br/>
                         <div>
-                            <span class="greyText">INFO: Afleveringspakken er skabt og placeret her: </span><a id="hybris-overview-deliveryPackage"></a>
+                            <span class="greyText languages" id="hybris-overview-deliveryPackage-SPAN"></span> <a id="hybris-overview-deliveryPackage"></a>
                         </div>
                         <br/>
-                        <button id="hybris-overview-validateBtn">Test {0}</button>
+                        <button id="hybris-overview-validateBtn"></button>
                     </div>                 
                 </section>
             </div>
@@ -448,20 +336,22 @@
             require('./assets/js/hybris/dataextraction');
             require('./assets/js/hybris/metadata');
             require('./assets/js/hybris/references');
+            require('./assets/js/hybris/backup');
             require('./assets/js/hybris/indexfiles');
             require('./assets/js/hybris/contextdocuments');
             require('./assets/js/hybris/overview');
             require('./assets/js/nemesis/structure');
 
-            Rigsarkiv.Panels.initialize(["hybris-tab-structure","hybris-tab-statistics","hybris-tab-metdata","hybris-tab-references","hybris-tab-indexfiles","hybris-tab-contextdocuments","hybris-tab-overview"]);
+            Rigsarkiv.Panels.initialize(["hybris-tab-structure","hybris-tab-statistics","hybris-tab-metdata","hybris-tab-references","hybris-tab-backup","hybris-tab-indexfiles","hybris-tab-contextdocuments","hybris-tab-overview"]);
             Rigsarkiv.Messages.initialize(["hybris-message-structure-delivery-package","hybris-message-structure-edit-path","hybris-message-structure-new-path","hybris-message-statistics-filepath","hybris-message-metdata-fileName","hybris-message-metdata-fileDescription","hybris-message-metdata-keyVariable","hybris-message-references-foreignFile","hybris-message-references-foreignVariable","hybris-message-references-referencesTable","hybris-message-references-referenceVariable","hybris-message-indexfiles-archiveIndex","hybris-message-indexfiles-contextDocumentationIndex"]);
-            Rigsarkiv.Hybris.Structure.initialize("hybris-section-title","hybris-section-title-New","hybris-section-title-Edit","hybris-select-structure-new-directory","hybris-select-structure-edit-directory","hybris-structure-new-path","hybris-structure-edit-path","hybris-structure-delivery-package","hybris-structure-new-okBtn","hybris-structure-edit-okBtn","hybris-output-structure-Error","hybris-output-structure-Exists","hybris-output-structure-RequiredPath","hybris-output-structure-UnvalidDeliveryPackage","hybris-output-structure-Ok","hybris-structure-select-delivery-package","hybris-tab-structure","hybris-tab-statistics","hybris-tab-indexfiles","hybris-output-statistics-header-trin1","hybris-output-statistics-header-trin2","hybris-output-statistics-header-trin3","hybris-output-statistics-header-information2","hybris-output-statistics-header-references","hybris-output-statistics-header-indexfiles","hybris-output-statistics-header-contextdocuments","hybris-output-statistics-header-overview","hybris-panel-structure","hybris-structure-indexfiles-RequiredPath","hybris-output-indexfiles-Description","hybris-structure-indexfiles-Description");          
-            Rigsarkiv.Hybris.DataExtraction.initialize("hybris-select-statistics-file","hybris-statistics-filepath","hybris-statistics-okBtn","hybris-output-statistics-Error","hybris-output-script-OKCopyScript","hybris-message-statistics-SASCatalogWarning","hybris-panel-script1","hybris-panel-script2","hybris-script-okBtn","hybris-output-script-dataPath","hybris-output-script-OKCopyScriptInfo","hybris-output-statistics-RequiredPath","hybris-output-script-RequiredFilesWarning","hybris-output-script-Ok","hybris-output-script-EncodingFileError","hybris-script-nextBtn","hybris-tab-metdata","hybris-output-script-CloseApplicationWarning","hybris-output-structure-Ok","hybris-structure-select-delivery-package","hybris-metdata-fileName","hybris-script-Spinner","hybris-output-script-dataPath-link","hybris-output-statistics-headerLink-trin2","hybris-output-statistics-headerLink-trin3","hybris-output-statistics-headerLink-information2","hybris-output-statistics-OkConfirm","hybris-output-statistics-CancelConfirm","hybris-output-statistics-SASCatalogPopup","hybris-metdata-Variables");
-            Rigsarkiv.Hybris.MetaData.initialize("hybris-metdata-fileName", "hybris-metdata-fileDescription", "hybris-metdata-okBtn", "hybris-output-metdata-fileNameRequired", "hybris-output-metdata-fileNameNumberFirst", "hybris-output-metdata-fileNameIllegalChar","hybris-output-metdata-Ok","hybris-output-metdata-path","hybris-output-metdata-Error","hybris-output-metdata-NewExtraction","hybris-metdata-NewExtractionBtn","hybris-tab-statistics","hybris-output-metdata-Next","hybris-metdata-NextBtn","hybris-tab-references","hybris-output-metdata-fileNameLength","hybris-output-metdata-fileNamereservedWord","hybris-output-metdata-fileDescrRequired","hybris-panel-information1","hybris-panel-information2","hybris-output-indexfiles-Description","hybris-output-metdata-CloseApplicationError","hybris-reset-hide-box","hybris-output-metdata-keyNumberFirst","hybris-output-metdata-keyIllegalChar","hybris-output-metdata-keyLength","hybris-output-metdata-keyReservedWord","hybris-metdata-Variables","hybris-metdata-addVarKeyBtn","hybris-metdata-varKeys","hybris-output-metdata-varKeyRequired","hybris-references-tables","hybris-references-foreignTables","hybris-metdata-cancelBtn","hybris-output-metdata-addKeyWarning","hybris-output-metdata-OkConfirm","hybris-output-metdata-CancelConfirm","hybris-tab-indexfiles","hybris-references-refVars","hybris-references-foreignVariables","hybris-output-metdata-newExtractionWarning");
-            Rigsarkiv.Hybris.References.initialize("hybris-output-references-Error","hybris-references-okBtn","hybris-references-tables","hybris-references-foreignTables","hybris-references-refVars","hybris-references-foreignVariables","hybris-references-addReferenceBtn","hybris-output-references-referenceRequired","hybris-output-references-referenceNumberFirst","hybris-output-references-referenceIllegalChar","hybris-output-references-referenceLength","hybris-output-references-referenceReservedWord","hybris-output-references-referenceForeignVariable","hybris-output-references-referenceRefVar","hybris-references-dataTable","hybris-tab-indexfiles","hybris-references-addReferenceVariableBtn","hybris-references-referenceVariablesTable","hybris-references-addForeignVariableBtn","hybris-references-foreignVariablesTable","hybris-references-cancelBtn","hybris-output-references-addKeyWarning","hybris-output-references-OkConfirm","hybris-output-references-CancelConfirm");
-            Rigsarkiv.Hybris.IndexFiles.initialize("hybris-indexfiles-archiveIndex-selectFile","hybris-indexfiles-archiveIndex","hybris-indexfiles-contextDocumentationIndex-selectFile","hybris-indexfiles-contextDocumentationIndex","hybris-indexfiles-okBtn","hybris-output-indexfiles-Error","hybris-output-indexfiles-RequiredPath","hybris-output-indexfiles-Ok","hybris-indexfiles-delivery-package","hybris-output-indexfiles-OkInformation","hybris-tab-contextdocuments","hybris-output-indexfiles-WrongFileName");
-            Rigsarkiv.Hybris.ContextDocuments.initialize("hybris-output-contextdocuments-Error","hybris-contextdocuments-uploads","hybris-contextdocuments-printBtn","hybris-output-contextdocuments-EmptyFile","hybris-contextdocuments-nextBtn","hybris-tab-overview","hybris-output-contextdocuments-OkInformation","hybris-contextdocuments-Spinner","hybris-overview-deliveryPackage","hybris-output-contextdocuments-OkConfirm","hybris-output-contextdocuments-CancelConfirm","hybris-output-contextdocuments-NextConfirm","hybris-overview-validateBtn");
-            Rigsarkiv.Hybris.Overview.initialize("hybris-overview-deliveryPackage","hybris-overview-validateBtn","nemesis-menu");
+            Rigsarkiv.Hybris.Structure.initialize("hybris-section-title","hybris-section-title-New","hybris-section-title-Edit","hybris-select-structure-new-directory","hybris-select-structure-edit-directory","hybris-structure-new-path","hybris-structure-edit-path","hybris-structure-delivery-package","hybris-structure-new-okBtn","hybris-structure-edit-okBtn","hybris-output-structure-Error","hybris-output-structure-Ok","hybris-structure-select-delivery-package","hybris-tab-structure","hybris-tab-statistics","hybris-tab-indexfiles","hybris-output-statistics-header-trin1","hybris-output-statistics-header-trin2","hybris-output-statistics-header-trin3","hybris-output-statistics-header-information2","hybris-output-statistics-header-references","hybris-output-statistics-header-backup","hybris-output-statistics-header-indexfiles","hybris-output-statistics-header-contextdocuments","hybris-output-statistics-header-overview","hybris-panel-structure","hybris-output-indexfiles-Description");          
+            Rigsarkiv.Hybris.DataExtraction.initialize("hybris-select-statistics-file","hybris-statistics-filepath","hybris-statistics-okBtn","hybris-output-statistics-Error","hybris-output-script-OKCopyScript","hybris-panel-script1","hybris-panel-script2","hybris-script-okBtn","hybris-output-script-dataPath","hybris-output-script-OKCopyScriptInfo","hybris-output-script-Ok","hybris-script-nextBtn","hybris-tab-metdata","hybris-output-structure-Ok","hybris-structure-select-delivery-package","hybris-metdata-fileName","hybris-script-Spinner","hybris-output-script-dataPath-link","hybris-output-statistics-headerLink-trin2","hybris-output-statistics-headerLink-trin3","hybris-output-statistics-headerLink-information2","hybris-output-statistics-SASCatalogPopup","hybris-metdata-Variables");
+            Rigsarkiv.Hybris.MetaData.initialize("hybris-metdata-fileName", "hybris-metdata-fileDescription", "hybris-metdata-okBtn","hybris-output-metdata-Ok","hybris-output-metdata-path","hybris-output-metdata-Error","hybris-output-metdata-NewExtraction","hybris-metdata-NewExtractionBtn","hybris-tab-statistics","hybris-metdata-NextBtn","hybris-tab-references","hybris-panel-information1","hybris-panel-information2","hybris-output-indexfiles-Description","hybris-reset-hide-box","hybris-metdata-Variables","hybris-metdata-addVarKeyBtn","hybris-metdata-varKeys","hybris-references-tables","hybris-references-foreignTables","hybris-metdata-cancelBtn","hybris-tab-backup","hybris-references-refVars","hybris-references-foreignVariables");
+            Rigsarkiv.Hybris.References.initialize("hybris-output-references-Error","hybris-references-okBtn","hybris-references-tables","hybris-references-foreignTables","hybris-references-refVars","hybris-references-foreignVariables","hybris-references-addReferenceBtn","hybris-references-dataTable","hybris-tab-backup","hybris-references-addReferenceVariableBtn","hybris-references-referenceVariablesTable","hybris-references-addForeignVariableBtn","hybris-references-foreignVariablesTable","hybris-references-cancelBtn");
+            Rigsarkiv.Hybris.Backup.initialize("hybris-output-backup-Error","hybris-backup-folders","hybris-backup-nextBtn","hybris-backup-printBtn","hybris-backup-cancelBtn","hybris-backup-Spinner","hybris-tab-indexfiles","hybris-panel-indexfiles-confirmation");
+            Rigsarkiv.Hybris.IndexFiles.initialize("hybris-indexfiles-archiveIndex-selectFile","hybris-indexfiles-archiveIndex","hybris-indexfiles-contextDocumentationIndex-selectFile","hybris-indexfiles-contextDocumentationIndex","hybris-indexfiles-okBtn","hybris-output-indexfiles-Error","hybris-output-indexfiles-Ok","hybris-indexfiles-delivery-package","hybris-tab-contextdocuments");
+            Rigsarkiv.Hybris.ContextDocuments.initialize("hybris-output-contextdocuments-Error","hybris-contextdocuments-uploads","hybris-contextdocuments-printBtn","hybris-contextdocuments-nextBtn","hybris-tab-overview","hybris-contextdocuments-Spinner","hybris-overview-deliveryPackage","hybris-overview-validateBtn");
+            Rigsarkiv.Hybris.Overview.initialize("hybris-overview-deliveryPackage","hybris-overview-validateBtn","menu-nemesis");
           </script>
     </section>
 </template>

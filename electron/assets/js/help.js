@@ -14,13 +14,11 @@ function (n) {
         outputErrorText: null,
         rightsCallback: null,
         selectLogFolder: null,
-        logPath: null,
-        adminPanel: null
+        logPath: null
     }
 
     // Ensure help Data
     var EnsureData = function() {
-        settings.adminPanel.hidden = !settings.rightsCallback().isAdmin;
         settings.logPath = log.transports.file.file;
         if(os.platform() == "win32") {
             settings.logPath = settings.logPath.substring(0,settings.logPath.lastIndexOf("\\"));
@@ -40,12 +38,11 @@ function (n) {
 
     //Model interfaces functions
     Rigsarkiv.Help = {
-        initialize: function (rightsCallback,outputErrorId,selectLogFolderId,adminPanelId) {
+        initialize: function (rightsCallback,outputErrorId,selectLogFolderId) {
             settings.rightsCallback = rightsCallback;
             settings.outputErrorSpn = document.getElementById(outputErrorId);
             settings.outputErrorText = settings.outputErrorSpn.innerHTML; 
             settings.selectLogFolder = document.getElementById(selectLogFolderId);
-            settings.adminPanel =  document.getElementById(adminPanelId);
             try
             {
                 EnsureData();

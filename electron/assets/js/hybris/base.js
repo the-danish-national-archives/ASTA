@@ -8,6 +8,7 @@ function (n) {
         //private data memebers
         var settings = {
             metadata: [],
+            backup: [],
             mode: "New"
         }
 
@@ -20,11 +21,15 @@ function (n) {
                 return { 
                     mode: settings.mode,
                     metadata: settings.metadata,
+                    backup: settings.backup,
                     setMode: function(mode) {
                         settings.mode = mode;   
                     },
                     setMetadata: function(metadata) {
                         settings.metadata = metadata;   
+                    },
+                    setBackup: function(backup) {
+                        settings.backup = backup;   
                     }
                 }
             }

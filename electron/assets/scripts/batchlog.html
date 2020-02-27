@@ -2,7 +2,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Test Log</title>
+    <title>{4}</title>
     <style>
         body {
             font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
@@ -97,27 +97,27 @@
 
 <body>
     <div class="header">
-        <h1 class="title">ASTA Batch Test Log</h1>
-        <p class="runDate">Dato for testkørsel: {0}</p>
+        <h1 class="title">ASTA {5}</h1>
+        <p class="runDate">{6} {0}</p>
         <hr class="divider">
         <div class="filters">
-            <span style="color:white;">Filter:</span><br>
-            <label for="fdSelector">FD Pakke:</label>
+            <span style="color:white;">{7}</span><br>
+            <label for="fdSelector">{10}</label>
             <select name="fdNumber" id="fdSelector" onchange="fdSelectChanged(this)">
-                <option value="">--Alle FD Pakker--</option>
+                <option value="">{11}</option>
             </select>
-            <label for="checkErr">Fejl:</label><input type="checkbox" name="error" id="checkErr" checked="true" onchange="errVisiChanged(this)">
-            <label for="checkWarn">OBS:</label><input type="checkbox" name="warning" id="checkWarn" checked="true" onchange="warnVisiChanged(this)">
-            <!--label for="checkInfo">Info:</label><input type="checkbox" name="info" id="checkInfo" onchange="infoVisiChanged(this)"-->
+            <label for="checkErr">{8}</label><input type="checkbox" name="error" id="checkErr" checked="true" onchange="errVisiChanged(this)">
+            <label for="checkWarn">{9}</label><input type="checkbox" name="warning" id="checkWarn" checked="true" onchange="warnVisiChanged(this)">
+            <label for="checkInfo" style="display: none;">Info:</label><input type="checkbox" name="info" id="checkInfo" onchange="infoVisiChanged(this)" style="display: none;">
         </div>
     </div>
     <div class="content">
-        <h3>Test af: {3}</h3>
-        <p>Batch test startet</p>
+        <h3>{12} {3}</h3>
+        <p>{13}</p>
         <div class="results" id="testContent">
             {1}
         </div>
-        <p id="count">Batch test afsluttet med {2} fejl</p>
+        <p id="count">{2}</p>
     </div>
 </body>
 <script>    
@@ -236,9 +236,9 @@
             }
         }
         if (val === "") {
-            el.innerText = 'Hele batch testen inderholder ' + errCounter + ' fejl';
+            el.innerText = '{14} ' + errCounter + ' {16}';
         } else {
-            el.innerText = val + ' indeholder ' + errCounter + ' fejl';
+            el.innerText = val + ' {15} ' + errCounter + ' {16}';
         }
         
     }
@@ -269,13 +269,13 @@
     }
     // Turn info messages on / off
     var infoElements = document.getElementsByClassName('ok');
-    function infoVisiChanged(checkbnoxInfoEl) {
+    function infoVisiChanged(checkboxInfoEl) {
         for (var i = 0; i < infoElements.length; i++) {
             if(selectedValue === "") {
-                infoElements[i].style.display = (checkbnoxInfoEl.checked) ? "block" : "none";
+                infoElements[i].style.display = (checkboxInfoEl.checked) ? "block" : "none";
             }
             else if(infoElements[i].getAttribute('name') === selectedValue) {
-                infoElements[i].style.display = (checkbnoxInfoEl.checked) ? "block" : "none";
+                infoElements[i].style.display = (checkboxInfoEl.checked) ? "block" : "none";
             }            
         }
     }

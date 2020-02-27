@@ -1,7 +1,7 @@
 ﻿* Encoding: UTF-8.
 
 ***********************************.
-* Version: 2,0
+* Version: 3,0
 * Importscript.
 * TFL august 2019.
 ***********************************.
@@ -209,8 +209,7 @@ insert file= 'dataDir\setmissingscript.sps'.
 execute.
 
 
+* 6. Gem .sav fil.
 
-
-
-
-
+SAVE OUTFILE='dataDir\spss_statistiktfil.sav'
+  /COMPRESSED.

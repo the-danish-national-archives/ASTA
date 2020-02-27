@@ -12,8 +12,8 @@ window.Rigsarkiv = window.Rigsarkiv || {},
             const path = require('path');
             const os = require('os');
 
-            const startNumberPattern = /^([0-9])([a-zA-ZæøåÆØÅ0-9_]*)$/;
-            const validFileNamePattern = /^([a-zA-ZæøåÆØÅ])([a-zA-ZæøåÆØÅ0-9_]*)$/;
+            const startNumberPattern = /^([0-9])([a-zA-ZæøåäöáðéíóúýþÆØÅÄÖÁÐÉÍÓÚÝÞ0-9_]*)$/;
+            const validFileNamePattern = /^([a-zA-ZæøåäöáðéíóúýþÆØÅÄÖÁÐÉÍÓÚÝÞ])([a-zA-ZæøåäöáðéíóúýþÆØÅÄÖÁÐÉÍÓÚÝÞ0-9_]*)$/;
             const reservedWordPattern = /^(ABSOLUTE|ACTION|ADD|ADMIN|AFTER|AGGREGATE|ALIAS|ALL|ALLOCATE|ALTER|AND|ANY|ARE|ARRAY|AS|ASC|ASSERTION|AT|AUTHORIZATION|BEFORE|BEGIN|BINARY|BIT|BLOB|BOOLEAN|BOTH|BREADTH|BY|CALL|CASCADE|CASCADED|CASE|CAST|CATALOG|CHAR|CHARACTER|CHECK|CLASS|CLOB|CLOSE|COLLATE|COLLATION|COLUMN|COMMIT|COMPLETION|CONNECT|CONNECTION|CONSTRAINT|CONSTRAINTS ||CONSTRUCTOR|CONTINUE|CORRESPONDING|CREATE|CROSS|CUBE|CURRENT|CURRENT_DATE|CURRENT_PATH|CURRENT_ROLE|CURRENT_TIME|CURRENT_TIMESTAMP|CURRENT_USER|CURSOR|CYCLE|DATA|DATE|DAY|DEALLOCATE|DEC|DECIMAL|DECLARE|DEFAULT|DEFERRABLE|DEFERRED|DELETE|DEPTH|DEREF|DESC|DESCRIBE|DESCRIPTOR|DESTROY|DESTRUCTOR|DETERMINISTIC|DICTIONARY|DIAGNOSTICS|DISCONNECT|DISTINCT|DOMAIN|DOUBLE|DROP|DYNAMIC|EACH|ELSE|END|END-EXEC|EQUALS|ESCAPE|EVERY|EXCEPT|EXCEPTION|EXEC|EXECUTE|EXTERNAL|FALSE|FETCH|FIRST|FLOAT|FOR|FOREIGN|FOUND|FROM|FREE|FULL|FUNCTION|GENERAL|GET|GLOBAL|GO|GOTO|GRANT|GROUP|GROUPING|HAVING|HOST|HOUR|IDENTITY|IGNORE|IMMEDIATE|IN|INDICATOR|INITIALIZE|INITIALLY|INNER|INOUT|INPUT|INSERT|INT|INTEGER|INTERSECT|INTERVAL|INTO|IS|ISOLATION|ITERATE|JOIN|KEY|LANGUAGE|LARGE|LAST|LATERAL|LEADING|LEFT|LESS|LEVEL|LIKE|LIMIT|LOCAL|LOCALTIME|LOCALTIMESTAMP|LOCATOR|MAP|MATCH|MINUTE|MODIFIES|MODIFY|MODULE|MONTH|NAMES|NATIONAL|NATURAL|NCHAR|NCLOB|NEW|NEXT|NO|NONE|NOT|NULL|NUMERIC|OBJECT|OF|OFF|OLD|ON|ONLY|OPEN|OPERATION|OPTION|OR|ORDER|ORDINALITY|OUT|OUTER|OUTPUT|PAD|PARAMETER|PARAMETERS|PARTIAL|PATH|POSTFIX|PRECISION|PREFIX|PREORDER|PREPARE|PRESERVE|PRIMARY|PRIOR|PRIVILEGES|PROCEDURE|PUBLIC|READ|READS|REAL|RECURSIVE|REF|REFERENCES|REFERENCING|RELATIVE|RESTRICT|RESULT|RETURN|RETURNS|REVOKE|RIGHT|ROLE|ROLLBACK|ROLLUP|ROUTINE|ROW|ROWS|SAVEPOINT|SCHEMA|SCROLL|SCOPE|SEARCH|SECOND|SECTION|SELECT|SEQUENCE|SESSION|SESSION_USER|SET|SETS|SIZE|SMALLINT|SOME|SPACE|SPECIFIC|SPECIFICTYPE|SQL|SQLEXCEPTION|SQLSTATE|SQLWARNING|START|STATE|STATEMENT|STATIC|STRUCTURE|SYSTEM_USER|TABLE|TEMPORARY|TERMINATE|THAN|THEN|TIME|TIMESTAMP|TIMEZONE_HOUR|TIMEZONE_MINUTE|TO|TRAILING|TRANSACTION|TRANSLATION|TREAT|TRIGGER|TRUE|UNDER|UNION|UNIQUE|UNKNOWN|UNNEST|UPDATE|USAGE|USER|USING|VALUE|VALUES|VARCHAR|VARIABLE|VARYING|VIEW|WHEN|WHENEVER|WHERE|WITH|WITHOUT|WORK|WRITE|YEAR|ZONE)$/i;
             const enclosedReservedWordPattern = /^(")(ABSOLUTE|ACTION|ADD|ADMIN|AFTER|AGGREGATE|ALIAS|ALL|ALLOCATE|ALTER|AND|ANY|ARE|ARRAY|AS|ASC|ASSERTION|AT|AUTHORIZATION|BEFORE|BEGIN|BINARY|BIT|BLOB|BOOLEAN|BOTH|BREADTH|BY|CALL|CASCADE|CASCADED|CASE|CAST|CATALOG|CHAR|CHARACTER|CHECK|CLASS|CLOB|CLOSE|COLLATE|COLLATION|COLUMN|COMMIT|COMPLETION|CONNECT|CONNECTION|CONSTRAINT|CONSTRAINTS ||CONSTRUCTOR|CONTINUE|CORRESPONDING|CREATE|CROSS|CUBE|CURRENT|CURRENT_DATE|CURRENT_PATH|CURRENT_ROLE|CURRENT_TIME|CURRENT_TIMESTAMP|CURRENT_USER|CURSOR|CYCLE|DATA|DATE|DAY|DEALLOCATE|DEC|DECIMAL|DECLARE|DEFAULT|DEFERRABLE|DEFERRED|DELETE|DEPTH|DEREF|DESC|DESCRIBE|DESCRIPTOR|DESTROY|DESTRUCTOR|DETERMINISTIC|DICTIONARY|DIAGNOSTICS|DISCONNECT|DISTINCT|DOMAIN|DOUBLE|DROP|DYNAMIC|EACH|ELSE|END|END-EXEC|EQUALS|ESCAPE|EVERY|EXCEPT|EXCEPTION|EXEC|EXECUTE|EXTERNAL|FALSE|FETCH|FIRST|FLOAT|FOR|FOREIGN|FOUND|FROM|FREE|FULL|FUNCTION|GENERAL|GET|GLOBAL|GO|GOTO|GRANT|GROUP|GROUPING|HAVING|HOST|HOUR|IDENTITY|IGNORE|IMMEDIATE|IN|INDICATOR|INITIALIZE|INITIALLY|INNER|INOUT|INPUT|INSERT|INT|INTEGER|INTERSECT|INTERVAL|INTO|IS|ISOLATION|ITERATE|JOIN|KEY|LANGUAGE|LARGE|LAST|LATERAL|LEADING|LEFT|LESS|LEVEL|LIKE|LIMIT|LOCAL|LOCALTIME|LOCALTIMESTAMP|LOCATOR|MAP|MATCH|MINUTE|MODIFIES|MODIFY|MODULE|MONTH|NAMES|NATIONAL|NATURAL|NCHAR|NCLOB|NEW|NEXT|NO|NONE|NOT|NULL|NUMERIC|OBJECT|OF|OFF|OLD|ON|ONLY|OPEN|OPERATION|OPTION|OR|ORDER|ORDINALITY|OUT|OUTER|OUTPUT|PAD|PARAMETER|PARAMETERS|PARTIAL|PATH|POSTFIX|PRECISION|PREFIX|PREORDER|PREPARE|PRESERVE|PRIMARY|PRIOR|PRIVILEGES|PROCEDURE|PUBLIC|READ|READS|REAL|RECURSIVE|REF|REFERENCES|REFERENCING|RELATIVE|RESTRICT|RESULT|RETURN|RETURNS|REVOKE|RIGHT|ROLE|ROLLBACK|ROLLUP|ROUTINE|ROW|ROWS|SAVEPOINT|SCHEMA|SCROLL|SCOPE|SEARCH|SECOND|SECTION|SELECT|SEQUENCE|SESSION|SESSION_USER|SET|SETS|SIZE|SMALLINT|SOME|SPACE|SPECIFIC|SPECIFICTYPE|SQL|SQLEXCEPTION|SQLSTATE|SQLWARNING|START|STATE|STATEMENT|STATIC|STRUCTURE|SYSTEM_USER|TABLE|TEMPORARY|TERMINATE|THAN|THEN|TIME|TIMESTAMP|TIMEZONE_HOUR|TIMEZONE_MINUTE|TO|TRAILING|TRANSACTION|TRANSLATION|TREAT|TRIGGER|TRUE|UNDER|UNION|UNIQUE|UNKNOWN|UNNEST|UPDATE|USAGE|USER|USING|VALUE|VALUES|VARCHAR|VARIABLE|VARYING|VIEW|WHEN|WHENEVER|WHERE|WITH|WITHOUT|WORK|WRITE|YEAR|ZONE)(")$/i;
             const strLength = 128;
@@ -28,25 +28,13 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 refVarsDropdown: null,
                 foreignVariablesDropdown: null,
                 addReferenceBtn: null,
-                referenceReqTitle: null,
-                referenceReqText: null,
-                numberFirstReferenceText: null,
-                illegalCharReferenceText: null,
-                referenceLengthText: null,
-                referenceReservedWordText: null,
-                foreignVariableTitle: null,
-                referenceVariableTitle: null,
                 referencesTbl: null,
-                indexfilesTab: null,
+                backupTab: null,
                 addReferenceVariableBtn: null,
                 referenceVariablesTbl: null,
                 addForeignVariableBtn: null,
                 foreignVariablesTbl: null,
                 cancelBtn: null,
-                addKeyWarningTitle: null,
-                addKeyWarningText: null,
-                okConfirm: null,
-                cancelConfirm: null,
                 foreignVariables: [],
                 referenceVariables: [],
                 dataPathPostfix: "Data",
@@ -127,7 +115,10 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 Rigsarkiv.Hybris.Base.callback().metadata.forEach(table => {
                     if(!UpdateFile(dataFolderPath,table)) { result = false; }
                 });
-                if(result) { settings.indexfilesTab.click(); }
+                if(result) { 
+                    Rigsarkiv.Hybris.Backup.callback().load();
+                    settings.backupTab.click();
+                }
             }
 
             // Validate refernces inputs
@@ -135,25 +126,25 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 var result = true;
                 var referenceTypeTitle = "";
                 switch(referenceType) {
-                    case "foreignVariable" : referenceTypeTitle = settings.foreignVariableTitle.innerHTML ;break;
-                    case "referenceVariable" : referenceTypeTitle = settings.referenceVariableTitle.innerHTML ;break;
+                    case "foreignVariable" : referenceTypeTitle = Rigsarkiv.Language.callback().getValue("hybris-output-references-referenceForeignVariable-Title");break;
+                    case "referenceVariable" : referenceTypeTitle = Rigsarkiv.Language.callback().getValue("hybris-output-references-referenceRefVar-Title");break;
                 }
                 if (result && startNumberPattern.test(referenceValue)) {
-                    ipcRenderer.send('open-error-dialog',referenceTypeTitle,settings.numberFirstReferenceText.innerHTML.format(referenceTypeTitle));
+                    ipcRenderer.send('open-error-dialog',referenceTypeTitle,Rigsarkiv.Language.callback().getValue("hybris-output-references-referenceNumberFirst-Text").format(referenceTypeTitle));
                     result = false;
                 }
                 if (result && !validFileNamePattern.test(referenceValue)) {
                     if(!enclosedReservedWordPattern.test(referenceValue)) {
-                        ipcRenderer.send('open-error-dialog',referenceTypeTitle,settings.illegalCharReferenceText.innerHTML.format(referenceTypeTitle));
+                        ipcRenderer.send('open-error-dialog',referenceTypeTitle,Rigsarkiv.Language.callback().getValue("hybris-output-references-referenceIllegalChar-Text").format(referenceTypeTitle));
                         result = false;
                     }
                 }
                 if (result && referenceValue.length > strLength) {
-                    ipcRenderer.send('open-error-dialog',referenceTypeTitle,settings.referenceLengthText.innerHTML.format(referenceTypeTitle));
+                    ipcRenderer.send('open-error-dialog',referenceTypeTitle,Rigsarkiv.Language.callback().getValue("hybris-output-references-referenceLength-Text").format(referenceTypeTitle));
                     result = false;
                 }
                 if (result && reservedWordPattern.test(referenceValue)) {
-                    ipcRenderer.send('open-error-dialog',referenceTypeTitle,settings.referenceReservedWordText.innerHTML.format(referenceTypeTitle));
+                    ipcRenderer.send('open-error-dialog',referenceTypeTitle,Rigsarkiv.Language.callback().getValue("hybris-output-references-referenceReservedWord-Text").format(referenceTypeTitle));
                     result = false;
                 }
                 return result;
@@ -171,7 +162,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
             var AddEvents = function () {
                 settings.okBtn.addEventListener('click', function (event) {    
                     if(settings.foreignVariablesDropdown.selectedIndex > 0 || settings.refVarsDropdown.selectedIndex > 0 || settings.referenceVariables.length > 0 || settings.foreignVariables > 0) {
-                        ipcRenderer.send('open-confirm-dialog','references-addkey',settings.addKeyWarningTitle.innerHTML,settings.addKeyWarningText.innerHTML,settings.okConfirm.innerHTML,settings.cancelConfirm.innerHTML);
+                        ipcRenderer.send('open-confirm-dialog','references-addkey',Rigsarkiv.Language.callback().getValue("hybris-output-references-addKeyWarning-Title"),Rigsarkiv.Language.callback().getValue("hybris-output-references-addKeyWarning-Text"),Rigsarkiv.Language.callback().getValue("hybris-output-references-OkConfirm"),Rigsarkiv.Language.callback().getValue("hybris-output-references-CancelConfirm"));
                     }
                     else {
                         Redirect();
@@ -217,7 +208,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                             settings.foreignTablesDropdown.selectedIndex = 0;
                     }
                     else {
-                        ipcRenderer.send('open-error-dialog',settings.referenceReqTitle.innerHTML,settings.referenceReqText.innerHTML);
+                        ipcRenderer.send('open-error-dialog',Rigsarkiv.Language.callback().getValue("hybris-output-references-referenceRequired-Title"),Rigsarkiv.Language.callback().getValue("hybris-output-references-referenceRequired-Text"));
                     }               
                 });
                 settings.addReferenceVariableBtn.addEventListener('click', function (event) { 
@@ -246,7 +237,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
 
             //Model interfaces functions
             Rigsarkiv.Hybris.References = { 
-                initialize: function (outputErrorId,okId,tablesId,foreignTablesId,refVarsId,foreignVariablesId,addReferenceId,referenceReqId,numberFirstReference,illegalCharReference,referenceLength,referenceReservedWord,foreignVariableId,referenceVariableId,referencesId,indexfilesTabId,addReferenceVariableId,referenceVariablesId,addForeignVariableId,foreignVariablesTable,cancelId,addKeyWarningId,okConfirmId,cancelConfirmId) {
+                initialize: function (outputErrorId,okId,tablesId,foreignTablesId,refVarsId,foreignVariablesId,addReferenceId,referencesId,backupTabId,addReferenceVariableId,referenceVariablesId,addForeignVariableId,foreignVariablesTable,cancelId) {
                     settings.outputErrorSpn = document.getElementById(outputErrorId);
                     settings.outputErrorText = settings.outputErrorSpn.innerHTML;
                     settings.okBtn = document.getElementById(okId);
@@ -255,25 +246,13 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                     settings.refVarsDropdown = document.getElementById(refVarsId);
                     settings.foreignVariablesDropdown = document.getElementById(foreignVariablesId);
                     settings.addReferenceBtn = document.getElementById(addReferenceId);
-                    settings.referenceReqTitle = document.getElementById(referenceReqId + "-Title");
-                    settings.referenceReqText = document.getElementById(referenceReqId + "-Text");
-                    settings.numberFirstReferenceText = document.getElementById(numberFirstReference + "-Text");
-                    settings.illegalCharReferenceText = document.getElementById(illegalCharReference + "-Text");
-                    settings.referenceLengthText = document.getElementById(referenceLength + "-Text");
-                    settings.referenceReservedWordText = document.getElementById(referenceReservedWord + "-Text");
-                    settings.foreignVariableTitle = document.getElementById(foreignVariableId + "-Title");
-                    settings.referenceVariableTitle = document.getElementById(referenceVariableId + "-Title");
                     settings.referencesTbl = document.getElementById(referencesId); 
-                    settings.indexfilesTab = document.getElementById(indexfilesTabId);
+                    settings.backupTab = document.getElementById(backupTabId);
                     settings.addReferenceVariableBtn = document.getElementById(addReferenceVariableId);
                     settings.referenceVariablesTbl = document.getElementById(referenceVariablesId);
                     settings.addForeignVariableBtn = document.getElementById(addForeignVariableId);
                     settings.foreignVariablesTbl = document.getElementById(foreignVariablesTable);
                     settings.cancelBtn = document.getElementById(cancelId);
-                    settings.addKeyWarningTitle = document.getElementById(addKeyWarningId + "-Title");
-                    settings.addKeyWarningText = document.getElementById(addKeyWarningId + "-Text");
-                    settings.okConfirm = document.getElementById(okConfirmId);
-                    settings.cancelConfirm = document.getElementById(cancelConfirmId);
                     AddEvents();
                 },
                 callback: function () {

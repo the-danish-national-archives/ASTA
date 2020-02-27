@@ -2,7 +2,7 @@
 
 <head>
     <meta charset="UTF-8"/>
-    <title>Test Log</title>
+    <title>{4}</title>
     <style>
         body {
             font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
@@ -52,8 +52,12 @@
             color: gray;
         }
 
+        .warningWithError {
+            color: orange;
+        }
+
         .ok {
-            color: black;
+            color: green;
         }
 
         .section {
@@ -93,25 +97,26 @@
 
 <body>
     <div class="header">
-        <h1 class="title">ASTA Test Log</h1>
-        <p class="runDate">Dato for testkørsel: {0}</p>
+        <h1 class="title">ASTA {4}</h1>
+        <p class="runDate">{5}: {0}</p>
         <hr class="divider"/>
         <div class="filters">
-            <span style="color:white;">Filter:</span><br/>
-            <label for="checkErr">Fejl:</label><input type="checkbox" name="error" id="checkErr" checked="true" onchange="errVisiChanged(this)"/>
-            <label for="checkWarn">OBS:</label><input type="checkbox" name="warning" id="checkWarn" checked="true" onchange="warnVisiChanged(this)"/>
+            <span style="color:white;">{6}</span><br/>
+            <label for="checkErr">{7}</label><input type="checkbox" name="error" id="checkErr" checked="true" onchange="errVisiChanged(this)"/>
+            <label for="checkWarn">{8}</label><input type="checkbox" name="warning" id="checkWarn" checked="true" onchange="warnVisiChanged(this)"/>
             <!--label for="checkInfo">Info:</label><input type="checkbox" name="info" id="checkInfo" onchange="infoVisiChanged(this)"/-->
         </div>
     </div>
     <div class="content">
-        <h3>Test af afleveringspakke ID: {1}</h3>
-        <p>Test startet</p>
+        <h3>{9} {1}</h3>
+        <p>{10}</p>
         <div class="results" id="testContent">
             <!--Start Log Data-->
             {2}
             <!--End Log Data-->
         </div>
-        <p>Test afsluttet med {3} fejl</p>
+        <p>{3}</p>
+        {11}
     </div>
 </body>
 <script>
