@@ -30,6 +30,8 @@ This project is a minimalistic app created using Electron. It follows the conven
 ## Guide to packaging
 In order to make a package of the program, use the scripts mentioned in the package.json file.
 Under the section 'scripts' there is listed scripts for both packaging and creation of the installer files.
+Environment should be installed first, then the packaging script should be made and then the installer.
+So the commands to be run are in this order "npm install ; npm run package-win ; npm run create-installer-win", or if several installers are being made, then package both their files first: "npm install ; npm run package-win ; npm run package-win-extended ; npm run create-installer-win ; npm run create-installer-win-extended'"
 
 ## Branching strategy
 In order to make the program development proceed as smoothly as possible, the branching strategy in the picture below have been implemented
