@@ -53,7 +53,7 @@ function (n) {
             variablesDropdown: null,   
             scriptPath: "./assets/scripts/{0}",
             resourceWinPath: "resources\\{0}",
-            scripts: ["spss_script.sps","sas_without_catalog_script.sas","sas_with_catalog_script.sas","stata_script.do","R_script.r"],
+            scripts: ["spss_script.sps","sas_without_catalog_script.sas","sas_with_catalog_script.sas","stata_script.do","R_script.R"],
             outputPostfixFiles: ["{0}.csv","{0}_VARIABEL.txt","{0}_VARIABELBESKRIVELSE.txt"],
             outputOptionalPostfixFiles: ["{0}_KODELISTE.txt","{0}_BRUGERKODE.txt"],
             sasCatalogFileExt: "{0}.sas7bcat",
@@ -62,6 +62,7 @@ function (n) {
             backupSPSSExtentions: ["sav","sps","spv"],
             backupSASExtentions: ["sas7bdat","sas7bcat","sas","Log"],
             backupStataExtentions: ["dta","do","log"],
+            backupStataExtentions: ["R"],
             logSPSSPostfix: "{0}_Exportscriptlog",
             outputSPSSPostfix: "{0}_output",
             variableFileName: null,
@@ -212,6 +213,11 @@ function (n) {
                             settings.scriptApplication = "Statistikprogrammet Stata";
                             settings.scriptType = "Stata";
                             settings.scriptFileName = settings.scripts[3];
+                        }; break;
+                        case "R": { 
+                            settings.scriptApplication = "Statistikprogrammet Stata";
+                            settings.scriptType = "Stata";
+                            settings.scriptFileName = settings.scripts[4];
                         }; break;
                     }
                     if(!sasCatalogExists && fileExt === "sas7bdat") {
@@ -395,6 +401,7 @@ function (n) {
                                 case "SPSS": backupExtentions = settings.backupSPSSExtentions; break;
                                 case "SAS": backupExtentions = settings.backupSASExtentions; break;
                                 case "Stata": backupExtentions = settings.backupStataExtentions; break;
+                                case "R": backupExtentions = settings.backupRExtentions; break;
                             }
                         }
                         var fileExactName = fileName.indexOf(".") > -1 ? fileName.substring(0,fileName.indexOf(".")) : "";
