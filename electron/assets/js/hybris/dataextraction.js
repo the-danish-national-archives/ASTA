@@ -62,7 +62,7 @@ function (n) {
             backupSPSSExtentions: ["sav","sps","spv"],
             backupSASExtentions: ["sas7bdat","sas7bcat","sas","Log"],
             backupStataExtentions: ["dta","do","log"],
-            backupStataExtentions: ["R"],
+            backupStataExtentions: ["rds","Rds"],
             logSPSSPostfix: "{0}_Exportscriptlog",
             outputSPSSPostfix: "{0}_output",
             variableFileName: null,
