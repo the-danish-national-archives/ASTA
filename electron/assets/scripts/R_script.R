@@ -4,19 +4,18 @@
 ##################################
 
 ### ROBUST FILE PROCESSING
-### Version 2.10
-### Note: Script for processing standard R RDS-files (.rds, .RDS, .RData)
+### Version 3.1
+### Note: Script for processing standard R RDS-files (.rds, .RDS, .RData) and statfiles e.g. .sav, .dta etc.
 ### Imports base formats from spss and stata if any
 
 ### Fixes: 
-### Bug when format in spss/stata is changed
+### ASTA paths
 
 # Clear environment
 rm(list = ls())
 
 # Import libraries
 library(haven)
-library(chron)
 
 ################# Utility functions ################# 
 
@@ -316,89 +315,19 @@ f_process <- function(df, f_name){
   
 }
 
-# Determine OS
-OS <- .Platform$OS.type
-if (OS == "unix"){
-  
-  wd <- "/Users/danielsafai/DATAMAGA/projects/rigsarkivet/project/"    # Mac OSX file path
-  
-} else if (OS == "windows"){
-  
-  wd <- "C:/Users/lokalAdmin/Desktop/TestSuite/Danieltest/sintax/"     # Windows file path
-  
-} else {
-  
-  stop("ERROR: Operating System could not be identified")
-}
+# ASTA input paths
+input_path <- "C:/Users/lokalAdmin/Desktop/TestSuite/AKEtestning/Accepttest_R-script/02_spss_to_rds_testfil" # "{1}"
+output_path <- "C:/Users/lokalAdmin/Desktop/TestSuite/AKEtestning/Accepttest_R-script" # "{3}"
+file_name <- "spss12345" # "{2}" Note: input skal v�re som strings -> paste0('"', {2}, '"')
 
 # Set working dir - Also the path for saving files
-setwd(wd)
+setwd(output_path)
 
-f_path <- paste0(wd, 'input/ctrl_input/')
-#f_name <- "sas12345b.sas7bdat"
-f_name <- "spss12345.sav"
-#f_name <- "table1.rds"
-#f_name <- "stata12345.dta"
+# Load file
+file <- tryCatch(readRDS(paste0(input_path, "/", file_name, ".rds")),
+                 warning = function(x) readRDS(paste0(input_path, "/", file_name, ".Rds")))
 
-if (substring(f_name, nchar(f_name)-3)==".sav"){
-  
-  file <- read_sav(paste0(f_path, f_name))
-  
-  f_process(file, sub(".sav", "", sub("\\..*", "", f_name)))
-  
-} else if (substring(f_name, nchar(f_name)-3)==".dta"){
-  
-  file <- read_dta(paste0(f_path, f_name))
-  
-  f_process(file, sub(".dta", "", sub("\\..*", "", f_name)))
-  
-} else if ((substring(f_name, nchar(f_name)-3)==".rds") || 
-           (substring(f_name, nchar(f_name)-5)==".RData") || 
-           (substring(f_name, nchar(f_name)-3)==".RDS")){
-  
-  file <- readRDS(paste0(f_path, f_name))
-  
-  f_process(file, sub("\\..*", "", f_name))
-  
-  
-} else if (substring(f_name, nchar(f_name)-8)==".sas7bdat"){
-  
-  # Check if catalogue file for SAS is present
-  files <- list.files(f_path)
-  
-  if (paste0(sub(".sas7bdat","",f_name), ".sas7bcat") %in% files){
-    
-    file <- read_sas(paste0(f_path, f_name), 
-                     catalog_file = paste0(f_path, sub(".sas7bdat","",f_name), ".sas7bcat"))
-    
-    f_process(file, sub(".sas7bdat", "", sub("\\..*", "", f_name)))
-    
-  } else {
-    
-    file <- read_sas(paste0(f_path, f_name))
-    f_process(file, sub(".sas7bdat", "", f_name))
-    
-  }
-}
-
-# # Eksempel på variabelbeskrivelse i.e. label
-# df$test_var <- rep(c(0,1), nrow(df))[1:nrow(df)]
-# attributes(df$test_var)$label <- "Hej her er et label aka. variabelbeskrivelse"
-# 
-# # Eksempel på value label i.e. labels
-# x <- c(0,1)
-# names(x) <- c("X", "Y")
-# attributes(df$test_var)$labels <- x
-# 
-# saveRDS(df, "table1.rds")
-
-# Eksempel på ændring af variabel med format h:m:s ved indlæsning i R
-# Pakken chron kan håndtere dette format, men ændrer til times format
-# lbl <- attributes(file$Maaling1tdpkt)$label
-# file$Maaling1tdpkt <- times(format(file$Maaling1tdpkt, "%H:%M:%OS6"))
-# attributes(file$Maaling1tdpkt)$label <- lbl
-
-
-
+# Proces file
+f_process(file, file_name)
 
 
