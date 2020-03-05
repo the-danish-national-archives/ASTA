@@ -62,7 +62,7 @@ function (n) {
             backupSPSSExtentions: ["sav","sps","spv"],
             backupSASExtentions: ["sas7bdat","sas7bcat","sas","Log"],
             backupStataExtentions: ["dta","do","log"],
-            backupStataExtentions: ["rds","RDS","RData"],
+            backupRScriptExtentions: ["rds","RDS","RData"],
             logSPSSPostfix: "{0}_Exportscriptlog",
             outputSPSSPostfix: "{0}_output",
             variableFileName: null,
@@ -215,8 +215,8 @@ function (n) {
                             settings.scriptFileName = settings.scripts[3];
                         }; break;
                         case "R": { 
-                            settings.scriptApplication = "Statistikprogrammet Stata";
-                            settings.scriptType = "Stata";
+                            settings.scriptApplication = "Statistikprogrammet R";
+                            settings.scriptType = "R-script";
                             settings.scriptFileName = settings.scripts[4];
                         }; break;
                     }
@@ -401,7 +401,7 @@ function (n) {
                                 case "SPSS": backupExtentions = settings.backupSPSSExtentions; break;
                                 case "SAS": backupExtentions = settings.backupSASExtentions; break;
                                 case "Stata": backupExtentions = settings.backupStataExtentions; break;
-                                case "R": backupExtentions = settings.backupRExtentions; break;
+                                case "R": backupExtentions = settings.backupRScriptExtentions; break;
                             }
                         }
                         var fileExactName = fileName.indexOf(".") > -1 ? fileName.substring(0,fileName.indexOf(".")) : "";

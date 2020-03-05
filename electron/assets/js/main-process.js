@@ -21,7 +21,7 @@ ipcMain.on('dataextraction-open-file-dialog', (event) => {
     filters: [
       {
         "name": "statistics file",
-        "extensions": ["sas7bdat", "sav", "dta"]
+        "extensions": ["sas7bdat", "sav", "dta", "rds", "RDS", "Rdata"]
       }
     ]  
   }, (files) => {

@@ -515,7 +515,7 @@
             },
             {
                 "key": "hybris-message-statistics-Description-DIV",
-                "value": "<p>Du kan her udtrække data og metadata fra dine statistikfiler til afleveringspakken<br/><br/> Udtrækket består af 3 trin for hver statistikfil:<br/> TRIN 1: Vælg statistikfil<br/> TRIN 2: Kør eksport script i dit statistikprogram<br/> TRIN 3: Indtast informationer om statistikfilen</p><span class=\"alert-warning\"><strong>Information!</strong>  Du kan kun lave udtræk fra statistikfiler i formaterne SPSS, SAS og Stata.</span>"
+                "value": "<p>Du kan her udtrække data og metadata fra dine statistikfiler til afleveringspakken<br/><br/> Udtrækket består af 3 trin for hver statistikfil:<br/> TRIN 1: Vælg statistikfil<br/> TRIN 2: Kør eksport script i dit statistikprogram<br/> TRIN 3: Indtast informationer om statistikfilen</p><span class=\"alert-warning\"><strong>Information!</strong>  Du kan kun lave udtræk fra statistikfiler i formaterne SPSS, SAS, Stata og R.</span>"
             },
             {
                 "key": "hybris-statistics-filepath-SPAN",
