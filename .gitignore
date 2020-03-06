@@ -65,3 +65,9 @@ electron/assets/scripts/Athena.exe.config
 /electron/assets/scripts/styx.log
 /electron/release-builds/asta-app-win32-ia32
 /electron/release-builds/asta-extended-app-win32-ia32
+electron/.vscode/settings.json
+electron/.vs/ProjectSettings.json
+electron/.vs/slnx.sqlite
+electron/.vs/VSWorkspaceState.json
+electron/.vs/electron/config/applicationhost.config
+electron/.vs/electron/v16/.suo
