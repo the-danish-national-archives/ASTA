@@ -15,7 +15,6 @@
     "create-installer-win-extended": "node installers/windows/createadmininstaller.js",
     "create-installer-mac": "electron-installer-dmg ./release-builds/asta-app-darwin-x64/asta-app.app ASTA --out=release-builds --overwrite --icon=assets/icons/mac/bookshelf-icon.icns",
     "create-installer-mac-extended": "electron-installer-dmg ./release-builds/asta-extended-app-darwin-x64/asta-extended-app.app ASTA-admin --out=release-builds --overwrite --icon=assets/icons/mac/bookshelf-icon.icns"
-    , "test": "mocha"
   },
   "keywords": [
     "electron",
