@@ -192,7 +192,7 @@ function (n) {
                 }
                 else {
                     var fileName = GetFileName();
-                    var fileExt = fileName.substring(fileName.indexOf(".") + 1);
+                    var fileExt = fileName.substring(fileName.indexOf(".") + 1).toLowerCase();
                     var sasCatalogFileName = settings.sasCatalogFileExt.format(fileName.substring(0,fileName.indexOf(".")));
                     var sasCatalogExists = false;
                     files.forEach(file => {
@@ -214,7 +214,7 @@ function (n) {
                             settings.scriptType = "Stata";
                             settings.scriptFileName = settings.scripts[3];
                         }; break;
-                        case "R": { 
+                        case "rds": { 
                             settings.scriptApplication = "Statistikprogrammet R";
                             settings.scriptType = "R-script";
                             settings.scriptFileName = settings.scripts[4];
