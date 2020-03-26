@@ -316,9 +316,9 @@ f_process <- function(df, f_name){
 }
 
 # ASTA input paths
-input_path <- "C:/Users/lokalAdmin/Desktop/TestSuite/AKEtestning/Accepttest_R-script/02_spss_to_rds_testfil" # "{1}"
-output_path <- "C:/Users/lokalAdmin/Desktop/TestSuite/AKEtestning/Accepttest_R-script" # "{3}"
-file_name <- "spss12345" # "{2}" Note: input skal v�re som strings -> paste0('"', {2}, '"')
+input_path <- "{1}"
+output_path <- "{3}"
+file_name <- paste0('"', {2}, '"') # "{2}" Note: input skal v�re som strings -> paste0('"', {2}, '"')
 
 # Set working dir - Also the path for saving files
 setwd(output_path)

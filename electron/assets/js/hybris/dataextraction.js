@@ -126,8 +126,13 @@ function (n) {
                     var folderPath = GetFolderPath();
                     var filePath = folderPath;
                     filePath += (filePath.indexOf("\\") > -1) ? "\\{0}".format(GetScriptFileName()) : "/{0}".format(GetScriptFileName());
-                    var fileName = GetFileName();  
+                    var fileName = GetFileName();
                     var datafolderPath = settings.dataFolderPath;
+                    if(settings.scriptType == "R"){
+                        //In case of R-scripting being used, then the paths in each variable is set to use / slashes, as is needed 
+                        folderPath = folderPath.split('\\').join('/');
+                        datafolderPath = datafolderPath.split('\\').join('/');
+                    }  
                     var updatedData = data.toString().format(GetSlash(),folderPath,fileName.substring(0,fileName.indexOf(".")),datafolderPath);
                     console.logInfo(`Update script file ${filePath}`,"Rigsarkiv.Hybris.DataExtraction.UpdateScript");
                     fs.writeFile(filePath, updatedData, (err) => {
@@ -192,7 +197,7 @@ function (n) {
                 }
                 else {
                     var fileName = GetFileName();
-                    var fileExt = fileName.substring(fileName.indexOf(".") + 1);
+                    var fileExt = fileName.substring(fileName.indexOf(".") + 1).toLowerCase();
                     var sasCatalogFileName = settings.sasCatalogFileExt.format(fileName.substring(0,fileName.indexOf(".")));
                     var sasCatalogExists = false;
                     files.forEach(file => {
@@ -214,7 +219,7 @@ function (n) {
                             settings.scriptType = "Stata";
                             settings.scriptFileName = settings.scripts[3];
                         }; break;
-                        case "R": { 
+                        case "rds": { 
                             settings.scriptApplication = "Statistikprogrammet R";
                             settings.scriptType = "R-script";
                             settings.scriptFileName = settings.scripts[4];
