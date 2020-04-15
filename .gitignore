@@ -71,3 +71,4 @@ electron/.vs/slnx.sqlite
 electron/.vs/VSWorkspaceState.json
 electron/.vs/electron/config/applicationhost.config
 electron/.vs/electron/v16/.suo
+*.exe

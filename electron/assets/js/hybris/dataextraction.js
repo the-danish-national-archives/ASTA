@@ -126,9 +126,14 @@ function (n) {
                     var folderPath = GetFolderPath();
                     var filePath = folderPath;
                     filePath += (filePath.indexOf("\\") > -1) ? "\\{0}".format(GetScriptFileName()) : "/{0}".format(GetScriptFileName());
-                    var fileName = GetFileName();  
-                    var datafolderPath = settings.dataFolderPath.split('\\').join('/')
-                    var updatedData = data.toString().format(GetSlash(),folderPath.split('\\').join('/'),fileName.substring(0,fileName.indexOf(".")),datafolderPath);
+                    var fileName = GetFileName();
+                    var datafolderPath = settings.dataFolderPath;
+                    if(settings.scriptType == "R"){
+                        //In case of R-scripting being used, then the paths in each variable is set to use / slashes, as is needed 
+                        folderPath = folderPath.split('\\').join('/');
+                        datafolderPath = datafolderPath.split('\\').join('/');
+                    }  
+                    var updatedData = data.toString().format(GetSlash(),folderPath,fileName.substring(0,fileName.indexOf(".")),datafolderPath);
                     console.logInfo(`Update script file ${filePath}`,"Rigsarkiv.Hybris.DataExtraction.UpdateScript");
                     fs.writeFile(filePath, updatedData, (err) => {
                         if (err) {
