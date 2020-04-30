@@ -318,7 +318,7 @@ f_process <- function(df, f_name){
 # ASTA input paths
 input_path <- "{1}"
 output_path <- "{3}"
-file_name <- paste0("{2}") # "{2}" Note: input skal være som strings -> paste0('"', {2}, '"')
+file_name <- paste0("{2}")
 
 # Set working dir - Also the path for saving files
 setwd(output_path)

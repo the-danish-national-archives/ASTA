@@ -252,17 +252,22 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                         files.forEach(file => {
                             var filePath = dataFolderPath;
                             filePath += (filePath.indexOf("\\") > -1) ? "\\{0}".format(file) : "/{0}".format(file);
+                            var text;
                             if(file.lastIndexOf("_VARIABEL.txt") > -1) {
-                                settings.contents[0] = GetFileContent(filePath);
+                                text = GetFileContent(filePath);
+                                settings.contents[0] = text;
                             }
                             if(file.lastIndexOf("_VARIABELBESKRIVELSE.txt") > -1) {
-                                settings.contents[1] = GetFileContent(filePath);
+                                text = GetFileContent(filePath);
+                                settings.contents[1] = text;
                             }
                             if(file.lastIndexOf("_KODELISTE.txt") > -1) {
-                                settings.contents[2] = GetFileContent(filePath);
+                                text = GetFileContent(filePath);
+                                settings.contents[2] = text;
                             }
                             if(file.lastIndexOf("_BRUGERKODE.txt") > -1) {
-                                settings.contents[3] = GetFileContent(filePath);
+                                text = GetFileContent(filePath);
+                                settings.contents[3] = text;
                             }
                         });
                         EnsureFile();

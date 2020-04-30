@@ -28,19 +28,21 @@
   "author": "Rigsarkivet",
   "license": "ISC",
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.10.2",
+    "@fortawesome/fontawesome-free": "^5.13.0",
     "chardet": "^0.7.0",
-    "electron-log": "^3.0.7",
+    "electron-log": "^3.0.9",
     "fast-csv": "^2.5.0",
     "fs-extra": "^8.1.0",
     "junk": "^3.1.0",
+    "minimist": "1.2.5",
     "nodejs-base64": "^1.0.3",
-    "xmldom": "^0.1.27"
+    "xmldom": "^0.1.31"
   },
   "devDependencies": {
-    "electron": "^4.2.10",
+    "electron": "^4.2.12",
     "electron-installer-dmg": "^2.0.0",
     "electron-packager": "^13.1.1",
-    "electron-winstaller": "^2.7.0"
+    "electron-winstaller": "^2.7.0",
+    "minimist": "1.2.5"
   }
 }

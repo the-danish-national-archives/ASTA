@@ -221,7 +221,7 @@ function (n) {
                         }; break;
                         case "rds": { 
                             settings.scriptApplication = "Statistikprogrammet R";
-                            settings.scriptType = "R-script";
+                            settings.scriptType = "R";
                             settings.scriptFileName = settings.scripts[4];
                         }; break;
                     }
