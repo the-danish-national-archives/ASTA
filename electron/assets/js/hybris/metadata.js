@@ -183,7 +183,6 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                         var updatedData = data.toString().format(scriptType,settings.fileName.value,settings.fileDescr.value,keyVar,"{0}",settings.contents[0],settings.contents[1],settings.contents[2],settings.contents[3]);
                         var srcFilePath = callback.dataFolderPath;
                         srcFilePath += (srcFilePath.indexOf("\\") > -1) ? "\\{0}".format(metadataFileName) : "/{0}".format(metadataFileName);
-                        updatedData = updatedData.replace(/^\uFEFF/, '');
                         fs.writeFile(srcFilePath, updatedData, (err) => {
                             if (err) {
                                 err.Handle(settings.outputErrorSpn,settings.outputErrorText,"Rigsarkiv.Hybris.MetaData.UpdateFile");
@@ -228,7 +227,7 @@ window.Rigsarkiv = window.Rigsarkiv || {},
                 });
             }
 
-            //remove UTF8 boom charactors TKN TODO: Use this part
+            //remove UTF8 boom charactors
             var GetFileContent = function(filePath) {
                 var fileContent = fs.readFileSync(filePath);
                 if(fileContent.byteLength >= 3 && (fileContent[0] & 0xff) == 0xef && (fileContent[1] & 0xff) == 0xbb && (fileContent[2] & 0xff) == 0xbf) {
