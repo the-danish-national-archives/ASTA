@@ -97,7 +97,7 @@
             },
             {
                 "key": "welcome-body-DIV",
-                "value": "<p>ASTA er Rigsarkivets værktøj til understøttelse af arbejdet med aflevering af data fra statistikfiler til arkiv.</p><p>Du kan downloade den nyeste version af ASTA fra Rigsarkivets hjemmeside.</p><p>Data fra statistikfiler skal afleveres i form af en afleveringspakke.</p><p>Med ASTA kan du lave udtræk fra statistikfiler i formaterne SAS, Stata og SPSS til en afleveringspakke og teste om den overholder de krav, som er specificeret for en afleveringspakke i bilag 9 i bekendtgørelsen om arkiveringsversioner.</p> <p>Bekendtgørelsen og nyttige vejledninger finder du under <a href=\"#\" id=\"menu-instructions\" data-section=\"instructions\">Vejledning</a></p>"
+                "value": "<p>ASTA er Rigsarkivets værktøj til understøttelse af arbejdet med aflevering af data fra statistikfiler til arkiv.</p><p>Du kan downloade den nyeste version af ASTA fra Rigsarkivets hjemmeside.</p><p>Data fra statistikfiler skal afleveres i form af en afleveringspakke.</p><p>Med ASTA kan du lave udtræk fra statistikfiler i formaterne SAS, Stata, SPSS eller R til en afleveringspakke og teste om den overholder de krav, som er specificeret for en afleveringspakke i bilag 9 i bekendtgørelsen om arkiveringsversioner.</p> <p>Bekendtgørelsen og nyttige vejledninger finder du under <a href=\"#\" id=\"menu-instructions\" data-section=\"instructions\">Vejledning</a></p>"
             }
         ]
     },
@@ -265,7 +265,7 @@
             },
             {
                 "key": "help-SubDescription33-DIV-LeftContent",
-                "value": "<p><b>Statistikprogrammer</b><br/>Eksport scripts til udtræk af sata og metadata fra statistikfilerne kan eksekveres i følgende versioner af statistikprogrammerne</p><ul><li>SAS v. 9.4</li><li>SPSS v. 24</li><li>Stata v. 14.2</li></ul>"
+                "value": "<p><b>Statistikprogrammer</b><br/>Eksport scripts til udtræk af sata og metadata fra statistikfilerne kan eksekveres i følgende versioner af statistikprogrammerne</p><ul><li>SAS v. 9.4</li><li>SPSS v. 24</li><li>Stata v. 14.2</li><li>RStudio v. 1.2.5033</li></ul>"
             },
             {
                 "key": "help-SubDescription34-DIV-LeftContent",
@@ -362,7 +362,7 @@
             },
             {
                 "key": "instructions-Description5-SPAN-LeftContent",
-                "value": "<p>Det er vigtigt at de data der afleveres til Rigsarkivet er autentiske og svarer til indholdet i de originale statistikfiler. Det er den afleverende myndigheds ansvar at sikre, at det udtræk der laves med ASTA eller andre værktøjer er tabsfrit. Dette kan gøres på mange måder både automatisk og visuelt.</p><p>Denne kvalitetskontrol kan i SPSS udføres ved at køre en compare-syntaks i statistikprogrammet, der sammenligner den originale statistikfil med den output statistikfil, som ASTA skaber. Compare-syntaksen til SPSS er indarbejdet i det eksport-script til SPSS, som ASTA danner. Ved kørsel af dette eksport-script udføres således automatisk en kvalitetskontrol af udtræk fra SPSS lavet med ASTA. Resultatet af denne sammenligning gemmes automatisk i en logfil, navngivet statistikfilnavn_Exportscriptlog.spv, på samme destination, hvor den valgte originale statistikfil ligger. Du bør åbne denne logfil i SPSS og kontrollere om der er forskelle mellem originalfilen og outputfilen. Resultatet af sammenligningen fremgår nederst i logfilen under overskriften ”Compare datasets”.</p><p>Syntakser til automatisk kvalitetskontrol af SAS og Stata udtræk er ikke indarbejdet i eksport-scriptene i ASTA.</p><p>Ud over automatiske kontroller, bør du også foretage visuel kontrol af data før og efter konvertering, samt tjekke om metadata i metadatafilen (fx table1.txt) er udtrukket korrekt og tabsfrit fra datafilen.</p>"
+                "value": "<p>Det er vigtigt at de data der afleveres til Rigsarkivet er autentiske og svarer til indholdet i de originale statistikfiler. Det er den afleverende myndigheds ansvar at sikre, at det udtræk der laves med ASTA eller andre værktøjer er tabsfrit. Du skal derfor foretage en visuel kontrol af data før og efter udtræk med ASTA, dvs. sammenligning af data i den originale statistikfil med data i datafilen (fx table1.csv) i afleveringspakken. Du skal også kontrollere om metadata i metadatafilen (fx table1.txt) i afleveringspakken er udtrukket korrekt og tabsfrit fra den originale statistikfil.</p>"
             },
             {
                 "key": "instructions-Title6-H4-LeftContent",
@@ -515,7 +515,7 @@
             },
             {
                 "key": "hybris-message-statistics-Description-DIV",
-                "value": "<p>Du kan her udtrække data og metadata fra dine statistikfiler til afleveringspakken<br/><br/> Udtrækket består af 3 trin for hver statistikfil:<br/> TRIN 1: Vælg statistikfil<br/> TRIN 2: Kør eksport script i dit statistikprogram<br/> TRIN 3: Indtast informationer om statistikfilen</p><span class=\"alert-warning\"><strong>Information!</strong>  Du kan kun lave udtræk fra statistikfiler i formaterne SPSS, SAS og Stata.</span>"
+                "value": "<p>Du kan her udtrække data og metadata fra dine statistikfiler til afleveringspakken<br/><br/> Udtrækket består af 3 trin for hver statistikfil:<br/> TRIN 1: Vælg statistikfil<br/> TRIN 2: Kør eksport script i dit statistikprogram<br/> TRIN 3: Indtast informationer om statistikfilen</p><span class=\"alert-warning\"><strong>Information!</strong>  Du kan kun lave udtræk fra statistikfiler i formaterne SPSS, SAS, Stata og R.</span>"
             },
             {
                 "key": "hybris-statistics-filepath-SPAN",
@@ -527,7 +527,7 @@
             },
             {
                 "key": "hybris-message-statistics-filepath-Text",
-                "value": "Vælg den statistikfil, du ønsker at lave udtræk fra. Filen skal have et af følgende formater: .sas7bdat (SAS-fil), .dta (Stata-fil) eller .sav (SPSS-fil). Når der udtrækkes data for en SAS-fil med katalog, skal katalogfilen (.sas7bcat) placeres i samme mappe som den valgte SAS-datafil (.sas7bdat), der skal laves udtræk fra og navngives på samme måde som datafilen.  Du skal lave en kopi af katalogfilen og omdøbe denne."
+                "value": "Vælg den statistikfil, du ønsker at lave udtræk fra. Filen skal have et af følgende formater: .sas7bdat (SAS-fil), .dta (Stata-fil), .sav (SPSS-fil) eller .rds (R-fil). Når der udtrækkes data for en SAS-fil med katalog, skal katalogfilen (.sas7bcat) placeres i samme mappe som den valgte SAS-datafil (.sas7bdat), der skal laves udtræk fra og navngives på samme måde som datafilen. Du skal lave en kopi af katalogfilen og omdøbe denne."
             },
             {
                 "key": "hybris-statistics-filepath",

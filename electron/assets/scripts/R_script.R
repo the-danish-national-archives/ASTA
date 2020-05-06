@@ -4,12 +4,12 @@
 ##################################
 
 ### ROBUST FILE PROCESSING
-### Version 3.2
+### Version 3.6
 ### Note: Script for processing standard R RDS-files (.rds, .RDS, .RData) and statfiles e.g. .sav, .dta etc.
 ### Imports base formats from spss and stata if any
 
 ### Fixes: 
-### ASTA paths
+### Output formats
 
 # Clear environment
 rm(list = ls())
@@ -27,7 +27,7 @@ f_quote <- function(x){
 # Formatting data frame for output
 f_df_format <- function(df, name){
   
-  df <- rbind(name, df)
+  #df <- rbind(name, df)
   
   colnames(df) <- 'COL'
   rownames(df) <- c()
@@ -212,7 +212,8 @@ f_process <- function(df, f_name){
                 file      = paste0(f_name, "_", "VARIABEL.txt"),
                 row.names = FALSE,
                 quote     = FALSE,
-                col.names = FALSE)
+                col.names = FALSE,
+                fileEncoding = "UTF-8")
   }
   
   ################# Create "VARIABELBESKRIVELSE" ################# 
@@ -244,7 +245,8 @@ f_process <- function(df, f_name){
                 file      = paste0(f_name, "_", "VARIABELBESKRIVELSE.txt"),
                 row.names = FALSE,
                 quote     = FALSE,
-                col.names = FALSE)
+                col.names = FALSE,
+                fileEncoding = "UTF-8")
   }
   
   ################# Create "KODELISTE" ################# 
@@ -307,7 +309,8 @@ f_process <- function(df, f_name){
                 file      = paste0(f_name, "_", "KODELISTE.txt"),
                 row.names = FALSE,
                 quote     = FALSE,
-                col.names = FALSE)
+                col.names = FALSE,
+                fileEncoding = "UTF-8")
   }
   
   # Report when done
