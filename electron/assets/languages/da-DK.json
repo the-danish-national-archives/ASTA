@@ -97,7 +97,7 @@
             },
             {
                 "key": "welcome-body-DIV",
-                "value": "<p>ASTA er Rigsarkivets værktøj til understøttelse af arbejdet med aflevering af data fra statistikfiler til arkiv.</p><p>Du kan downloade den nyeste version af ASTA fra Rigsarkivets hjemmeside.</p><p>Data fra statistikfiler skal afleveres i form af en afleveringspakke.</p><p>Med ASTA kan du lave udtræk fra statistikfiler i formaterne SAS, Stata, SPSS eller R til en afleveringspakke og teste om den overholder de krav, som er specificeret for en afleveringspakke i bilag 9 i bekendtgørelsen om arkiveringsversioner.</p> <p>Bekendtgørelsen og nyttige vejledninger finder du under <a href=\"#\" id=\"menu-instructions\" data-section=\"instructions\">Vejledning</a></p>"
+                "value": "<p>ASTA er Rigsarkivets værktøj til understøttelse af arbejdet med aflevering af data fra statistikfiler til arkiv.</p><p>Du kan downloade den nyeste version af ASTA samt vejledninger fra Rigsarkivets hjemmeside.</p><p>Data fra statistikfiler skal afleveres i form af en afleveringspakke.</p><p>Med ASTA kan du lave udtræk fra statistikfiler i formaterne SAS, Stata, SPSS eller R til en afleveringspakke og teste om den overholder de krav, som er specificeret for en afleveringspakke i bilag 9 i bekendtgørelse om arkiveringsversioner nr. 128.</p></p>"
             }
         ]
     },
@@ -172,7 +172,7 @@
             },
             {
                 "key": "about-Q2-SPAN-LeftContent",
-                "value": "En afleveringspakke med data fra statistikfiler, skal overholde særlige krav til mappestruktur, navngivning af mapper og filer, datatyper, koder for missing values mm.<p>Alle krav til en afleveringspakke fremgår af bilag 9 i bekendtgørelse om aflevering af arkiveringsversioner.</p><p>En læsevenlig version af kravene  fra bilag 9 til datakvalitet og dokumentation af statistikfilen findes i <a id=\"about-link1\" href=\"#Quickguide.pdf\">Quickguide.pdf</a> under \"Sådan kvalitetssikrer du statistikfilen før du laver udtræk\".</p>"
+                "value": "En afleveringspakke med data fra statistikfiler, skal overholde særlige krav til mappestruktur, navngivning af mapper og filer, datatyper, koder for missing values mm.<p>Alle krav til en afleveringspakke fremgår af bilag 9 i bekendtgørelse om arkiveringsversioner nr. 128.</p><p>En læsevenlig version af kravene  fra bilag 9 til datakvalitet og dokumentation af statistikfilen findes i menupunktet <a href=\"#\" id=\"menu-instructions\" data-section=\"instructions\">Vejledning</a> under afsnittet \"Sådan kvalitetssikrer du statistikfilen før du laver udtræk\".</p>"
             },
             {
                 "key": "about-Q3-H4-LeftContent",
@@ -180,7 +180,7 @@
             },
             {
                 "key": "about-Q3-SPAN-LeftContent",
-                "value": "Data som er skabt i forbindelse med forskning med anvendelse af en videnskabelig metode, og som er skabt eller bearbejdet i statistikprogrammer eller lignende, kan afleveres som en afleveringspakke til arkivet efter reglerne i bilag 9 til bekendtgørelse om aflevering af arkiveringsversioner.<p>Det fremgår af afleveringsbestemmelsen, du har modtaget fra arkivet i forbindelse med afleveringssagen, om data skal afleveres som en afleveringspakke.</p><p>Data som er skabt eller lagret i databaser samt kvalitative interviews og andre dokumentsamlinger skal afleveres efter reglerne i bilag 1-8 i bekendtgørelse om aflevering af arkiveringsversioner.</p>"
+                "value": "Data som er skabt i forbindelse med forskning med anvendelse af en videnskabelig metode, og som er skabt eller bearbejdet i statistikprogrammer eller lignende, kan afleveres som en afleveringspakke til arkivet efter reglerne i bilag 9 til bekendtgørelse om arkiveringsversioner nr. 128.<p>Det fremgår af afleveringsbestemmelsen, du har modtaget fra arkivet i forbindelse med afleveringssagen, om data skal afleveres som en afleveringspakke.</p><p>Data som er skabt eller lagret i databaser samt kvalitative interviews og andre dokumentsamlinger skal afleveres efter reglerne i bilag 1-8 i bekendtgørelse om arkiveringsversioner nr.128.</p>"
             },
             {
                 "key": "about-Q4-H4-LeftContent",
@@ -196,7 +196,7 @@
             },
             {
                 "key": "about-Q5-SPAN-LeftContent",
-                "value": "Funktionen \"Skab afleveringspakke\" er et udtræksværktøj, der kan anvendes til at skabe dele af en afleveringspakke.<p>Med dette udtræksværktøj kan du:</p><ul><li>Skabe en tom mappestruktur til afleveringspakken.</li><li>Lave udtræk af data og metadata fra dine statistikfiler, så de overholder kravene til struktur i data- og metadatafiler i en afleveringspakke.</li><li>Placere indekafilerne i afleveringspakken</li><li>Placere kontekstdokumenterne i afleveringspakken i overensstemmelse med rækkefølgen i indeksfilen contextDocumentationIndex.xml</li></ul>"
+                "value": "Funktionen \"Skab afleveringspakke\" er et udtræksværktøj, der kan anvendes til at skabe dele af en afleveringspakke.<p>Med dette udtræksværktøj kan du:</p><ul><li>Skabe en tom mappestruktur til afleveringspakken.</li><li>Lave udtræk af data og metadata fra dine statistikfiler, så de overholder kravene til struktur i data- og metadatafiler i en afleveringspakke.</li><li>Placere indeksfilerne i afleveringspakken</li><li>Placere kontekstdokumenterne i afleveringspakken i overensstemmelse med rækkefølgen i indeksfilen contextDocumentationIndex.xml</li></ul>"
             },
             {
                 "key": "about-Q6-H4-LeftContent",
@@ -204,7 +204,7 @@
             },
             {
                 "key": "about-Q6-SPAN-LeftContent",
-                "value": "Funktionen \"Test afleveringspakke\" er en funktion, der kan anvendes til at teste om afleveringspakken overholder krav fra bilag 9 i bekendtgørelse om aflevering af arkiveringsversioner.<p>Når en afleveringspakke er testet med \"Test afleveringspakke\" funktionen gemmes automatisk en testlog på samme destination, hvor den testede afleveringspakke ligger.</p>"
+                "value": "Funktionen \"Test afleveringspakke\" er en funktion, der kan anvendes til at teste om afleveringspakken overholder krav fra bilag 9 i bekendtgørelse om arkiveringsversioner nr. 128.<p>Når en afleveringspakke er testet med \"Test afleveringspakke\" funktionen gemmes automatisk en testlog på samme destination, hvor den testede afleveringspakke ligger.</p>"
             },
             {
                 "key": "about-Q7-H4-LeftContent",
@@ -298,11 +298,11 @@
             },
             {
                 "key": "instructions-Description1-DIV-LeftContent",
-                "value": "<p>Rigsarkivet har skabt værktøjet ASTA (Aflevering af Statiskfiler Til Arkiv), som du kan anvende til at skabe og teste en afleveringspakke, der indeholder data udtrukket fra statistikfiler, som overholder Rigsarkivets krav til en afleveringspakke. Disse krav fremgår bilag 9 i bekendtgørelsen om arkiveringsversioner. Bekendtgørelsen og vejledningen til denne finder du på Rigsarkivets hjemmeside www.sa.dk.</p><p>Når du skaber en afleveringspakke med ASTA, sikrer programmet at afleveringspakken overholder de strukturelle krav til mappestruktur og data- og metadatafiler. Du skal derimod selv sikre at data og metadataindhold i statistikfilerne overholder krav i bilag 9 før udtræk med ASTA.</p><p>Funktionen \"Skab afleveringspakke\" i ASTA udtrækker blot de data- og metadata der findes i statistikfilen.</br>Det er derfor vigtigt at du sikrer dig, at kvaliteten af data- og metadata i statistikfilen lever op til arkivets krav i bilag 9 i bekendtgørelse om arkiveringsversioner, før du laver udtræk med ASTA.</br></br>Krav til data- og metadatakvalitet er listet herunder, samt i denne <a id=\"instructions-link1\" href=\"#Quickguide.pdf\">Quickguide.pdf</a>:</P>"
+                "value": "<p>Rigsarkivet har skabt værktøjet ASTA (Aflevering af Statiskfiler Til Arkiv), som du kan anvende til at skabe og teste en afleveringspakke, der indeholder data udtrukket fra statistikfiler, som overholder Rigsarkivets krav til en afleveringspakke. Disse krav fremgår af bilag 9 i bekendtgørelse om arkiveringsversioner nr. 128. Bekendtgørelsen og vejledningen til denne finder du på Rigsarkivets hjemmeside www.sa.dk.</p><p>Når du skaber en afleveringspakke med ASTA, sikrer programmet at afleveringspakken overholder de strukturelle krav til mappestruktur og data- og metadatafiler. Du skal derimod selv sikre at data og metadataindhold i statistikfilerne overholder krav i bilag 9 før udtræk med ASTA.</p><p>Funktionen \"Skab afleveringspakke\" i ASTA udtrækker blot de data- og metadata der findes i statistikfilen.</br>Det er derfor vigtigt at du sikrer dig, at kvaliteten af data- og metadata i statistikfilen lever op til arkivets krav i bilag 9 i bekendtgørelse om arkiveringsversioner nr. 128, før du laver udtræk med ASTA.</br></br>Krav til data- og metadatakvalitet er listet herunder.</p>"
             },
             {
                 "key": "instructions-SubDescription11-DIV-LeftContent",
-                "value": "<p><b>Datafil</b></p><ul><li>Tegnsættet for statistikfilen skal være indkodet som UTF-8. Se <a id=\"instructions-link17\" href=\"#UTF8vejledning.pdf\">vejledning om UTF-8</a>.</li></ul>"
+                "value": "<p><b>Datafil</b></p><ul><li>Tegnsættet for statistikfilen skal være indkodet som UTF-8. Se vejledning om UTF-8 på Rigsarkivets hjemmeside.</li></ul>"
             },
             {
                 "key": "instructions-SubDescription12-DIV-LeftContent",
@@ -310,7 +310,7 @@
             },
             {
                 "key": "instructions-SubDescription13-DIV-LeftContent",
-                "value": "<p><b>Datatyper (Formats)</b></p><ul><li>Datatyper for variable i statistikfilen skal overholde de tilladte datatyper i en afleveringspakke angivet i figur 9.3 i bilag 9 i bekendtgørelse om arkiveringsversioner. Hvis dette ikke er tilfældet, skal du selv konvertere datatyperne til tilladte formater før udtræk laves med ASTA.</li></ul>"
+                "value": "<p><b>Datatyper (Formats)</b></p><ul><li>Datatyper for variable i statistikfilen skal overholde de tilladte datatyper i en afleveringspakke angivet i figur 9.3 i bilag 9 i bekendtgørelse om arkiveringsversioner nr. 128. Hvis dette ikke er tilfældet, skal du selv konvertere datatyperne til tilladte formater før udtræk laves med ASTA.</li></ul>"
             },
             {
                 "key": "instructions-SubDescription14-DIV-LeftContent",
@@ -326,11 +326,11 @@
             },
             {
                 "key": "instructions-SubDescription17-DIV-LeftContent",
-                "value": "</br>Læs <a id=\"instructions-link2\" href=\"#Bilag9Kravtilafleveringspakke.pdf\">Vejledning til bilag 9</a> igennem, for en mere detaljeret beskrivelse af hvad en afleveringspakke er og hvilke krav der stilles til data- og metadatafilen."
+                "value": "</br>Se vejledning til bilag 9 i vejledning til bekendtgørelse om arkiveringsversioner nr. 128 fra Rigsarkivets hjemmeside, for en mere detaljeret beskrivelse af hvad en afleveringspakke er og hvilke krav der stilles til data- og metadatafilen."
             },
             {
                 "key": "instructions-Description1-DIV-RightContent",
-                "value": "<ul><li><a id=\"instructions-link19\" href=\"#Bekendtgoerelse128.pdf\">Bekendtgørelse nr. 128</a></li><li><a id=\"instructions-link6\" href=\"#Quickguide.pdf\">Quickguide.pdf</a></li><li><a id=\"instructions-link7\" href=\"#Bilag9Kravtilafleveringspakke.pdf\">Vejledning til bilag 9</a></li><li><a id=\"instructions-link8\" href=\"#ASTAbrugervejledning.pdf\">ASTA brugervejledning.pdf</a></li><li><a id=\"instructions-link4\" href=\"#SkabarchiveIndexvejledning.pdf\">Skab archiveIndex vejledning.pdf</a></li><li><a id=\"instructions-link5\" href=\"#SkabcontextDocumentationIndexvejledning.pdf\">Skab contextDocumentationIndex vejledning.pdf</a></li><li><a id=\"instructions-link15\" href=\"#TIFFvejledning.pdf\">Vejledning i konvertering til TIFF</a></li><li><a id=\"instructions-link16\" href=\"#UTF8vejledning.pdf\">Vejledning i UTF-8</a></li></ul>"
+                "value": "<br/><b>Vejledninger på Rigsarkivets hjemmeside:</b><br/><ul><li>Bekendtgørelse nr. 128</li><li>Vejledning til bek. 128</li><li>Quickguide til skabelse af afleveringspakke</li><li>ASTA brugervejledning</li><li>Vejledning til udfyldelse af arkivbeskrivelsesfil</li><li>Vejledning til udfyldelse af kontekstdokumentationsfil</li><li>Vejledning i konvertering til TIFF</li><li>Vejledning i UTF-8</li></ul>"
             },
             {
                 "key": "instructions-Title2-H4-LeftContent",
@@ -338,7 +338,7 @@
             },
             {
                 "key": "instructions-Description2-SPAN-LeftContent",
-                "value": "Da det ikke er muligt at fortryde eller gå tilbage i ASTA, bør du have nedenstående filer og informationer klar, før du skaber en afleveringspakke med ASTA.<p>Du kan tilføje eller erstatte eksisterende indeksfiler og kontekstdokumenter i en afleveringspakke efterfølgende med funktionen \"Rediger afleveringspakke\".</p><ul><li><b>Fremfind de statistikfiler</b> der skal afleveres til arkivet. </li><span class=\"alert-warning\"><strong>Information!</strong> Hvis personfølsomme oplysninger er adskilt fra statistikfilen i en nøglefil, skal både statistikfilen og nøglefilen indgå i afleveringspakken</span><br/><li><b>Fremfind løbenummer</b> for afleveringspakken. Løbenummere er udleveret af arkivet og fremgår af afleveringsbestemmelsen.</li><br/><li><b>Udfyld indeksfilerne</b> archiveIndex.xml og contextDocumentationIndex.xml. Arkivet har udviklet indtastningsværktøjer til udfyldning af indeksfilerne. Se vejledningerne <a id=\"instructions-link10\" href=\"#SkabarchiveIndexvejledning.pdf\">Skab archiveIndex vejledning.pdf</a> og <a id=\"instructions-link11\" href=\"#SkabcontextDocumentationIndexvejledning.pdf\">Skab contextDocumentationIndex vejledning.pdf</a> i ASTA eller på Rigsarkivets hjemmeside www.sa.dk.</li><span class=\"alert-warning\"><strong>Information!</strong> Arkivet skal godkende de udfyldte indeksfiler, før du placerer dem i afleveringspakken</span><br/><li><b>Fremfind de kontekstdokumenter</b>, der skal indgå i afleveringspakken. Disse fremgår af afleveringsbestemmelsen.</li><br/><li><b>Konverter kontekstdokumenterne</b> til bevaringsformat, fx .tif (dokumenter og billeder), .mp3 (lydfiler) og .mpg (video). Se <a id=\"instructions-link18\" href=\"#TIFFvejledning.pdf\">vejledning om \"TIFF-konvertering\"</a> på Rigsarkivets hjemmeside www.sa.dk.</li><span class=\"alert-warning\"><strong>Information!</strong> Du kan også konvertere kontekstdokumenterne efter afleveringspakken er skabt med ASTA</span><br/><li><b>Afklar om der findes unikke variable</b> i statistikfilene som skal angives som nøglevariable under udtræk med ASTA.</li><br/><li><b>Afklar om der er flettevariable</b> på tværs af flere statistikfiler i afleveringspakken som skal angives i en opmærkning af en reference under udtræk med ASTA samt over hvilke variable disse referencer skal dannes.</li></ul>"
+                "value": "Da det ikke er muligt at fortryde eller gå tilbage i ASTA, bør du have nedenstående filer og informationer klar, før du skaber en afleveringspakke med ASTA.<p>Du kan tilføje eller erstatte eksisterende indeksfiler og kontekstdokumenter i en afleveringspakke efterfølgende med funktionen \"Rediger afleveringspakke\".</p><ul><li><b>Fremfind de statistikfiler</b> der skal afleveres til arkivet. </li><span class=\"alert-warning\"><strong>Information!</strong> Hvis personfølsomme oplysninger er adskilt fra statistikfilen i en nøglefil, skal både statistikfilen og nøglefilen indgå i afleveringspakken</span><br/><li><b>Fremfind løbenummer</b> for afleveringspakken. Løbenummere er udleveret af arkivet og fremgår af afleveringsbestemmelsen.</li><br/><li><b>Udfyld indeksfilerne</b> archiveIndex.xml og contextDocumentationIndex.xml. Arkivet har udviklet indtastningsværktøjer til udfyldning af indeksfilerne. Se vejledninger til disse indtastningsprogrammer på Rigsarkivets hjemmeside www.sa.dk.</li><span class=\"alert-warning\"><strong>Information!</strong> Arkivet skal godkende de udfyldte indeksfiler, før du placerer dem i afleveringspakken</span><br/><li><b>Fremfind de kontekstdokumenter</b>, der skal indgå i afleveringspakken. Disse fremgår af afleveringsbestemmelsen.</li><br/><li><b>Konverter kontekstdokumenterne</b> til bevaringsformat, fx .tif (dokumenter og billeder), .mp3 (lydfiler) og .mpg (video). Se vejledning om konvertering af dokumenter til TIFF på Rigsarkivets hjemmeside www.sa.dk.</li><span class=\"alert-warning\"><strong>Information!</strong> Du kan også konvertere kontekstdokumenterne efter afleveringspakken er skabt med ASTA</span><br/><li><b>Afklar om der findes unikke variable</b> i statistikfilene som skal angives som nøglevariable under udtræk med ASTA.</li><br/><li><b>Afklar om der er flettevariable</b> på tværs af flere statistikfiler i afleveringspakken som skal angives i en opmærkning af en reference under udtræk med ASTA samt over hvilke variable disse referencer skal dannes.</li></ul>"
             },
             {
                 "key": "instructions-Title3-H4-LeftContent",
@@ -346,7 +346,7 @@
             },
             {
                 "key": "instructions-Description3-SPAN-LeftContent",
-                "value": "Anvend funktionen \"Skab afleveringspakke\" til at gøre følgende:<ul><li>Navngive afleveringspakken med korrekt løbenummer.</li><li>Danne en tom mappestruktur til afleveringspakken med struktur og navngivning af mapper, der overholder krav i bilag 9.</li><li>Lave udtræk af data og metadata fra dine originale statistikfiler til data- og metadatafiler, der overholder de strukturelle krav til disse filer i  bilag 9.</li><li>Tilføje archiveIndex.xml og contextDocumentationIndex.xml til afleveringspakken. Læs <a id=\"instructions-link9\" href=\"#SkabarchiveIndexvejledning.pdf\">Skab archiveIndex_vejledning.pdf</a> og <a id=\"instructions-link12\" href=\"#SkabcontextDocumentationIndexvejledning.pdf\"> Skab contextDocumentationIndex_vejledning.pdf</a> for vejledning i udfyldning af disse indexfiler.</li><li>Tilføje kontekstdokumenter til afleveringspakken.</li></ul>"
+                "value": "Anvend funktionen \"Skab afleveringspakke\" til at gøre følgende:<ul><li>Navngive afleveringspakken med korrekt løbenummer.</li><li>Danne en tom mappestruktur til afleveringspakken med struktur og navngivning af mapper, der overholder krav i bilag 9.</li><li>Lave udtræk af data og metadata fra dine originale statistikfiler til data- og metadatafiler, der overholder de strukturelle krav til disse filer i  bilag 9.</li><li>Tilføje archiveIndex.xml og contextDocumentationIndex.xml til afleveringspakken. Se ”Vejledning til udfyldelse af arkivbeskrivelsesfil” og ”Vejledning til udfyldelse af kontekstdokumentationsfil” på Rigsarkivets hjemmeside for vejledning i udfyldelse af disse indeksfiler.</li><li>Tilføje kontekstdokumenter til afleveringspakken.</li></ul>"
             },
             {
                 "key": "instructions-Title4-H4-LeftContent",
@@ -467,7 +467,7 @@
             },
             {
                 "key": "hybris-panel-structure-New-Description-DIV-RightContent",
-                "value": "<p>Du bør have følgende klar, før du skaber en afleveringspakke:</p><ol><li><b>Løbenummer for afleveringspakken</b> - løbenummeret er udleveret af arkivet og fremgår af afleveringsbestemmelsen</li><br/><li><b>Statistikfilerne</b> der skal indgå i afleveringspakken og afleveres til arkivet - husk at kvalitetssikre statistikfilerne før udtræk </li><span class=\"alert-warning\"><strong>Advarsel!</strong> Anvend altid en KOPI af din originale statistikfil!</span><br/><li><b>Indeksfilerne</b> archiveIndex.xml og contextDocumentationIndex.xml </li><br/><li><b>Kontekstdokumenterne</b> der skal indgå i afleveringspakken. Kontekstdokumenterne skal konverteres til TIFF, JPEG-2000, MP3, WAVE eller MPEG inden de afleveres til arkivet</li><br/><li><b>Beskrivelse af statistikfilernes indhold</b></li><br/><li><b>Afklar nøglevariable</b> - hvilke unikke variable i statistikfilerne skal angives som nøglevariable? </li><br/><li><b>Afklar referencer</b> - over hvilke variable dannes referencer mellem hvilke statistikfiler i afleveringspakken?</li></ol>Se <a id=\"hypres-link1\" href=\"#Quickguide.pdf\">Quickguide.pdf</a> for mere vejledning i hvordan du kvalitetssikrer statistikfilen og gør øvrige dokumenter klar før udtræk med ASTA."
+                "value": "<p>Du bør have følgende klar, før du skaber en afleveringspakke:</p><ol><li><b>Løbenummer for afleveringspakken</b> - løbenummeret er udleveret af arkivet og fremgår af afleveringsbestemmelsen</li><br/><li><b>Statistikfilerne</b> der skal indgå i afleveringspakken og afleveres til arkivet - husk at kvalitetssikre statistikfilerne før udtræk </li><span class=\"alert-warning\"><strong>Advarsel!</strong> Anvend altid en KOPI af din originale statistikfil!</span><br/><li><b>Indeksfilerne</b> archiveIndex.xml og contextDocumentationIndex.xml </li><br/><li><b>Kontekstdokumenterne</b> der skal indgå i afleveringspakken. Kontekstdokumenterne skal konverteres til TIFF, JPEG-2000, MP3, WAVE eller MPEG inden de afleveres til arkivet</li><br/><li><b>Beskrivelse af statistikfilernes indhold</b></li><br/><li><b>Afklar nøglevariable</b> - hvilke unikke variable i statistikfilerne skal angives som nøglevariable? </li><br/><li><b>Afklar referencer</b> - over hvilke variable dannes referencer mellem hvilke statistikfiler i afleveringspakken?</li></ol>Se hvordan du kvalitetssikrer statistikfilen og gør øvrige dokumenter klar før udtræk med ASTA under menupunktet <a href=\"#\" id=\"menu-instructions\" data-section=\"instructions\">Vejledning</a>."
             },
             {
                 "key": "hybris-panel-structure-Edit-Title-H2",
@@ -1924,7 +1924,7 @@
             },
             {
                 "key": "nemesis-processing-CheckMetadata-FileVariable-DataFormat-StringLength-Error",
-                "value": "<i class=\"fas fa-times error\"><div id=\"15715\" hidden=\"true\"><h3>Vejledning</h3>Kravet udgår af bekendtgørelsen og der kan derfor ses bort fra denne fejlbesked.</div></i>Dataformatnotationen <i>{2}</i> angivet i metadatafilen <i>{0}</i> for tekst variablen <i>{1}</i> er over maximal længde (32.767 bytes) for et tekstfelt<br/>"
+                "value": "<i class=\"fas fa-times error\"><div id=\"15715\" hidden=\"true\"><h3>Vejledning</h3>Kravet udgår af bekendtgørelse nr. 128 og der kan derfor ses bort fra denne fejlbesked.</div></i>Dataformatnotationen <i>{2}</i> angivet i metadatafilen <i>{0}</i> for tekst variablen <i>{1}</i> er over maximal længde (32.767 bytes) for et tekstfelt<br/>"
             },
             {
                 "key": "nemesis-processing-CheckMetadata-ErrorStop",
