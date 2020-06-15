@@ -117,6 +117,10 @@
                 "value": "Choose language"
             },
             {
+                "key": "profile-warning-reset",
+                "value": "<strong>Warning!</strong> ASTA is reset when you change the language"
+            },
+            {
                 "key": "profile-save",
                 "value": "Save"
             },
