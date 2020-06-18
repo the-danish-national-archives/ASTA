@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- contextDocumentationIndex 0.9.5 -->
-<!-- Rigsarkivet 2019 -->
+<!-- Rigsarkivet 2020 -->
 <xs:schema xmlns="http://www.sa.dk/xmlns/diark/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.sa.dk/xmlns/diark/1.0" elementFormDefault="qualified" attributeFormDefault="unqualified" blockDefault="#all" finalDefault="extension restriction" version="0.9.5" id="contextDocumentationIndex" xml:lang="en">
 	<xs:element name="contextDocumentationIndex">
 		<xs:complexType>

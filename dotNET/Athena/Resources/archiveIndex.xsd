@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!-- archiveIndex 0.9.6 -->
-<!-- Rigsarkivet 2019 -->
+<!-- Rigsarkivet 2020 -->
 <!-- Regarding the schema structure, the use of elements only and the intensive use of nested elements with multiple occurence elements is done to ease cooperation with various development tools -->
 <xs:schema xmlns="http://www.sa.dk/xmlns/diark/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.sa.dk/xmlns/diark/1.0" elementFormDefault="qualified" attributeFormDefault="unqualified" blockDefault="#all" finalDefault="extension restriction" version="0.9.6	" id="archiveIndex" xml:lang="en">
 	<xs:element name="archiveIndex">

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- fileIndex.xsd version 0.9.6 -->
-<!-- Rigsarkivet 2019 -->
+<!-- Rigsarkivet 2020 -->
 <xs:schema xmlns="http://www.sa.dk/xmlns/diark/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.sa.dk/xmlns/diark/1.0" elementFormDefault="qualified" attributeFormDefault="unqualified" blockDefault="#all" finalDefault="#all" version="0.9.5" id="fileIndex">
 	<xs:annotation>
 		<xs:documentation xml:lang="da">Dette skema angiver tilladte mappenavne og filnavne, men ikke hvilke filnavne, som er tilladt i hvilke mapper. Denne begrænsning skyldes ønsket om at anvende samme elementnavn 'foN' for alle mappenavne, og XML Schema tillader ikke at samme element kan være af forskellig type (Consistent Declaration Rule)</xs:documentation>
