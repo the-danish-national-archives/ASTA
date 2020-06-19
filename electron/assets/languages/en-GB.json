@@ -4,7 +4,7 @@
         "keys": [
             {
                 "key": "menu-welcome",
-                "value": "Home page"
+                "value": "Front page"
             },
             {
                 "key": "menu-hybris-new",
@@ -20,7 +20,7 @@
             },
             {
                 "key": "menu-styx",
-                "value": "Create dissemination format"
+                "value": "Create dissemination package"
             },
             {
                 "key": "menu-instructions",
@@ -81,7 +81,7 @@
         "keys": [
             {
                 "key": "welcome-Title",
-                "value": "Home page"
+                "value": "Front page"
             },
             {
                 "key": "welcome-title-H2",
@@ -139,15 +139,15 @@
         "keys": [
             {
                 "key": "styx-Title",
-                "value": "Create dissemination format"
+                "value": "Create dissemination package"
             },
             {
                 "key": "styx-title-H2",
-                "value": "Create dissemination format"
+                "value": "Create dissemination package"
             },
             {
                 "key": "styx-body-DIV",
-                "value": "<p>The \"Create dissemination format\" function has been selected and opened in a separate window.</p>"
+                "value": "<p>The \"Create dissemination package\" function has been selected and opened in a separate window.</p>"
             }
         ]
     },
@@ -995,7 +995,7 @@
             },
             {
                 "key": "hybris-output-backup-Description",
-                "value": "Here you can make copies of files which you can then use to check that the extractions made using ASTA are lossless and to support the work of the archives in testing and approving the information package. <br/> The files are copied to the folder ASTA_KONTROLFILER_FD.XXXXX which is placed beside the information package created.<br/><br/> You can make a copy of the following files: <ol type=\"a\"><li>Your original statistics file</li><li>The export script used for extraction</li><li>Any output files from the extraction (SPSS only)</li><li>The file statisticsfilename_Exportscriptlog.spv (SPSS only). The file contains the result of the comparison between the original statistics file and the output file from the extraction in SPSS.</li></ol>"
+                "value": "Here you can make copies of files which you can then use to check that the extractions made using ASTA are lossless and to support the work of the archives in testing and approving the information package. <br/> The files are copied to the folder ASTA_kontrolfiler_FD.XXXXX which is placed beside the information package created.<br/><br/> You can make a copy of the following files: <ol type=\"a\"><li>Your original statistics file</li><li>The export script used for extraction</li><li>Any output files from the extraction (SPSS only)</li><li>The file statisticsfilename_Exportscriptlog.spv (SPSS only). The file contains the result of the comparison between the original statistics file and the output file from the extraction in SPSS.</li></ol>"
             },
             {
                 "key": "hybris-output-backup-Summary1",
@@ -1155,7 +1155,7 @@
             },
             {
                 "key": "hybris-panel-contextdocuments-confirmation-SPAN",
-                "value": "The index files are located"
+                "value": "The index files have been added"
             },
             {
                 "key": "hybris-output-statistics-header-contextdocuments-SPAN",
@@ -1163,11 +1163,11 @@
             },
             {
                 "key": "hybris-contextdocuments-Description-DIV",
-                "value": "You must add the below context documents to the information package.<br/>You can only place one file per document folder.<br/>If a context document is not added, an empty document folder will be created with the name of the folder number.<br/>If you do not have the context documents ready, you can print the document list and add them manually at a later time."
+                "value": "You must add the below context documents to the information package.<br/>You can only place one file per document folder.<br/>If a context document is not added, an empty document folder will be created with the name of the folder number.<br/>If you do not have the context documents ready, you can print the document list and add them at a later time."
             },
             {
                 "key": "hybris-output-contextdocuments-Information2",
-                "value": "<strong>Note!</strong> Context documents must be converted to their preservation format before being submitted to the archive; e.g. .tif or .mp3"
+                "value": "<strong>Note!</strong> Context documents must be converted to preservation format before being submitted to the archive; e.g. .tif or .mp3"
             },
             {
                 "key": "hybris-contextdocuments-List-H2",
@@ -1576,7 +1576,7 @@
             },
             {
                 "key": "nemesis-processing-CheckFolderIndices-ContextDocumentation-FileRequired-Error",
-                "value": "<i class=\"fas fa-times error\"><div id=\"15157\" hidden=\"true\"><h3>Guidance</h3>All context documents registered in <i>contextDocumentationIndex.xml</i> must be found in the information package in the folder <i>ContextDocumentation</i>.<br/><br/> Each context document is assigned a documentID in <i>contextDocumentationIndex.xml.</i> When context documents are placed in document folders in the information package’s <i>docCollection1</i> folder, the document folders must be given the same names as the documentIDs, in the same order as that in which the documentIDs are listed in <i>contextDocumentationIndex.xml.</i><h3>Example</h3>If the context document \"Submission provision\" has documentID 7 in <i>contextDocumentationIndex.xml</i> then this document must be placed in the document folder named \"7\".<h3>Requirements in Schedule 9</h3><b>9.D. The <i>ContextDocumentation</i></b> folder<br/><b>9.D.1</b> The ContextDocumentation folder must contain context documentation; cf. 4.E.<br/><br/><b>4.E <i>ContextDocumentation</i></b> folder<br/><b>4.E.1</b> The <i>ContextDocumentation</i> folder must contain one or more document collection folders with context documentation; cf. 6.B. <br/><b>4.E.2</b> A document collection folder with context documentation can contain up to 10,000 document folders. <br/><b>4.E.3</b> The document collection folders must be named »docCollection[consecutive number]«, starting with 1. The name must be unique within <i>ContextDocumentation</i>.<br/><b>4.E.4</b> Each document in the context documentation must be given an ID of up to 12 digits. The document ID must be unique within <i>ContextDocumentation</i>.<br/><b>4.E.5</b> A document folder must contain one document consisting of one or more files in the same format and be named with the document ID. Leading zeros are not allowed.</div></i>The document registered in the index file <i>{0}</i> with documentID <b><i>{1}</i></b> cannot be found in the information package in the folder ContextDocumentation<br/>"
+                "value": "<i class=\"fas fa-times error\"><div id=\"15157\" hidden=\"true\"><h3>Guidance</h3>All context documents registered in <i>contextDocumentationIndex.xml</i> must be found in the information package in the folder <i>ContextDocumentation</i>.<br/><br/> Each context document is assigned a documentID in <i>contextDocumentationIndex.xml.</i> When context documents are placed in document folders in the information package’s <i>docCollection1</i> folder, the document folders must be given the same names as the documentIDs, in the same order as that in which the documentIDs are listed in <i>contextDocumentationIndex.xml.</i><h3>Example</h3>If the context document \"Submission provision\" has documentID 1 in <i>contextDocumentationIndex.xml</i> then this document must be placed in the document folder named \"1\".<h3>Requirements in Schedule 9</h3><b>9.D. The <i>ContextDocumentation</i></b> folder<br/><b>9.D.1</b> The ContextDocumentation folder must contain context documentation; cf. 4.E.<br/><br/><b>4.E <i>ContextDocumentation</i></b> folder<br/><b>4.E.1</b> The <i>ContextDocumentation</i> folder must contain one or more document collection folders with context documentation; cf. 6.B. <br/><b>4.E.2</b> A document collection folder with context documentation can contain up to 10,000 document folders. <br/><b>4.E.3</b> The document collection folders must be named »docCollection[consecutive number]«, starting with 1. The name must be unique within <i>ContextDocumentation</i>.<br/><b>4.E.4</b> Each document in the context documentation must be given an ID of up to 12 digits. The document ID must be unique within <i>ContextDocumentation</i>.<br/><b>4.E.5</b> A document folder must contain one document consisting of one or more files in the same format and be named with the document ID. Leading zeros are not allowed.</div></i>The document registered in the index file <i>{0}</i> with documentID <b><i>{1}</i></b> cannot be found in the information package in the folder ContextDocumentation<br/>"
             },
             {
                 "key": "nemesis-processing-CheckFolderDataEmpty-Error",
@@ -1728,7 +1728,7 @@
             },
             {
                 "key": "nemesis-processing-CheckMetadata-FileLabel-KeyValidation-Error",
-                "value": "<i class=\"fas fa-times error\"><div id=\"15316\" hidden=\"true\"><h3>Guidance</h3>Rename the key variable so that it does not contain any illegal characters.<br/>Illegal characters are all characters other than numbers and letters.<br/>Spaces and white space characters are not allowed.<br/>A key variable must consist of a single word without spaces.<br/>In a composite key variable consisting of multiple key variables, the different key variables must be separated by spaces.<br/>A key variable may never begin with a number but can be a mix of letters and numbers up to a maximum of 128 characters.<br/>If the key variable specified is a reserved word in SQL:1999, then the key variable must be enclosed by double quotation marks.<h3>Example</h3>KEY VARIABLE<br/>date of birth lbnr \"select\"<h3>Requirements in Schedule 9</h3><b>9.I. Metadata file</b><br/><b>9.I.1</b> Metadata from a data file is submitted as a structured text file that complies with the syntax described as EBNF in Figure 9.11.<br/><br/><b>EBNF in Figure 9.11:</b><br/><b>KEY VARIABLE ::=</b> ”NØGLEVARIABEL” LINEBREAK {VARIABLENAME SPACE} LINEBREAK {LINEBREAK}<br/><b>VARIABLENAME ::=</b>TITLE<br/><b>TITLE ::=</b>(LETTER {LETTER | DIGIT}) | (QUOTATIONMARK LETTER {LETTER | DIGIT} QUOTATIONMARK)<i>!! A TITLE must never begin with a number, but can be a mix of letters and numbers up to a maximum of 128 characters, and if the title is a reserved word in SQL: 1999, then the title must be enclosed by double quotation marks; cf. ISO/IEC 9075:1999 – Database Language SQL (SQL:99)</i><br/><br/><b>Figure 9.4 The structure of the metadata file</b><br/><b>KEY VARIABLE</b>: The unique key variable of the data file is specified with the names of the variable(s) that the key variable consists of.<br/><b>Outcome space</b>: ISO/IEC 9075:1999 – Database Language SQL (SQL-99)<br/><b>Cardinality</b>: 0–1. <br/><b>Mandatory</b>: Yes, if a unique key variable exists.</div></i>The key variable <b><i>{1}</i></b> specified under the tag CODE LIST in the metadata file <i>{0}</i> contains one or several illegal characters<br/>"
+                "value": "<i class=\"fas fa-times error\"><div id=\"15316\" hidden=\"true\"><h3>Guidance</h3>Rename the key variable so that it does not contain any illegal characters.<br/>Illegal characters are all characters other than numbers and letters.<br/>Spaces and white space characters are not allowed.<br/>A key variable must consist of a single word without spaces.<br/>In a composite key variable consisting of multiple key variables, the different key variables must be separated by spaces.<br/>A key variable may never begin with a number but can be a mix of letters and numbers up to a maximum of 128 characters.<br/>If the key variable specified is a reserved word in SQL:1999, then the key variable must be enclosed by double quotation marks.<h3>Example</h3>KEY VARIABLE<br/>date of birth lbnr \"select\"<h3>Requirements in Schedule 9</h3><b>9.I. Metadata file</b><br/><b>9.I.1</b> Metadata from a data file is submitted as a structured text file that complies with the syntax described as EBNF in Figure 9.11.<br/><br/><b>EBNF in Figure 9.11:</b><br/><b>KEY VARIABLE ::=</b> ”NØGLEVARIABEL” LINEBREAK {VARIABLENAME SPACE} LINEBREAK {LINEBREAK}<br/><b>VARIABLENAME ::=</b>TITLE<br/><b>TITLE ::=</b>(LETTER {LETTER | DIGIT}) | (QUOTATIONMARK LETTER {LETTER | DIGIT} QUOTATIONMARK)<i>!! A TITLE must never begin with a number, but can be a mix of letters and numbers up to a maximum of 128 characters, and if the title is a reserved word in SQL: 1999, then the title must be enclosed by double quotation marks; cf. ISO/IEC 9075:1999 – Database Language SQL (SQL:99)</i><br/><br/><b>Figure 9.4 The structure of the metadata file</b><br/><b>KEY VARIABLE</b>: The unique key variable of the data file is specified with the names of the variable(s) that the key variable consists of.<br/><b>Outcome space</b>: ISO/IEC 9075:1999 – Database Language SQL (SQL-99)<br/><b>Cardinality</b>: 0–1. <br/><b>Mandatory</b>: Yes, if a unique key variable exists.</div></i>The key variable <b><i>{1}</i></b> specified under the tag KEY VARIABLE in the metadata file <i>{0}</i> contains one or several illegal characters<br/>"
             },
             {
                 "key": "nemesis-processing-CheckMetadata-FileLabel-KeyLength-Error",

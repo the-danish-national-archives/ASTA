@@ -205,22 +205,22 @@ function (n) {
                     });
                     switch(fileExt) {
                         case "sav": {
-                            settings.scriptApplication = "Statistikprogrammet SPSS Statistics";
+                            settings.scriptApplication = "SPSS Statistics";
                             settings.scriptType = "SPSS";
                             settings.scriptFileName = settings.scripts[0]; 
                         };break;
                         case "sas7bdat": {
-                            settings.scriptApplication = "Statistikprogrammet SAS";
+                            settings.scriptApplication = "SAS";
                             settings.scriptType = "SAS";
                             settings.scriptFileName = sasCatalogExists ? settings.scripts[2] : settings.scripts[1];
                         };break;
                         case "dta": { 
-                            settings.scriptApplication = "Statistikprogrammet Stata";
+                            settings.scriptApplication = "Stata";
                             settings.scriptType = "Stata";
                             settings.scriptFileName = settings.scripts[3];
                         }; break;
                         case "rds": { 
-                            settings.scriptApplication = "Statistikprogrammet R";
+                            settings.scriptApplication = "R";
                             settings.scriptType = "R";
                             settings.scriptFileName = settings.scripts[4];
                         }; break;
