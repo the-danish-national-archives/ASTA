@@ -39,7 +39,7 @@
     "xmldom": "^0.1.31"
   },
   "devDependencies": {
-    "electron": "^4.2.12",
+    "electron": "^7.2.4",
     "electron-installer-dmg": "^2.0.0",
     "electron-packager": "^13.1.1",
     "electron-winstaller": "^2.7.0",
