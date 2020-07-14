@@ -1435,6 +1435,10 @@
                 "value": "Dato for testkørsel:"
             },
             {
+                "key": "nemesis-batchFile-test-version-P",
+                "value": "ASTA version: "
+            },
+            {
                 "key": "nemesis-batchFile-filters-SPAN",
                 "value": "Filter:"
             },

@@ -94,7 +94,8 @@ function (n) {
             var wholeContains = Rigsarkiv.Language.callback().getValue("nemesis-batchFile-test-WholeContains");
             var contains = Rigsarkiv.Language.callback().getValue("nemesis-batchFile-test-Contains");
             var errors = Rigsarkiv.Language.callback().getValue("nemesis-batchFile-test-Errors");
-            var versionNo = electron.remote["app"].getVersion();
+            var versionText = Rigsarkiv.Language.callback().getValue("nemesis-batchFile-test-version-P")
+            var versionNo = versionText + electron.remote["app"].getVersion();
             var updatedData = data.toString().format(settings.logsDate.getFromFormat("dd-MM-yyyy hh:mm:ss"),settings.logs.join("\r\n"),testEnd,folderName,title,titleHeader,runDate,filters,error,warning,selectorLabel,selectorOption,testTitle,testStart,wholeContains,contains,errors,versionNo);
             console.logInfo('filepath: ' + destPath + ' selected path:' + settings.selectedPath[0],"Rigsarkiv.Nemesis.Batch.EnsureData");
             fs.writeFileSync(destPath, updatedData);
