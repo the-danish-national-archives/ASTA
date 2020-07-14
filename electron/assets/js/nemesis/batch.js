@@ -8,6 +8,7 @@ function (n) {
     function (n) {
         const {ipcRenderer} = require('electron');
         const {shell} = require('electron');
+        const electron = require('electron');
         const fs = require('fs'); 
         const fse = require('fs-extra');
         const path = require('path');
@@ -93,7 +94,8 @@ function (n) {
             var wholeContains = Rigsarkiv.Language.callback().getValue("nemesis-batchFile-test-WholeContains");
             var contains = Rigsarkiv.Language.callback().getValue("nemesis-batchFile-test-Contains");
             var errors = Rigsarkiv.Language.callback().getValue("nemesis-batchFile-test-Errors");
-            var updatedData = data.toString().format(settings.logsDate.getFromFormat("dd-MM-yyyy hh:mm:ss"),settings.logs.join("\r\n"),testEnd,folderName,title,titleHeader,runDate,filters,error,warning,selectorLabel,selectorOption,testTitle,testStart,wholeContains,contains,errors);
+            var versionNo = electron.remote["app"].getVersion();
+            var updatedData = data.toString().format(settings.logsDate.getFromFormat("dd-MM-yyyy hh:mm:ss"),settings.logs.join("\r\n"),testEnd,folderName,title,titleHeader,runDate,filters,error,warning,selectorLabel,selectorOption,testTitle,testStart,wholeContains,contains,errors,versionNo);
             console.logInfo('filepath: ' + destPath + ' selected path:' + settings.selectedPath[0],"Rigsarkiv.Nemesis.Batch.EnsureData");
             fs.writeFileSync(destPath, updatedData);
             console.logInfo("Log is updated at: {0}".format(destPath),"Rigsarkiv.Nemesis.Batch.EnsureData");
