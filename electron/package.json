@@ -15,7 +15,8 @@
     "create-installer-win": "node installers/windows/createinstaller.js",
     "create-installer-win-extended": "node installers/windows/createadmininstaller.js",
     "create-installer-mac": "electron-installer-dmg ./release-builds/asta-app-darwin-x64/asta-app.app ASTA --out=release-builds --overwrite --icon=assets/icons/mac/bookshelf-icon.icns",
-    "create-installer-mac-extended": "electron-installer-dmg ./release-builds/asta-extended-app-darwin-x64/asta-extended-app.app ASTA-admin --out=release-builds --overwrite --icon=assets/icons/mac/bookshelf-icon.icns"
+    "create-installer-mac-extended": "electron-installer-dmg ./release-builds/asta-extended-app-darwin-x64/asta-extended-app.app ASTA-admin --out=release-builds --overwrite --icon=assets/icons/mac/bookshelf-icon.icns",
+    "test": "mocha"
   },
   "keywords": [
     "electron",
@@ -49,10 +50,16 @@
     "rebuild": "^0.1.2"
   },
   "devDependencies": {
+    "@types/mocha": "^8.0.0",
+    "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
     "electron": "^4.2.12",
+    "electron-chromedriver": "^9.0.0",
     "electron-installer-dmg": "^2.0.0",
     "electron-packager": "^13.1.1",
     "electron-winstaller": "^2.7.0",
-    "minimist": "1.2.5"
+    "minimist": "1.2.5",
+    "mocha": "^8.0.1",
+    "spectron": "^11.1.0"
   }
 }
