@@ -125,7 +125,8 @@ window.navigation = window.navigation || {},
             });
             ipcRenderer.on('app-close', (e) => {
                 var languageCallback = Rigsarkiv.Language.callback();
-                ipcRenderer.send('app-close',languageCallback.getValue("app-close-dialog-title"),languageCallback.getValue("app-close-dialog-text"),languageCallback.getValue("app-close-dialog-ok"),languageCallback.getValue("app-close-dialog-cancel")); 
+                ipcRenderer.send('app-close',languageCallback.getValue("app-close-dialog-title"),
+                languageCallback.getValue("app-close-dialog-text"),languageCallback.getValue("app-close-dialog-ok"),languageCallback.getValue("app-close-dialog-cancel")); 
             });
         })
 
