@@ -43,10 +43,11 @@ electron/assets/scripts/Athena.exe.config
 /dotNET/AthenaForm/obj/Release
 /dotNET/AthenaWPF/obj/Release
 /dotNET/Athena/bin/Release
+/dotNET/Asta/obj/Debug
 /dotNET/AthenaWPF/bin/Release
 /dotNET/Styx/obj/Debug
 /dotNET/.vs/Styx
-/dotNET/Styx/.vs/Styx/v15
+/dotNET/Styx/.vs
 /dotNET/Styx/bin/Debug
 /dotNET/StyxConsole/bin/Debug
 /dotNET/StyxConsole/obj/Debug
@@ -74,3 +75,4 @@ electron/.vs/electron/config/applicationhost.config
 electron/.vs/electron/v16/.suo
 *.exe
 *.dmg
+*.suo
