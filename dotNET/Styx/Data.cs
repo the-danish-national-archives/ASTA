@@ -26,7 +26,7 @@ namespace Rigsarkiv.Styx
         const string StataSpecialNumericPattern = "^\\.[a-z]$";
         const string Alphabet = "abcdefghijklmnopqrstuvwxyz";
         const string UserCodeRange = "'{0}' 'through' '{1}'{2}";
-        const string UserCodeExtra = " 'and' '{0}'";
+        const string UserCodeExtra = ", '{0}'";
         private List<string> _codeLists = null;
         private List<string> _sasSpecialNumerics = null;
         private List<string> _stataSpecialNumerics = null;
