@@ -114,7 +114,7 @@ namespace Rigsarkiv.Styx
                     index++;
                 }
                 _variables.AppendLine(string.Format("{0} {1} {2}", NormalizeName(column.Name), GetColumnType(column), codeList));
-                _descriptions.AppendLine(string.Format("{0} '{1}'", NormalizeName(column.Name), EnsureNewLines(column.Description)));
+                _descriptions.AppendLine(string.Format("{0} '{1}'", NormalizeName(column.Name), EnsureNewLines(column.Description).Replace("'","''")));
             });
             EnsureFile(table, VariablesPath, _variables.ToString());
             EnsureFile(table, DescriptionsPath, _descriptions.ToString());
