@@ -33,8 +33,8 @@ namespace Rigsarkiv.Styx
         protected const string DataTypeDatetimePattern = "^([0-9]{4,4})-([0-9]{2,2})-([0-9]{2,2})T([0-9]{2,2}):([0-9]{2,2}):([0-9]{2,2})(\\.([0-9]{1,6})){0,1}$";
         protected const int IntMaxLength = 10;
         protected const int DecimalPart1MaxLength = 29;
-        protected const int decimalPart2MaxLength = 29;
         protected const int StringMaxLength = 2147483647;
+        protected const int TextMaxLength = 32767;
         protected delegate void OperationOnRow(XElement row);
         protected Assembly _assembly = null;
         protected Asta.Logging.LogManager _logManager = null;
@@ -200,7 +200,7 @@ namespace Rigsarkiv.Styx
         /// <param name="hasError"></param>
         /// <param name="isDifferent"></param>
         /// <returns></returns>
-        protected string GetConvertedValue(Column column, string value, out bool hasError, out bool isDifferent)
+        protected string GetConvertedValue(Column column, string value, out bool hasError, out bool isDifferent, int rowNumber)
         {
             string result = null;
             switch (column.TypeOriginal)
@@ -210,7 +210,7 @@ namespace Rigsarkiv.Styx
                 case "DATE": result = GetDateValue(column, value, out hasError, out isDifferent); break;
                 case "TIME": result = GetTimeValue(column, value, out hasError, out isDifferent); break;
                 case "TIMESTAMP": result = GetTimeStampValue(column, value, out hasError, out isDifferent); break;
-                default: result = GetStringValue(column, value, out hasError, out isDifferent); break;
+                default: result = GetStringValue(column, value, out hasError, out isDifferent, rowNumber); break;
             }
             return result;
         }
@@ -477,10 +477,13 @@ namespace Rigsarkiv.Styx
             return result;
         }
 
-        private string GetStringValue(Column column, string value, out bool hasError, out bool isDifferent)
+        private string GetStringValue(Column column, string value, out bool hasError, out bool isDifferent, int rowNumber)
         {
             hasError = false;
             isDifferent = false;
+
+            hasError = AddErrorRows(column, value, rowNumber);
+
             var result = value;
             if (result.IndexOf("\"") > -1)
             {
@@ -496,6 +499,19 @@ namespace Rigsarkiv.Styx
             result = EnsureNewLines(result);
             if (!isDifferent) { isDifferent = result != value; }
             return result;
+        }
+
+        private static bool AddErrorRows(Column column, string value, int rowNumber)
+        {
+            var length = Encoding.UTF8.GetByteCount(value);
+            if (length > TextMaxLength)
+            {
+                //_log.Info("recor ...");
+                column.ErrorRows.Add(new ErrorRow {ByteLength = length, RowNo = rowNumber});
+                return true;
+            }
+
+            return false;
         }
 
         protected int GetStringLength(Column column)

@@ -136,13 +136,16 @@ namespace Rigsarkiv.Styx
         {
             var result = string.Empty;
             var contents = new List<string>();
+            var rowNumber = 0;
+
             table.Columns.ForEach(column => {
                 var hasError = false;
                 var isDifferent = false;
                 var content = row.Element(tableNS + column.Id).Value;
+                rowNumber++;
                 if (!string.IsNullOrEmpty(content))
                 {
-                    content = GetConvertedValue(column, content, out hasError, out isDifferent);
+                    content = GetConvertedValue(column, content, out hasError, out isDifferent, rowNumber);
                 }
                 contents.Add(content);
             });            
