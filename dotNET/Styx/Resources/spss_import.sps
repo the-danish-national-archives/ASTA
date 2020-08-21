@@ -1,9 +1,10 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 
 ***********************************.
-* Version: 3,0
+* Version: 3,0,1
 * Importscript.
 * TFL august 2019.
+* JLE august 2020.
 ***********************************.
 
 * dan underscripts.
@@ -35,7 +36,7 @@ file handle varbesk /name 'dataDir\{2}_VARIABELBESKRIVELSE.txt'.
 execute.
 
 do if $casenum=1.
-compute varname=concat('GET DATA  /TYPE=TXT', ' /FILE="datafil"',
+compute varname=concat('GET DATA  /TYPE=TXT', ' /FILE="datafil" /QUALIFIER="""" ',
                                        ' /DELCASE=LINE /DELIMITERS=";" /ARRANGEMENT=DELIMITED /FIRSTCASE=2 /IMPORTCASE=ALL /VARIABLES=',varname).
 end if.
 execute.
@@ -211,5 +212,5 @@ execute.
 
 * 6. Gem .sav fil.
 
-SAVE OUTFILE='dataDir\spss_statistiktfil.sav'
+SAVE OUTFILE='dataDir\spss_statistikfil.sav'
   /COMPRESSED.
