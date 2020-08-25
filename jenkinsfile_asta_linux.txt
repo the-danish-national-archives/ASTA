@@ -1,0 +1,81 @@
+pipeline {
+    agent {
+        node {
+            label 'windows'
+        }
+    }
+    tools {
+        nodejs "nodejs145"
+    }
+    stages {
+        stage('Setup') {
+            steps {
+                cleanWs()
+                bat 'node --version'
+                bat 'git clone --depth=1 https://github.com/the-danish-national-archives/ASTA.git'
+            } //steps
+        } //stage
+        stage('Build dotnet') {
+            steps {
+                bat ' echo "Building Styx and Athena..."'
+                dir('ASTA/dotNET') {
+                    bat 'nuget.exe restore styx.sln'
+                    bat '"C:\\Program Files (x86)\\MSBuild\\14.0\\Bin\\msbuild.exe" /t:Build /p:Configuration=Release "styx.sln" '
+                    bat 'nuget.exe restore Athena.sln'
+                    bat '"C:\\Program Files (x86)\\MSBuild\\14.0\\Bin\\msbuild.exe" /t:Build /p:Configuration=Release "Athena.sln" '
+                } //dir
+            } //steps
+        } //stage
+        stage('Testing dotnet') {
+            steps {
+                bat ' echo "testing via console apps..."'
+                dir('ASTA/dotNET') {
+
+
+                } //dir
+            } //steps
+        } //stage
+        stage('Build electron') {
+            steps {
+                bat ' echo "Building electron app and package it..."'
+                dir('ASTA/electron') {
+                    bat "npm config ls"
+                    bat 'mkdir release-builds'
+                    dir('release-builds') {
+                        bat 'mkdir windows-installer'
+                        bat 'mkdir windows-installer-extended\\athena'
+                    }
+                    bat 'npm install electron-packager g'
+                    bat 'npm install npm-platform-dependencies'
+                    bat 'npm install'
+                    bat 'npm run package-win'
+                    bat 'npm run create-installer-win'
+                    //bat 'dir /S'
+                    // bat 'npm config set script-shell bash'
+                } //dir
+            } //steps
+        } //stage
+        stage('Test') {
+            steps {
+                bat 'echo "Testing..."'
+                dir('ASTA/electron') {
+                    npm test
+                }
+            } //steps
+        } //stage
+        stage('Finish') {
+            steps {
+                bat '"Saving and notifying..."'
+                bat 'npm run create-installer-win'
+
+                //      bat 'npm run package-win-extended'
+                //      bat 'npm run create-installer-win-extended'       
+
+
+                //archiveArtifacts artifacts: '/release-builds/**/*.exe', followSymlinks: false, onlyIfSuccessful: true
+
+                //archiveArtifacts  '/release-builds/windows-installer-extended/*.exe' '/release-builds/windows-installer/*.exe'
+            } //steps
+        } //stage
+    } //stages
+} //pipeline
