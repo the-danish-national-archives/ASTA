@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace Rigsarkiv.Styx.Entities
 {
-    public class ErrorRow
+    public class TruncatedRow
     {
         public int RowNo { get; set; }
         public int ByteLength { get; set; }
+        public int NoOfTruncationsForVariable { get; set; }
     }
 }

@@ -8,11 +8,6 @@ namespace Rigsarkiv.Styx.Entities
     /// </summary>
     public class Column
     {
-        public Column()
-        {
-            ErrorRows = new List<ErrorRow>();
-        }
-
         public string Id { get; set; }
         public string Description { get; set; }
         public string Name { get; set; }
@@ -26,6 +21,6 @@ namespace Rigsarkiv.Styx.Entities
         public List<string> SortedMissingValues { get; set; }
         public Table CodeList { get; set; }
         public string Message { get; set; }
-        public List<ErrorRow> ErrorRows { get; set; }
+        public TruncatedRow TruncatedRow { get; set; }
     }
 }

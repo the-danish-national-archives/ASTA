@@ -9,6 +9,8 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Linq;
 using System;
+using Rigsarkiv.Asta.Logging;
+using LogManager = log4net.LogManager;
 
 namespace Rigsarkiv.Styx
 {
@@ -482,7 +484,7 @@ namespace Rigsarkiv.Styx
             hasError = false;
             isDifferent = false;
 
-            hasError = AddErrorRows(column, value, rowNumber);
+            hasError = AddTruncatedRow(column, value, rowNumber);
 
             var result = value;
             if (result.IndexOf("\"") > -1)
@@ -501,13 +503,21 @@ namespace Rigsarkiv.Styx
             return result;
         }
 
-        private static bool AddErrorRows(Column column, string value, int rowNumber)
+        private bool AddTruncatedRow(Column column, string value, int rowNumber)
         {
             var length = Encoding.UTF8.GetByteCount(value);
             if (length > TextMaxLength)
             {
-                //_log.Info("recor ...");
-                column.ErrorRows.Add(new ErrorRow {ByteLength = length, RowNo = rowNumber});
+                //Only data for the first truncated row for this column/variable is added
+                if (column.TruncatedRow == null)
+                {
+                    _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = $"Record: {column.Name} has been truncated" });
+                    
+                    column.TruncatedRow = new TruncatedRow {ByteLength = length, RowNo = rowNumber};
+                }
+                //...the rest are just counted
+                column.TruncatedRow.NoOfTruncationsForVariable++;
+
                 return true;
             }
 
