@@ -12,12 +12,12 @@ PATH_TO_ATHENA: str = './dotNET/Athena.sln'
 PATH_TO_STYX = './dotNET/Styx.sln'
 PATH_TO_ASSETS = './electron/assets/scripts/'
 
-def verify_prerequisites(my_os):
+def verify_prerequisites(current_os):
     # Function checking the prerequisites
     # such as msbuild, node and npm are present and in a minimum version
     clear_to_go_ahead = True
 
-    if my_os == "Windows":
+    if current_os == "Windows":
         if not os.path.exists(MSBUILD_PATH):
             print(MSBUILD_PATH + ' mangler.')
             clear_to_go_ahead = False
@@ -60,25 +60,25 @@ def build_styx():
     print("last modified: %s" % time.ctime(os.path.getmtime(PATH_TO_ASSETS + "Styx.dll")))
 
 
-def build_asta(my_os):
+def build_asta(current_os):
     # Function to build the Release version of Asta
     # On Mac and Windows there are build an installer
     # On Windows there is an extended version (with Styx and Athena) included
-    print(f"Building Asta on {my_os}..")
+    print(f"Building Asta on {current_os}..")
     subprocess.run('npm install electron-packager -g', shell=True, cwd="electron")
     subprocess.run('npm install npm-platform-dependencies', shell=True, cwd="electron")
     subprocess.run('npm install', shell=True, cwd="electron")
-    if my_os == "Windows":
+    if current_os == "Windows":
         subprocess.run('npm run package-win', shell=True, cwd="electron")
         subprocess.run('npm run create-installer-win', shell=True, cwd="electron")
         subprocess.run('npm run package-win-extended', shell=True, cwd="electron")
         subprocess.run('npm run create-installer-win-extended', shell=True, cwd="electron")
 
-    if my_os == "Linux":
+    if current_os == "Linux":
         subprocess.run('npm run package-linux', shell=True, cwd="electron")
         subprocess.run('npm run package-linux-extended', shell=True, cwd="electron")
 
-    if my_os == "Darwin":
+    if current_os == "Darwin":
         subprocess.run('npm install electron-packager -g', shell=True, cwd="electron")
         subprocess.run('npm run package-mac', shell=True, cwd="electron")
         subprocess.run('npm run create-installer-mac', shell=True, cwd="electron")
@@ -108,7 +108,7 @@ def main():
     print(f"\nPlatform identified as '{current_os}'\n")
 
     if verify_prerequisites(current_os):
-        if os == 'Windows':
+        if current_os == 'Windows':
             build_styx()
             build_athena()
 
