@@ -74,3 +74,9 @@ electron/.vs/electron/config/applicationhost.config
 electron/.vs/electron/v16/.suo
 *.exe
 *.dmg
+chromedriverlog.txt
+.vs/
+electron/test/asta_testing.js_
+electron/test/chaiAsPromise.js_
+electron/test/test.js_
+venv/

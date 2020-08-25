@@ -108,7 +108,7 @@ def main():
     print(f"\nPlatform identified as '{current_os}'\n")
 
     if verify_prerequisites(current_os):
-        if current_os == 'Windows':
+        if os == 'Windows':
             build_styx()
             build_athena()
 
