@@ -512,7 +512,7 @@ namespace Rigsarkiv.Styx
                 //Only data for the first truncated row for this column/variable is added
                 if (column.TruncatedRow == null)
                 {
-                    _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = $"Record: {column.Name} has been truncated" });
+                    _logManager.Add(new LogEntity() { Level = LogLevel.Warning, Section = _logSection, Message = $"Record: {column.Name} has been truncated" });
                     
                     column.TruncatedRow = new TruncatedRow {ByteLength = length, RowNo = rowNumber};
                 }
