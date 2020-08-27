@@ -201,6 +201,7 @@ namespace Rigsarkiv.Styx
         /// <param name="value"></param>
         /// <param name="hasError"></param>
         /// <param name="isDifferent"></param>
+        /// <param name="rowNumber"></param>
         /// <returns></returns>
         protected string GetConvertedValue(Column column, string value, out bool hasError, out bool isDifferent, int rowNumber)
         {

@@ -115,8 +115,8 @@ namespace Rigsarkiv.Styx
                         sw.WriteLine(string.Join(Separator, table.Columns.Select(c => NormalizeName(c.Name)).ToArray()));
                         path = string.Format(TablePath, _srcPath, table.SrcFolder);
                         StreamElement(delegate (XElement row) {
-                            sw.WriteLine(GetRow(table, row, tableNS));
                             table.RowsCounter++;
+                            sw.WriteLine(GetRow(table, row, tableNS));
                             if ((table.RowsCounter % RowsChunk) == 0) { _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("{0} of {1} rows added", table.RowsCounter, table.Rows) }); }
                         }, path);                        
                     }
@@ -136,16 +136,14 @@ namespace Rigsarkiv.Styx
         {
             var result = string.Empty;
             var contents = new List<string>();
-            var rowNumber = 0;
 
             table.Columns.ForEach(column => {
                 var hasError = false;
                 var isDifferent = false;
                 var content = row.Element(tableNS + column.Id).Value;
-                rowNumber++;
                 if (!string.IsNullOrEmpty(content))
                 {
-                    content = GetConvertedValue(column, content, out hasError, out isDifferent, rowNumber);
+                    content = GetConvertedValue(column, content, out hasError, out isDifferent, table.RowsCounter);
                 }
                 contents.Add(content);
             });            
