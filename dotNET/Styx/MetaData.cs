@@ -23,6 +23,7 @@ namespace Rigsarkiv.Styx
         const string OldTypeDatePattern = "^(DATE)$";
         const string OldTypeTimePattern = "^(TIME|TIME\\[WITH TIME ZONE\\])$";
         const string OldTypeDateTimePattern = "^(TIMESTAMP|TIMESTAMP\\[WITH TIME ZONE\\])$";
+        const int DescriptionMaxLength = 256;
         private StringBuilder _variables = null;
         private StringBuilder _descriptions = null;
         private StringBuilder _codeList = null;
@@ -115,10 +116,23 @@ namespace Rigsarkiv.Styx
                 }
                 _variables.AppendLine(string.Format("{0} {1} {2}", NormalizeName(column.Name), GetColumnType(column), codeList));
                 _descriptions.AppendLine(string.Format("{0} '{1}'", NormalizeName(column.Name), EnsureNewLines(column.Description).Replace("'","''")));
+
+                CheckDescriptionLength(column);
             });
             EnsureFile(table, VariablesPath, _variables.ToString());
             EnsureFile(table, DescriptionsPath, _descriptions.ToString());
             EnsureFile(table, CodeListPath, _codeList.ToString());
+        }
+
+        private void CheckDescriptionLength(Column column)
+        {
+            var descriptionLength = Encoding.UTF8.GetByteCount(column.Description);
+            if (descriptionLength > DescriptionMaxLength)
+            {
+                _logManager.Add(new LogEntity() { Level = LogLevel.Warning, Section = _logSection, Message = $"Variable description: {column.Name} has been truncated" });
+
+                column.DescriptionLengthExceeded = descriptionLength;
+            }
         }
 
         private void EnsureFile(Table table,string filePath,string content)

@@ -504,19 +504,25 @@ namespace Rigsarkiv.Styx
             return result;
         }
 
+        /// <summary>
+        /// Only data for the first truncated row for this column/variable is added
+        /// ...the rest are just counted
+        /// </summary>
+        /// <param name="column"></param>
+        /// <param name="value"></param>
+        /// <param name="rowNumber"></param>
+        /// <returns>True if the max length is exceeded</returns>
         private bool AddTruncatedRow(Column column, string value, int rowNumber)
         {
             var length = Encoding.UTF8.GetByteCount(value);
             if (length > TextMaxLength)
             {
-                //Only data for the first truncated row for this column/variable is added
                 if (column.TruncatedRow == null)
                 {
-                    _logManager.Add(new LogEntity() { Level = LogLevel.Warning, Section = _logSection, Message = $"Record: {column.Name} has been truncated" });
+                    _logManager.Add(new LogEntity() { Level = LogLevel.Warning, Section = _logSection, Message = $"Text record: {column.Name} has been truncated" });
                     
                     column.TruncatedRow = new TruncatedRow {ByteLength = length, RowNo = rowNumber};
                 }
-                //...the rest are just counted
                 column.TruncatedRow.NoOfTruncationsForVariable++;
 
                 return true;
