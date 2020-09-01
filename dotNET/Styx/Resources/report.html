@@ -50,13 +50,6 @@
                 <tr><th>Tabel</th><th>Variabel</th><th>Rækkenummer</th><th>Antal bytes</th><th>Antal trunkeringer for variabel</th></tr>
             </table>
             <br />
-            <div id="longDescriptionDiv">
-                <p style="{{0}}">Variabelbeskrivelsen for nedenstående variable er over 256 bytes lang og trunkeres/afkortes derfor under indlæsning af data med SPSS import scriptet i statistikprogrammet SPSS Statistics.</p>
-                <table id="longDescriptionTable" style="{{0}}">
-                    <tr><th>Tabel</th><th>Variabel</th><th>Antal bytes</th></tr>
-                </table>
-                <br />
-            </div>
             <p id="missingValues">Konvertering af brugerkoder/specialkoder, ialt: <b>{{0}}</b></p>
             <table id="missingValuesTable">
                 <tr><th>Tabel</th><th>Variabel</th><th>Værdi (AIP)</th><th>Værdi (DIP)</th><th>Information</th></tr>
@@ -89,17 +82,13 @@
         var contextDocumentsTable = document.getElementById("contextDocumentsTable");
         var truncatedTextP = document.getElementById("truncatedText");
         var truncatedTextTable = document.getElementById("truncatedTextTable");
-        var longDescriptionDiv = document.getElementById("longDescriptionDiv");
-        var longDescriptionTable = document.getElementById("longDescriptionTable");
         var rowHtml = "<tr><td>{{0}}</td><td>{{1}}</td><td{{4}}>{{2}}</td><td{{4}}>{{3}}</td></tr>";
         var truncatedTextHtml = "<tr class=\"Error\"><td>{{0}}</td><td>{{1}}</td><td>{{2}}</td><td>{{3}}</td><td>{{4}}</td></tr>";
-        var longDescriptionHtml = "<tr class=\"Error\"><td>{{0}}</td><td>{{1}}</td><td>{{2}}</td></tr>";
         var missingValuesHtml = "<tr><td>{{0}}</td><td>{{1}}</td><td{{4}}>{{2}}</td><td{{4}}>{{3}}</td><td>{{5}}</td></tr>";
         var contextDocumentsHtml = "<tr><td{{2}}>{{0}}</td><td{{2}}>{{1}}</td></tr>";
         (function () {{
             var counter = 0;
             var truncatedCounter = 0;
-            var longDescriptionCounter = 0;
             scriptTypeP.innerHTML = scriptTypeP.innerHTML.format(report.ScriptTypeString);
             UpdateTable("tablesBefore", "tablesAfter", report.Tables.length, report.TablesCounter);
             var codeLists = 0;
@@ -115,10 +104,6 @@
                     if (column.TruncatedRow != null) {{
                         truncatedCounter++;
                         AddTruncatedRow(table, column);
-                    }}
-                    if (column.DescriptionLengthExceeded > 0) {{
-                        longDescriptionCounter++;
-                        AddLongDescriptionRow(table, column);
                     }}
                     if (column.CodeList != null && column.MissingValues != null) {{                         
                         Object.keys(column.MissingValues).forEach(function (key, index) {{
@@ -148,8 +133,7 @@
             }}
             UpdateTable("codeListsBefore", "codeListsAfter", codeLists, report.CodeListsCounter);
             missingValuesP.innerHTML = missingValuesP.innerHTML.format(counter === 0 ? "" : counter);
-            truncatedTextP.innerHTML = truncatedTextP.innerHTML.format(truncatedCounter === 0 ? "display: none;" : "");
-            longDescriptionDiv.innerHTML = longDescriptionDiv.innerHTML.format(longDescriptionCounter === 0 ? "display: none;" : "");
+            truncatedTextP.innerHTML = truncatedTextP.innerHTML.format(truncatedCounter === 0 ? "display: none;" : "")
             counter = 0;
             Object.keys(report.ContextDocuments).forEach(function (key, index) {{
                     var value = report.ContextDocuments[key];
@@ -186,12 +170,9 @@
                 var className = (table.Rows !== table.RowsCounter) ? " class=\"Error\"" : "";
             rowsTable.insertAdjacentHTML("beforeend", rowHtml.format(isMain ? "<b>" + table.Name + "</b>" : table.Name, table.Columns.length, table.Rows, table.RowsCounter, className));
         }}
-        function AddTruncatedRow(table, column) {{
-            var truncatedRow = column.TruncatedRow;
-            truncatedTextTable.insertAdjacentHTML("beforeend", truncatedTextHtml.format(table.Name, column.Name, truncatedRow.RowNo, truncatedRow.ByteLength, truncatedRow.NoOfTruncationsForVariable));
-        }}
-        function AddLongDescriptionRow(table, column) {{
-            longDescriptionTable.insertAdjacentHTML("beforeend", longDescriptionHtml.format(table.Name, column.Name, column.DescriptionLengthExceeded));
+            function AddTruncatedRow(table, column) {{
+                var truncatedRow = column.TruncatedRow;
+                truncatedTextTable.insertAdjacentHTML("beforeend", truncatedTextHtml.format(table.Name, column.Name, truncatedRow.RowNo, truncatedRow.ByteLength, truncatedRow.NoOfTruncationsForVariable));
         }}
         function UpdateTable(beforeId, afterId, beforeValue, afterValue) {{
             var before = document.getElementById(beforeId);
