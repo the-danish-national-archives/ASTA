@@ -20,7 +20,7 @@
             }}
     </style>
     <script type="text/javascript">
-        var report = { 2}
+        var report = {2}
     </script>
 </head>
 <body>
@@ -44,14 +44,14 @@
                 <tr><th>Tabel</th><th>Antal variable (AIP)</th><th>Antal rækker (AIP)</th><th>Antal rækker (DIP)</th></tr>
             </table>
             <br />
-            <p id="truncatedText"><span style="color: red; {{0}}">Der findes indhold i tekstfelter der er længere end 32.767 bytes. Disse trunkeres/afkortes under indlæsning af data med SPSS import scriptet i statistikprogrammet SPSS Statistics.</span>
+            <p id="truncatedText"><span class="Error" style="{{0}}">Der findes indhold i tekstfelter der er længere end 32.767 bytes. Disse trunkeres/afkortes under indlæsning af data med SPSS import scriptet i statistikprogrammet SPSS Statistics.</span>
                 <br /> Herunder vises et eksempel på en række for hver variabel med indhold der trunkeres samt det totale antal af tekstfelter (kolonnen "Antal trunkeringer for variabel") med indhold længere end 32.767 for variablen.</p>
             <table id="truncatedTextTable">
                 <tr><th>Tabel</th><th>Variabel</th><th>Rækkenummer</th><th>Antal bytes</th><th>Antal trunkeringer for variabel</th></tr>
             </table>
             <br />
             <div id="longDescriptionDiv">
-                <p style="{{0}}">Variabelbeskrivelsen for nedenstående variable er over 256 bytes lang og trunkeres/afkortes derfor under indlæsning af data med SPSS import scriptet i statistikprogrammet SPSS Statistics.</p>
+                <p class="Error" style="{{0}}">Variabelbeskrivelsen for nedenstående variable er over 256 bytes lang og trunkeres/afkortes derfor under indlæsning af data med SPSS import scriptet i statistikprogrammet SPSS Statistics.</p>
                 <table id="longDescriptionTable" style="{{0}}">
                     <tr><th>Tabel</th><th>Variabel</th><th>Antal bytes</th></tr>
                 </table>
