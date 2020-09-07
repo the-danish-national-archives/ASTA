@@ -27,6 +27,7 @@ namespace Rigsarkiv.Styx
         const string Alphabet = "abcdefghijklmnopqrstuvwxyz";
         const string UserCodeRange = "'{0}' 'through' '{1}'{2}";
         const string UserCodeExtra = ", '{0}'";
+        const int CodeDescriptionMaxLength = 120;
         private List<string> _codeLists = null;
         private List<string> _sasSpecialNumerics = null;
         private List<string> _stataSpecialNumerics = null;
@@ -461,7 +462,9 @@ namespace Rigsarkiv.Styx
                     {
                         code = column.MissingValues[code];
                     }
-                    codeList.AppendLine(string.Format(CodeFormat, code, EnsureNewLines(row.Element(tableNS + columnId).Value)));
+                    var codeDescription = row.Element(tableNS + columnId).Value;
+                    codeList.AppendLine(string.Format(CodeFormat, code, EnsureNewLines(codeDescription)));
+                    CheckCodeListDescriptionLength(column, codeDescription, code);
                     column.CodeList.RowsCounter++;
                 }, path);
                 var codeListContent = codeList.ToString();                
@@ -475,6 +478,20 @@ namespace Rigsarkiv.Styx
             {
                 sw.Write(string.Format(content, _codeLists.ToArray()));
             }            
+        }
+
+        private void CheckCodeListDescriptionLength(Column column, string codeDescription, string code)
+        {
+            var codeDescriptionLength = Encoding.UTF8.GetByteCount(codeDescription);
+            if (codeDescriptionLength > CodeDescriptionMaxLength)
+            {
+                if (column.CodeDescriptionLengthExceeded == null)
+                {
+                    _logManager.Add(new LogEntity() { Level = LogLevel.Warning, Section = _logSection, Message = $"Value label: {column.Name} has been truncated" });
+
+                    column.CodeDescriptionLengthExceeded = new CodeDescriptionLengthExceeded {ByteLength = codeDescriptionLength, Code = code};
+                }
+            }
         }
 
         private string GetReportTemplate()

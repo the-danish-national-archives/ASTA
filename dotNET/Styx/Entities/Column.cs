@@ -23,5 +23,6 @@ namespace Rigsarkiv.Styx.Entities
         public string Message { get; set; }
         public TruncatedRow TruncatedRow { get; set; }
         public int DescriptionLengthExceeded { get; set; }
+        public CodeDescriptionLengthExceeded CodeDescriptionLengthExceeded { get; set; }
     }
 }

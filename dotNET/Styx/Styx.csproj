@@ -49,6 +49,7 @@
     <Compile Include="Converter.cs" />
     <Compile Include="Data.cs" />
     <Compile Include="Entities\Column.cs" />
+    <Compile Include="Entities\CodeDescriptionLengthExceeded.cs" />
     <Compile Include="Entities\TruncatedRow.cs" />
     <Compile Include="Entities\FlowState.cs" />
     <Compile Include="Entities\Report.cs" />
