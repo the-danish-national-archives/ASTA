@@ -21,8 +21,8 @@ namespace Rigsarkiv.Styx.Entities
         public List<string> SortedMissingValues { get; set; }
         public Table CodeList { get; set; }
         public string Message { get; set; }
-        public TruncatedRow TruncatedRow { get; set; }
-        public int DescriptionLengthExceeded { get; set; }
-        public CodeDescriptionLengthExceeded CodeDescriptionLengthExceeded { get; set; }
+        public TruncatedRow TruncatedRow { get; set; } //P9a
+        public int VariableDescriptionLengthExceeded { get; set; } //P9b
+        public CodeDescriptionLengthExceeded CodeDescriptionLengthExceeded { get; set; } //P9c
     }
 }

@@ -23,7 +23,7 @@ namespace Rigsarkiv.Styx
         const string OldTypeDatePattern = "^(DATE)$";
         const string OldTypeTimePattern = "^(TIME|TIME\\[WITH TIME ZONE\\])$";
         const string OldTypeDateTimePattern = "^(TIMESTAMP|TIMESTAMP\\[WITH TIME ZONE\\])$";
-        const int DescriptionMaxLength = 256;
+        const int VariableDescriptionMaxLength = 256;
         private StringBuilder _variables = null;
         private StringBuilder _descriptions = null;
         private StringBuilder _codeList = null;
@@ -127,11 +127,11 @@ namespace Rigsarkiv.Styx
         private void CheckDescriptionLength(Column column)
         {
             var descriptionLength = Encoding.UTF8.GetByteCount(column.Description);
-            if (descriptionLength > DescriptionMaxLength)
+            if (descriptionLength > VariableDescriptionMaxLength)
             {
                 _logManager.Add(new LogEntity() { Level = LogLevel.Warning, Section = _logSection, Message = $"Variable description: {column.Name} has been truncated" });
 
-                column.DescriptionLengthExceeded = descriptionLength;
+                column.VariableDescriptionLengthExceeded = descriptionLength;
             }
         }
 
