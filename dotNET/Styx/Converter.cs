@@ -212,6 +212,7 @@ namespace Rigsarkiv.Styx
                 case "DECIMAL": result = GetDecimalValue(column, value, out hasError, out isDifferent); break;
                 case "DATE": result = GetDateValue(column, value, out hasError, out isDifferent); break;
                 case "TIME": result = GetTimeValue(column, value, out hasError, out isDifferent); break;
+                case "INTERVAL": result = GetIntervalValue(value, out hasError, out isDifferent); break;
                 case "TIMESTAMP": result = GetTimeStampValue(column, value, out hasError, out isDifferent); break;
                 default: result = GetStringValue(column, value, out hasError, out isDifferent, rowNumber); break;
             }
@@ -227,6 +228,7 @@ namespace Rigsarkiv.Styx
                 case "DECIMAL": result = GetDecimalType(column); break;
                 case "DATE": result = GetDateType(column); break;
                 case "TIME": result = GetTimeType(column); break;
+                case "INTERVAL": result = GetTimeType(column); break;
                 case "TIMESTAMP": result = GetTimeStampType(column); break;
                 default: result = GetStringType(column); break;
             }
@@ -396,6 +398,36 @@ namespace Rigsarkiv.Styx
             return value;
         }
 
+        private string GetIntervalValue(string value, out bool hasError, out bool isDifferent)
+        {
+            hasError = false;
+            isDifferent = false;
+            string result;
+
+            switch (_report.ScriptType)
+            {
+                case ScriptType.SPSS: result = ConvertIso8601DurationToTime8(value); break;
+                case ScriptType.SAS: result = value; break;
+                case ScriptType.Stata: result = value; break;
+                case ScriptType.Xml: result = value; break;
+                default: throw new ArgumentOutOfRangeException($"The format {_report.ScriptType} is not implemented.");
+            }  
+
+            return result;
+        }
+
+        /// <summary>
+        /// Convert a duration from the lexical ISO8601 format "PnYnMnDTnHnMnS" to the SPSS time8 format hh:mm:ss.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns>A string in time8 format</returns>
+        private string ConvertIso8601DurationToTime8(string value)
+        {
+            var ts = XmlConvert.ToTimeSpan(value);
+            var hours = (int)ts.TotalHours;
+            return $"{hours}:{ts.Minutes}:{ts.Seconds}";
+        }
+
         private string GetDecimalValue(Column column, string value, out bool hasError, out bool isDifferent)
         {
             isDifferent = false;
@@ -432,7 +464,7 @@ namespace Rigsarkiv.Styx
             {
                var groups = regex.Match(column.Type).Groups;
                foreach (Group group in groups)
-                {
+               {
                     if (result[0] == 0)
                     {
                         int.TryParse(group.Value, out result[0]);
@@ -441,7 +473,7 @@ namespace Rigsarkiv.Styx
                     {
                         if (result[1] == 0) { int.TryParse(group.Value, out result[1]); }
                     }
-                }
+               }
             }
             return result;
         }
