@@ -9,6 +9,8 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Linq;
 using System;
+using Rigsarkiv.Asta.Logging;
+using LogManager = log4net.LogManager;
 
 namespace Rigsarkiv.Styx
 {
@@ -33,8 +35,8 @@ namespace Rigsarkiv.Styx
         protected const string DataTypeDatetimePattern = "^([0-9]{4,4})-([0-9]{2,2})-([0-9]{2,2})T([0-9]{2,2}):([0-9]{2,2}):([0-9]{2,2})(\\.([0-9]{1,6})){0,1}$";
         protected const int IntMaxLength = 10;
         protected const int DecimalPart1MaxLength = 29;
-        protected const int decimalPart2MaxLength = 29;
         protected const int StringMaxLength = 2147483647;
+        protected const int TextMaxLength = 32767;
         protected delegate void OperationOnRow(XElement row);
         protected Assembly _assembly = null;
         protected Asta.Logging.LogManager _logManager = null;
@@ -199,8 +201,9 @@ namespace Rigsarkiv.Styx
         /// <param name="value"></param>
         /// <param name="hasError"></param>
         /// <param name="isDifferent"></param>
+        /// <param name="rowNumber"></param>
         /// <returns></returns>
-        protected string GetConvertedValue(Column column, string value, out bool hasError, out bool isDifferent)
+        protected string GetConvertedValue(Column column, string value, out bool hasError, out bool isDifferent, int rowNumber)
         {
             string result = null;
             switch (column.TypeOriginal)
@@ -209,8 +212,9 @@ namespace Rigsarkiv.Styx
                 case "DECIMAL": result = GetDecimalValue(column, value, out hasError, out isDifferent); break;
                 case "DATE": result = GetDateValue(column, value, out hasError, out isDifferent); break;
                 case "TIME": result = GetTimeValue(column, value, out hasError, out isDifferent); break;
+                case "INTERVAL": result = GetIntervalValue(value, out hasError, out isDifferent); break;
                 case "TIMESTAMP": result = GetTimeStampValue(column, value, out hasError, out isDifferent); break;
-                default: result = GetStringValue(column, value, out hasError, out isDifferent); break;
+                default: result = GetStringValue(column, value, out hasError, out isDifferent, rowNumber); break;
             }
             return result;
         }
@@ -224,6 +228,7 @@ namespace Rigsarkiv.Styx
                 case "DECIMAL": result = GetDecimalType(column); break;
                 case "DATE": result = GetDateType(column); break;
                 case "TIME": result = GetTimeType(column); break;
+                case "INTERVAL": result = GetTimeType(column); break;
                 case "TIMESTAMP": result = GetTimeStampType(column); break;
                 default: result = GetStringType(column); break;
             }
@@ -393,6 +398,36 @@ namespace Rigsarkiv.Styx
             return value;
         }
 
+        private string GetIntervalValue(string value, out bool hasError, out bool isDifferent)
+        {
+            hasError = false;
+            isDifferent = false;
+            string result;
+
+            switch (_report.ScriptType)
+            {
+                case ScriptType.SPSS: result = ConvertIso8601DurationToTime8(value); break;
+                case ScriptType.SAS: result = value; break;
+                case ScriptType.Stata: result = value; break;
+                case ScriptType.Xml: result = value; break;
+                default: throw new ArgumentOutOfRangeException($"The format {_report.ScriptType} is not implemented.");
+            }  
+
+            return result;
+        }
+
+        /// <summary>
+        /// Convert a duration from the lexical ISO8601 format "PnYnMnDTnHnMnS" to the SPSS time8 format hh:mm:ss.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns>A string in time8 format</returns>
+        private string ConvertIso8601DurationToTime8(string value)
+        {
+            var ts = XmlConvert.ToTimeSpan(value);
+            var hours = (int)ts.TotalHours;
+            return $"{hours}:{ts.Minutes}:{ts.Seconds}";
+        }
+
         private string GetDecimalValue(Column column, string value, out bool hasError, out bool isDifferent)
         {
             isDifferent = false;
@@ -429,7 +464,7 @@ namespace Rigsarkiv.Styx
             {
                var groups = regex.Match(column.Type).Groups;
                foreach (Group group in groups)
-                {
+               {
                     if (result[0] == 0)
                     {
                         int.TryParse(group.Value, out result[0]);
@@ -438,7 +473,7 @@ namespace Rigsarkiv.Styx
                     {
                         if (result[1] == 0) { int.TryParse(group.Value, out result[1]); }
                     }
-                }
+               }
             }
             return result;
         }
@@ -477,10 +512,13 @@ namespace Rigsarkiv.Styx
             return result;
         }
 
-        private string GetStringValue(Column column, string value, out bool hasError, out bool isDifferent)
+        private string GetStringValue(Column column, string value, out bool hasError, out bool isDifferent, int rowNumber)
         {
             hasError = false;
             isDifferent = false;
+
+            hasError = AddTruncatedRow(column, value, rowNumber);
+
             var result = value;
             if (result.IndexOf("\"") > -1)
             {
@@ -496,6 +534,33 @@ namespace Rigsarkiv.Styx
             result = EnsureNewLines(result);
             if (!isDifferent) { isDifferent = result != value; }
             return result;
+        }
+
+        /// <summary>
+        /// Only data for the first truncated row for this column/variable is added
+        /// ...the rest are just counted
+        /// </summary>
+        /// <param name="column"></param>
+        /// <param name="value"></param>
+        /// <param name="rowNumber"></param>
+        /// <returns>True if the max length is exceeded</returns>
+        private bool AddTruncatedRow(Column column, string value, int rowNumber)
+        {
+            var length = Encoding.UTF8.GetByteCount(value);
+            if (length > TextMaxLength)
+            {
+                if (column.TruncatedRow == null)
+                {
+                    _logManager.Add(new LogEntity() { Level = LogLevel.Warning, Section = _logSection, Message = $"Text record: {column.Name} has been truncated" });
+                    
+                    column.TruncatedRow = new TruncatedRow {ByteLength = length, RowNo = rowNumber};
+                }
+                column.TruncatedRow.NoOfTruncationsForVariable++;
+
+                return true;
+            }
+
+            return false;
         }
 
         protected int GetStringLength(Column column)

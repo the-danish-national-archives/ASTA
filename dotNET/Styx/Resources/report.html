@@ -1,7 +1,7 @@
 ﻿<html>
 <head>
     <meta charset="UTF-8" />
-    <title>Convert Log</title>
+    <title>Convert Report (DIP)</title>
     <style>
             .Error {{
                 color: red;
@@ -22,7 +22,7 @@
     <script type="text/javascript">
         var report = {2}
     </script>
-    </head>
+</head>
 <body>
     <div class="header">
         <h1 class="title">ASTA konverteringsrapport - udleveringsformat (DIP)</h1>
@@ -44,6 +44,26 @@
                 <tr><th>Tabel</th><th>Antal variable (AIP)</th><th>Antal rækker (AIP)</th><th>Antal rækker (DIP)</th></tr>
             </table>
             <br />
+            <p id="truncatedText"><span class="Error" style="{{0}}">Der findes indhold i tekstfelter der er længere end 32.767 bytes. Disse trunkeres/afkortes under indlæsning af data med SPSS import scriptet i statistikprogrammet SPSS Statistics.</span>
+                <br /> Herunder vises et eksempel på en række for hver variabel med indhold der trunkeres samt det totale antal af tekstfelter (kolonnen "Antal trunkeringer for variabel") med indhold længere end 32.767 for variablen.</p>
+            <table id="truncatedTextTable">
+                <tr><th>Tabel</th><th>Variabel</th><th>Rækkenummer</th><th>Antal bytes</th><th>Antal trunkeringer for variabel</th></tr>
+            </table>
+            <br />
+            <div id="longVariableDescriptionDiv">
+                <p class="Error" style="{{0}}">Variabelbeskrivelsen for nedenstående variable er over 256 bytes lang og trunkeres/afkortes derfor under indlæsning af data med SPSS import scriptet i statistikprogrammet SPSS Statistics.</p>
+                <table id="longVariableDescriptionTable" style="{{0}}">
+                    <tr><th>Tabel</th><th>Variabel</th><th>Antal bytes</th></tr>
+                </table>
+                <br />
+            </div>
+            <div id="longCodeDescriptionDiv">
+                <p class="Error" style="{{0}}">Der findes value labels som overstiger 120 bytes. Disse trunkeres/afkortes under indlæsning af data med SPSS import scriptet i statistikprogrammet SPSS Statistics.</p>
+                <table id="longCodeDescriptionTable" style="{{0}}">
+                    <tr><th>Tabel</th><th>Variabel</th><th>Kode</th><th>Antal bytes</th></tr>
+                </table>
+                <br />
+            </div>
             <p id="missingValues">Konvertering af brugerkoder/specialkoder, ialt: <b>{{0}}</b></p>
             <table id="missingValuesTable">
                 <tr><th>Tabel</th><th>Variabel</th><th>Værdi (AIP)</th><th>Værdi (DIP)</th><th>Information</th></tr>
@@ -74,28 +94,53 @@
         var missingValuesTable = document.getElementById("missingValuesTable");
         var contextDocumentsP = document.getElementById("contextDocuments");
         var contextDocumentsTable = document.getElementById("contextDocumentsTable");
+        var truncatedTextP = document.getElementById("truncatedText");
+        var truncatedTextTable = document.getElementById("truncatedTextTable");
+        var longVariableDescriptionDiv = document.getElementById("longVariableDescriptionDiv");
+        var longVariableDescriptionTable = document.getElementById("longVariableDescriptionTable");
+        var longCodeDescriptionDiv = document.getElementById("longCodeDescriptionDiv");
+        var longCodeDescriptionTable = document.getElementById("longCodeDescriptionTable");
         var rowHtml = "<tr><td>{{0}}</td><td>{{1}}</td><td{{4}}>{{2}}</td><td{{4}}>{{3}}</td></tr>";
+        var truncatedTextHtml = "<tr class=\"Error\"><td>{{0}}</td><td>{{1}}</td><td>{{2}}</td><td>{{3}}</td><td>{{4}}</td></tr>";
+        var longVariableDescriptionHtml = "<tr class=\"Error\"><td>{{0}}</td><td>{{1}}</td><td>{{2}}</td></tr>";
+        var longCodeDescriptionHtml = "<tr class=\"Error\"><td>{{0}}</td><td>{{1}}</td><td>{{2}}</td><td>{{3}}</td></tr>";
         var missingValuesHtml = "<tr><td>{{0}}</td><td>{{1}}</td><td{{4}}>{{2}}</td><td{{4}}>{{3}}</td><td>{{5}}</td></tr>";
         var contextDocumentsHtml = "<tr><td{{2}}>{{0}}</td><td{{2}}>{{1}}</td></tr>";
         (function () {{
             var counter = 0;
+            var truncatedCounter = 0;
+            var longVariableDescriptionCounter = 0;
+            var longCodeDescriptionCounter = 0;
             scriptTypeP.innerHTML = scriptTypeP.innerHTML.format(report.ScriptTypeString);
             UpdateTable("tablesBefore", "tablesAfter", report.Tables.length, report.TablesCounter);
             var codeLists = 0;
             for (var i = 0; i < report.Tables.length; i++) {{
-                UpdateRow(report.Tables[i],true);
-                for (var k = 0; k < report.Tables[i].Columns.length; k++) {{
-                    var column = report.Tables[i].Columns[k];
+                var table = report.Tables[i];
+                UpdateRow(table,true);
+                for (var k = 0; k < table.Columns.length; k++) {{
+                    var column = table.Columns[k];
                     if (column.CodeList != null) {{
                         codeLists = codeLists + 1;
                         UpdateRow(column.CodeList,false);
                     }}
-                    if (column.CodeList != null && column.MissingValues != null) {{                         
+                    if (column.TruncatedRow != null) {{
+                        truncatedCounter++;
+                        AddTruncatedRow(table, column);
+                    }}
+                    if (column.VariableDescriptionLengthExceeded > 0) {{
+                        longVariableDescriptionCounter++;
+                        AddLongVariableDescriptionRow(table, column);
+                    }}
+                    if (column.CodeDescriptionLengthExceeded != null) {{
+                        longCodeDescriptionCounter++;
+                        AddLongCodeDescriptionRow(table, column);
+                    }}
+                    if (column.CodeList != null && column.MissingValues != null) {{
                         Object.keys(column.MissingValues).forEach(function (key, index) {{
                             var value = column.MissingValues[key];
                             if (UpdateMissingValue(column.CodeList, column, key, value)) {{
                                 counter = counter + 1;
-                            }}                           
+                            }}
                         }});
                         if (column.SortedMissingValues != null && column.SortedMissingValues.length > 3) {{
                             var lastValue = column.SortedMissingValues[0];
@@ -118,6 +163,9 @@
             }}
             UpdateTable("codeListsBefore", "codeListsAfter", codeLists, report.CodeListsCounter);
             missingValuesP.innerHTML = missingValuesP.innerHTML.format(counter === 0 ? "" : counter);
+            truncatedTextP.innerHTML = truncatedTextP.innerHTML.format(truncatedCounter === 0 ? "display: none;" : "");
+            longVariableDescriptionDiv.innerHTML = longVariableDescriptionDiv.innerHTML.format(longVariableDescriptionCounter === 0 ? "display: none;" : "");
+            longCodeDescriptionDiv.innerHTML = longCodeDescriptionDiv.innerHTML.format(longCodeDescriptionCounter === 0 ? "display: none;" : "");
             counter = 0;
             Object.keys(report.ContextDocuments).forEach(function (key, index) {{
                     var value = report.ContextDocuments[key];
@@ -154,6 +202,17 @@
                 var className = (table.Rows !== table.RowsCounter) ? " class=\"Error\"" : "";
             rowsTable.insertAdjacentHTML("beforeend", rowHtml.format(isMain ? "<b>" + table.Name + "</b>" : table.Name, table.Columns.length, table.Rows, table.RowsCounter, className));
         }}
+        function AddTruncatedRow(table, column) {{
+            var truncatedRow = column.TruncatedRow;
+            truncatedTextTable.insertAdjacentHTML("beforeend", truncatedTextHtml.format(table.Name, column.Name, truncatedRow.RowNo, truncatedRow.ByteLength, truncatedRow.NoOfTruncationsForVariable));
+        }}
+        function AddLongVariableDescriptionRow(table, column) {{
+            longVariableDescriptionTable.insertAdjacentHTML("beforeend", longVariableDescriptionHtml.format(table.Name, column.Name, column.VariableDescriptionLengthExceeded));
+        }}
+        function AddLongCodeDescriptionRow(table, column) {{
+            var codeDescriptionLengthExceeded = column.CodeDescriptionLengthExceeded;
+            longCodeDescriptionTable.insertAdjacentHTML("beforeend", longCodeDescriptionHtml.format(table.Name, column.Name, codeDescriptionLengthExceeded.Code, codeDescriptionLengthExceeded.ByteLength));
+        }}
         function UpdateTable(beforeId, afterId, beforeValue, afterValue) {{
             var before = document.getElementById(beforeId);
             var after = document.getElementById(afterId);
@@ -163,7 +222,7 @@
                 before.className = "Error";
                 after.className = "Error";
             }}
-        }}        
+        }}
     </script>
 </body>
 </html>
