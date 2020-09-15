@@ -1,7 +1,7 @@
 ﻿* Encoding: UTF-8.
 
 ***********************************.
-* Version: 3,0,2b
+* Version: 3,0,3
 * Importscript.
 * TFL august 2019.
 * JLE september 2020
@@ -62,7 +62,7 @@ execute.
 
 compute varname=concat(varname,' ',varfmt).
 
-write outfile 'C:\getdatascript.sps' / varname.
+write outfile 'C:\Windows\Temp\getdatascript.sps' / varname.
 execute.
 
 
@@ -101,7 +101,7 @@ execute.
 sort cases id (A).
 execute.
 
-write outfile 'C:\setvarlabelsscript.sps' / varname.
+write outfile 'C:\Windows\Temp\setvarlabelsscript.sps' / varname.
 execute.
 
 
@@ -150,7 +150,7 @@ execute.
 
 compute varname=concat(varname,' ',varlabel).
 
-write outfile 'C:\setvaluelabelsscript.sps' / varname.
+write outfile 'C:\Windows\Temp\setvaluelabelsscript.sps' / varname.
 execute.
 
 
@@ -204,23 +204,23 @@ execute.
 compute varname=concat('MISSING VALUES ',varname,' (',var1,').').
 execute.
 
-write outfile 'C:\setmissingscript.sps' / varname.
+write outfile 'C:\Windows\Temp\setmissingscript.sps' / varname.
 execute.
 
 
 * 5. kør scripts.
 
-insert file= 'C:\getdatascript.sps'.
-insert file= 'C:\setvarlabelsscript.sps'.
-insert file= 'C:\setvaluelabelsscript.sps'.
-insert file= 'C:\setmissingscript.sps'.
+insert file= 'C:\Windows\Temp\getdatascript.sps'.
+insert file= 'C:\Windows\Temp\setvarlabelsscript.sps'.
+insert file= 'C:\Windows\Temp\setvaluelabelsscript.sps'.
+insert file= 'C:\Windows\Temp\setmissingscript.sps'.
 execute.
 
-* clean up
-erase file= 'C:\getdatascript.sps'.
-erase file= 'C:\setvarlabelsscript.sps'.
-erase file= 'C:\setvaluelabelsscript.sps'.
-erase file= 'C:\setmissingscript.sps'.
+* clean up.
+erase file= 'C:\Windows\Temp\getdatascript.sps'.
+erase file= 'C:\Windows\Temp\setvarlabelsscript.sps'.
+erase file= 'C:\Windows\Temp\setvaluelabelsscript.sps'.
+erase file= 'C:\Windows\Temp\setmissingscript.sps'.
 execute.
 
 
