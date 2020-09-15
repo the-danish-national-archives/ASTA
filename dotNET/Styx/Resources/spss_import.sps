@@ -1,10 +1,10 @@
-* Encoding: UTF-8.
+﻿* Encoding: UTF-8.
 
 ***********************************.
-* Version: 3,0,1
+* Version: 3,0,3
 * Importscript.
 * TFL august 2019.
-* JLE august 2020.
+* JLE september 2020
 ***********************************.
 
 * dan underscripts.
@@ -27,6 +27,9 @@ file handle varbesk /name 'dataDir\{2}_VARIABELBESKRIVELSE.txt'.
 * 1. dan getscript.
 * hent var liste.
 
+ SET DECIMAL COMMA.
+SET BLANKS sysmis.
+
  get data
                       /type=txt
                       /file='variabel'
@@ -36,8 +39,8 @@ file handle varbesk /name 'dataDir\{2}_VARIABELBESKRIVELSE.txt'.
 execute.
 
 do if $casenum=1.
-compute varname=concat('GET DATA  /TYPE=TXT', ' /FILE="datafil" /QUALIFIER="""" ',
-                                       ' /DELCASE=LINE /DELIMITERS=";" /ARRANGEMENT=DELIMITED /FIRSTCASE=2 /IMPORTCASE=ALL /VARIABLES=',varname).
+compute varname=concat('GET DATA  /TYPE=TXT', ' /FILE="datafil" /QUALIFIER=""""',
+                                       ' /DELCASE=LINE /DATATYPEMIN PERCENTAGE=100.0 /DELIMITERS=";" /ARRANGEMENT=DELIMITED /FIRSTCASE=2 /IMPORTCASE=ALL /VARIABLES=',varname).
 end if.
 execute.
 
@@ -59,7 +62,7 @@ execute.
 
 compute varname=concat(varname,' ',varfmt).
 
-write outfile 'dataDir\getdatascript.sps' / varname.
+write outfile 'C:\Windows\Temp\getdatascript.sps' / varname.
 execute.
 
 
@@ -86,6 +89,8 @@ EXECUTE.
 sort cases id (D).
 execute.
 
+*escape evt apostroffer i label.
+compute varlabel = replace(varlabel, "'","''").
 compute varname=concat(varname," '",varlabel,"'").
 
 do if $casenum=1.
@@ -96,7 +101,7 @@ execute.
 sort cases id (A).
 execute.
 
-write outfile 'dataDir\setvarlabelsscript.sps' / varname.
+write outfile 'C:\Windows\Temp\setvarlabelsscript.sps' / varname.
 execute.
 
 
@@ -116,6 +121,8 @@ end if.
 execute.
 
 do if varlabel<>''.
+*escape evt apostroffer i label.
+compute varlabel = replace(varlabel, "'","''").
 compute varlabel=concat("'",varlabel,"'").
 compute varname=concat("'",varname,"'").
 end if.
@@ -143,7 +150,7 @@ execute.
 
 compute varname=concat(varname,' ',varlabel).
 
-write outfile 'dataDir\setvaluelabelsscript.sps' / varname.
+write outfile 'C:\Windows\Temp\setvaluelabelsscript.sps' / varname.
 execute.
 
 
@@ -197,16 +204,23 @@ execute.
 compute varname=concat('MISSING VALUES ',varname,' (',var1,').').
 execute.
 
-write outfile 'dataDir\setmissingscript.sps' / varname.
+write outfile 'C:\Windows\Temp\setmissingscript.sps' / varname.
 execute.
 
 
 * 5. kør scripts.
 
-insert file= 'dataDir\getdatascript.sps'.
-insert file= 'dataDir\setvarlabelsscript.sps'.
-insert file= 'dataDir\setvaluelabelsscript.sps'.
-insert file= 'dataDir\setmissingscript.sps'.
+insert file= 'C:\Windows\Temp\getdatascript.sps'.
+insert file= 'C:\Windows\Temp\setvarlabelsscript.sps'.
+insert file= 'C:\Windows\Temp\setvaluelabelsscript.sps'.
+insert file= 'C:\Windows\Temp\setmissingscript.sps'.
+execute.
+
+* clean up.
+erase file= 'C:\Windows\Temp\getdatascript.sps'.
+erase file= 'C:\Windows\Temp\setvarlabelsscript.sps'.
+erase file= 'C:\Windows\Temp\setvaluelabelsscript.sps'.
+erase file= 'C:\Windows\Temp\setmissingscript.sps'.
 execute.
 
 
@@ -214,3 +228,10 @@ execute.
 
 SAVE OUTFILE='dataDir\spss_statistikfil.sav'
   /COMPRESSED.
+
+
+
+
+
+
+
