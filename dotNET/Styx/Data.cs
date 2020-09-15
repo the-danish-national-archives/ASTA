@@ -27,6 +27,7 @@ namespace Rigsarkiv.Styx
         const string Alphabet = "abcdefghijklmnopqrstuvwxyz";
         const string UserCodeRange = "'{0}' 'through' '{1}'{2}";
         const string UserCodeExtra = ", '{0}'";
+        const int CodeDescriptionMaxLength = 120;
         private List<string> _codeLists = null;
         private List<string> _sasSpecialNumerics = null;
         private List<string> _stataSpecialNumerics = null;
@@ -115,8 +116,8 @@ namespace Rigsarkiv.Styx
                         sw.WriteLine(string.Join(Separator, table.Columns.Select(c => NormalizeName(c.Name)).ToArray()));
                         path = string.Format(TablePath, _srcPath, table.SrcFolder);
                         StreamElement(delegate (XElement row) {
-                            sw.WriteLine(GetRow(table, row, tableNS));
                             table.RowsCounter++;
+                            sw.WriteLine(GetRow(table, row, tableNS));
                             if ((table.RowsCounter % RowsChunk) == 0) { _logManager.Add(new LogEntity() { Level = LogLevel.Info, Section = _logSection, Message = string.Format("{0} of {1} rows added", table.RowsCounter, table.Rows) }); }
                         }, path);                        
                     }
@@ -136,13 +137,14 @@ namespace Rigsarkiv.Styx
         {
             var result = string.Empty;
             var contents = new List<string>();
+
             table.Columns.ForEach(column => {
                 var hasError = false;
                 var isDifferent = false;
                 var content = row.Element(tableNS + column.Id).Value;
                 if (!string.IsNullOrEmpty(content))
                 {
-                    content = GetConvertedValue(column, content, out hasError, out isDifferent);
+                    content = GetConvertedValue(column, content, out hasError, out isDifferent, table.RowsCounter);
                 }
                 contents.Add(content);
             });            
@@ -460,7 +462,9 @@ namespace Rigsarkiv.Styx
                     {
                         code = column.MissingValues[code];
                     }
-                    codeList.AppendLine(string.Format(CodeFormat, code, EnsureNewLines(row.Element(tableNS + columnId).Value)));
+                    var codeDescription = row.Element(tableNS + columnId).Value;
+                    codeList.AppendLine(string.Format(CodeFormat, code, EnsureNewLines(codeDescription)));
+                    CheckCodeListDescriptionLength(column, codeDescription, code);
                     column.CodeList.RowsCounter++;
                 }, path);
                 var codeListContent = codeList.ToString();                
@@ -474,6 +478,20 @@ namespace Rigsarkiv.Styx
             {
                 sw.Write(string.Format(content, _codeLists.ToArray()));
             }            
+        }
+
+        private void CheckCodeListDescriptionLength(Column column, string codeDescription, string code)
+        {
+            var codeDescriptionLength = Encoding.UTF8.GetByteCount(codeDescription);
+            if (codeDescriptionLength > CodeDescriptionMaxLength)
+            {
+                if (column.CodeDescriptionLengthExceeded == null)
+                {
+                    _logManager.Add(new LogEntity() { Level = LogLevel.Warning, Section = _logSection, Message = $"Value label: {column.Name} has been truncated" });
+
+                    column.CodeDescriptionLengthExceeded = new CodeDescriptionLengthExceeded {ByteLength = codeDescriptionLength, Code = code};
+                }
+            }
         }
 
         private string GetReportTemplate()
