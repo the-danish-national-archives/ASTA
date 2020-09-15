@@ -261,6 +261,7 @@ namespace Rigsarkiv.Styx
                 var codeListColumn = new Column() { Id = columnNode.Element(_tableIndexXNS + "columnID").Value, Name = columnNode.Element(_tableIndexXNS + "name").Value, Description = columnNode.Element(_tableIndexXNS + "description").Value, Type = columnNode.Element(_tableIndexXNS + "typeOriginal").Value, TypeOriginal = columnNode.Element(_tableIndexXNS + "type").Value };
                 codeListColumn.IsKey = tableNode.Element(_tableIndexXNS + "primaryKey").Element(_tableIndexXNS + "column").Value == codeListColumn.Name;
                 if (_state == FlowState.Suspended) { UpdateOldType(codeListColumn); }
+                CheckDescriptionLength(codeListColumn);
                 result.Columns.Add(codeListColumn);
             }
             return result;

@@ -122,6 +122,14 @@
                     if (column.CodeList != null) {{
                         codeLists = codeLists + 1;
                         UpdateRow(column.CodeList,false);
+
+                        for (var l = 0; l < column.CodeList.Columns.length; l++) {{
+                            var codeListColumn = column.CodeList.Columns[l];
+                            if (codeListColumn.VariableDescriptionLengthExceeded > 0) {{
+                                longVariableDescriptionCounter++;
+                                AddLongVariableDescriptionRow(column.CodeList, codeListColumn);
+                            }}
+                        }}
                     }}
                     if (column.TruncatedRow != null) {{
                         truncatedCounter++;
