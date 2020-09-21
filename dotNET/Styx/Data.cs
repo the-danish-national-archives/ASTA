@@ -485,12 +485,8 @@ namespace Rigsarkiv.Styx
             var codeDescriptionLength = Encoding.UTF8.GetByteCount(codeDescription);
             if (codeDescriptionLength > CodeDescriptionMaxLength)
             {
-                if (column.CodeDescriptionLengthExceeded == null)
-                {
-                    _logManager.Add(new LogEntity() { Level = LogLevel.Warning, Section = _logSection, Message = $"Value label: {column.Name} has been truncated" });
-
-                    column.CodeDescriptionLengthExceeded = new CodeDescriptionLengthExceeded {ByteLength = codeDescriptionLength, Code = code};
-                }
+                _logManager.Add(new LogEntity() { Level = LogLevel.Warning, Section = _logSection, Message = $"Value label: {column.Name} ('{code}') has been truncated" });
+                column.CodeDescriptionLengthExceededList.Add(new CodeDescriptionLengthExceeded {ByteLength = codeDescriptionLength, Code = code});
             }
         }
 

@@ -8,6 +8,11 @@ namespace Rigsarkiv.Styx.Entities
     /// </summary>
     public class Column
     {
+        public Column()
+        {
+            CodeDescriptionLengthExceededList = new List<CodeDescriptionLengthExceeded>();
+        }
+
         public string Id { get; set; }
         public string Description { get; set; }
         public string Name { get; set; }
@@ -23,6 +28,6 @@ namespace Rigsarkiv.Styx.Entities
         public string Message { get; set; }
         public TruncatedRow TruncatedRow { get; set; } //P9a
         public int VariableDescriptionLengthExceeded { get; set; } //P9b
-        public CodeDescriptionLengthExceeded CodeDescriptionLengthExceeded { get; set; } //P9c
+        public List<CodeDescriptionLengthExceeded> CodeDescriptionLengthExceededList { get; set; } //P9c
     }
 }

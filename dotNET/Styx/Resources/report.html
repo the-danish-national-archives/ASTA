@@ -60,7 +60,7 @@
             <div id="longCodeDescriptionDiv">
                 <p class="Error" style="{{0}}">Der findes value labels som overstiger 120 bytes. Disse trunkeres/afkortes under indlæsning af data med SPSS import scriptet i statistikprogrammet SPSS Statistics.</p>
                 <table id="longCodeDescriptionTable" style="{{0}}">
-                    <tr><th>Tabel</th><th>Variabel</th><th>Kode</th><th>Antal bytes</th></tr>
+                    <tr><th>Tabel</th><th>Value label</th><th>Kode</th><th>Antal bytes</th></tr>
                 </table>
                 <br />
             </div>
@@ -139,9 +139,12 @@
                         longVariableDescriptionCounter++;
                         AddLongVariableDescriptionRow(table, column);
                     }}
-                    if (column.CodeDescriptionLengthExceeded != null) {{
-                        longCodeDescriptionCounter++;
-                        AddLongCodeDescriptionRow(table, column);
+                    if (column.CodeDescriptionLengthExceededList != null && column.CodeDescriptionLengthExceededList.length > 0) {{
+                        for (var m = 0; m < column.CodeDescriptionLengthExceededList.length; m++) {{
+                            var codeDescriptionLengthExceeded = column.CodeDescriptionLengthExceededList[m];
+                            longCodeDescriptionCounter++;
+                            AddLongCodeDescriptionRow(table, column, codeDescriptionLengthExceeded);
+                        }}
                     }}
                     if (column.CodeList != null && column.MissingValues != null) {{
                         Object.keys(column.MissingValues).forEach(function (key, index) {{
@@ -217,8 +220,7 @@
         function AddLongVariableDescriptionRow(table, column) {{
             longVariableDescriptionTable.insertAdjacentHTML("beforeend", longVariableDescriptionHtml.format(table.Name, column.Name, column.VariableDescriptionLengthExceeded));
         }}
-        function AddLongCodeDescriptionRow(table, column) {{
-            var codeDescriptionLengthExceeded = column.CodeDescriptionLengthExceeded;
+        function AddLongCodeDescriptionRow(table, column, codeDescriptionLengthExceeded) {{
             longCodeDescriptionTable.insertAdjacentHTML("beforeend", longCodeDescriptionHtml.format(table.Name, column.Name, codeDescriptionLengthExceeded.Code, codeDescriptionLengthExceeded.ByteLength));
         }}
         function UpdateTable(beforeId, afterId, beforeValue, afterValue) {{
