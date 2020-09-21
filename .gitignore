@@ -76,3 +76,4 @@ electron/.vs/electron/v16/.suo
 *.exe
 *.dmg
 *.suo
+/docs/.~lock.1007 Dokumentation.docx#
