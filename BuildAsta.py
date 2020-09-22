@@ -169,13 +169,13 @@ def verify_prerequisites(current_os):
     node_version = int(subprocess.run(
         'node --version', shell=True, capture_output=True, text=True).stdout[1:3])
     if not (node_version >= settings.min_nodejs_version):
-        print(f'node {str(node_version)} is missing or needs an update')
+        print("node ver {0} is missing or needs an update".format(str(node_version)))
         clear_to_go_ahead = False
 
     npm_version = int(subprocess.run('npm --version', shell=True,
                                      capture_output=True, text=True).stdout[0:1])
     if not (npm_version >= settings.min_npm_version):
-        print(f'npm {settings.min_npm_version} is missing or needs an update')
+        print("npm ver {0} is missing or needs an update".format(settings.min_npm_version))
         clear_to_go_ahead = False
 
     return clear_to_go_ahead
