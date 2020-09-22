@@ -41,7 +41,7 @@ class Settings:
                  min_node_version=12,
                  min_npm_version=6,
                  msbuild_path='C:\\Program Files (x86)\\MSBuild\\14.0\\Bin\\msbuild.exe',
-                 nuget_path='nuget.exe',
+                 nuget_path='./nuget.exe',
                  path_to_athena='./dotNET/Athena.sln',
                  path_to_styx='./dotNET/Styx.sln',
                  path_to_assets='./electron/assets/scripts/',
