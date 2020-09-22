@@ -196,8 +196,8 @@ restore nuget packages and build to the release lib"""
 
 def build_athena():
     print("Building Athena..")
-    build_dotnet({f'"{settings.nuget_path}" restore {settings.path_to_athena}',
-                  f'"{settings.msbuild_path}" /t:Build /p:Configuration=Release {settings.path_to_athena}'})
+    build_dotnet({'"{0}" restore {1}'.format(settings.nuget_path,settings.path_to_athena),
+                  '"{0}" /t:Build /p:Configuration=Release {1}'.format(settings.msbuild_path,settings.path_to_athena)})
     print("last modified: %s" % time.ctime(
         os.path.getmtime(settings.path_to_assets + "Athena.dll")))
 
@@ -209,8 +209,8 @@ restore nuget packages and build to the release lib"""
 def build_styx():
     print("Building Styx..")
     build_dotnet(
-        {f'{settings.nuget_path} restore {settings.path_to_styx}',
-         f'"{settings.msbuild_path}" /t:Build /p:Configuration=Release {settings.path_to_styx}'})
+        {'{0} restore {1}'.format(settings.nuget_path,settings.path_to_styx),
+         '"{0}" /t:Build /p:Configuration=Release {1}'.format(settings.msbuild_path,settings.path_to_styx)})
     print("last modified: %s" % time.ctime(
         os.path.getmtime(settings.path_to_assets + "Styx.dll")))
 
@@ -221,7 +221,7 @@ def build_styx():
 
 
 def build_asta(current_os, Settings: settings):
-    print(f"Building Asta on {current_os}..")
+    print("Building Asta on {0}..".format(current_os))
     if settings.audit_fix:
         subprocess.run('npm audit fix', shell=True, cwd="electron")
     else:
@@ -321,7 +321,7 @@ def setup_config(user: str, arguments):
     if user not in legal_users:
         user = 'jenkins'
         print('Legal user not found - moving forward with "Jenkins" as user')
-    print(f'user setting is "{user}"\n')
+    print('user setting is "{0}"\n'.format(user))
     config_all(arguments)
     if user == 'kna':
         config_kna()
@@ -350,7 +350,7 @@ def main(arguments):
         jsonStr = json.dumps(settings.__dict__, indent=2)
         print("Configuration:\n" + jsonStr)
         print("Starting build artefacts...")
-        print(f"\nPlatform identified as '{current_os}'\n")
+        print("\nPlatform identified as '{0}'\n".format(current_os))
     if verify_prerequisites(current_os):
         if current_os == 'Windows':
             build_styx()
@@ -359,7 +359,7 @@ def main(arguments):
         build_asta(current_os, settings)
 
     toc = time.perf_counter()  # stop timer and print
-    print(f"\nThe script was running in {toc - tic:0.4f} seconds")
+    print("\nThe script was running in " +toc - tic:0.4f + "" seconds")
 
 
 if __name__ == '__main__':
