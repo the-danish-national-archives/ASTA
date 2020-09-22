@@ -220,7 +220,7 @@ def build_styx():
    On Windows there is an extended version (with Styx and Athena) included """
 
 
-def build_asta(current_os, Settings: settings):
+def build_asta(current_os,  settings):
     print("Building Asta on {0}..".format(current_os))
     if settings.audit_fix:
         subprocess.run('npm audit fix', shell=True, cwd="electron")
