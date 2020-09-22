@@ -163,7 +163,7 @@ def verify_prerequisites(current_os):
             clear_to_go_ahead = False
 
         if not os.path.isfile(settings.nuget_path):
-            print(f'{settings.nuget_path} is missing (or path is wrong)')
+            print("'{0}' is missing (or path is wrong)".format(settings.nuget_path))
             clear_to_go_ahead = False
 
     node_version = int(subprocess.run(
