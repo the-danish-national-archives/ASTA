@@ -55,6 +55,7 @@
     <Compile Include="Entities\Report.cs" />
     <Compile Include="Entities\ScriptType.cs" />
     <Compile Include="Entities\Table.cs" />
+    <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="MetaData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Structure.cs" />

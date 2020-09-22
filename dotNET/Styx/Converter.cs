@@ -11,6 +11,7 @@ using System.Linq;
 using System;
 using Rigsarkiv.Asta.Logging;
 using LogManager = log4net.LogManager;
+using Rigsarkiv.Styx.Extensions;
 
 namespace Rigsarkiv.Styx
 {
@@ -363,19 +364,22 @@ namespace Rigsarkiv.Styx
                 var groups = regex.Match(value).Groups;
                 if (_report.ScriptType == ScriptType.SPSS)
                 {
-                    if(column.Type.IndexOf(".") == -1)
+                    if(!column.Type.Contains("."))
                     {
-                        result = string.Format("{0}-{1}-{2} {3}:{4}:{5}", groups[3].Value, GetMonth(groups[2].Value), groups[1].Value, groups[4].Value, groups[5].Value, groups[6].Value);
+                            result=
+                                $"{groups[TimeParts.Date.ToInt()].Value}-{GetMonth(groups[TimeParts.Month.ToInt()].Value)}-{groups[TimeParts.Year.ToInt()].Value} {groups[TimeParts.Hours.ToInt()].Value}:{groups[TimeParts.Minutes.ToInt()].Value}:{groups[TimeParts.Seconds.ToInt()].Value}";
                     }
                     else
                     {
-                        if (groups.Count > 8 && !string.IsNullOrEmpty(groups[8].Value))
+                        if (groups.Count <= 8 || string.IsNullOrEmpty(groups[8].Value))
                         {
-                            result = string.Format("{0}-{1}-{2} {3}:{4}:{5}.{6}", groups[1].Value, groups[2].Value, groups[3].Value, groups[4].Value, groups[5].Value, groups[6].Value, groups[8].Value);
+                            result =
+                                $"{groups[TimeParts.Year.ToInt()].Value}-{groups[TimeParts.Month.ToInt()].Value}-{groups[TimeParts.Date.ToInt()].Value} {groups[TimeParts.Hours.ToInt()].Value}:{groups[TimeParts.Minutes.ToInt()].Value}:{groups[TimeParts.Seconds.ToInt()].Value}";
                         }
                         else
                         {
-                            result = string.Format("{0}-{1}-{2} {3}:{4}:{5}", groups[1].Value, groups[2].Value, groups[3].Value, groups[4].Value, groups[5].Value, groups[6].Value);
+                            result =
+                                $"\"{groups[TimeParts.Year.ToInt()].Value}-{groups[TimeParts.Month.ToInt()].Value}-{groups[TimeParts.Date.ToInt()].Value} {groups[TimeParts.Hours.ToInt()].Value}:{groups[5].Value}:{groups[TimeParts.Minutes.ToInt()].Value}:{groups[TimeParts.Seconds.ToInt()].Value}.{groups[TimeParts.Fractions.ToInt()].Value}\"";
                         }
                     }
                 }
@@ -617,6 +621,17 @@ namespace Rigsarkiv.Styx
 
              return 0;
         }
+    }
+
+    enum TimeParts : int
+    {
+        Year = 1,
+        Month = 2,
+        Date = 3,
+        Hours = 4,
+        Minutes = 5,
+        Seconds = 6,
+        Fractions = 8
     }
 
     public class DecimalComparer : IComparer<string>
