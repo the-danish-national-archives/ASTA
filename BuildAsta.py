@@ -42,9 +42,9 @@ class Settings:
                  min_npm_version=6,
                  msbuild_path='C:\\Program Files (x86)\\MSBuild\\14.0\\Bin\\msbuild.exe',
                  nuget_path='C:\\ProgramData\\chocolatey\\bin\\NuGet.exe',
-                 path_to_athena='./dotNET/Athena.sln',
-                 path_to_styx='./dotNET/Styx.sln',
-                 path_to_assets='./electron/assets/scripts/',
+                 path_to_athena='./ASTA/dotNET/Athena.sln',
+                 path_to_styx='./ASTA/dotNET/Styx.sln',
+                 path_to_assets='./ASTA/electron/assets/scripts/',
                  build_mode='a',
                  audit_fix=False):
         self.min_nodejs_version = min_node_version
@@ -220,7 +220,7 @@ def build_styx():
    On Windows there is an extended version (with Styx and Athena) included """
 
 
-def build_asta(current_os,  settings):
+def build_asta(current_os, Settings: settings):
     print("Building Asta on {0}..".format(current_os))
     if settings.audit_fix:
         subprocess.run('npm audit fix', shell=True, cwd="electron")
@@ -272,8 +272,7 @@ def build_asta(current_os,  settings):
 def detect_platform() -> str:
     list_of_platforms = {'Linux', 'Darwin', 'Windows'}
     if not platform.system() in list_of_platforms:
-        # unknown platform - no reason to continue
-        print("\nUnknown platform - Halt!")
+        print("\nUnknown platform - no reason to continue. Halt!")
         quit()
     return str(platform.system())
 
@@ -290,8 +289,8 @@ def config_all(arguments):
 
 
 def config_kna():
-    settings.msbuild_path = 'D:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\MSBuild\\Current\\Bin\\MSBuild.exe'
     settings.nuget_path = 'D:\\Repos\\Asta\\electron\\node_modules\\electron-winstaller\\vendor\\nuget.exe'
+    settings.msbuild_path = 'D:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\MSBuild\\Current\\Bin\\MSBuild.exe'
 
 
 """ This is the place for setting the values for user 'tkn' """
@@ -359,7 +358,7 @@ def main(arguments):
         build_asta(current_os, settings)
 
     toc = time.perf_counter()  # stop timer and print
-    print("\nThe script was running in " +toc - tic:0.4f + "" seconds")
+    print(f"\nThe script was running in {toc - tic:0.4f} seconds")
 
 
 if __name__ == '__main__':
