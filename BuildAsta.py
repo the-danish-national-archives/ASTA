@@ -44,7 +44,7 @@ class Settings:
                  nuget_path='C:\\ProgramData\\chocolatey\\bin\\NuGet.exe',
                  path_to_athena='./ASTA/dotNET/Athena.sln',
                  path_to_styx='./ASTA/dotNET/Styx.sln',
-                 path_to_assets='./electron/assets/scripts/',
+                 path_to_assets='./ASTA/electron/assets/scripts/',
                  build_mode='a',
                  audit_fix=False):
         self.min_nodejs_version = min_node_version
