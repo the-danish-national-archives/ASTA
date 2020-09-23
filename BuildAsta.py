@@ -298,16 +298,16 @@ def config_kna():
 
 
 def config_tkn():
-    settings.nuget_path = ''
     settings.msbuild_path = ''
+    settings.nuget_path = ''
 
 
 """ This is the place for setting the values for user 'rhr' """
 
 
 def config_rhr():
-    settings.nuget_path = ''
-    settings.msbuild_path = ''
+    settings.msbuild_path = 'C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Professional\\MSBuild\\Current\\Bin\\MSBuild.exe'
+    settings.nuget_path = 'C:\\Users\\rarhr\\source\\repos\\ASTA\\electron\\node_modules\\electron-winstaller\\vendor\\nuget.exe'
 
     """ Function for configuring the settings object
     If there is a parameter of type user verify its a known user
