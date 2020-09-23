@@ -42,9 +42,9 @@ class Settings:
                  min_npm_version=6,
                  msbuild_path='C:\\Program Files (x86)\\MSBuild\\14.0\\Bin\\msbuild.exe',
                  nuget_path='C:\\ProgramData\\chocolatey\\bin\\NuGet.exe',
-                 path_to_athena='./ASTA/dotNET/Athena.sln',
-                 path_to_styx='./ASTA/dotNET/Styx.sln',
-                 path_to_assets='./ASTA/electron/assets/scripts/',
+                 path_to_athena='./dotNET/Athena.sln',
+                 path_to_styx='./dotNET/Styx.sln',
+                 path_to_assets='./electron/assets/scripts/',
                  build_mode='a',
                  audit_fix=False):
         self.min_nodejs_version = min_node_version
@@ -222,46 +222,47 @@ def build_styx():
 
 def build_asta(current_os, Settings: settings):
     print("Building Asta on {0}..".format(current_os))
+    electronDir = "electron"
     if settings.audit_fix:
-        subprocess.run('npm audit fix', shell=True, cwd="electron")
+        subprocess.run('npm audit fix', shell=True, cwd=electronDir)
     else:
-        subprocess.run('npm audit', shell=True, cwd="electron")
+        subprocess.run('npm audit', shell=True, cwd=electronDir)
 
     subprocess.run('npm install electron-packager -g',
-                   shell=True, cwd="electron")
+                   shell=True, cwd=electronDir)
     subprocess.run('npm install npm-platform-dependencies',
-                   shell=True, cwd="electron")
-    subprocess.run('npm install', shell=True, cwd="electron")
+                   shell=True, cwd=electronDir)
+    subprocess.run('npm install', shell=True, cwd=electronDir)
     if current_os == "Windows":
-        subprocess.run('npm run package-win', shell=True, cwd="electron")
+        subprocess.run('npm run package-win', shell=True, cwd=electronDir)
         if settings.build_mode == 'n' or settings.build_mode == 'a':
             subprocess.run('npm run create-installer-win',
-                           shell=True, cwd="electron")
+                           shell=True, cwd=electronDir)
         if settings.build_mode != 'x' or settings.build_mode == 'a':
             subprocess.run('npm run package-win-extended',
-                           shell=True, cwd="electron")
+                           shell=True, cwd=electronDir)
             subprocess.run('npm run create-installer-win-extended',
-                           shell=True, cwd="electron")
+                           shell=True, cwd=electronDir)
 
     if current_os == "Linux":
         if settings.build_mode == 'n' or settings.build_mode == 'a':
-            subprocess.run('npm run package-linux', shell=True, cwd="electron")
+            subprocess.run('npm run package-linux', shell=True, cwd=electronDir)
         if settings.build_mode != 'x' or settings.build_mode == 'a':
             subprocess.run('npm run package-linux-extended',
-                           shell=True, cwd="electron")
+                           shell=True, cwd=electronDir)
 
     if current_os == "Darwin":
         subprocess.run('npm install electron-packager -g',
-                       shell=True, cwd="electron")
+                       shell=True, cwd=electronDir)
         if settings.build_mode == 'n' or settings.build_mode == 'a':
-            subprocess.run('npm run package-mac', shell=True, cwd="electron")
+            subprocess.run('npm run package-mac', shell=True, cwd=electronDir)
             subprocess.run('npm run create-installer-mac',
-                           shell=True, cwd="electron")
+                           shell=True, cwd=electronDir)
         if settings.build_mode == 'x' or settings.build_mode == 'a':
             subprocess.run('npm run package-mac-extended',
-                           shell=True, cwd="electron")
+                           shell=True, cwd=electronDir)
             subprocess.run('npm run create-installer-mac-extended',
-                           shell=True, cwd="electron")
+                           shell=True, cwd=electronDir)
 
 
 """ Detect the current platform
@@ -289,7 +290,7 @@ def config_all(arguments):
 
 
 def config_kna():
-    settings.nuget_path = 'D:\\Repos\\Asta\\electron\\node_modules\\electron-winstaller\\vendor\\nuget.exe'
+    settings.nuget_path = 'C:/Users/Kim Adelhardt/.nuget/packages/icsharpcode.sharpziplib.dll/0.85.4.369/NuGet.exe'
     settings.msbuild_path = 'D:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\MSBuild\\Current\\Bin\\MSBuild.exe'
 
 
