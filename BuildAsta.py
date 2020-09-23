@@ -220,7 +220,7 @@ def build_styx():
    On Windows there is an extended version (with Styx and Athena) included """
 
 
-def build_asta(current_os,  settings):
+def build_asta(current_os, Settings: settings):
     print("Building Asta on {0}..".format(current_os))
     if settings.audit_fix:
         subprocess.run('npm audit fix', shell=True, cwd="electron")
@@ -359,7 +359,7 @@ def main(arguments):
         build_asta(current_os, settings)
 
     toc = time.perf_counter()  # stop timer and print
-    print("\nThe script was running in " +toc - tic:0.4f + "" seconds")
+    print(f"\nThe script was running in {toc - tic:0.4f} seconds")
 
 
 if __name__ == '__main__':
