@@ -364,27 +364,36 @@ namespace Rigsarkiv.Styx
                 var groups = regex.Match(value).Groups;
                 if (_report.ScriptType == ScriptType.SPSS)
                 {
-                    if(!column.Type.Contains("."))
+                    if(!column.Type.Contains("."))  //Is there a dot, indicating iso standard yyyy-mm-dd format on datetime
                     {
                             result=
                                 $"{groups[TimeParts.Date.ToInt()].Value}-{GetMonth(groups[TimeParts.Month.ToInt()].Value)}-{groups[TimeParts.Year.ToInt()].Value} {groups[TimeParts.Hours.ToInt()].Value}:{groups[TimeParts.Minutes.ToInt()].Value}:{groups[TimeParts.Seconds.ToInt()].Value}";
                     }
                     else
                     {
-                        if (groups.Count <= 8 || string.IsNullOrEmpty(groups[8].Value))
-                        {
-                            result =
-                                $"{groups[TimeParts.Year.ToInt()].Value}-{groups[TimeParts.Month.ToInt()].Value}-{groups[TimeParts.Date.ToInt()].Value} {groups[TimeParts.Hours.ToInt()].Value}:{groups[TimeParts.Minutes.ToInt()].Value}:{groups[TimeParts.Seconds.ToInt()].Value}";
-                        }
-                        else
-                        {
-                            result =
-                                $"\"{groups[TimeParts.Year.ToInt()].Value}-{groups[TimeParts.Month.ToInt()].Value}-{groups[TimeParts.Date.ToInt()].Value} {groups[TimeParts.Hours.ToInt()].Value}:{groups[5].Value}:{groups[TimeParts.Minutes.ToInt()].Value}:{groups[TimeParts.Seconds.ToInt()].Value}.{groups[TimeParts.Fractions.ToInt()].Value}\"";
-                        }
+                        result = HandleIsoFormattedDatetime(groups);
                     }
                 }
             }
             isDifferent = result != value;
+            return result;
+        }
+
+        private static string HandleIsoFormattedDatetime(GroupCollection groups)
+        {
+            string result;
+            if (groups.Count <= TimeParts.Fractions.ToInt() || string.IsNullOrEmpty(groups[TimeParts.Fractions.ToInt()].Value)) // If the fraction part is empty
+            {
+                result =
+                    $"{groups[TimeParts.Year.ToInt()].Value}-{groups[TimeParts.Month.ToInt()].Value}-{groups[TimeParts.Date.ToInt()].Value} {groups[TimeParts.Hours.ToInt()].Value}:{groups[TimeParts.Minutes.ToInt()].Value}:{groups[TimeParts.Seconds.ToInt()].Value}";
+            }
+            else
+            {
+                //Save as string as SPSS doesn't support fractions of seconds
+                result =
+                    $"\"{groups[TimeParts.Year.ToInt()].Value}-{groups[TimeParts.Month.ToInt()].Value}-{groups[TimeParts.Date.ToInt()].Value} {groups[TimeParts.Hours.ToInt()].Value}:{groups[TimeParts.Minutes.ToInt()].Value}:{groups[TimeParts.Seconds.ToInt()].Value}.{groups[TimeParts.Fractions.ToInt()].Value}\"";
+            }
+
             return result;
         }
 
@@ -631,6 +640,7 @@ namespace Rigsarkiv.Styx
         Hours = 4,
         Minutes = 5,
         Seconds = 6,
+        Seperator = 7,
         Fractions = 8
     }
 
