@@ -32,11 +32,12 @@ from docopt import docopt, DocoptExit
 from pydoc import doc
 
 
-""" Class Settings are created to hold the configuration
-The default values are set to fit running on Jenkins windows node """
-
-
 class Settings:
+    """
+    Class Settings are created to hold the configuration
+    The default values are set to fit running on Jenkins windows node
+    """
+
     def __init__(self,
                  min_node_version=12,
                  min_npm_version=6,
@@ -140,11 +141,12 @@ class Settings:
 
 settings = Settings()
 
-""" Function checking the prerequisites
-such as msbuild, node and npm are present and in a minimum version"""
-
 
 def verify_prerequisites(current_os):
+    """
+    Function checking the prerequisites
+    such as msbuild, node and npm are present and in a minimum version
+    """
     clear_to_go_ahead = True
 
     if current_os == "Windows":
@@ -163,64 +165,65 @@ def verify_prerequisites(current_os):
             clear_to_go_ahead = False
 
         if not os.path.isfile(settings.nuget_path):
-            print("'{0}' is missing (or path is wrong)".format(settings.nuget_path))
+            print("'{0}' is missing (or path is wrong)".format(
+                settings.nuget_path))
             clear_to_go_ahead = False
 
     node_version = int(subprocess.run(
         'node --version', shell=True, capture_output=True, text=True).stdout[1:3])
     if not (node_version >= settings.min_nodejs_version):
-        print("node ver {0} is missing or needs an update".format(str(node_version)))
+        print("node ver {0} is missing or needs an update".format(
+            str(node_version)))
         clear_to_go_ahead = False
 
     npm_version = int(subprocess.run('npm --version', shell=True,
                                      capture_output=True, text=True).stdout[0:1])
     if not (npm_version >= settings.min_npm_version):
-        print("npm ver {0} is missing or needs an update".format(settings.min_npm_version))
+        print("npm ver {0} is missing or needs an update".format(
+            settings.min_npm_version))
         clear_to_go_ahead = False
 
     return clear_to_go_ahead
 
 
-"""build_dotnet execution build commands til msbuild"""
-
-
 def build_dotnet(cmds):
+    '''build_dotnet execute commands for msbuild'''
     for x in cmds:
         print(x)
         subprocess.run(x, shell=True)
 
 
-"""Function to build the Release version of Athena (only on windows)
-restore nuget packages and build to the release lib"""
-
-
 def build_athena():
+    """
+    Function to build the Release version of Athena (only on windows)
+    restore nuget packages and build to the release lib
+    """
     print("Building Athena..")
-    build_dotnet({'"{0}" restore {1}'.format(settings.nuget_path,settings.path_to_athena),
-                  '"{0}" /t:Build /p:Configuration=Release {1}'.format(settings.msbuild_path,settings.path_to_athena)})
+    build_dotnet({'"{0}" restore {1}'.format(settings.nuget_path, settings.path_to_athena),
+                  '"{0}" /t:Build /p:Configuration=Release {1}'.format(settings.msbuild_path, settings.path_to_athena)})
     print("last modified: %s" % time.ctime(
         os.path.getmtime(settings.path_to_assets + "Athena.dll")))
 
 
-"""Function to build the Release version of Styx (only on windows)
-restore nuget packages and build to the release lib"""
-
-
 def build_styx():
+    """
+    Function to build the Release version of Styx (only on windows)
+    restore nuget packages and build to the release lib
+    """
     print("Building Styx..")
     build_dotnet(
-        {'{0} restore {1}'.format(settings.nuget_path,settings.path_to_styx),
-         '"{0}" /t:Build /p:Configuration=Release {1}'.format(settings.msbuild_path,settings.path_to_styx)})
+        {'{0} restore {1}'.format(settings.nuget_path, settings.path_to_styx),
+         '"{0}" /t:Build /p:Configuration=Release {1}'.format(settings.msbuild_path, settings.path_to_styx)})
     print("last modified: %s" % time.ctime(
         os.path.getmtime(settings.path_to_assets + "Styx.dll")))
 
 
-"""Function to build the Release version of Asta
-   On Mac and Windows there are build an installer
-   On Windows there is an extended version (with Styx and Athena) included """
-
-
 def build_asta(current_os, Settings: settings):
+    """
+    Function to build the Release version of Asta
+    On Mac and Windows there are build an installer
+    On Windows there is an extended version (with Styx and Athena) included
+    """
     print("Building Asta on {0}..".format(current_os))
     electronDir = "electron"
     if settings.audit_fix:
@@ -246,7 +249,8 @@ def build_asta(current_os, Settings: settings):
 
     if current_os == "Linux":
         if settings.build_mode == 'n' or settings.build_mode == 'a':
-            subprocess.run('npm run package-linux', shell=True, cwd=electronDir)
+            subprocess.run('npm run package-linux',
+                           shell=True, cwd=electronDir)
         if settings.build_mode != 'x' or settings.build_mode == 'a':
             subprocess.run('npm run package-linux-extended',
                            shell=True, cwd=electronDir)
@@ -265,12 +269,12 @@ def build_asta(current_os, Settings: settings):
                            shell=True, cwd=electronDir)
 
 
-""" Detect the current platform
-    The script only handles three platforms and aborts if either it cant
-     detect the platform or if its not one of the tree (Linux', 'Darwin', 'Windows')"""
-
-
-def detect_platform() -> str:
+def detect_platform():
+    """ 
+    Detect the current platform
+    The script only handles three platforms and aborts if either it can't 
+    detect the platform or if its not one of the tree (Linux', 'Darwin', 'Windows')
+     """
     list_of_platforms = {'Linux', 'Darwin', 'Windows'}
     if not platform.system() in list_of_platforms:
         print("\nUnknown platform - no reason to continue. Halt!")
@@ -278,44 +282,37 @@ def detect_platform() -> str:
     return str(platform.system())
 
 
-""" This is the place for setting the general values for settings """
-
-
 def config_all(arguments):
+    """ This is the place for setting the general values for settings """
     settings.build_mode = arguments.get("--mode")
     settings.audit_fix = arguments.get("-f")
 
 
-""" This is the place for setting the values for user 'kna' """
-
-
 def config_kna():
+    """ This is the place for setting the values for user 'kna' """
     settings.nuget_path = 'C:/Users/Kim Adelhardt/.nuget/packages/icsharpcode.sharpziplib.dll/0.85.4.369/NuGet.exe'
     settings.msbuild_path = 'D:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\MSBuild\\Current\\Bin\\MSBuild.exe'
 
 
-""" This is the place for setting the values for user 'tkn' """
-
-
 def config_tkn():
+    """ This is the place for setting the values for user 'tkn' """
     settings.msbuild_path = ''
     settings.nuget_path = ''
 
 
-""" This is the place for setting the values for user 'rhr' """
-
-
 def config_rhr():
+    """ This is the place for setting the values for user 'rhr' """
     settings.msbuild_path = 'C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Professional\\MSBuild\\Current\\Bin\\MSBuild.exe'
     settings.nuget_path = 'C:\\Users\\rarhr\\source\\repos\\ASTA\\electron\\node_modules\\electron-winstaller\\vendor\\nuget.exe'
 
-    """ Function for configuring the settings object
-    If there is a parameter of type user verify its a known user
-    and set it up accordingly by calling the matching config-function.
-    If not set the user to the default Jenkins-user """
-
 
 def setup_config(user: str, arguments):
+    """ 
+    Function for configuring the settings object
+    If there is a parameter of type user verify its a known user
+    and set it up accordingly by calling the matching config-function.
+    If not set the user to the default Jenkins-user 
+    """
     legal_users = {'kna', 'tkn', 'rhr', 'Jenkins'}
 
     if user not in legal_users:
@@ -333,8 +330,6 @@ def setup_config(user: str, arguments):
 
 def main(arguments):
     user = arguments.get('-u')
- #   auditFix =  arguments.get('-f')
-   # buildMode=arguments.get('--mode')
     if user == None:
         user = "Jenkins"
     verbose = False
