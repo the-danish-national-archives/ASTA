@@ -296,8 +296,8 @@ def config_kna():
 
 def config_tkn():
     """ This is the place for setting the values for user 'tkn' """
-    settings.msbuild_path = ''
-    settings.nuget_path = ''
+    settings.msbuild_path = 'C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Professional\\MSBuild\\Current\\Bin\\MSBuild.exe'
+    settings.nuget_path = 'C:\\Users\\tknud\\Desktop\\git\\ASTA\\electron\\node_modules\\electron-winstaller\\vendor\\nuget.exe'
 
 
 def config_rhr():
