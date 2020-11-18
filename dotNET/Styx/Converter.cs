@@ -445,6 +445,7 @@ namespace Rigsarkiv.Styx
         {
             isDifferent = false;
             var result = value;
+            
             if (column.MissingValues != null && column.MissingValues.ContainsKey(result))
             {
                 result = column.MissingValues[result];
@@ -461,6 +462,10 @@ namespace Rigsarkiv.Styx
                 }
             }
             isDifferent = result != value;
+            if(result.Length > 17)
+            {
+                return '"' + result + '"';
+            }
             return result;
         }
 

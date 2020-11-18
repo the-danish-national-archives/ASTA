@@ -331,32 +331,32 @@ namespace Athena_II_REM
             {
                 string[] items = line.Split(' ');
                 
-                  string variable = items[0].Trim();
-                
-                    //alle delelementer pånær det første
-                    beskrivelse = line.Substring(items[0].Length, line.Length - items[0].Length);
+                string variable = items[0].Trim();
+            
+                //alle delelementer pånær det første
+                beskrivelse = line.Substring(items[0].Length, line.Length - items[0].Length);
 
-                    //Trim enderne
-                    beskrivelse = beskrivelse.TrimStart();
-                    beskrivelse = beskrivelse.TrimEnd();
+                //Trim enderne
+                beskrivelse = beskrivelse.TrimStart();
+                beskrivelse = beskrivelse.TrimEnd();
 
-                    //Fjern evt foranstillet '
-                    if (beskrivelse[0] == '\'')
-                    {
-                        beskrivelse = beskrivelse.Remove(0, 1);
-                    }
+                //Fjern evt foranstillet '
+                if (beskrivelse[0] == '\'')
+                {
+                    beskrivelse = beskrivelse.Remove(0, 1);
+                }
 
-                    //Fjern evt bagvedstillet '
-                    if (beskrivelse[beskrivelse.Length - 1] == '\'')
-                    {
-                        beskrivelse = beskrivelse.Remove(beskrivelse.Length - 1, 1);
-                    }
+                //Fjern evt bagvedstillet '
+                if (beskrivelse[beskrivelse.Length - 1] == '\'')
+                {
+                    beskrivelse = beskrivelse.Remove(beskrivelse.Length - 1, 1);
+                }
 
 
-                    string decodedBeskrivelse = System.Net.WebUtility.HtmlDecode(beskrivelse);
-                   // if (beskrivelse.Contains('&')) MessageBox.Show(encodedXml);
+                string decodedBeskrivelse = System.Net.WebUtility.HtmlDecode(beskrivelse);
+                // if (beskrivelse.Contains('&')) MessageBox.Show(encodedXml);
 
-                    varDick.Add(variable, decodedBeskrivelse);    
+                varDick.Add(variable, decodedBeskrivelse);    
 
              
                 
