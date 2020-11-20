@@ -110,7 +110,7 @@ namespace Rigsarkiv.Styx
                     var codelistName = NormalizeName(column.CodeList.Name);
                     if (_report.ScriptType == ScriptType.SPSS) { codelistName = NormalizeName(column.Name); }
                     codeList = string.Format("{0}{1}.", column.TypeOriginal.StartsWith("VARCHAR") ? "$" : string.Empty, codelistName);
-                    _codeList.AppendLine(codelistName);
+                    _codeList.AppendLine(codelistName.Replace("'","''"));
                     _codeList.AppendLine(string.Format("{{{0}}}", index));
                     index++;
                 }
@@ -258,7 +258,11 @@ namespace Rigsarkiv.Styx
             result.Rows = int.Parse(tableNode.Element(_tableIndexXNS + "rows").Value);
             foreach (var columnNode in tableNode.Element(_tableIndexXNS + "columns").Elements())
             {
-                var codeListColumn = new Column() { Id = columnNode.Element(_tableIndexXNS + "columnID").Value, Name = columnNode.Element(_tableIndexXNS + "name").Value, Description = columnNode.Element(_tableIndexXNS + "description").Value, Type = columnNode.Element(_tableIndexXNS + "typeOriginal").Value, TypeOriginal = columnNode.Element(_tableIndexXNS + "type").Value };
+                var codeListColumn = new Column() { Id = columnNode.Element(_tableIndexXNS + "columnID").Value, 
+                    Name = columnNode.Element(_tableIndexXNS + "name").Value, 
+                    Description = columnNode.Element(_tableIndexXNS + "description").Value, 
+                    Type = columnNode.Element(_tableIndexXNS + "typeOriginal").Value, 
+                    TypeOriginal = columnNode.Element(_tableIndexXNS + "type").Value };
                 codeListColumn.IsKey = tableNode.Element(_tableIndexXNS + "primaryKey").Element(_tableIndexXNS + "column").Value == codeListColumn.Name;
                 if (_state == FlowState.Suspended) { UpdateOldType(codeListColumn); }
                 CheckDescriptionLength(codeListColumn);
