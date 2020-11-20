@@ -391,7 +391,7 @@ namespace Rigsarkiv.Styx
             {
                 //Save as string as SPSS doesn't support fractions of seconds
                 result =
-                    $"\"{groups[TimeParts.Year.ToInt()].Value}-{groups[TimeParts.Month.ToInt()].Value}-{groups[TimeParts.Date.ToInt()].Value} {groups[TimeParts.Hours.ToInt()].Value}:{groups[TimeParts.Minutes.ToInt()].Value}:{groups[TimeParts.Seconds.ToInt()].Value}.{groups[TimeParts.Fractions.ToInt()].Value}\"";
+                    $"{groups[TimeParts.Year.ToInt()].Value}-{groups[TimeParts.Month.ToInt()].Value}-{groups[TimeParts.Date.ToInt()].Value} {groups[TimeParts.Hours.ToInt()].Value}:{groups[TimeParts.Minutes.ToInt()].Value}:{groups[TimeParts.Seconds.ToInt()].Value}.{groups[TimeParts.Fractions.ToInt()].Value}";
             }
 
             return result;
