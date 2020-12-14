@@ -1,6 +1,6 @@
 {
   "name": "asta",
-  "version": "2.2.0",
+  "version": "2.2.2",
   "description": "Aflevering Af Statistikfiler til Arkiv",
   "main": "main.js",
   "scripts": {

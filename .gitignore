@@ -77,3 +77,4 @@ electron/.vs/electron/v16/.suo
 *.dmg
 *.suo
 /docs/.~lock.1007 Dokumentation.docx#
+/dotNET/.vs/config/applicationhost.config

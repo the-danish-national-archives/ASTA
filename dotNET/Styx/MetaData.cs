@@ -110,12 +110,12 @@ namespace Rigsarkiv.Styx
                     var codelistName = NormalizeName(column.CodeList.Name);
                     if (_report.ScriptType == ScriptType.SPSS) { codelistName = NormalizeName(column.Name); }
                     codeList = string.Format("{0}{1}.", column.TypeOriginal.StartsWith("VARCHAR") ? "$" : string.Empty, codelistName);
-                    _codeList.AppendLine(codelistName.Replace("'","''"));
+                    _codeList.AppendLine(codelistName.Replace("\'","\'\'"));
                     _codeList.AppendLine(string.Format("{{{0}}}", index));
                     index++;
                 }
-                _variables.AppendLine(string.Format("{0} {1} {2}", NormalizeName(column.Name), GetColumnType(column), codeList.Replace("'","''")));
-                _descriptions.AppendLine(string.Format("{0} '{1}'", NormalizeName(column.Name), EnsureNewLines(column.Description).Replace("'","''")));
+                _variables.AppendLine(string.Format("{0} {1} {2}", NormalizeName(column.Name), GetColumnType(column), codeList.Replace("\'","\'\'")));
+                _descriptions.AppendLine(string.Format("{0} '{1}'", NormalizeName(column.Name), EnsureNewLines(column.Description).Replace("\'","\'\'")));
 
                 CheckDescriptionLength(column);
             });
